@@ -94,7 +94,7 @@ class _ProviderConversationListState extends State<ProviderConversationList> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                widget.isMessageRead != null
+                widget.isMessageRead != null && widget.isMessageRead == false
                     ? CircleAvatar(
                         backgroundColor: CustomColors.primaryColor,
                         radius: 05,

@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables, await_only_futures
+// ignore_for_file: use_build_context_synchronously, prefer_typing_uninitialized_variables, await_only_futures, deprecated_member_use
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -143,7 +143,8 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
   }
 
   // Add Bank Detail
-  Future<Response> postAddBank() async {
+  postAddBank() async {
+    // print("post bank call");
     var requestBody = {
       'name_of_bank': selectedNames.toString(),
       'name_on_account': accountTitleController.text.toString(),
@@ -154,45 +155,56 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
       // 'cvv': cvvController.text.toString(),
     };
     // print(requestBody);
-    var token = await getUserToken();
-    // showProgress(context);
-    final response = await Dio().post(
-      CareReceiverURl.addServiceReceiverBank,
-      // body: jsonEncode(model.toJson()),
-      data: requestBody,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      if (response.data.contains("This Bank Account Already Exist")) {
+    try {
+      var token = await getUserToken();
+      // showProgress(context);
+      final response = await Dio().post(
+        CareReceiverURl.addServiceReceiverBank,
+        // body: jsonEncode(model.toJson()),
+        data: requestBody,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        if (response.data['success']) {
+          customSuccesSnackBar(
+            context,
+            response.data['message'],
+          );
+          setState(() {
+            futureBankDetails = fetchBankDetailsModel();
+          });
+          accountTitleController.clear();
+          accountNumberController.clear();
+        } else {
+          customErrorSnackBar(
+            context,
+            response.data['message'],
+          );
+          accountTitleController.clear();
+          accountNumberController.clear();
+        }
+        // print(response.body);
+      } else {
         customErrorSnackBar(
           context,
-          response.data,
+          response.data['message'],
         );
-      } else {
-        customSuccesSnackBar(
-          context,
-          "Card Added Successfully",
-        );
-        setState(() {
-          futureBankDetails = fetchBankDetailsModel();
-        });
       }
-      // print(response.body);
-    } else {
+    } on DioError {
+      // print(e);
       customErrorSnackBar(
         context,
-        response.data,
+        "Something went wrong please try again later",
       );
-      // print(response.body);
     }
 
     // hideProgress();
-    return response;
+    // return response;
   }
 
   List dataNames = [
@@ -393,20 +405,21 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                     vertical: 4,
                                                   ),
                                                   child: DropdownButtonHideUnderline(
-                                                      child: DropdownButton(
-                                                    isExpanded: true,
-                                                    hint: const Text("Select Banks"),
-                                                    value: selectedNames,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        selectedNames = value.toString();
-                                                        // print(selectedNames);
-                                                      });
-                                                    },
-                                                    items: dataNames.map((itemone) {
-                                                      return DropdownMenuItem(value: itemone['value'], child: Text(itemone['name']));
-                                                    }).toList(),
-                                                  )),
+                                                    child: DropdownButton(
+                                                      isExpanded: true,
+                                                      hint: const Text("Select Banks"),
+                                                      value: selectedNames,
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          selectedNames = value.toString();
+                                                          // print(selectedNames);
+                                                        });
+                                                      },
+                                                      items: dataNames.map((itemone) {
+                                                        return DropdownMenuItem(value: itemone['value'], child: Text(itemone['name']));
+                                                      }).toList(),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -551,6 +564,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                 } else {
                                                   if (bankKey.currentState!.validate()) {
                                                     postAddBank();
+                                                    Navigator.pop(context);
                                                   }
                                                 }
                                               },

@@ -7,7 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:island_app/carereceiver/models/chat_users.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/conversational_widget.dart';
 import 'package:island_app/models/chatroom_model.dart';
@@ -24,20 +23,20 @@ class MessagesScreen extends StatefulWidget {
 }
 
 class _MessagesScreenState extends State<MessagesScreen> {
-  List<ChatUsers>? chatUsers = [
-    ChatUsers(
-      name: "Shakeel Provider",
-      messageText: "Provider",
-      imageURL: "",
-      time: "Now",
-    ),
-    ChatUsers(
-      name: "Shakeel Receiver",
-      messageText: "Receiver",
-      imageURL: "",
-      time: "Now",
-    ),
-  ];
+  // List<ChatUsers>? chatUsers = [
+  //   ChatUsers(
+  //     name: "Shakeel Provider",
+  //     messageText: "Provider",
+  //     imageURL: "",
+  //     time: "Now",
+  //   ),
+  //   ChatUsers(
+  //     name: "Shakeel Receiver",
+  //     messageText: "Receiver",
+  //     imageURL: "",
+  //     time: "Now",
+  //   ),
+  // ];
 
   late Future<ChatRoomMessagesModel>? futureReceiverDashboard;
 
@@ -85,11 +84,6 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // var check = "2023-09-07T05:51:01.000000Z";
-    // if (DateTime.parse(check).isBefore(DateTime.parse("2023-09-07T05:51:01.000000Z"))) {
-    //   print("lol");
-    // }
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -139,88 +133,96 @@ class _MessagesScreenState extends State<MessagesScreen> {
           ),
         ),
         body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                // Container(
-                //   decoration: BoxDecoration(
-                //     borderRadius: const BorderRadius.only(
-                //       topLeft: Radius.circular(6),
-                //       bottomLeft: Radius.circular(6),
-                //       bottomRight: Radius.circular(6),
-                //       topRight: Radius.circular(6),
-                //     ),
-                //     color: CustomColors.white,
-                //     boxShadow: const [
-                //       BoxShadow(
-                //         color: Color.fromARGB(13, 0, 0, 0),
-                //         blurRadius: 4.0,
-                //         spreadRadius: 2.0,
-                //         offset: Offset(2.0, 2.0),
-                //       ),
-                //     ],
-                //   ),
-                //   alignment: Alignment.center,
-                //   width: MediaQuery.of(context).size.width,
-                //   height: 50,
-                //   child: TextFormField(
-                //     style: const TextStyle(
-                //       fontSize: 16,
-                //       fontFamily: "Rubik",
-                //       fontWeight: FontWeight.w400,
-                //     ),
-                //     textAlignVertical: TextAlignVertical.bottom,
-                //     maxLines: 1,
-                //     decoration: InputDecoration(
-                //       prefixIcon: Icon(
-                //         Icons.search,
-                //         size: 17,
-                //         color: CustomColors.hintText,
-                //       ),
-                //       hintText: "Search Messages...",
-                //       fillColor: CustomColors.white,
-                //       focusColor: CustomColors.white,
-                //       hoverColor: CustomColors.white,
-                //       filled: true,
-                //       border: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(4),
-                //       ),
-                //       focusedBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                //         borderRadius: BorderRadius.circular(4.0),
-                //       ),
-                //       enabledBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                //         borderRadius: BorderRadius.circular(4.0),
-                //       ),
-                //     ),
-                //   ),
-                // ),
+          child: RefreshIndicator(
+            onRefresh: () async {
+              Provider.of<ChatProvider>(context, listen: false).getChats();
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Column(
+                children: [
+                  const SizedBox(height: 20),
+                  // Container(
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: const BorderRadius.only(
+                  //       topLeft: Radius.circular(6),
+                  //       bottomLeft: Radius.circular(6),
+                  //       bottomRight: Radius.circular(6),
+                  //       topRight: Radius.circular(6),
+                  //     ),
+                  //     color: CustomColors.white,
+                  //     boxShadow: const [
+                  //       BoxShadow(
+                  //         color: Color.fromARGB(13, 0, 0, 0),
+                  //         blurRadius: 4.0,
+                  //         spreadRadius: 2.0,
+                  //         offset: Offset(2.0, 2.0),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   alignment: Alignment.center,
+                  //   width: MediaQuery.of(context).size.width,
+                  //   height: 50,
+                  //   child: TextFormField(
+                  //     style: const TextStyle(
+                  //       fontSize: 16,
+                  //       fontFamily: "Rubik",
+                  //       fontWeight: FontWeight.w400,
+                  //     ),
+                  //     textAlignVertical: TextAlignVertical.bottom,
+                  //     maxLines: 1,
+                  //     decoration: InputDecoration(
+                  //       prefixIcon: Icon(
+                  //         Icons.search,
+                  //         size: 17,
+                  //         color: CustomColors.hintText,
+                  //       ),
+                  //       hintText: "Search Messages...",
+                  //       fillColor: CustomColors.white,
+                  //       focusColor: CustomColors.white,
+                  //       hoverColor: CustomColors.white,
+                  //       filled: true,
+                  //       border: OutlineInputBorder(
+                  //         borderRadius: BorderRadius.circular(4),
+                  //       ),
+                  //       focusedBorder: OutlineInputBorder(
+                  //         borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                  //         borderRadius: BorderRadius.circular(4.0),
+                  //       ),
+                  //       enabledBorder: OutlineInputBorder(
+                  //         borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                  //         borderRadius: BorderRadius.circular(4.0),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
-                // Messsages
-                Consumer<ChatProvider>(
-                  builder: (context, provider, child) {
-                    return ListView.builder(
-                      itemCount: provider.chatList.length,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.only(top: 16),
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return ConversationList(
-                          roomId: provider.chatList[index]["roomId"],
-                          name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].firstName}",
-                          messageText: provider.chatList[index]['lastMessage'],
-                          imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
-                          time: provider.chatList[index]['lastMessageTime'].toString(),
-                          isMessageRead: provider.chatList[index]['lastMessagesCount'] == 0 ? false : true,
+                  // Messsages
+                  Consumer<ChatProvider>(
+                    builder: (context, provider, child) {
+                      if (provider.chatList.isNotEmpty) {
+                        return ListView.builder(
+                          itemCount: provider.chatList.length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(top: 16),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return ConversationList(
+                              roomId: provider.chatList[index]["roomId"],
+                              name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].firstName}",
+                              messageText: provider.chatList[index]['lastMessage'],
+                              imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
+                              time: provider.chatList[index]['lastMessageTime'].toString(),
+                              isMessageRead: provider.chatList[index]['lastMessagesCount'] == 0 ? false : true,
+                            );
+                          },
                         );
-                      },
-                    );
-                  },
-                ),
-              ],
+                      }
+                      return const Center(child: Text("No chat found"));
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -277,39 +279,60 @@ class ChatProvider extends ChangeNotifier {
         },
       ),
     );
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.data['flag'] == 1) {
+      // if(){
       allChatRooms = resp.data['chat_room'];
       chatList = List.generate(
         resp.data['chat_room'].length,
         (index) {
-          var getlastmessage = resp.data['chat_room'][index]['chat_messages'].where((item) => item['updated_at'] == resp.data['chat_room'][index]['updated_at']);
+          // where((item) => item['updated_at'] == resp.data['chat_room'][index]['updated_at']);
 
-          var lastmessagetime = DateFormat.jm().format(DateTime.parse(getlastmessage.first['updated_at']).toLocal());
+          var getlastmessage = resp.data['chat_room'][index]['chat_messages'].last;
+          var lastmessagetime = DateFormat.jm().format(DateTime.parse(getlastmessage['updated_at']).toLocal());
           return {
             "roomId": resp.data['chat_room'][index]['id'],
             "userDate": ChatroomUser.fromJson(
               resp.data['chat_room'][index]['receiver'],
             ),
-            "lastMessage": getlastmessage.first['message'],
+            "lastMessage": getlastmessage['message'],
             "lastMessagesCount": resp.data['chat_room'][index]["status"],
             "lastMessageTime": lastmessagetime,
           };
         },
       );
       if (activeChat.isNotEmpty) {
-        setActiveChat(activeChat['id']);
+        setActiveChat(activeChat['id'], null);
       }
+      // }
     }
     notifyListeners();
   }
 
   List activeChatMessages = [];
   Map activeChat = {};
-  setActiveChat(id) async {
-    var getChatRoom = allChatRooms.firstWhere((element) => element["id"] == id);
-    activeChat = getChatRoom;
-    // print(activeChat);
-    notifyListeners();
+  setActiveChat(id, Map? receiver) async {
+    // print(id);
+    if (id == "new") {
+      if (chatList.isNotEmpty) {
+        var isExits = allChatRooms.where((element) => element['receiver_id'] == receiver!['id']);
+        // print(isExits);
+        if (isExits.isNotEmpty) {
+          activeChat = isExits.first;
+        } else {
+          activeChat = {"receiver": receiver!, "receiver_id": receiver['id']};
+        }
+        notifyListeners();
+      } else {
+        activeChat = {"receiver": receiver!, "receiver_id": receiver['id']};
+      }
+      notifyListeners();
+      getChats();
+    } else {
+      var getChatRoom = allChatRooms.firstWhere((element) => element["id"] == id);
+      activeChat = getChatRoom;
+      // print(activeChat);
+      notifyListeners();
+    }
   }
 
   disposeActiveChat() {
@@ -341,7 +364,28 @@ class ChatProvider extends ChangeNotifier {
     if (resp.statusCode == 200) {
       activeChat = resp.data['chat_room'][0];
       sendMessageReq = false;
+      getChats();
       notifyListeners();
+    }
+  }
+
+
+  updateStatus() async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+    var userToken = prefs.getString('userToken');
+    var resp = await Dio().post(
+      "${AppUrl.webBaseURL}/api/message-status",
+      data: {"id": activeChat['id']},
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    if (resp.statusCode == 200) {
+      getChats();
     }
   }
 }

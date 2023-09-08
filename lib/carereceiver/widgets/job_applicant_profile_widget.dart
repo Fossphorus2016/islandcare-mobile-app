@@ -5,10 +5,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:provider/provider.dart';
 
 class JobApplicantProfileWidget extends StatefulWidget {
+  final Map? dataMap;
+  final String id;
   final String? imgPath;
   final String? title;
   final String? services;
@@ -38,6 +42,8 @@ class JobApplicantProfileWidget extends StatefulWidget {
 
   JobApplicantProfileWidget({
     Key? key,
+    required this.dataMap,
+    required this.id,
     this.imgPath,
     this.title,
     this.services,
@@ -50,8 +56,6 @@ class JobApplicantProfileWidget extends StatefulWidget {
     this.major,
     this.from,
     this.to,
-    // this.firstAdd,
-
     this.zip,
     this.review,
     this.imgProviderPath,
@@ -619,7 +623,8 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => const MessagesScreen()));
+                  Provider.of<ChatProvider>(context, listen: false).setActiveChat("new", widget.dataMap);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatDetailPage()));
                 },
                 child: Container(
                     width: MediaQuery.of(context).size.width,

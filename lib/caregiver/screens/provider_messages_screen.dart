@@ -125,22 +125,25 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
                 // Messsages
                 Consumer<ServiceProviderChat>(
                   builder: (context, provider, child) {
-                    return ListView.builder(
-                      itemCount: provider.chatList.length,
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.only(top: 16),
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return ProviderConversationList(
-                          roomId: provider.chatList[index]["roomId"],
-                          name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].firstName}",
-                          messageText: provider.chatList[index]['lastMessage'],
-                          imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
-                          time: provider.chatList[index]['lastMessageTime'].toString(),
-                          isMessageRead: provider.chatList[index]['lastMessagesCount'] == 0 ? false : true,
-                        );
-                      },
-                    );
+                    if (provider.chatList.isNotEmpty) {
+                      return ListView.builder(
+                        itemCount: provider.chatList.length,
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.only(top: 16),
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return ProviderConversationList(
+                            roomId: provider.chatList[index]["roomId"],
+                            name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].lastName}",
+                            messageText: provider.chatList[index]['lastMessage'],
+                            imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
+                            time: provider.chatList[index]['lastMessageTime'].toString(),
+                            isMessageRead: provider.chatList[index]['lastMessagesCount'] == 0 ? false : true,
+                          );
+                        },
+                      );
+                    }
+                    return const Center(child: Text("No chat found"));
                   },
                 ),
               ],
@@ -200,20 +203,23 @@ class ServiceProviderChat extends ChangeNotifier {
         },
       ),
     );
-    if (resp.statusCode == 200) {
+    if (resp.statusCode == 200 && resp.data['flag'] == 1) {
       allChatRooms = resp.data['chat_room'];
+      // print("generate");
       chatList = List.generate(
         resp.data['chat_room'].length,
         (index) {
-          var getlastmessage = resp.data['chat_room'][index]['chat_messages'].where((item) => item['updated_at'] == resp.data['chat_room'][index]['updated_at']);
-
-          var lastmessagetime = DateFormat.jm().format(DateTime.parse(getlastmessage.first['updated_at']).toLocal());
+          // where.((item) => item['updated_at'] == resp.data['chat_room'][index]['updated_at'])
+          // print("index in list generate $index");
+          var getlastmessage = resp.data['chat_room'][index]['chat_messages'].last;
+          // print(getlastmessage);
+          var lastmessagetime = DateFormat.jm().format(DateTime.parse(getlastmessage['updated_at']).toLocal());
           return {
             "roomId": resp.data['chat_room'][index]['id'],
             "userDate": ChatroomUser.fromJson(
               resp.data['chat_room'][index]['sender'],
             ),
-            "lastMessage": getlastmessage.first['message'],
+            "lastMessage": getlastmessage['message'],
             "lastMessagesCount": resp.data['chat_room'][index]["status"],
             "lastMessageTime": lastmessagetime,
           };
@@ -226,13 +232,31 @@ class ServiceProviderChat extends ChangeNotifier {
     notifyListeners();
   }
 
-  List activeChatMessages = [];
+  // List activeChatMessages = [];
   Map activeChat = {};
   setActiveChat(id) async {
     var getChatRoom = allChatRooms.firstWhere((element) => element["id"] == id);
     activeChat = getChatRoom;
-    // print(activeChat);
     notifyListeners();
+  }
+
+  updateStatus() async {
+    SharedPreferences? prefs = await SharedPreferences.getInstance();
+    await prefs.reload();
+    var userToken = prefs.getString('userToken');
+    var resp = await Dio().post(
+      "${AppUrl.webBaseURL}/api/message-status",
+      data: {"id": activeChat['id']},
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    if (resp.statusCode == 200) {
+      getChats();
+    }
   }
 
   disposeActiveChat() {
@@ -264,6 +288,7 @@ class ServiceProviderChat extends ChangeNotifier {
     if (resp.statusCode == 200) {
       activeChat = resp.data['chat_room'];
       sendMessageReq = false;
+      getChats();
       notifyListeners();
     }
   }

@@ -479,6 +479,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                     // itemCount: 10,
                     itemBuilder: (BuildContext context, int index) {
                       return JobApplicantProfileWidget(
+                          dataMap:snapshot.data!.data![0].toJson(),
+                          id:snapshot.data!.data![0].id.toString(),
                           imgPath: "${AppUrl.webStorageUrl}/${snapshot.data!.data![0].avatar}",
                           title: "${snapshot.data!.data![0].firstName} ${snapshot.data!.data![0].lastName}",
                           services: snapshot.data!.data![0].userdetail!.service!.name.toString(),

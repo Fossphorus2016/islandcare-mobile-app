@@ -182,7 +182,7 @@ class _ManageCardsState extends State<ManageCards> {
     }
   }
 
-  Future<Response> postAddCard() async {
+  postAddCard() async {
     var requestBody = {
       'name_on_card': nameOncardController.text.toString(),
       'card_number': cardNumberController.text.toString(),
@@ -192,46 +192,48 @@ class _ManageCardsState extends State<ManageCards> {
     };
     var token = await getUserToken();
     // showProgress(context);
-    final response = await Dio().post(
-      CareReceiverURl.serviceReceiverAddCreditCards,
-      // body: jsonEncode(model.toJson()),
-      data: requestBody,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      if (response.data.contains("Card Already Exist")) {
-        customErrorSnackBar(
-          context,
-          response.data,
-        );
-      } else if (response.data.contains("The credit card number is invalid.")) {
-        customErrorSnackBar(
-          context,
-          response.data,
-        );
+    try {
+      final response = await Dio().post(
+        CareReceiverURl.serviceReceiverAddCreditCards,
+        // body: jsonEncode(model.toJson()),
+        data: requestBody,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        if (response.data['success'] == false) {
+          customErrorSnackBar(
+            context,
+            response.data['message'],
+          );
+        } else if (response.data['success'] == true) {
+          customSuccesSnackBar(
+            context,
+            "Card Added Successfully",
+          );
+        }
+        setState(() {
+          futureManageCards = fetchManageCardsModel();
+        });
+        // print(response.body);
       } else {
-        customSuccesSnackBar(
-          context,
-          "Card Added Successfully",
-        );
+        // print(response.body);
       }
-
-      // print(response.body);
-    } else {
+      Navigator.pop(context);
+    } on DioError catch (e) {
+      Navigator.pop(context);
+      print(e.response!.data['message']);
       customErrorSnackBar(
         context,
-        "something went wrong please try again later",
+        e.response!.data['message'].toString(),
       );
-      // print(response.body);
     }
-
     // hideProgress();
-    return response;
+    // return response;
   }
 
   getUserToken() async {

@@ -23,7 +23,7 @@ class _ConversationListState extends State<ConversationList> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Provider.of<ChatProvider>(context, listen: false).setActiveChat(widget.roomId);
+        Provider.of<ChatProvider>(context, listen: false).setActiveChat(widget.roomId, null);
 
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return const ChatDetailPage();
@@ -94,7 +94,7 @@ class _ConversationListState extends State<ConversationList> {
                   ),
                 ),
                 const SizedBox(height: 5),
-                widget.isMessageRead != null
+                widget.isMessageRead != null && widget.isMessageRead == false
                     ? CircleAvatar(
                         backgroundColor: CustomColors.primaryColor,
                         radius: 05,

@@ -183,7 +183,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                  height: 70,
+                  height: 80,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     border: Border(

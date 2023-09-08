@@ -206,7 +206,7 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
                                 // print("id ${widget.jobId} name ${widget.name}");
                                 // print(snapshot.data!.data![index].id);
                                 return JobApplicantsWidget(
-                                  name: "${snapshot.data!.data![index].firstName} ${snapshot.data!.data![index].firstName}",
+                                  name: "${snapshot.data!.data![index].firstName} ${snapshot.data!.data![index].lastName}",
                                   jobType: snapshot.data!.data![index].userdetail!.gender.toString() == '1' ? "Male" : "Female",
                                   // (foo==1)? something1():(foo==2)? something2(): something3();
                                   count: '',

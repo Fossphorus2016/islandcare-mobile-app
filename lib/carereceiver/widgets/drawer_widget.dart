@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unused_local_variable, prefer_typing_uninitialized_variables
+// ignore_for_file: use_build_context_synchronously, unused_local_variable, prefer_typing_uninitialized_variables, deprecated_member_use
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -18,7 +18,6 @@ import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:http/http.dart' as http;
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({
@@ -179,16 +178,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }
 
   chnagePassword() async {
+    // print("change password call");
     var token = await getUserToken();
     var userId = await getUserId();
-    var formData = FormData.fromMap(
-      {
-        "_method": "PUT",
-        "old_password": oldPasswordController.text.toString(),
-        "password": passwordController.text.toString(),
-        "password_confirmation": cpasswordController.text.toString(),
-      },
-    );
+    var formData = FormData.fromMap({"_method": "PUT", "old_password": oldPasswordController.text.toString(), "password": passwordController.text.toString(), "password_confirmation": cpasswordController.text.toString()});
     Dio dio = Dio();
     try {
       var response = await dio.post(
@@ -203,12 +196,20 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           },
         ),
       );
-      // print(response.toString());
-      customSuccesSnackBar(
-        context,
-        "Password Updated Successfully",
-      );
-    } catch (e) {
+      if (response.statusCode == 200 && response.data['success']) {
+        customSuccesSnackBar(
+          context,
+          response.data['message'],
+        );
+      } else {
+        customErrorSnackBar(
+          context,
+          response.data['message'],
+        );
+      }
+      // print("res ${response.toString()}");
+    } on DioError catch (e) {
+      // print("error $e");
       customErrorSnackBar(
         context,
         e.toString(),
@@ -977,14 +978,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   //   ),
                   // ),
                   GestureDetector(
-                    onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const AccountSettings(),
-                      //   ),
-                      // );
-                    },
+                    onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: BoxDecoration(
@@ -995,37 +989,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                           selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                           focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          // tileColor: Colors.red,
-                          leading: SizedBox(
-                            // height: 40,
-                            // width: 80,
-                            child: Image.asset("assets/images/icons/lock.png"),
-                          ),
-                          title: Text(
-                            'Change Password',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: CustomColors.white,
-                              fontFamily: "Rubik",
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: CustomColors.white,
-                            size: 16,
-                          ),
+                          leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
+                          title: Text('Change Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomColors.white, fontFamily: "Rubik")),
+                          trailing: Icon(Icons.arrow_forward_ios, color: CustomColors.white, size: 16),
                           onTap: () {
                             showModalBottomSheet(
                               isScrollControlled: true,
                               context: context,
                               backgroundColor: Colors.white,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30.0),
-                                  topRight: Radius.circular(30.0),
-                                ),
-                              ),
+                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
                               builder: (BuildContext context) {
                                 return StatefulBuilder(
                                   builder: (BuildContext context, StateSetter setState) {
@@ -1039,9 +1011,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              const SizedBox(
-                                                height: 20,
-                                              ),
+                                              const SizedBox(height: 20),
                                               Center(
                                                 child: Container(
                                                   width: 130,
@@ -1052,9 +1022,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(
-                                                height: 40,
-                                              ),
+                                              const SizedBox(height: 40),
                                               Center(
                                                 child: Text(
                                                   "Change Password",
@@ -1068,9 +1036,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
+                                              const SizedBox(height: 10),
                                               Center(
                                                 child: Text(
                                                   "Set the new password for your account so you can login and access all the features.",
@@ -1084,9 +1050,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                   ),
                                                 ),
                                               ),
-                                              const SizedBox(
-                                                height: 40,
-                                              ),
+                                              const SizedBox(height: 40),
                                               Form(
                                                 key: changePassKey,
                                                 child: Column(
@@ -1121,9 +1085,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                         ),
                                                       ),
                                                     ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
+                                                    const SizedBox(height: 10),
                                                     CustomTextFieldWidget(
                                                       borderColor: CustomColors.loginBorder,
                                                       textStyle: TextStyle(
@@ -1152,9 +1114,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                         ),
                                                       ),
                                                     ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
+                                                    const SizedBox(height: 10),
                                                     CustomTextFieldWidget(
                                                       borderColor: CustomColors.loginBorder,
                                                       textStyle: TextStyle(
@@ -1183,28 +1143,30 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                         ),
                                                       ),
                                                     ),
-                                                    const SizedBox(
-                                                      height: 20,
-                                                    ),
+                                                    const SizedBox(height: 20),
                                                     // OTP
                                                     GestureDetector(
                                                       onTap: () {
                                                         if (oldPasswordController.text.isEmpty) {
+                                                          Navigator.pop(context);
                                                           customErrorSnackBar(
                                                             context,
                                                             "Please Enter Old Password",
                                                           );
                                                         } else if (passwordController.text.isEmpty) {
+                                                          Navigator.pop(context);
                                                           customErrorSnackBar(
                                                             context,
                                                             "Please Enter Password",
                                                           );
                                                         } else if (passwordController.text.length < 7) {
+                                                          Navigator.pop(context);
                                                           customErrorSnackBar(
                                                             context,
                                                             "Please Enter 3 digit Password",
                                                           );
                                                         } else if (passwordController == cpasswordController) {
+                                                          Navigator.pop(context);
                                                           customErrorSnackBar(
                                                             context,
                                                             "New Password Not Match",
@@ -1237,9 +1199,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                                         ),
                                                       ),
                                                     ),
-                                                    const SizedBox(
-                                                      height: 30,
-                                                    ),
+                                                    const SizedBox(height: 30),
                                                   ],
                                                 ),
                                               ),

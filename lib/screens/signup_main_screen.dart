@@ -1,6 +1,5 @@
-// ignore_for_file: must_be_immutable, unused_local_variable, prefer_typing_uninitialized_variables, use_build_context_synchronously
+// ignore_for_file: must_be_immutable, unused_local_variable, prefer_typing_uninitialized_variables, use_build_context_synchronously, deprecated_member_use
 
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -156,21 +155,24 @@ class _SignupScreenState extends State<SignupScreen> {
 
   Future<Response> postRegister(RegisterModel model) async {
     showProgress(context);
-    final response = await Dio().post(
-      SessionUrl.register,
-      data: jsonEncode(model.toJson()),
-      options: Options(
-        headers: {
-          // 'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-          "Content-Type": "application/json",
-        },
-      ),
-      // headers: {"Accept": "application/json"},
-    );
-
-    hideProgress();
-    return response;
+    try {
+      var formData = FormData.fromMap(model.toJson());
+      final response = await Dio().post(
+        SessionUrl.register,
+        data: formData,
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      hideProgress();
+      return response;
+    } on DioError catch (e) {
+      // print(e.response!.data);
+      hideProgress();
+      return Response(requestOptions: RequestOptions(), statusCode: 500, data: e.response!.data);
+    }
   }
 
   @override
@@ -199,7 +201,6 @@ class _SignupScreenState extends State<SignupScreen> {
     // const focusedBorderColor = Color.fromRGBO(23, 171, 144, 1);
     // const fillColor = Color.fromRGBO(243, 246, 249, 0);
     // const borderColor = Color.fromRGBO(23, 171, 144, 0.4);
-
     // final defaultPinTheme = PinTheme(
     //   width: 56,
     //   height: 56,
@@ -675,7 +676,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             } else {
                               customErrorSnackBar(
                                 context,
-                                "The email has already been taken",
+                                response.data['message'],
                               );
                             }
                           });

@@ -20,6 +20,12 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ServiceProviderChat>(context, listen: false).updateStatus();
+  }
+
   TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -102,9 +108,7 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                         fontFamily: "Rubik",
                       ),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
+                    const SizedBox(height: 5),
                     const Padding(
                       padding: EdgeInsets.only(left: 12),
                     ),

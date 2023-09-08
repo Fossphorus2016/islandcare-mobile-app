@@ -15,48 +15,14 @@ class ChatDetailPage extends StatefulWidget {
 }
 
 class ChatDetailPageState extends State<ChatDetailPage> {
-  // List<ChatMessage> messages = [
-  //   ChatMessage(
-  //     messageContent: "Hello, Will",
-  //     messageType: "receiver",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "How have you been?",
-  //     messageType: "receiver",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "Hey Kriss, I am doing fine dude. wbu? ",
-  //     messageType: "sender",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "ehhhh, doing OK.",
-  //     messageType: "receiver",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "Is there any thing wrong?",
-  //     messageType: "sender",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "Hello, Will",
-  //     messageType: "receiver",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "How have you been?",
-  //     messageType: "receiver",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "Hey Kriss, I am doing fine dude. wbu? ",
-  //     messageType: "sender",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "ehhhh, doing OK.",
-  //     messageType: "receiver",
-  //   ),
-  //   ChatMessage(
-  //     messageContent: "Is there any thing wrong?",
-  //     messageType: "sender",
-  //   ),
-  // ];
+
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<ChatProvider>(context, listen: false).updateStatus();
+  }
+
+
   @override
   void dispose() {
     super.dispose();
@@ -113,6 +79,7 @@ class ChatDetailPageState extends State<ChatDetailPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                if(chatProvider.activeChat['receiver'] != null)...[
                 ClipRRect(
                   borderRadius: BorderRadius.circular(70),
                   child: Center(
@@ -152,6 +119,7 @@ class ChatDetailPageState extends State<ChatDetailPage> {
                     ),
                   ],
                 ),
+                ],
               ],
             ),
           ),
@@ -165,20 +133,21 @@ class ChatDetailPageState extends State<ChatDetailPage> {
               reverse: true,
               child: Column(
                 children: [
-                  for (final message in chatProvider.activeChat['chat_messages']) ...[
-                    if (message['sender_id'] == chatProvider.activeChat['sender_id']) ...[
-                      senderMassage(message),
-                      const SizedBox(height: 20),
-                    ] else ...[
-                      receiverMessage(message),
-                      const SizedBox(height: 20),
-                    ]
+                  if(chatProvider.activeChat['chat_messages'] != null)...[
+                    for (final message in chatProvider.activeChat['chat_messages']) ...[
+                      if (message['sender_id'] == chatProvider.activeChat['sender_id']) ...[
+                        senderMassage(message),
+                        const SizedBox(height: 20),
+                      ] else ...[
+                        receiverMessage(message),
+                        const SizedBox(height: 20),
+                      ],
+                    ],
                   ],
                 ],
               ),
             ),
           ),
-
           // TextField
           Align(
             alignment: Alignment.bottomLeft,

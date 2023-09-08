@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison, prefer_typing_uninitialized_variables
+// ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison, prefer_typing_uninitialized_variables, unused_catch_clause, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/bank_details_models.dart';
@@ -142,7 +142,7 @@ class _BankDetailsState extends State<BankDetails> {
   }
 
   // Add Bank Detail
-  Future<Response> postAddBank() async {
+  postAddBank() async {
     var requestBody = {
       'name_of_bank': selectedNames.toString(),
       'name_on_account': accountTitleController.text.toString(),
@@ -152,43 +152,53 @@ class _BankDetailsState extends State<BankDetails> {
       // 'card_expiration_year': selectedYear.toString(),
       // 'cvv': cvvController.text.toString(),
     };
-    var token = await getUserToken();
-    // showProgress(context);
-    final response = await Dio().post(
-      CareGiverUrl.addServiceProviderBank,
-      // body: jsonEncode(model.toJson()),
-      data: requestBody,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      if (response.data.contains("This Bank Account Already Exist")) {
-        customErrorSnackBar(context, "This Bank Account Already Exist");
-
-        // customErrorSnackBar(response.body, context);
+    try {
+      var token = await getUserToken();
+      // showProgress(context);
+      final response = await Dio().post(
+        CareGiverUrl.addServiceProviderBank,
+        // body: jsonEncode(model.toJson()),
+        data: requestBody,
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        if (response.data['success']) {
+          customSuccesSnackBar(
+            context,
+            response.data['message'],
+          );
+          setState(() {
+            futureBankDetails = fetchBankDetailsModel();
+          });
+          accountTitleController.clear();
+          accountNumberController.clear();
+        } else {
+          customErrorSnackBar(
+            context,
+            response.data['message'],
+          );
+          accountTitleController.clear();
+          accountNumberController.clear();
+        }
+        // print(response.body);
       } else {
-        // customSuccesSnackBar("Bank Account Added Successfully", context);
-        customSuccesSnackBar(context, "Bank Account Added Successfully");
-        accountTitleController.clear();
-        accountNumberController.clear();
-
-        setState(() {
-          futureBankDetails = fetchBankDetailsModel();
-        });
+        customErrorSnackBar(
+          context,
+          response.data['message'],
+        );
       }
-      // print(response.body);
-    } else {
-      customErrorSnackBar(context, response.data['message']);
-      // customErrorSnackBar(response.body, context);
-      // print(response.body);
+    } on DioError catch (e) {
+      // print(e);
+      customErrorSnackBar(
+        context,
+        "Something went wrong please try again later",
+      );
     }
-    Navigator.pop(context);
-    // hideProgress();
-    return response;
   }
 
   List dataNames = [
@@ -552,6 +562,7 @@ class _BankDetailsState extends State<BankDetails> {
                                                 } else {
                                                   if (bankKey.currentState!.validate()) {
                                                     postAddBank();
+                                                    Navigator.pop(context);
                                                   }
                                                 }
                                               },

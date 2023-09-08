@@ -36,6 +36,7 @@ class CustomTextFieldWidget extends StatelessWidget {
         keyboardType: keyboardType,
         obscureText: obsecure!,
         controller: controller,
+        textInputAction: TextInputAction.next,
         decoration: InputDecoration(
           fillColor: Colors.white,
           prefixIcon: prefIcon,
