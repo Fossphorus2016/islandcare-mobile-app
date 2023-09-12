@@ -19,7 +19,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // PusherService.instance.initialize();
   runApp(
     MultiProvider(
       providers: [

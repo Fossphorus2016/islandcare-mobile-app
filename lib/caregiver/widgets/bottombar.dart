@@ -26,7 +26,6 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
 
   List<Widget> pages = [
     const HomeGiverScreen(),
-    // const WishlistGiverScreen(),
     const ProviderMessagesScreen(),
     const ProfileGiver(),
   ];
@@ -46,7 +45,6 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
       'userToken',
     );
 
-    // print("userTokenBottom $userToken");
     return userToken.toString();
   }
 
@@ -119,22 +117,7 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
                         ),
                         label: '',
                       ),
-                      // Favorite
-                      // BottomNavigationBarItem(
-                      //   icon: Container(
-                      //     height: 50,
-                      //     width: 50,
-                      //     decoration: BoxDecoration(
-                      //       color: _page == 1 ? CustomColors.primaryColor : Colors.transparent,
-                      //       shape: BoxShape.circle,
-                      //     ),
-                      //     child: Icon(
-                      //       Icons.favorite,
-                      //       color: _page == 1 ? CustomColors.white : CustomColors.primaryColor,
-                      //     ),
-                      //   ),
-                      //   label: '',
-                      // ),
+
                       BottomNavigationBarItem(
                         icon: Container(
                           height: 50,

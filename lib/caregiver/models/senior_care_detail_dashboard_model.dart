@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final serviceProviderDetailDashboardModel = serviceProviderDetailDashboardModelFromJson(jsonString);
-
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';

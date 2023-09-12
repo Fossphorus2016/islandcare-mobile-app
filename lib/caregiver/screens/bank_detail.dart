@@ -3,9 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/bank_details_models.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/res/app_url.dart';
-// import 'package:island_app/utils/dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
@@ -37,19 +35,14 @@ class _BankDetailsState extends State<BankDetails> {
         'Accept': 'application/json',
       }),
     );
-    // print(response.body);
     if (response.statusCode == 200) {
       var json = response.data as Map;
       var bankDetails = json['bank_details'] as List;
-      // print("response  == ${jsonDecode(response.body)}");
       setState(() {
         bankDetails = bankDetails;
       });
-      // print("bankDetails= $bankDetails");
       return BankDetailsModel.fromJson(response.data);
     } else {
-      // print("response  == ${jsonDecode(response.body)}");
-
       throw Exception(
         'Failed to load Manage Cards',
       );
@@ -77,7 +70,6 @@ class _BankDetailsState extends State<BankDetails> {
           },
         ),
       );
-      // print(response.toString());
       if (response.statusCode == 200) {
         customSuccesSnackBar(context, "Bank Account Selected");
         setState(() {
@@ -118,7 +110,6 @@ class _BankDetailsState extends State<BankDetails> {
           },
         ),
       );
-      // print(response.toString());
       if (response.statusCode == 200) {
         customSuccesSnackBar(
           context,
@@ -147,17 +138,11 @@ class _BankDetailsState extends State<BankDetails> {
       'name_of_bank': selectedNames.toString(),
       'name_on_account': accountTitleController.text.toString(),
       'account_number': accountNumberController.text.toString(),
-      // 'card_number': cardNumberController.text.toString(),
-      // 'card_expiration_month': selectedMonth.toString(),
-      // 'card_expiration_year': selectedYear.toString(),
-      // 'cvv': cvvController.text.toString(),
     };
     try {
       var token = await getUserToken();
-      // showProgress(context);
       final response = await Dio().post(
         CareGiverUrl.addServiceProviderBank,
-        // body: jsonEncode(model.toJson()),
         data: requestBody,
         options: Options(
           headers: {
@@ -185,7 +170,6 @@ class _BankDetailsState extends State<BankDetails> {
           accountTitleController.clear();
           accountNumberController.clear();
         }
-        // print(response.body);
       } else {
         customErrorSnackBar(
           context,
@@ -193,7 +177,6 @@ class _BankDetailsState extends State<BankDetails> {
         );
       }
     } on DioError catch (e) {
-      // print(e);
       customErrorSnackBar(
         context,
         "Something went wrong please try again later",
@@ -208,36 +191,12 @@ class _BankDetailsState extends State<BankDetails> {
   ]; //edited line
   var selectedNames;
 
-  // Future<String> getBankNames() async {
-  //   var token = await getUserToken();
-  //   var res = await http.get(Uri.parse(AppUrl.bankName), headers: {
-  //     'Authorization': 'Bearer $token',
-  //     'Accept': 'application/json',
-  //   });
-  //   Map<String, dynamic> resBody = json.decode(res.body);
-  //   // Map<String, dynamic> map = json.decode(response.body);
-  //   List<dynamic>? names = resBody["names"];
-  //   // print(data![0]["name"]);
-  //   // var json = jsonDecode(res.body) as Map;
-  //   // var listOfJobs = json['jobs'] as List;
-
-  //   setState(() {
-  //     dataNames = names;
-  //   });
-
-  //   // print("BankNames== $dataNames");
-
-  //   return "Sucess";
-  // }
-
   getUserToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var userToken = preferences.getString(
       'userToken',
     );
-    // if (kDebugMode) {
-    // print(userToken);
-    // }
+
     return userToken.toString();
   }
 
@@ -246,11 +205,9 @@ class _BankDetailsState extends State<BankDetails> {
 
   @override
   void initState() {
-    // print("today ${DateFormat('yyyy-MM-dd').format(today)}");
     getUserToken();
     super.initState();
     futureBankDetails = fetchBankDetailsModel();
-    // getBankNames();
   }
 
   @override
@@ -406,7 +363,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                     onChanged: (value) {
                                                       setState(() {
                                                         selectedNames = value.toString();
-                                                        // print(selectedNames);
                                                       });
                                                     },
                                                     items: dataNames.map((itemone) {
@@ -451,7 +407,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                 ),
                                                 textAlignVertical: TextAlignVertical.bottom,
                                                 maxLines: 1,
-                                                // onChanged: (value) => _runFilter(value),
                                                 decoration: InputDecoration(
                                                   hintText: "Enter Account Title",
                                                   fillColor: CustomColors.white,
@@ -506,18 +461,7 @@ class _BankDetailsState extends State<BankDetails> {
                                                 ),
                                                 textAlignVertical: TextAlignVertical.bottom,
                                                 maxLines: 1,
-                                                // onChanged: (value) => _runFilter(value),
                                                 decoration: InputDecoration(
-                                                  // suffixIcon: Icon(
-                                                  //   Icons.credit_card,
-                                                  //   size: 17,
-                                                  //   color: CustomColors.red,
-                                                  // ),
-                                                  // suffixIcon: Icon(
-                                                  //   Icons.close,
-                                                  //   size: 17,
-                                                  //   color: CustomColors.hintText,
-                                                  // ),
                                                   hintText: "Enter Account Number",
                                                   fillColor: CustomColors.white,
                                                   focusColor: CustomColors.white,
@@ -702,7 +646,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                   width: MediaQuery.of(context).size.width * .4,
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                    // bankDetails[index]['name_of_bank'].toString(),
                                                     // "Babysitters",
                                                     snapshot.data!.bankDetails![index].nameOfBank.toString(),
                                                     style: TextStyle(
@@ -763,7 +706,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                       alignment: Alignment.center,
                                                       child: Text(
                                                         "Account Number",
-                                                        // "Babysitters",
                                                         style: TextStyle(
                                                           color: CustomColors.primaryText,
                                                           fontFamily: "Poppins",
@@ -780,7 +722,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                       alignment: Alignment.center,
                                                       child: Text(
                                                         snapshot.data!.bankDetails![index].accountNumber.toString(),
-                                                        // "One-Time",
                                                         style: TextStyle(
                                                           color: CustomColors.hintText,
                                                           fontFamily: "Poppins",
@@ -799,7 +740,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                       alignment: Alignment.center,
                                                       child: Text(
                                                         "Selected Default Bank",
-                                                        // "Babysitters",
                                                         style: TextStyle(
                                                           color: CustomColors.primaryText,
                                                           fontFamily: "Poppins",
@@ -819,7 +759,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                         alignment: Alignment.center,
                                                         child: Text(
                                                           "Default Bank",
-                                                          // "One-Time",
                                                           style: TextStyle(
                                                             color: snapshot.data!.bankDetails![index].selected == 1 ? Colors.white : CustomColors.red,
                                                             fontFamily: "Poppins",
@@ -832,9 +771,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                       GestureDetector(
                                                         onTap: () {
                                                           selectBank(snapshot.data!.bankDetails![index].id);
-                                                          // setState(() {
-                                                          //   futureBankDetails = fetchBankDetailsModel();
-                                                          // });
                                                         },
                                                         child: Container(
                                                           width: MediaQuery.of(context).size.width * .4,
@@ -843,7 +779,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                           alignment: Alignment.center,
                                                           child: Text(
                                                             snapshot.data!.bankDetails![index].status == 0 ? "" : "Select",
-                                                            // "One-Time",
                                                             style: TextStyle(
                                                               color: snapshot.data!.bankDetails![index].selected.toString() == "1" ? CustomColors.white : CustomColors.red,
                                                               fontFamily: "Poppins",
@@ -873,7 +808,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                       alignment: Alignment.center,
                                                       child: Text(
                                                         "Status",
-                                                        // "Babysitters",
                                                         style: TextStyle(
                                                           color: CustomColors.primaryText,
                                                           fontFamily: "Poppins",
@@ -890,7 +824,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                       alignment: Alignment.center,
                                                       child: Text(
                                                         snapshot.data!.bankDetails![index].status == 0 ? "Pending" : "Approved",
-                                                        // "One-Time",
                                                         style: TextStyle(
                                                           color: snapshot.data!.bankDetails![index].status == 0 ? CustomColors.red : CustomColors.green,
                                                           fontFamily: "Poppins",
@@ -909,7 +842,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                       alignment: Alignment.center,
                                                       child: Text(
                                                         "Action",
-                                                        // "Babysitters",
                                                         style: TextStyle(
                                                           color: CustomColors.primaryText,
                                                           fontFamily: "Poppins",
@@ -932,7 +864,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                         alignment: Alignment.center,
                                                         child: Text(
                                                           snapshot.data!.bankDetails![index].selected.toString() == "1" ? "Delete" : "Delete",
-                                                          // "One-Time",
                                                           style: TextStyle(
                                                             color: CustomColors.white,
                                                             fontFamily: "Poppins",
@@ -946,26 +877,7 @@ class _BankDetailsState extends State<BankDetails> {
                                                 ),
                                               ],
                                             ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            // Container(
-                                            //   width: MediaQuery.of(context).size.width * .4,
-                                            //   padding: const EdgeInsets.symmetric(vertical: 8),
-                                            //   margin: const EdgeInsets.symmetric(vertical: 8),
-                                            //   decoration: BoxDecoration(
-                                            //     color: CustomColors.red,
-                                            //     borderRadius: BorderRadius.circular(6),
-                                            //   ),
-                                            //   child: Center(
-                                            //     child: Text(
-                                            //       "Delete",
-                                            //       style: TextStyle(
-                                            //         color: CustomColors.white,
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
+                                            const SizedBox(height: 10),
                                           ],
                                         ),
                                       )

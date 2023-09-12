@@ -191,11 +191,9 @@ class _ManageCardsState extends State<ManageCards> {
       'cvv': cvvController.text.toString(),
     };
     var token = await getUserToken();
-    // showProgress(context);
     try {
       final response = await Dio().post(
         CareReceiverURl.serviceReceiverAddCreditCards,
-        // body: jsonEncode(model.toJson()),
         data: requestBody,
         options: Options(
           headers: {
@@ -219,21 +217,15 @@ class _ManageCardsState extends State<ManageCards> {
         setState(() {
           futureManageCards = fetchManageCardsModel();
         });
-        // print(response.body);
-      } else {
-        // print(response.body);
       }
       Navigator.pop(context);
     } on DioError catch (e) {
       Navigator.pop(context);
-      print(e.response!.data['message']);
       customErrorSnackBar(
         context,
         e.response!.data['message'].toString(),
       );
     }
-    // hideProgress();
-    // return response;
   }
 
   getUserToken() async {
@@ -241,9 +233,6 @@ class _ManageCardsState extends State<ManageCards> {
     var userToken = await preferences.getString(
       'userToken',
     );
-    // if (kDebugMode) {
-    // print(userToken);
-    // }
     return userToken.toString();
   }
 
@@ -405,18 +394,12 @@ class _ManageCardsState extends State<ManageCards> {
                                                 ),
                                                 textAlignVertical: TextAlignVertical.bottom,
                                                 maxLines: 1,
-                                                // onChanged: (value) => _runFilter(value),
                                                 decoration: InputDecoration(
                                                   suffixIcon: Icon(
                                                     Icons.person,
                                                     size: 17,
                                                     color: CustomColors.primaryColor,
                                                   ),
-                                                  // suffixIcon: Icon(
-                                                  //   Icons.close,
-                                                  //   size: 17,
-                                                  //   color: CustomColors.hintText,
-                                                  // ),
                                                   hintText: "Enter Name On Card",
                                                   fillColor: CustomColors.white,
                                                   focusColor: CustomColors.white,
@@ -470,18 +453,12 @@ class _ManageCardsState extends State<ManageCards> {
                                                 ),
                                                 textAlignVertical: TextAlignVertical.bottom,
                                                 maxLines: 1,
-                                                // onChanged: (value) => _runFilter(value),
                                                 decoration: InputDecoration(
                                                   suffixIcon: Icon(
                                                     Icons.credit_card,
                                                     size: 17,
                                                     color: CustomColors.primaryColor,
                                                   ),
-                                                  // suffixIcon: Icon(
-                                                  //   Icons.close,
-                                                  //   size: 17,
-                                                  //   color: CustomColors.hintText,
-                                                  // ),
                                                   hintText: "16 Digit Card Number",
                                                   fillColor: CustomColors.white,
                                                   focusColor: CustomColors.white,
@@ -512,7 +489,6 @@ class _ManageCardsState extends State<ManageCards> {
                                                   SizedBox(
                                                     height: 50,
                                                     width: MediaQuery.of(context).size.width * .4,
-                                                    // margin: const EdgeInsets.only(bottom: 15, top: 15),
                                                     child: Center(
                                                       child: DecoratedBox(
                                                         decoration: BoxDecoration(
@@ -557,7 +533,6 @@ class _ManageCardsState extends State<ManageCards> {
                                                               onChanged: (newVal) {
                                                                 setState(() {
                                                                   selectedMonth = newVal;
-                                                                  // print(selectedMonth);
                                                                 });
                                                               },
                                                               value: selectedMonth,
@@ -573,7 +548,6 @@ class _ManageCardsState extends State<ManageCards> {
                                                   SizedBox(
                                                     width: MediaQuery.of(context).size.width * .4,
                                                     height: 50,
-                                                    // margin: const EdgeInsets.only(bottom: 15, top: 15),
                                                     child: Center(
                                                       child: DecoratedBox(
                                                         decoration: BoxDecoration(
@@ -618,11 +592,7 @@ class _ManageCardsState extends State<ManageCards> {
                                                               onChanged: (newVal) {
                                                                 setState(() {
                                                                   selectedYear = newVal;
-
-                                                                  // print(selectedYear);
                                                                 });
-
-                                                                // print(selectedYear);
                                                               },
                                                               value: selectedYear,
                                                             ),
@@ -669,18 +639,7 @@ class _ManageCardsState extends State<ManageCards> {
                                                 ),
                                                 textAlignVertical: TextAlignVertical.bottom,
                                                 maxLines: 1,
-                                                // onChanged: (value) => _runFilter(value),
                                                 decoration: InputDecoration(
-                                                  // suffixIcon: Icon(
-                                                  //   Icons.credit_card,
-                                                  //   size: 17,
-                                                  //   color: CustomColors.red,
-                                                  // ),
-                                                  // suffixIcon: Icon(
-                                                  //   Icons.close,
-                                                  //   size: 17,
-                                                  //   color: CustomColors.hintText,
-                                                  // ),
                                                   hintText: "CVV/CVC",
                                                   fillColor: CustomColors.white,
                                                   focusColor: CustomColors.white,
@@ -734,19 +693,7 @@ class _ManageCardsState extends State<ManageCards> {
                                                   );
                                                 } else {
                                                   if (cardKey.currentState!.validate()) {
-                                                    // var request = AddCardModel(
-                                                    //   nameOnCard: nameOncardController.text.toString(),
-                                                    //   cardNumber: cardNumberController.text.toString(),
-                                                    //   cardExpirationMonth: selectedMonth.toString(),
-                                                    //   cardExpirationYear: selectedYear.toString(),
-                                                    //   cvv: cvvController.text.toString(),
-                                                    // );
                                                     postAddCard();
-                                                    // .then(
-                                                    //   (response) async {
-                                                    //     print(jsonDecode(response.body));
-                                                    //   },
-                                                    // );
                                                   }
                                                 }
                                               },

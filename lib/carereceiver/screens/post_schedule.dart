@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, prefer_typing_uninitialized_variables, non_constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: unused_local_variable, prefer_typing_uninitialized_variables, non_constant_identifier_names, use_build_context_synchronously, deprecated_member_use
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -264,14 +264,10 @@ class _ScheduleState extends State<Schedule> {
     );
     if (picked != null) {
       startDateController.text = DateFormat('yyyy-MM-dd').format(picked);
-      // print("picked $picked");
-      // picked == startDateController;
-      // print("startDateController ${startDateController.text}");
+
       setState(() {
         getfromPickedDate = startDateController.text;
       });
-
-      // print("GetfromPickedDate $getfromPickedDate");
     }
   }
 
@@ -297,15 +293,10 @@ class _ScheduleState extends State<Schedule> {
     );
     if (picked != null) {
       dobController.text = DateFormat('yyyy-MM-dd').format(picked);
-      // print(dobController);
-      // print("picked $picked");
-      // picked == dobController;
-      // print("dobController ${dobController.text}");
+
       setState(() {
         getfromPickedDate = dobController.text;
       });
-
-      // print("GetfromPickedDate $getfromPickedDate");
     }
   }
 
@@ -319,7 +310,6 @@ class _ScheduleState extends State<Schedule> {
     if (time != null) {
       setState(() {
         selectedTime = time.format(context);
-        // print("start time = $selectedTime");
       });
     }
   }
@@ -353,16 +343,7 @@ class _ScheduleState extends State<Schedule> {
       'start_time[]': startTimeMapList,
       'duration[]': durationMapList,
     });
-    // print(formData.fields);
-    // for (var element in dateMapList) {
-    //   // formData.fields.add(MapEntry("date[]", element.toString()));
-    // }
-    // for (var element in startTimeMapList) {
-    //   formData.fields.add(MapEntry("start_time[]", element.toString()));
-    // }
-    // for (var element in durationMapList) {
-    //   formData.fields.add(MapEntry("duration[]", element.toString()));
-    // }
+
     Dio dio = Dio();
     try {
       var response = await dio.post(
@@ -377,7 +358,6 @@ class _ScheduleState extends State<Schedule> {
           },
         ),
       );
-      // print("Reccurring = ${response.toString()}");
     } catch (e) {
       customErrorSnackBar(
         context,
@@ -411,16 +391,6 @@ class _ScheduleState extends State<Schedule> {
       },
     );
 
-    // for (var element in dateMapList) {
-    //   formData.fields.add(MapEntry("date[]", element.toString()));
-    // }
-    // for (var element in startTimeMapList) {
-    //   formData.fields.add(MapEntry("start_time[]", element.toString()));
-    // }
-    // for (var element in durationMapList) {
-    //   formData.fields.add(MapEntry("duration[]", element.toString()));
-    // }
-
     Dio dio = Dio();
     try {
       var response = await dio.post(
@@ -435,7 +405,6 @@ class _ScheduleState extends State<Schedule> {
           },
         ),
       );
-      // print("Reccurring = ${response.toString()}");
     } catch (e) {
       customErrorSnackBar(context, e.toString());
     }
@@ -461,15 +430,6 @@ class _ScheduleState extends State<Schedule> {
       },
     );
 
-    // for (var element in dateMapList) {
-    //   formData.fields.add(MapEntry("date[]", element.toString()));
-    // }
-    // for (var element in startTimeMapList) {
-    //   formData.fields.add(MapEntry("start_time[]", element.toString()));
-    // }
-    // for (var element in durationMapList) {
-    //   formData.fields.add(MapEntry("duration[]", element.toString()));
-    // }
     Dio dio = Dio();
     try {
       var response = await dio.post(
@@ -484,7 +444,6 @@ class _ScheduleState extends State<Schedule> {
           },
         ),
       );
-      // print("Reccurring = ${response.toString()}");
     } catch (e) {
       customErrorSnackBar(
         context,
@@ -495,7 +454,6 @@ class _ScheduleState extends State<Schedule> {
 
   PostChildCare() async {
     var token = await getUserToken();
-    // print(int.parse(hourlyController.text));
     var formData = FormData.fromMap(
       {
         'job_title': jobTitleController.text.toString(),
@@ -517,25 +475,7 @@ class _ScheduleState extends State<Schedule> {
         "grade[]": gradeLevelMapList,
       },
     );
-    // print(formData.fields);
-    // for (var element in dateMapList) {
-    //   formData.fields.add(MapEntry("date[]", element.toString()));
-    // }
-    // for (var element in startTimeMapList) {
-    //   formData.fields.add(MapEntry("start_time[]", element.toString()));
-    // }
-    // for (var element in durationMapList) {
-    //   formData.fields.add(MapEntry("duration[]", element.toString()));
-    // }
-    // for (var element in childnameMapList) {
-    //   formData.fields.add(MapEntry("name[]", element.toString()));
-    // }
-    // for (var element in childageMapList) {
-    //   formData.fields.add(MapEntry("age[]", element.toString()));
-    // }
-    // for (var element in gradeLevelMapList) {
-    //   formData.fields.add(MapEntry("grade[]", element.toString()));
-    // }
+
     Dio dio = Dio();
     try {
       var response = await dio.post(
@@ -550,7 +490,6 @@ class _ScheduleState extends State<Schedule> {
           },
         ),
       );
-      // print("Reccurring = ${response.toString()}");
     } catch (e) {
       customErrorSnackBar(
         context,
@@ -576,21 +515,7 @@ class _ScheduleState extends State<Schedule> {
         "age[]": childageMapList,
       },
     );
-    // for (var element in dateMapList) {
-    //   formData.fields.add(MapEntry("date[]", element.toString()));
-    // }
-    // for (var element in startTimeMapList) {
-    //   formData.fields.add(MapEntry("start_time[]", element.toString()));
-    // }
-    // for (var element in durationMapList) {
-    //   formData.fields.add(MapEntry("duration[]", element.toString()));
-    // }
-    // for (var element in childnameMapList) {
-    //   formData.fields.add(MapEntry("name[]", element.toString()));
-    // }
-    // for (var element in childageMapList) {
-    //   formData.fields.add(MapEntry("age[]", element.toString()));
-    // }
+
     Dio dio = Dio();
     try {
       var response = await dio.post(
@@ -605,7 +530,6 @@ class _ScheduleState extends State<Schedule> {
           },
         ),
       );
-      // print("Reccurring = ${response.toString()}");
     } catch (e) {
       customErrorSnackBar(
         context,
@@ -614,75 +538,11 @@ class _ScheduleState extends State<Schedule> {
     }
   }
 
-  // PostOneTimeApi() async {
-  //   var token = await getUserToken();
-  //   var formData = FormData.fromMap(
-  //     {
-  //       'job_title': jobTitleController.text.toString(),
-  //       'service_id': widget.serviceId,
-  //       'job_type': "1",
-  //       'date_one': startDateController.text.toString(),
-  //       'start_time_one': selectedTime.toString(),
-  //       'duration_one': durationController.text.toString(),
-  //       'responsibilities': responsibilitiesController.text.toString(),
-  //       'rate': hourlyController.text.toString(),
-  //       'address': addressController.text.toString(),
-  //       'zip': zipController.text.toString(),
-  //       'requirements': requirementController.text.toString(),
-  //       'description': descController.text.toString(),
-  //     },
-  //   );
-  //   childnameMapList.forEach((element) {
-  //     formData.fields.add(MapEntry("child_name[]", element.toString()));
-  //   });
-  //   childageMapList.forEach((element) {
-  //     formData.fields.add(MapEntry("child_age[]", element.toString()));
-  //   });
-  //   Dio dio = Dio();
-  //   try {
-  //     var response = await dio.post(
-  //       'http://192.168.0.244:9999/api/service-receiver-job-create',
-  //       data: formData,
-  //       options: Options(
-  //         followRedirects: false,
-  //         validateStatus: (status) => true,
-  //         headers: {"Accept": "application/json", "Authorization": "Bearer ${token}"},
-  //       ),
-  //     );
-  //     print("Reccurring = ${response.toString()}");
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
-
-  // Get Job Details
-  // Future<void> fetchJobBoardDetail() async {
-  //   var token = await getUserToken();
-  //   final url = "http://192.168.0.244:9999/api/service-receiver-job-board/${widget.jobId}/details";
-  //   final response = await http.get(Uri.parse(url), headers: {"Authorization": "Bearer ${token}"});
-  //   if (response.statusCode == 200) {
-  //     final json = jsonDecode(response.body) as Map;
-  //     // _data.isNotEmpty? _data[0]["Sector"]: null
-  //     var job = json['job'].isNotEmpty ? json['job'][0] : null;
-  //     final childinfo = json['job'].isNotEmpty ? json['job'][0]['childinfo'] : null ?? [] as List;
-  //     final schedule = json['job'].isNotEmpty ? json['job'][0]['schedule'] : null ?? [] as List;
-  //     setState(() {
-  //       children = childinfo;
-  //       days = schedule;
-  //       print("Schedu $days");
-  //     });
-  //     print("Get Job Details ${response.body}");
-  //   } else {
-  //     print("Get Job Details ${response.body}");
-  //   }
-  // }
-
   getUserToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -721,9 +581,6 @@ class _ScheduleState extends State<Schedule> {
 
   @override
   Widget build(BuildContext context) {
-    // double baseWidth = 360;
-    // double fem = MediaQuery.of(context).size.width / baseWidth;
-    // double ffem = fem * 0.97;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -868,7 +725,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -931,7 +787,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -1004,7 +859,6 @@ class _ScheduleState extends State<Schedule> {
                     onChanged: (newVal) {
                       setState(() {
                         selectedLocation = newVal;
-                        // print(selectedLocation);
                       });
                       if (selectedLocation == "1") {
                         locationValue = "east";
@@ -1013,7 +867,6 @@ class _ScheduleState extends State<Schedule> {
                       } else if (selectedLocation == "3") {
                         locationValue = "central";
                       }
-                      // print("locationValue $locationValue");
                     },
                     value: selectedLocation,
                   ),
@@ -1066,7 +919,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -1253,11 +1105,6 @@ class _ScheduleState extends State<Schedule> {
               // AddBtn
               GestureDetector(
                 onTap: () {
-                  //
-                  // String childname = childrenController.text.toString();
-                  // String childAge = childrenAgeController.text.toString();
-
-                  // if (startDate.isNotEmpty) {
                   setState(() {
                     childnameMapList.add(childrenController.text.toString());
                     childageMapList.add(childrenAgeController.text.toString());
@@ -1270,9 +1117,7 @@ class _ScheduleState extends State<Schedule> {
                         "grade": gradeLevelController.text.toString(),
                       },
                     );
-                    // print(children);
                   });
-                  // print(children);
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -1354,7 +1199,6 @@ class _ScheduleState extends State<Schedule> {
                       ),
                       alignment: Alignment.centerLeft,
                       width: MediaQuery.of(context).size.width,
-                      // height: 100,
                       child: Row(
                         children: [
                           SizedBox(
@@ -1420,10 +1264,8 @@ class _ScheduleState extends State<Schedule> {
                   Positioned(
                     top: 10,
                     right: -2,
-                    // left: 20,
                     child: GestureDetector(
                       onTap: (() {
-                        //
                         setState(() {
                           children.removeAt(index);
                           childnameMapList.removeAt(index);
@@ -1511,7 +1353,6 @@ class _ScheduleState extends State<Schedule> {
                     setState(() {
                       getfromPickedDate = value;
                     });
-                    // print("start date = $getfromPickedDate");
                   },
                   onTap: () async {
                     _fromDate(context);
@@ -1519,15 +1360,13 @@ class _ScheduleState extends State<Schedule> {
                 ),
               ),
               //Timer
-              // Text(selectedTime != null ? '$selectedTime': 'Click Below Button To Select Time...',
-              // style: const TextStyle(fontSize: 24),textAlign:TextAlign.center,),
+
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     alignment: Alignment.centerLeft,
-                    // ignore: deprecated_member_use
                     primary: CustomColors.myJobDetail,
                     padding: const EdgeInsets.all(7),
                     textStyle: const TextStyle(fontSize: 20),
@@ -1588,7 +1427,6 @@ class _ScheduleState extends State<Schedule> {
                           onChanged: (newVal) {
                             setState(() {
                               selectedHours = newVal;
-                              // print(selectedHours);
                             });
                           },
                           value: selectedHours,
@@ -1604,25 +1442,19 @@ class _ScheduleState extends State<Schedule> {
                 onTap: () {
                   String startDate = startDateController.text.trim();
                   String time = selectedTime.toString();
-                  // String duration = durationController.text.trim();
-                  // if (startDate.isNotEmpty) {
+
                   setState(() {
                     dateMapList.add(startDate);
                     startTimeMapList.add(time);
                     durationMapList.add(selectedHours);
-                    // durationMapList.add(selectedHours);
                     seniorCareDays.add(
                       {
                         "starting_date": startDate,
                         "starting_time": time,
                         "duration": selectedHours,
-                        // "duration": selectedHours,
                       },
                     );
-                    // print("days == $seniorCareDays");
-                    // Navigator.pop(context);
                   });
-                  // print(days);
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width,
@@ -1745,7 +1577,6 @@ class _ScheduleState extends State<Schedule> {
                                       ),
                                     ),
                                     Expanded(
-                                      // width: 300,
                                       child: Text("${seniorCareDays[index]['starting_time']}"),
                                     ),
                                   ],
@@ -1762,7 +1593,6 @@ class _ScheduleState extends State<Schedule> {
                                       ),
                                     ),
                                     Expanded(
-                                      // width: 300,
                                       child: Text("${seniorCareDays[index]['duration']} hours"),
                                     ),
                                   ],
@@ -1777,10 +1607,8 @@ class _ScheduleState extends State<Schedule> {
                   Positioned(
                     top: 10,
                     right: -2,
-                    // left: 20,
                     child: GestureDetector(
                       onTap: (() {
-                        //
                         setState(() {
                           seniorCareDays.removeAt(index);
                           startTimeMapList.removeAt(index);
@@ -1857,7 +1685,6 @@ class _ScheduleState extends State<Schedule> {
                       } else {
                         math = "1";
                       }
-                      // print("math $math");
                     });
                   },
                   controlAffinity: ListTileControlAffinity.leading,
@@ -1881,7 +1708,6 @@ class _ScheduleState extends State<Schedule> {
                       } else {
                         english = "1";
                       }
-                      // print("english $english");
                     });
                   },
                   controlAffinity: ListTileControlAffinity.leading,
@@ -1905,7 +1731,6 @@ class _ScheduleState extends State<Schedule> {
                       } else {
                         reading = "1";
                       }
-                      // print("reading $reading");
                     });
                   },
                   controlAffinity: ListTileControlAffinity.leading,
@@ -1929,7 +1754,6 @@ class _ScheduleState extends State<Schedule> {
                       } else {
                         science = "1";
                       }
-                      // print("science $science");
                     });
                   },
                   controlAffinity: ListTileControlAffinity.leading,
@@ -1953,7 +1777,6 @@ class _ScheduleState extends State<Schedule> {
                       } else {
                         other = "1";
                       }
-                      // print("other $other");
                     });
                   },
                   controlAffinity: ListTileControlAffinity.leading,
@@ -1991,7 +1814,6 @@ class _ScheduleState extends State<Schedule> {
                     hoverColor: CustomColors.white,
                     filled: true,
                     contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-                    // EdgeInsets.symmetric(horizontal: 5),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(2),
                     ),
@@ -2260,7 +2082,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -2323,7 +2144,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -2396,7 +2216,6 @@ class _ScheduleState extends State<Schedule> {
                     onChanged: (newVal) {
                       setState(() {
                         selectedLocation = newVal;
-                        // print(selectedLocation);
                       });
                       if (selectedLocation == "1") {
                         locationValue = "east";
@@ -2456,7 +2275,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -2601,21 +2419,14 @@ class _ScheduleState extends State<Schedule> {
               // AddBtn
               GestureDetector(
                 onTap: () {
-                  //
-                  // String childname = childrenController.text.toString();
-                  // String childAge = childrenAgeController.text.toString();
-
-                  // if (startDate.isNotEmpty) {
                   setState(() {
                     childnameMapList.add(childrenController.text.toString());
                     childageMapList.add(childrenAgeController.text.toString());
-                    // gradeLevelMapList.add(gradeLevelController.text.toString());
 
                     children.add(
                       {
                         "name": childrenController.text.toString(),
                         "age": childrenAgeController.text.toString(),
-                        // "grade": gradeLevelController.text.toString(),
                       },
                     );
                   });
@@ -2700,7 +2511,6 @@ class _ScheduleState extends State<Schedule> {
                       ),
                       alignment: Alignment.centerLeft,
                       width: MediaQuery.of(context).size.width,
-                      // height: 100,
                       child: Row(
                         children: [
                           SizedBox(
@@ -2750,10 +2560,8 @@ class _ScheduleState extends State<Schedule> {
                   Positioned(
                     top: 10,
                     right: -2,
-                    // left: 20,
                     child: GestureDetector(
                       onTap: (() {
-                        //
                         setState(() {
                           children.removeAt(index);
                           childnameMapList.removeAt(index);
@@ -2848,15 +2656,13 @@ class _ScheduleState extends State<Schedule> {
                 ),
               ),
               //Timer
-              // Text(selectedTime != null ? '$selectedTime': 'Click Below Button To Select Time...',
-              // style: const TextStyle(fontSize: 24),textAlign:TextAlign.center,),
+
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     alignment: Alignment.centerLeft,
-                    // ignore: deprecated_member_use
                     primary: CustomColors.myJobDetail,
                     padding: const EdgeInsets.all(7),
                     textStyle: const TextStyle(fontSize: 20),
@@ -2932,22 +2738,18 @@ class _ScheduleState extends State<Schedule> {
                 onTap: () {
                   String startDate = startDateController.text.trim();
                   String time = selectedTime.toString();
-                  // String duration = durationController.text.trim();
-                  // if (startDate.isNotEmpty) {
+
                   setState(() {
                     dateMapList.add(startDate);
                     startTimeMapList.add(time);
                     durationMapList.add(selectedHours);
-                    // durationMapList.add(selectedHours);
                     seniorCareDays.add(
                       {
                         "starting_date": startDate,
                         "starting_time": time,
                         "duration": selectedHours,
-                        // "duration": selectedHours,
                       },
                     );
-                    // Navigator.pop(context);
                   });
                 },
                 child: Container(
@@ -3071,7 +2873,6 @@ class _ScheduleState extends State<Schedule> {
                                       ),
                                     ),
                                     Expanded(
-                                      // width: 300,
                                       child: Text("${seniorCareDays[index]['starting_time']}"),
                                     ),
                                   ],
@@ -3088,7 +2889,6 @@ class _ScheduleState extends State<Schedule> {
                                       ),
                                     ),
                                     Expanded(
-                                      // width: 300,
                                       child: Text("${seniorCareDays[index]['duration']} hours"),
                                     ),
                                   ],
@@ -3103,10 +2903,8 @@ class _ScheduleState extends State<Schedule> {
                   Positioned(
                     top: 10,
                     right: -2,
-                    // left: 20,
                     child: GestureDetector(
                       onTap: (() {
-                        //
                         setState(() {
                           seniorCareDays.removeAt(index);
                           startTimeMapList.removeAt(index);
@@ -3388,7 +3186,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -3451,7 +3248,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -3723,15 +3519,13 @@ class _ScheduleState extends State<Schedule> {
                 ),
               ),
               //Timer
-              // Text(selectedTime != null ? '$selectedTime': 'Click Below Button To Select Time...',
-              // style: const TextStyle(fontSize: 24),textAlign:TextAlign.center,),
+
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     alignment: Alignment.centerLeft,
-                    // ignore: deprecated_member_use
                     primary: CustomColors.myJobDetail,
                     padding: const EdgeInsets.all(7),
                     textStyle: const TextStyle(fontSize: 20),
@@ -3807,22 +3601,18 @@ class _ScheduleState extends State<Schedule> {
                 onTap: () {
                   String startDate = startDateController.text.trim();
                   String time = selectedTime.toString();
-                  // String duration = durationController.text.trim();
-                  // if (startDate.isNotEmpty) {
+
                   setState(() {
                     dateMapList.add(startDate);
                     startTimeMapList.add(time);
                     durationMapList.add(selectedHours);
-                    // durationMapList.add(selectedHours);
                     seniorCareDays.add(
                       {
                         "starting_date": startDate,
                         "starting_time": time,
                         "duration": selectedHours,
-                        // "duration": selectedHours,
                       },
                     );
-                    // Navigator.pop(context);
                   });
                 },
                 child: Container(
@@ -3946,7 +3736,6 @@ class _ScheduleState extends State<Schedule> {
                                       ),
                                     ),
                                     Expanded(
-                                      // width: 300,
                                       child: Text("${seniorCareDays[index]['starting_time']}"),
                                     ),
                                   ],
@@ -3963,7 +3752,6 @@ class _ScheduleState extends State<Schedule> {
                                       ),
                                     ),
                                     Expanded(
-                                      // width: 300,
                                       child: Text("${seniorCareDays[index]['duration']} hours"),
                                     ),
                                   ],
@@ -3978,10 +3766,8 @@ class _ScheduleState extends State<Schedule> {
                   Positioned(
                     top: 10,
                     right: -2,
-                    // left: 20,
                     child: GestureDetector(
                       onTap: (() {
-                        //
                         setState(() {
                           seniorCareDays.removeAt(index);
                           startTimeMapList.removeAt(index);
@@ -4264,7 +4050,6 @@ class _ScheduleState extends State<Schedule> {
                     hoverColor: CustomColors.white,
                     filled: true,
                     contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-                    // EdgeInsets.symmetric(horizontal: 5),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(2),
                     ),
@@ -4406,7 +4191,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -4469,7 +4253,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -4676,15 +4459,13 @@ class _ScheduleState extends State<Schedule> {
                 ),
               ),
               //Timer
-              // Text(selectedTime != null ? '$selectedTime': 'Click Below Button To Select Time...',
-              // style: const TextStyle(fontSize: 24),textAlign:TextAlign.center,),
+
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     alignment: Alignment.centerLeft,
-                    // ignore: deprecated_member_use
                     primary: CustomColors.myJobDetail,
                     padding: const EdgeInsets.all(7),
                     textStyle: const TextStyle(fontSize: 20),
@@ -4760,22 +4541,18 @@ class _ScheduleState extends State<Schedule> {
                 onTap: () {
                   String startDate = startDateController.text.trim();
                   String time = selectedTime.toString();
-                  // String duration = durationController.text.trim();
-                  // if (startDate.isNotEmpty) {
+
                   setState(() {
                     dateMapList.add(startDate);
                     startTimeMapList.add(time);
                     durationMapList.add(selectedHours);
-                    // durationMapList.add(selectedHours);
                     seniorCareDays.add(
                       {
                         "starting_date": startDate,
                         "starting_time": time,
                         "duration": selectedHours,
-                        // "duration": selectedHours,
                       },
                     );
-                    // Navigator.pop(context);
                   });
                 },
                 child: Container(
@@ -4899,7 +4676,6 @@ class _ScheduleState extends State<Schedule> {
                                       ),
                                     ),
                                     Expanded(
-                                      // width: 300,
                                       child: Text("${seniorCareDays[index]['starting_time']}"),
                                     ),
                                   ],
@@ -4916,7 +4692,6 @@ class _ScheduleState extends State<Schedule> {
                                       ),
                                     ),
                                     Expanded(
-                                      // width: 300,
                                       child: Text("${seniorCareDays[index]['duration']} hours"),
                                     ),
                                   ],
@@ -4931,10 +4706,8 @@ class _ScheduleState extends State<Schedule> {
                   Positioned(
                     top: 10,
                     right: -2,
-                    // left: 20,
                     child: GestureDetector(
                       onTap: (() {
-                        //
                         setState(() {
                           seniorCareDays.removeAt(index);
                           startTimeMapList.removeAt(index);
@@ -5701,7 +5474,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -5764,7 +5536,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -5896,7 +5667,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -5959,7 +5729,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -6030,7 +5799,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -6093,7 +5861,6 @@ class _ScheduleState extends State<Schedule> {
               hoverColor: CustomColors.white,
               filled: true,
               contentPadding: const EdgeInsets.fromLTRB(6, 4, 12, 4),
-              // EdgeInsets.symmetric(horizontal: 5),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(2),
               ),
@@ -6379,15 +6146,13 @@ class _ScheduleState extends State<Schedule> {
                 ),
               ),
               //Timer
-              // Text(selectedTime != null ? '$selectedTime': 'Click Below Button To Select Time...',
-              // style: const TextStyle(fontSize: 24),textAlign:TextAlign.center,),
+
               SizedBox(
                 width: MediaQuery.of(context).size.width,
                 height: 50,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     alignment: Alignment.centerLeft,
-                    // ignore: deprecated_member_use
                     primary: CustomColors.myJobDetail,
                     padding: const EdgeInsets.all(7),
                     textStyle: const TextStyle(fontSize: 20),
@@ -6463,22 +6228,18 @@ class _ScheduleState extends State<Schedule> {
                 onTap: () {
                   String startDate = startDateController.text.trim();
                   String time = selectedTime.toString();
-                  // String duration = durationController.text.trim();
-                  // if (startDate.isNotEmpty) {
+
                   setState(() {
                     dateMapList.add(startDate);
                     startTimeMapList.add(time);
                     durationMapList.add(selectedHours);
-                    // durationMapList.add(selectedHours);
                     seniorCareDays.add(
                       {
                         "starting_date": startDate,
                         "starting_time": time,
                         "duration": selectedHours,
-                        // "duration": selectedHours,
                       },
                     );
-                    // Navigator.pop(context);
                   });
                 },
                 child: Container(
@@ -6602,7 +6363,6 @@ class _ScheduleState extends State<Schedule> {
                                       ),
                                     ),
                                     Expanded(
-                                      // width: 300,
                                       child: Text("${seniorCareDays[index]['starting_time']}"),
                                     ),
                                   ],
@@ -6619,7 +6379,6 @@ class _ScheduleState extends State<Schedule> {
                                       ),
                                     ),
                                     Expanded(
-                                      // width: 300,
                                       child: Text("${seniorCareDays[index]['duration']} hours"),
                                     ),
                                   ],
@@ -6634,10 +6393,8 @@ class _ScheduleState extends State<Schedule> {
                   Positioned(
                     top: 10,
                     right: -2,
-                    // left: 20,
                     child: GestureDetector(
                       onTap: (() {
-                        //
                         setState(() {
                           seniorCareDays.removeAt(index);
                           startTimeMapList.removeAt(index);

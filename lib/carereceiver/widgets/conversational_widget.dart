@@ -98,15 +98,6 @@ class _ConversationListState extends State<ConversationList> {
                     ? CircleAvatar(
                         backgroundColor: CustomColors.primaryColor,
                         radius: 05,
-                        // child: Text(
-                        //   "1",
-                        //   style: TextStyle(
-                        //     fontSize: 9,
-                        //     fontFamily: "Rubik",
-                        //     color: CustomColors.white,
-                        //     fontWeight: FontWeight.w600,
-                        //   ),
-                        // ),
                       )
                     : Container(),
               ],

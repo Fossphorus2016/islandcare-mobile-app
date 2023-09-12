@@ -43,7 +43,6 @@ class JobBoardCartWidget extends StatelessWidget {
               children: [
                 Text(
                   jobTitle.toString(),
-                  // "Babysitters",
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                   style: TextStyle(
@@ -55,7 +54,6 @@ class JobBoardCartWidget extends StatelessWidget {
                 ),
                 Text(
                   jobType.toString(),
-                  // "One-Time",
                   style: TextStyle(
                     color: CustomColors.hintText,
                     fontFamily: "Poppins",
@@ -71,14 +69,6 @@ class JobBoardCartWidget extends StatelessWidget {
             flex: 3,
             child: GestureDetector(
               onTap: detail,
-              // onTap: () {
-              //   Navigator.push(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => const MyJobsDetail(),
-              //     ),
-              //   );
-              // },
               child: Container(
                 height: 24,
                 width: 70,

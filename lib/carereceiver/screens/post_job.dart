@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/screens/post_schedule.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/service_model.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 
@@ -26,7 +25,6 @@ class _PostJobScreenState extends State<PostJobScreen> {
       AppUrl.services,
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return ServicesModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -107,7 +105,6 @@ class _PostJobScreenState extends State<PostJobScreen> {
                   future: futureJobPost,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      // var storege = snapshot.data!.folderPath;
                       return GridView.builder(
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
@@ -122,7 +119,6 @@ class _PostJobScreenState extends State<PostJobScreen> {
                               setState(() {
                                 selectedJob = index;
                               });
-                              // print(selectedJob);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -135,8 +131,6 @@ class _PostJobScreenState extends State<PostJobScreen> {
                             child: Center(
                               child: Container(
                                 margin: const EdgeInsets.all(4),
-                                // height: 130,
-                                // width: 140,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: selectedJob == index ? CustomColors.primaryColor : CustomColors.white,
@@ -156,13 +150,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                     SizedBox(
                                       height: 60,
                                       width: 60,
-                                      child:
-                                          // SvgPicture.network(
-                                          //   snapshot.data!.folderPath.toString() + "/" + snapshot.data!.services![index].image.toString(),
-                                          //   placeholderBuilder: (context) => CircularProgressIndicator(),
-                                          //   height: 128.0,
-                                          // ),
-                                          CachedNetworkImage(
+                                      child: CachedNetworkImage(
                                         width: 60,
                                         height: 60,
                                         fit: BoxFit.contain,
@@ -170,12 +158,6 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                         placeholder: (context, url) => const CircularProgressIndicator(),
                                         errorWidget: (context, url, error) => const Icon(Icons.error),
                                       ),
-                                      //  Image.asset(
-                                      //   "assets/images/icons/Senior.png",
-                                      //   height: 60,
-                                      //   width: 60,
-                                      //   fit: BoxFit.contain,
-                                      // ),
                                     ),
                                     const SizedBox(
                                       height: 20,

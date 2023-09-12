@@ -2,14 +2,12 @@
 
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
@@ -18,7 +16,7 @@ import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 class ProfileReceiverEdit extends StatefulWidget {
   String? name;
   String? dob;
-  String? male;
+  int? male;
   String? phoneNumber;
   String? service;
   String? zipCode;
@@ -74,7 +72,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
       },
     );
     if (picked != null) {
-      // DateTime.parse(picked);
       if (picked.isAfter(DateTime.now())) {
         customErrorSnackBar(
           context,
@@ -83,15 +80,10 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
         return;
       }
       dobController.text = DateFormat('yyyy-MM-dd').format(picked);
-      // print(dobController);
-      // print("picked $picked");
-      // picked == dobController;
-      // print("controller ${dobController.text}");
+
       setState(() {
         getPickedDate = dobController.text;
       });
-
-      // print("GetPickedDate $getPickedDate");
     }
   }
 
@@ -105,28 +97,21 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
   Future<String> getSWData() async {
     var res = await Dio().get(serviceurl, options: Options(headers: {"Accept": "application/json"}));
     Map<String, dynamic> resBody = res.data;
-    // Map<String, dynamic> map = json.decode(response.body);
     List<dynamic> serviceData = resBody["services"];
-    // print(serviceData);
     if (widget.service != null) {
       var getServiceByProfile = serviceData
           .where(
             (element) => element['name'] == widget.service,
           )
           .first;
-      // print(getServiceByProfile);
 
       setState(() {
-        // data = serviceData;
         selectedService = getServiceByProfile['id'].toString();
       });
     }
     setState(() {
       data = serviceData;
-      // selectedService = getServiceByProfile['id'].toString();
     });
-
-    // print(resBody);
 
     return "Sucess";
   }
@@ -145,99 +130,61 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
   }
 
   File? image;
-  final _picker = ImagePicker();
   bool showSpinner = false;
   var myimg;
   Future getImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
-    if (pickedFile != null) {
-      image = File(pickedFile.path);
-      myimg = image!.path.split('/').last;
-      // print("Imagess $image");
-      // print("lasatacccestt ${image!.absolute}");
-      // print("slited name ${image!.path.split('/').last}");
-      // print("myIMG $myimg");
+    FilePickerResult? pickedFileDio = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg'],
+    );
 
-      setState(() {});
+    if (pickedFileDio != null) {
+      if (checkImageFileTypes(context, pickedFileDio.files.single.extension)) {
+        setState(() {
+          image = File(pickedFileDio.files.single.path ?? " ");
+        });
+      }
     } else {
-      // print("No image selected");
+      customErrorSnackBar(context, "No file select");
     }
   }
 
   var userinfo = "fromapp";
-  // Future<String?> uploadImage2(filename, url) async {
-  //   var token = "85|4OmSeaaLUrp2ns2SYtNx733AnzSpTSvqJghXtf2Q";
-  //   var request = http.MultipartRequest('POST',
-  //       Uri.parse("${CareReceiverURl.serviceReceiverProfile}/3"));
-  //   request.fields['_method'] = "PUT";
-  //   request.fields['user_info'] = "from app";
-  //   request.fields['phone'] = "12121212";
-  //   request.fields['address'] = "from app";
-  //   request.fields['gender'] = "1";
-  //   request.fields['phone'] = "12121212";
-  //   request.fields['dob'] = "2023-01-04T00:12:36.000000Z";
-  //   request.fields['zip'] = "1234";
-  //   request.files.add(await http.MultipartFile.fromPath('avatar', filename));
-  //   request.headers.addAll(
-  //     {"Authorization": "Bearer ${token}", "Accept": "application/json"},
-  //   );
-  //   var res = await request.send();
-  //   return res.reasonPhrase;
-  // }
 
-  // String state = "";
-  Future<void> uploadImage(filename) async {
+  Future<void> uploadImage() async {
     var token = await getUserToken();
     var usersId = await getUserId();
 
-    // var token = "85|4OmSeaaLUrp2ns2SYtNx733AnzSpTSvqJghXtf2Q";
-    // showProgress(context);
+    var formData = FormData.fromMap(
+      {
+        '_method': 'PUT',
+        'user_info': userInfoController.text.toString(),
+        'phone': phoneController.text.toString(),
+        'address': addressController.text.toString(),
+        'gender': _isSelectedGender,
+        'dob': dobController.text.toString(),
+        'zip': zipController.text.toString(),
+        "avatar": image == null ? null : await MultipartFile.fromFile(image!.path),
+      },
+    );
 
-    // var stream = http.ByteStream(image!.openRead());
-    // stream.cast();
-
-    // // var length = await image!.length();
-    // var putUrl = "${CareReceiverURl.serviceReceiverProfile}/$usersId";
-    // var uri = Uri.parse(putUrl);
-
-    // var request = http.MultipartRequest("POST", uri);
-    // request.fields['_method'] = "PUT";
-    // request.fields['user_info'] = userInfoController.text.toString();
-    // request.fields['phone'] = phoneController.text.toString();
-    // request.fields['address'] = addressController.text.toString();
-    // request.fields['gender'] = _isSelectedGender;
-    // request.fields['phone'] = phoneController.text.toString();
-    // request.fields['dob'] = dobController.text.toString();
-    // request.fields['zip'] = zipController.text.toString();
-
-    // var multiport = http.MultipartFile(
-    //   'avatar',
-    //   stream,
-    //   length,
-    // );
-    // request.files.add(await http.MultipartFile.fromPath('avatar', filename));
-
-    // // request.files.add(multiport);
-    // request.headers.addAll(
-    //   {"Authorization": "Bearer $token", "Accept": "application/json"},
-    // );
-    // var response = await request.send();
-    // final respStr = await response.stream.bytesToString();
-    // if (response.statusCode == 200) {
-    // print("API response  $response");
-    // print("Succes response $respStr");
-    // print(response.statusCode);
-    // print("File Uploaded"); context,
-    //    customSuccesSnackBar(context, "Profile Updated Successfully");
-    //   // hideProgress();
-    // } else {
-    //    customErrorSnackBar(context, "Profile Is Not Updated Successfully");
-
-    // print("Failed");
-    // print(respStr);
-    // print(response.statusCode);
-    // hideProgress();
-    // }
+    Dio dio = Dio();
+    try {
+      var response = await dio.post('https://islandcare.bm/api/service-receiver-profile/$usersId', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
+      if (response.statusCode == 200) {
+        customSuccesSnackBar(
+          context,
+          "Profile Updated Successfully.",
+        );
+      } else {
+        customErrorSnackBar(
+          context,
+          response.data['message'],
+        );
+      }
+    } catch (e) {
+      customErrorSnackBar(context, "Something went wrong please try agan later.");
+    }
   }
 
   getUserToken() async {
@@ -254,7 +201,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
     var userId = preferences.getString(
       'userId',
     );
-    // print(userId);
     return userId.toString();
   }
 
@@ -279,9 +225,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
     if (widget.phoneNumber != null) {
       phoneController.text = widget.phoneNumber!;
     }
-    // if (widget.service != null) {
-    //   selectedService = widget.service!;
-    // }
   }
 
   @override
@@ -302,31 +245,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
               fontFamily: "Rubik",
             ),
           ),
-          // actions: [
-          //   GestureDetector(
-          //     onTap: () {
-          //       Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //           builder: (context) => const NotificationScreen(),
-          //         ),
-          //       );
-          //     },
-          //     child: const Padding(
-          //       padding: EdgeInsets.all(12.0),
-          //       // child: Badge(
-          //       //   elevation: 0,
-          //       //   badgeContent: const Text(""),
-          //       //   badgeColor: CustomColors.red,
-          //       //   position: BadgePosition.topStart(start: 18),
-          //       //   child: const Icon(
-          //       //     Icons.notifications_none,
-          //       //     size: 30,
-          //       //   ),
-          //       // ),
-          //     ),
-          //   )
-          // ],
         ),
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -390,62 +308,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                               ),
                       ),
                       const SizedBox(height: 15),
-                      // Text(state),
-
-                      // Container(
-                      //   padding: const EdgeInsets.symmetric(
-                      //       horizontal: 17, vertical: 10),
-                      //   margin: const EdgeInsets.only(bottom: 15),
-                      //   decoration: BoxDecoration(
-                      //     color: CustomColors.white,
-                      //     borderRadius: BorderRadius.circular(12),
-                      //   ),
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Text(
-                      //         "Name",
-                      //         style: TextStyle(
-                      //           color: CustomColors.primaryColor,
-                      //           fontSize: 12,
-                      //           fontFamily: "Rubik",
-                      //           fontWeight: FontWeight.w600,
-                      //         ),
-                      //       ),
-                      //       TextFormField(
-                      //         controller: nameController,
-                      //         style: const TextStyle(
-                      //           fontSize: 16,
-                      //           fontFamily: "Rubik",
-                      //           fontWeight: FontWeight.w400,
-                      //         ),
-                      //         textAlignVertical: TextAlignVertical.bottom,
-                      //         maxLines: 1,
-                      //         decoration: InputDecoration(
-                      //           hintText: "Name...",
-                      //           fillColor: CustomColors.white,
-                      //           focusColor: CustomColors.white,
-                      //           hoverColor: CustomColors.white,
-                      //           filled: true,
-                      //           border: OutlineInputBorder(
-                      //             borderRadius: BorderRadius.circular(0),
-                      //           ),
-                      //           focusedBorder: OutlineInputBorder(
-                      //             borderSide: BorderSide(
-                      //                 color: CustomColors.white, width: 0.0),
-                      //             borderRadius: BorderRadius.circular(0.0),
-                      //           ),
-                      //           enabledBorder: OutlineInputBorder(
-                      //             borderSide: BorderSide(
-                      //                 color: CustomColors.white, width: 0.0),
-                      //             borderRadius: BorderRadius.circular(0.0),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
@@ -477,12 +339,10 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                     onTap: () {
                                       setState(() {
                                         _isSelectedGender = "1";
-                                        // print(_isSelectedGender);
                                       });
                                     },
                                     child: Container(
                                       height: 50.45,
-                                      // width: 149.49,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
                                         color: _isSelectedGender == "1" ? CustomColors.primaryColor : CustomColors.white,
@@ -501,7 +361,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                         onPressed: () {
                                           setState(() {
                                             _isSelectedGender = "1";
-                                            // print(_isSelectedGender);
                                           });
                                         },
                                         child: Text(
@@ -526,12 +385,10 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                     onTap: () {
                                       setState(() {
                                         _isSelectedGender = "2";
-                                        // print(_isSelectedGender);
                                       });
                                     },
                                     child: Container(
                                       height: 50.45,
-                                      // width: 149.49,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
                                         color: _isSelectedGender == "2" ? CustomColors.primaryColor : CustomColors.white,
@@ -550,7 +407,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                         onPressed: () {
                                           setState(() {
                                             _isSelectedGender = "2";
-                                            // print(_isSelectedGender);
                                           });
                                         },
                                         child: Text(
@@ -605,16 +461,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                               hintText: "DOB",
                               onTap: () async {
                                 _selectDate(context);
-                                // DateTime? pickedDate = await showDatePicker(
-                                //     context: context,
-                                //     initialDate: DateTime.now(),
-                                //     firstDate: DateTime(1950),
-                                //     lastDate: DateTime(2050));
-
-                                // if (pickedDate != null) {
-                                //   dobController.text =
-                                //       DateFormat('dd MMMM yyyy').format(pickedDate);
-                                // }
                               },
                             ),
                           ],
@@ -665,7 +511,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                       onChanged: (newVal) {
                                         setState(() {
                                           selectedService = newVal;
-                                          // print(selectedService);
                                         });
                                       },
                                       value: selectedService,
@@ -890,9 +735,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: GestureDetector(
                           onTap: () {
-                            if (image == null) {
-                              customErrorSnackBar(context, "Please Select Image");
-                            } else if (_isSelectedGender == null) {
+                            if (_isSelectedGender == null) {
                               customErrorSnackBar(context, "Please Select Gender");
                             } else if (dobController.text.isEmpty) {
                               customErrorSnackBar(context, "Please Select Date Of Birth");
@@ -905,7 +748,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                             } else if (addressController.text.isEmpty) {
                               customErrorSnackBar(context, "Please Enter User Address");
                             } else {
-                              uploadImage(image!.path);
+                              uploadImage();
                             }
                           },
                           child: Container(
@@ -1014,15 +857,10 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
     );
     if (picked != null) {
       dobController.text = DateFormat('yyyy-MM-dd').format(picked);
-      // print(dobController);
-      // print("picked $picked");
-      // picked == dobController;
-      // print("controller ${dobController.text}");
+
       setState(() {
         getPickedDate = dobController.text;
       });
-
-      // print("GetPickedDate $getPickedDate");
     }
   }
 
@@ -1039,15 +877,11 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
       options: Options(headers: {"Accept": "application/json"}),
     );
     Map<String, dynamic> resBody = res.data;
-    // Map<String, dynamic> map = json.decode(response.body);
     List<dynamic> serviceData = resBody["services"];
-    // print(data![0]["name"]);
 
     setState(() {
       data = serviceData;
     });
-
-    // print(resBody);
 
     return "Sucess";
   }
@@ -1066,99 +900,60 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
   }
 
   File? image;
-  final _picker = ImagePicker();
   bool showSpinner = false;
   var myimg;
   Future getImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
-    if (pickedFile != null) {
-      image = File(pickedFile.path);
-      myimg = image!.path.split('/').last;
-      // print("Imagess $image");
-      // print("lasatacccestt ${image!.absolute}");
-      // print("slited name ${image!.path.split('/').last}");
-      // print("myIMG $myimg");
+    FilePickerResult? pickedFileDio = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg'],
+    );
 
-      setState(() {});
+    if (pickedFileDio != null) {
+      if (checkImageFileTypes(context, pickedFileDio.files.single.extension)) {
+        setState(() {
+          image = File(pickedFileDio.files.single.path ?? " ");
+        });
+      }
     } else {
-      // print("No image selected");
+      customErrorSnackBar(context, "No file select");
     }
   }
 
   var userinfo = "fromapp";
-  // Future<String?> uploadImage2(filename, url) async {
-  //   var token = "85|4OmSeaaLUrp2ns2SYtNx733AnzSpTSvqJghXtf2Q";
-  //   var request = http.MultipartRequest('POST',
-  //       Uri.parse("http://192.168.0.244:9999/api/service-receiver-profile/3"));
-  //   request.fields['_method'] = "PUT";
-  //   request.fields['user_info'] = "from app";
-  //   request.fields['phone'] = "12121212";
-  //   request.fields['address'] = "from app";
-  //   request.fields['gender'] = "1";
-  //   request.fields['phone'] = "12121212";
-  //   request.fields['dob'] = "2023-01-04T00:12:36.000000Z";
-  //   request.fields['zip'] = "1234";
-  //   request.files.add(await http.MultipartFile.fromPath('avatar', filename));
-  //   request.headers.addAll(
-  //     {"Authorization": "Bearer ${token}", "Accept": "application/json"},
-  //   );
-  //   var res = await request.send();
-  //   return res.reasonPhrase;
-  // }
 
-  // String state = "";
   Future<void> uploadImage(filename) async {
     var token = await getUserToken();
     var usersId = await getUserId();
+    var formData = FormData.fromMap(
+      {
+        '_method': 'PUT',
+        'user_info': userInfoController.text.toString(),
+        'phone': phoneController.text.toString(),
+        'address': addressController.text.toString(),
+        'gender': _isSelectedGender,
+        'dob': dobController.text.toString(),
+        'zip': zipController.text.toString(),
+        "avatar": image == null ? null : await MultipartFile.fromFile(image!.path),
+      },
+    );
 
-    // var token = "85|4OmSeaaLUrp2ns2SYtNx733AnzSpTSvqJghXtf2Q";
-    // showProgress(context);
-
-    // var stream = http.ByteStream(image!.openRead());
-    // stream.cast();
-
-    // // var length = await image!.length();
-    // var putUrl = "${CareReceiverURl.serviceReceiverProfile}/$usersId";
-    // var uri = Uri.parse(putUrl);
-
-    // var request = http.MultipartRequest("POST", uri);
-    // request.fields['_method'] = "PUT";
-    // request.fields['user_info'] = userInfoController.text.toString();
-    // request.fields['phone'] = phoneController.text.toString();
-    // request.fields['address'] = addressController.text.toString();
-    // request.fields['gender'] = _isSelectedGender;
-    // request.fields['phone'] = phoneController.text.toString();
-    // request.fields['dob'] = dobController.text.toString();
-    // request.fields['zip'] = zipController.text.toString();
-
-    // var multiport = http.MultipartFile(
-    //   'avatar',
-    //   stream,
-    //   length,
-    // );
-    // request.files.add(await http.MultipartFile.fromPath('avatar', filename));
-
-    // // request.files.add(multiport);
-    // request.headers.addAll(
-    //   {"Authorization": "Bearer $token", "Accept": "application/json"},
-    // );
-    // var response = await request.send();
-    // final respStr = await response.stream.bytesToString();
-    // if (response.statusCode == 200) {
-    // print("API response  $response");
-    // print("Succes response $respStr");
-    // print(response.statusCode);
-    // print("File Uploaded");
-    //    customSuccesSnackBar(context, "Profile Updated Successfully");
-    //   // hideProgress();
-    // } else {
-    //    customErrorSnackBar(context, "Profile Is Not Updated Successfully");
-
-    // print("Failed");
-    // print(respStr);
-    // print(response.statusCode);
-    // hideProgress();
-    // }
+    Dio dio = Dio();
+    try {
+      var response = await dio.post('https://islandcare.bm/api/service-receiver-profile/$usersId', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
+      if (response.statusCode == 200) {
+        customSuccesSnackBar(
+          context,
+          "Profile Updated Successfully.",
+        );
+      } else {
+        customErrorSnackBar(
+          context,
+          "Something went wrong please try agan later.",
+        );
+      }
+    } catch (e) {
+      customErrorSnackBar(context, e.toString());
+    }
   }
 
   getUserToken() async {
@@ -1166,7 +961,6 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
     var userToken = preferences.getString(
       'userTokenProfile',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -1175,7 +969,6 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
     var userId = preferences.getString(
       'userId',
     );
-    // print(userId);
     return userId.toString();
   }
 
@@ -1205,31 +998,7 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
               fontFamily: "Rubik",
             ),
           ),
-          actions: const [
-            // GestureDetector(
-            //   onTap: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => const NotificationScreen(),
-            //       ),
-            //     );
-            //   },
-            //   child: const Padding(
-            //     padding: EdgeInsets.all(12.0),
-            //     // child: Badge(
-            //     //   elevation: 0,
-            //     //   badgeContent: const Text(""),
-            //     //   badgeColor: CustomColors.red,
-            //     //   position: BadgePosition.topStart(start: 18),
-            //     //   child: const Icon(
-            //     //     Icons.notifications_none,
-            //     //     size: 30,
-            //     //   ),
-            //     // ),
-            //   ),
-            // )
-          ],
+          actions: const [],
         ),
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -1313,9 +1082,7 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            const SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -1324,12 +1091,10 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
                                     onTap: () {
                                       setState(() {
                                         _isSelectedGender = "1";
-                                        // print(_isSelectedGender);
                                       });
                                     },
                                     child: Container(
                                       height: 50.45,
-                                      // width: 149.49,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
                                         color: _isSelectedGender == "1" ? CustomColors.primaryColor : CustomColors.white,
@@ -1348,7 +1113,6 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
                                         onPressed: () {
                                           setState(() {
                                             _isSelectedGender = "1";
-                                            // print(_isSelectedGender);
                                           });
                                         },
                                         child: Text(
@@ -1365,20 +1129,16 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                                const SizedBox(width: 15),
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
                                       setState(() {
                                         _isSelectedGender = "2";
-                                        // print(_isSelectedGender);
                                       });
                                     },
                                     child: Container(
                                       height: 50.45,
-                                      // width: 149.49,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
                                         color: _isSelectedGender == "2" ? CustomColors.primaryColor : CustomColors.white,
@@ -1397,7 +1157,6 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
                                         onPressed: () {
                                           setState(() {
                                             _isSelectedGender = "2";
-                                            // print(_isSelectedGender);
                                           });
                                         },
                                         child: Text(
@@ -1448,7 +1207,6 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
                               },
                               hintText: "DOB",
                               onTap: () async {
-                                // _selectDate(context);
                                 showDialog(
                                     context: context,
                                     builder: (context) {
@@ -1476,8 +1234,6 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
                                                 ),
                                               ),
                                             ),
-                                            // selectionColor: AppColors.appPrimarySkyColor,
-                                            // rangeSelectionColor: AppColors.appPrimarySkyColor,
                                             onSubmit: (args) {
                                               if (args != null) {
                                                 var value = args as PickerDateRange;
@@ -1581,7 +1337,6 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
                                       onChanged: (newVal) {
                                         setState(() {
                                           selectedService = newVal;
-                                          // print(selectedService);
                                         });
                                       },
                                       value: selectedService,
@@ -1806,18 +1561,16 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: GestureDetector(
                           onTap: () {
-                            if (image == null) {
-                              customErrorSnackBar(context, "Please Select Image");
-                            } else if (_isSelectedGender == null) {
+                            if (_isSelectedGender == null) {
                               customErrorSnackBar(context, "Please Select Gender");
                             } else if (dobController.text.isEmpty) {
                               customErrorSnackBar(context, "Please Select Date Of Birth");
                             } else if (selectedService == null) {
                               customErrorSnackBar(context, "Please Select Services");
-                            } else if (zipController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter Zip Code");
                             } else if (phoneController.text.isEmpty) {
                               customErrorSnackBar(context, "Please Enter Phone Number");
+                            } else if (zipController.text.isEmpty) {
+                              customErrorSnackBar(context, "Please Enter Zip Code");
                             } else if (addressController.text.isEmpty) {
                               customErrorSnackBar(context, "Please Enter User Address");
                             } else {

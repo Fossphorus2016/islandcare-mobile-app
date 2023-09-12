@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/receiver_reviews_given.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/carereceiver/widgets/reviews_given_widget.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
@@ -34,11 +33,7 @@ class _ReceiverReviewsScreenState extends State<ReceiverReviewsScreen> {
       ),
     );
     if (response.statusCode == 200) {
-      // if (kDebugMode) {
-      //   print("Job Applicant == ${jsonDecode(response.body)}");
-      // }
       var data = response.data;
-      // print(data);
       if (data.isNotEmpty) {
         return ReceiverReviewsModel.fromJson(data);
       } else {
@@ -69,7 +64,6 @@ class _ReceiverReviewsScreenState extends State<ReceiverReviewsScreen> {
   void initState() {
     getUserToken();
     super.initState();
-    // fetchJobBoardDetail();
     futurereviews = fetchReviewsModel();
   }
 

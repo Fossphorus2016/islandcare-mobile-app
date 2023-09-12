@@ -8,7 +8,6 @@ import 'package:island_app/carereceiver/models/favourite_get_model.dart';
 import 'package:island_app/carereceiver/screens/provider_profile_detail_for_giver.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/recommendation_widget.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/res/app_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,7 +19,6 @@ class WishlistScreen extends StatefulWidget {
 }
 
 class _WishlistScreenState extends State<WishlistScreen> {
-  // Rating Bar
   late final ratingController;
   late double rating;
   final double userRating = 3.0;
@@ -30,7 +28,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
   final bool isVertical = false;
   List providerList = [];
 
-  // Service Receiver Dashboard
   late Future<FavouriteGetModel>? futureFavourite;
   Future<FavouriteGetModel> fetchFavourite() async {
     var token = await getUserToken();
@@ -43,19 +40,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
         },
       ),
     );
-    // Map<String, dynamic> map = json.decode(response.body);
-    // List<dynamic> data = map["data"];
 
     if (response.statusCode == 200) {
-      // print("mapdata $data");
       var json = response.data as Map;
       var listOfProviders = json['data'] as List;
-      // print("IsNotEmpty== ${jsonDecode(response.body)}");
       setState(() {
         providerList = listOfProviders;
         foundProviders = listOfProviders;
       });
-      // print("providerList= $providerList");
       return FavouriteGetModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -80,16 +72,12 @@ class _WishlistScreenState extends State<WishlistScreen> {
       ),
     );
     if (response.statusCode == 200) {
-      // Utils.customSuccesSnackBar( context,"Added To Favourite",);
-      // print("isFavourite = ${response.body}");
       setState(() {
         futureFavourite = fetchFavourite();
         favouriteList;
         foundProviders;
         fetchFavourite();
       });
-    } else {
-      // print("isFavouriteerror = ${response.body}");
     }
     return response;
   }
@@ -99,7 +87,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -138,22 +125,15 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
   String isAdult(String enteredAge) {
     var birthDate = DateFormat('yyyy-mm-dd').parse(enteredAge);
-    // print("set state: $birthDate");
     var today = DateTime.now();
 
     final difference = today.difference(birthDate).inDays;
-    // print(difference);
     final year = difference / 365;
-    // print(year);
     return year.toStringAsFixed(0);
   }
 
   @override
   Widget build(BuildContext context) {
-    // double baseWidth = 360;
-    // double fem = MediaQuery.of(context).size.width / baseWidth;
-    // double ffem = fem * 0.97;
-    // print(foundProviders);
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomColors.loginBg,
@@ -179,74 +159,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
               children: [
-                // Search Field
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // Container(
-                //   decoration: BoxDecoration(
-                //     borderRadius: const BorderRadius.only(
-                //       topLeft: Radius.circular(6),
-                //       bottomLeft: Radius.circular(6),
-                //       bottomRight: Radius.circular(6),
-                //       topRight: Radius.circular(6),
-                //     ),
-                //     color: CustomColors.white,
-                //     boxShadow: const [
-                //       BoxShadow(
-                //         color: Color.fromARGB(13, 0, 0, 0),
-                //         blurRadius: 4.0,
-                //         spreadRadius: 2.0,
-                //         offset: Offset(2.0, 2.0),
-                //       ),
-                //     ],
-                //   ),
-                //   alignment: Alignment.center,
-                //   width: MediaQuery.of(context).size.width,
-                //   height: 50,
-                //   child: TextFormField(
-                //     onChanged: (value) => _runFilter(value),
-                //     style: const TextStyle(
-                //       fontSize: 16,
-                //       fontFamily: "Rubik",
-                //       fontWeight: FontWeight.w400,
-                //     ),
-                //     textAlignVertical: TextAlignVertical.bottom,
-                //     maxLines: 1,
-                //     decoration: InputDecoration(
-                //       prefixIcon: Icon(
-                //         Icons.search,
-                //         size: 17,
-                //         color: CustomColors.hintText,
-                //       ),
-                //       suffixIcon: Icon(
-                //         Icons.close,
-                //         size: 17,
-                //         color: CustomColors.hintText,
-                //       ),
-                //       hintText: "Search...",
-                //       fillColor: CustomColors.white,
-                //       focusColor: CustomColors.white,
-                //       hoverColor: CustomColors.white,
-                //       filled: true,
-                //       border: OutlineInputBorder(
-                //         borderRadius: BorderRadius.circular(4),
-                //       ),
-                //       focusedBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                //         borderRadius: BorderRadius.circular(4.0),
-                //       ),
-                //       enabledBorder: OutlineInputBorder(
-                //         borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                //         borderRadius: BorderRadius.circular(4.0),
-                //       ),
-                //     ),
-                //   ),
-                // ),
                 // Card Box Widget
-                const SizedBox(
-                  height: 5,
-                ),
+                const SizedBox(height: 5),
                 foundProviders.isEmpty
                     ? Container(
                         width: MediaQuery.of(context).size.width,
@@ -277,22 +191,16 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               shrinkWrap: true,
                               scrollDirection: Axis.vertical,
                               physics: const NeverScrollableScrollPhysics(),
-                              // itemCount: snapshot.data!.data!.length,
                               itemCount: foundProviders.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return foundProviders[index]['data'] == 0
                                     ? Container()
                                     : RecommendationReceiverWidget(
-                                        // imgPath: "${AppUrl.webStorageUrl}" '/' + foundProviders[index]['users']['avatar'].toString(),
                                         title: "${foundProviders[index]['users']['first_name']} ${foundProviders[index]['users']['last_name']}",
                                         experience: foundProviders[index]['userdetailproviders']['experience'] == null ? "0" : foundProviders[index]['userdetailproviders']['experience'].toString(),
                                         hourly: foundProviders[index]['userdetailproviders']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailproviders']['hourly_rate'].toString(),
                                         price: foundProviders[index]['userdetailproviders']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailproviders']['hourly_rate'].toString(),
                                         dob: isAdult(foundProviders[index]['userdetails']['dob'] != null ? "${foundProviders[index]['userdetails']['dob']}" : "00-00-0000"),
-                                        // dob: Jiffy("${foundProviders[index]['users']['userdetail']['dob']}" == null ? "00-00-0000" : "${foundProviders[index]['users']['userdetail']['dob']}", "yyyy-MM-dd").fromNow(),
-                                        // dob: "DOB ${foundProviders[index]['users'].userdetail!.dob.toString()}",
-                                        // dob: calAge(DateFormat('yyyy-mm-dd').parse(foundProviders[index]['users'].userdetail!.dob)) as DateDuration,
-                                        // ratingCount: double.parse(foundProviders[index]['users']['ratings']['rating'] == null ? "0.0" : "${foundProviders[index]['users']['ratings']['rating']}"),
                                         isRatingShow: false,
                                         isFavouriteIcon: GestureDetector(
                                           onTap: () {
@@ -308,7 +216,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                             }
                                             providerId = foundProviders[index]['users']['id'];
                                             favourited("http://192.168.0.244:9999/api/service-receiver-add-to-favourite?favourite_id=${foundProviders[index]['users']['id'].toString()}");
-                                            // Navigator.push(context, new MaterialPageRoute(builder: (context) => this.build(context)));
                                             setState(() {});
                                           },
                                           child: favouriteList.contains(foundProviders[index]['users']['id'].toString())
@@ -329,11 +236,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                             MaterialPageRoute(
                                                 builder: (context) => ProviderProfileDetailForReceiver(
                                                       id: snapshot.data!.data![index].id.toString(),
-                                                    )
-                                                // JobDetailGiver(
-                                                //   id: snapshot.data!.data![index].id.toString(),
-                                                // ),
-                                                ),
+                                                    )),
                                           );
                                         },
                                       );

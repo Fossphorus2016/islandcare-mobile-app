@@ -15,13 +15,11 @@ class ChatDetailPage extends StatefulWidget {
 }
 
 class ChatDetailPageState extends State<ChatDetailPage> {
-
   @override
   void initState() {
     super.initState();
     Provider.of<ChatProvider>(context, listen: false).updateStatus();
   }
-
 
   @override
   void dispose() {
@@ -35,11 +33,8 @@ class ChatDetailPageState extends State<ChatDetailPage> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        // leadingWidth: 0,
-        // toolbarHeight: 140,
         backgroundColor: const Color(0xff2dcd95),
         automaticallyImplyLeading: false,
-        // title:
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
@@ -79,46 +74,46 @@ class ChatDetailPageState extends State<ChatDetailPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                if(chatProvider.activeChat['receiver'] != null)...[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(70),
-                  child: Center(
-                    child: chatProvider.activeChat['receiver']['avatar'] != null
-                        ? Image(
-                            height: 60,
-                            width: 60,
-                            image: NetworkImage("${AppUrl.webStorageUrl}/${chatProvider.activeChat['receiver']['avatar']}"),
-                          )
-                        : const Image(
-                            height: 60,
-                            width: 60,
-                            image: AssetImage("assets/images/category.png"),
-                          ),
+                if (chatProvider.activeChat['receiver'] != null) ...[
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(70),
+                    child: Center(
+                      child: chatProvider.activeChat['receiver']['avatar'] != null
+                          ? Image(
+                              height: 60,
+                              width: 60,
+                              image: NetworkImage("${AppUrl.webStorageUrl}/${chatProvider.activeChat['receiver']['avatar']}"),
+                            )
+                          : const Image(
+                              height: 60,
+                              width: 60,
+                              image: AssetImage("assets/images/category.png"),
+                            ),
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${chatProvider.activeChat['receiver']['first_name']} ${chatProvider.activeChat['receiver']['last_name']}",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: CustomColors.white,
-                        fontFamily: "Rubik",
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${chatProvider.activeChat['receiver']['first_name']} ${chatProvider.activeChat['receiver']['last_name']}",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: CustomColors.white,
+                          fontFamily: "Rubik",
+                        ),
                       ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 12),
-                    ),
-                  ],
-                ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 12),
+                      ),
+                    ],
+                  ),
                 ],
               ],
             ),
@@ -133,7 +128,7 @@ class ChatDetailPageState extends State<ChatDetailPage> {
               reverse: true,
               child: Column(
                 children: [
-                  if(chatProvider.activeChat['chat_messages'] != null)...[
+                  if (chatProvider.activeChat['chat_messages'] != null) ...[
                     for (final message in chatProvider.activeChat['chat_messages']) ...[
                       if (message['sender_id'] == chatProvider.activeChat['sender_id']) ...[
                         senderMassage(message),
@@ -190,10 +185,6 @@ class ChatDetailPageState extends State<ChatDetailPage> {
                           fontWeight: FontWeight.w400,
                         ),
                         decoration: InputDecoration(
-                          // suffixIcon: Icon(
-                          //   Icons.attach_file,
-                          //   color: CustomColors.white,
-                          // ),
                           hintText: "Write a message...",
                           fillColor: CustomColors.blackLight,
                           focusColor: CustomColors.blackLight,
@@ -349,85 +340,3 @@ class ChatDetailPageState extends State<ChatDetailPage> {
     );
   }
 }
-// Img
-// Container(
-//   padding: const EdgeInsets.only(right: 8),
-//   child: (messages[index].messageType == "receiver"
-//       ? const CircleAvatar(
-//           backgroundImage: AssetImage("assets/images/category.png"),
-//         )
-//       : const CircleAvatar(
-//           radius: 0,
-//           backgroundImage: AssetImage("assets/images/category.png"),
-//         )),
-// ),
-//  Container(
-//                     padding: const EdgeInsets.symmetric(horizontal: 15),
-//                     width: MediaQuery.of(context).size.width,
-//                     child: Row(
-//                       mainAxisAlignment: (messages[index].messageType == "receiver" ? MainAxisAlignment.start : MainAxisAlignment.end),
-//                       children: [
-//                         // Img
-//                         // Container(
-//                         //   padding: const EdgeInsets.only(right: 8),
-//                         //   child: (messages[index].messageType == "receiver"
-//                         //       ? const CircleAvatar(
-//                         //           backgroundImage: AssetImage("assets/images/category.png"),
-//                         //         )
-//                         //       : const CircleAvatar(
-//                         //           radius: 0,
-//                         //           backgroundImage: AssetImage("assets/images/category.png"),
-//                         //         )),
-//                         // ),
-//                         // Column for message and time
-//                         Column(
-//                           crossAxisAlignment: (messages[index].messageType == "receiver" ? CrossAxisAlignment.start : CrossAxisAlignment.end),
-//                           children: [
-//                             Container(
-//                               decoration: BoxDecoration(
-//                                 borderRadius: BorderRadius.only(
-//                                   topLeft: const Radius.circular(10),
-//                                   topRight: const Radius.circular(10),
-//                                   bottomLeft: (messages[index].messageType == "receiver" ? const Radius.circular(0) : const Radius.circular(10)),
-//                                   bottomRight: (messages[index].messageType == "receiver" ? const Radius.circular(10) : const Radius.circular(0)),
-//                                 ),
-//                                 color: (messages[index].messageType == "receiver" ? CustomColors.orangeLight.withOpacity(0.1) : CustomColors.otpText),
-//                               ),
-//                               padding: const EdgeInsets.all(16),
-//                               child: Text(
-//                                 messages[index].messageContent!,
-//                                 style: TextStyle(
-//                                   fontSize: 13,
-//                                   fontFamily: "Rubik",
-//                                   color: (messages[index].messageType == "receiver" ? CustomColors.primaryText : CustomColors.white),
-//                                 ),
-//                               ),
-//                             ),
-//                             Row(
-//                               children: [
-//                                 Text(
-//                                   "09:33 am",
-//                                   style: TextStyle(
-//                                     fontSize: 13,
-//                                     fontFamily: "Rubik",
-//                                     color: (messages[index].messageType == "receiver" ? CustomColors.chatTime : CustomColors.chatTime),
-//                                   ),
-//                                 ),
-//                                 // Align(
-//                                 //   alignment: (messages[index].messageType == "receiver" ? Alignment.topLeft : Alignment.topRight),
-//                                 //   child: Padding(
-//                                 //     padding: const EdgeInsets.only(left: 2),
-//                                 //     child: Icon(
-//                                 //       Icons.done_all,
-//                                 //       size: 18,
-//                                 //       color: (messages[index].messageType == "receiver" ? Colors.transparent : CustomColors.chatTick),
-//                                 //     ),
-//                                 //   ),
-//                                 // )
-//                               ],
-//                             ),
-//                           ],
-//                         ),
-//                       ],
-//                     ),
-//                   ),

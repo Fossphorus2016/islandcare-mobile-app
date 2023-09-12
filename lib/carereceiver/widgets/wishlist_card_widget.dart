@@ -129,8 +129,6 @@ class WishlistCardWidget extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        // margin: EdgeInsets.fromLTRB(
-                        //     0 * fem, 0 * fem, 30 * fem, 0 * fem),
                         width: double.infinity,
                         height: 14 * fem,
                         child: Row(
@@ -209,13 +207,11 @@ class WishlistCardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  // textVxa (66:1144)
                   margin: EdgeInsets.fromLTRB(0 * fem, 3 * fem, 82 * fem, 0 * fem),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        // nextavailableSsp (66:1145)
                         margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 4 * fem),
                         child: Text(
                           'Next Available ',
@@ -230,7 +226,6 @@ class WishlistCardWidget extends StatelessWidget {
                         ),
                       ),
                       RichText(
-                        // amtomorrowZhY (66:1146)
                         text: TextSpan(
                           style: TextStyle(
                             fontFamily: 'Rubik',

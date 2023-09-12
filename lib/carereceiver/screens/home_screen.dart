@@ -1,20 +1,16 @@
-// ignore_for_file: unused_local_variable, prefer_typing_uninitialized_variables, use_build_context_synchronously, prefer_interpolation_to_compose_strings
+// ignore_for_file: unused_local_variable, prefer_typing_uninitialized_variables, use_build_context_synchronously, prefer_interpolation_to_compose_strings, library_private_types_in_public_api
 
 import 'dart:async';
 
-// import 'package:age_calculator/age_calculator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
-
 import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/carereceiver/models/service_receiver_dashboard_model.dart';
 import 'package:island_app/carereceiver/screens/provider_profile_detail_for_giver.dart';
@@ -22,7 +18,6 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/drawer_widget.dart';
 import 'package:island_app/carereceiver/widgets/recommendation_widget.dart';
 
-// import 'package:rat';
 String? token1;
 
 class HomeScreen extends StatefulWidget {
@@ -33,14 +28,10 @@ class HomeScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // HomeViewViewReceiverModel homeViewViewReceiverModel = HomeViewViewReceiverModel();
-// Rating Bar
-
   List providerList = [];
   List favouriteListTwo = [];
   var favouriteList = [];
@@ -111,16 +102,13 @@ class _HomeScreenState extends State<HomeScreen> {
   String? findArea;
   String? findRate;
   String? serviceId = '';
-  // Service Receiver Dashboard
   late Future<ServiceReceiverDashboardModel>? futureReceiverDashboard;
-  // late Future<ServiceReceiverDashboardModel>? futureFindedReceiverDashboard;
 
   Future<ServiceReceiverDashboardModel> fetchReceiverDashboardModel() async {
     var token = await getUserToken();
     final response = await Dio().get(
       CareReceiverURl.serviceReceiverDashboard,
       options: Options(headers: {
-        // 'Authorization': 'Bearer 41|Zh4DLWxwzRgRmL45hvaWQLiePq6koaIUxOcVR8Sx',
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
         "Connection": "Keep-Alive",
@@ -130,15 +118,12 @@ class _HomeScreenState extends State<HomeScreen> {
       var json = response.data as Map;
       var listOfProviders = json['data'] as List;
       var listOfFavourites = json['favourites'] as List;
-      // print("foundProviders== ${jsonDecode(response.body)}");
       setState(() {
         providerList = listOfProviders;
         favouriteList = listOfFavourites;
         foundProviders = listOfProviders;
       });
-      // print("widget.passedToken= ${widget.passedToken}");
-      // print("providerList= $providerList");
-      // print("favouriteList= $favouriteList");
+
       return ServiceReceiverDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -152,7 +137,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final response = await Dio().get(
       '${CareReceiverURl.serviceReceiverDashboard}?service=${findSelected ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
       options: Options(headers: {
-        // 'Authorization': 'Bearer 41|Zh4DLWxwzRgRmL45hvaWQLiePq6koaIUxOcVR8Sx',
         'Authorization': 'Bearer ${token ?? widget.passedToken}',
         'Accept': 'application/json',
       }),
@@ -162,13 +146,10 @@ class _HomeScreenState extends State<HomeScreen> {
       var json = response.data as Map;
       var listOfProviders = json['data'] as List;
       var listOfFavourites = json['favourites'] as List;
-      // print("IsNotEmpty== ${jsonDecode(response.body)}");
       setState(() {
         findProviders = listOfProviders;
       });
-      // print("widget.passedToken= ${widget.passedToken}");
-      // print("providerList= $providerList");
-      // print("favouriteList= $favouriteList");
+
       return ServiceReceiverDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -181,7 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   var providerId;
   Future<Response> favourited(url) async {
-    // var token = await getUserToken();
     var url = '${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=$providerId';
     var response = await Dio().post(
       url,
@@ -197,13 +177,11 @@ class _HomeScreenState extends State<HomeScreen> {
         context,
         "Added To Favourite",
       );
-      // print("isFavourite = ${response.body}");
     } else {
       customSuccesSnackBar(
         context,
         "Favourite Is Not Added",
       );
-      // print("isFavouriteerror = ${response.body}");
     }
     return response;
   }
@@ -222,7 +200,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return ProfileReceiverModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -239,7 +216,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       token = userToken;
     });
-    // print("token == $token");
     return userToken.toString();
   }
 
@@ -252,35 +228,17 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       userPic = userAvatar;
     });
-    // print("userPic == $userPic");
     return userPic.toString();
   }
 
   // Search bar
   List foundProviders = [];
   List findProviders = [];
-  // void _runFilter(String enteredKeyword) {
-  //   List results = [];
-  //   if (enteredKeyword.isEmpty) {
-  //     results = providerList;
-  //     setState(() {});
-  //   } else {
-  //     results = providerList.where((user) => user['first_name'].toLowerCase().contains(enteredKeyword.toLowerCase())).toList();
-  //   }
-  //   setState(() {
-  //     foundProviders = results;
-  //   });
-  // }
 
   @override
   void initState() {
-    // homeViewViewReceiverModel.fetchReceiverDashboardListApi();
     getUserToken();
-    // Timer(const Duration(seconds: 2), () {
-    //   setState(() {
-    //     foundProviders = providerList;
-    //   });
-    // });
+
     getUserAvatar();
     super.initState();
     futureReceiverDashboard = fetchReceiverDashboardModel();
@@ -301,47 +259,26 @@ class _HomeScreenState extends State<HomeScreen> {
   int? age;
   calculateAge(int? age) {
     DateTime birthday = DateTime(age!);
-
-    // DateDuration duration;
-
-    // Find out your age as of today's date 2021-03-08
-    // duration = AgeCalculator.age(birthday);
-    // print('Your age is $duration');
   }
 
   String isAdult(String enteredAge) {
     var birthDate = DateFormat('yyyy-mm-dd').parse(enteredAge);
-    // print("set state: $birthDate");
     var today = DateTime.now();
 
     final difference = today.difference(birthDate).inDays;
-    // print(difference);
     final year = difference / 365;
-    // print(year);
     return year.toStringAsFixed(0);
   }
-
-  // DateDuration calAge(DateTime? birthDate) {
-  //   DateTime birthday = birthDate!; //DateTime(1997, 3, 5);
-  //   DateDuration duration;
-  //   // Find out your age as of today's date 2021-03-08
-  //   duration = AgeCalculator.age(birthday);
-  //   print('Your age is $duration');
-  //   return duration;
-  // }
 
   mybirth(birthdayy) {
     final birthday = DateTime(birthdayy);
     final date2 = DateTime.now();
     final difference = date2.difference(birthday).inDays;
-    // print("difference $difference");
     return difference;
   }
 
   @override
   Widget build(BuildContext context) {
-    // print(foundProviders);
-    // final homeViewData = Provider.of<HomeViewViewReceiverModel>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomColors.loginBg,
@@ -361,10 +298,6 @@ class _HomeScreenState extends State<HomeScreen> {
               child: const Padding(
                 padding: EdgeInsets.all(12.0),
                 child: Badge(
-                  // elevation: 0,
-                  // badgeContent: const Text(""),
-                  // badgeColor: CustomColors.red,
-                  // position: BadgePosition.topStart(start: 18),
                   child: Icon(
                     Icons.notifications_none,
                     size: 30,
@@ -611,7 +544,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         },
                                                       );
                                                       serviceId = value;
-                                                      // print("asda = $serviceId");
                                                     },
                                                     decoration: InputDecoration(
                                                       prefixIcon: Icon(
@@ -619,11 +551,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                         size: 17,
                                                         color: CustomColors.hintText,
                                                       ),
-                                                      // suffixIcon: Icon(
-                                                      //   Icons.close,
-                                                      //   size: 17,
-                                                      //   color: CustomColors.hintText,
-                                                      // ),
                                                       hintText: "Search...",
                                                       fillColor: CustomColors.white,
                                                       focusColor: CustomColors.white,
@@ -679,12 +606,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               offset: Offset(2.0, 2.0),
                                                             ),
                                                           ],
-                                                          // color: Colors.transparent,
-                                                          // border: Border.all(
-                                                          //   color: CustomColors.darkGreyRecommended,
-                                                          //   width: 0.5,
-                                                          // ),
-                                                          // borderRadius: BorderRadius.circular(12),
                                                         ),
                                                         child: Padding(
                                                           padding: const EdgeInsets.symmetric(
@@ -704,7 +625,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               onChanged: (newVal) {
                                                                 setState(() {
                                                                   findSelected = newVal;
-                                                                  // print("findSelected $findSelected");
                                                                 });
                                                               },
                                                               value: findSelected,
@@ -770,9 +690,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               onChanged: (newVal) {
                                                                 setState(() {
                                                                   findArea = newVal;
-                                                                  // print(findArea);
                                                                 });
-                                                                // print("Findare $findArea");
                                                               },
                                                               value: findArea,
                                                             ),
@@ -837,7 +755,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               onChanged: (newVal) {
                                                                 setState(() {
                                                                   findRate = newVal;
-                                                                  // print(findRate);
                                                                 });
                                                               },
                                                               value: findRate,
@@ -854,7 +771,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                                 GestureDetector(
                                                   onTap: () {
-                                                    // print("sercive id = $serviceId");
                                                     fetchFindedReceiverDashboardModel();
                                                     Navigator.pop(context);
                                                   },
@@ -901,18 +817,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         textAlignVertical: TextAlignVertical.bottom,
                         maxLines: 1,
-                        // onChanged: (value) => _runFilter(value),
                         decoration: InputDecoration(
                           prefixIcon: Icon(
                             Icons.search,
                             size: 17,
                             color: CustomColors.hintText,
                           ),
-                          // suffixIcon: Icon(
-                          //   Icons.close,
-                          //   size: 17,
-                          //   color: CustomColors.hintText,
-                          // ),
                           hintText: "Search...",
                           fillColor: CustomColors.white,
                           focusColor: CustomColors.white,
@@ -949,31 +859,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  // itemCount: snapshot.data!.data!.length,
                                   itemCount: foundProviders.length,
                                   itemBuilder: (BuildContext context, int index) {
                                     return RecommendationReceiverWidget(
-                                      // imgPath: "http://192.168.0.244:9999/storage" + '/' + snapshot.data!.data![index].avatar.toString(),
-                                      // title: snapshot.data!.data![index].firstName.toString() + " " + snapshot.data!.data![index].lastName.toString(),
-                                      // experience: snapshot.data!.data![index].userdetailprovider!.experience.toString() == "null" ? "0" : snapshot.data!.data![index].userdetailprovider!.experience.toString(),
-                                      // hourly: snapshot.data!.data![index].userdetailprovider!.hourlyRate.toString() == "null" ? "0" : snapshot.data!.data![index].userdetailprovider!.hourlyRate.toString(),
-                                      // price: snapshot.data!.data![index].userdetailprovider!.hourlyRate.toString() == "null" ? "0" : snapshot.data!.data![index].userdetailprovider!.hourlyRate.toString(),
-                                      // dob: isAdult("${snapshot.data!.data![index].userdetail!.dob}" == null ? "00-00-0000" : "${snapshot.data!.data![index].userdetail!.dob}").ceilToDouble(),
-                                      // // dob: "DOB ${snapshot.data!.data![index].userdetail!.dob.toString()}",
-                                      // // dob: calAge(DateFormat('yyyy-mm-dd').parse(snapshot.data!.data![index].userdetail!.dob)) as DateDuration,
-                                      // ratingCount: double.parse(snapshot.data!.data![index].ratings?.rating == null ? "0.0" : "${snapshot.data!.data![index].ratings?.rating!}"),
                                       imgPath: "${AppUrl.webStorageUrl}" '/' + foundProviders[index]['avatar'].toString(),
                                       title: "${foundProviders[index]['first_name']} ${foundProviders[index]['last_name']}",
                                       experience: foundProviders[index]['userdetailprovider']['experience'] == null ? "0" : foundProviders[index]['userdetailprovider']['experience'].toString(),
                                       hourly: foundProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailprovider']['hourly_rate'].toString(),
                                       price: foundProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailprovider']['hourly_rate'].toString(),
                                       dob: isAdult(foundProviders[index]['userdetail']['dob'] != null ? "${foundProviders[index]['userdetail']['dob']}" : "00-00-0000").toString(),
-                                      // dob: Jiffy("${foundProviders[index]['userdetail']['dob']}" == null ? "00-00-0000" : "${foundProviders[index]['userdetail']['dob']}", "yyyy-MM-dd").fromNow(),
-                                      // dob: "DOB ${foundProviders[index].userdetail!.dob.toString()}",
-                                      // dob: calAge(DateFormat('yyyy-mm-dd').parse(foundProviders[index].userdetail!.dob)) as DateDuration,
-                                      // ratingCount: double.parse(ratingList == "null" ? "0.0" : "${ratingList[0]['rating'].toString()}"),
                                       ratingCount: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
-
                                       isFavouriteIcon: GestureDetector(
                                         onTap: () {
                                           setState(() {});
@@ -1003,14 +898,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) => ProviderProfileDetailForReceiver(
-                                                    id: snapshot.data!.data![index].id.toString(),
-                                                    rating: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
-                                                  )
-                                              // JobDetailGiver(
-                                              //   id: snapshot.data!.data![index].id.toString(),
-                                              // ),
-                                              ),
+                                            builder: (context) => ProviderProfileDetailForReceiver(
+                                              id: snapshot.data!.data![index].id.toString(),
+                                              rating: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
+                                            ),
+                                          ),
                                         );
                                       },
                                     );
@@ -1031,7 +923,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: MediaQuery.of(context).size.width,
                                         margin: const EdgeInsets.symmetric(
                                           vertical: 10,
-                                          // horizontal: 20,
                                         ),
                                         padding: const EdgeInsets.all(20),
                                         decoration: const BoxDecoration(
@@ -1057,7 +948,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: MediaQuery.of(context).size.width,
                                         margin: const EdgeInsets.symmetric(
                                           vertical: 10,
-                                          // horizontal: 20,
                                         ),
                                         padding: const EdgeInsets.all(20),
                                         decoration: const BoxDecoration(
@@ -1083,7 +973,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: MediaQuery.of(context).size.width,
                                         margin: const EdgeInsets.symmetric(
                                           vertical: 10,
-                                          // horizontal: 20,
                                         ),
                                         padding: const EdgeInsets.all(20),
                                         decoration: const BoxDecoration(
@@ -1120,7 +1009,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: MediaQuery.of(context).size.width,
                                         margin: const EdgeInsets.symmetric(
                                           vertical: 10,
-                                          // horizontal: 20,
                                         ),
                                         padding: const EdgeInsets.all(20),
                                         decoration: const BoxDecoration(
@@ -1147,38 +1035,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                             },
                           )
-                        // : Container(
-                        //     width: MediaQuery.of(context).size.width,
-                        //     margin: const EdgeInsets.symmetric(vertical: 20),
-                        //     alignment: Alignment.center,
-                        //     padding: const EdgeInsets.all(60),
-                        //     decoration: const BoxDecoration(
-                        //       borderRadius: BorderRadius.only(
-                        //         topLeft: Radius.circular(10),
-                        //         topRight: Radius.circular(10),
-                        //         bottomLeft: Radius.circular(10),
-                        //         bottomRight: Radius.circular(10),
-                        //       ),
-                        //       boxShadow: [
-                        //         BoxShadow(
-                        //           color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                        //           offset: Offset(0, 4),
-                        //           blurRadius: 45,
-                        //         )
-                        //       ],
-                        //       color: Color.fromRGBO(255, 255, 255, 1),
-                        //     ),
-                        //     child: Text("0 Service Providers Found")),
-
                         : FutureBuilder<ServiceReceiverDashboardModel>(
-                            // future: futureReceiverDashboard,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 return ListView.builder(
                                   shrinkWrap: true,
                                   scrollDirection: Axis.vertical,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  // itemCount: snapshot.data!.data!.length,
                                   itemCount: findProviders.length,
                                   itemBuilder: (BuildContext context, int index) {
                                     return RecommendationReceiverWidget(
@@ -1237,7 +1100,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: MediaQuery.of(context).size.width,
                                         margin: const EdgeInsets.symmetric(
                                           vertical: 10,
-                                          // horizontal: 20,
                                         ),
                                         padding: const EdgeInsets.all(20),
                                         decoration: const BoxDecoration(

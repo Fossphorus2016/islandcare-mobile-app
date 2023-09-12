@@ -10,12 +10,8 @@ import 'package:island_app/screens/verify_email.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
-// import 'package:pinput/pinput.dart';
-// import 'package:easy_localization/easy_localization.dart' hide TextDirection;
-// import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-// import 'dart:ui';
 class SignupScreen extends StatefulWidget {
   bool? isSelectedService = false;
 
@@ -79,15 +75,10 @@ class _SignupScreenState extends State<SignupScreen> {
     );
     if (picked != null) {
       dobController.text = DateFormat('yyyy-MM-dd').format(picked);
-      // print(dobController.text);
-      // print("picked $picked");
-      // picked == dobController;
-      // print("controller ${dobController.text}");
+
       setState(() {
         getPickedDate == picked;
       });
-
-      // print("GetPickedDate $getPickedDate");
     }
   }
 
@@ -127,15 +118,11 @@ class _SignupScreenState extends State<SignupScreen> {
       ),
     );
     Map<String, dynamic> resBody = res.data;
-    // Map<String, dynamic> map = json.decode(response.body);
     List<dynamic> serviceData = resBody["services"];
-    // print(data![0]["name"]);
 
     setState(() {
       data = serviceData;
     });
-
-    // print(resBody);
 
     return "Sucess";
   }
@@ -169,7 +156,6 @@ class _SignupScreenState extends State<SignupScreen> {
       hideProgress();
       return response;
     } on DioError catch (e) {
-      // print(e.response!.data);
       hideProgress();
       return Response(requestOptions: RequestOptions(), statusCode: 500, data: e.response!.data);
     }
@@ -178,7 +164,6 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   void initState() {
     super.initState();
-    // _isSelectedService = widget.isSelectedService;
     getSWData();
   }
 
@@ -198,23 +183,6 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // const focusedBorderColor = Color.fromRGBO(23, 171, 144, 1);
-    // const fillColor = Color.fromRGBO(243, 246, 249, 0);
-    // const borderColor = Color.fromRGBO(23, 171, 144, 0.4);
-    // final defaultPinTheme = PinTheme(
-    //   width: 56,
-    //   height: 56,
-    //   textStyle: TextStyle(
-    //     fontSize: 26,
-    //     color: CustomColors.otpText,
-    //     fontStyle: FontStyle.normal,
-    //     fontWeight: FontWeight.w700,
-    //   ),
-    //   decoration: BoxDecoration(
-    //     borderRadius: BorderRadius.circular(12),
-    //     border: Border.all(color: CustomColors.hintText, width: 0.5),
-    //   ),
-    // );
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -290,12 +258,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           onTap: () {
                             setState(() {
                               _isSelectedService = "3";
-                              // print(_isSelectedService);
                             });
                           },
                           child: Container(
                             height: 50.45,
-                            // width: 149.49,
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               color: _isSelectedService == "3" ? CustomColors.primaryColor : CustomColors.white,
@@ -314,7 +280,6 @@ class _SignupScreenState extends State<SignupScreen> {
                               onPressed: () {
                                 setState(() {
                                   _isSelectedService = "3";
-                                  // print(_isSelectedService);
                                 });
                               },
                               icon: Image.asset(
@@ -346,12 +311,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           onTap: () {
                             setState(() {
                               _isSelectedService = "4";
-                              // print(_isSelectedService);
                             });
                           },
                           child: Container(
                             height: 50.45,
-                            // width: 149.49,
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               color: _isSelectedService == "4" ? CustomColors.primaryColor : CustomColors.white,
@@ -370,7 +333,6 @@ class _SignupScreenState extends State<SignupScreen> {
                               onPressed: () {
                                 setState(() {
                                   _isSelectedService = "4";
-                                  // print(_isSelectedService);
                                 });
                               },
                               icon: Image.asset(
@@ -422,7 +384,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             onChanged: (newVal) {
                               setState(() {
                                 selectedService = newVal;
-                                // print(selectedService);
                               });
                             },
                             value: selectedService,
@@ -477,7 +438,6 @@ class _SignupScreenState extends State<SignupScreen> {
                     style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                     onPressed: () {
                       _toggleradio();
-                      // print(_isRadioSelected);
                     },
                     icon: CircleAvatar(
                       backgroundColor: const Color.fromARGB(181, 171, 171, 171),
@@ -578,7 +538,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             service: selectedService.toString(),
                           );
                           postRegister(request).then((response) async {
-                            // print(jsonDecode(response.body));
                             if (response.statusCode == 200) {
                               var data = response.data;
                               var role = data["user"]["role"];
@@ -589,11 +548,6 @@ class _SignupScreenState extends State<SignupScreen> {
                               var name = data["user"]['first_name'];
                               var last = data["user"]['last_name'];
                               var isProfileCompleted = data["is_profile_completed"];
-
-                              // print("User role ${data["user"]["role"]}");
-                              // print("User status $status");
-                              // print("User token $token");
-                              // print("Signup user data $data");
 
                               if (status == 3) {
                                 customErrorSnackBar(
@@ -672,7 +626,6 @@ class _SignupScreenState extends State<SignupScreen> {
                                   }
                                 }
                               }
-                              // if(response.body.["user"]){}
                             } else {
                               customErrorSnackBar(
                                 context,
@@ -682,236 +635,6 @@ class _SignupScreenState extends State<SignupScreen> {
                           });
                         }
                       }
-                      // if (_signUpFormKey.currentState!.validate()) {
-
-                      // signInUser();
-                      // OTP Dailogs
-                      // showModalBottomSheet(
-                      //   isScrollControlled: true,
-                      //   context: context,
-                      //   backgroundColor: Colors.white,
-                      //   shape: const RoundedRectangleBorder(
-                      //     borderRadius: BorderRadius.only(
-                      //       topLeft: Radius.circular(30.0),
-                      //       topRight: Radius.circular(30.0),
-                      //     ),
-                      //   ),
-                      //   builder: (context) {
-                      //     return Padding(
-                      //       padding: EdgeInsets.only(
-                      //           bottom:
-                      //               MediaQuery.of(context).viewInsets.bottom),
-                      //       child: Container(
-                      //         padding:
-                      //             const EdgeInsets.symmetric(horizontal: 25),
-                      //         child: Column(
-                      //           crossAxisAlignment: CrossAxisAlignment.start,
-                      //           mainAxisAlignment: MainAxisAlignment.center,
-                      //           mainAxisSize: MainAxisSize.min,
-                      //           children: [
-                      //             const SizedBox(
-                      //               height: 20,
-                      //             ),
-                      //             Center(
-                      //               child: Container(
-                      //                 width: 130,
-                      //                 height: 5,
-                      //                 decoration: BoxDecoration(
-                      //                   color: const Color(0xffC4C4C4),
-                      //                   borderRadius:
-                      //                       BorderRadius.circular(6),
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //             const SizedBox(
-                      //               height: 50,
-                      //             ),
-                      //             Center(
-                      //               child: Text(
-                      //                 "Enter 4 Digits Code",
-                      //                 textAlign: TextAlign.center,
-                      //                 style: TextStyle(
-                      //                   color: CustomColors.black,
-                      //                   fontFamily: "Rubik",
-                      //                   fontStyle: FontStyle.normal,
-                      //                   fontSize: 24,
-                      //                   fontWeight: FontWeight.w600,
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //             const SizedBox(
-                      //               height: 10,
-                      //             ),
-                      //             Center(
-                      //               child: Text(
-                      //                 "Enter the 4 digits code that you received on your email.",
-                      //                 textAlign: TextAlign.center,
-                      //                 style: TextStyle(
-                      //                   color: CustomColors.primaryText,
-                      //                   fontFamily: "Rubik",
-                      //                   fontStyle: FontStyle.normal,
-                      //                   fontSize: 14,
-                      //                   fontWeight: FontWeight.w400,
-                      //                 ),
-                      //               ),
-                      //             ),
-                      //             const SizedBox(
-                      //               height: 30,
-                      //             ),
-                      //             Form(
-                      //               key: pinformKey,
-                      //               child: Column(
-                      //                 mainAxisAlignment:
-                      //                     MainAxisAlignment.center,
-                      //                 children: [
-                      //                   Directionality(
-                      //                     // Specify direction if desired1
-                      //                     textDirection: ui.TextDirection.ltr,
-                      //                     child: Center(
-                      //                       child: Pinput(
-                      //                         closeKeyboardWhenCompleted:
-                      //                             true,
-                      //                         mainAxisAlignment:
-                      //                             MainAxisAlignment
-                      //                                 .spaceAround,
-                      //                         controller: pinController,
-                      //                         focusNode: pinfocusNode,
-                      //                         androidSmsAutofillMethod:
-                      //                             AndroidSmsAutofillMethod
-                      //                                 .smsUserConsentApi,
-                      //                         listenForMultipleSmsOnAndroid:
-                      //                             true,
-                      //                         defaultPinTheme:
-                      //                             defaultPinTheme,
-                      //                         validator: (value) {
-                      //                           return value == '2222'
-                      //                               ? null
-                      //                               : 'Pin is incorrect';
-                      //                         },
-                      //                         // onClipboardFound: (value) {
-                      //                         //   debugPrint('onClipboardFound: $value');
-                      //                         //   pinController.setText(value);
-                      //                         // },
-                      //                         hapticFeedbackType:
-                      //                             HapticFeedbackType
-                      //                                 .lightImpact,
-                      //                         onCompleted: (pin) {
-                      //                           debugPrint(
-                      //                               'onCompleted: $pin');
-                      //                         },
-                      //                         onChanged: (value) {
-                      //                           debugPrint(
-                      //                               'onChanged: $value');
-                      //                         },
-                      //                         cursor: Column(
-                      //                           mainAxisAlignment:
-                      //                               MainAxisAlignment.end,
-                      //                           children: [
-                      //                             Container(
-                      //                               margin:
-                      //                                   const EdgeInsets.only(
-                      //                                       bottom: 9),
-                      //                               width: 22,
-                      //                               height: 1,
-                      //                               color: focusedBorderColor,
-                      //                             ),
-                      //                           ],
-                      //                         ),
-                      //                         focusedPinTheme:
-                      //                             defaultPinTheme.copyWith(
-                      //                           textStyle: TextStyle(
-                      //                             fontSize: 26,
-                      //                             color: CustomColors.otpText,
-                      //                             fontStyle: FontStyle.normal,
-                      //                             fontWeight: FontWeight.w700,
-                      //                           ),
-                      //                           decoration: defaultPinTheme
-                      //                               .decoration!
-                      //                               .copyWith(
-                      //                             borderRadius:
-                      //                                 BorderRadius.circular(
-                      //                                     12),
-                      //                             border: Border.all(
-                      //                                 color:
-                      //                                     focusedBorderColor),
-                      //                           ),
-                      //                         ),
-                      //                         submittedPinTheme:
-                      //                             defaultPinTheme.copyWith(
-                      //                           decoration: defaultPinTheme
-                      //                               .decoration!
-                      //                               .copyWith(
-                      //                             color: fillColor,
-                      //                             borderRadius:
-                      //                                 BorderRadius.circular(
-                      //                                     12),
-                      //                             border: Border.all(
-                      //                                 color:
-                      //                                     focusedBorderColor),
-                      //                           ),
-                      //                         ),
-                      //                         errorPinTheme: defaultPinTheme
-                      //                             .copyBorderWith(
-                      //                           border: Border.all(
-                      //                               color: Colors.redAccent),
-                      //                         ),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                   const SizedBox(
-                      //                     height: 20,
-                      //                   ),
-                      //                   GestureDetector(
-                      //                     onTap: () {
-                      //                       if (pinformKey.currentState!
-                      //                           .validate()) {
-                      //                         Navigator.push(
-                      //                           context,
-                      //                           MaterialPageRoute(
-                      //                             builder: (context) =>
-                      //                                 const LoginScreen(),
-                      //                           ),
-                      //                         );
-                      //                       }
-                      //                     },
-                      //                     child: Container(
-                      //                       width: MediaQuery.of(context)
-                      //                           .size
-                      //                           .width,
-                      //                       height: 54,
-                      //                       decoration: BoxDecoration(
-                      //                         color:
-                      //                             CustomColors.primaryColor,
-                      //                         borderRadius:
-                      //                             BorderRadius.circular(10),
-                      //                       ),
-                      //                       child: Center(
-                      //                         child: Text(
-                      //                           "Continue",
-                      //                           style: TextStyle(
-                      //                             color: CustomColors.white,
-                      //                             fontFamily: "Rubik",
-                      //                             fontStyle: FontStyle.normal,
-                      //                             fontWeight: FontWeight.w500,
-                      //                             fontSize: 18,
-                      //                           ),
-                      //                         ),
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                   const SizedBox(
-                      //                     height: 30,
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             ),
-                      //           ],
-                      //         ),
-                      //       ),
-                      //     );
-                      //   },
-                      // );
-                      // }
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,

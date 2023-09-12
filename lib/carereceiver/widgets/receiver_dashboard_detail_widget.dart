@@ -1,5 +1,3 @@
-// import 'dart:html';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -18,7 +16,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
   final String? major;
   final String? from;
   final String? to;
-  // String? firstAdd;
   final String? zip;
   final String? imgProviderPath;
   final String? providerName;
@@ -40,7 +37,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
     this.major,
     this.from,
     this.to,
-    // this.firstAdd,
     this.zip,
     this.imgProviderPath,
     this.providerName,
@@ -66,11 +62,7 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(40),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child:
-                        //  Image.network(
-                        //   imgPath.toString(),
-                        // )
-                        CachedNetworkImage(
+                    child: CachedNetworkImage(
                       width: 100,
                       height: 100,
                       fit: BoxFit.cover,
@@ -100,7 +92,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                // width: 130,
                 child: Text(
                   "$experience years experience \n \$$hour/hour \n  $address \n $zip",
                   textAlign: TextAlign.center,
@@ -128,9 +119,7 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                     Icons.star,
                     color: Colors.amber,
                   ),
-                  onRatingUpdate: (rating) {
-                    // print(rating);
-                  },
+                  onRatingUpdate: (rating) {},
                 ),
               ],
               const SizedBox(
@@ -194,7 +183,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                 alignment: Alignment.topLeft,
                 child: Text(
                   "$experience Years",
-                  // textAlign: TextAlign.center,
                   style: TextStyle(
                     color: CustomColors.primaryText,
                     fontFamily: "Poppins",
@@ -273,8 +261,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                         fontWeight: FontWeight.w200,
                       ),
                     ),
-                    // snapshot.data!.data![0].educations![index].to == ""
-                    //     ?
                     Text(
                       to == "" ? "Time Period: Currently Studying" : "",
                       softWrap: true,
@@ -286,17 +272,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                         fontWeight: FontWeight.w200,
                       ),
                     )
-                    // : Text(
-                    //     "",
-                    //     softWrap: true,
-                    //     style: TextStyle(
-                    //       height: 0,
-                    //       color: CustomColors.hintText,
-                    //       fontSize: 12,
-                    //       fontFamily: "Rubik",
-                    //       fontWeight: FontWeight.w200,
-                    //     ),
-                    //   ),
                   ],
                 ),
               ),
@@ -413,29 +388,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // Container(
-                              //   child: ListTile(
-                              //     leading: CircleAvatar(
-                              //       radius: 15,
-                              //       child: ClipRRect(
-                              //         borderRadius: BorderRadius.circular(15),
-                              //         child: ClipRRect(
-                              //           borderRadius: BorderRadius.circular(15),
-                              //           child: CachedNetworkImage(
-                              //             width: 100,
-                              //             height: 100,
-                              //             fit: BoxFit.cover,
-                              //             imageUrl: "http://192.168.0.244:9999/storage/avatar/yqrIEO0yATogxq2V3aLD1gy9IwoWwcMmltBf1UmV.png",
-                              //             // imageUrl: imgProviderPath!,
-                              //             placeholder: (context, url) => const CircularProgressIndicator(),
-                              //             errorWidget: (context, url, error) => const Icon(Icons.error),
-                              //           ),
-                              //         ),
-                              //       ),
-                              //     ),
-                              //     title: Text("data"),
-                              //   ),
-                              // ),
                               SizedBox(
                                 width: 100,
                                 child: Column(
@@ -452,40 +404,13 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                                             height: 100,
                                             fit: BoxFit.cover,
                                             imageUrl: imgProviderPath.toString(),
-                                            // imageUrl: imgProviderPath!,
                                             placeholder: (context, url) => const CircularProgressIndicator(),
                                             errorWidget: (context, url, error) => const Icon(Icons.error),
                                           ),
                                         ),
                                       ),
                                     ),
-                                    // CircleAvatar(
-                                    //   radius: 15,
-                                    //   child: ClipRRect(
-                                    //     borderRadius: BorderRadius.circular(15),
-                                    //     child: ClipRRect(
-                                    //       borderRadius: BorderRadius.circular(15),
-                                    //       child: SvgPicture.network(
-                                    //         imgProviderPath.toString(),
-                                    //         placeholderBuilder: (context) => CircularProgressIndicator(),
-                                    //         width: 100,
-                                    //         height: 100,
-                                    //       ),
-                                    //       // CachedNetworkImage(
-                                    //       //   width: 100,
-                                    //       //   height: 100,
-                                    //       //   fit: BoxFit.cover,
-                                    //       //   // imageUrl: "http://192.168.0.244:9999/storage/avatar/yqrIEO0yATogxq2V3aLD1gy9IwoWwcMmltBf1UmV.png",
-                                    //       //   imageUrl: imgProviderPath.toString(),
-                                    //       //   placeholder: (context, url) => const CircularProgressIndicator(),
-                                    //       //   errorWidget: (context, url, error) => const Icon(Icons.error),
-                                    //       // ),
-                                    //     ),
-                                    //   ),
-                                    // ),
-                                    const SizedBox(
-                                      width: 4,
-                                    ),
+                                    const SizedBox(width: 4),
                                     Text(
                                       providerName.toString(),
                                       style: TextStyle(
@@ -512,9 +437,7 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                                     Icons.star,
                                     color: Colors.amber,
                                   ),
-                                  onRatingUpdate: (rating) {
-                                    // print(rating);
-                                  },
+                                  onRatingUpdate: (rating) {},
                                 ),
                               ),
                               Container(

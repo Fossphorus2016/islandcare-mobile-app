@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class PaymentFormScreen extends StatefulWidget {
   const PaymentFormScreen({super.key});
@@ -22,7 +21,6 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          // title: const Text('AlertDialog Title'),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -95,20 +93,6 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
               ],
             ),
           ),
-          // actions: <Widget>[
-          //   TextButton(
-          //     child: const Text('Cancel'),
-          //     onPressed: () {
-          //       Navigator.of(context).pop();
-          //     },
-          //   ),
-          //   TextButton(
-          //     child: const Text('Approve'),
-          //     onPressed: () {
-          //       Navigator.of(context).pop();
-          //     },
-          //   ),
-          // ],
         );
       },
     );
@@ -431,7 +415,6 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                             width: MediaQuery.of(context).size.width,
                             height: 40,
                             child: TextFormField(
-                              // inputFormatters: [MaskTextInputFormatter(mask: "######-######-#")],
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontFamily: "Rubik",
@@ -506,7 +489,6 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                             width: MediaQuery.of(context).size.width,
                             height: 40,
                             child: TextFormField(
-                              // inputFormatters: [MaskTextInputFormatter(mask: "## | ## | ####")],
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontFamily: "Rubik",
@@ -581,7 +563,6 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                             width: MediaQuery.of(context).size.width,
                             height: 40,
                             child: TextFormField(
-                              // inputFormatters: [MaskTextInputFormatter(mask: "####")],
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontFamily: "Rubik",
@@ -656,7 +637,6 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                             width: MediaQuery.of(context).size.width,
                             height: 40,
                             child: TextFormField(
-                              // inputFormatters: [MaskTextInputFormatter(mask: "######")],
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontFamily: "Rubik",

@@ -21,7 +21,6 @@ class _AvailabilityState extends State<Availability> {
     double ffem = fem * 0.97;
     return SafeArea(
       child: Scaffold(
-        // backgroundColor: CustomColors.loginBg,
         appBar: AppBar(
           centerTitle: false,
           elevation: 0,
@@ -133,13 +132,11 @@ class _AvailabilityState extends State<Availability> {
                       ),
                       Container(
                         margin: EdgeInsets.fromLTRB(0 * fem, 9 * fem, 0 * fem, 0),
-                        // width: MediaQuery.of(context).size.width,
                         height: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              // width: double.infinity,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -175,7 +172,6 @@ class _AvailabilityState extends State<Availability> {
                                     ),
                                   ),
                                   SizedBox(
-                                    // height: 5,
                                     child: RatingBar.builder(
                                       initialRating: 3,
                                       minRating: 1,
@@ -189,7 +185,6 @@ class _AvailabilityState extends State<Availability> {
                                         color: Colors.amber,
                                       ),
                                       onRatingUpdate: (rating) {
-                                        // print(rating);
                                         setState(() => rating = rating);
                                       },
                                     ),
@@ -219,7 +214,6 @@ class _AvailabilityState extends State<Availability> {
                           setState(() {
                             selectedIndex = index;
                           });
-                          // print(selectedIndex);
                         },
                         child: Container(
                           margin: const EdgeInsets.only(right: 10),
@@ -297,7 +291,6 @@ class _AvailabilityState extends State<Availability> {
                         setState(() {
                           selectedTimeIndex = index;
                         });
-                        // print(selectedTimeIndex);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(right: 10),
@@ -361,7 +354,6 @@ class _AvailabilityState extends State<Availability> {
                         setState(() {
                           selectedEveningTimeIndex = index;
                         });
-                        // print(selectedEveningTimeIndex);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(right: 10),

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/job_applicant_model.dart';
 import 'package:island_app/carereceiver/screens/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/carereceiver/widgets/job_applicants_widget.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
@@ -26,7 +25,6 @@ class _JobApplicantsState extends State<JobApplicants> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          // title:
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -104,11 +102,7 @@ class _JobApplicantsState extends State<JobApplicants> {
       ),
     );
     if (response.statusCode == 200) {
-      // if (kDebugMode) {
-      // print("Job Applicant == ${jsonDecode(response.body)}");
-      // }
       var data = response.data;
-      // print("data is $data");
       if (data['data'] != "No Job Found!") {
         return ServiceReceiverJobApplicantModel.fromJson(response.data);
       } else {
@@ -129,9 +123,7 @@ class _JobApplicantsState extends State<JobApplicants> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // if (kDebugMode) {
-    //   print(userToken);
-    // }
+
     return userToken.toString();
   }
 
@@ -139,13 +131,11 @@ class _JobApplicantsState extends State<JobApplicants> {
   void initState() {
     getUserToken();
     super.initState();
-    // fetchJobBoardDetail();
     futureJobApplicantModel = fetchJobApplicantModel();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print(allJobs);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -259,7 +249,6 @@ class _JobApplicantsState extends State<JobApplicants> {
                         padding: const EdgeInsets.only(top: 16),
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          // print({"title": snapshot.data!.data![index].jobTitle.toString(), "job id": snapshot.data!.data![index].id.toString()});
                           return JobApplicantsWidget(
                             name: snapshot.data!.data![index].jobTitle.toString(),
                             jobType: (snapshot.data!.data![index].serviceId.toString() == "1")
@@ -271,7 +260,6 @@ class _JobApplicantsState extends State<JobApplicants> {
                                         : (snapshot.data!.data![index].serviceId.toString() == "4")
                                             ? "Child Care"
                                             : "School Support",
-                            // (foo==1)? something1():(foo==2)? something2(): something3();
                             count: snapshot.data!.applicationCounts![index].count.toString(),
                             onTap: () {
                               Navigator.push(

@@ -4,17 +4,13 @@ import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/caregiver/models/profile_model.dart';
-// import 'package:island_app/caregiver/widgets/recent_job_widget.dart';
 import 'package:island_app/caregiver/widgets/receommend_job_widget.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:island_app/caregiver/models/service_provider_dashboard_model.dart';
 import 'package:island_app/caregiver/screens/job_detail.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
@@ -48,15 +44,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
       ),
     );
     if (response.statusCode == 200) {
-      // var json = jsonDecode(response.body) as Map;
-      // var jobs = json['jobs'] as List;
-
-      // this.setState(() {
-      //   recommendedJob = jobs;
-      //   foundUsers = jobs;
-      //   foundUsers2 = recentJob;
-      // });
-      // print("IsNotEmpty== ${jsonDecode(response.body)}");
       return ServiceProviderDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -71,7 +58,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
       '${CareGiverUrl.serviceProviderDashboard}?service=${findSelected ?? ""}&search=$serviceId&area=${findArea ?? ""}&rate=${findRate ?? ""}',
       options: Options(
         headers: {
-          // 'Authorization': 'Bearer 41|Zh4DLWxwzRgRmL45hvaWQLiePq6koaIUxOcVR8Sx',
           'Authorization': 'Bearer $token',
           'Accept': 'application/json',
         },
@@ -83,14 +69,11 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
       var listOfJobs = json['jobs'] as List;
       var applied = json['applied_jobs'] as List;
       var completed = json['completed_jobs'] as List;
-      // var listOfFavourites = json['favourites'] as List;
-      // print("IsNotEmpty== ${jsonDecode(response.body)}");
       setState(() {
         findJobs = listOfJobs;
         appliedList = applied;
         completedList = completed;
       });
-      // print("Jobs Finded List= $findJobs");
       return ServiceProviderDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -107,9 +90,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
     setState(() {
       token = userToken!;
     });
-    if (kDebugMode) {
-      print("getUserToken == $token");
-    }
+
     return userToken.toString();
   }
 
@@ -121,7 +102,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
     setState(() {
       name = userName;
     });
-    // print("Name == $Name");
     return userName.toString();
   }
 
@@ -199,25 +179,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   String? findRate;
   String serviceId = '';
 
-  // void _runFilter(String enteredKeyword) {
-  //   List results = [];
-  //   List results2 = [];
-
-  //   if (enteredKeyword.isEmpty) {
-  //     results = recommendedJob;
-  //     results2 = recentJob;
-
-  //     setState(() {});
-  //   } else {
-  //     results = recommendedJob.where((user) => user["job_title"].toLowerCase().contains(enteredKeyword.toLowerCase())).toList();
-  //     results2 = recentJob.where((user) => user["job_title"].toLowerCase().contains(enteredKeyword.toLowerCase())).toList();
-  //   }
-  //   setState(() {
-  //     foundUsers = results;
-  //     foundUsers = results2;
-  //   });
-  // }
-
   // fetchPRofile
   late Future<ProfileGiverModel> fetchProfile;
   Future<ProfileGiverModel> fetchProfileGiverModel() async {
@@ -230,25 +191,9 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
       }),
     );
     if (response.statusCode == 200) {
-      // final json = jsonDecode(response.body) as Map;
-      // var host = json['folder_path'];
-      // var enhance = json['data'][0]['providerverification']['enhanced_criminal'] ?? [];
-      // List basic = json['data'][0]['providerverification']['basic_criminal'] ?? [];
-      // List firstAdd = json['data'][0]['providerverification']['first_aid'] ?? [];
-      // List vehicleRecord = json['data'][0]['providerverification']['vehicle_record'] ?? [];
-
-      // this.setState(() {
-      //   hostPath = host;
-      //   pdfEnhancePath = enhance;
-      //   pdfBasicPath = basic.toString();
-      //   pdfFirstAddPath = firstAdd.toString();
-      //   pdfvehicleRecordPath = vehicleRecord.toString();
-      // });
-      // print(jsonDecode(response.body));
       return ProfileGiverModel.fromJson(response.data);
     } else {
       throw Exception(
-        // ignore: use_build_context_synchronously
         customErrorSnackBar(
           context,
           'Failed to load Profile Model',
@@ -261,12 +206,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   void initState() {
     getUserToken();
     getUserName();
-    // Timer(const Duration(seconds: 2), () {
-    //   setState(() {
-    //     foundUsers = recommendedJob;
-    //     foundUsers2 = recentJob;
-    //   });
-    // });
 
     super.initState();
     futureProviderDashboard = fetchProviderDashboardModel();
@@ -276,7 +215,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   bool? isRecommended = true;
   @override
   Widget build(BuildContext context) {
-    // print(token);
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomColors.loginBg,
@@ -542,7 +480,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                         },
                                                       );
                                                       serviceId = value;
-                                                      // print("asda = $serviceId");
                                                     },
                                                     decoration: InputDecoration(
                                                       prefixIcon: Icon(
@@ -550,11 +487,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                         size: 17,
                                                         color: CustomColors.hintText,
                                                       ),
-                                                      // suffixIcon: Icon(
-                                                      //   Icons.close,
-                                                      //   size: 17,
-                                                      //   color: CustomColors.hintText,
-                                                      // ),
                                                       hintText: "Search...",
                                                       fillColor: CustomColors.white,
                                                       focusColor: CustomColors.white,
@@ -610,12 +542,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                               offset: Offset(2.0, 2.0),
                                                             ),
                                                           ],
-                                                          // color: Colors.transparent,
-                                                          // border: Border.all(
-                                                          //   color: CustomColors.darkGreyRecommended,
-                                                          //   width: 0.5,
-                                                          // ),
-                                                          // borderRadius: BorderRadius.circular(12),
                                                         ),
                                                         child: Padding(
                                                           padding: const EdgeInsets.symmetric(
@@ -635,7 +561,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                               onChanged: (newVal) {
                                                                 setState(() {
                                                                   findSelected = newVal;
-                                                                  // print(findSelected);
                                                                 });
                                                               },
                                                               value: findSelected,
@@ -701,7 +626,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                               onChanged: (newVal) {
                                                                 setState(() {
                                                                   findArea = newVal;
-                                                                  // print(findArea);
                                                                 });
                                                               },
                                                               value: findArea,
@@ -767,7 +691,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                               onChanged: (newVal) {
                                                                 setState(() {
                                                                   findRate = newVal;
-                                                                  // print(findRate);
                                                                 });
                                                               },
                                                               value: findRate,
@@ -830,18 +753,12 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                         ),
                         textAlignVertical: TextAlignVertical.bottom,
                         maxLines: 1,
-                        // onChanged: (value) => _runFilter(value),
                         decoration: InputDecoration(
                           prefixIcon: Icon(
                             Icons.search,
                             size: 17,
                             color: CustomColors.hintText,
                           ),
-                          // suffixIcon: Icon(
-                          //   Icons.close,
-                          //   size: 17,
-                          //   color: CustomColors.hintText,
-                          // ),
                           hintText: "Search...",
                           fillColor: CustomColors.white,
                           focusColor: CustomColors.white,
@@ -864,15 +781,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                   ),
                 ],
               ),
-              // GestureDetector(
-              //   onTap: (() {
-              //     Navigator.push(
-              //         context,
-              //         MaterialPageRoute(
-              //             builder: (context) => ProfileGiverEdit()));
-              //   }),
-              //   child: Text("Giver"),
-              // ),
+
               // isRecommended
               const SizedBox(
                 height: 5,
@@ -890,17 +799,10 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: snapshot.data!.jobs!.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  // if(snapshot){}
-                                  // int appliedJobs=snapshot.data!.appliedJobs!.contains(element);
                                   return RecommendationWidget(
-                                    // title: foundUsers[index]['job_title'].toString(),
                                     title: snapshot.data!.jobs![index].jobTitle.toString(),
-                                    // subTitle: foundUsers[index]['user']['first_name'].toString() + " " + foundUsers[index]['user']['last_name'].toString(),
                                     subTitle: snapshot.data!.jobs![index].service!.name.toString(),
-                                    // country: foundUsers[index]['address'].toString(),
                                     country: snapshot.data!.jobs![index].address.toString(),
-                                    // desc: foundUsers[index]['service']['description'].toString(),
-                                    // price: foundUsers[index]['hourly_rate'].toString(),
                                     price: snapshot.data!.jobs![index].hourlyRate.toString(),
                                     isApplied: snapshot.data!.appliedJobs!.contains(snapshot.data!.jobs![index].id) ? 1 : 0,
                                     isCompleted: snapshot.data!.completedJobs!.contains(snapshot.data!.jobs![index].id) ? 1 : 0,
@@ -926,7 +828,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                           },
                         )
                       : FutureBuilder<ServiceProviderDashboardModel>(
-                          // future: futureProviderDashboard,
                           builder: (context, snapshot) {
                             if (snapshot.hasData) {
                               return ListView.builder(

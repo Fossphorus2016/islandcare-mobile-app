@@ -2,7 +2,6 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/carereceiver/models/child_care_model.dart';
 import 'package:island_app/carereceiver/models/house_keeping_model.dart';
 import 'package:island_app/carereceiver/models/pet_care_model.dart';
@@ -42,7 +41,6 @@ class _MyJobsDetailState extends State<MyJobsDetail> {
       }),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return SeniorCareDetailModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -63,7 +61,6 @@ class _MyJobsDetailState extends State<MyJobsDetail> {
       }),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return PetCareDetailModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -86,7 +83,6 @@ class _MyJobsDetailState extends State<MyJobsDetail> {
       ),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return HouseKeepingDetailModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -109,7 +105,6 @@ class _MyJobsDetailState extends State<MyJobsDetail> {
       ),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return ChildCareDetailModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -132,7 +127,6 @@ class _MyJobsDetailState extends State<MyJobsDetail> {
       ),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return SchoolSupportDetailModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -149,7 +143,6 @@ class _MyJobsDetailState extends State<MyJobsDetail> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -157,7 +150,6 @@ class _MyJobsDetailState extends State<MyJobsDetail> {
   void initState() {
     getUserToken();
     super.initState();
-    // fetchJobBoardDetail();
     futureSeniorCareDetail = fetchSeniorCareDetailModel();
     futurePetCareDetail = fetchPetCareDetailModel();
     futureHouseKeepingDetail = fetchHouseKeepingDetailModel();

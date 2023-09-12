@@ -53,7 +53,6 @@ class ReviewsListWidget extends StatelessWidget {
                         height: 100,
                         fit: BoxFit.cover,
                         imageUrl: imgUrl.toString(),
-                        // imageUrl: imgProviderPath!,
                         placeholder: (context, url) => const CircularProgressIndicator(),
                         errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
@@ -79,7 +78,6 @@ class ReviewsListWidget extends StatelessWidget {
             width: 100,
             child: RatingBar.builder(
               initialRating: reviewRating.toDouble(),
-              // initialRating: providerRating!.toDouble(),
               minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,
@@ -90,9 +88,7 @@ class ReviewsListWidget extends StatelessWidget {
                 Icons.star,
                 color: Colors.amber,
               ),
-              onRatingUpdate: (rating) {
-                // print(rating);
-              },
+              onRatingUpdate: (rating) {},
             ),
           ),
           Container(

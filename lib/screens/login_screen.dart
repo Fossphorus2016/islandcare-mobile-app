@@ -12,11 +12,9 @@ import 'package:island_app/screens/splash_screen.dart';
 import 'package:island_app/screens/verify_email.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:pinput/pinput.dart';
-// import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/utils/utils.dart';
 
-// import "package:htt"/
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
@@ -196,12 +194,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                             var name = data["user"]['first_name'];
                                             var last = data["user"]['last_name'];
 
-                                            // print("User role ${data["user"]["role"]}");
-                                            // print("User status $status");
-                                            // print("User token $token");
-
-                                            // print(data);
-
                                             if (status == 3) {
                                               customErrorSnackBar(
                                                 context,
@@ -224,20 +216,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   await pref.setString('userId', userId.toString());
                                                   await pref.setString('isProfileCompleted', isProfileCompleted.toString());
                                                   await pref.setString('userName', "$name $last");
-                                                  // Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(3);
+
                                                   Navigator.pushNamedAndRemoveUntil(
                                                     context,
                                                     'bottom-bar-giver-2',
                                                     (route) => false,
                                                   );
                                                 } else {
-                                                  // Navigator.pushNamedAndRemoveUntil(
-                                                  //   context,
-                                                  //   'bottom-bar-giver',
-                                                  //   (route) => false,
-                                                  // );
-                                                  // Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(3);
-
                                                   SharedPreferences pref = await SharedPreferences.getInstance();
                                                   await pref.setString('userRole', data["user"]["role"].toString());
                                                   await pref.setString('userToken', data["token"].toString());
@@ -269,8 +254,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                     (route) => false,
                                                   );
                                                 } else {
-                                                  // Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(4);
-
                                                   SharedPreferences pref = await SharedPreferences.getInstance();
                                                   await pref.setString('userRole', data["user"]["role"].toString());
                                                   await pref.setString('userToken', data["token"].toString());
@@ -283,7 +266,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                                 }
                                               }
                                             }
-                                            // if(response.body.["user"]){}
                                           } else {
                                             customErrorSnackBar(
                                               context,

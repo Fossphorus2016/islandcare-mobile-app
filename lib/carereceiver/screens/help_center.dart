@@ -79,10 +79,6 @@ class _HelpCenterState extends State<HelpCenter> {
                       fontFamily: "Rubik",
                     ),
                   ),
-                  // trailing: Icon(
-                  //   Icons.arrow_forward_ios,
-                  //   size: 20,
-                  // ),
                 ),
               ),
               const SizedBox(

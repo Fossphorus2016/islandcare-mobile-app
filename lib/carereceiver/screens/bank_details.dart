@@ -4,10 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/bank_details_models.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
 
@@ -41,11 +39,9 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
     if (response.statusCode == 200) {
       var json = response.data as Map;
       var bankDetails = json['bank_details'] as List;
-      // print("response  == ${jsonDecode(response.body)}");
       setState(() {
         bankDetails = bankDetails;
       });
-      // print("bankDetails= $bankDetails");
       return BankDetailsModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -75,7 +71,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
           },
         ),
       );
-      // print(response.toString());
       if (response.statusCode == 200) {
         customSuccesSnackBar(
           context,
@@ -144,23 +139,15 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
 
   // Add Bank Detail
   postAddBank() async {
-    // print("post bank call");
     var requestBody = {
       'name_of_bank': selectedNames.toString(),
       'name_on_account': accountTitleController.text.toString(),
       'account_number': accountNumberController.text.toString(),
-      // 'card_number': cardNumberController.text.toString(),
-      // 'card_expiration_month': selectedMonth.toString(),
-      // 'card_expiration_year': selectedYear.toString(),
-      // 'cvv': cvvController.text.toString(),
     };
-    // print(requestBody);
     try {
       var token = await getUserToken();
-      // showProgress(context);
       final response = await Dio().post(
         CareReceiverURl.addServiceReceiverBank,
-        // body: jsonEncode(model.toJson()),
         data: requestBody,
         options: Options(
           headers: {
@@ -188,7 +175,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
           accountTitleController.clear();
           accountNumberController.clear();
         }
-        // print(response.body);
       } else {
         customErrorSnackBar(
           context,
@@ -196,15 +182,11 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
         );
       }
     } on DioError {
-      // print(e);
       customErrorSnackBar(
         context,
         "Something went wrong please try again later",
       );
     }
-
-    // hideProgress();
-    // return response;
   }
 
   List dataNames = [
@@ -214,36 +196,12 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
   ]; //edited line
   var selectedNames;
 
-  // Future<String> getBankNames() async {
-  //   var token = await getUserToken();
-  //   var res = await http.get(Uri.parse(AppUrl.bankName), headers: {
-  //     'Authorization': 'Bearer $token',
-  //     'Accept': 'application/json',
-  //   });
-  //   Map<String, dynamic> resBody = json.decode(res.body);
-  //   // Map<String, dynamic> map = json.decode(response.body);
-  //   List<dynamic> names = resBody["names"];
-  //   // print(data![0]["name"]);
-  //   // var json = jsonDecode(res.body) as Map;
-  //   // var listOfJobs = json['jobs'] as List;
-
-  //   setState(() {
-  //     dataNames = names;
-  //   });
-
-  //   // print("BankNames== $dataNames");
-
-  //   return "Sucess";
-  // }
-
   getUserToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var userToken = await preferences.getString(
       'userToken',
     );
-    // if (kDebugMode) {
-    // print(userToken);
-    // }
+
     return userToken.toString();
   }
 
@@ -252,11 +210,9 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
 
   @override
   void initState() {
-    // print("today ${DateFormat('yyyy-MM-dd').format(today)}");
     getUserToken();
     super.initState();
     futureBankDetails = fetchBankDetailsModel();
-    // getBankNames();
   }
 
   @override
@@ -412,7 +368,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                       onChanged: (value) {
                                                         setState(() {
                                                           selectedNames = value.toString();
-                                                          // print(selectedNames);
                                                         });
                                                       },
                                                       items: dataNames.map((itemone) {
@@ -457,7 +412,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                 ),
                                                 textAlignVertical: TextAlignVertical.bottom,
                                                 maxLines: 1,
-                                                // onChanged: (value) => _runFilter(value),
                                                 decoration: InputDecoration(
                                                   hintText: "Enter Account Title",
                                                   fillColor: CustomColors.white,
@@ -508,18 +462,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                 style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
                                                 textAlignVertical: TextAlignVertical.bottom,
                                                 maxLines: 1,
-                                                // onChanged: (value) => _runFilter(value),
                                                 decoration: InputDecoration(
-                                                  // suffixIcon: Icon(
-                                                  //   Icons.credit_card,
-                                                  //   size: 17,
-                                                  //   color: CustomColors.red,
-                                                  // ),
-                                                  // suffixIcon: Icon(
-                                                  //   Icons.close,
-                                                  //   size: 17,
-                                                  //   color: CustomColors.hintText,
-                                                  // ),
                                                   hintText: "Enter Account Number",
                                                   fillColor: CustomColors.white,
                                                   focusColor: CustomColors.white,
@@ -704,8 +647,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                   width: MediaQuery.of(context).size.width * .4,
                                                   alignment: Alignment.center,
                                                   child: Text(
-                                                    // bankDetails[index]['name_of_bank'].toString(),
-                                                    // "Babysitters",
                                                     snapshot.data!.bankDetails![index].nameOfBank.toString(),
                                                     style: TextStyle(
                                                       color: CustomColors.primaryText,
@@ -834,9 +775,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                       GestureDetector(
                                                         onTap: () {
                                                           selectBank(snapshot.data!.bankDetails![index].id);
-                                                          // setState(() {
-                                                          //   futureBankDetails = fetchBankDetailsModel();
-                                                          // });
                                                         },
                                                         child: Container(
                                                           width: MediaQuery.of(context).size.width * .4,
@@ -951,23 +889,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                             const SizedBox(
                                               height: 10,
                                             ),
-                                            // Container(
-                                            //   width: MediaQuery.of(context).size.width * .4,
-                                            //   padding: const EdgeInsets.symmetric(vertical: 8),
-                                            //   margin: const EdgeInsets.symmetric(vertical: 8),
-                                            //   decoration: BoxDecoration(
-                                            //     color: CustomColors.red,
-                                            //     borderRadius: BorderRadius.circular(6),
-                                            //   ),
-                                            //   child: Center(
-                                            //     child: Text(
-                                            //       "Delete",
-                                            //       style: TextStyle(
-                                            //         color: CustomColors.white,
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
                                           ],
                                         ),
                                       )

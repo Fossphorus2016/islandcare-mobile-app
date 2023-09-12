@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final applicantDetailProfileModel = applicantDetailProfileModelFromJson(jsonString);
-
 // ignore_for_file: file_names
 
 import 'dart:convert';
@@ -235,7 +231,6 @@ class Rating {
   int? ratingBy;
   String? createdAt;
   String? updatedAt;
-  // ReceiverRating? receiverRating;
 
   Rating({
     this.id,
@@ -246,7 +241,6 @@ class Rating {
     this.ratingBy,
     this.createdAt,
     this.updatedAt,
-    // this.receiverRating,
   });
 
   factory Rating.fromJson(Map<String, dynamic> json) => Rating(
@@ -258,7 +252,6 @@ class Rating {
         ratingBy: json["rating_by"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-        // receiverRating: json["receiver_rating"] == null ? null : ReceiverRating.fromJson(json["receiver_rating"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -270,7 +263,6 @@ class Rating {
         "rating_by": ratingBy,
         "created_at": createdAt,
         "updated_at": updatedAt,
-        // "receiver_rating": receiverRating?.toJson(),
       };
 }
 

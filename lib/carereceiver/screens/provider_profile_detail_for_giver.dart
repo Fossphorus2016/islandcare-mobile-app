@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/carereceiver/widgets/receiver_dashboard_detail_widget.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
@@ -31,7 +30,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
   late Future<ServiceReceiverDashboardDetailModel>? futureReceiverDashboardDetail;
   Future<ServiceReceiverDashboardDetailModel> fetchReceiverDashboardDetailModel() async {
     var token = await getUserToken();
-    // print("${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}");
     final response = await Dio().get(
       "${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}",
       options: Options(
@@ -42,13 +40,8 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         },
       ),
     );
-    // Map<String, dynamic> map = json.decode(response.body);
-    // List<dynamic> data = map["data"];
 
     if (response.statusCode == 200) {
-      // print(response.statusCode);
-      // print(response.body);
-
       return ServiceReceiverDashboardDetailModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -86,7 +79,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         hostPath + '/' + pdfEnhancePath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -94,7 +86,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         },
       );
     } catch (e) {
-      // print(e);
       customErrorSnackBar(context, e.toString());
     }
     await Future.delayed(const Duration(seconds: 3));
@@ -111,7 +102,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         hostPath + '/' + pdfBasicPath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -119,7 +109,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         },
       );
     } catch (e) {
-      // print(e);
       customErrorSnackBar(context, e.toString());
     }
     await Future.delayed(const Duration(seconds: 3));
@@ -136,7 +125,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         hostPath + '/' + pdfFirstAddPath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -144,7 +132,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         },
       );
     } catch (e) {
-      // print(e);
       customErrorSnackBar(context, e.toString());
     }
     await Future.delayed(const Duration(seconds: 3));
@@ -161,7 +148,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         hostPath + '/' + pdfvehicleRecordPath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -169,7 +155,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         },
       );
     } catch (e) {
-      // print(e);
       customErrorSnackBar(context, e.toString());
     }
     await Future.delayed(const Duration(seconds: 3));
@@ -249,7 +234,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
 
   @override
   Widget build(BuildContext context) {
-    // print(token1);
     return Scaffold(
       backgroundColor: CustomColors.loginBg,
       appBar: AppBar(
@@ -269,7 +253,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                 scrollDirection: Axis.vertical,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: snapshot.data!.data!.length,
-                // itemCount: 10,
                 itemBuilder: (BuildContext context, int index) {
                   return ReceiverDashboardDetailWidget(
                     imgPath: snapshot.data!.data![0].avatar != null ? ("https://islandcare.bm/storage/${snapshot.data!.data![0].avatar}") : "https://img.icons8.com/material-rounded/256/question-mark.png",
@@ -293,7 +276,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                             : snapshot.data!.data![0].userdetailprovider!.hourlyRate.toString()
                         : '',
                     zip: snapshot.data!.data![0].userdetail!.zip.toString() == "null" ? "Not Available" : snapshot.data!.data![0].userdetail!.zip.toString(),
-                    // firstAdd: snapshot.data!.data![0].providerverification!.firstAid.toString(),
                     documentsSection: Column(
                       children: [
                         // Download Enhanced File

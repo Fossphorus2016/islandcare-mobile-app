@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final jobApplicantDetailModel = jobApplicantDetailModelFromJson(jsonString);
-
 import 'dart:convert';
 
 JobApplicantDetailModel jobApplicantDetailModelFromJson(String str) => JobApplicantDetailModel.fromJson(json.decode(str));
@@ -11,20 +7,16 @@ String jobApplicantDetailModelToJson(JobApplicantDetailModel data) => json.encod
 class JobApplicantDetailModel {
   JobApplicantDetailModel({
     this.data,
-    // this.jobTitle,
   });
 
   List<Datum>? data;
-  // String? jobTitle;
 
   factory JobApplicantDetailModel.fromJson(Map<String, dynamic> json) => JobApplicantDetailModel(
         data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
-        // jobTitle: json["job_title"],
       );
 
   Map<String, dynamic> toJson() => {
         "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
-        // "job_title": jobTitle,
       };
 }
 

@@ -11,13 +11,11 @@ class RecommendationWidget extends StatelessWidget {
   final String? country;
   final int? isApplied;
   final int? isCompleted;
-  // String? desc;
   final String? price;
   final onTap;
 
   const RecommendationWidget({
     Key? key,
-    // this.desc,
     this.imgPath,
     this.title,
     this.subTitle,
@@ -32,7 +30,6 @@ class RecommendationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width * .90,
-      // height: 180,
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(

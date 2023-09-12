@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final serviceProviderJobBoardModel = serviceProviderJobBoardModelFromJson(jsonString);
-
 import 'dart:convert';
 
 ServiceProviderJobBoardModel serviceProviderJobBoardModelFromJson(String str) => ServiceProviderJobBoardModel.fromJson(json.decode(str));
@@ -38,9 +34,6 @@ class Job {
     this.createdAt,
     this.updatedAt,
     this.totalAmount,
-    // this.adminCommission,
-    // this.providerPayout,
-    // this.isFunded,
     this.providerId,
     this.fundsTransferedToProvider,
     this.totalDuration,
@@ -94,9 +87,6 @@ class Job {
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
         totalAmount: json["total_amount"],
-        // adminCommission: json["admin_commission"],
-        // providerPayout: json["provider_payout"],
-        // isFunded: json["is_funded"],
         providerId: json["provider_id"],
         fundsTransferedToProvider: json["funds_transfered_to_provider"],
         totalDuration: json["total_duration"],

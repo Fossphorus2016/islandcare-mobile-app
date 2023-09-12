@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final serviceReceiverJobBoardModel = serviceReceiverJobBoardModelFromJson(jsonString);
-
 import 'dart:convert';
 
 ServiceReceiverJobBoardModel serviceReceiverJobBoardModelFromJson(String str) => ServiceReceiverJobBoardModel.fromJson(json.decode(str));
@@ -9,79 +5,79 @@ ServiceReceiverJobBoardModel serviceReceiverJobBoardModelFromJson(String str) =>
 String serviceReceiverJobBoardModelToJson(ServiceReceiverJobBoardModel data) => json.encode(data.toJson());
 
 class ServiceReceiverJobBoardModel {
-    ServiceReceiverJobBoardModel({
-        this.job,
-    });
+  ServiceReceiverJobBoardModel({
+    this.job,
+  });
 
-    List<Job>? job;
+  List<Job>? job;
 
-    factory ServiceReceiverJobBoardModel.fromJson(Map<String, dynamic> json) => ServiceReceiverJobBoardModel(
+  factory ServiceReceiverJobBoardModel.fromJson(Map<String, dynamic> json) => ServiceReceiverJobBoardModel(
         job: json["job"] == null ? [] : List<Job>.from(json["job"]!.map((x) => Job.fromJson(x))),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "job": job == null ? [] : List<dynamic>.from(job!.map((x) => x.toJson())),
-    };
+      };
 }
 
 class Job {
-    Job({
-        this.id,
-        this.jobTitle,
-        this.serviceId,
-        this.hourlyRate,
-        this.address,
-        this.location,
-        this.userId,
-        this.status,
-        this.deletedAt,
-        this.createdAt,
-        this.updatedAt,
-        this.totalAmount,
-        this.adminCommission,
-        this.providerPayout,
-        this.isFunded,
-        this.providerId,
-        this.fundsTransferedToProvider,
-        this.totalDuration,
-        this.childinfo,
-        this.service,
-        this.schedule,
-        this.seniorCare,
-        this.petCare,
-        this.houseKeeping,
-        this.learning,
-        this.schoolCamp,
-    });
+  Job({
+    this.id,
+    this.jobTitle,
+    this.serviceId,
+    this.hourlyRate,
+    this.address,
+    this.location,
+    this.userId,
+    this.status,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.totalAmount,
+    this.adminCommission,
+    this.providerPayout,
+    this.isFunded,
+    this.providerId,
+    this.fundsTransferedToProvider,
+    this.totalDuration,
+    this.childinfo,
+    this.service,
+    this.schedule,
+    this.seniorCare,
+    this.petCare,
+    this.houseKeeping,
+    this.learning,
+    this.schoolCamp,
+  });
 
-    int? id;
-    String? jobTitle;
-    int? serviceId;
-    int? hourlyRate;
-    String? address;
-    String? location;
-    int? userId;
-    int? status;
-    dynamic deletedAt;
-    String? createdAt;
-    String? updatedAt;
-    String? totalAmount;
-    String? adminCommission;
-    String? providerPayout;
-    int? isFunded;
-    dynamic providerId;
-    int? fundsTransferedToProvider;
-    String? totalDuration;
-    List<Childinfo>? childinfo;
-    Service? service;
-    List<Schedule>? schedule;
-    SeniorCare? seniorCare;
-    PetCare? petCare;
-    HouseKeeping? houseKeeping;
-    Learning? learning;
-    SchoolCamp? schoolCamp;
+  int? id;
+  String? jobTitle;
+  int? serviceId;
+  int? hourlyRate;
+  String? address;
+  String? location;
+  int? userId;
+  int? status;
+  dynamic deletedAt;
+  String? createdAt;
+  String? updatedAt;
+  String? totalAmount;
+  String? adminCommission;
+  String? providerPayout;
+  int? isFunded;
+  dynamic providerId;
+  int? fundsTransferedToProvider;
+  String? totalDuration;
+  List<Childinfo>? childinfo;
+  Service? service;
+  List<Schedule>? schedule;
+  SeniorCare? seniorCare;
+  PetCare? petCare;
+  HouseKeeping? houseKeeping;
+  Learning? learning;
+  SchoolCamp? schoolCamp;
 
-    factory Job.fromJson(Map<String, dynamic> json) => Job(
+  factory Job.fromJson(Map<String, dynamic> json) => Job(
         id: json["id"],
         jobTitle: json["job_title"],
         serviceId: json["service_id"],
@@ -108,9 +104,9 @@ class Job {
         houseKeeping: json["house_keeping"] == null ? null : HouseKeeping.fromJson(json["house_keeping"]),
         learning: json["learning"] == null ? null : Learning.fromJson(json["learning"]),
         schoolCamp: json["school_camp"] == null ? null : SchoolCamp.fromJson(json["school_camp"]),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "job_title": jobTitle,
         "service_id": serviceId,
@@ -137,29 +133,29 @@ class Job {
         "house_keeping": houseKeeping?.toJson(),
         "learning": learning?.toJson(),
         "school_camp": schoolCamp?.toJson(),
-    };
+      };
 }
 
 class Childinfo {
-    Childinfo({
-        this.id,
-        this.jobId,
-        this.name,
-        this.age,
-        this.grade,
-        this.createdAt,
-        this.updatedAt,
-    });
+  Childinfo({
+    this.id,
+    this.jobId,
+    this.name,
+    this.age,
+    this.grade,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    int? id;
-    int? jobId;
-    String? name;
-    String? age;
-    String? grade;
-    String? createdAt;
-    String? updatedAt;
+  int? id;
+  int? jobId;
+  String? name;
+  String? age;
+  String? grade;
+  String? createdAt;
+  String? updatedAt;
 
-    factory Childinfo.fromJson(Map<String, dynamic> json) => Childinfo(
+  factory Childinfo.fromJson(Map<String, dynamic> json) => Childinfo(
         id: json["id"],
         jobId: json["job_id"],
         name: json["name"],
@@ -167,9 +163,9 @@ class Childinfo {
         grade: json["grade"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "job_id": jobId,
         "name": name,
@@ -177,35 +173,35 @@ class Childinfo {
         "grade": grade,
         "created_at": createdAt,
         "updated_at": updatedAt,
-    };
+      };
 }
 
 class HouseKeeping {
-    HouseKeeping({
-        this.id,
-        this.jobId,
-        this.cleaningType,
-        this.numberOfBathrooms,
-        this.numberOfBedrooms,
-        this.laundry,
-        this.ironing,
-        this.other,
-        this.createdAt,
-        this.updatedAt,
-    });
+  HouseKeeping({
+    this.id,
+    this.jobId,
+    this.cleaningType,
+    this.numberOfBathrooms,
+    this.numberOfBedrooms,
+    this.laundry,
+    this.ironing,
+    this.other,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    int? id;
-    int? jobId;
-    String? cleaningType;
-    int? numberOfBathrooms;
-    int? numberOfBedrooms;
-    int? laundry;
-    int? ironing;
-    dynamic other;
-    String? createdAt;
-    String? updatedAt;
+  int? id;
+  int? jobId;
+  String? cleaningType;
+  int? numberOfBathrooms;
+  int? numberOfBedrooms;
+  int? laundry;
+  int? ironing;
+  dynamic other;
+  String? createdAt;
+  String? updatedAt;
 
-    factory HouseKeeping.fromJson(Map<String, dynamic> json) => HouseKeeping(
+  factory HouseKeeping.fromJson(Map<String, dynamic> json) => HouseKeeping(
         id: json["id"],
         jobId: json["job_id"],
         cleaningType: json["cleaning_type"],
@@ -216,9 +212,9 @@ class HouseKeeping {
         other: json["other"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "job_id": jobId,
         "cleaning_type": cleaningType,
@@ -229,37 +225,37 @@ class HouseKeeping {
         "other": other,
         "created_at": createdAt,
         "updated_at": updatedAt,
-    };
+      };
 }
 
 class Learning {
-    Learning({
-        this.id,
-        this.jobId,
-        this.learningStyle,
-        this.learningChallenge,
-        this.assistanceInMath,
-        this.assistanceInEnglish,
-        this.assistanceInScience,
-        this.assistanceInReading,
-        this.assistanceInOther,
-        this.createdAt,
-        this.updatedAt,
-    });
+  Learning({
+    this.id,
+    this.jobId,
+    this.learningStyle,
+    this.learningChallenge,
+    this.assistanceInMath,
+    this.assistanceInEnglish,
+    this.assistanceInScience,
+    this.assistanceInReading,
+    this.assistanceInOther,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    int? id;
-    int? jobId;
-    String? learningStyle;
-    String? learningChallenge;
-    int? assistanceInMath;
-    int? assistanceInEnglish;
-    dynamic assistanceInScience;
-    int? assistanceInReading;
-    dynamic assistanceInOther;
-    String? createdAt;
-    String? updatedAt;
+  int? id;
+  int? jobId;
+  String? learningStyle;
+  String? learningChallenge;
+  int? assistanceInMath;
+  int? assistanceInEnglish;
+  dynamic assistanceInScience;
+  int? assistanceInReading;
+  dynamic assistanceInOther;
+  String? createdAt;
+  String? updatedAt;
 
-    factory Learning.fromJson(Map<String, dynamic> json) => Learning(
+  factory Learning.fromJson(Map<String, dynamic> json) => Learning(
         id: json["id"],
         jobId: json["job_id"],
         learningStyle: json["learning_style"],
@@ -271,9 +267,9 @@ class Learning {
         assistanceInOther: json["assistance_in_other"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "job_id": jobId,
         "learning_style": learningStyle,
@@ -285,45 +281,45 @@ class Learning {
         "assistance_in_other": assistanceInOther,
         "created_at": createdAt,
         "updated_at": updatedAt,
-    };
+      };
 }
 
 class PetCare {
-    PetCare({
-        this.id,
-        this.jobId,
-        this.petType,
-        this.numberOfPets,
-        this.petBreed,
-        this.sizeOfPet,
-        this.temperament,
-        this.walking,
-        this.daycare,
-        this.feeding,
-        this.socialization,
-        this.grooming,
-        this.boarding,
-        this.createdAt,
-        this.updatedAt,
-    });
+  PetCare({
+    this.id,
+    this.jobId,
+    this.petType,
+    this.numberOfPets,
+    this.petBreed,
+    this.sizeOfPet,
+    this.temperament,
+    this.walking,
+    this.daycare,
+    this.feeding,
+    this.socialization,
+    this.grooming,
+    this.boarding,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    int? id;
-    int? jobId;
-    String? petType;
-    int? numberOfPets;
-    String? petBreed;
-    String? sizeOfPet;
-    String? temperament;
-    dynamic walking;
-    int? daycare;
-    dynamic feeding;
-    int? socialization;
-    dynamic grooming;
-    dynamic boarding;
-    String? createdAt;
-    String? updatedAt;
+  int? id;
+  int? jobId;
+  String? petType;
+  int? numberOfPets;
+  String? petBreed;
+  String? sizeOfPet;
+  String? temperament;
+  dynamic walking;
+  int? daycare;
+  dynamic feeding;
+  int? socialization;
+  dynamic grooming;
+  dynamic boarding;
+  String? createdAt;
+  String? updatedAt;
 
-    factory PetCare.fromJson(Map<String, dynamic> json) => PetCare(
+  factory PetCare.fromJson(Map<String, dynamic> json) => PetCare(
         id: json["id"],
         jobId: json["job_id"],
         petType: json["pet_type"],
@@ -339,9 +335,9 @@ class PetCare {
         boarding: json["boarding"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "job_id": jobId,
         "pet_type": petType,
@@ -357,29 +353,29 @@ class PetCare {
         "boarding": boarding,
         "created_at": createdAt,
         "updated_at": updatedAt,
-    };
+      };
 }
 
 class Schedule {
-    Schedule({
-        this.id,
-        this.jobId,
-        this.startingDate,
-        this.startingTime,
-        this.duration,
-        this.createdAt,
-        this.updatedAt,
-    });
+  Schedule({
+    this.id,
+    this.jobId,
+    this.startingDate,
+    this.startingTime,
+    this.duration,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    int? id;
-    int? jobId;
-    String? startingDate;
-    String? startingTime;
-    String? duration;
-    String? createdAt;
-    String? updatedAt;
+  int? id;
+  int? jobId;
+  String? startingDate;
+  String? startingTime;
+  String? duration;
+  String? createdAt;
+  String? updatedAt;
 
-    factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
+  factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
         id: json["id"],
         jobId: json["job_id"],
         startingDate: json["starting_date"],
@@ -387,9 +383,9 @@ class Schedule {
         duration: json["duration"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "job_id": jobId,
         "starting_date": startingDate,
@@ -397,93 +393,93 @@ class Schedule {
         "duration": duration,
         "created_at": createdAt,
         "updated_at": updatedAt,
-    };
+      };
 }
 
 class SchoolCamp {
-    SchoolCamp({
-        this.id,
-        this.jobId,
-        this.interestForChild,
-        this.costRange,
-        this.createdAt,
-        this.updatedAt,
-    });
+  SchoolCamp({
+    this.id,
+    this.jobId,
+    this.interestForChild,
+    this.costRange,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    int? id;
-    int? jobId;
-    String? interestForChild;
-    String? costRange;
-    String? createdAt;
-    String? updatedAt;
+  int? id;
+  int? jobId;
+  String? interestForChild;
+  String? costRange;
+  String? createdAt;
+  String? updatedAt;
 
-    factory SchoolCamp.fromJson(Map<String, dynamic> json) => SchoolCamp(
+  factory SchoolCamp.fromJson(Map<String, dynamic> json) => SchoolCamp(
         id: json["id"],
         jobId: json["job_id"],
         interestForChild: json["interest_for_child"],
         costRange: json["cost_range"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "job_id": jobId,
         "interest_for_child": interestForChild,
         "cost_range": costRange,
         "created_at": createdAt,
         "updated_at": updatedAt,
-    };
+      };
 }
 
 class SeniorCare {
-    SeniorCare({
-        this.id,
-        this.jobId,
-        this.seniorName,
-        this.dob,
-        this.medicalCondition,
-        this.bathing,
-        this.dressing,
-        this.feeding,
-        this.mealPreparation,
-        this.groceryShopping,
-        this.walking,
-        this.bedTransfer,
-        this.lightCleaning,
-        this.companionship,
-        this.medicationAdministration,
-        this.dressingWoundCare,
-        this.bloodPressureMonetoring,
-        this.bloodSugarMonetoring,
-        this.groomingHairAndNailTrimming,
-        this.createdAt,
-        this.updatedAt,
-    });
+  SeniorCare({
+    this.id,
+    this.jobId,
+    this.seniorName,
+    this.dob,
+    this.medicalCondition,
+    this.bathing,
+    this.dressing,
+    this.feeding,
+    this.mealPreparation,
+    this.groceryShopping,
+    this.walking,
+    this.bedTransfer,
+    this.lightCleaning,
+    this.companionship,
+    this.medicationAdministration,
+    this.dressingWoundCare,
+    this.bloodPressureMonetoring,
+    this.bloodSugarMonetoring,
+    this.groomingHairAndNailTrimming,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    int? id;
-    int? jobId;
-    String? seniorName;
-    String? dob;
-    String? medicalCondition;
-    int? bathing;
-    int? dressing;
-    int? feeding;
-    int? mealPreparation;
-    int? groceryShopping;
-    int? walking;
-    int? bedTransfer;
-    int? lightCleaning;
-    int? companionship;
-    int? medicationAdministration;
-    int? dressingWoundCare;
-    int? bloodPressureMonetoring;
-    int? bloodSugarMonetoring;
-    int? groomingHairAndNailTrimming;
-    String? createdAt;
-    String? updatedAt;
+  int? id;
+  int? jobId;
+  String? seniorName;
+  String? dob;
+  String? medicalCondition;
+  int? bathing;
+  int? dressing;
+  int? feeding;
+  int? mealPreparation;
+  int? groceryShopping;
+  int? walking;
+  int? bedTransfer;
+  int? lightCleaning;
+  int? companionship;
+  int? medicationAdministration;
+  int? dressingWoundCare;
+  int? bloodPressureMonetoring;
+  int? bloodSugarMonetoring;
+  int? groomingHairAndNailTrimming;
+  String? createdAt;
+  String? updatedAt;
 
-    factory SeniorCare.fromJson(Map<String, dynamic> json) => SeniorCare(
+  factory SeniorCare.fromJson(Map<String, dynamic> json) => SeniorCare(
         id: json["id"],
         jobId: json["job_id"],
         seniorName: json["senior_name"],
@@ -505,9 +501,9 @@ class SeniorCare {
         groomingHairAndNailTrimming: json["grooming_hair_and_nail_trimming"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "job_id": jobId,
         "senior_name": seniorName,
@@ -529,29 +525,29 @@ class SeniorCare {
         "grooming_hair_and_nail_trimming": groomingHairAndNailTrimming,
         "created_at": createdAt,
         "updated_at": updatedAt,
-    };
+      };
 }
 
 class Service {
-    Service({
-        this.id,
-        this.name,
-        this.image,
-        this.description,
-        this.deletedAt,
-        this.createdAt,
-        this.updatedAt,
-    });
+  Service({
+    this.id,
+    this.name,
+    this.image,
+    this.description,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    int? id;
-    String? name;
-    String? image;
-    String? description;
-    dynamic deletedAt;
-    String? createdAt;
-    String? updatedAt;
+  int? id;
+  String? name;
+  String? image;
+  String? description;
+  dynamic deletedAt;
+  String? createdAt;
+  String? updatedAt;
 
-    factory Service.fromJson(Map<String, dynamic> json) => Service(
+  factory Service.fromJson(Map<String, dynamic> json) => Service(
         id: json["id"],
         name: json["name"],
         image: json["image"],
@@ -559,9 +555,9 @@ class Service {
         deletedAt: json["deleted_at"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "image": image,
@@ -569,5 +565,5 @@ class Service {
         "deleted_at": deletedAt,
         "created_at": createdAt,
         "updated_at": updatedAt,
-    };
+      };
 }

@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final serviceReceiverJobBoardDetailModel = serviceReceiverJobBoardDetailModelFromJson(jsonString);
-
 import 'dart:convert';
 
 ServiceReceiverJobBoardDetailModel serviceReceiverJobBoardDetailModelFromJson(String str) => ServiceReceiverJobBoardDetailModel.fromJson(json.decode(str));
@@ -9,67 +5,67 @@ ServiceReceiverJobBoardDetailModel serviceReceiverJobBoardDetailModelFromJson(St
 String serviceReceiverJobBoardDetailModelToJson(ServiceReceiverJobBoardDetailModel data) => json.encode(data.toJson());
 
 class ServiceReceiverJobBoardDetailModel {
-    ServiceReceiverJobBoardDetailModel({
-        this.job,
-    });
+  ServiceReceiverJobBoardDetailModel({
+    this.job,
+  });
 
-    List<Job>? job;
+  List<Job>? job;
 
-    factory ServiceReceiverJobBoardDetailModel.fromJson(Map<String, dynamic> json) => ServiceReceiverJobBoardDetailModel(
+  factory ServiceReceiverJobBoardDetailModel.fromJson(Map<String, dynamic> json) => ServiceReceiverJobBoardDetailModel(
         job: json["job"] == null ? [] : List<Job>.from(json["job"]!.map((x) => Job.fromJson(x))),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "job": job == null ? [] : List<dynamic>.from(job!.map((x) => x.toJson())),
-    };
+      };
 }
 
 class Job {
-    Job({
-        this.id,
-        this.jobTitle,
-        this.serviceId,
-        this.hourlyRate,
-        this.address,
-        this.location,
-        this.userId,
-        this.status,
-        this.deletedAt,
-        this.createdAt,
-        this.updatedAt,
-        this.totalAmount,
-        this.adminCommission,
-        this.providerPayout,
-        this.isFunded,
-        this.providerId,
-        this.fundsTransferedToProvider,
-        this.totalDuration,
-        this.service,
-        this.schedule,
-    });
+  Job({
+    this.id,
+    this.jobTitle,
+    this.serviceId,
+    this.hourlyRate,
+    this.address,
+    this.location,
+    this.userId,
+    this.status,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+    this.totalAmount,
+    this.adminCommission,
+    this.providerPayout,
+    this.isFunded,
+    this.providerId,
+    this.fundsTransferedToProvider,
+    this.totalDuration,
+    this.service,
+    this.schedule,
+  });
 
-    int? id;
-    String? jobTitle;
-    int? serviceId;
-    int? hourlyRate;
-    String? address;
-    String? location;
-    int? userId;
-    int? status;
-    dynamic deletedAt;
-    String? createdAt;
-    String? updatedAt;
-    String? totalAmount;
-    String? adminCommission;
-    String? providerPayout;
-    int? isFunded;
-    dynamic providerId;
-    int? fundsTransferedToProvider;
-    String? totalDuration;
-    Service? service;
-    List<Schedule>? schedule;
+  int? id;
+  String? jobTitle;
+  int? serviceId;
+  int? hourlyRate;
+  String? address;
+  String? location;
+  int? userId;
+  int? status;
+  dynamic deletedAt;
+  String? createdAt;
+  String? updatedAt;
+  String? totalAmount;
+  String? adminCommission;
+  String? providerPayout;
+  int? isFunded;
+  dynamic providerId;
+  int? fundsTransferedToProvider;
+  String? totalDuration;
+  Service? service;
+  List<Schedule>? schedule;
 
-    factory Job.fromJson(Map<String, dynamic> json) => Job(
+  factory Job.fromJson(Map<String, dynamic> json) => Job(
         id: json["id"],
         jobTitle: json["job_title"],
         serviceId: json["service_id"],
@@ -90,9 +86,9 @@ class Job {
         totalDuration: json["total_duration"],
         service: json["service"] == null ? null : Service.fromJson(json["service"]),
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "job_title": jobTitle,
         "service_id": serviceId,
@@ -113,29 +109,29 @@ class Job {
         "total_duration": totalDuration,
         "service": service?.toJson(),
         "schedule": schedule == null ? [] : List<dynamic>.from(schedule!.map((x) => x.toJson())),
-    };
+      };
 }
 
 class Schedule {
-    Schedule({
-        this.id,
-        this.jobId,
-        this.startingDate,
-        this.startingTime,
-        this.duration,
-        this.createdAt,
-        this.updatedAt,
-    });
+  Schedule({
+    this.id,
+    this.jobId,
+    this.startingDate,
+    this.startingTime,
+    this.duration,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    int? id;
-    int? jobId;
-    String? startingDate;
-    String? startingTime;
-    String? duration;
-    String? createdAt;
-    String? updatedAt;
+  int? id;
+  int? jobId;
+  String? startingDate;
+  String? startingTime;
+  String? duration;
+  String? createdAt;
+  String? updatedAt;
 
-    factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
+  factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
         id: json["id"],
         jobId: json["job_id"],
         startingDate: json["starting_date"],
@@ -143,9 +139,9 @@ class Schedule {
         duration: json["duration"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "job_id": jobId,
         "starting_date": startingDate,
@@ -153,29 +149,29 @@ class Schedule {
         "duration": duration,
         "created_at": createdAt,
         "updated_at": updatedAt,
-    };
+      };
 }
 
 class Service {
-    Service({
-        this.id,
-        this.name,
-        this.image,
-        this.description,
-        this.deletedAt,
-        this.createdAt,
-        this.updatedAt,
-    });
+  Service({
+    this.id,
+    this.name,
+    this.image,
+    this.description,
+    this.deletedAt,
+    this.createdAt,
+    this.updatedAt,
+  });
 
-    int? id;
-    String? name;
-    String? image;
-    String? description;
-    dynamic deletedAt;
-    String? createdAt;
-    String? updatedAt;
+  int? id;
+  String? name;
+  String? image;
+  String? description;
+  dynamic deletedAt;
+  String? createdAt;
+  String? updatedAt;
 
-    factory Service.fromJson(Map<String, dynamic> json) => Service(
+  factory Service.fromJson(Map<String, dynamic> json) => Service(
         id: json["id"],
         name: json["name"],
         image: json["image"],
@@ -183,9 +179,9 @@ class Service {
         deletedAt: json["deleted_at"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "image": image,
@@ -193,5 +189,5 @@ class Service {
         "deleted_at": deletedAt,
         "created_at": createdAt,
         "updated_at": updatedAt,
-    };
+      };
 }

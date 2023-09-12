@@ -1,15 +1,14 @@
-// ignore_for_file: prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:island_app/carereceiver/utils/colors.dart';
 
-// ignore: must_be_immutable
 class ReviewsGivenWidget extends StatelessWidget {
-  String? name;
+  final String? name;
   var rating;
-  String? comment;
+  final String? comment;
   var email;
 
   ReviewsGivenWidget({
@@ -44,7 +43,6 @@ class ReviewsGivenWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   name.toString(),
-                  // "Babysitters",
                   style: TextStyle(
                     color: CustomColors.primaryText,
                     fontFamily: "Poppins",
@@ -58,7 +56,6 @@ class ReviewsGivenWidget extends StatelessWidget {
                 alignment: Alignment.center,
                 child: Text(
                   email.toString(),
-                  // "One-Time",
                   style: TextStyle(
                     color: CustomColors.hintText,
                     fontFamily: "Poppins",
@@ -85,7 +82,6 @@ class ReviewsGivenWidget extends StatelessWidget {
                   color: Colors.amber,
                 ),
                 onRatingUpdate: (rating) {
-                  // print(rating);
                   rating = rating;
                 },
               )),
@@ -94,33 +90,6 @@ class ReviewsGivenWidget extends StatelessWidget {
             alignment: Alignment.center,
             child: Text(comment.toString()),
           ),
-          // Row(
-          //   children: [
-          //     Container(
-          //       padding: const EdgeInsets.symmetric(horizontal: 8),
-          //       height: 24,
-          //       // width: 70,
-          //       // decoration: BoxDecoration(
-          //       //   borderRadius: BorderRadius.circular(2),
-          //       //   color: CustomColors.blackLight,
-          //       // ),
-          //       child: Center(
-          //         child: Text(
-          //           comment.toString(),
-          //           style: TextStyle(
-          //             color: CustomColors.black,
-          //             fontSize: 12,
-          //             fontFamily: "Poppins",
-          //             fontWeight: FontWeight.w500,
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //     const SizedBox(
-          //       width: 10,
-          //     ),
-          //   ],
-          // )
         ],
       ),
     );

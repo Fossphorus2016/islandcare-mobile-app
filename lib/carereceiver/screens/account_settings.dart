@@ -207,7 +207,6 @@ class _AccountSettingsState extends State<AccountSettings> {
                     height: 20,
                     child: FlutterSwitch(
                       padding: 0.5,
-                      // toggleColor: Colors.red,
                       width: 40,
                       activeColor: Colors.red,
                       borderRadius: 10,
@@ -236,8 +235,6 @@ class _AccountSettingsState extends State<AccountSettings> {
                     height: 20,
                     child: FlutterSwitch(
                       padding: 0.5,
-                      // toggleColor: Colors.red,
-
                       width: 40,
                       activeColor: Colors.red,
                       borderRadius: 10,

@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final serviceReceiverDashboardDetailModel = serviceReceiverDashboardDetailModelFromJson(jsonString);
-
 import 'dart:convert';
 
 ServiceReceiverDashboardDetailModel serviceReceiverDashboardDetailModelFromJson(String str) => ServiceReceiverDashboardDetailModel.fromJson(json.decode(str));

@@ -69,7 +69,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          // title:
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -155,7 +154,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       ),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return ProfileReceiverModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -178,7 +176,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }
 
   chnagePassword() async {
-    // print("change password call");
     var token = await getUserToken();
     var userId = await getUserId();
     var formData = FormData.fromMap({"_method": "PUT", "old_password": oldPasswordController.text.toString(), "password": passwordController.text.toString(), "password_confirmation": cpasswordController.text.toString()});
@@ -207,9 +204,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           response.data['message'],
         );
       }
-      // print("res ${response.toString()}");
     } on DioError catch (e) {
-      // print("error $e");
       customErrorSnackBar(
         context,
         e.toString(),
@@ -222,7 +217,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     var userId = preferences.getString(
       'userId',
     );
-    // print(userId);
     return userId.toString();
   }
 
@@ -244,7 +238,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     setState(() {
       avatar = userAvatar;
     });
-    // print("avatar $avatar");
     return avatar.toString();
   }
 
@@ -294,13 +287,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                     ),
                                   ),
                                 ),
-                                // backgroundImage: NetworkImage(
-                                //     snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data![0].avatar .toString()),
                               ),
-                              // const CircleAvatar(
-                              //   radius: 30,
-                              //   backgroundImage: AssetImage("assets/images/category.png"),
-                              // ),
                               const SizedBox(
                                 width: 10,
                               ),
@@ -355,13 +342,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       borderRadius: BorderRadius.circular(100),
                                     ),
                                   ),
-                                  // backgroundImage: NetworkImage(
-                                  //     snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data![0].avatar .toString()),
                                 ),
-                                // const CircleAvatar(
-                                //   radius: 30,
-                                //   backgroundImage: AssetImage("assets/images/category.png"),
-                                // ),
                                 const SizedBox(
                                   width: 10,
                                 ),
@@ -409,17 +390,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 6),
                     decoration: BoxDecoration(
-                      // color: CustomColors.selectedItems,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: ListTile(
                       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                      // tileColor: Colors.red,
                       leading: SizedBox(
-                        // height: 40,
-                        // width: 80,
                         child: Image.asset("assets/images/icons/homeIcon.png"),
                       ),
                       title: Text(
@@ -441,52 +418,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       },
                     ),
                   ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const MyJobs(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     padding: const EdgeInsets.symmetric(vertical: 6),
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(6),
-                  //     ),
-                  //     child: ListTile(
-                  //       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       leading: SizedBox(
-                  //         child: Image.asset("assets/images/icons/jobBoard.png"),
-                  //       ),
-                  //       title: Text(
-                  //         'Jobs Board',
-                  //         style: TextStyle(
-                  //           fontSize: 16,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: CustomColors.white,
-                  //           fontFamily: "Rubik",
-                  //         ),
-                  //       ),
-                  //       trailing: Icon(
-                  //         Icons.arrow_forward_ios,
-                  //         color: CustomColors.white,
-                  //         size: 16,
-                  //       ),
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //             builder: (context) => const MyJobs(),
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -499,17 +430,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: BoxDecoration(
-                        // color: CustomColors.selectedItems,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: ListTile(
                         hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                         selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                         focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        // tileColor: Colors.red,
                         leading: SizedBox(
-                          // height: 40,
-                          // width: 80,
                           child: Image.asset("assets/images/icons/jobPost.png"),
                         ),
                         title: Text(
@@ -641,17 +568,13 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: BoxDecoration(
-                        // color: CustomColors.selectedItems,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: ListTile(
                         hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                         selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                         focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        // tileColor: Colors.red,
                         leading: SizedBox(
-                          // height: 40,
-                          // width: 80,
                           child: Image.asset("assets/images/icons/payments.png"),
                         ),
                         title: Text(
@@ -679,55 +602,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       ),
                     ),
                   ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const ReceiverReviewsScreen(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     padding: const EdgeInsets.symmetric(vertical: 6),
-                  //     decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(6),
-                  //     ),
-                  //     child: ListTile(
-                  //       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       leading: SizedBox(
-                  //         child: Icon(
-                  //           Icons.star_border_outlined,
-                  //           color: CustomColors.white,
-                  //         ),
-                  //       ),
-                  //       title: Text(
-                  //         'Reviews Given',
-                  //         style: TextStyle(
-                  //           fontSize: 16,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: CustomColors.white,
-                  //           fontFamily: "Rubik",
-                  //         ),
-                  //       ),
-                  //       trailing: Icon(
-                  //         Icons.arrow_forward_ios,
-                  //         color: CustomColors.white,
-                  //         size: 16,
-                  //       ),
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //             builder: (context) => const ReceiverReviewsScreen(),
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -826,163 +700,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       ),
                     ),
                   ),
-
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const PrivacyPolicy(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     padding: const EdgeInsets.symmetric(vertical: 6),
-                  //     decoration: BoxDecoration(
-                  //       // color: CustomColors.selectedItems,
-                  //       borderRadius: BorderRadius.circular(6),
-                  //     ),
-                  //     child: ListTile(
-                  //       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       // tileColor: Colors.red,
-                  //       leading: SizedBox(
-                  //         // height: 40,
-                  //         // width: 80,
-                  //         child: Image.asset("assets/images/icons/privacy.png"),
-                  //       ),
-                  //       title: Text(
-                  //         'Privacy & Policy',
-                  //         style: TextStyle(
-                  //           fontSize: 16,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: CustomColors.white,
-                  //           fontFamily: "Rubik",
-                  //         ),
-                  //       ),
-                  //       trailing: Icon(
-                  //         Icons.arrow_forward_ios,
-                  //         color: CustomColors.white,
-                  //         size: 16,
-                  //       ),
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //             builder: (context) => const PrivacyPolicy(),
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const HelpCenter(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     padding: const EdgeInsets.symmetric(vertical: 6),
-                  //     decoration: BoxDecoration(
-                  //       // color: CustomColors.selectedItems,
-                  //       borderRadius: BorderRadius.circular(6),
-                  //     ),
-                  //     child: ListTile(
-                  //       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       // tileColor: Colors.red,
-                  //       leading: SizedBox(
-                  //         // height: 40,
-                  //         // width: 80,
-                  //         child: Image.asset("assets/images/icons/helpCenter.png"),
-                  //       ),
-                  //       title: Text(
-                  //         'Help Center',
-                  //         style: TextStyle(
-                  //           fontSize: 16,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: CustomColors.white,
-                  //           fontFamily: "Rubik",
-                  //         ),
-                  //       ),
-                  //       trailing: Icon(
-                  //         Icons.arrow_forward_ios,
-                  //         color: CustomColors.white,
-                  //         size: 16,
-                  //       ),
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //             builder: (context) => const HelpCenter(),
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const AccountSettings(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     padding: const EdgeInsets.symmetric(vertical: 6),
-                  //     decoration: BoxDecoration(
-                  //       // color: CustomColors.selectedItems,
-                  //       borderRadius: BorderRadius.circular(6),
-                  //     ),
-                  //     child: ListTile(
-                  //       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       // tileColor: Colors.red,
-                  //       leading: SizedBox(
-                  //         // height: 40,
-                  //         // width: 80,
-                  //         child: Image.asset("assets/images/icons/setting.png"),
-                  //       ),
-                  //       title: Text(
-                  //         'Settings',
-                  //         style: TextStyle(
-                  //           fontSize: 16,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: CustomColors.white,
-                  //           fontFamily: "Rubik",
-                  //         ),
-                  //       ),
-                  //       trailing: Icon(
-                  //         Icons.arrow_forward_ios,
-                  //         color: CustomColors.white,
-                  //         size: 16,
-                  //       ),
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //             builder: (context) => const AccountSettings(),
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
                   GestureDetector(
                     onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: BoxDecoration(
-                        // color: CustomColors.selectedItems,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: ListTile(

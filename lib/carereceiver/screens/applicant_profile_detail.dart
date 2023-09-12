@@ -5,10 +5,8 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/models/applicant_profile_detail-model.dart';
@@ -36,11 +34,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
   late Future<ApplicantDetailProfileModel>? futureapplicantProfileDetail;
   var id;
   var isHiredd;
-  // double calculateAverage(List<int> data) {
-  //   if (data.isEmpty) return 0;
-  //   int sum = data.reduce((a, b) => a + b);
-  //   return sum / data.length;
-  // }
 
   Future<ApplicantDetailProfileModel> fetchApplicantProfileDetailModel() async {
     var token = await getUserToken();
@@ -67,17 +60,10 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         sum += sumRating[i]['rating'];
       }
       int average = sum ~/ sumRating.length;
-      // print('Average: ${average.toString()}');
       setState(() {
-        // print('Average: ${average.toString()}');
         ratings = average;
         id = id;
         isHiredd = hired;
-        // print("sumRating $sumRating");
-        // print("hired $isHiredd");
-        // print("jobtit ${widget.jobTitle}");
-        // print("jobId ${widget.jobId}");
-        // print("jobpro ${widget.profileId}");
       });
       return ApplicantDetailProfileModel.fromJson(response.data);
     } else {
@@ -87,35 +73,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
     }
   }
 
-  // AcceptApplicant
-  // Future<http.Response> AcceptApplicant(url) async {
-  //   var requestBody = {
-  //     '_method': 'put',
-  //   };
-  //   var token = await getUserToken();
-  //   var url = 'http://192.168.0.244:9999/api/service-receiver-my-application-applicant-details-approve/$id/${widget.profileId}';
-  //   var response = await http.post(
-  //     Uri.parse(url),
-  //     headers: {
-  //       'Accept': 'application/json',
-  //       'Authorization': 'Bearer $token',
-  //     },
-  //     body: requestBody,
-  //   );
-  //   if (response.statusCode == 200) {
-  //     // customSuccesSnackBar("Added To Favourite", context);
-  //     if (kDebugMode) {
-  //       print("AcceptApplicant = ${response.body}");
-  //     }
-  //   } else {
-  //     if (kDebugMode) {
-  //       print("AcceptApplicant = ${response.body}");
-  //     }
-  //   }
-  //   return response;
-  // }
   acceptApplicant() async {
-    // print("call");
     var token = await getUserToken();
     var formData = FormData.fromMap(
       {
@@ -123,9 +81,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
       },
     );
     Dio dio = Dio();
-    // print(
-    //   '${CareReceiverURl.serviceReceiverApplicantionApplicantsAccept}/${widget.profileId}/${widget.jobId}',
-    // );
+
     try {
       var response = await dio.post(
         '${CareReceiverURl.serviceReceiverApplicantionApplicantsAccept}/${widget.profileId}/${widget.jobId}',
@@ -139,7 +95,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
           },
         ),
       );
-      // print(response.data);
       if (response.statusCode == 200) {
         customSuccesSnackBar(
           context,
@@ -180,7 +135,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
           },
         ),
       );
-      // print(response.toString());
       if (response.statusCode == 200) {
         customSuccesSnackBar(
           context,
@@ -197,7 +151,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         context,
         e.toString(),
       );
-      // print(e.toString());
     }
   }
 
@@ -230,7 +183,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         hostPath + '/' + pdfEnhancePath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -257,7 +209,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         hostPath + '/' + pdfBasicPath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -284,7 +235,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         hostPath + '/' + pdfFirstAddPath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -311,7 +261,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         hostPath + '/' + pdfvehicleRecordPath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -402,7 +351,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
     setState(() {
       isCompletedProfile = completedProfile;
     });
-    // print("isCompletedProfile $completedProfile $isCompletedProfile");
 
     return isCompletedProfile.toString();
   }
@@ -476,11 +424,10 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                     scrollDirection: Axis.vertical,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: snapshot.data!.data!.length,
-                    // itemCount: 10,
                     itemBuilder: (BuildContext context, int index) {
                       return JobApplicantProfileWidget(
-                          dataMap:snapshot.data!.data![0].toJson(),
-                          id:snapshot.data!.data![0].id.toString(),
+                          dataMap: snapshot.data!.data![0].toJson(),
+                          id: snapshot.data!.data![0].id.toString(),
                           imgPath: "${AppUrl.webStorageUrl}/${snapshot.data!.data![0].avatar}",
                           title: "${snapshot.data!.data![0].firstName} ${snapshot.data!.data![0].lastName}",
                           services: snapshot.data!.data![0].userdetail!.service!.name.toString(),
@@ -494,7 +441,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           to: snapshot.data!.data![0].educations!.isEmpty ? "Not Available" : snapshot.data!.data![0].educations![index].to.toString(),
                           hour: snapshot.data!.data![0].userdetailprovider!.hourlyRate.toString() == "null" ? "0" : snapshot.data!.data![0].userdetailprovider!.hourlyRate.toString(),
                           zip: snapshot.data!.data![0].userdetail!.zip.toString() == "null" ? " " : snapshot.data!.data![0].userdetail!.zip.toString(),
-                          // firstAdd: snapshot.data!.data![0].providerverification!.firstAid.toString(),
                           documentsSection: Column(
                             children: [
                               // Download Enhanced File
@@ -768,39 +714,18 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           review: null,
                           acceptBtnFunc: () {
-                            // if (isHiredd == 0) {
                             acceptApplicant();
-                            // if (isHiredd == 0) {
                             setState(() {
                               isHiredd = 1;
                             });
-                            // }
-                            // else if (isHiredd == 1) {
-                            //   setState(() {
-                            //     isHiredd = 0;
-                            //   });
-                            // }
-                            // }
                           },
                           acceptBtnColor: isHiredd == 0 ? CustomColors.green : CustomColors.red,
-                          declineApplicant:
-                              // isHiredd == 1
-                              //     ?
-                              () {
+                          declineApplicant: () {
                             declineApplicant();
-                            // if (isHiredd == 0) {
                             setState(() {
                               isHiredd = 1;
                             });
-                            // }
-                            // else if (isHiredd == 1) {
-                            //   setState(() {
-                            //     isHiredd = 0;
-                            //   });
-                            // }
-                          }
-                          // : n.ull,
-                          );
+                          });
                     },
                   );
                 } else {

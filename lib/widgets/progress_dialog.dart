@@ -5,7 +5,6 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 
 enum ProgressDialogType { Normal, Download }
 
-// String _dialogMessage = "Loading...";
 double _progress = 0.0, _maxProgress = 100.0;
 
 late Widget _customBody;
@@ -27,7 +26,6 @@ Curve _insetAnimCurve = Curves.easeInOut;
 EdgeInsets _dialogPadding = const EdgeInsets.all(8.0);
 
 Widget _progressWidget = Image.asset('assets/images/loaderLight.gif');
-// Widget _progressWidget = Text("Loading...");
 
 class ProgressDialog {
   late _Body _dialog;
@@ -46,7 +44,6 @@ class ProgressDialog {
       _progress = progress ?? _progress;
     }
 
-    // _dialogMessage = message ?? _dialogMessage;
     _maxProgress = maxProgress ?? _maxProgress;
     _progressWidget = progressWidget ?? _progressWidget;
     _backgroundColor = backgroundColor ?? _backgroundColor;
@@ -66,7 +63,6 @@ class ProgressDialog {
       _progress = progress ?? _progress;
     }
 
-    // _dialogMessage = message ?? _dialogMessage;
     _maxProgress = maxProgress ?? _maxProgress;
     _progressWidget = progressWidget ?? _progressWidget;
     _messageStyle = messageTextStyle ?? _messageStyle;

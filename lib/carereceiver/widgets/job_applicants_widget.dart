@@ -38,7 +38,6 @@ class JobApplicantsWidget extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * .3,
                 child: Text(
                   name.toString(),
-                  // "Babysitters",
                   style: TextStyle(
                     color: CustomColors.primaryText,
                     fontFamily: "Poppins",
@@ -51,7 +50,6 @@ class JobApplicantsWidget extends StatelessWidget {
                 width: MediaQuery.of(context).size.width * .3,
                 child: Text(
                   jobType.toString(),
-                  // "One-Time",
                   style: TextStyle(
                     color: CustomColors.hintText,
                     fontFamily: "Poppins",
@@ -73,7 +71,6 @@ class JobApplicantsWidget extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   height: 24,
-                  // width: 70,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(2),
                     color: CustomColors.blackLight,

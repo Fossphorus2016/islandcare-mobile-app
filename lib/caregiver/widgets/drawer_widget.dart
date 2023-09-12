@@ -12,11 +12,9 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/screens/onboard_screen.dart';
 import 'package:island_app/utils/utils.dart';
-
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:http/http.dart' as http;
 import 'package:shimmer/shimmer.dart';
 
 class DrawerGiverWidget extends StatefulWidget {
@@ -35,7 +33,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          // title:
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -173,7 +170,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
           headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
         ),
       );
-      // print(response.toString());
       customSuccesSnackBar(
         context,
         "Password Updated Successfully",
@@ -190,11 +186,9 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
   late Future<ProfileGiverModel> fetchProfile;
   Future<ProfileGiverModel> fetchProfileGiverModel() async {
     var token = await getUserToken();
-    // print('token is $token');
     Dio()
         .get(
       CareGiverUrl.serviceProviderProfile,
-      // 'http://192.168.0.244:9999/api/service-provider-profile',
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',
@@ -206,7 +200,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
     });
     final response = await Dio().get(
       CareGiverUrl.serviceProviderProfile,
-      // 'http://192.168.0.244:9999/api/service-provider-profile',
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',
@@ -215,21 +208,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
       ),
     );
     if (response.statusCode == 200) {
-      // final json = jsonDecode(response.body) as Map;
-      // var host = json['folder_path'];
-      // var enhance = json['data'][0]['providerverification']['enhanced_criminal'] ?? [];
-      // List basic = json['data'][0]['providerverification']['basic_criminal'] ?? [];
-      // List firstAdd = json['data'][0]['providerverification']['first_aid'] ?? [];
-      // List vehicleRecord = json['data'][0]['providerverification']['vehicle_record'] ?? [];
-
-      // this.setState(() {
-      //   hostPath = host;
-      //   pdfEnhancePath = enhance;
-      //   pdfBasicPath = basic.toString();
-      //   pdfFirstAddPath = firstAdd.toString();
-      //   pdfvehicleRecordPath = vehicleRecord.toString();
-      // });
-      // print(response.body);
       return ProfileGiverModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -246,7 +224,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
     var userId = preferences.getString(
       'userId',
     );
-    // print(userId);
     return userId.toString();
   }
 
@@ -255,7 +232,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -303,16 +279,8 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                     ),
                                   ),
                                 ),
-                                // backgroundImage: NetworkImage(
-                                //     snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data![0].avatar .toString()),
                               ),
-                              // const CircleAvatar(
-                              //   radius: 30,
-                              //   backgroundImage: AssetImage("assets/images/category.png"),
-                              // ),
-                              const SizedBox(
-                                width: 10,
-                              ),
+                              const SizedBox(width: 10),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
@@ -327,9 +295,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
+                                  const SizedBox(height: 10),
                                   SizedBox(
                                     child: Text(
                                       snapshot.data!.data!.phone.toString(),
@@ -364,16 +330,8 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                       borderRadius: BorderRadius.circular(100),
                                     ),
                                   ),
-                                  // backgroundImage: NetworkImage(
-                                  //     snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data![0].avatar .toString()),
                                 ),
-                                // const CircleAvatar(
-                                //   radius: 30,
-                                //   backgroundImage: AssetImage("assets/images/category.png"),
-                                // ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
+                                const SizedBox(width: 10),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
@@ -390,9 +348,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
+                                    const SizedBox(height: 10),
                                     Container(
                                       width: 80,
                                       color: CustomColors.paraColor,
@@ -418,17 +374,13 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 6),
                     decoration: BoxDecoration(
-                      // color: CustomColors.selectedItems,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: ListTile(
                       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                      // tileColor: Colors.red,
                       leading: SizedBox(
-                        // height: 40,
-                        // width: 80,
                         child: Image.asset("assets/images/icons/homeIcon.png"),
                       ),
                       title: Text(
@@ -485,14 +437,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                           color: CustomColors.white,
                           size: 16,
                         ),
-                        // onTap: () {
-                        //   Navigator.push(
-                        //     context,
-                        //     MaterialPageRoute(
-                        //       builder: (context) => const MyJobs(),
-                        //     ),
-                        //   );
-                        // },
                       ),
                     ),
                   ),
@@ -594,157 +538,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                       ),
                     ),
                   ),
-
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const PrivacyPolicy(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     padding: const EdgeInsets.symmetric(vertical: 6),
-                  //     decoration: BoxDecoration(
-                  //       // color: CustomColors.selectedItems,
-                  //       borderRadius: BorderRadius.circular(6),
-                  //     ),
-                  //     child: ListTile(
-                  //       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       // tileColor: Colors.red,
-                  //       leading: SizedBox(
-                  //         // height: 40,
-                  //         // width: 80,
-                  //         child: Image.asset("assets/images/icons/privacy.png"),
-                  //       ),
-                  //       title: Text(
-                  //         'Privacy & Policy',
-                  //         style: TextStyle(
-                  //           fontSize: 16,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: CustomColors.white,
-                  //           fontFamily: "Rubik",
-                  //         ),
-                  //       ),
-                  //       trailing: Icon(
-                  //         Icons.arrow_forward_ios,
-                  //         color: CustomColors.white,
-                  //         size: 16,
-                  //       ),
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //             builder: (context) => const PrivacyPolicy(),
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const HelpCenter(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     padding: const EdgeInsets.symmetric(vertical: 6),
-                  //     decoration: BoxDecoration(
-                  //       // color: CustomColors.selectedItems,
-                  //       borderRadius: BorderRadius.circular(6),
-                  //     ),
-                  //     child: ListTile(
-                  //       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       // tileColor: Colors.red,
-                  //       leading: SizedBox(
-                  //         // height: 40,
-                  //         // width: 80,
-                  //         child: Image.asset("assets/images/icons/helpCenter.png"),
-                  //       ),
-                  //       title: Text(
-                  //         'Help Center',
-                  //         style: TextStyle(
-                  //           fontSize: 16,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: CustomColors.white,
-                  //           fontFamily: "Rubik",
-                  //         ),
-                  //       ),
-                  //       trailing: Icon(
-                  //         Icons.arrow_forward_ios,
-                  //         color: CustomColors.white,
-                  //         size: 16,
-                  //       ),
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //             builder: (context) => const HelpCenter(),
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //         builder: (context) => const AccountSettings(),
-                  //       ),
-                  //     );
-                  //   },
-                  //   child: Container(
-                  //     padding: const EdgeInsets.symmetric(vertical: 6),
-                  //     decoration: BoxDecoration(
-                  //       // color: CustomColors.selectedItems,
-                  //       borderRadius: BorderRadius.circular(6),
-                  //     ),
-                  //     child: ListTile(
-                  //       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                  //       // tileColor: Colors.red,
-                  //       leading: SizedBox(
-                  //         // height: 40,
-                  //         // width: 80,
-                  //         child: Image.asset("assets/images/icons/setting.png"),
-                  //       ),
-                  //       title: Text(
-                  //         'Settings',
-                  //         style: TextStyle(
-                  //           fontSize: 16,
-                  //           fontWeight: FontWeight.w500,
-                  //           color: CustomColors.white,
-                  //           fontFamily: "Rubik",
-                  //         ),
-                  //       ),
-                  //       trailing: Icon(
-                  //         Icons.arrow_forward_ios,
-                  //         color: CustomColors.white,
-                  //         size: 16,
-                  //       ),
-                  //       onTap: () {
-                  //         Navigator.push(
-                  //           context,
-                  //           MaterialPageRoute(
-                  //             builder: (context) => const AccountSettings(),
-                  //           ),
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -757,17 +550,13 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 6),
                       decoration: BoxDecoration(
-                        // color: CustomColors.selectedItems,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: ListTile(
                         hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                         selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                         focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        // tileColor: Colors.red,
                         leading: SizedBox(
-                          // height: 40,
-                          // width: 80,
                           child: Image.asset("assets/images/icons/lock.png"),
                         ),
                         title: Text(

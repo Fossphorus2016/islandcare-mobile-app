@@ -6,7 +6,6 @@ import 'package:island_app/carereceiver/models/service_rec_job_board_model.dart'
 
 import 'package:island_app/carereceiver/screens/my_job_detail.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/carereceiver/widgets/job_cart_widget.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
@@ -27,7 +26,6 @@ class _MyJobsState extends State<MyJobs> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          // title:
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -105,8 +103,6 @@ class _MyJobsState extends State<MyJobs> {
       ),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
-
       return ServiceReceiverJobBoardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -123,7 +119,6 @@ class _MyJobsState extends State<MyJobs> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -131,7 +126,6 @@ class _MyJobsState extends State<MyJobs> {
   void initState() {
     getUserToken();
     super.initState();
-    // fetchJobBoardDetail();
     fetchJobBoard = fetchServiceReceiverJobBoardModel();
   }
 

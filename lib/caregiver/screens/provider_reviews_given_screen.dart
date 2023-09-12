@@ -4,11 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/provider_reviews_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/carereceiver/widgets/reviews_given_widget.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProviderReviewsScreen extends StatefulWidget {
@@ -33,12 +31,7 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
         },
       ),
     );
-    // print(response.body);
     if (response.statusCode == 200) {
-      // print(response.body);
-      // if (kDebugMode) {
-      //   print("Job Applicant == ${jsonDecode(response.body)}");
-      // }
       return ProviderReviewsModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -55,9 +48,7 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // if (kDebugMode) {
-    //   print(userToken);
-    // }
+
     return userToken.toString();
   }
 
@@ -65,13 +56,11 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
   void initState() {
     getUserToken();
     super.initState();
-    // fetchJobBoardDetail();
     futurereviews = fetchReviewsModel();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print(futurereviews);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -183,16 +172,11 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                         padding: const EdgeInsets.only(top: 16),
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
-                          // print(snapshot.data!.data![index].receiverRating);
-                          // if (snapshot.data!.data![index].receiverRating != null) {
                           return ReviewsGivenWidget(
                             name: '${snapshot.data!.data![index].receiverRating!.firstName} ${snapshot.data!.data![index].receiverRating!.lastName}',
-                            // email: snapshot.data!.data![index].receiverRating!.email.toString(),
                             rating: snapshot.data!.data![index].rating!.toDouble(),
                             comment: snapshot.data!.data![index].comment.toString() == "null" ? "Not Available" : snapshot.data!.data![index].comment.toString(),
                           );
-                          // }
-                          // return null;
                         },
                       );
                     } else {

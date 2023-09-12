@@ -147,7 +147,6 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                 topRight: Radius.circular(10),
                               ),
                             ),
-                            // alignment: Alignment.centerLeft,
                             width: MediaQuery.of(context).size.width * .90,
                             height: 165,
                             child: Column(
@@ -286,7 +285,6 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                 topRight: Radius.circular(10),
                               ),
                             ),
-                            // alignment: Alignment.centerLeft,
                             width: MediaQuery.of(context).size.width * .90,
                             height: 165,
                             child: Column(
@@ -425,7 +423,6 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                 topRight: Radius.circular(10),
                               ),
                             ),
-                            // alignment: Alignment.centerLeft,
                             width: MediaQuery.of(context).size.width * .90,
                             height: 165,
                             child: Column(

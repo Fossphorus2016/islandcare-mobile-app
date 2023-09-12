@@ -35,8 +35,6 @@ class _DetailScreenState extends State<DetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        // margin: EdgeInsets.fromLTRB(
-                        //     0 * fem, 0 * fem, 200.52 * fem, 0 * fem),
                         height: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +44,6 @@ class _DetailScreenState extends State<DetailScreen> {
                                 Navigator.pop(context);
                               },
                               child: Container(
-                                // backzzS (15:118)
                                 margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 10 * fem),
                                 child: Text(
                                   '< Back',
@@ -62,7 +59,6 @@ class _DetailScreenState extends State<DetailScreen> {
                               ),
                             ),
                             Text(
-                              // detailsWSz (15:101)
                               'Details',
                               style: TextStyle(
                                 fontFamily: 'Rubik',
@@ -203,7 +199,6 @@ class _DetailScreenState extends State<DetailScreen> {
                                               color: Colors.amber,
                                             ),
                                             onRatingUpdate: (rating) {
-                                              // print(rating);
                                               setState(() => rating = rating);
                                             },
                                           ),
@@ -324,7 +319,6 @@ class _DetailScreenState extends State<DetailScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Container(
-                        // runingzF8 (15:68)
                         padding: EdgeInsets.fromLTRB(25.89 * fem, 10.36 * fem, 23.32 * fem, 15.11 * fem),
                         width: 93.21 * fem,
                         height: double.infinity,
@@ -336,7 +330,6 @@ class _DetailScreenState extends State<DetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              // t5c (15:71)
                               margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 3.71 * fem, 1.82 * fem),
                               child: Text(
                                 '100',
@@ -351,7 +344,6 @@ class _DetailScreenState extends State<DetailScreen> {
                               ),
                             ),
                             Text(
-                              // runingQ3x (15:70)
                               'Runing',
                               style: TextStyle(
                                 fontFamily: 'Rubik',
@@ -394,7 +386,6 @@ class _DetailScreenState extends State<DetailScreen> {
                               ),
                             ),
                             Text(
-                              // ongoingXXt (15:66)
                               'Ongoing',
                               style: TextStyle(
                                 fontFamily: 'Rubik',
@@ -412,7 +403,6 @@ class _DetailScreenState extends State<DetailScreen> {
                         width: 8.29 * fem,
                       ),
                       Container(
-                        // patientrKG (15:60)
                         padding: EdgeInsets.fromLTRB(24.86 * fem, 10.36 * fem, 25.36 * fem, 0 * fem),
                         width: 93.21 * fem,
                         height: double.infinity,
@@ -424,7 +414,6 @@ class _DetailScreenState extends State<DetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              // mBL (15:63)
                               margin: EdgeInsets.fromLTRB(0.36 * fem, 0 * fem, 0 * fem, 3.89 * fem),
                               child: Text(
                                 '700',

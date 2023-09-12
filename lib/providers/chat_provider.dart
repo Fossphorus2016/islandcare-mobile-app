@@ -1,8 +1,5 @@
 // ignore_for_file: unused_local_variable, empty_catches
 
-// import 'package:http/http.dart' as http;
-// import 'package:pusher_client/pusher_client.dart';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/res/app_url.dart';
@@ -16,7 +13,6 @@ class ChatProvider with ChangeNotifier {
   Future<void> fetchMessages() async {
     try {
       final response = await Dio().get(ChatUrl.serviceReceiverChat);
-      // print(response.body);
       notifyListeners();
     } catch (error) {}
   }
@@ -25,32 +21,11 @@ class ChatProvider with ChangeNotifier {
     try {
       final response = await Dio().post(ChatUrl.serviceReceiverSendMessage, data: {'content': content});
       notifyListeners();
-    } catch (error) {
-      // Handle error
-      // ...
-    }
+    } catch (error) {}
   }
 
-  void subscribeToPusherChannel() {
-    // final pusher = PusherClient(
-    //   '9805223081ead5006cf0',
-    //   PusherOptions(cluster: 'ap2'),
-    //   enableLogging: true,
-    // );
-
-    // final channel = pusher.subscribe('receiver-chat-channel');
-    // channel.bind('new-message', (event) {
-    //   // Parse the event data and update _messages list accordingly
-    //   // ...
-    //   print("event== $event");
-    //   notifyListeners();
-    // });
-
-    // pusher.connect();
-  }
+  void subscribeToPusherChannel() {}
 }
-
-// chat_screen.dart
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -127,7 +102,6 @@ class ChatScreenState extends State<ChatScreen> {
     );
   }
 }
-// message.dart
 
 class Message {
   final String id;

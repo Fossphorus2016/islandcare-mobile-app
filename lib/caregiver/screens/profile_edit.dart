@@ -1,17 +1,14 @@
 // ignore_for_file: use_build_context_synchronously, unused_local_variable, unnecessary_null_comparison, prefer_typing_uninitialized_variables, unrelated_type_equality_checks
 
 import 'dart:io';
-// import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-// import 'package:island_app/utils/dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -20,7 +17,6 @@ import 'package:island_app/widgets/progress_dialog.dart';
 
 // import '../../utils/utils.dart';
 // import 'package:dio/dio.dart';
-
 // class ProfileGiverEdit extends StatefulWidget {
 //   const ProfileGiverEdit({
 //     Key? key,
@@ -2088,7 +2084,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     userTokenProfile();
     getUserToken();
     getUserId();
-    // print("educationListtt $education");
     super.initState();
     // this.getSWData();
     fetchProfileEdit = fetchProfileGiverModelEdit();
@@ -2177,15 +2172,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     );
     if (picked != null) {
       dobController.text = DateFormat('yyyy-MM-dd').format(picked);
-      // print(dobController);
-      // print("picked $picked");
       picked == dobController;
-      // print("controller ${dobController.text}");
       setState(() {
         getPickedDate = dobController.text;
       });
-
-      // print("GetPickedDate $getPickedDate");
     }
   }
 
@@ -2211,10 +2201,8 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     );
     if (picked != null) {
       fromController.text = DateFormat('yyyy-MM-dd').format(picked);
-      // print(fromController);
-      // print("picked $picked");
+
       picked == fromController;
-      // print("fromcontroller ${fromController.text}");
       setState(() {
         getfromPickedDate = fromController.text;
       });
@@ -2253,7 +2241,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   List educationApiList = [];
   late Future<ProfileGiverModel> fetchProfileEdit;
   Future<ProfileGiverModel> fetchProfileGiverModelEdit() async {
-    // print("call");
     var token = await userTokenProfile();
     final response = await Dio().get(
       CareGiverUrl.serviceProviderProfile,
@@ -2264,20 +2251,16 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         },
       ),
     );
-    // print(response.data);
     if (response.statusCode == 200) {
       setState(() {
         educationApiList = response.data['data']["educations"];
       });
       for (int i = 0; i < educationApiList.length; i++) {
-        // educationApiList.map((item) {
-        // print(educationApiList[i]['name']);
         instituteMapList.add(educationApiList[i]['name']);
         majorMapList.add(educationApiList[i]['major']);
         startDateMapList.add(educationApiList[i]['from']);
         endDateMapList.add(educationApiList[i]['to']);
         currentMapList.add(educationApiList[i]['current']);
-        // });
       }
       return ProfileGiverModel.fromJson(response.data);
     } else {
@@ -2306,9 +2289,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   File? image;
   File? imageFileDio;
 
-  // final picker = ImagePicker();
-  // final _pickerDio = ImagePicker();
-
   bool showSpinner = false;
   var myimg;
 
@@ -2319,7 +2299,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     );
 
     if (pickedFileDio != null) {
-      // var file =
       if (checkImageFileTypes(context, pickedFileDio.files.single.extension)) {
         setState(() {
           imageFileDio = File(pickedFileDio.files.single.path ?? " ");
@@ -2327,18 +2306,8 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
       }
     } else {
       customErrorSnackBar(context, "No file select");
-      // print("No image selected");
     }
   }
-
-  // Future getEnhancePdf() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles();
-  //   if (result != null) {
-  //     File pdfFileEnhance = File(result.files.single.path ?? " ");
-  //     String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-  //     String? enhancePath = pdfFileEnhance.path;
-  //   }
-  // }
 
   String? _getEnhanceFile;
   String? _getBasicFile;
@@ -2358,7 +2327,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         String? enhancePath = pdfFileEnhance.path;
         setState(() {
           _getEnhanceFile = enhancePath;
-          // print("_getEnhanceFile = $_getEnhanceFile");
         });
       }
     }
@@ -2377,7 +2345,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         String? enhancePath = pdfFileEnhance.path;
         setState(() {
           _getBasicFile = enhancePath;
-          // print("_getBasicFile = $_getBasicFile");
         });
       }
     }
@@ -2396,7 +2363,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         String? enhancePath = pdfFileEnhance.path;
         setState(() {
           _getFirstAidFile = enhancePath;
-          // print("_getFirstAidFile = $_getFirstAidFile");
         });
       }
     }
@@ -2415,7 +2381,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         String? enhancePath = pdfFileEnhance.path;
         setState(() {
           _getVehicleRecordFile = enhancePath;
-          // print("_getVehicleRecordFile = $_getVehicleRecordFile");
         });
       }
     }
@@ -2424,17 +2389,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   uploadImageDio() async {
     var usersId = await getUserId();
     var token = await userTokenProfile();
-    // FilePickerResult? result = await FilePicker.platform.pickFiles();
-    //   if(result!=null){
-    //     File pdfFileEnhance = File(result.files.single.path??" ");
 
-    //     String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-    //     String? enhancePath = pdfFileEnhance.path;
-    // }
-    // File pdfFileEnhance = File(result?.files.single.path ?? " ");
-
-    // String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-    // String? enhancePath = pdfFileEnhance.path;
     var formData = FormData.fromMap(
       {
         '_method': 'PUT',
@@ -2461,31 +2416,9 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
       },
     );
 
-    // for (var element in instituteMapList) {
-    //   formData.fields.add(MapEntry("institute_name[]", element.toString()));
-    // }
-    // for (var element in startDateMapList) {
-    //   formData.fields.add(MapEntry("start_date[]", element.toString()));
-    // }
-    // for (var element in endDateMapList) {
-    //   formData.fields.add(MapEntry("end_date[]", element.toString()));
-    // }
-    // for (var element in currentMapList) {
-    //   formData.fields.add(MapEntry("current[]", element.toString()));
-    // }
-    // for (var element in majorMapList) {
-    //   formData.fields.add(MapEntry("major[]", element.toString()));
-    // }
-    // print(formData.fields);
-    // print("enhanced $_getEnhanceFile");
-    // print("basic $_getBasicFile");
-    // print("ADs $_getFirstAidFile");
-    // print("vehicle $_getVehicleRecordFile");
-
     Dio dio = Dio();
     try {
       var response = await dio.post('https://islandcare.bm/api/service-provider-profile/$usersId', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
-      // print(response.statusCode);
       if (response.statusCode == 200) {
         customSuccesSnackBar(
           context,
@@ -2497,19 +2430,9 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
           "Something went wrong please try agan later.",
         );
       }
-      // dio.options.headers['Accept'] = 'application/json';
-      // dio.options.headers["Authorization"] = "Bearer ${token}";
-      // print("DioREsponse = ${response.toString()}");
     } catch (e) {
       customErrorSnackBar(context, e.toString());
     }
-  }
-
-  //Upload PDF
-  Future uploadPdf() async {
-    var dio = Dio();
-
-    // FilePickerResult? result
   }
 
   getUserToken() async {
@@ -2517,7 +2440,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -2526,7 +2448,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     var userId = preferences.getString(
       'userId',
     );
-    // print(userId);
     return userId.toString();
   }
 
@@ -2535,7 +2456,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -2562,8 +2482,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
 
   @override
   Widget build(BuildContext context) {
-    // print(instituteMapList);
-//
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomColors.loginBg,
@@ -2592,16 +2510,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
               },
               child: const Padding(
                 padding: EdgeInsets.all(12.0),
-                // child: Badge(
-                //   elevation: 0,
-                //   badgeContent: const Text(""),
-                //   badgeColor: CustomColors.red,
-                //   position: BadgePosition.topStart(start: 18),
-                //   child: const Icon(
-                //     Icons.notifications_none,
-                //     size: 30,
-                //   ),
-                // ),
               ),
             )
           ],
@@ -2639,7 +2547,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   alignment: Alignment.center,
                                   height: 100.45,
                                   width: 100.45,
-                                  // padding: const EdgeInsets.all(4),
                                   decoration: BoxDecoration(
                                     color: CustomColors.primaryColor,
                                     borderRadius: BorderRadius.circular(100),
@@ -2712,12 +2619,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                     onTap: () {
                                       setState(() {
                                         _isSelectedGender = "1";
-                                        // print(_isSelectedGender);
                                       });
                                     },
                                     child: Container(
                                       height: 50.45,
-                                      // width: 149.49,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
                                         color: _isSelectedGender == "1" ? CustomColors.primaryColor : CustomColors.white,
@@ -2736,7 +2641,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         onPressed: () {
                                           setState(() {
                                             _isSelectedGender = "1";
-                                            // print(_isSelectedGender);
                                           });
                                         },
                                         child: Text(
@@ -2761,12 +2665,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                     onTap: () {
                                       setState(() {
                                         _isSelectedGender = "2";
-                                        // print(_isSelectedGender);
                                       });
                                     },
                                     child: Container(
                                       height: 50.45,
-                                      // width: 149.49,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
                                         color: _isSelectedGender == "2" ? CustomColors.primaryColor : CustomColors.white,
@@ -2785,7 +2687,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         onPressed: () {
                                           setState(() {
                                             _isSelectedGender = "2";
-                                            // print(_isSelectedGender);
                                           });
                                         },
                                         child: Text(
@@ -2894,16 +2795,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               hintText: "DOB",
                               onTap: () async {
                                 _selectDate(context);
-                                // DateTime? pickedDate = await showDatePicker(
-                                //     context: context,
-                                //     initialDate: DateTime.now(),
-                                //     firstDate: DateTime(1950),
-                                //     lastDate: DateTime(2050));
-
-                                // if (pickedDate != null) {
-                                //   dobController.text =
-                                //       DateFormat('dd MMMM yyyy').format(pickedDate);
-                                // }
                               },
                             ),
                           ],
@@ -3192,9 +3083,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               showModalBottomSheet(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  // return StatefulBuilder(builder: (context, setState) {
-                                  // return AlertDialog(
-                                  // content:
                                   return SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
                                     child: Column(
@@ -3287,7 +3175,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                           onPressed: () {
                                             _toggleradio();
                                             setState(() {});
-                                            // print(isPeriodSeleted);
                                           },
                                           icon: CircleAvatar(
                                             backgroundColor: const Color.fromARGB(181, 171, 171, 171),
@@ -3352,7 +3239,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         GestureDetector(
                                           onTap: () async {
                                             {
-                                              //
                                               String institute = instituteController.text.trim();
                                               String major = majorController.text.trim();
                                               String from = fromController.text.toString();
@@ -3378,7 +3264,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                       "to": to.toString(),
                                                     },
                                                   );
-                                                  // print(" asdas $instituteMapList $majorMapList");
                                                 });
 
                                                 setState(() {
@@ -3389,10 +3274,8 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                 });
                                                 SharedPreferences pref = await SharedPreferences.getInstance();
                                                 var data = await pref.setString('ListData', education.toString());
-                                                // print(data);
-                                                // print("educationListtt2 $education");
+
                                                 Navigator.pop(context, true);
-                                                // print("object = $jsonser");
                                               }
                                             }
                                           },
@@ -3436,8 +3319,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                       ],
                                     ),
                                   );
-                                  // );
-                                  // });
                                 },
                               );
                             },
@@ -3464,12 +3345,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         child: Column(
                           children: [
                             const SizedBox(height: 20),
-                            // education.isEmpty
-                            //     ? const Text(
-                            //         '',
-                            //         style: TextStyle(fontSize: 22),
-                            //       )
-                            //     :
                             SizedBox(
                               child: educationApiList.isEmpty
                                   ? null
@@ -3509,7 +3384,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                   ),
                                                   alignment: Alignment.centerLeft,
                                                   width: MediaQuery.of(context).size.width,
-                                                  // height: 100,
                                                   child: Row(
                                                     children: [
                                                       SizedBox(
@@ -3544,7 +3418,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                                   ),
                                                                 ),
                                                                 Expanded(
-                                                                  // width: 300,
                                                                   child: Text("${educationApiList[index]['major']}"),
                                                                 ),
                                                               ],
@@ -3561,7 +3434,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                                   ),
                                                                 ),
                                                                 Expanded(
-                                                                  // width: 300,
                                                                   child: Text("${educationApiList[index]['from']}"),
                                                                 ),
                                                               ],
@@ -3570,24 +3442,15 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                         ),
                                                       ),
                                                     ],
-                                                  )
-
-                                                  // ListTile(
-                                                  //   title: Text( "Institute Name: ${snapshot.data!.data![0].educations![index].name}"),
-                                                  //   subtitle: Text("Major: ${snapshot.data!.data![0].educations![index].major}"),
-                                                  //   trailing: Text(snapshot.data!.data![0].educations![index].from.toString()),
-                                                  // ),
-                                                  ),
+                                                  )),
                                             ),
                                             Positioned(
                                               top: 10,
                                               right: -2,
-                                              // left: 20,
                                               child: GestureDetector(
                                                 onTap: (() {
                                                   //
                                                   setState(() {
-                                                    // education.removeAt(index);
                                                     educationApiList.removeAt(index);
                                                     instituteMapList.removeAt(index);
                                                     majorMapList.removeAt(index);
@@ -3625,9 +3488,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                             ),
                                           ],
                                         );
-                                      }
-                                      // getEducation(index),
-                                      ),
+                                      }),
                             ),
                           ],
                         ),
@@ -3975,9 +3836,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: GestureDetector(
                           onTap: () async {
-                            // if (imageFileDio == null) {
-                            //   customErrorSnackBar(context, "Please Select Image");
-                            // } else
                             if (_isSelectedGender == null) {
                               customErrorSnackBar(context, "Please Select Gender");
                             } else if (dobController.text.isEmpty) {
@@ -3999,7 +3857,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             } else if (instituteMapList.isEmpty) {
                               customErrorSnackBar(context, "Please Enter education");
                             } else {
-                              // uploadImage(image!.path);
                               uploadImageDio();
                             }
                           },
@@ -4081,20 +3938,13 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
             alignment: Alignment.centerLeft,
             width: MediaQuery.of(context).size.width,
             height: 100,
-            // child: ListTile(
-            //   title: Text("Institute Name: ${snapshot![index][index]['name']}"),
-            //   subtitle: Text("Major: ${educationApiList![index][index].name}"),
-            //   trailing: Text(education[index]["start_date[]"].toString()),
-            // ),
           ),
         ),
         Positioned(
           top: 10,
           right: -2,
-          // left: 20,
           child: GestureDetector(
             onTap: (() {
-              //
               setState(() {
                 education.removeAt(index);
                 instituteMapList.removeAt(index);
@@ -4161,17 +4011,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
           width: 70,
           child: Row(
             children: [
-              // InkWell(
-              //     onTap: () {
-              //       //
-              //       instituteController.text = education[index].name!;
-              //       majorController.text = education[index].major!;
-              //       setState(() {
-              //         selectedIndex = index;
-              //       });
-              //       //
-              //     },
-              //     child: const Icon(Icons.edit)),
               InkWell(
                   onTap: (() {
                     //
@@ -4182,16 +4021,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       startDateMapList.removeAt(index);
                       endDateMapList.removeAt(index);
                       currentMapList.removeAt(index);
-                      // stringListData.removeWhere((element) => true);
                     });
-                    // for (var i = 0; i < stringListData.length; i++) {
-                    //   if (stringListData[i] == stringListData) {
-                    //     int index = i;
-                    //   }
-                    // }
-                    // stringListData.removeAt(index);
-                    //
-                    // stringListData.removeWhere((item) => item == index);
                   }),
                   child: const Icon(Icons.delete)),
             ],

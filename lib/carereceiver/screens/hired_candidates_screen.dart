@@ -9,10 +9,8 @@ import 'package:island_app/carereceiver/models/hired_candidate_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:http/http.dart' as http;
 
 class HiredCandidatesScreen extends StatefulWidget {
   const HiredCandidatesScreen({super.key});
@@ -31,7 +29,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
 
   Future<HiredCandidateModel> fetchHiredCandidateModel() async {
     var token = await getUserToken();
-    // print('${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=$currentDate');
     final response = await Dio().get(
       '${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=$currentDate',
       options: Options(
@@ -42,10 +39,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
       ),
     );
     if (response.statusCode == 200) {
-      // var data = jsonDecode(response.body);
-
       var json = response.data as Map;
-      // print(json['data']['data']);
       if (json['data'].isNotEmpty) {
         var hired = json['data'] as List;
         setState(() {
@@ -64,12 +58,9 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
 
   var providerId;
   var rating;
-  // var comment;
   var jobId;
   jobCompleted() async {
-    // var token = await getUserToken();
     var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
-    // print(url);
     var response = await Dio().post(
       url,
       options: Options(
@@ -97,7 +88,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
         print("jobCompleted = ${response.data}");
       }
     }
-    // return response;
   }
 
   var token;
@@ -123,7 +113,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // print(hiredCandidates);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -175,8 +164,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
         body: ListView.builder(
           shrinkWrap: true,
           scrollDirection: Axis.vertical,
-          // physics: const NeverScrollableScrollPhysics(),
-          // itemCount: snapshot.data!.data!.length,
           itemCount: hiredCandidates.length,
           itemBuilder: (BuildContext context, int index) {
             return Column(
@@ -205,7 +192,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                           children: [
                             Text(
                               "${hiredCandidates[index]['users']['first_name']} ${hiredCandidates[index]['users']['last_name']}",
-                              // "Babysitters",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
@@ -217,7 +203,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                             ),
                             Text(
                               hiredCandidates[index]['jobs']['job_title'].toString(),
-                              // "One-Time",
                               style: TextStyle(
                                 color: CustomColors.hintText,
                                 fontFamily: "Poppins",
@@ -329,11 +314,9 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                     const SizedBox(
                                                       height: 20,
                                                     ),
-                                                    // btn submit
                                                     GestureDetector(
                                                       onTap: () async {
                                                         var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
-                                                        // print(url);
                                                         var response = await Dio().post(
                                                           url,
                                                           options: Options(
@@ -343,7 +326,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                             },
                                                           ),
                                                         );
-                                                        // print(response.data);
 
                                                         if (response.statusCode == 200) {
                                                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response.data['message'].toString())));
@@ -356,7 +338,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                           fetchHiredCandidateModel();
                                                         }
                                                         Navigator.pop(context);
-                                                        // }
                                                       },
                                                       child: Container(
                                                         width: MediaQuery.of(context).size.width,
@@ -395,7 +376,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             height: 24,
-                            // width: 70,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(2),
                               color: hiredCandidates[index]['status'] == 3 ? CustomColors.primaryLight : CustomColors.primaryColor,

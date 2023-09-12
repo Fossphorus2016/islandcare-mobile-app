@@ -1,5 +1,3 @@
-// import 'dart:html';
-
 // ignore_for_file: unrelated_type_equality_checks, must_be_immutable
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -25,7 +23,6 @@ class JobApplicantProfileWidget extends StatefulWidget {
   final String? major;
   final String? from;
   final String? to;
-  // String? firstAdd;
   final Widget? documentsSection;
   final String? zip;
   final Widget? review;
@@ -33,7 +30,6 @@ class JobApplicantProfileWidget extends StatefulWidget {
   final String? providerName;
   final double? providerRating;
   final String? providerComment;
-  // int? isHired;
   final Function()? acceptApplicant;
   final Function()? declineApplicant;
   final Widget? acceptBtn;
@@ -92,11 +88,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                   borderRadius: BorderRadius.circular(40),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
-                    child:
-                        //  Image.network(
-                        //   imgPath.toString(),
-                        // )
-                        CachedNetworkImage(
+                    child: CachedNetworkImage(
                       width: 100,
                       height: 100,
                       fit: BoxFit.cover,
@@ -126,7 +118,6 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                 ),
               ),
               SizedBox(
-                // width: 130,
                 child: Text(
                   "${widget.experience} years experience \n \$${widget.hour}/hour \n  ${widget.address} \n ${widget.zip}",
                   textAlign: TextAlign.center,
@@ -153,9 +144,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                   Icons.star,
                   color: Colors.amber,
                 ),
-                onRatingUpdate: (rating) {
-                  // print(rating);
-                },
+                onRatingUpdate: (rating) {},
               ),
               const SizedBox(
                 height: 10,
@@ -218,7 +207,6 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                 alignment: Alignment.topLeft,
                 child: Text(
                   "${widget.experience} Years",
-                  // textAlign: TextAlign.center,
                   style: TextStyle(
                     color: CustomColors.primaryText,
                     fontFamily: "Poppins",
@@ -297,8 +285,6 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                         fontWeight: FontWeight.w200,
                       ),
                     ),
-                    // snapshot.data!.data![0].educations![index].to == ""
-                    //     ?
                     Text(
                       widget.to == "" ? "Time Period: Currently Studying" : "",
                       softWrap: true,
@@ -310,17 +296,6 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                         fontWeight: FontWeight.w200,
                       ),
                     )
-                    // : Text(
-                    //     "",
-                    //     softWrap: true,
-                    //     style: TextStyle(
-                    //       height: 0,
-                    //       color: CustomColors.hintText,
-                    //       fontSize: 12,
-                    //       fontFamily: "Rubik",
-                    //       fontWeight: FontWeight.w200,
-                    //     ),
-                    //   ),
                   ],
                 ),
               ),
@@ -451,49 +426,6 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                         ),
                       ),
                     ),
-                    // widget.acceptBtn!,
-                    // GestureDetector(
-                    //   onTap: acceptApplicant,
-                    //   child: Container(
-                    //     height: 40,
-                    //     width: MediaQuery.of(context).size.width * .4,
-                    //     decoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(6),
-                    //       color: isHired == 0 ? CustomColors.green : Color.fromARGB(255, 156, 202, 177),
-                    //     ),
-                    //     child: Center(
-                    //       child: Text(
-                    //         "Accept Applicant",
-                    //         style: TextStyle(
-                    //           color: CustomColors.white,
-                    //           fontFamily: "Rubik",
-                    //           fontWeight: FontWeight.w500,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    // : GestureDetector(
-                    //     onTap: () {},
-                    //     child: Container(
-                    //       height: 40,
-                    //       width: MediaQuery.of(context).size.width * .4,
-                    //       decoration: BoxDecoration(
-                    //         borderRadius: BorderRadius.circular(6),
-                    //         color: const Color.fromARGB(255, 156, 202, 177),
-                    //       ),
-                    //       child: Center(
-                    //         child: Text(
-                    //           "Accept Applicant",
-                    //           style: TextStyle(
-                    //             color: CustomColors.white,
-                    //             fontFamily: "Rubik",
-                    //             fontWeight: FontWeight.w500,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
                     GestureDetector(
                       onTap: widget.declineApplicant,
                       child: Container(
@@ -515,106 +447,6 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                         ),
                       ),
                     ),
-                    // if (isHired == "0") ...[
-                    //   Container(
-                    //     width: MediaQuery.of(context).size.width * .9,
-                    //     child: Row(
-                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //       children: [
-                    //         GestureDetector(
-                    //           onTap: acceptApplicant,
-                    //           child: Container(
-                    //             height: 40,
-                    //             width: MediaQuery.of(context).size.width * .4,
-                    //             decoration: BoxDecoration(
-                    //               borderRadius: BorderRadius.circular(6),
-                    //               color: isHired == "1" ? Color.fromARGB(255, 156, 202, 177) : CustomColors.green,
-                    //             ),
-                    //             child: Center(
-                    //               child: Text(
-                    //                 "Accept Applicant",
-                    //                 style: TextStyle(
-                    //                   color: CustomColors.white,
-                    //                   fontFamily: "Rubik",
-                    //                   fontWeight: FontWeight.w500,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         GestureDetector(
-                    //           onTap: declineApplicant,
-                    //           child: Container(
-                    //             height: 40,
-                    //             width: MediaQuery.of(context).size.width * .4,
-                    //             decoration: BoxDecoration(
-                    //               borderRadius: BorderRadius.circular(6),
-                    //               color: CustomColors.loginBorder,
-                    //             ),
-                    //             child: Center(
-                    //               child: Text(
-                    //                 "Decline Applicant",
-                    //                 style: TextStyle(
-                    //                   color: CustomColors.white,
-                    //                   fontFamily: "Rubik",
-                    //                   fontWeight: FontWeight.w500,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ] else if (isHired == "1") ...[
-                    //   Container(
-                    //     width: MediaQuery.of(context).size.width * .9,
-                    //     child: Row(
-                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //       children: [
-                    //         Container(
-                    //           height: 40,
-                    //           width: MediaQuery.of(context).size.width * .4,
-                    //           decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(6),
-                    //             color: isHired == "1" ? Color.fromARGB(255, 156, 202, 177) : CustomColors.green,
-                    //           ),
-                    //           child: Center(
-                    //             child: Text(
-                    //               "Accept Applicant",
-                    //               style: TextStyle(
-                    //                 color: CustomColors.white,
-                    //                 fontFamily: "Rubik",
-                    //                 fontWeight: FontWeight.w500,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //         GestureDetector(
-                    //           onTap: declineApplicant,
-                    //           child: Container(
-                    //             height: 40,
-                    //             width: MediaQuery.of(context).size.width * .4,
-                    //             decoration: BoxDecoration(
-                    //               borderRadius: BorderRadius.circular(6),
-                    //               color: CustomColors.loginBorder,
-                    //             ),
-                    //             child: Center(
-                    //               child: Text(
-                    //                 "Decline Applicant",
-                    //                 style: TextStyle(
-                    //                   color: CustomColors.white,
-                    //                   fontFamily: "Rubik",
-                    //                   fontWeight: FontWeight.w500,
-                    //                 ),
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //   ),
-                    // ],
                   ],
                 ),
               ),

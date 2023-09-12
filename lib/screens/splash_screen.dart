@@ -27,16 +27,12 @@ class _SplashScreenState extends State<SplashScreen> {
         'bottom-bar-giver',
         (route) => false,
       );
-      // Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute(builder: (context) => const BottomBarGiver()));
     } else if (userRole == "4") {
       Navigator.pushNamedAndRemoveUntil(
         context,
         'bottom-bar',
         (route) => false,
       );
-      // Navigator.of(context).pushReplacement(
-      //     MaterialPageRoute(builder: (context) => const BottomBar()));
     }
   }
 
@@ -45,15 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(const Duration(seconds: 3), () {
       check();
     });
-    // Timer(
-    //   const Duration(seconds: 2),
-    //   () => Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => const OnBoardScreen(),
-    //     ),
-    //   ),
-    // );
+
     super.initState();
   }
 

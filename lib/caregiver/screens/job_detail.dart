@@ -1,9 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:Dio()/http.dart' as http;
 import 'package:island_app/caregiver/models/child_care_detail-dashbaord_model.dart';
 import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart';
@@ -11,10 +9,8 @@ import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:island_app/caregiver/models/senior_care_detail_dashboard_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:island_app/utils/dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 
 class JobDetailGiver extends StatefulWidget {
@@ -40,7 +36,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
     await pr!.show();
   }
 
-  // var updatedData;
 
   void hideProgress() async {
     if (pr != null && pr!.isShowing()) {
@@ -63,7 +58,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
         context,
         "Job applied successfully",
       );
-      // print(response.toString());
       return response;
     } else {
       customErrorSnackBar(
@@ -91,9 +85,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       ),
     );
     if (response.statusCode == 200) {
-      // if (kDebugMode) {
-      //   print(jsonDecode(response.body));
-      // }
+      
       return SeniorCareDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -114,12 +106,8 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       ),
     );
     if (response.statusCode == 200) {
-      // final json = jsonDecode(response.body) as Map;
-      // var jobs = json['job_detail'] as List;
-      // this.setState(() {});
-      if (kDebugMode) {
-        print(response.data);
-      }
+      
+      
       return SchoolSupportDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -140,12 +128,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       ),
     );
     if (response.statusCode == 200) {
-      // final json = jsonDecode(response.body) as Map;
-      // var jobs = json['job_detail'] as List;
-      // this.setState(() {});
-      // if (kDebugMode) {
-      //   print(jsonDecode(response.body));
-      // }
+     
       return ChildCareDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -166,12 +149,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       ),
     );
     if (response.statusCode == 200) {
-      // final json = jsonDecode(response.body) as Map;
-      // var jobs = json['job_detail'] as List;
-      // this.setState(() {});
-      // if (kDebugMode) {
-      //   print(jsonDecode(response.body));
-      // }
+      
       return HouseKeepingDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -192,12 +170,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       ),
     );
     if (response.statusCode == 200) {
-      // final json = jsonDecode(response.body) as Map;
-      // var jobs = json['job_detail'] as List;
-      // this.setState(() {});
-      if (kDebugMode) {
-        print(response.data);
-      }
+      
       return PetCareDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -211,7 +184,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -831,7 +803,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                               child: Column(
                                 children: [
                                   SizedBox(
-                                    // width: MediaQuery.of(context).size.width * .9,
                                     child: Column(
                                       children: [
                                         Row(
@@ -937,7 +908,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                         height: 10,
                       ),
 
-                      // snapshot.data!.isApplied == 0
                       snapshot.data!.isApplied == 0
                           ? GestureDetector(
                               onTap: () {
@@ -1155,7 +1125,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                      // width: MediaQuery.of(context).size.width * .9,
                                       child: Column(
                                         children: [
                                           Row(
@@ -1336,7 +1305,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                      // width: MediaQuery.of(context).size.width * .9,
                                       child: Column(
                                         children: [
                                           Row(
@@ -1442,7 +1410,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                           height: 10,
                         ),
 
-                        // snapshot.data!.isApplied == 0
                         snapshot.data!.isApplied == 0
                             ? GestureDetector(
                                 onTap: () {
@@ -1661,7 +1628,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                      // width: MediaQuery.of(context).size.width * .9,
                                       child: Column(
                                         children: [
                                           Row(
@@ -1776,7 +1742,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                     child: Column(
                       children: [
                         SizedBox(
-                          // width: MediaQuery.of(context).size.width * .80,
                           child: Row(
                             children: [
                               Container(
@@ -2003,7 +1968,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                      // width: MediaQuery.of(context).size.width * .9,
                                       child: Column(
                                         children: [
                                           Row(
@@ -2109,7 +2073,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                           height: 10,
                         ),
 
-                        // snapshot.data!.isApplied == 0
                         snapshot.data!.isApplied == 0
                             ? GestureDetector(
                                 onTap: () {
@@ -2559,7 +2522,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                      // width: MediaQuery.of(context).size.width * .9,
                                       child: Column(
                                         children: [
                                           Row(
@@ -2665,7 +2627,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                           height: 10,
                         ),
 
-                        // snapshot.data!.isApplied == 0
                         snapshot.data!.isApplied == 0
                             ? GestureDetector(
                                 onTap: () {
@@ -3030,7 +2991,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                     child: Column(
                       children: [
                         SizedBox(
-                          // width: MediaQuery.of(context).size.width * .80,
                           child: Row(
                             children: [
                               Container(
@@ -3195,7 +3155,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                                 child: Column(
                                   children: [
                                     SizedBox(
-                                      // width: MediaQuery.of(context).size.width * .9,
                                       child: Column(
                                         children: [
                                           Row(
@@ -3301,7 +3260,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                           height: 10,
                         ),
 
-                        // snapshot.data!.isApplied == 0
                         snapshot.data!.isApplied == 0
                             ? GestureDetector(
                                 onTap: () {

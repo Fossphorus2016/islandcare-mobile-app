@@ -9,13 +9,10 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
-// import 'package:http/http.dart' as http;
 import 'dart:core';
 
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-// import 'package:pusher_client/pusher_client.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -31,10 +28,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
     void initState() {
       super.initState();
       Provider.of<NotificationProvider>(context, listen: false).getNotifications();
-      // Timer(
-      //   const Duration(seconds: 5),
-      //   () => Provider.of<NotificationProvider>(context, listen: false).markreadNotifications(),
-      // );
     }
 
     @override
@@ -90,7 +83,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   Icons.more_vert_rounded,
                   color: Colors.black,
                 ),
-                // color: Colors.black,
                 onSelected: (value) async {
                   if (value == 1) {
                     try {
@@ -109,14 +101,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         Provider.of<NotificationProvider>(context, listen: false).getNotifications();
                       }
                     } catch (error) {
-                      // print(error);
                       customErrorSnackBar(context, "something went wrong please try again later");
                     }
                   } else if (value == 2) {
                     var allNotification = Provider.of<NotificationProvider>(context, listen: false).allNotifications;
 
                     List allRead = allNotification.where((item) => item['is_read'] == 1).toList();
-                    // print(allRead);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -338,15 +328,11 @@ class NotificationProvider extends ChangeNotifier {
   }
 
   onSubscriptionSucceeded(dynamic data) {
-    //   log("onSubscriptionSucceeded: ${channelName.toString()} data: ${data.toString()}");
-    //   // final me = pusher.getChannel(channelName)?.me;
-    //   // log("Me: $data");
-    // print(data);
+    log("onSubscriptionSucceeded: ${data.toString()} data: ${data.toString()}");
   }
 
   onSubscriptionError(dynamic data) {
-    // print(data);
-    // log("onSubscriptionError: ${message.toString()} Exception: ${e.toString()}");
+    log("onSubscriptionError: ${data.toString()} Exception: ${data.toString()}");
   }
 
   getNotifications() async {
@@ -370,7 +356,7 @@ class NotificationProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (error) {
-      // print(error);
+      print(error);
     }
   }
 }

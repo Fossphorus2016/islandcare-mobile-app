@@ -9,10 +9,8 @@ import 'package:island_app/caregiver/screens/profile_edit.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,17 +45,14 @@ class _ProfileGiverState extends State<ProfileGiver> {
   Future downloadFile(String downloadDirectory, String fileUrl) async {
     Dio dio = Dio();
 
-    // print("${AppUrl.webStorageUrl}/$fileUrl");
     var filname = fileUrl.split('.');
     String savename = '${filname.first}${DateTime.now()}.${filname.last}';
-    // String savePath = "${dir.path}/$savename";
     var downloadingPdfPath = '$downloadDirectory/$savename';
     try {
       var fileRes = await dio.download(
         "${AppUrl.webStorageUrl}/$fileUrl",
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -68,7 +63,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
         customSuccesSnackBar(context, "file is downloaded successfully");
       }
     } catch (e) {
-      // print(e);
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -77,10 +72,8 @@ class _ProfileGiverState extends State<ProfileGiver> {
 
   // Download by user click
   Future<void> doDownloadFile(fileUrl) async {
-    // print(await getStoragePermission());
     if (await getStoragePermission()) {
       String downloadDirectory = await getDownloadFolderPath();
-      // print(downloadDirectory);
       await downloadFile(downloadDirectory, fileUrl).then(
         (value) {
           displayPDF(value);
@@ -88,119 +81,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
       );
     }
   }
-
-  // Future downloadBasicFile(String downloadDirectory) async {
-  //   Dio dio = Dio();
-  //   var downloadingPdfPath = '$downloadDirectory/enhanced.pdf';
-  //   try {
-  //     await dio.download(
-  //       hostPath + '/' + pdfBasicPath!,
-  //       downloadingPdfPath,
-  //       onReceiveProgress: (rec, total) {
-  //         // print("REC: $rec , TOTAL: $total");
-  //         setState(() {
-  //           downloading = true;
-  //           downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
-  //         });
-  //       },
-  //     );
-  //   } catch (e) {
-  //     // print(e);
-  //   }
-  //   await Future.delayed(const Duration(seconds: 3));
-  //   return downloadingPdfPath;
-  // }
-
-  // Future downloadFirstAidFile(String downloadDirectory) async {
-  //   Dio dio = Dio();
-  //   var downloadingPdfPath = '$downloadDirectory/enhanced.pdf';
-  //   try {
-  //     await dio.download(
-  //       hostPath + '/' + pdfFirstAddPath!,
-  //       downloadingPdfPath,
-  //       onReceiveProgress: (rec, total) {
-  //         // print("REC: $rec , TOTAL: $total");
-  //         setState(() {
-  //           downloading = true;
-  //           downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
-  //         });
-  //       },
-  //     );
-  //   } catch (e) {
-  //     // print(e);
-  //   }
-  //   await Future.delayed(const Duration(seconds: 3));
-  //   return downloadingPdfPath;
-  // }
-
-  // Future downloadVehicleRecordFile(String downloadDirectory) async {
-  //   Dio dio = Dio();
-  //   var downloadingPdfPath = '$downloadDirectory/enhanced.pdf';
-  //   try {
-  //     await dio.download(
-  //       hostPath + '/' + pdfvehicleRecordPath!,
-  //       downloadingPdfPath,
-  //       onReceiveProgress: (rec, total) {
-  //         // print("REC: $rec , TOTAL: $total");
-  //         setState(() {
-  //           downloading = true;
-  //           downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
-  //         });
-  //       },
-  //     );
-  //   } catch (e) {
-  //     // print(e);
-  //   }
-  //   await Future.delayed(const Duration(seconds: 3));
-  //   return downloadingPdfPath;
-  // }
-
-  // Download by user click
-  // Future<void> doDownloadEnhancedFile(fileUrl) async {
-  //   print(await getStoragePermission());
-  //   if (await getStoragePermission()) {
-  //     String downloadDirectory = await getDownloadFolderPath();
-  //     print(downloadDirectory);
-  //     await downloadEnhancedFile(downloadDirectory, fileUrl).then(
-  //       (value) {
-  //         displayPDF(value);
-  //       },
-  //     );
-  //   }
-  // }
-
-  // Future<void> doDownloadBasicFile() async {
-  //   if (await getStoragePermission()) {
-  //     String downloadDirectory = await getDownloadFolderPath();
-  //     await downloadBasicFile(downloadDirectory).then(
-  //       (value) {
-  //         displayPDF(value);
-  //       },
-  //     );
-  //   }
-  // }
-
-  // Future<void> doDownloadFirstAidFile() async {
-  //   if (await getStoragePermission()) {
-  //     String downloadDirectory = await getDownloadFolderPath();
-  //     await downloadFirstAidFile(downloadDirectory).then(
-  //       (value) {
-  //         displayPDF(value);
-  //       },
-  //     );
-  //   }
-  // }
-
-  // Future<void> doDownloadVehicleFile() async {
-  //   if (await getStoragePermission()) {
-  //     String downloadDirectory = await getDownloadFolderPath();
-  //     await downloadVehicleRecordFile(downloadDirectory).then(
-  //       (value) {
-  //         displayPDF(value);
-  //       },
-  //     );
-  //   }
-  // }
 
   void displayPDF(String downloadDirectory) {
     setState(() {
@@ -224,7 +104,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
       ),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return ProfileGiverModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -241,7 +120,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -381,7 +259,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                       ),
                                     ),
                                   ),
-                                  // height: 100,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -571,10 +448,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               additionalService: snapshot.data!.data!.userdetailprovider!.keywords.toString(),
                                               availability: snapshot.data!.data!.userdetailprovider!.availability.toString(),
                                               userInfo: snapshot.data!.data!.userdetail!.userInfo.toString(),
-
-//
-//
-//
                                               enhancedCriminal: snapshot.data!.data!.providerverification!.enhancedCriminal,
                                               enhancedCriminalStatus: snapshot.data!.data!.providerverification!.enhancedCriminalVerify,
                                               basicCriminal: snapshot.data!.data!.providerverification!.basicCriminal,
@@ -587,40 +460,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                           ),
                                         );
                                       },
-                                      // child: Badge(
-                                      //   elevation: 0,
-                                      //   badgeContent: Icon(
-                                      //     Icons.edit_outlined,
-                                      //     size: 12,
-                                      //     color: CustomColors.primaryColor,
-                                      //   ),
-                                      //   // padding: EdgeInsets.all(10),
-                                      //   badgeColor: CustomColors.white,
-                                      //   position: BadgePosition.bottomEnd(end: 6, bottom: 0),
-                                      //   child: CircleAvatar(
-                                      //     radius: 42,
-                                      //     backgroundColor: const Color.fromARGB(255, 70, 168, 109),
-                                      //     child: CircleAvatar(
-                                      //       radius: 40,
-                                      //       child: ClipRRect(
-                                      //         borderRadius: BorderRadius.circular(40),
-                                      //         child: ClipRRect(
-                                      //           borderRadius: BorderRadius.circular(100),
-                                      //           child: CachedNetworkImage(
-                                      //             width: 100,
-                                      //             height: 100,
-                                      //             fit: BoxFit.cover,
-                                      //             imageUrl: snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data!.avatar.toString(),
-                                      //             placeholder: (context, url) => const CircularProgressIndicator(),
-                                      //             errorWidget: (context, url, error) => const Icon(Icons.error),
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       // backgroundImage: NetworkImage(
-                                      //       //     snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data!.avatar .toString()),
-                                      //     ),
-                                      //   ),
-                                      // ),
                                     ),
                                   ),
                                 ),
@@ -643,7 +482,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                // Name
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
@@ -718,7 +556,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       : (snapshot.data!.data!.userdetail!.gender.toString() == "2")
                                                           ? "Female"
                                                           : "Required",
-                                                  //  == "1" ? "Male" : "Female",
                                                   style: TextStyle(
                                                     color: CustomColors.hintText,
                                                     fontSize: 16,
@@ -732,7 +569,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       : (snapshot.data!.data!.userdetail!.gender.toString() == "2")
                                                           ? "Female"
                                                           : "Required",
-                                                  //  == "1" ? "Male" : "Female",
                                                   style: TextStyle(
                                                     color: CustomColors.red,
                                                     fontSize: 16,
@@ -942,7 +778,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // Zip Code
                                 Container(
-                                  // height: 60,
                                   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
@@ -1200,24 +1035,20 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             snapshot.data!.data!.userdetail!.userInfo.toString() == "null"
                                                 ? Text(
                                                     snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.userInfo.toString(),
-                                                    // maxLines: 1,
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
-                                                      // overflow: TextOverflow.ellipsis,
                                                       fontFamily: "Rubik",
                                                       fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
                                                     snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.userInfo.toString(),
-                                                    // maxLines: 1,
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.hintText,
                                                       fontSize: 16,
-                                                      // overflow: TextOverflow.ellipsis,
                                                       fontFamily: "Rubik",
                                                       fontWeight: FontWeight.w200,
                                                     ),
@@ -1696,7 +1527,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
   }
 
   Future downloadEnhancedFile(String downloadDirectory) async {
-    // print(downloadDirectory);
     Dio dio = Dio();
     var downloadingPdfPath = '$downloadDirectory/enhanced.pdf';
 
@@ -1705,7 +1535,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         hostPath + '/' + pdfEnhancePath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -1713,7 +1542,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         },
       );
     } catch (e) {
-      // print(e);
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -1729,7 +1558,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         hostPath + '/' + pdfBasicPath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -1737,7 +1565,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         },
       );
     } catch (e) {
-      // print(e);
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -1753,7 +1581,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         hostPath + '/' + pdfFirstAddPath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -1761,7 +1588,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         },
       );
     } catch (e) {
-      // print(e);
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -1777,7 +1604,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         hostPath + '/' + pdfvehicleRecordPath!,
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
-          // print("REC: $rec , TOTAL: $total");
           setState(() {
             downloading = true;
             downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
@@ -1785,7 +1611,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         },
       );
     } catch (e) {
-      // print(e);
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -1794,7 +1620,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
 
   // Download by user click
   Future<void> doDownloadEnhancedFile() async {
-    // print(await getStoragePermission());
     if (await getStoragePermission()) {
       String downloadDirectory = await getDownloadFolderPath();
       await downloadEnhancedFile(downloadDirectory).then(
@@ -1860,7 +1685,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
       ),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return ProfileGiverModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -1877,7 +1701,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
+
     return userToken.toString();
   }
 
@@ -1886,7 +1710,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
     var userToken = preferences.getString(
       'userTokenProfile',
     );
-    // print(userToken);
+
     return userToken.toString();
   }
 
@@ -1928,16 +1752,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
               },
               child: const Padding(
                 padding: EdgeInsets.all(12.0),
-                // child: Badge(
-                //   elevation: 0,
-                //   badgeContent: const Text(""),
-                //   badgeColor: CustomColors.red,
-                //   position: BadgePosition.topStart(start: 18),
-                //   child: const Icon(
-                //     Icons.notifications_none,
-                //     size: 30,
-                //   ),
-                // ),
               ),
             )
           ],
@@ -2031,7 +1845,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                       ),
                                     ),
                                   ),
-                                  // height: 100,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -2217,9 +2030,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                               additionalService: snapshot.data!.data!.userdetailprovider!.keywords.toString(),
                                               availability: snapshot.data!.data!.userdetailprovider!.availability.toString(),
                                               userInfo: snapshot.data!.data!.userdetail!.userInfo.toString(),
-                                              //
-                                              //
-                                              //
                                               enhancedCriminal: snapshot.data!.data!.providerverification!.enhancedCriminal,
                                               enhancedCriminalStatus: snapshot.data!.data!.providerverification!.enhancedCriminalVerify,
                                               basicCriminal: snapshot.data!.data!.providerverification!.basicCriminal,
@@ -2232,40 +2042,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                           ),
                                         );
                                       },
-                                      // child: Badge(
-                                      //   elevation: 0,
-                                      //   badgeContent: Icon(
-                                      //     Icons.edit_outlined,
-                                      //     size: 12,
-                                      //     color: CustomColors.primaryColor,
-                                      //   ),
-                                      //   // padding: EdgeInsets.all(10),
-                                      //   badgeColor: CustomColors.white,
-                                      //   position: BadgePosition.bottomEnd(end: 6, bottom: 0),
-                                      //   child: CircleAvatar(
-                                      //     radius: 42,
-                                      //     backgroundColor: const Color.fromARGB(255, 70, 168, 109),
-                                      //     child: CircleAvatar(
-                                      //       radius: 40,
-                                      //       child: ClipRRect(
-                                      //         borderRadius: BorderRadius.circular(40),
-                                      //         child: ClipRRect(
-                                      //           borderRadius: BorderRadius.circular(100),
-                                      //           child: CachedNetworkImage(
-                                      //             width: 100,
-                                      //             height: 100,
-                                      //             fit: BoxFit.cover,
-                                      //             imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
-                                      //             placeholder: (context, url) => const CircularProgressIndicator(),
-                                      //             errorWidget: (context, url, error) => const Icon(Icons.error),
-                                      //           ),
-                                      //         ),
-                                      //       ),
-                                      //       // backgroundImage: NetworkImage(
-                                      //       //     snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data!.avatar .toString()),
-                                      //     ),
-                                      //   ),
-                                      // ),
                                     ),
                                   ),
                                 ),
@@ -2367,7 +2143,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                       : (snapshot.data!.data!.userdetail!.gender.toString() == "2")
                                                           ? "Female"
                                                           : "Required",
-                                                  //  == "1" ? "Male" : "Female",
                                                   style: TextStyle(
                                                     color: CustomColors.hintText,
                                                     fontSize: 16,
@@ -2381,7 +2156,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                       : (snapshot.data!.data!.userdetail!.gender.toString() == "2")
                                                           ? "Female"
                                                           : "Required",
-                                                  //  == "1" ? "Male" : "Female",
                                                   style: TextStyle(
                                                     color: CustomColors.red,
                                                     fontSize: 16,
@@ -2593,7 +2367,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Zip Code
                                 Container(
-                                  // height: 60,
                                   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
@@ -2851,24 +2624,20 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             snapshot.data!.data!.userdetail!.userInfo.toString() == "null"
                                                 ? Text(
                                                     snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.userInfo.toString(),
-                                                    // maxLines: 1,
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
-                                                      // overflow: TextOverflow.ellipsis,
                                                       fontFamily: "Rubik",
                                                       fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
                                                     snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.userInfo.toString(),
-                                                    // maxLines: 1,
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.hintText,
                                                       fontSize: 16,
-                                                      // overflow: TextOverflow.ellipsis,
                                                       fontFamily: "Rubik",
                                                       fontWeight: FontWeight.w200,
                                                     ),
@@ -3232,7 +3001,6 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                   ),
                                 ),
                                 const SizedBox(height: 15),
-                                // doDownloadVehicleFile
                                 GestureDetector(
                                   onTap: () {
                                     doDownloadVehicleFile();

@@ -42,7 +42,6 @@ class RecommendationReceiverWidget extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(
         vertical: 10,
-        // horizontal: 20,
       ),
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -101,10 +100,6 @@ class RecommendationReceiverWidget extends StatelessWidget {
                             ),
                     ),
                   ),
-                  // CircleAvatar(
-                  //   radius: 27,
-                  //   backgroundImage: NetworkImage(imgPath!),
-                  // ),
                   const SizedBox(
                     width: 8,
                   ),
@@ -135,7 +130,6 @@ class RecommendationReceiverWidget extends StatelessWidget {
                                 color: Colors.amber,
                               ),
                               onRatingUpdate: (rating) {
-                                // print(rating);
                                 rating = rating;
                               },
                             )

@@ -1,7 +1,6 @@
 // import 'package:badges/badges.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/res/app_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
@@ -20,7 +19,6 @@ class ProfileReceiverScreen extends StatefulWidget {
 }
 
 class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
-  // fetchPRofile
   late Future<ProfileReceiverModel> fetchProfile;
   Future<ProfileReceiverModel> fetchProfileReceiverModel() async {
     var token = await getUserToken();
@@ -34,7 +32,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
       ),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return ProfileReceiverModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -90,10 +87,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
               child: const Padding(
                 padding: EdgeInsets.all(12.0),
                 child: Badge(
-                  // elevation: 0,
-                  // badgeContent: const Text(""),
-                  // badgeColor: CustomColors.red,
-                  // position: BadgePosition.topStart(start: 18),
                   child: Icon(
                     Icons.notifications_none,
                     size: 30,
@@ -158,7 +151,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                 ),
                               ),
                             ),
-                            // height: 100,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -325,52 +317,18 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => ProfileReceiverEdit(
-                                        name: snapshot.data!.data![0].userdetail!.service!.name.toString(),
-                                        dob: snapshot.data!.data![0].userdetail!.dob.toString(),
-                                        male: snapshot.data!.data![0].userdetail!.gender.toString(),
-                                        phoneNumber: snapshot.data!.data![0].phone.toString(),
-                                        service: snapshot.data!.data![0].userdetail!.service!.name.toString(),
-                                        zipCode: snapshot.data!.data![0].userdetail!.zip.toString(),
-                                        userInfo: snapshot.data!.data![0].userdetail!.userInfo.toString(),
-                                        userAddress: snapshot.data!.data![0].userdetail!.address.toString(),
+                                        name: snapshot.data!.data![0].userdetail!.service!.name,
+                                        dob: snapshot.data!.data![0].userdetail!.dob,
+                                        male: snapshot.data!.data![0].userdetail!.gender,
+                                        phoneNumber: snapshot.data!.data![0].phone,
+                                        service: snapshot.data!.data![0].userdetail!.service!.name,
+                                        zipCode: snapshot.data!.data![0].userdetail!.zip,
+                                        userInfo: snapshot.data!.data![0].userdetail!.userInfo,
+                                        userAddress: snapshot.data!.data![0].userdetail!.address,
                                       ),
                                     ),
                                   );
                                 },
-                                //   child: Badge(
-                                //     elevation: 0,
-                                //     badgeContent: Icon(
-                                //       Icons.edit_outlined,
-                                //       size: 12,
-                                //       color: CustomColors.primaryColor,
-                                //     ),
-                                //     // padding: EdgeInsets.all(10),
-                                //     badgeColor: CustomColors.white,
-                                //     position: BadgePosition.bottomEnd(end: 6, bottom: 0),
-                                //     child: CircleAvatar(
-                                //       radius: 42,
-                                //       backgroundColor: Color.fromARGB(255, 70, 168, 109),
-                                //       child: CircleAvatar(
-                                //         radius: 40,
-                                //         child: ClipRRect(
-                                //           borderRadius: BorderRadius.circular(40),
-                                //           child: ClipRRect(
-                                //             borderRadius: BorderRadius.circular(100),
-                                //             child: CachedNetworkImage(
-                                //               width: 100,
-                                //               height: 100,
-                                //               fit: BoxFit.cover,
-                                //               imageUrl: snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data![0].avatar.toString(),
-                                //               placeholder: (context, url) => const CircularProgressIndicator(),
-                                //               errorWidget: (context, url, error) => const Icon(Icons.error),
-                                //             ),
-                                //           ),
-                                //         ),
-                                //         // backgroundImage: NetworkImage(
-                                //         //     snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data![0].avatar .toString()),
-                                //       ),
-                                //     ),
-                                //   ),
                               ),
                             ),
                           ),
@@ -467,7 +425,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                                 : (snapshot.data!.data![0].userdetail!.gender.toString() == "2")
                                                     ? "Female"
                                                     : "Required",
-                                            //  == "1" ? "Male" : "Female",
                                             style: TextStyle(
                                               color: CustomColors.hintText,
                                               fontSize: 16,
@@ -481,7 +438,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                                 : (snapshot.data!.data![0].userdetail!.gender.toString() == "2")
                                                     ? "Female"
                                                     : "Required",
-                                            //  == "1" ? "Male" : "Female",
                                             style: TextStyle(
                                               color: CustomColors.red,
                                               fontSize: 16,
@@ -574,7 +530,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                             ),
                           ),
                           Container(
-                            // height: 60,
                             padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
@@ -624,8 +579,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                             ),
                           ),
                           Container(
-                            // height: 60,
-                            // width: MediaQuery.of(context).size.width,
                             padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
@@ -654,24 +607,20 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                       snapshot.data!.data![0].userdetail!.userInfo.toString() == "null"
                                           ? Text(
                                               snapshot.data!.data![0].userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data![0].userdetail!.userInfo.toString(),
-                                              // maxLines: 1,
                                               softWrap: true,
                                               style: TextStyle(
                                                 color: CustomColors.red,
                                                 fontSize: 16,
-                                                // overflow: TextOverflow.ellipsis,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w200,
                                               ),
                                             )
                                           : Text(
                                               snapshot.data!.data![0].userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data![0].userdetail!.userInfo.toString(),
-                                              // maxLines: 1,
                                               softWrap: true,
                                               style: TextStyle(
                                                 color: CustomColors.hintText,
                                                 fontSize: 16,
-                                                // overflow: TextOverflow.ellipsis,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w200,
                                               ),
@@ -723,7 +672,6 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
       ),
     );
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body));
       return ProfileReceiverModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -778,24 +726,10 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
               },
               child: const Padding(
                 padding: EdgeInsets.all(12.0),
-                // child: Badge(
-                //   elevation: 0,
-                //   badgeContent: const Text(""),
-                //   badgeColor: CustomColors.red,
-                //   position: BadgePosition.topStart(start: 18),
-                //   child: const Icon(
-                //     Icons.notifications_none,
-                //     size: 30,
-                //   ),
-                // ),
               ),
             )
           ],
         ),
-        // drawer: Drawer(
-        //   backgroundColor: CustomColors.primaryColor,
-        //   child: const DrawerWidget(),
-        // ),
         body: SingleChildScrollView(
           child: FutureBuilder<ProfileReceiverModel>(
             future: fetchProfile,
@@ -853,7 +787,6 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                 ),
                               ),
                             ),
-                            // height: 100,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -1034,40 +967,6 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                     ),
                                   );
                                 },
-                                // child: Badge(
-                                //   elevation: 0,
-                                //   badgeContent: Icon(
-                                //     Icons.edit_outlined,
-                                //     size: 12,
-                                //     color: CustomColors.primaryColor,
-                                //   ),
-                                //   // padding: EdgeInsets.all(10),
-                                //   badgeColor: CustomColors.white,
-                                //   position: BadgePosition.bottomEnd(end: 6, bottom: 0),
-                                //   child: CircleAvatar(
-                                //     radius: 42,
-                                //     backgroundColor: Color.fromARGB(255, 70, 168, 109),
-                                //     child: CircleAvatar(
-                                //       radius: 40,
-                                //       child: ClipRRect(
-                                //         borderRadius: BorderRadius.circular(40),
-                                //         child: ClipRRect(
-                                //           borderRadius: BorderRadius.circular(100),
-                                //           child: CachedNetworkImage(
-                                //             width: 100,
-                                //             height: 100,
-                                //             fit: BoxFit.cover,
-                                //             imageUrl: snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data![0].avatar.toString(),
-                                //             placeholder: (context, url) => const CircularProgressIndicator(),
-                                //             errorWidget: (context, url, error) => const Icon(Icons.error),
-                                //           ),
-                                //         ),
-                                //       ),
-                                //       // backgroundImage: NetworkImage(
-                                //       //     snapshot.data!.folderPath.toString() + "/" + snapshot.data!.data![0].avatar .toString()),
-                                //     ),
-                                //   ),
-                                // ),
                               ),
                             ),
                           ),
@@ -1168,7 +1067,6 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                                 : (snapshot.data!.data![0].userdetail!.gender.toString() == "2")
                                                     ? "Female"
                                                     : "Required",
-                                            //  == "1" ? "Male" : "Female",
                                             style: TextStyle(
                                               color: CustomColors.hintText,
                                               fontSize: 16,
@@ -1182,7 +1080,6 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                                 : (snapshot.data!.data![0].userdetail!.gender.toString() == "2")
                                                     ? "Female"
                                                     : "Required",
-                                            //  == "1" ? "Male" : "Female",
                                             style: TextStyle(
                                               color: CustomColors.red,
                                               fontSize: 16,
@@ -1279,7 +1176,6 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                             ),
                           ),
                           Container(
-                            // height: 60,
                             padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
@@ -1331,8 +1227,6 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                             ),
                           ),
                           Container(
-                            // height: 60,
-                            // width: MediaQuery.of(context).size.width,
                             padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
@@ -1363,24 +1257,20 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                       snapshot.data!.data![0].userdetail!.userInfo.toString() == "null"
                                           ? Text(
                                               snapshot.data!.data![0].userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data![0].userdetail!.userInfo.toString(),
-                                              // maxLines: 1,
                                               softWrap: true,
                                               style: TextStyle(
                                                 color: CustomColors.red,
                                                 fontSize: 16,
-                                                // overflow: TextOverflow.ellipsis,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w200,
                                               ),
                                             )
                                           : Text(
                                               snapshot.data!.data![0].userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data![0].userdetail!.userInfo.toString(),
-                                              // maxLines: 1,
                                               softWrap: true,
                                               style: TextStyle(
                                                 color: CustomColors.hintText,
                                                 fontSize: 16,
-                                                // overflow: TextOverflow.ellipsis,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w200,
                                               ),

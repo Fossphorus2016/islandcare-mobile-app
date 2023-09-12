@@ -2,7 +2,6 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/screens/onboard_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -20,7 +19,6 @@ class VerifyEmail extends StatefulWidget {
 }
 
 class _VerifyEmailState extends State<VerifyEmail> {
-  // Post Email Verification
   ProgressDialog? pr;
   void showProgress(context) async {
     pr ??= ProgressDialog(context);
@@ -39,7 +37,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
     showProgress(context);
     final response = await Dio().post(
       SessionUrl.emailVerification,
-      // body: jsonEncode(model.toJson()),
       options: Options(
         headers: {
           'Authorization': 'Bearer ${widget.token}',
@@ -177,14 +174,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                           decoration: BoxDecoration(
                                             color: CustomColors.white,
                                             borderRadius: BorderRadius.circular(6 * fem),
-                                            // boxShadow: [
-                                            //   BoxShadow(
-                                            //     color: Color(0x3f000000),
-                                            //     offset:
-                                            //         Offset(2 * fem, 4 * fem),
-                                            //     blurRadius: 3.5 * fem,
-                                            //   ),
-                                            // ],
                                           ),
                                           child: Center(
                                             child: Text(

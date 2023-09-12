@@ -10,7 +10,6 @@ class CustomTextFieldWidget extends StatelessWidget {
   TextEditingController? controller;
   bool? obsecure = false;
   TextInputType? keyboardType;
-  // double? border = 12;
   Radius? topLeftBorder = const Radius.circular(12);
   Radius? bottomLeftBorder = const Radius.circular(12);
   Radius? bottomRightBorder = const Radius.circular(12);

@@ -3,7 +3,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/carereceiver/models/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/screens/applicant_profile_detail.dart';
 import 'package:island_app/res/app_url.dart';
@@ -39,9 +38,6 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
       }),
     );
     if (response.statusCode == 200) {
-      // if (kDebugMode) {
-      //   print("Job Applicant Detail == ${jsonDecode(response.body)}");
-      // }
       return JobApplicantDetailModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -68,7 +64,6 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
   void initState() {
     getUserToken();
     super.initState();
-    // fetchJobBoardDetail();
     futureJobApplicantModel = fetchJobApplicantModel();
   }
 
@@ -203,12 +198,9 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
                               padding: const EdgeInsets.only(top: 16),
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
-                                // print("id ${widget.jobId} name ${widget.name}");
-                                // print(snapshot.data!.data![index].id);
                                 return JobApplicantsWidget(
                                   name: "${snapshot.data!.data![index].firstName} ${snapshot.data!.data![index].lastName}",
                                   jobType: snapshot.data!.data![index].userdetail!.gender.toString() == '1' ? "Male" : "Female",
-                                  // (foo==1)? something1():(foo==2)? something2(): something3();
                                   count: '',
                                   onTap: () {
                                     Navigator.push(

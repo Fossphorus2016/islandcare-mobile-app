@@ -5,12 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/service_provider_job_board_model.dart';
 import 'package:island_app/caregiver/screens/my_job_detail.dart';
 import 'package:island_app/utils/utils.dart';
-
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/carereceiver/widgets/job_cart_widget.dart';
 import 'package:island_app/res/app_url.dart';
-// import 'package:island_app/utils/dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ServiceProviderJobs extends StatefulWidget {
@@ -28,7 +25,6 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          // title:
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -122,7 +118,6 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
     var userToken = preferences.getString(
       'userToken',
     );
-    // print(userToken);
     return userToken.toString();
   }
 
@@ -130,7 +125,6 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
   void initState() {
     getUserToken();
     super.initState();
-    // fetchJobBoardDetail();
     fetchJobBoard = fetchServiceProviderJobBoardModel();
   }
 
