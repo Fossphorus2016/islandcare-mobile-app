@@ -1,13 +1,17 @@
-// ignore_for_file: use_build_context_synchronously, await_only_futures
+// ignore_for_file: use_build_context_synchronously, await_only_futures, deprecated_member_use
+
+import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/manage_cards_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/providers/user_provider.dart';
 // import 'package:http/http.dart' as http;
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ManageCards extends StatefulWidget {
@@ -157,30 +161,30 @@ class _ManageCardsState extends State<ManageCards> {
     }
   }
 
-  Future<CreditCardModel> fetchManageCardsModel() async {
-    var token = await getUserToken();
-    final response = await Dio().get(
-      CareReceiverURl.serviceReceiverGetCreditCards,
-      options: Options(headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      }),
-    );
-    if (response.statusCode == 200) {
-      var json = response.data as Map;
-      var bankDetails = json['credit-cards'] as List;
-      // print("response  == ${jsonDecode(response.body)}");
-      setState(() {
-        manageCardsData = bankDetails;
-      });
-      // print("manageCardsData= $manageCardsData");
-      return CreditCardModel.fromJson(response.data);
-    } else {
-      throw Exception(
-        'Failed to load Manage Cards',
-      );
-    }
-  }
+  // Future<CreditCardModel> fetchManageCardsModel() async {
+  //   var token = await getUserToken();
+  //   final response = await Dio().get(
+  //     CareReceiverURl.serviceReceiverGetCreditCards,
+  //     options: Options(headers: {
+  //       'Authorization': 'Bearer $token',
+  //       'Accept': 'application/json',
+  //     }),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     var json = response.data as Map;
+  //     var bankDetails = json['credit-cards'] as List;
+  //     // print("response  == ${jsonDecode(response.body)}");
+  //     setState(() {
+  //       manageCardsData = bankDetails;
+  //     });
+  //     // print("manageCardsData= $manageCardsData");
+  //     return CreditCardModel.fromJson(response.data);
+  //   } else {
+  //     throw Exception(
+  //       'Failed to load Manage Cards',
+  //     );
+  //   }
+  // }
 
   postAddCard() async {
     var requestBody = {
@@ -214,9 +218,10 @@ class _ManageCardsState extends State<ManageCards> {
             "Card Added Successfully",
           );
         }
-        setState(() {
-          futureManageCards = fetchManageCardsModel();
-        });
+        Provider.of<CardProvider>(context).fetchManageCardsModel();
+        // setState(() {
+        //   futureManageCards = fetchManageCardsModel();
+        // });
       }
       Navigator.pop(context);
     } on DioError catch (e) {
@@ -239,9 +244,12 @@ class _ManageCardsState extends State<ManageCards> {
   @override
   void initState() {
     getUserToken();
+    // callFetchCards();
     super.initState();
-    futureManageCards = fetchManageCardsModel();
+    // futureManageCards = fetchManageCardsModel();
   }
+
+  // bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
@@ -293,15 +301,21 @@ class _ManageCardsState extends State<ManageCards> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
+        body:
+            // isLoading
+            //     ? const Center(
+            //         child: CircularProgressIndicator(
+            //           color: Colors.green,
+            //         ),
+            //       )
+            //     :
+            SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
@@ -604,7 +618,6 @@ class _ManageCardsState extends State<ManageCards> {
                                                 ],
                                               ),
                                             ),
-
                                             const SizedBox(
                                               height: 10,
                                             ),
@@ -749,9 +762,7 @@ class _ManageCardsState extends State<ManageCards> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 // Listing
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -790,14 +801,14 @@ class _ManageCardsState extends State<ManageCards> {
                   ),
                 ),
 
-                FutureBuilder<CreditCardModel>(
-                  future: futureManageCards,
+                FutureBuilder<List<CreditCard>>(
+                  future: context.watch<CardProvider>().allCards,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: snapshot.data?.creditCards?.length,
+                        itemCount: snapshot.data?.length,
                         itemBuilder: (BuildContext context, int index) {
                           return GestureDetector(
                             onTap: () {
@@ -833,7 +844,7 @@ class _ManageCardsState extends State<ManageCards> {
                                             width: MediaQuery.of(context).size.width * .4,
                                             alignment: Alignment.topLeft,
                                             child: Text(
-                                              snapshot.data!.creditCards![index].nameOnCard.toString(),
+                                              snapshot.data![index].nameOnCard.toString(),
                                               style: TextStyle(
                                                 color: CustomColors.primaryText,
                                                 fontFamily: "Poppins",
@@ -848,7 +859,7 @@ class _ManageCardsState extends State<ManageCards> {
                                         width: MediaQuery.of(context).size.width * .4,
                                         alignment: Alignment.center,
                                         child: Text(
-                                          snapshot.data!.creditCards![index].cardNumber.toString(),
+                                          snapshot.data![index].cardNumber.toString(),
                                           style: TextStyle(
                                             color: CustomColors.primaryText,
                                             fontFamily: "Poppins",
@@ -859,9 +870,7 @@ class _ManageCardsState extends State<ManageCards> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
+                                  const SizedBox(height: 10),
                                   showItem.contains(index)
                                       ? Container(
                                           padding: const EdgeInsets.symmetric(vertical: 5),
@@ -897,14 +906,12 @@ class _ManageCardsState extends State<ManageCards> {
                                                           ),
                                                         ),
                                                       ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
+                                                      const SizedBox(height: 5),
                                                       Container(
                                                         width: MediaQuery.of(context).size.width * .3,
                                                         alignment: Alignment.center,
                                                         child: Text(
-                                                          snapshot.data!.creditCards![index].cardExpirationMonth.toString(),
+                                                          snapshot.data![index].cardExpirationMonth.toString(),
                                                           // "One-Time",
                                                           style: TextStyle(
                                                             color: CustomColors.hintText,
@@ -933,14 +940,12 @@ class _ManageCardsState extends State<ManageCards> {
                                                           ),
                                                         ),
                                                       ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
+                                                      const SizedBox(height: 5),
                                                       Container(
                                                         width: MediaQuery.of(context).size.width * .3,
                                                         alignment: Alignment.center,
                                                         child: Text(
-                                                          snapshot.data!.creditCards![index].cardExpirationYear.toString(),
+                                                          snapshot.data![index].cardExpirationYear.toString(),
                                                           style: TextStyle(
                                                             color: CustomColors.hintText,
                                                             fontFamily: "Poppins",
@@ -968,14 +973,12 @@ class _ManageCardsState extends State<ManageCards> {
                                                           ),
                                                         ),
                                                       ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
+                                                      const SizedBox(height: 5),
                                                       Container(
                                                         width: MediaQuery.of(context).size.width * .3,
                                                         alignment: Alignment.center,
                                                         child: Text(
-                                                          snapshot.data!.creditCards![index].cvv.toString(),
+                                                          snapshot.data![index].cvv.toString(),
                                                           // "One-Time",
                                                           style: TextStyle(
                                                             color: CustomColors.hintText,
@@ -1012,5 +1015,30 @@ class _ManageCardsState extends State<ManageCards> {
         ),
       ),
     );
+  }
+}
+
+class CardProvider extends ChangeNotifier {
+  List<CreditCard> _allCards = [];
+  Future<List<CreditCard>> get allCards async => _allCards;
+  List<CreditCard> get gWAallCards => _allCards;
+  Future<dynamic> fetchManageCardsModel() async {
+    var token = await UserProvider.userToken;
+    final response = await Dio().get(
+      CareReceiverURl.serviceReceiverGetCreditCards,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      _allCards = List<CreditCard>.from(response.data["credit-cards"]!.map((x) => CreditCard.fromJson(x)));
+      notifyListeners();
+      return {"status": true, "message": "Cards is loaded successfully"};
+    } else {
+      return {"status": false, "message": "Failed to load Cards"};
+    }
   }
 }

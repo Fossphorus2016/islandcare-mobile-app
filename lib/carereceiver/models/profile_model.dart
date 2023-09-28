@@ -11,16 +11,16 @@ class ProfileReceiverModel {
   });
 
   String? folderPath;
-  List<Datum>? data;
+  Datum? data;
 
   factory ProfileReceiverModel.fromJson(Map<String, dynamic> json) => ProfileReceiverModel(
         folderPath: json["folder_path"],
-        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+        data: Datum.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
         "folder_path": folderPath,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data ?? {},
       };
 }
 
@@ -41,6 +41,7 @@ class Datum {
     this.deletedAt,
     this.userdetailprovider,
     this.userdetail,
+    this.userSubscriptionDetail,
   });
 
   int? id;
@@ -58,7 +59,7 @@ class Datum {
   dynamic deletedAt;
   dynamic userdetailprovider;
   Userdetail? userdetail;
-
+  UserSubscriptionDetail? userSubscriptionDetail;
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
         firstName: json["first_name"],
@@ -75,6 +76,7 @@ class Datum {
         deletedAt: json["deleted_at"],
         userdetailprovider: json["userdetailprovider"],
         userdetail: json["userdetail"] == null ? null : Userdetail.fromJson(json["userdetail"]),
+        userSubscriptionDetail: json['user_subscription_detail'] == null ? null : UserSubscriptionDetail.fromJson(json['user_subscription_detail']),
       );
 
   Map<String, dynamic> toJson() => {
@@ -93,6 +95,7 @@ class Datum {
         "deleted_at": deletedAt,
         "userdetailprovider": userdetailprovider,
         "userdetail": userdetail?.toJson(),
+        "userSubscriptionDetail": userSubscriptionDetail?.toJson(),
       };
 }
 
@@ -191,6 +194,54 @@ class Service {
         "description": description,
         "is_active": isActive,
         "deleted_at": deletedAt?.toIso8601String(),
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+      };
+}
+
+class UserSubscriptionDetail {
+  UserSubscriptionDetail({
+    required this.id,
+    required this.userId,
+    required this.subscriptionId,
+    required this.subscriptionName,
+    required this.periodType,
+    required this.price,
+    required this.isActive,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  final int id;
+  final int userId;
+  final int subscriptionId;
+  final String subscriptionName;
+  final String periodType;
+  final String price;
+  final int isActive;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+
+  factory UserSubscriptionDetail.fromJson(Map<String, dynamic> json) => UserSubscriptionDetail(
+        id: json["id"],
+        userId: json["user_id"],
+        subscriptionId: json["subscription_id"],
+        subscriptionName: json["subscription_name"],
+        periodType: json["period_type"],
+        price: json["price"],
+        isActive: json["is_active"],
+        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "user_id": userId,
+        "subscription_id": subscriptionId,
+        "subscription_name": subscriptionName,
+        "period_type": periodType,
+        "price": price,
+        "is_active": isActive,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };

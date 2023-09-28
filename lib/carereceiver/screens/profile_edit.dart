@@ -62,7 +62,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              primaryColorDark: CustomColors.primaryColor,
+              // primaryColorDark: CustomColors.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -846,7 +846,7 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              primaryColorDark: CustomColors.primaryColor,
+              // primaryColorDark: CustomColors.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,

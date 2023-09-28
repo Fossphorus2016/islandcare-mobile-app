@@ -64,7 +64,7 @@ class _SignupScreenState extends State<SignupScreen> {
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              primaryColorDark: CustomColors.primaryColor,
+              // primaryColorDark: CustomColors.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,

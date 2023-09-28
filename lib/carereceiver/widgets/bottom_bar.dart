@@ -1,7 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
+import 'package:island_app/carereceiver/screens/manage_cards.dart';
+import 'package:island_app/providers/subscription_provider.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
+import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:island_app/carereceiver/screens/home_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
@@ -32,28 +37,40 @@ class _BottomBarState extends State<BottomBar> {
     setState(() {
       _page = page;
     });
-    setState(() {
-      getUserToken();
-    });
+    // setState(() {
+    //   getUserToken();
+    // });
   }
 
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
+  // getUserToken() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var userToken = preferences.getString(
+  //     'userToken',
+  //   );
+  //   // print("userTokenBottom $userToken");
+  //   return userToken.toString();
+  // }
 
-    // print("userTokenBottom $userToken");
-    return userToken.toString();
+  callUserData() async {
+    await Provider.of<UserProvider>(context, listen: false).getUserToken();
+    await Provider.of<UserProvider>(context, listen: false).fetchProfileReceiverModel();
+    await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(4);
+    await Provider.of<ChatProvider>(context, listen: false).connectChatChannel(4);
+    await Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
+
+    var resp = await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
+    if (resp['status'] == false) {
+      customErrorSnackBar(context, resp['message']);
+    }
   }
 
   @override
   void initState() {
-    setState(() {
-      getUserToken();
-    });
-    Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(4);
-    Provider.of<ChatProvider>(context, listen: false).connectChatChannel(4);
+    // setState(() {
+    //   getUserToken();
+    // });
+    // print(lol);
+    // var res = Provider.of<UserProvider>(context, listen: false).getUserToken();
 
     pages = [
       HomeScreen(
@@ -63,6 +80,7 @@ class _BottomBarState extends State<BottomBar> {
       const MessagesScreen(),
       const ProfileReceiverScreen(),
     ];
+    callUserData();
     super.initState();
   }
 

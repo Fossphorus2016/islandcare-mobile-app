@@ -6,7 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
 import 'package:island_app/caregiver/widgets/bottombar.dart';
+import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
+import 'package:island_app/carereceiver/screens/payment_package_screen.dart';
+import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/widgets/bottom_bar.dart';
 import 'package:island_app/providers/user_provider.dart';
@@ -27,12 +30,23 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => NotificationProvider(),
+          child: const NotificationScreen(),
         ),
         ChangeNotifierProvider(
           create: (context) => ChatProvider(),
+          child: const MessagesScreen(),
         ),
         ChangeNotifierProvider(
           create: (context) => ServiceProviderChat(),
+          child: const ProviderMessagesScreen(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SubscriptionProvider(),
+          child: const PaymentPackageScreen(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CardProvider(),
+          child: const ManageCards(),
         ),
       ],
       child: const MyApp(),
@@ -80,8 +94,6 @@ class _MyAppState extends State<MyApp> {
     getUserName();
     IslandPusher().initPusher();
     super.initState();
-
-    // initPusher();
   }
 
   Route? onGenerateRoute(RouteSettings settings) {
@@ -117,9 +129,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'APP',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
+      theme: ThemeData(primarySwatch: Colors.green),
       initialRoute: '/',
       onGenerateRoute: onGenerateRoute,
     );

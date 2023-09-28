@@ -11,7 +11,9 @@ import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/screens/payment_package_screen.dart';
 import 'package:island_app/carereceiver/screens/post_job.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:island_app/screens/onboard_screen.dart';
 import 'package:island_app/utils/utils.dart';
@@ -156,6 +158,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     if (response.statusCode == 200) {
       return ProfileReceiverModel.fromJson(response.data);
     } else {
+      // print()
       throw Exception(
         'Failed to load Profile Model',
       );
@@ -262,8 +265,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             children: [
               Column(
                 children: [
-                  FutureBuilder<ProfileReceiverModel>(
-                    future: fetchProfile,
+                  FutureBuilder<ProfileReceiverModel?>(
+                    future: context.watch<UserProvider>().userProfile,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return Padding(
@@ -281,7 +284,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                       width: 100,
                                       height: 100,
                                       fit: BoxFit.cover,
-                                      imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data![0].avatar}",
+                                      imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
                                       placeholder: (context, url) => const CircularProgressIndicator(),
                                       errorWidget: (context, url, error) => const Icon(Icons.error),
                                     ),
@@ -296,7 +299,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                 children: <Widget>[
                                   SizedBox(
                                     child: Text(
-                                      "${"${snapshot.data!.data![0].firstName} ${snapshot.data!.data![0].lastName}"} ",
+                                      "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
@@ -310,7 +313,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ),
                                   SizedBox(
                                     child: Text(
-                                      snapshot.data!.data![0].phone.toString(),
+                                      snapshot.data!.data!.phone.toString(),
                                       style: TextStyle(
                                         color: CustomColors.white,
                                         fontFamily: "Rubik",
@@ -578,7 +581,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           child: Image.asset("assets/images/icons/payments.png"),
                         ),
                         title: Text(
-                          'Payments',
+                          'Payment Center',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,

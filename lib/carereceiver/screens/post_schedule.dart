@@ -3,8 +3,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import '../../widgets/custom_text_field.dart';
@@ -253,7 +255,7 @@ class _ScheduleState extends State<Schedule> {
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              primaryColorDark: CustomColors.primaryColor,
+              // primaryColorDark: CustomColors.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -282,7 +284,7 @@ class _ScheduleState extends State<Schedule> {
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              primaryColorDark: CustomColors.primaryColor,
+              // primaryColorDark: CustomColors.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -343,26 +345,30 @@ class _ScheduleState extends State<Schedule> {
       'start_time[]': startTimeMapList,
       'duration[]': durationMapList,
     });
-
     Dio dio = Dio();
-    try {
-      var response = await dio.post(
-        CareReceiverURl.serviceReceiverSeniorCareJobCreater,
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
-      );
-    } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+    var userSubs = await Provider.of<UserProvider>(context).userProfile;
+    if (userSubs!.data!.userSubscriptionDetail != null) {
+      try {
+        var response = await dio.post(
+          CareReceiverURl.serviceReceiverSeniorCareJobCreater,
+          data: formData,
+          options: Options(
+            followRedirects: false,
+            validateStatus: (status) => true,
+            headers: {
+              "Accept": "application/json",
+              "Authorization": "Bearer $token",
+            },
+          ),
+        );
+      } on DioError catch (e) {
+        customErrorSnackBar(
+          context,
+          e.toString(),
+        );
+      }
+    } else {
+      customErrorSnackBar(context, "Please Subscribe Package First");
     }
   }
 
@@ -392,21 +398,26 @@ class _ScheduleState extends State<Schedule> {
     );
 
     Dio dio = Dio();
-    try {
-      var response = await dio.post(
-        CareReceiverURl.serviceReceiverPetCareJobCreater,
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
-      );
-    } catch (e) {
-      customErrorSnackBar(context, e.toString());
+    var userSubs = await Provider.of<UserProvider>(context).userProfile;
+    if (userSubs!.data!.userSubscriptionDetail != null) {
+      try {
+        var response = await dio.post(
+          CareReceiverURl.serviceReceiverPetCareJobCreater,
+          data: formData,
+          options: Options(
+            followRedirects: false,
+            validateStatus: (status) => true,
+            headers: {
+              "Accept": "application/json",
+              "Authorization": "Bearer $token",
+            },
+          ),
+        );
+      } catch (e) {
+        customErrorSnackBar(context, e.toString());
+      }
+    } else {
+      customErrorSnackBar(context, "Please Subscribe Package First");
     }
   }
 
@@ -431,24 +442,29 @@ class _ScheduleState extends State<Schedule> {
     );
 
     Dio dio = Dio();
-    try {
-      var response = await dio.post(
-        CareReceiverURl.serviceReceiverHouseKeepingJobCreater,
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
-      );
-    } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+    var userSubs = await Provider.of<UserProvider>(context).userProfile;
+    if (userSubs!.data!.userSubscriptionDetail != null) {
+      try {
+        var response = await dio.post(
+          CareReceiverURl.serviceReceiverHouseKeepingJobCreater,
+          data: formData,
+          options: Options(
+            followRedirects: false,
+            validateStatus: (status) => true,
+            headers: {
+              "Accept": "application/json",
+              "Authorization": "Bearer $token",
+            },
+          ),
+        );
+      } catch (e) {
+        customErrorSnackBar(
+          context,
+          e.toString(),
+        );
+      }
+    } else {
+      customErrorSnackBar(context, "Please Subscribe Package First");
     }
   }
 
@@ -477,24 +493,29 @@ class _ScheduleState extends State<Schedule> {
     );
 
     Dio dio = Dio();
-    try {
-      var response = await dio.post(
-        CareReceiverURl.serviceReceiverLearningJobCreater,
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
-      );
-    } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+    var userSubs = await Provider.of<UserProvider>(context).userProfile;
+    if (userSubs!.data!.userSubscriptionDetail != null) {
+      try {
+        var response = await dio.post(
+          CareReceiverURl.serviceReceiverLearningJobCreater,
+          data: formData,
+          options: Options(
+            followRedirects: false,
+            validateStatus: (status) => true,
+            headers: {
+              "Accept": "application/json",
+              "Authorization": "Bearer $token",
+            },
+          ),
+        );
+      } catch (e) {
+        customErrorSnackBar(
+          context,
+          e.toString(),
+        );
+      }
+    } else {
+      customErrorSnackBar(context, "Please Subscribe Package First");
     }
   }
 
@@ -517,24 +538,29 @@ class _ScheduleState extends State<Schedule> {
     );
 
     Dio dio = Dio();
-    try {
-      var response = await dio.post(
-        CareReceiverURl.serviceReceiverSchoolCampJobCreater,
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
-      );
-    } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+    var userSubs = await Provider.of<UserProvider>(context).userProfile;
+    if (userSubs!.data!.userSubscriptionDetail != null) {
+      try {
+        var response = await dio.post(
+          CareReceiverURl.serviceReceiverSchoolCampJobCreater,
+          data: formData,
+          options: Options(
+            followRedirects: false,
+            validateStatus: (status) => true,
+            headers: {
+              "Accept": "application/json",
+              "Authorization": "Bearer $token",
+            },
+          ),
+        );
+      } catch (e) {
+        customErrorSnackBar(
+          context,
+          e.toString(),
+        );
+      }
+    } else {
+      customErrorSnackBar(context, "Please Subscribe Package First");
     }
   }
 

@@ -6,12 +6,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:island_app/carereceiver/models/profile_model.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/carereceiver/models/service_receiver_dashboard_model.dart';
 import 'package:island_app/carereceiver/screens/provider_profile_detail_for_giver.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -186,28 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return response;
   }
 
-  // fetchPRofile
-  late Future<ProfileReceiverModel> fetchProfile;
-  Future<ProfileReceiverModel> fetchProfileReceiverModel() async {
-    var token = await getUserToken();
-    final response = await Dio().get(
-      CareReceiverURl.serviceReceiverProfile,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      return ProfileReceiverModel.fromJson(response.data);
-    } else {
-      throw Exception(
-        'Failed to load Profile Model',
-      );
-    }
-  }
-
   var token;
   Future getUserToken() async {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
@@ -242,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getUserAvatar();
     super.initState();
     futureReceiverDashboard = fetchReceiverDashboardModel();
-    fetchProfile = fetchProfileReceiverModel();
+    // fetchProfile = fetchProfileReceiverModel();
   }
 
   @override
@@ -305,10 +285,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            FutureBuilder<ProfileReceiverModel>(
-              future: fetchProfile,
+            FutureBuilder<ProfileReceiverModel?>(
+              future: context.watch<UserProvider>().userProfile,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  // print(snapshot.data!.data!.userSubscriptionDetail!.periodType);
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
@@ -334,7 +315,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,
-                              imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data![0].avatar}",
+                              imageUrl: "${AppUrl.localStorageUrl}/${snapshot.data!.data!.avatar}",
                               placeholder: (context, url) => const CircularProgressIndicator(),
                               errorWidget: (context, url, error) => const Icon(Icons.error),
                             ),
@@ -1036,6 +1017,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           )
                         : FutureBuilder<ServiceReceiverDashboardModel>(
+                            future: futureReceiverDashboard,
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
                                 return ListView.builder(

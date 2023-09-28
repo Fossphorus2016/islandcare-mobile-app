@@ -2161,7 +2161,8 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              primaryColorDark: CustomColors.primaryColor,
+              // : ,
+              backgroundColor: CustomColors.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -2190,7 +2191,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              primaryColorDark: CustomColors.primaryColor,
+              // primaryColorDark: CustomColors.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -2220,7 +2221,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              primaryColorDark: CustomColors.primaryColor,
+              // primaryColorDark: CustomColors.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,

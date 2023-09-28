@@ -36,7 +36,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
     await pr!.show();
   }
 
-
   void hideProgress() async {
     if (pr != null && pr!.isShowing()) {
       await pr!.hide();
@@ -46,7 +45,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   Future<Response> jobApply() async {
     var token = await getUserToken();
     final response = await Dio().put(
-      "${AppUrl.serviceProviderJobApply}/${widget.id}",
+      "${CareGiverUrl.serviceProviderJobApply}/${widget.id}",
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',
@@ -85,7 +84,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       ),
     );
     if (response.statusCode == 200) {
-      
       return SeniorCareDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -106,8 +104,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       ),
     );
     if (response.statusCode == 200) {
-      
-      
       return SchoolSupportDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -128,7 +124,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       ),
     );
     if (response.statusCode == 200) {
-     
       return ChildCareDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -149,7 +144,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       ),
     );
     if (response.statusCode == 200) {
-      
       return HouseKeepingDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -170,7 +164,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       ),
     );
     if (response.statusCode == 200) {
-      
       return PetCareDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(

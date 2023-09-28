@@ -3,11 +3,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/carereceiver/screens/post_schedule.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/service_model.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 class PostJobScreen extends StatefulWidget {
   const PostJobScreen({super.key});
@@ -44,6 +47,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
 
   @override
   Widget build(BuildContext context) {
+    UserSubscriptionDetail? subscriptionDetail = context.watch<UserProvider>().gWAUserProfile!.data!.userSubscriptionDetail;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -119,14 +123,18 @@ class _PostJobScreenState extends State<PostJobScreen> {
                               setState(() {
                                 selectedJob = index;
                               });
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Schedule(
-                                    serviceId: snapshot.data!.services![index].id.toString(),
+                              if (subscriptionDetail!.isActive != 0) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Schedule(
+                                      serviceId: snapshot.data!.services![index].id.toString(),
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              } else {
+                                customErrorSnackBar(context, "Please subscribe package first");
+                              }
                             },
                             child: Center(
                               child: Container(

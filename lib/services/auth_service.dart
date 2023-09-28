@@ -129,9 +129,9 @@ class AuthService {
             var userId = data["user"]['id'];
             var avatar = data["user"]['avatar'];
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            Provider.of<UserProvider>(context, listen: false).setUser(res.data);
+            Provider.of<UserProvider>(context, listen: false).fetchProfileReceiverModel();
             await prefs.setString('x-auth-token', token);
-            print("UserData = $data");
+            // print("UserData = $data");
             if (status == 3) {
               customErrorSnackBar(
                 context,

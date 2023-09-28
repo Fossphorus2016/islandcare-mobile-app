@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/bottom_bar.dart';
 import 'package:island_app/models/login_model.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/screens/splash_screen.dart';
 import 'package:island_app/screens/verify_email.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:pinput/pinput.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/utils/utils.dart';
 
@@ -208,6 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   ),
                                                 );
                                               } else if (data["user"]["role"] == 3) {
+                                                // Provider.of<UserProvider>(context, listen: false).setUserToken(data['token']);
                                                 if (data["user"]["status"] == 0) {
                                                   SharedPreferences pref = await SharedPreferences.getInstance();
                                                   await pref.setString('userStatus', status.toString());
@@ -233,7 +236,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   await pref.setString('isProfileCompleted', isProfileCompleted.toString());
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
                                                 }
+
+                                                Provider.of<UserProvider>(context, listen: false).getUserToken();
                                               } else if (data["user"]["role"] == 4) {
+                                                // Provider.of<UserProvider>(context, listen: false).setUserToken(data['token']);
                                                 if (data["user"]["status"] == 0) {
                                                   SharedPreferences pref = await SharedPreferences.getInstance();
                                                   await pref.setString('userStatus', status.toString());
@@ -264,6 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                                   await pref.setString('isProfileCompleted', isProfileCompleted.toString());
                                                   Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
                                                 }
+                                                Provider.of<UserProvider>(context, listen: false).getUserToken();
                                               }
                                             }
                                           } else {
@@ -515,516 +522,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                               ),
-                              // Forget Password
-                              // Positioned(
-                              //   left: 50 * fem,
-                              //   top: 395 * fem,
-                              //   child: Align(
-                              //     child: GestureDetector(
-                              //       onTap: () {
-                              //         showModalBottomSheet(
-                              //           isScrollControlled: true,
-                              //           context: context,
-                              //           backgroundColor: Colors.white,
-                              //           shape: const RoundedRectangleBorder(
-                              //             borderRadius: BorderRadius.only(
-                              //               topLeft: Radius.circular(30.0),
-                              //               topRight: Radius.circular(30.0),
-                              //             ),
-                              //           ),
-                              //           builder: (context) {
-                              //             return Padding(
-                              //               padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                              //               child: Container(
-                              //                 padding: const EdgeInsets.symmetric(horizontal: 25),
-                              //                 child: Column(
-                              //                   crossAxisAlignment: CrossAxisAlignment.start,
-                              //                   mainAxisAlignment: MainAxisAlignment.center,
-                              //                   mainAxisSize: MainAxisSize.min,
-                              //                   children: [
-                              //                     const SizedBox(
-                              //                       height: 20,
-                              //                     ),
-                              //                     Center(
-                              //                       child: Container(
-                              //                         width: 130,
-                              //                         height: 5,
-                              //                         decoration: BoxDecoration(
-                              //                           color: const Color(0xffC4C4C4),
-                              //                           borderRadius: BorderRadius.circular(6),
-                              //                         ),
-                              //                       ),
-                              //                     ),
-                              //                     const SizedBox(
-                              //                       height: 40,
-                              //                     ),
-                              //                     Center(
-                              //                       child: Text(
-                              //                         "Forgot Password",
-                              //                         textAlign: TextAlign.center,
-                              //                         style: TextStyle(
-                              //                           color: CustomColors.black,
-                              //                           fontFamily: "Rubik",
-                              //                           fontStyle: FontStyle.normal,
-                              //                           fontSize: 24,
-                              //                           fontWeight: FontWeight.w600,
-                              //                         ),
-                              //                       ),
-                              //                     ),
-                              //                     const SizedBox(
-                              //                       height: 10,
-                              //                     ),
-                              //                     Center(
-                              //                       child: Text(
-                              //                         "Enter your email for the verification proccess we will send 4 digit code to your email.",
-                              //                         textAlign: TextAlign.center,
-                              //                         style: TextStyle(
-                              //                           color: CustomColors.primaryText,
-                              //                           fontFamily: "Rubik",
-                              //                           fontStyle: FontStyle.normal,
-                              //                           fontSize: 14,
-                              //                           fontWeight: FontWeight.w400,
-                              //                         ),
-                              //                       ),
-                              //                     ),
-                              //                     const SizedBox(
-                              //                       height: 40,
-                              //                     ),
-                              //                     Form(
-                              //                       key: forgetformKey,
-                              //                       child: Column(
-                              //                         mainAxisAlignment: MainAxisAlignment.center,
-                              //                         children: [
-                              //                           CustomTextFieldWidget(
-                              //                             borderColor: CustomColors.loginBorder,
-                              //                             sufIcon: Icon(
-                              //                               Icons.done,
-                              //                               color: CustomColors.hintText,
-                              //                               size: 20,
-                              //                             ),
-                              //                             textStyle: TextStyle(
-                              //                               fontSize: 15,
-                              //                               color: CustomColors.hintText,
-                              //                               fontFamily: "Calibri",
-                              //                               fontWeight: FontWeight.w400,
-                              //                             ),
-                              //                             hintText: "xxxxxxxxxxxxx@gmail.com",
-                              //                             controller: emailController,
-                              //                             obsecure: false,
-                              //                           ),
-                              //                           const SizedBox(
-                              //                             height: 20,
-                              //                           ),
-                              //                           // OTP
-                              //                           GestureDetector(
-                              //                             onTap: () {
-                              //                               if (forgetformKey.currentState!.validate()) {
-                              //                                 // signInUser();
-                              //                                 showModalBottomSheet(
-                              //                                   isScrollControlled: true,
-                              //                                   context: context,
-                              //                                   backgroundColor: Colors.white,
-                              //                                   shape: const RoundedRectangleBorder(
-                              //                                     borderRadius: BorderRadius.only(
-                              //                                       topLeft: Radius.circular(30.0),
-                              //                                       topRight: Radius.circular(30.0),
-                              //                                     ),
-                              //                                   ),
-                              //                                   builder: (context) {
-                              //                                     return Padding(
-                              //                                       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                              //                                       child: Container(
-                              //                                         padding: const EdgeInsets.symmetric(horizontal: 25),
-                              //                                         child: Column(
-                              //                                           crossAxisAlignment: CrossAxisAlignment.start,
-                              //                                           mainAxisAlignment: MainAxisAlignment.center,
-                              //                                           mainAxisSize: MainAxisSize.min,
-                              //                                           children: [
-                              //                                             const SizedBox(
-                              //                                               height: 20,
-                              //                                             ),
-                              //                                             Center(
-                              //                                               child: Container(
-                              //                                                 width: 130,
-                              //                                                 height: 5,
-                              //                                                 decoration: BoxDecoration(
-                              //                                                   color: const Color(0xffC4C4C4),
-                              //                                                   borderRadius: BorderRadius.circular(6),
-                              //                                                 ),
-                              //                                               ),
-                              //                                             ),
-                              //                                             const SizedBox(
-                              //                                               height: 50,
-                              //                                             ),
-                              //                                             Center(
-                              //                                               child: Text(
-                              //                                                 "Enter 4 Digits Code",
-                              //                                                 textAlign: TextAlign.center,
-                              //                                                 style: TextStyle(
-                              //                                                   color: CustomColors.black,
-                              //                                                   fontFamily: "Rubik",
-                              //                                                   fontStyle: FontStyle.normal,
-                              //                                                   fontSize: 24,
-                              //                                                   fontWeight: FontWeight.w600,
-                              //                                                 ),
-                              //                                               ),
-                              //                                             ),
-                              //                                             const SizedBox(
-                              //                                               height: 10,
-                              //                                             ),
-                              //                                             Center(
-                              //                                               child: Text(
-                              //                                                 "Enter the 4 digits code that you received on your email.",
-                              //                                                 textAlign: TextAlign.center,
-                              //                                                 style: TextStyle(
-                              //                                                   color: CustomColors.primaryText,
-                              //                                                   fontFamily: "Rubik",
-                              //                                                   fontStyle: FontStyle.normal,
-                              //                                                   fontSize: 14,
-                              //                                                   fontWeight: FontWeight.w400,
-                              //                                                 ),
-                              //                                               ),
-                              //                                             ),
-                              //                                             const SizedBox(
-                              //                                               height: 30,
-                              //                                             ),
-                              //                                             Form(
-                              //                                               key: pinformKey,
-                              //                                               child: Column(
-                              //                                                 mainAxisAlignment: MainAxisAlignment.center,
-                              //                                                 children: [
-                              //                                                   Directionality(
-                              //                                                     // Specify direction if desired1
-                              //                                                     textDirection: ui.TextDirection.ltr,
-                              //                                                     child: Center(
-                              //                                                       child: Pinput(
-                              //                                                         closeKeyboardWhenCompleted: true,
-                              //                                                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              //                                                         controller: pinController,
-                              //                                                         focusNode: pinfocusNode,
-                              //                                                         androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsUserConsentApi,
-                              //                                                         listenForMultipleSmsOnAndroid: true,
-                              //                                                         defaultPinTheme: defaultPinTheme,
-                              //                                                         validator: (value) {
-                              //                                                           return value == '2222' ? null : 'Pin is incorrect';
-                              //                                                         },
-                              //                                                         // onClipboardFound: (value) {
-                              //                                                         //   debugPrint('onClipboardFound: $value');
-                              //                                                         //   pinController.setText(value);
-                              //                                                         // },
-                              //                                                         hapticFeedbackType: HapticFeedbackType.lightImpact,
-                              //                                                         onCompleted: (pin) {
-                              //                                                           debugPrint('onCompleted: $pin');
-                              //                                                         },
-                              //                                                         onChanged: (value) {
-                              //                                                           debugPrint('onChanged: $value');
-                              //                                                         },
-                              //                                                         cursor: Column(
-                              //                                                           mainAxisAlignment: MainAxisAlignment.end,
-                              //                                                           children: [
-                              //                                                             Container(
-                              //                                                               margin: const EdgeInsets.only(bottom: 9),
-                              //                                                               width: 22,
-                              //                                                               height: 1,
-                              //                                                               color: focusedBorderColor,
-                              //                                                             ),
-                              //                                                           ],
-                              //                                                         ),
-                              //                                                         focusedPinTheme: defaultPinTheme.copyWith(
-                              //                                                           textStyle: TextStyle(
-                              //                                                             fontSize: 26,
-                              //                                                             color: CustomColors.otpText,
-                              //                                                             fontStyle: FontStyle.normal,
-                              //                                                             fontWeight: FontWeight.w700,
-                              //                                                           ),
-                              //                                                           decoration: defaultPinTheme.decoration!.copyWith(
-                              //                                                             borderRadius: BorderRadius.circular(12),
-                              //                                                             border: Border.all(color: focusedBorderColor),
-                              //                                                           ),
-                              //                                                         ),
-                              //                                                         submittedPinTheme: defaultPinTheme.copyWith(
-                              //                                                           decoration: defaultPinTheme.decoration!.copyWith(
-                              //                                                             color: fillColor,
-                              //                                                             borderRadius: BorderRadius.circular(12),
-                              //                                                             border: Border.all(color: focusedBorderColor),
-                              //                                                           ),
-                              //                                                         ),
-                              //                                                         errorPinTheme: defaultPinTheme.copyBorderWith(
-                              //                                                           border: Border.all(color: Colors.redAccent),
-                              //                                                         ),
-                              //                                                       ),
-                              //                                                     ),
-                              //                                                   ),
-                              //                                                   const SizedBox(
-                              //                                                     height: 20,
-                              //                                                   ),
-                              //                                                   GestureDetector(
-                              //                                                     onTap: () {
-                              //                                                       // Add New Password
-                              //                                                       if (pinformKey.currentState!.validate()) {}
-                              //                                                       showModalBottomSheet(
-                              //                                                         isScrollControlled: true,
-                              //                                                         context: context,
-                              //                                                         backgroundColor: Colors.white,
-                              //                                                         shape: const RoundedRectangleBorder(
-                              //                                                           borderRadius: BorderRadius.only(
-                              //                                                             topLeft: Radius.circular(30.0),
-                              //                                                             topRight: Radius.circular(30.0),
-                              //                                                           ),
-                              //                                                         ),
-                              //                                                         builder: (context) {
-                              //                                                           return Padding(
-                              //                                                             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                              //                                                             child: Container(
-                              //                                                               padding: const EdgeInsets.symmetric(horizontal: 25),
-                              //                                                               child: Column(
-                              //                                                                 crossAxisAlignment: CrossAxisAlignment.start,
-                              //                                                                 mainAxisAlignment: MainAxisAlignment.center,
-                              //                                                                 mainAxisSize: MainAxisSize.min,
-                              //                                                                 children: [
-                              //                                                                   const SizedBox(
-                              //                                                                     height: 20,
-                              //                                                                   ),
-                              //                                                                   Center(
-                              //                                                                     child: Container(
-                              //                                                                       width: 130,
-                              //                                                                       height: 5,
-                              //                                                                       decoration: BoxDecoration(
-                              //                                                                         color: const Color(0xffC4C4C4),
-                              //                                                                         borderRadius: BorderRadius.circular(6),
-                              //                                                                       ),
-                              //                                                                     ),
-                              //                                                                   ),
-                              //                                                                   const SizedBox(
-                              //                                                                     height: 40,
-                              //                                                                   ),
-                              //                                                                   Center(
-                              //                                                                     child: Text(
-                              //                                                                       "Reset Password",
-                              //                                                                       textAlign: TextAlign.center,
-                              //                                                                       style: TextStyle(
-                              //                                                                         color: CustomColors.black,
-                              //                                                                         fontFamily: "Rubik",
-                              //                                                                         fontStyle: FontStyle.normal,
-                              //                                                                         fontSize: 24,
-                              //                                                                         fontWeight: FontWeight.w600,
-                              //                                                                       ),
-                              //                                                                     ),
-                              //                                                                   ),
-                              //                                                                   const SizedBox(
-                              //                                                                     height: 10,
-                              //                                                                   ),
-                              //                                                                   Center(
-                              //                                                                     child: Text(
-                              //                                                                       "Set the new password for your account so you can login and access all the features.",
-                              //                                                                       textAlign: TextAlign.center,
-                              //                                                                       style: TextStyle(
-                              //                                                                         color: CustomColors.primaryText,
-                              //                                                                         fontFamily: "Rubik",
-                              //                                                                         fontStyle: FontStyle.normal,
-                              //                                                                         fontSize: 14,
-                              //                                                                         fontWeight: FontWeight.w400,
-                              //                                                                       ),
-                              //                                                                     ),
-                              //                                                                   ),
-                              //                                                                   const SizedBox(
-                              //                                                                     height: 40,
-                              //                                                                   ),
-                              //                                                                   Form(
-                              //                                                                     key: addPassformKey,
-                              //                                                                     child: Column(
-                              //                                                                       mainAxisAlignment: MainAxisAlignment.center,
-                              //                                                                       children: [
-                              //                                                                         CustomTextFieldWidget(
-                              //                                                                           borderColor: CustomColors.loginBorder,
-                              //                                                                           textStyle: TextStyle(
-                              //                                                                             fontSize: 15,
-                              //                                                                             color: CustomColors.hintText,
-                              //                                                                             fontFamily: "Calibri",
-                              //                                                                             fontWeight: FontWeight.w400,
-                              //                                                                           ),
-                              //                                                                           hintText: "New Password",
-                              //                                                                           controller: passwordController,
-                              //                                                                           obsecure: !_showPassword,
-                              //                                                                           sufIcon: GestureDetector(
-                              //                                                                             onTap: () {
-                              //                                                                               _togglevisibility();
-                              //                                                                             },
-                              //                                                                             child: Padding(
-                              //                                                                               padding: const EdgeInsets.only(left: 8.0),
-                              //                                                                               child: Icon(
-                              //                                                                                 _showPassword ? Icons.visibility : Icons.visibility_off,
-                              //                                                                                 size: 20,
-                              //                                                                                 color: CustomColors.hintText,
-                              //                                                                               ),
-                              //                                                                             ),
-                              //                                                                           ),
-                              //                                                                         ),
-                              //                                                                         const SizedBox(
-                              //                                                                           height: 10,
-                              //                                                                         ),
-                              //                                                                         CustomTextFieldWidget(
-                              //                                                                           borderColor: CustomColors.loginBorder,
-                              //                                                                           textStyle: TextStyle(
-                              //                                                                             fontSize: 15,
-                              //                                                                             color: CustomColors.hintText,
-                              //                                                                             fontFamily: "Calibri",
-                              //                                                                             fontWeight: FontWeight.w400,
-                              //                                                                           ),
-                              //                                                                           hintText: "Re-enter Password",
-                              //                                                                           controller: cpasswordController,
-                              //                                                                           obsecure: !_showPassword,
-                              //                                                                           sufIcon: GestureDetector(
-                              //                                                                             onTap: () {
-                              //                                                                               _togglevisibility();
-                              //                                                                             },
-                              //                                                                             child: Padding(
-                              //                                                                               padding: const EdgeInsets.only(left: 8.0),
-                              //                                                                               child: Icon(
-                              //                                                                                 _showPassword ? Icons.visibility : Icons.visibility_off,
-                              //                                                                                 size: 20,
-                              //                                                                                 color: CustomColors.hintText,
-                              //                                                                               ),
-                              //                                                                             ),
-                              //                                                                           ),
-                              //                                                                         ),
-                              //                                                                         const SizedBox(
-                              //                                                                           height: 20,
-                              //                                                                         ),
-                              //                                                                         // OTP
-                              //                                                                         GestureDetector(
-                              //                                                                           onTap: () {
-                              //                                                                             Navigator.push(
-                              //                                                                               context,
-                              //                                                                               MaterialPageRoute(
-                              //                                                                                 builder: (context) => const BottomBar(),
-                              //                                                                               ),
-                              //                                                                             );
-                              //                                                                           },
-                              //                                                                           child: Container(
-                              //                                                                             width: MediaQuery.of(context).size.width,
-                              //                                                                             height: 54,
-                              //                                                                             decoration: BoxDecoration(
-                              //                                                                               color: CustomColors.primaryColor,
-                              //                                                                               borderRadius: BorderRadius.circular(10),
-                              //                                                                             ),
-                              //                                                                             child: Center(
-                              //                                                                               child: Text(
-                              //                                                                                 "Continue",
-                              //                                                                                 style: TextStyle(
-                              //                                                                                   color: CustomColors.white,
-                              //                                                                                   fontFamily: "Rubik",
-                              //                                                                                   fontStyle: FontStyle.normal,
-                              //                                                                                   fontWeight: FontWeight.w500,
-                              //                                                                                   fontSize: 18,
-                              //                                                                                 ),
-                              //                                                                               ),
-                              //                                                                             ),
-                              //                                                                           ),
-                              //                                                                         ),
-                              //                                                                         const SizedBox(
-                              //                                                                           height: 30,
-                              //                                                                         ),
-                              //                                                                       ],
-                              //                                                                     ),
-                              //                                                                   ),
-                              //                                                                 ],
-                              //                                                               ),
-                              //                                                             ),
-                              //                                                           );
-                              //                                                         },
-                              //                                                       );
-                              //                                                     },
-                              //                                                     child: Container(
-                              //                                                       width: MediaQuery.of(context).size.width,
-                              //                                                       height: 54,
-                              //                                                       decoration: BoxDecoration(
-                              //                                                         color: CustomColors.primaryColor,
-                              //                                                         borderRadius: BorderRadius.circular(10),
-                              //                                                       ),
-                              //                                                       child: Center(
-                              //                                                         child: Text(
-                              //                                                           "Continue",
-                              //                                                           style: TextStyle(
-                              //                                                             color: CustomColors.white,
-                              //                                                             fontFamily: "Rubik",
-                              //                                                             fontStyle: FontStyle.normal,
-                              //                                                             fontWeight: FontWeight.w500,
-                              //                                                             fontSize: 18,
-                              //                                                           ),
-                              //                                                         ),
-                              //                                                       ),
-                              //                                                     ),
-                              //                                                   ),
-                              //                                                   const SizedBox(
-                              //                                                     height: 30,
-                              //                                                   ),
-                              //                                                 ],
-                              //                                               ),
-                              //                                             ),
-                              //                                           ],
-                              //                                         ),
-                              //                                       ),
-                              //                                     );
-                              //                                   },
-                              //                                 );
-                              //                               }
-                              //                             },
-                              //                             child: Container(
-                              //                               width: MediaQuery.of(context).size.width,
-                              //                               height: 54,
-                              //                               decoration: BoxDecoration(
-                              //                                 color: CustomColors.primaryColor,
-                              //                                 borderRadius: BorderRadius.circular(10),
-                              //                               ),
-                              //                               child: Center(
-                              //                                 child: Text(
-                              //                                   "Continue",
-                              //                                   style: TextStyle(
-                              //                                     color: CustomColors.white,
-                              //                                     fontFamily: "Rubik",
-                              //                                     fontStyle: FontStyle.normal,
-                              //                                     fontWeight: FontWeight.w500,
-                              //                                     fontSize: 18,
-                              //                                   ),
-                              //                                 ),
-                              //                               ),
-                              //                             ),
-                              //                           ),
-                              //                           const SizedBox(
-                              //                             height: 30,
-                              //                           ),
-                              //                         ],
-                              //                       ),
-                              //                     ),
-                              //                   ],
-                              //                 ),
-                              //               ),
-                              //             );
-                              //           },
-                              //         );
-                              //       },
-                              //       child: Padding(
-                              //         padding: const EdgeInsets.only(top: 8.0),
-                              //         child: SizedBox(
-                              //           width: 105 * fem,
-                              //           height: 17 * fem,
-                              //           child: Text(
-                              //             'Forgor password',
-                              //             style: TextStyle(
-                              //               fontFamily: 'Rubik',
-                              //               fontSize: 14 * ffem,
-                              //               fontWeight: FontWeight.w400,
-                              //               height: 1.185 * ffem / fem,
-                              //               letterSpacing: -0.3000000119 * fem,
-                              //               color: const Color(0xffffffff),
-                              //             ),
-                              //           ),
-                              //         ),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
@@ -1102,3 +599,513 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+// Forget Password
+// Positioned(
+//   left: 50 * fem,
+//   top: 395 * fem,
+//   child: Align(
+//     child: GestureDetector(
+//       onTap: () {
+//         showModalBottomSheet(
+//           isScrollControlled: true,
+//           context: context,
+//           backgroundColor: Colors.white,
+//           shape: const RoundedRectangleBorder(
+//             borderRadius: BorderRadius.only(
+//               topLeft: Radius.circular(30.0),
+//               topRight: Radius.circular(30.0),
+//             ),
+//           ),
+//           builder: (context) {
+//             return Padding(
+//               padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+//               child: Container(
+//                 padding: const EdgeInsets.symmetric(horizontal: 25),
+//                 child: Column(
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   mainAxisAlignment: MainAxisAlignment.center,
+//                   mainAxisSize: MainAxisSize.min,
+//                   children: [
+//                     const SizedBox(
+//                       height: 20,
+//                     ),
+//                     Center(
+//                       child: Container(
+//                         width: 130,
+//                         height: 5,
+//                         decoration: BoxDecoration(
+//                           color: const Color(0xffC4C4C4),
+//                           borderRadius: BorderRadius.circular(6),
+//                         ),
+//                       ),
+//                     ),
+//                     const SizedBox(
+//                       height: 40,
+//                     ),
+//                     Center(
+//                       child: Text(
+//                         "Forgot Password",
+//                         textAlign: TextAlign.center,
+//                         style: TextStyle(
+//                           color: CustomColors.black,
+//                           fontFamily: "Rubik",
+//                           fontStyle: FontStyle.normal,
+//                           fontSize: 24,
+//                           fontWeight: FontWeight.w600,
+//                         ),
+//                       ),
+//                     ),
+//                     const SizedBox(
+//                       height: 10,
+//                     ),
+//                     Center(
+//                       child: Text(
+//                         "Enter your email for the verification proccess we will send 4 digit code to your email.",
+//                         textAlign: TextAlign.center,
+//                         style: TextStyle(
+//                           color: CustomColors.primaryText,
+//                           fontFamily: "Rubik",
+//                           fontStyle: FontStyle.normal,
+//                           fontSize: 14,
+//                           fontWeight: FontWeight.w400,
+//                         ),
+//                       ),
+//                     ),
+//                     const SizedBox(
+//                       height: 40,
+//                     ),
+//                     Form(
+//                       key: forgetformKey,
+//                       child: Column(
+//                         mainAxisAlignment: MainAxisAlignment.center,
+//                         children: [
+//                           CustomTextFieldWidget(
+//                             borderColor: CustomColors.loginBorder,
+//                             sufIcon: Icon(
+//                               Icons.done,
+//                               color: CustomColors.hintText,
+//                               size: 20,
+//                             ),
+//                             textStyle: TextStyle(
+//                               fontSize: 15,
+//                               color: CustomColors.hintText,
+//                               fontFamily: "Calibri",
+//                               fontWeight: FontWeight.w400,
+//                             ),
+//                             hintText: "xxxxxxxxxxxxx@gmail.com",
+//                             controller: emailController,
+//                             obsecure: false,
+//                           ),
+//                           const SizedBox(
+//                             height: 20,
+//                           ),
+//                           // OTP
+//                           GestureDetector(
+//                             onTap: () {
+//                               if (forgetformKey.currentState!.validate()) {
+//                                 // signInUser();
+//                                 showModalBottomSheet(
+//                                   isScrollControlled: true,
+//                                   context: context,
+//                                   backgroundColor: Colors.white,
+//                                   shape: const RoundedRectangleBorder(
+//                                     borderRadius: BorderRadius.only(
+//                                       topLeft: Radius.circular(30.0),
+//                                       topRight: Radius.circular(30.0),
+//                                     ),
+//                                   ),
+//                                   builder: (context) {
+//                                     return Padding(
+//                                       padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+//                                       child: Container(
+//                                         padding: const EdgeInsets.symmetric(horizontal: 25),
+//                                         child: Column(
+//                                           crossAxisAlignment: CrossAxisAlignment.start,
+//                                           mainAxisAlignment: MainAxisAlignment.center,
+//                                           mainAxisSize: MainAxisSize.min,
+//                                           children: [
+//                                             const SizedBox(
+//                                               height: 20,
+//                                             ),
+//                                             Center(
+//                                               child: Container(
+//                                                 width: 130,
+//                                                 height: 5,
+//                                                 decoration: BoxDecoration(
+//                                                   color: const Color(0xffC4C4C4),
+//                                                   borderRadius: BorderRadius.circular(6),
+//                                                 ),
+//                                               ),
+//                                             ),
+//                                             const SizedBox(
+//                                               height: 50,
+//                                             ),
+//                                             Center(
+//                                               child: Text(
+//                                                 "Enter 4 Digits Code",
+//                                                 textAlign: TextAlign.center,
+//                                                 style: TextStyle(
+//                                                   color: CustomColors.black,
+//                                                   fontFamily: "Rubik",
+//                                                   fontStyle: FontStyle.normal,
+//                                                   fontSize: 24,
+//                                                   fontWeight: FontWeight.w600,
+//                                                 ),
+//                                               ),
+//                                             ),
+//                                             const SizedBox(
+//                                               height: 10,
+//                                             ),
+//                                             Center(
+//                                               child: Text(
+//                                                 "Enter the 4 digits code that you received on your email.",
+//                                                 textAlign: TextAlign.center,
+//                                                 style: TextStyle(
+//                                                   color: CustomColors.primaryText,
+//                                                   fontFamily: "Rubik",
+//                                                   fontStyle: FontStyle.normal,
+//                                                   fontSize: 14,
+//                                                   fontWeight: FontWeight.w400,
+//                                                 ),
+//                                               ),
+//                                             ),
+//                                             const SizedBox(
+//                                               height: 30,
+//                                             ),
+//                                             Form(
+//                                               key: pinformKey,
+//                                               child: Column(
+//                                                 mainAxisAlignment: MainAxisAlignment.center,
+//                                                 children: [
+//                                                   Directionality(
+//                                                     // Specify direction if desired1
+//                                                     textDirection: ui.TextDirection.ltr,
+//                                                     child: Center(
+//                                                       child: Pinput(
+//                                                         closeKeyboardWhenCompleted: true,
+//                                                         mainAxisAlignment: MainAxisAlignment.spaceAround,
+//                                                         controller: pinController,
+//                                                         focusNode: pinfocusNode,
+//                                                         androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsUserConsentApi,
+//                                                         listenForMultipleSmsOnAndroid: true,
+//                                                         defaultPinTheme: defaultPinTheme,
+//                                                         validator: (value) {
+//                                                           return value == '2222' ? null : 'Pin is incorrect';
+//                                                         },
+//                                                         // onClipboardFound: (value) {
+//                                                         //   debugPrint('onClipboardFound: $value');
+//                                                         //   pinController.setText(value);
+//                                                         // },
+//                                                         hapticFeedbackType: HapticFeedbackType.lightImpact,
+//                                                         onCompleted: (pin) {
+//                                                           debugPrint('onCompleted: $pin');
+//                                                         },
+//                                                         onChanged: (value) {
+//                                                           debugPrint('onChanged: $value');
+//                                                         },
+//                                                         cursor: Column(
+//                                                           mainAxisAlignment: MainAxisAlignment.end,
+//                                                           children: [
+//                                                             Container(
+//                                                               margin: const EdgeInsets.only(bottom: 9),
+//                                                               width: 22,
+//                                                               height: 1,
+//                                                               color: focusedBorderColor,
+//                                                             ),
+//                                                           ],
+//                                                         ),
+//                                                         focusedPinTheme: defaultPinTheme.copyWith(
+//                                                           textStyle: TextStyle(
+//                                                             fontSize: 26,
+//                                                             color: CustomColors.otpText,
+//                                                             fontStyle: FontStyle.normal,
+//                                                             fontWeight: FontWeight.w700,
+//                                                           ),
+//                                                           decoration: defaultPinTheme.decoration!.copyWith(
+//                                                             borderRadius: BorderRadius.circular(12),
+//                                                             border: Border.all(color: focusedBorderColor),
+//                                                           ),
+//                                                         ),
+//                                                         submittedPinTheme: defaultPinTheme.copyWith(
+//                                                           decoration: defaultPinTheme.decoration!.copyWith(
+//                                                             color: fillColor,
+//                                                             borderRadius: BorderRadius.circular(12),
+//                                                             border: Border.all(color: focusedBorderColor),
+//                                                           ),
+//                                                         ),
+//                                                         errorPinTheme: defaultPinTheme.copyBorderWith(
+//                                                           border: Border.all(color: Colors.redAccent),
+//                                                         ),
+//                                                       ),
+//                                                     ),
+//                                                   ),
+//                                                   const SizedBox(
+//                                                     height: 20,
+//                                                   ),
+//                                                   GestureDetector(
+//                                                     onTap: () {
+//                                                       // Add New Password
+//                                                       if (pinformKey.currentState!.validate()) {}
+//                                                       showModalBottomSheet(
+//                                                         isScrollControlled: true,
+//                                                         context: context,
+//                                                         backgroundColor: Colors.white,
+//                                                         shape: const RoundedRectangleBorder(
+//                                                           borderRadius: BorderRadius.only(
+//                                                             topLeft: Radius.circular(30.0),
+//                                                             topRight: Radius.circular(30.0),
+//                                                           ),
+//                                                         ),
+//                                                         builder: (context) {
+//                                                           return Padding(
+//                                                             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+//                                                             child: Container(
+//                                                               padding: const EdgeInsets.symmetric(horizontal: 25),
+//                                                               child: Column(
+//                                                                 crossAxisAlignment: CrossAxisAlignment.start,
+//                                                                 mainAxisAlignment: MainAxisAlignment.center,
+//                                                                 mainAxisSize: MainAxisSize.min,
+//                                                                 children: [
+//                                                                   const SizedBox(
+//                                                                     height: 20,
+//                                                                   ),
+//                                                                   Center(
+//                                                                     child: Container(
+//                                                                       width: 130,
+//                                                                       height: 5,
+//                                                                       decoration: BoxDecoration(
+//                                                                         color: const Color(0xffC4C4C4),
+//                                                                         borderRadius: BorderRadius.circular(6),
+//                                                                       ),
+//                                                                     ),
+//                                                                   ),
+//                                                                   const SizedBox(
+//                                                                     height: 40,
+//                                                                   ),
+//                                                                   Center(
+//                                                                     child: Text(
+//                                                                       "Reset Password",
+//                                                                       textAlign: TextAlign.center,
+//                                                                       style: TextStyle(
+//                                                                         color: CustomColors.black,
+//                                                                         fontFamily: "Rubik",
+//                                                                         fontStyle: FontStyle.normal,
+//                                                                         fontSize: 24,
+//                                                                         fontWeight: FontWeight.w600,
+//                                                                       ),
+//                                                                     ),
+//                                                                   ),
+//                                                                   const SizedBox(
+//                                                                     height: 10,
+//                                                                   ),
+//                                                                   Center(
+//                                                                     child: Text(
+//                                                                       "Set the new password for your account so you can login and access all the features.",
+//                                                                       textAlign: TextAlign.center,
+//                                                                       style: TextStyle(
+//                                                                         color: CustomColors.primaryText,
+//                                                                         fontFamily: "Rubik",
+//                                                                         fontStyle: FontStyle.normal,
+//                                                                         fontSize: 14,
+//                                                                         fontWeight: FontWeight.w400,
+//                                                                       ),
+//                                                                     ),
+//                                                                   ),
+//                                                                   const SizedBox(
+//                                                                     height: 40,
+//                                                                   ),
+//                                                                   Form(
+//                                                                     key: addPassformKey,
+//                                                                     child: Column(
+//                                                                       mainAxisAlignment: MainAxisAlignment.center,
+//                                                                       children: [
+//                                                                         CustomTextFieldWidget(
+//                                                                           borderColor: CustomColors.loginBorder,
+//                                                                           textStyle: TextStyle(
+//                                                                             fontSize: 15,
+//                                                                             color: CustomColors.hintText,
+//                                                                             fontFamily: "Calibri",
+//                                                                             fontWeight: FontWeight.w400,
+//                                                                           ),
+//                                                                           hintText: "New Password",
+//                                                                           controller: passwordController,
+//                                                                           obsecure: !_showPassword,
+//                                                                           sufIcon: GestureDetector(
+//                                                                             onTap: () {
+//                                                                               _togglevisibility();
+//                                                                             },
+//                                                                             child: Padding(
+//                                                                               padding: const EdgeInsets.only(left: 8.0),
+//                                                                               child: Icon(
+//                                                                                 _showPassword ? Icons.visibility : Icons.visibility_off,
+//                                                                                 size: 20,
+//                                                                                 color: CustomColors.hintText,
+//                                                                               ),
+//                                                                             ),
+//                                                                           ),
+//                                                                         ),
+//                                                                         const SizedBox(
+//                                                                           height: 10,
+//                                                                         ),
+//                                                                         CustomTextFieldWidget(
+//                                                                           borderColor: CustomColors.loginBorder,
+//                                                                           textStyle: TextStyle(
+//                                                                             fontSize: 15,
+//                                                                             color: CustomColors.hintText,
+//                                                                             fontFamily: "Calibri",
+//                                                                             fontWeight: FontWeight.w400,
+//                                                                           ),
+//                                                                           hintText: "Re-enter Password",
+//                                                                           controller: cpasswordController,
+//                                                                           obsecure: !_showPassword,
+//                                                                           sufIcon: GestureDetector(
+//                                                                             onTap: () {
+//                                                                               _togglevisibility();
+//                                                                             },
+//                                                                             child: Padding(
+//                                                                               padding: const EdgeInsets.only(left: 8.0),
+//                                                                               child: Icon(
+//                                                                                 _showPassword ? Icons.visibility : Icons.visibility_off,
+//                                                                                 size: 20,
+//                                                                                 color: CustomColors.hintText,
+//                                                                               ),
+//                                                                             ),
+//                                                                           ),
+//                                                                         ),
+//                                                                         const SizedBox(
+//                                                                           height: 20,
+//                                                                         ),
+//                                                                         // OTP
+//                                                                         GestureDetector(
+//                                                                           onTap: () {
+//                                                                             Navigator.push(
+//                                                                               context,
+//                                                                               MaterialPageRoute(
+//                                                                                 builder: (context) => const BottomBar(),
+//                                                                               ),
+//                                                                             );
+//                                                                           },
+//                                                                           child: Container(
+//                                                                             width: MediaQuery.of(context).size.width,
+//                                                                             height: 54,
+//                                                                             decoration: BoxDecoration(
+//                                                                               color: CustomColors.primaryColor,
+//                                                                               borderRadius: BorderRadius.circular(10),
+//                                                                             ),
+//                                                                             child: Center(
+//                                                                               child: Text(
+//                                                                                 "Continue",
+//                                                                                 style: TextStyle(
+//                                                                                   color: CustomColors.white,
+//                                                                                   fontFamily: "Rubik",
+//                                                                                   fontStyle: FontStyle.normal,
+//                                                                                   fontWeight: FontWeight.w500,
+//                                                                                   fontSize: 18,
+//                                                                                 ),
+//                                                                               ),
+//                                                                             ),
+//                                                                           ),
+//                                                                         ),
+//                                                                         const SizedBox(
+//                                                                           height: 30,
+//                                                                         ),
+//                                                                       ],
+//                                                                     ),
+//                                                                   ),
+//                                                                 ],
+//                                                               ),
+//                                                             ),
+//                                                           );
+//                                                         },
+//                                                       );
+//                                                     },
+//                                                     child: Container(
+//                                                       width: MediaQuery.of(context).size.width,
+//                                                       height: 54,
+//                                                       decoration: BoxDecoration(
+//                                                         color: CustomColors.primaryColor,
+//                                                         borderRadius: BorderRadius.circular(10),
+//                                                       ),
+//                                                       child: Center(
+//                                                         child: Text(
+//                                                           "Continue",
+//                                                           style: TextStyle(
+//                                                             color: CustomColors.white,
+//                                                             fontFamily: "Rubik",
+//                                                             fontStyle: FontStyle.normal,
+//                                                             fontWeight: FontWeight.w500,
+//                                                             fontSize: 18,
+//                                                           ),
+//                                                         ),
+//                                                       ),
+//                                                     ),
+//                                                   ),
+//                                                   const SizedBox(
+//                                                     height: 30,
+//                                                   ),
+//                                                 ],
+//                                               ),
+//                                             ),
+//                                           ],
+//                                         ),
+//                                       ),
+//                                     );
+//                                   },
+//                                 );
+//                               }
+//                             },
+//                             child: Container(
+//                               width: MediaQuery.of(context).size.width,
+//                               height: 54,
+//                               decoration: BoxDecoration(
+//                                 color: CustomColors.primaryColor,
+//                                 borderRadius: BorderRadius.circular(10),
+//                               ),
+//                               child: Center(
+//                                 child: Text(
+//                                   "Continue",
+//                                   style: TextStyle(
+//                                     color: CustomColors.white,
+//                                     fontFamily: "Rubik",
+//                                     fontStyle: FontStyle.normal,
+//                                     fontWeight: FontWeight.w500,
+//                                     fontSize: 18,
+//                                   ),
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                           const SizedBox(
+//                             height: 30,
+//                           ),
+//                         ],
+//                       ),
+//                     ),
+//                   ],
+//                 ),
+//               ),
+//             );
+//           },
+//         );
+//       },
+//       child: Padding(
+//         padding: const EdgeInsets.only(top: 8.0),
+//         child: SizedBox(
+//           width: 105 * fem,
+//           height: 17 * fem,
+//           child: Text(
+//             'Forgor password',
+//             style: TextStyle(
+//               fontFamily: 'Rubik',
+//               fontSize: 14 * ffem,
+//               fontWeight: FontWeight.w400,
+//               height: 1.185 * ffem / fem,
+//               letterSpacing: -0.3000000119 * fem,
+//               color: const Color(0xffffffff),
+//             ),
+//           ),
+//         ),
+//       ),
+//     ),
+//   ),
+// ),

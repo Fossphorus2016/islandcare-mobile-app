@@ -342,7 +342,7 @@ class NotificationProvider extends ChangeNotifier {
       var userToken = prefs.getString('userToken');
 
       var resp = await Dio().get(
-        "${AppUrl.webBaseURL}/api/get-notifications",
+        AppUrl.getNotification,
         options: Options(headers: {
           "Authorization": "Bearer $userToken",
           "Accept": "application/json",
@@ -356,7 +356,7 @@ class NotificationProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (error) {
-      print(error);
+      print("error on notifiacation get $error");
     }
   }
 }

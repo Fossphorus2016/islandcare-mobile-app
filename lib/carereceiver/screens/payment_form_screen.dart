@@ -24,17 +24,9 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const SizedBox(
-                  height: 20,
-                ),
-                Image.asset(
-                  "assets/images/tick.png",
-                  width: 70,
-                  height: 70,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
+                Image.asset("assets/images/tick.png", width: 70, height: 70),
+                const SizedBox(height: 20),
                 Center(
                   child: Text(
                     'Successful',
@@ -46,9 +38,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Center(
                   child: Text(
                     'Lorem ipsum dolar sit emit consecteter aditising emit',
@@ -61,9 +51,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 30,
-                ),
+                const SizedBox(height: 30),
                 GestureDetector(
                   onTap: () {
                     Navigator.pop(context);
@@ -129,11 +117,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 4.0),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: CustomColors.primaryColor,
-                    size: 18,
-                  ),
+                  child: Icon(Icons.arrow_back_ios, color: CustomColors.primaryColor, size: 18),
                 ),
               ),
             ),
@@ -222,9 +206,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                                         ],
                                       ),
                                     ),
-                                    const SizedBox(
-                                      height: 12,
-                                    ),
+                                    const SizedBox(height: 12),
                                   ],
                                 ),
                               ),
@@ -269,9 +251,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
+                                const SizedBox(width: 20),
                                 Expanded(
                                   child: Container(
                                     padding: const EdgeInsets.all(12),
@@ -316,9 +296,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          const SizedBox(height: 5),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
@@ -374,9 +352,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          const SizedBox(height: 15),
                           // Card Number
                           Container(
                             alignment: Alignment.topLeft,
@@ -390,9 +366,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          const SizedBox(height: 5),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
@@ -448,9 +422,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          const SizedBox(height: 15),
                           // Card Expiry Date
                           Container(
                             alignment: Alignment.topLeft,
@@ -464,9 +436,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          const SizedBox(height: 5),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
@@ -522,9 +492,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          const SizedBox(height: 15),
                           // Card CVV
                           Container(
                             alignment: Alignment.topLeft,
@@ -538,9 +506,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          const SizedBox(height: 5),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
@@ -596,9 +562,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
+                          const SizedBox(height: 15),
                           // Card ZIP CODE
                           Container(
                             alignment: Alignment.topLeft,
@@ -612,9 +576,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 5,
-                          ),
+                          const SizedBox(height: 5),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
@@ -670,9 +632,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 25,
-                          ),
+                          const SizedBox(height: 25),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -696,9 +656,7 @@ class _PaymentFormScreenState extends State<PaymentFormScreen> {
                               ),
                             ],
                           ),
-                          const SizedBox(
-                            height: 25,
-                          ),
+                          const SizedBox(height: 25),
                           // BTN
                           GestureDetector(
                             onTap: () {

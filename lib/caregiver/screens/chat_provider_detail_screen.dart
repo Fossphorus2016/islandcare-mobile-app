@@ -273,13 +273,43 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                 ),
               ),
               const SizedBox(height: 05),
-              Text(
-                DateFormat.jm().format(DateTime.parse(message['updated_at']).toLocal()),
-                style: TextStyle(
-                  fontSize: 13,
-                  fontFamily: "Rubik",
-                  color: CustomColors.white,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    DateFormat.jm().format(DateTime.parse(message['updated_at']).toLocal()),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontFamily: "Rubik",
+                      color: CustomColors.white,
+                    ),
+                  ),
+                  if (message['sender_read'] == 1) ...[
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 2),
+                        child: Icon(
+                          Icons.done_all_rounded,
+                          size: 18,
+                          color: CustomColors.white,
+                        ),
+                      ),
+                    ),
+                  ] else ...[
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 2),
+                        child: Icon(
+                          Icons.done_rounded,
+                          size: 18,
+                          color: CustomColors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ],
           ),
