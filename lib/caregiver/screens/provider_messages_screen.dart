@@ -176,7 +176,7 @@ class ServiceProviderChat extends ChangeNotifier {
     await prefs.reload();
     var userToken = prefs.getString('userToken');
     var resp = await Dio().post(
-      "${AppUrl.webBaseURL}/api/service-provider-message-status",
+      ChatUrl.serviceProviderChatMessageStatus,
       data: {"id": activeChat['id']},
       options: Options(
         headers: {

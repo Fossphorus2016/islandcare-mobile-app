@@ -18,7 +18,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 8),
           child: GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, "sign-up");
+              Navigator.pushNamed(context, "login");
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
@@ -29,7 +29,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
               ),
               child: Center(
                 child: Text(
-                  "Signup",
+                  "Signin",
                   style: TextStyle(
                     color: CustomColors.white,
                     fontFamily: "Rubik",

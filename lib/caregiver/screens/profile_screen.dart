@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
 
+import 'dart:typed_data';
+
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:external_path/external_path.dart';
@@ -206,224 +208,197 @@ class _ProfileGiverState extends State<ProfileGiver> {
                     if (snapshot.hasData) {
                       return Column(
                         children: [
-                          Stack(
-                            children: [
-                              Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.transparent,
-                                ),
-                                alignment: Alignment.centerRight,
-                                width: MediaQuery.of(context).size.width,
-                                height: 250,
-                                child: const RotatedBox(
-                                  quarterTurns: 1,
-                                  child: Text(
-                                    'Container 1',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: -25,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.primaryColor,
-                                    borderRadius: const BorderRadius.only(
-                                      bottomLeft: Radius.circular(12),
-                                      bottomRight: Radius.circular(12),
-                                    ),
-                                  ),
-                                  alignment: Alignment.centerLeft,
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 150,
-                                ),
-                              ),
-                              Positioned(
-                                top: 35,
-                                bottom: 5,
-                                right: 8,
-                                left: 8,
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  width: MediaQuery.of(context).size.width,
-                                  margin: const EdgeInsets.all(7),
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      fit: BoxFit.cover,
-                                      image: AssetImage(
-                                        "assets/images/profileBackground.png",
-                                      ),
-                                    ),
-                                  ),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        snapshot.data!.data!.firstName.toString(),
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w700,
-                                          color: CustomColors.white,
-                                        ),
-                                      ),
-                                      Text(
-                                        snapshot.data!.data!.email.toString(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w400,
-                                          color: CustomColors.white,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                                            decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Color.fromARGB(13, 0, 0, 0),
-                                                  blurRadius: 4.0,
-                                                  spreadRadius: 2.0,
-                                                  offset: Offset(2.0, 2.0),
-                                                ),
-                                              ],
-                                              borderRadius: BorderRadius.only(
-                                                bottomLeft: Radius.circular(6),
-                                                bottomRight: Radius.circular(6),
-                                                topLeft: Radius.circular(6),
-                                                topRight: Radius.circular(6),
-                                              ),
-                                            ),
-                                            child: RichText(
-                                              text: TextSpan(
-                                                children: [
-                                                  WidgetSpan(
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.only(left: 1, right: 5),
-                                                      child: Icon(
-                                                        Icons.phone_outlined,
-                                                        size: 14,
-                                                        color: CustomColors.primaryTextLight,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  TextSpan(
-                                                    text: snapshot.data!.data!.phone.toString(),
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w400,
-                                                      color: CustomColors.primaryTextLight,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
-                                          Container(
-                                            margin: const EdgeInsets.symmetric(horizontal: 14),
-                                            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                                            decoration: const BoxDecoration(
-                                              color: Colors.white,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Color.fromARGB(13, 0, 0, 0),
-                                                  blurRadius: 4.0,
-                                                  spreadRadius: 2.0,
-                                                  offset: Offset(2.0, 2.0),
-                                                ),
-                                              ],
-                                              borderRadius: BorderRadius.only(
-                                                bottomLeft: Radius.circular(6),
-                                                bottomRight: Radius.circular(6),
-                                                topLeft: Radius.circular(6),
-                                                topRight: Radius.circular(6),
-                                              ),
-                                            ),
-                                            child: RichText(
-                                              text: TextSpan(
-                                                children: [
-                                                  WidgetSpan(
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.only(left: 3, right: 5),
-                                                      child: Icon(
-                                                        Icons.location_on_outlined,
-                                                        size: 14,
-                                                        color: CustomColors.primaryTextLight,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  snapshot.data!.data!.userdetail!.address.toString() != "null"
-                                                      ? TextSpan(
-                                                          text: snapshot.data!.data!.userdetail!.address.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.address.toString(),
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            fontWeight: FontWeight.w400,
-                                                            color: CustomColors.primaryTextLight,
-                                                          ),
-                                                        )
-                                                      : TextSpan(
-                                                          text: "Required",
-                                                          style: TextStyle(
-                                                            fontSize: 12,
-                                                            fontWeight: FontWeight.w400,
-                                                            color: CustomColors.red,
-                                                          ),
-                                                        ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 5,
-                                left: 100,
-                                right: 100,
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                                  decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(50),
-                                      bottomRight: Radius.circular(50),
-                                      topLeft: Radius.circular(50),
-                                      topRight: Radius.circular(50),
-                                    ),
-                                  ),
-                                  alignment: Alignment.center,
-                                  width: 84,
-                                  height: 84,
+                          SizedBox(
+                            height: 250,
+                            width: MediaQuery.of(context).size.width,
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  top: -25,
                                   child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.primaryColor,
+                                      borderRadius: const BorderRadius.only(
+                                        bottomLeft: Radius.circular(12),
+                                        bottomRight: Radius.circular(12),
+                                      ),
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 150,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 35,
+                                  bottom: 5,
+                                  right: 8,
+                                  left: 8,
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    width: MediaQuery.of(context).size.width,
+                                    clipBehavior: Clip.antiAlias,
+
+                                    // transform: ,
+                                    // margin: const EdgeInsets.all(7),
                                     decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Color.fromARGB(13, 0, 0, 0),
-                                          blurRadius: 4.0,
-                                          spreadRadius: 2.0,
-                                          offset: Offset(2.0, 2.0),
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(50),
+                                        bottomRight: Radius.circular(50),
+                                      ),
+                                      // image: DecorationImage(
+                                      //   alignment: Alignment.topCenter,
+                                      //   fit: BoxFit.fitWidth,
+
+                                      //   image: AssetImage(
+                                      //     "assets/images/profileBackground.png",
+                                      //   ),
+                                      // ),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          snapshot.data!.data!.firstName.toString(),
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w700,
+                                            color: CustomColors.white,
+                                          ),
+                                        ),
+                                        Text(
+                                          snapshot.data!.data!.email.toString(),
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w400,
+                                            color: CustomColors.white,
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                    blurRadius: 4.0,
+                                                    spreadRadius: 2.0,
+                                                    offset: Offset(2.0, 2.0),
+                                                  ),
+                                                ],
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft: Radius.circular(6),
+                                                  bottomRight: Radius.circular(6),
+                                                  topLeft: Radius.circular(6),
+                                                  topRight: Radius.circular(6),
+                                                ),
+                                              ),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: [
+                                                    WidgetSpan(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left: 1, right: 5),
+                                                        child: Icon(
+                                                          Icons.phone_outlined,
+                                                          size: 14,
+                                                          color: CustomColors.primaryTextLight,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    TextSpan(
+                                                      text: snapshot.data!.data!.phone.toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w400,
+                                                        color: CustomColors.primaryTextLight,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Container(
+                                              margin: const EdgeInsets.symmetric(horizontal: 14),
+                                              padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                    blurRadius: 4.0,
+                                                    spreadRadius: 2.0,
+                                                    offset: Offset(2.0, 2.0),
+                                                  ),
+                                                ],
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft: Radius.circular(6),
+                                                  bottomRight: Radius.circular(6),
+                                                  topLeft: Radius.circular(6),
+                                                  topRight: Radius.circular(6),
+                                                ),
+                                              ),
+                                              child: RichText(
+                                                text: TextSpan(
+                                                  children: [
+                                                    WidgetSpan(
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.only(left: 3, right: 5),
+                                                        child: Icon(
+                                                          Icons.location_on_outlined,
+                                                          size: 14,
+                                                          color: CustomColors.primaryTextLight,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    snapshot.data!.data!.userdetail!.address.toString() != "null"
+                                                        ? TextSpan(
+                                                            text: snapshot.data!.data!.userdetail!.address.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.address.toString(),
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: CustomColors.primaryTextLight,
+                                                            ),
+                                                          )
+                                                        : TextSpan(
+                                                            text: "Required",
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: CustomColors.red,
+                                                            ),
+                                                          ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  top: 5,
+                                  left: 100,
+                                  right: 100,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    decoration: const BoxDecoration(
                                       borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(50),
                                         bottomRight: Radius.circular(50),
@@ -431,40 +406,77 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                         topRight: Radius.circular(50),
                                       ),
                                     ),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ProfileGiverPendingEdit(
-                                              avatar: snapshot.data!.data!.avatar.toString(),
-                                              gender: snapshot.data!.data!.userdetail!.gender.toString(),
-                                              phoneNumber: snapshot.data!.data!.phone.toString(),
-                                              dob: snapshot.data!.data!.userdetail!.dob.toString(),
-                                              yoe: snapshot.data!.data!.userdetailprovider!.experience.toString(),
-                                              hourlyRate: snapshot.data!.data!.userdetailprovider!.hourlyRate.toString(),
-                                              userAddress: snapshot.data!.data!.userdetail!.address.toString(),
-                                              zipCode: snapshot.data!.data!.userdetail!.zip.toString(),
-                                              additionalService: snapshot.data!.data!.userdetailprovider!.keywords.toString(),
-                                              availability: snapshot.data!.data!.userdetailprovider!.availability.toString(),
-                                              userInfo: snapshot.data!.data!.userdetail!.userInfo.toString(),
-                                              enhancedCriminal: snapshot.data!.data!.providerverification!.enhancedCriminal,
-                                              enhancedCriminalStatus: snapshot.data!.data!.providerverification!.enhancedCriminalVerify,
-                                              basicCriminal: snapshot.data!.data!.providerverification!.basicCriminal,
-                                              basicCriminalStatus: snapshot.data!.data!.providerverification!.basicCriminalVerify,
-                                              firstAid: snapshot.data!.data!.providerverification!.firstAid,
-                                              firstAidStatus: snapshot.data!.data!.providerverification!.firstAidVerify,
-                                              vehicleRecord: snapshot.data!.data!.providerverification!.vehicleRecord,
-                                              vehicleRecordStatus: snapshot.data!.data!.providerverification!.vehicleRecordVerify,
-                                            ),
+                                    alignment: Alignment.center,
+                                    width: 90,
+                                    height: 90,
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                          // color: Colors.white,
+                                          // boxShadow: [
+                                          //   BoxShadow(
+                                          //     color: Color.fromARGB(13, 0, 0, 0),
+                                          //     blurRadius: 4.0,
+                                          //     spreadRadius: 2.0,
+                                          //     offset: Offset(2.0, 2.0),
+                                          //   ),
+                                          // ],
+                                          // borderRadius: BorderRadius.only(
+                                          //   bottomLeft: Radius.circular(50),
+                                          //   bottomRight: Radius.circular(50),
+                                          //   topLeft: Radius.circular(50),
+                                          //   topRight: Radius.circular(50),
+                                          // ),
                                           ),
-                                        );
-                                      },
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ProfileGiverPendingEdit(
+                                                avatar: snapshot.data!.data!.avatar.toString(),
+                                                gender: snapshot.data!.data!.userdetail!.gender.toString(),
+                                                phoneNumber: snapshot.data!.data!.phone.toString(),
+                                                dob: snapshot.data!.data!.userdetail!.dob.toString(),
+                                                yoe: snapshot.data!.data!.userdetailprovider!.experience.toString(),
+                                                hourlyRate: snapshot.data!.data!.userdetailprovider!.hourlyRate.toString(),
+                                                userAddress: snapshot.data!.data!.userdetail!.address.toString(),
+                                                zipCode: snapshot.data!.data!.userdetail!.zip.toString(),
+                                                additionalService: snapshot.data!.data!.userdetailprovider!.keywords.toString(),
+                                                availability: snapshot.data!.data!.userdetailprovider!.availability.toString(),
+                                                userInfo: snapshot.data!.data!.userdetail!.userInfo.toString(),
+                                                enhancedCriminal: snapshot.data!.data!.providerverification!.enhancedCriminal,
+                                                enhancedCriminalStatus: snapshot.data!.data!.providerverification!.enhancedCriminalVerify,
+                                                basicCriminal: snapshot.data!.data!.providerverification!.basicCriminal,
+                                                basicCriminalStatus: snapshot.data!.data!.providerverification!.basicCriminalVerify,
+                                                firstAid: snapshot.data!.data!.providerverification!.firstAid,
+                                                firstAidStatus: snapshot.data!.data!.providerverification!.firstAidVerify,
+                                                vehicleRecord: snapshot.data!.data!.providerverification!.vehicleRecord,
+                                                vehicleRecordStatus: snapshot.data!.data!.providerverification!.vehicleRecordVerify,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Center(
+                                            child: ClipPath(
+                                          // clipper: const ShapeBorderClipper(shape: ),
+                                          // borderRadius: BorderRadius.circular(500),
+                                          child: Image(
+                                            image: NetworkImage("${AppUrl.webStorageUrl}/${snapshot.data!.data!.avatar.toString()}"),
+                                          ),
+                                        )),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          ),
+                          CustomPaint(
+                            painter: HeaderCurvedContainer(),
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                            ),
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 18),
@@ -1496,6 +1508,33 @@ class _ProfileGiverState extends State<ProfileGiver> {
       ),
     );
   }
+}
+
+class HeaderCurvedContainer extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    Paint paint = Paint()
+      ..color = const Color(0xffea5d49)
+      ..style = PaintingStyle.fill;
+
+    Path path = Path()
+      ..relativeLineTo(0, 100)
+      ..quadraticBezierTo(size.width / 2, 80, size.width, 100)
+      ..relativeLineTo(0, -100)
+      ..quadraticBezierTo(size.width / 2, 100.0, size.width, 100)
+      ..close();
+    // Path topStrokePath = Path()
+    //   ..moveTo(0, 0)
+    //   ..lineTo(size.width, 0);
+
+    // // Combine the main path and top stroke path
+    // path.addPath(topStrokePath, Offset.zero);
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
 
 class ProfileGiverPending extends StatefulWidget {

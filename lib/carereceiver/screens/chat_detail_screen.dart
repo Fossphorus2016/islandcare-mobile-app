@@ -282,7 +282,7 @@ class ChatDetailPageState extends State<ChatDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    DateFormat.jm().format(DateTime.parse(message['updated_at']).toLocal()),
+                    DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()),
                     style: TextStyle(
                       fontSize: 13,
                       fontFamily: "Rubik",
@@ -356,7 +356,7 @@ class ChatDetailPageState extends State<ChatDetailPage> {
               ),
               const SizedBox(height: 05),
               Text(
-                DateFormat.jm().format(DateTime.parse(message['updated_at']).toLocal()),
+                DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()),
                 style: TextStyle(
                   fontSize: 13,
                   fontFamily: "Rubik",

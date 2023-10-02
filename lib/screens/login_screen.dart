@@ -87,9 +87,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    double baseWidth = 360;
-    double fem = MediaQuery.of(context).size.width / baseWidth;
-    double ffem = fem * 0.97;
+    // double baseWidth = 300;
+    // double fem = MediaQuery.of(context).size.width / baseWidth;
+    // double ffem = fem * 0.50;
 
     const focusedBorderColor = Color.fromRGBO(23, 171, 144, 1);
     const fillColor = Color.fromRGBO(243, 246, 249, 0);
@@ -111,479 +111,333 @@ class _LoginScreenState extends State<LoginScreen> {
     );
     return SafeArea(
       child: Scaffold(
-        body: ListView(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              child: Container(
-                width: double.infinity,
-                height: 800 * fem,
-                decoration: const BoxDecoration(
-                  color: Color(0xffffffff),
-                ),
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 56 * fem),
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Color(0xfff2f4f7),
-                  ),
-                  child: Form(
-                    key: _signInFormKey,
+        body: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Form(
+            key: _signInFormKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 8,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      // color: Color(0xfff2f4f7),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        alignment: Alignment.bottomCenter,
+                        image: AssetImage(
+                          // fit: BoxFit.cover,
+                          'assets/images/loginBg.png',
+                          // width: 363 * fem,
+                          // height: 503 * fem,
+                          // scale: 2.5,
+                          // alignment: Alignment.bottomCenter,
+                        ),
+                      ),
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                    height: double.infinity,
+                    padding: const EdgeInsets.fromLTRB(40, 0, 40, 60),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        // logo
                         SizedBox(
-                          width: 363 * fem,
-                          height: 546 * fem,
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                left: 0 * fem,
-                                top: 0 * fem,
-                                child: Align(
-                                  child: SizedBox(
-                                    width: 363 * fem,
-                                    height: 503 * fem,
-                                    child: Image.asset(
-                                      fit: BoxFit.cover,
-                                      'assets/images/loginBg.png',
-                                      width: 363 * fem,
-                                      height: 503 * fem,
-                                      scale: 2.5,
-                                      alignment: Alignment.bottomCenter,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              // Login btn
-                              Positioned(
-                                left: 74 * fem,
-                                top: 470 * fem,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (emailController.text.isEmpty) {
-                                      customErrorSnackBar(
-                                        context,
-                                        "Please Enter Email",
-                                      );
-                                    } else if (passwordController.text.isEmpty) {
-                                      customErrorSnackBar(
-                                        context,
-                                        "Please Enter Password",
-                                      );
-                                    } else if (passwordController.text.length < 3) {
-                                      customErrorSnackBar(
-                                        context,
-                                        "Please Enter 3 digit Password",
-                                      );
-                                    } else {
-                                      if (_signInFormKey.currentState!.validate()) {
-                                        var request = LoginModel(
-                                          email: emailController.text.toString(),
-                                          password: passwordController.text.toString(),
-                                        );
-                                        postLogin(request).then((response) async {
-                                          print(response.data);
-                                          if (response.statusCode == 200) {
-                                            var data = response.data;
-                                            var role = data["user"]["role"];
-                                            var status = data["user"]["status"];
-                                            var token = data["token"];
-                                            var isProfileCompleted = data["is_profile_completed"];
-                                            var userId = data["user"]['id'];
-                                            var avatar = data["user"]['avatar'];
-                                            var name = data["user"]['first_name'];
-                                            var last = data["user"]['last_name'];
-
-                                            if (status == 3) {
-                                              customErrorSnackBar(
-                                                context,
-                                                "User Blocked",
-                                              );
-                                            } else {
-                                              if (data["user"]["email_verified_at"] == null) {
-                                                Navigator.pushReplacement(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => VerifyEmail(token: data["token"]),
-                                                  ),
-                                                );
-                                              } else if (data["user"]["role"] == 3) {
-                                                // Provider.of<UserProvider>(context, listen: false).setUserToken(data['token']);
-                                                if (data["user"]["status"] == 0) {
-                                                  SharedPreferences pref = await SharedPreferences.getInstance();
-                                                  await pref.setString('userStatus', status.toString());
-                                                  await pref.setString('userTokenProfile', data["token"].toString());
-                                                  await pref.setString('userAvatar', avatar.toString());
-                                                  await pref.setString('userId', userId.toString());
-                                                  await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                                  await pref.setString('userName', "$name $last");
-
-                                                  Navigator.pushNamedAndRemoveUntil(
-                                                    context,
-                                                    'bottom-bar-giver-2',
-                                                    (route) => false,
-                                                  );
-                                                } else {
-                                                  SharedPreferences pref = await SharedPreferences.getInstance();
-                                                  await pref.setString('userRole', data["user"]["role"].toString());
-                                                  await pref.setString('userToken', data["token"].toString());
-                                                  await pref.setString('userStatus', status.toString());
-                                                  await pref.setString('userId', userId.toString());
-                                                  await pref.setString('userAvatar', avatar.toString());
-                                                  await pref.setString('userName', "$name $last");
-                                                  await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
-                                                }
-
-                                                Provider.of<UserProvider>(context, listen: false).getUserToken();
-                                              } else if (data["user"]["role"] == 4) {
-                                                // Provider.of<UserProvider>(context, listen: false).setUserToken(data['token']);
-                                                if (data["user"]["status"] == 0) {
-                                                  SharedPreferences pref = await SharedPreferences.getInstance();
-                                                  await pref.setString('userStatus', status.toString());
-                                                  await pref.setString('userTokenProfile', data["token"].toString());
-                                                  await pref.setString('userAvatar', avatar.toString());
-                                                  await pref.setString('userId', userId.toString());
-                                                  await pref.setString('userName', "$name $last");
-                                                  await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-
-                                                  Navigator.pushAndRemoveUntil(
-                                                    context,
-                                                    // 'bottom-bar-2',
-                                                    MaterialPageRoute(
-                                                      builder: (context) => BottomBar(
-                                                        data: data['token'].toString(),
-                                                      ),
-                                                    ),
-                                                    (route) => false,
-                                                  );
-                                                } else {
-                                                  SharedPreferences pref = await SharedPreferences.getInstance();
-                                                  await pref.setString('userRole', data["user"]["role"].toString());
-                                                  await pref.setString('userToken', data["token"].toString());
-                                                  await pref.setString('userStatus', status.toString());
-                                                  await pref.setString('userId', userId.toString());
-                                                  await pref.setString('userAvatar', avatar.toString());
-                                                  await pref.setString('userName', "$name $last");
-                                                  await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
-                                                }
-                                                Provider.of<UserProvider>(context, listen: false).getUserToken();
-                                              }
-                                            }
-                                          } else {
-                                            customErrorSnackBar(
-                                              context,
-                                              "Bad Credentials",
-                                            );
-                                          }
-                                        });
-                                      }
-                                    }
-                                  },
-                                  child: Container(
-                                    width: 220 * fem,
-                                    height: 60 * fem,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xffffffff),
-                                      borderRadius: BorderRadius.circular(6 * fem),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: const Color(0x3f000000),
-                                          offset: Offset(2 * fem, 4 * fem),
-                                          blurRadius: 3.5 * fem,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'Log In',
-                                        style: TextStyle(
-                                          fontFamily: 'Rubik',
-                                          fontSize: 20 * ffem,
-                                          fontWeight: FontWeight.w700,
-                                          color: CustomColors.primaryColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 23 * fem,
-                                top: 281 * fem,
-                                child: Container(
-                                  width: 320 * fem,
-                                  height: 130.8 * fem,
-                                  decoration: const BoxDecoration(),
-                                  child: Stack(
-                                    children: [
-                                      // Name Textfield
-                                      Positioned(
-                                        left: 0 * fem,
-                                        top: 0 * fem,
-                                        child: Container(
-                                          width: 320 * fem,
-                                          height: 48.86 * fem,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: const Color(0xff938284)),
-                                            color: const Color(0x28efefef),
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(6 * fem),
-                                              topRight: Radius.circular(6 * fem),
-                                              bottomLeft: Radius.circular(6 * fem),
-                                              bottomRight: Radius.circular(6 * fem),
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: const Color(0x16000000),
-                                                offset: Offset(0 * fem, 4 * fem),
-                                                blurRadius: 2 * fem,
-                                              ),
-                                            ],
-                                          ),
-                                          child: TextFormField(
-                                            controller: emailController,
-                                            validator: (value) {
-                                              if (value!.isEmpty) {
-                                                return customErrorSnackBar(
-                                                  context,
-                                                  "Please Enter Email",
-                                                );
-                                              }
-                                              if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
-                                                return customErrorSnackBar(
-                                                  context,
-                                                  "Please Enter Email",
-                                                );
-                                              }
-                                              return null;
-                                            },
-                                            keyboardType: TextInputType.emailAddress,
-                                            textInputAction: TextInputAction.next,
-                                            style: TextStyle(
-                                              color: CustomColors.white,
-                                              fontSize: 16,
-                                              fontFamily: "Rubik",
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                            textAlignVertical: TextAlignVertical.center,
-                                            maxLines: 1,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              prefixIcon: Icon(
-                                                Icons.mail_outline,
-                                                size: 20,
-                                                color: CustomColors.white,
-                                              ),
-                                              hintText: "Email",
-                                              hintStyle: TextStyle(
-                                                fontFamily: 'Calibri',
-                                                fontSize: 18 * ffem,
-                                                fontWeight: FontWeight.w400,
-                                                height: 1.2575 * ffem / fem,
-                                                color: CustomColors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      // Password TextField
-                                      Positioned(
-                                        left: 0 * fem,
-                                        top: 65.9428710938 * fem,
-                                        child: Container(
-                                          width: 320 * fem,
-                                          height: 48.86 * fem,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(color: const Color(0xff948284)),
-                                            color: const Color(0x28efefef),
-                                            borderRadius: BorderRadius.only(
-                                              bottomRight: Radius.circular(6 * fem),
-                                              bottomLeft: Radius.circular(6 * fem),
-                                              topLeft: Radius.circular(6 * fem),
-                                              topRight: Radius.circular(6 * fem),
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: const Color(0x16000000),
-                                                offset: Offset(0 * fem, 4 * fem),
-                                                blurRadius: 2 * fem,
-                                              ),
-                                            ],
-                                          ),
-                                          child: TextFormField(
-                                            controller: passwordController,
-                                            obscureText: !_showPassword,
-                                            style: TextStyle(
-                                              color: CustomColors.white,
-                                              fontSize: 16,
-                                              fontFamily: "Rubik",
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                            textAlignVertical: TextAlignVertical.center,
-                                            maxLines: 1,
-                                            decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              prefixIcon: Icon(
-                                                Icons.lock_outline,
-                                                size: 20,
-                                                color: CustomColors.white,
-                                              ),
-                                              suffixIcon: GestureDetector(
-                                                onTap: () {
-                                                  _togglevisibility();
-                                                },
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(left: 8.0),
-                                                  child: Icon(
-                                                    _showPassword ? Icons.visibility : Icons.visibility_off,
-                                                    size: 20,
-                                                    color: CustomColors.white,
-                                                  ),
-                                                ),
-                                              ),
-                                              hintText: "Password",
-                                              hintStyle: TextStyle(
-                                                fontFamily: 'Calibri',
-                                                fontSize: 18 * ffem,
-                                                fontWeight: FontWeight.w400,
-                                                height: 1.2575 * ffem / fem,
-                                                color: CustomColors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              // logo
-                              Positioned(
-                                left: 93 * fem,
-                                top: 32 * fem,
-                                child: Align(
-                                  child: SizedBox(
-                                    width: 175 * fem,
-                                    height: 121 * fem,
-                                    child: Image.asset(
-                                      'assets/images/Logo-light.png',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                left: 43 * fem,
-                                top: 163 * fem,
-                                child: SizedBox(
-                                  width: 269 * fem,
-                                  height: 89 * fem,
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      // welcome
-                                      Container(
-                                        margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 7 * fem),
-                                        child: Text(
-                                          "Welcome",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: CustomColors.white,
-                                            fontFamily: "Rubik",
-                                            fontStyle: FontStyle.normal,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                      // youcansearchcourseapplycoursea
-                                      Container(
-                                        constraints: BoxConstraints(
-                                          maxWidth: 269 * fem,
-                                        ),
-                                        child: Text(
-                                          'You can search course, apply course \nand find caregiver',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontFamily: 'Rubik',
-                                            fontSize: 16 * ffem,
-                                            fontWeight: FontWeight.w400,
-                                            height: 1.6560000181 * ffem / fem,
-                                            letterSpacing: -0.3000000119 * fem,
-                                            color: const Color(0xffffffff),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                          // width: 175,
+                          height: 200,
+                          child: Image.asset(
+                            'assets/images/Logo-light.png',
+                            fit: BoxFit.cover,
                           ),
                         ),
-                        // Need help logging in
-                        Container(
-                          margin: EdgeInsets.fromLTRB(
-                            16 * fem,
-                            12 * fem,
-                            0 * fem,
-                            49.5 * fem,
+                        Text(
+                          "Welcome",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: CustomColors.white,
+                            fontFamily: "Rubik",
+                            fontStyle: FontStyle.normal,
+                            fontSize: MediaQuery.of(context).size.width > 460 ? 32 : 24,
+                            fontWeight: FontWeight.w500,
                           ),
-                          child: Text(
-                            'Need help logging in?',
-                            style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontStyle: FontStyle.italic,
-                              fontSize: 16 * ffem,
-                              fontWeight: FontWeight.w500,
-                              height: 1.2575 * ffem / fem,
-                              color: const Color(0xff131313),
+                        ),
+                        const SizedBox(height: 10),
+                        // youcansearchcourseapplycoursea
+                        Text(
+                          'You can search course, apply course \nand find caregiver',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Rubik',
+                            fontSize: MediaQuery.of(context).size.width > 460 ? 24 : 16,
+                            fontWeight: FontWeight.w400,
+                            // height: 1.6560000181 * ffem / fem,
+                            // letterSpacing: -0.3000000119 * fem,
+                            color: const Color(0xffffffff),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        // Login Fields
+                        TextFormField(
+                          controller: emailController,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return customErrorSnackBar(context, "Please Enter Email");
+                            }
+                            if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+                              return customErrorSnackBar(context, "Please Enter Email");
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          style: TextStyle(
+                            color: CustomColors.white,
+                            fontSize: 16,
+                            fontFamily: "Rubik",
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                style: BorderStyle.solid,
+                                color: Color(0xff938284),
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                style: BorderStyle.solid,
+                                color: Color(0xff938284),
+                              ),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.mail_outline,
+                              color: CustomColors.white,
+                            ),
+                            hintText: "Email",
+                            hintStyle: TextStyle(
+                              fontFamily: 'Calibri',
+                              fontWeight: FontWeight.w400,
+                              color: CustomColors.white,
                             ),
                           ),
                         ),
-                        // Don’t have an account
-                        Container(
-                          margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0 * fem, 0 * fem),
-                          child: RichText(
-                            text: TextSpan(
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16 * ffem,
-                                fontWeight: FontWeight.w400,
-                                height: 1.1849999428 * ffem / fem,
-                                color: const Color(0xff201e1d),
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        // Password TextField
+                        TextFormField(
+                          controller: passwordController,
+                          obscureText: !_showPassword,
+                          style: TextStyle(
+                            color: CustomColors.white,
+                            fontSize: 16,
+                            fontFamily: "Rubik",
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                style: BorderStyle.solid,
+                                color: Color(0xff938284),
                               ),
-                              children: [
-                                TextSpan(
-                                  text: 'Don’t have an account?',
-                                  style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontStyle: FontStyle.italic,
-                                    fontSize: 16 * ffem,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.2575 * ffem / fem,
-                                    color: const Color(0xff201e1d),
-                                  ),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(
+                                style: BorderStyle.solid,
+                                color: Color(0xff938284),
+                              ),
+                            ),
+                            prefixIcon: Icon(
+                              Icons.lock_outline,
+                              // size: 16 * fem,
+                              color: CustomColors.white,
+                            ),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                _togglevisibility();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                                child: Icon(
+                                  _showPassword ? Icons.visibility : Icons.visibility_off,
+                                  // size: 16 * fem,
+                                  color: CustomColors.white,
                                 ),
-                                TextSpan(
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.pushNamed(context, "sign-up");
-                                    },
-                                  text: ' Register here',
-                                  style: TextStyle(
-                                    fontFamily: 'Rubik',
-                                    fontSize: 16 * ffem,
-                                    fontWeight: FontWeight.w700,
-                                    height: 1.185 * ffem / fem,
-                                    color: const Color(0xff201e1d),
-                                  ),
+                              ),
+                            ),
+                            hintText: "Password",
+                            hintStyle: TextStyle(
+                              fontFamily: 'Calibri',
+                              // fontSize: 18 * ffem,
+                              fontWeight: FontWeight.w400,
+                              // height: 1.2575 * ffem / fem,
+                              color: CustomColors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        // Login btn
+                        GestureDetector(
+                          onTap: () {
+                            if (emailController.text.isEmpty) {
+                              customErrorSnackBar(
+                                context,
+                                "Please Enter Email",
+                              );
+                            } else if (passwordController.text.isEmpty) {
+                              customErrorSnackBar(
+                                context,
+                                "Please Enter Password",
+                              );
+                            } else if (passwordController.text.length < 3) {
+                              customErrorSnackBar(
+                                context,
+                                "Please Enter 3 digit Password",
+                              );
+                            } else {
+                              if (_signInFormKey.currentState!.validate()) {
+                                var request = LoginModel(
+                                  email: emailController.text.toString(),
+                                  password: passwordController.text.toString(),
+                                );
+                                postLogin(request).then((response) async {
+                                  print(response.data);
+                                  if (response.statusCode == 200) {
+                                    var data = response.data;
+                                    var role = data["user"]["role"];
+                                    var status = data["user"]["status"];
+                                    var token = data["token"];
+                                    var isProfileCompleted = data["is_profile_completed"];
+                                    var userId = data["user"]['id'];
+                                    var avatar = data["user"]['avatar'];
+                                    var name = data["user"]['first_name'];
+                                    var last = data["user"]['last_name'];
+
+                                    if (status == 3) {
+                                      customErrorSnackBar(
+                                        context,
+                                        "User Blocked",
+                                      );
+                                    } else {
+                                      if (data["user"]["email_verified_at"] == null) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => VerifyEmail(token: data["token"]),
+                                          ),
+                                        );
+                                      } else if (data["user"]["role"] == 3) {
+                                        // Provider.of<UserProvider>(context, listen: false).setUserToken(data['token']);
+                                        if (data["user"]["status"] == 0) {
+                                          SharedPreferences pref = await SharedPreferences.getInstance();
+                                          await pref.setString('userStatus', status.toString());
+                                          await pref.setString('userTokenProfile', data["token"].toString());
+                                          await pref.setString('userAvatar', avatar.toString());
+                                          await pref.setString('userId', userId.toString());
+                                          await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                          await pref.setString('userName', "$name $last");
+
+                                          Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            'bottom-bar-giver-2',
+                                            (route) => false,
+                                          );
+                                        } else {
+                                          SharedPreferences pref = await SharedPreferences.getInstance();
+                                          await pref.setString('userRole', data["user"]["role"].toString());
+                                          await pref.setString('userToken', data["token"].toString());
+                                          await pref.setString('userStatus', status.toString());
+                                          await pref.setString('userId', userId.toString());
+                                          await pref.setString('userAvatar', avatar.toString());
+                                          await pref.setString('userName', "$name $last");
+                                          await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
+                                        }
+
+                                        Provider.of<UserProvider>(context, listen: false).getUserToken();
+                                      } else if (data["user"]["role"] == 4) {
+                                        // Provider.of<UserProvider>(context, listen: false).setUserToken(data['token']);
+                                        if (data["user"]["status"] == 0) {
+                                          SharedPreferences pref = await SharedPreferences.getInstance();
+                                          await pref.setString('userStatus', status.toString());
+                                          await pref.setString('userTokenProfile', data["token"].toString());
+                                          await pref.setString('userAvatar', avatar.toString());
+                                          await pref.setString('userId', userId.toString());
+                                          await pref.setString('userName', "$name $last");
+                                          await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            // 'bottom-bar-2',
+                                            MaterialPageRoute(
+                                              builder: (context) => BottomBar(
+                                                data: data['token'].toString(),
+                                              ),
+                                            ),
+                                            (route) => false,
+                                          );
+                                        } else {
+                                          SharedPreferences pref = await SharedPreferences.getInstance();
+                                          await pref.setString('userRole', data["user"]["role"].toString());
+                                          await pref.setString('userToken', data["token"].toString());
+                                          await pref.setString('userStatus', status.toString());
+                                          await pref.setString('userId', userId.toString());
+                                          await pref.setString('userAvatar', avatar.toString());
+                                          await pref.setString('userName', "$name $last");
+                                          await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
+                                        }
+                                        Provider.of<UserProvider>(context, listen: false).getUserToken();
+                                      }
+                                    }
+                                  } else {
+                                    customErrorSnackBar(
+                                      context,
+                                      "Bad Credentials",
+                                    );
+                                  }
+                                });
+                              }
+                            }
+                          },
+                          child: Container(
+                            width: 220,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: const Color(0xffffffff),
+                              borderRadius: BorderRadius.circular(15),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0x3f000000),
+                                  offset: Offset(2, 4),
+                                  blurRadius: 3.5,
                                 ),
                               ],
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Log In',
+                                style: TextStyle(
+                                  fontFamily: 'Rubik',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w700,
+                                  color: CustomColors.primaryColor,
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -591,9 +445,67 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-              ),
+                Expanded(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      // Need help logging in
+                      Text(
+                        'Need help logging in?',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontStyle: FontStyle.italic,
+                          fontSize: MediaQuery.of(context).size.width > 460 ? 24 : 16,
+                          fontWeight: FontWeight.w500,
+                          height: 3.2575,
+                          color: const Color(0xff131313),
+                        ),
+                      ),
+                      // Don’t have an account
+                      RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                            // fontSize: 16 * ffem,
+                            fontWeight: FontWeight.w400,
+                            // height: 1.1849999428 * ffem / fem,
+                            color: Color(0xff201e1d),
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'Don’t have an account?',
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontStyle: FontStyle.italic,
+                                fontSize: MediaQuery.of(context).size.width > 460 ? 24 : 16,
+                                fontWeight: FontWeight.w400,
+                                // height: 1.2575 * ffem / fem,
+                                color: const Color(0xff201e1d),
+                              ),
+                            ),
+                            TextSpan(
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushNamed(context, "sign-up");
+                                },
+                              text: ' Register here',
+                              style: TextStyle(
+                                fontFamily: 'Rubik',
+                                fontSize: MediaQuery.of(context).size.width > 460 ? 24 : 16,
+                                fontWeight: FontWeight.w700,
+                                // height: 1.185 * ffem / fem,
+                                color: const Color(0xff201e1d),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
