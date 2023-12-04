@@ -49,6 +49,9 @@ class Job {
     this.fundsTransferedToProvider,
     this.totalDuration,
     this.service,
+    this.userImage,
+    this.userFirstName,
+    this.userLastName,
   });
 
   int? id;
@@ -70,7 +73,9 @@ class Job {
   int? fundsTransferedToProvider;
   String? totalDuration;
   Service? service;
-
+  String? userImage;
+  String? userFirstName;
+  String? userLastName;
   factory Job.fromJson(Map<String, dynamic> json) => Job(
         id: json["id"],
         jobTitle: json["job_title"],
@@ -91,6 +96,9 @@ class Job {
         fundsTransferedToProvider: json["funds_transfered_to_provider"],
         totalDuration: json["total_duration"],
         service: json["service"] == null ? null : Service.fromJson(json["service"]),
+        userImage: json['user']['avatar'],
+        userFirstName: json['user']['first_name'],
+        userLastName: json['user']['last_name'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -113,6 +121,9 @@ class Job {
         "funds_transfered_to_provider": fundsTransferedToProvider,
         "total_duration": totalDuration,
         "service": service?.toJson(),
+        "userImage": "",
+        "userFirstName": "",
+        "userLastName": "",
       };
 }
 

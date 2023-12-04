@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
 import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/widgets/receommend_job_widget.dart';
 import 'package:island_app/res/app_url.dart';
@@ -215,6 +216,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   bool? isRecommended = true;
   @override
   Widget build(BuildContext context) {
+    print(token);
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomColors.loginBg,
@@ -321,9 +323,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
               Stack(
                 children: [
                   Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                    ),
+                    decoration: const BoxDecoration(color: Colors.transparent),
                     alignment: Alignment.centerRight,
                     width: MediaQuery.of(context).size.width,
                     height: 100,
@@ -781,11 +781,8 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                   ),
                 ],
               ),
-
               // isRecommended
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               Column(
                 children: [
                   findJobs.isEmpty
@@ -799,31 +796,176 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: snapshot.data!.jobs!.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return RecommendationWidget(
-                                    title: snapshot.data!.jobs![index].jobTitle.toString(),
-                                    subTitle: snapshot.data!.jobs![index].service!.name.toString(),
-                                    country: snapshot.data!.jobs![index].address.toString(),
-                                    price: snapshot.data!.jobs![index].hourlyRate.toString(),
-                                    isApplied: snapshot.data!.appliedJobs!.contains(snapshot.data!.jobs![index].id) ? 1 : 0,
-                                    isCompleted: snapshot.data!.completedJobs!.contains(snapshot.data!.jobs![index].id) ? 1 : 0,
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => JobDetailGiver(
-                                            id: snapshot.data!.jobs![index].id.toString(),
-                                            serviceId: snapshot.data!.jobs![index].service!.id.toString(),
-                                          ),
+                                  return Container(
+                                    width: MediaQuery.of(context).size.width * .90,
+                                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                    padding: const EdgeInsets.all(20),
+                                    decoration: const BoxDecoration(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(20),
+                                        topRight: Radius.circular(20),
+                                        bottomLeft: Radius.circular(20),
+                                        bottomRight: Radius.circular(20),
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+                                          offset: Offset(0, 4),
+                                          blurRadius: 45,
+                                        )
+                                      ],
+                                      color: Color.fromRGBO(255, 255, 255, 1),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius: BorderRadius.circular(50),
+                                              child: Image(
+                                                image: NetworkImage("${AppUrl.webStorageUrl}/${snapshot.data!.jobs![index].userImage}"),
+                                                height: 50,
+                                                width: 50,
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                            const SizedBox(width: 05),
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    snapshot.data!.jobs![index].service!.name.toString(),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                                  ),
+                                                  // const SizedBox(height: 05),
+                                                  Text(
+                                                    "${snapshot.data!.jobs![index].userFirstName} ${snapshot.data!.jobs![index].userLastName}",
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.grey.shade700,
+                                                    ),
+                                                  ),
+                                                  // const SizedBox(height: 05),
+                                                  Text(
+                                                    snapshot.data!.jobs![index].address.toString(),
+                                                    overflow: TextOverflow.clip,
+                                                    maxLines: 2,
+                                                    style: const TextStyle(color: Colors.grey, fontSize: 10),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      );
-                                    },
+                                        const SizedBox(height: 15),
+                                        Text(
+                                          "${snapshot.data!.jobs![index].jobTitle}",
+                                        ),
+                                        const SizedBox(height: 15),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => JobDetailGiver(
+                                                      id: snapshot.data!.jobs![index].id.toString(),
+                                                      serviceId: snapshot.data!.jobs![index].service!.id.toString(),
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                height: 43,
+                                                width: 110,
+                                                decoration: BoxDecoration(
+                                                  color: CustomColors.primaryColor,
+                                                  borderRadius: BorderRadius.circular(12),
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "Read More",
+                                                    style: TextStyle(
+                                                      fontFamily: "Poppins",
+                                                      color: CustomColors.white,
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 1.1849999428,
+                                                  color: CustomColors.primaryText,
+                                                ),
+                                                children: [
+                                                  TextSpan(
+                                                    text: '\$${snapshot.data!.jobs![index].hourlyRate.toString()}',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Poppins',
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                      height: 1.2575,
+                                                      color: CustomColors.primaryText,
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: '/hour',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Rubik',
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w500,
+                                                      height: 1.185,
+                                                      color: CustomColors.primaryText,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   );
+
+                                  // RecommendationWidget(
+                                  //   title: snapshot.data!.jobs![index].jobTitle.toString(),
+                                  //   subTitle: snapshot.data!.jobs![index].service!.name.toString(),
+                                  //   country: snapshot.data!.jobs![index].address.toString(),
+                                  //   price: snapshot.data!.jobs![index].hourlyRate.toString(),
+                                  //   isApplied: snapshot.data!.appliedJobs!.contains(snapshot.data!.jobs![index].id) ? 1 : 0,
+                                  //   isCompleted: snapshot.data!.completedJobs!.contains(snapshot.data!.jobs![index].id) ? 1 : 0,
+                                  //   onTap: () {
+                                  //     Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //         builder: (context) => JobDetailGiver(
+                                  //           id: snapshot.data!.jobs![index].id.toString(),
+                                  //           serviceId: snapshot.data!.jobs![index].service!.id.toString(),
+                                  //         ),
+                                  //       ),
+                                  //     );
+                                  //   },
+                                  // );
                                 },
                               );
                             } else {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
+                              return const Center(child: CircularProgressIndicator());
                             }
                           },
                         )

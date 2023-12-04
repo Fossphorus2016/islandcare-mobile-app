@@ -19,6 +19,7 @@ import 'package:island_app/screens/splash_screen.dart';
 import 'package:island_app/widgets/custom_page_route.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -127,9 +128,21 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'APP',
-      theme: ThemeData(primarySwatch: Colors.green),
+      theme: ThemeData(
+        primarySwatch: Colors.green,
+        appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
+      ),
       initialRoute: '/',
       onGenerateRoute: onGenerateRoute,
+      builder: (context, child) => ResponsiveBreakpoints.builder(
+        child: child!,
+        breakpoints: [
+          const Breakpoint(start: 0, end: 450, name: MOBILE),
+          const Breakpoint(start: 451, end: 800, name: TABLET),
+          const Breakpoint(start: 801, end: 1920, name: DESKTOP),
+          const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+        ],
+      ),
     );
   }
 }

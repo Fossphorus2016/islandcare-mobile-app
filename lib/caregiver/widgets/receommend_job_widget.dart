@@ -74,9 +74,7 @@ class RecommendationWidget extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(
-                          width: 4,
-                        ),
+                        const SizedBox(width: 4),
                         // isApplied
                         isApplied == 1
                             ? Container(

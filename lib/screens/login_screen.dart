@@ -14,6 +14,7 @@ import 'package:island_app/screens/verify_email.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_breakpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/utils/utils.dart';
 
@@ -146,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           // logo
                           SizedBox(
-                            height: 200,
+                            height: ResponsiveBreakpoints.of(context).isMobile ? 150 : 200,
                             child: Image.asset(
                               'assets/images/Logo-light.png',
                               fit: BoxFit.cover,

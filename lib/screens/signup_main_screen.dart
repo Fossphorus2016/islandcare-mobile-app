@@ -261,7 +261,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             });
                           },
                           child: Container(
-                            height: 50.45,
+                            height: 55.45,
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               color: _isSelectedService == "3" ? CustomColors.primaryColor : CustomColors.white,
@@ -314,7 +314,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             });
                           },
                           child: Container(
-                            height: 50.45,
+                            height: 55.45,
                             padding: const EdgeInsets.all(4),
                             decoration: BoxDecoration(
                               color: _isSelectedService == "4" ? CustomColors.primaryColor : CustomColors.white,
@@ -430,7 +430,6 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-
                   const SizedBox(
                     height: 30,
                   ),
