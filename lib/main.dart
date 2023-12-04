@@ -25,9 +25,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => UserProvider(),
-        ),
+        ChangeNotifierProvider(create: (context) => UserProvider()),
         ChangeNotifierProvider(
           create: (context) => NotificationProvider(),
           child: const NotificationScreen(),
