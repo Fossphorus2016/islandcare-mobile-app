@@ -1,4 +1,4 @@
-// ignore_for_file: unused_element, constant_identifier_names, no_logic_in_create_state
+// ignore_for_file: unused_element, constant_identifier_names, no_logic_in_create_state, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';

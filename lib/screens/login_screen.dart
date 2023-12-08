@@ -59,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
         data: jsonEncode(model.toJson()),
         options: Options(
           headers: {"Content-Type": "application/json"},
+          validateStatus: (status) => true,
         ),
       );
       hideProgress();

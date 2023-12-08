@@ -1494,9 +1494,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                               ],
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
+                          const SizedBox(height: 20),
                         ],
                       );
                     } else {
@@ -1521,7 +1519,6 @@ class HeaderCurvedContainer extends CustomPainter {
       ..relativeLineTo(0, 100)
       ..quadraticBezierTo(size.width / 2, 80, size.width, 100)
       ..relativeLineTo(0, -100)
-      ..quadraticBezierTo(size.width / 2, 100.0, size.width, 100)
       ..close();
     // Path topStrokePath = Path()
     //   ..moveTo(0, 0)
