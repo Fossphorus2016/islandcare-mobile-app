@@ -93,7 +93,7 @@ class _JobApplicantsState extends State<JobApplicants> {
   Future<ServiceReceiverJobApplicantModel> fetchJobApplicantModel() async {
     var token = await getUserToken();
     final response = await Dio().get(
-      '${CareReceiverURl.serviceReceiverApplication}?start_date=2022-01-01&end_date=2023-04-04',
+      '${CareReceiverURl.serviceReceiverApplication}',
       options: Options(
         headers: {
           'Accept': 'application/json',
@@ -195,7 +195,8 @@ class _JobApplicantsState extends State<JobApplicants> {
 
                 // Listing
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   decoration: BoxDecoration(
                     color: CustomColors.blackLight,
                     border: Border(
@@ -250,24 +251,37 @@ class _JobApplicantsState extends State<JobApplicants> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return JobApplicantsWidget(
-                            name: snapshot.data!.data![index].jobTitle.toString(),
-                            jobType: (snapshot.data!.data![index].serviceId.toString() == "1")
+                            name:
+                                snapshot.data!.data![index].jobTitle.toString(),
+                            jobType: (snapshot.data!.data![index].serviceId
+                                        .toString() ==
+                                    "1")
                                 ? "Senior Care"
-                                : (snapshot.data!.data![index].serviceId.toString() == "2")
+                                : (snapshot.data!.data![index].serviceId
+                                            .toString() ==
+                                        "2")
                                     ? "Pet Care"
-                                    : (snapshot.data!.data![index].serviceId.toString() == "3")
+                                    : (snapshot.data!.data![index].serviceId
+                                                .toString() ==
+                                            "3")
                                         ? "House Keeping"
-                                        : (snapshot.data!.data![index].serviceId.toString() == "4")
+                                        : (snapshot.data!.data![index].serviceId
+                                                    .toString() ==
+                                                "4")
                                             ? "Child Care"
                                             : "School Support",
-                            count: snapshot.data!.applicationCounts![index].count.toString(),
+                            count: snapshot
+                                .data!.applicationCounts![index].count
+                                .toString(),
                             onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => JobApplicantsDetail(
-                                    name: snapshot.data!.data![index].jobTitle.toString(),
-                                    jobId: snapshot.data!.data![index].id.toString(),
+                                    name: snapshot.data!.data![index].jobTitle
+                                        .toString(),
+                                    jobId: snapshot.data!.data![index].id
+                                        .toString(),
                                   ),
                                 ),
                               );
