@@ -89,10 +89,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // double baseWidth = 300;
-    // double fem = MediaQuery.of(context).size.width / baseWidth;
-    // double ffem = fem * 0.50;
-
     const focusedBorderColor = Color.fromRGBO(23, 171, 144, 1);
     const fillColor = Color.fromRGBO(243, 246, 249, 0);
     const borderColor = Color.fromRGBO(23, 171, 144, 0.4);
@@ -129,14 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         image: DecorationImage(
                           fit: BoxFit.cover,
                           alignment: Alignment.bottomCenter,
-                          image: AssetImage(
-                            'assets/images/loginBg.png',
-                            // fit: BoxFit.cover,
-                            // width: 363 * fem,
-                            // height: 503 * fem,
-                            // scale: 2.5,
-                            // alignment: Alignment.bottomCenter,
-                          ),
+                          image: AssetImage('assets/images/loginBg.png'),
                         ),
                       ),
                       width: MediaQuery.of(context).size.width,
@@ -424,9 +413,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           text: TextSpan(
                             style: const TextStyle(
                               fontFamily: 'Poppins',
-                              // fontSize: 16 * ffem,
                               fontWeight: FontWeight.w400,
-                              // height: 1.1849999428 * ffem / fem,
                               color: Color(0xff201e1d),
                             ),
                             children: [
@@ -437,7 +424,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontStyle: FontStyle.italic,
                                   fontSize: MediaQuery.of(context).size.width > 460 ? 24 : 16,
                                   fontWeight: FontWeight.w400,
-                                  // height: 1.2575 * ffem / fem,
                                   color: const Color(0xff201e1d),
                                 ),
                               ),
@@ -451,7 +437,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                   fontFamily: 'Rubik',
                                   fontSize: MediaQuery.of(context).size.width > 460 ? 24 : 16,
                                   fontWeight: FontWeight.w700,
-                                  // height: 1.185 * ffem / fem,
                                   color: const Color(0xff201e1d),
                                 ),
                               ),
