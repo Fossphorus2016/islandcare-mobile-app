@@ -44,6 +44,7 @@ class Datum {
     this.userdetailprovider,
     this.educations,
     this.userdetail,
+    this.avgRating,
   });
 
   int? id;
@@ -64,6 +65,7 @@ class Datum {
   Userdetailprovider? userdetailprovider;
   List<Education>? educations;
   Userdetail? userdetail;
+  Map? avgRating;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
@@ -84,6 +86,7 @@ class Datum {
         userdetailprovider: json["userdetailprovider"] == null ? null : Userdetailprovider.fromJson(json["userdetailprovider"]),
         educations: json["educations"] == null ? [] : List<Education>.from(json["educations"]!.map((x) => Education.fromJson(x))),
         userdetail: json["userdetail"] == null ? null : Userdetail.fromJson(json["userdetail"]),
+        avgRating: json["avg_rating"] == null ? null : json["avg_rating"][0],
       );
 
   Map<String, dynamic> toJson() => {
@@ -105,6 +108,7 @@ class Datum {
         "userdetailprovider": userdetailprovider?.toJson(),
         "educations": educations == null ? [] : List<dynamic>.from(educations!.map((x) => x.toJson())),
         "userdetail": userdetail?.toJson(),
+        "avgRating": avgRating,
       };
 }
 

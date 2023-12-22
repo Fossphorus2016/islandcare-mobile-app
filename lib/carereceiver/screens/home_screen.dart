@@ -279,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.all(12.0),
                 child: Badge(
                   child: Icon(
-                    Icons.notifications_none,
+                    Icons.message,
                     size: 30,
                   ),
                 ),

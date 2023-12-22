@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/screens/profile_edit.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
@@ -65,8 +66,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
         customSuccesSnackBar(context, "file is downloaded successfully");
       }
     } catch (e) {
-      customErrorSnackBar(
-          context, "something went wrong please try again later");
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -165,7 +165,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                 padding: EdgeInsets.all(12.0),
                 child: Badge(
                   child: Icon(
-                    Icons.notifications_none,
+                    Icons.message_outlined,
                     size: 30,
                   ),
                 ),
@@ -207,8 +207,231 @@ class _ProfileGiverState extends State<ProfileGiver> {
                   future: fetchProfile,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
+                      var badges = snapshot.data!.data!.userdetailprovider!.badge.toString().split(',');
                       return Column(
                         children: [
+                          Container(
+                            height: 250,
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                            color: CustomColors.primaryColor,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 110,
+                                  child: Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(08),
+                                        child: Image(
+                                          width: 110,
+                                          height: 110,
+                                          image: NetworkImage("${AppUrl.webStorageUrl}/${snapshot.data!.data!.avatar.toString()}"),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${snapshot.data!.data!.firstName.toString()} ${snapshot.data!.data!.lastName.toString()}",
+                                            style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            snapshot.data!.data!.email.toString(),
+                                            style: TextStyle(fontSize: 12, fontFamily: "Rubik", fontWeight: FontWeight.w400, color: CustomColors.white),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          RatingBar(
+                                            ignoreGestures: true,
+                                            itemCount: 5,
+                                            initialRating: snapshot.data!.data!.avgRating!['rating'] == null ? 0.0 : double.parse(snapshot.data!.data!.avgRating!['rating'].toString()),
+                                            minRating: 0,
+                                            ratingWidget: RatingWidget(
+                                              full: const Icon(Icons.star_rounded, color: Colors.amber),
+                                              half: const Icon(Icons.star_rounded, color: Colors.amber),
+                                              empty: const Icon(Icons.star_rounded, color: Colors.grey),
+                                            ),
+                                            onRatingUpdate: (rating) {
+                                              // print(rating);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      height: 40,
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                                            decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Color.fromARGB(13, 0, 0, 0),
+                                                  blurRadius: 4.0,
+                                                  spreadRadius: 2.0,
+                                                  offset: Offset(2.0, 2.0),
+                                                ),
+                                              ],
+                                              borderRadius: BorderRadius.only(
+                                                bottomLeft: Radius.circular(6),
+                                                bottomRight: Radius.circular(6),
+                                                topLeft: Radius.circular(6),
+                                                topRight: Radius.circular(6),
+                                              ),
+                                            ),
+                                            child: RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  WidgetSpan(
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 1, right: 5),
+                                                      child: Icon(
+                                                        Icons.phone_outlined,
+                                                        size: 14,
+                                                        color: CustomColors.primaryTextLight,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: snapshot.data!.data!.phone.toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w400,
+                                                      color: CustomColors.primaryTextLight,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 15),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment: CrossAxisAlignment.center,
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      "Profile Completion",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontFamily: "Rubik",
+                                                        fontWeight: FontWeight.w400,
+                                                        color: CustomColors.white,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      "53%",
+                                                      style: TextStyle(
+                                                        fontSize: 14,
+                                                        fontFamily: "Rubik",
+                                                        fontWeight: FontWeight.w400,
+                                                        color: CustomColors.white,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 05),
+                                                LinearProgressIndicator(
+                                                  minHeight: 08,
+                                                  borderRadius: BorderRadius.circular(08),
+                                                  value: 0.53,
+                                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.red.shade300),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(horizontal: 14),
+                                      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Color.fromARGB(13, 0, 0, 0),
+                                            blurRadius: 4.0,
+                                            spreadRadius: 2.0,
+                                            offset: Offset(2.0, 2.0),
+                                          ),
+                                        ],
+                                        borderRadius: BorderRadius.only(
+                                          bottomLeft: Radius.circular(6),
+                                          bottomRight: Radius.circular(6),
+                                          topLeft: Radius.circular(6),
+                                          topRight: Radius.circular(6),
+                                        ),
+                                      ),
+                                      child: RichText(
+                                        text: TextSpan(
+                                          children: [
+                                            WidgetSpan(
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 3, right: 5),
+                                                child: Icon(
+                                                  Icons.location_on_outlined,
+                                                  size: 14,
+                                                  color: CustomColors.primaryTextLight,
+                                                ),
+                                              ),
+                                            ),
+                                            snapshot.data!.data!.userdetail!.address.toString() != "null"
+                                                ? TextSpan(
+                                                    text: snapshot.data!.data!.userdetail!.address.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.address.toString(),
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w400,
+                                                      color: CustomColors.primaryTextLight,
+                                                    ),
+                                                  )
+                                                : TextSpan(
+                                                    text: "Required",
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w400,
+                                                      color: CustomColors.red,
+                                                    ),
+                                                  ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Wrap(
+                            spacing: 05,
+                            children: List.generate(badges.length, (index) {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.circular(500),
+                                child: Image(
+                                  height: 50,
+                                  image: NetworkImage("${AppUrl.webStorageUrl}/${badges[index]}"),
+                                ),
+                              );
+                            }),
+                          ),
+                          const SizedBox(height: 20),
                           SizedBox(
                             height: 250,
                             width: MediaQuery.of(context).size.width,
@@ -217,8 +440,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 Positioned(
                                   top: -25,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
                                     decoration: BoxDecoration(
                                       color: CustomColors.primaryColor,
                                       borderRadius: const BorderRadius.only(
@@ -257,15 +479,13 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                       ),
                                     ),
                                     child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         const SizedBox(
                                           height: 20,
                                         ),
                                         Text(
-                                          snapshot.data!.data!.firstName
-                                              .toString(),
+                                          snapshot.data!.data!.firstName.toString(),
                                           style: TextStyle(
                                             fontSize: 20,
                                             fontFamily: "Rubik",
@@ -286,30 +506,23 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                           height: 20,
                                         ),
                                         Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 7,
-                                                      horizontal: 4),
+                                              padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
                                               decoration: const BoxDecoration(
                                                 color: Colors.white,
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: Color.fromARGB(
-                                                        13, 0, 0, 0),
+                                                    color: Color.fromARGB(13, 0, 0, 0),
                                                     blurRadius: 4.0,
                                                     spreadRadius: 2.0,
                                                     offset: Offset(2.0, 2.0),
                                                   ),
                                                 ],
                                                 borderRadius: BorderRadius.only(
-                                                  bottomLeft:
-                                                      Radius.circular(6),
-                                                  bottomRight:
-                                                      Radius.circular(6),
+                                                  bottomLeft: Radius.circular(6),
+                                                  bottomRight: Radius.circular(6),
                                                   topLeft: Radius.circular(6),
                                                   topRight: Radius.circular(6),
                                                 ),
@@ -319,62 +532,43 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                   children: [
                                                     WidgetSpan(
                                                       child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 1,
-                                                                right: 5),
+                                                        padding: const EdgeInsets.only(left: 1, right: 5),
                                                         child: Icon(
                                                           Icons.phone_outlined,
                                                           size: 14,
-                                                          color: CustomColors
-                                                              .primaryTextLight,
+                                                          color: CustomColors.primaryTextLight,
                                                         ),
                                                       ),
                                                     ),
                                                     TextSpan(
-                                                      text: snapshot
-                                                          .data!.data!.phone
-                                                          .toString(),
+                                                      text: snapshot.data!.data!.phone.toString(),
                                                       style: TextStyle(
                                                         fontSize: 12,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: CustomColors
-                                                            .primaryTextLight,
+                                                        fontWeight: FontWeight.w400,
+                                                        color: CustomColors.primaryTextLight,
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                               ),
                                             ),
-                                            const SizedBox(
-                                              height: 5,
-                                            ),
+                                            const SizedBox(height: 5),
                                             Container(
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 14),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 7,
-                                                      horizontal: 4),
+                                              margin: const EdgeInsets.symmetric(horizontal: 14),
+                                              padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
                                               decoration: const BoxDecoration(
                                                 color: Colors.white,
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: Color.fromARGB(
-                                                        13, 0, 0, 0),
+                                                    color: Color.fromARGB(13, 0, 0, 0),
                                                     blurRadius: 4.0,
                                                     spreadRadius: 2.0,
                                                     offset: Offset(2.0, 2.0),
                                                   ),
                                                 ],
                                                 borderRadius: BorderRadius.only(
-                                                  bottomLeft:
-                                                      Radius.circular(6),
-                                                  bottomRight:
-                                                      Radius.circular(6),
+                                                  bottomLeft: Radius.circular(6),
+                                                  bottomRight: Radius.circular(6),
                                                   topLeft: Radius.circular(6),
                                                   topRight: Radius.circular(6),
                                                 ),
@@ -384,61 +578,29 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                   children: [
                                                     WidgetSpan(
                                                       child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(
-                                                                left: 3,
-                                                                right: 5),
+                                                        padding: const EdgeInsets.only(left: 3, right: 5),
                                                         child: Icon(
-                                                          Icons
-                                                              .location_on_outlined,
+                                                          Icons.location_on_outlined,
                                                           size: 14,
-                                                          color: CustomColors
-                                                              .primaryTextLight,
+                                                          color: CustomColors.primaryTextLight,
                                                         ),
                                                       ),
                                                     ),
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetail!
-                                                                .address
-                                                                .toString() !=
-                                                            "null"
+                                                    snapshot.data!.data!.userdetail!.address.toString() != "null"
                                                         ? TextSpan(
-                                                            text: snapshot
-                                                                        .data!
-                                                                        .data!
-                                                                        .userdetail!
-                                                                        .address
-                                                                        .toString() ==
-                                                                    "null"
-                                                                ? "Not Available"
-                                                                : snapshot
-                                                                    .data!
-                                                                    .data!
-                                                                    .userdetail!
-                                                                    .address
-                                                                    .toString(),
+                                                            text: snapshot.data!.data!.userdetail!.address.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.address.toString(),
                                                             style: TextStyle(
                                                               fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              color: CustomColors
-                                                                  .primaryTextLight,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: CustomColors.primaryTextLight,
                                                             ),
                                                           )
                                                         : TextSpan(
                                                             text: "Required",
                                                             style: TextStyle(
                                                               fontSize: 12,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400,
-                                                              color:
-                                                                  CustomColors
-                                                                      .red,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: CustomColors.red,
                                                             ),
                                                           ),
                                                   ],
@@ -456,8 +618,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                   left: 100,
                                   right: 100,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
                                     decoration: const BoxDecoration(
                                       borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(50),
@@ -471,7 +632,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                     height: 90,
                                     child: Container(
                                       decoration: const BoxDecoration(
-                                        // color: Colors.white,
                                         boxShadow: [
                                           BoxShadow(
                                             color: Color.fromARGB(13, 0, 0, 0),
@@ -492,107 +652,39 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ProfileGiverPendingEdit(
-                                                avatar: snapshot
-                                                    .data!.data!.avatar
-                                                    .toString(),
-                                                gender: snapshot.data!.data!
-                                                    .userdetail!.gender
-                                                    .toString(),
-                                                phoneNumber: snapshot
-                                                    .data!.data!.phone
-                                                    .toString(),
-                                                dob: snapshot
-                                                    .data!.data!.userdetail!.dob
-                                                    .toString(),
-                                                yoe: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .userdetailprovider!
-                                                    .experience
-                                                    .toString(),
-                                                hourlyRate: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .userdetailprovider!
-                                                    .hourlyRate
-                                                    .toString(),
-                                                userAddress: snapshot.data!
-                                                    .data!.userdetail!.address
-                                                    .toString(),
-                                                zipCode: snapshot
-                                                    .data!.data!.userdetail!.zip
-                                                    .toString(),
-                                                additionalService: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .userdetailprovider!
-                                                    .keywords
-                                                    .toString(),
-                                                availability: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .userdetailprovider!
-                                                    .availability
-                                                    .toString(),
-                                                userInfo: snapshot.data!.data!
-                                                    .userdetail!.userInfo
-                                                    .toString(),
-                                                enhancedCriminal: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .providerverification!
-                                                    .enhancedCriminal,
-                                                enhancedCriminalStatus: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .providerverification!
-                                                    .enhancedCriminalVerify,
-                                                basicCriminal: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .providerverification!
-                                                    .basicCriminal,
-                                                basicCriminalStatus: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .providerverification!
-                                                    .basicCriminalVerify,
-                                                firstAid: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .providerverification!
-                                                    .firstAid,
-                                                firstAidStatus: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .providerverification!
-                                                    .firstAidVerify,
-                                                vehicleRecord: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .providerverification!
-                                                    .vehicleRecord,
-                                                vehicleRecordStatus: snapshot
-                                                    .data!
-                                                    .data!
-                                                    .providerverification!
-                                                    .vehicleRecordVerify,
+                                              builder: (context) => ProfileGiverPendingEdit(
+                                                avatar: snapshot.data!.data!.avatar.toString(),
+                                                gender: snapshot.data!.data!.userdetail!.gender.toString(),
+                                                phoneNumber: snapshot.data!.data!.phone.toString(),
+                                                dob: snapshot.data!.data!.userdetail!.dob.toString(),
+                                                yoe: snapshot.data!.data!.userdetailprovider!.experience.toString(),
+                                                hourlyRate: snapshot.data!.data!.userdetailprovider!.hourlyRate.toString(),
+                                                userAddress: snapshot.data!.data!.userdetail!.address.toString(),
+                                                zipCode: snapshot.data!.data!.userdetail!.zip.toString(),
+                                                additionalService: snapshot.data!.data!.userdetailprovider!.keywords.toString(),
+                                                availability: snapshot.data!.data!.userdetailprovider!.availability.toString(),
+                                                userInfo: snapshot.data!.data!.userdetail!.userInfo.toString(),
+                                                enhancedCriminal: snapshot.data!.data!.providerverification!.enhancedCriminal,
+                                                enhancedCriminalStatus: snapshot.data!.data!.providerverification!.enhancedCriminalVerify,
+                                                basicCriminal: snapshot.data!.data!.providerverification!.basicCriminal,
+                                                basicCriminalStatus: snapshot.data!.data!.providerverification!.basicCriminalVerify,
+                                                firstAid: snapshot.data!.data!.providerverification!.firstAid,
+                                                firstAidStatus: snapshot.data!.data!.providerverification!.firstAidVerify,
+                                                vehicleRecord: snapshot.data!.data!.providerverification!.vehicleRecord,
+                                                vehicleRecordStatus: snapshot.data!.data!.providerverification!.vehicleRecordVerify,
                                               ),
                                             ),
                                           );
                                         },
                                         child: Center(
-                                            child: ClipRRect(
-                                          // clipper: const ShapeBorderClipper(shape: ),
-                                          borderRadius:
-                                              BorderRadius.circular(500),
-                                          child: Image(
-                                            image: NetworkImage(
-                                                "${AppUrl.webStorageUrl}/${snapshot.data!.data!.avatar.toString()}"),
+                                          child: ClipRRect(
+                                            // clipper: const ShapeBorderClipper(shape: ),
+                                            borderRadius: BorderRadius.circular(500),
+                                            child: Image(
+                                              image: NetworkImage("${AppUrl.webStorageUrl}/${snapshot.data!.data!.avatar.toString()}"),
+                                            ),
                                           ),
-                                        )),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -600,6 +692,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                               ],
                             ),
                           ),
+
                           // CustomPaint(
                           //   painter: HeaderCurvedContainer(),
                           //   child: SizedBox(
@@ -624,24 +717,19 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 const SizedBox(height: 10),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Name",
@@ -669,24 +757,19 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // Gender
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Gender",
@@ -700,52 +783,24 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                           const SizedBox(
                                             height: 8,
                                           ),
-                                          snapshot.data!.data!.userdetail!
-                                                      .gender
-                                                      .toString() !=
-                                                  "null"
+                                          snapshot.data!.data!.userdetail!.gender.toString() != "null"
                                               ? Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .userdetail!
-                                                              .gender
-                                                              .toString() ==
-                                                          "1")
+                                                  (snapshot.data!.data!.userdetail!.gender.toString() == "1")
                                                       ? "Male"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .userdetail!
-                                                                  .gender
-                                                                  .toString() ==
-                                                              "2")
+                                                      : (snapshot.data!.data!.userdetail!.gender.toString() == "2")
                                                           ? "Female"
                                                           : "Required",
                                                   style: TextStyle(
-                                                    color:
-                                                        CustomColors.hintText,
+                                                    color: CustomColors.hintText,
                                                     fontSize: 16,
                                                     fontFamily: "Rubik",
                                                     fontWeight: FontWeight.w200,
                                                   ),
                                                 )
                                               : Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .userdetail!
-                                                              .gender
-                                                              .toString() ==
-                                                          "1")
+                                                  (snapshot.data!.data!.userdetail!.gender.toString() == "1")
                                                       ? "Male"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .userdetail!
-                                                                  .gender
-                                                                  .toString() ==
-                                                              "2")
+                                                      : (snapshot.data!.data!.userdetail!.gender.toString() == "2")
                                                           ? "Female"
                                                           : "Required",
                                                   style: TextStyle(
@@ -763,24 +818,19 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // Services
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Area of Insterest",
@@ -795,14 +845,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             height: 8,
                                           ),
                                           Text(
-                                            snapshot.data!.data!.userdetail!
-                                                        .service!.name
-                                                        .toString() ==
-                                                    "null"
-                                                ? "Not Available"
-                                                : snapshot.data!.data!
-                                                    .userdetail!.service!.name
-                                                    .toString(),
+                                            snapshot.data!.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.service!.name.toString(),
                                             style: TextStyle(
                                               color: CustomColors.hintText,
                                               fontSize: 16,
@@ -817,91 +860,50 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 //  Experience
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Years of Experience",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             ),
                                             const SizedBox(height: 8),
-                                            snapshot
-                                                        .data!
-                                                        .data!
-                                                        .userdetailprovider!
-                                                        .experience
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetailprovider!.experience.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .experience
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .experience
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.experience.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.experience.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .experience
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .experience
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.experience.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.experience.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -912,31 +914,25 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // Hourly
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Hourly Rate",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -945,47 +941,25 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot
-                                                        .data!
-                                                        .data!
-                                                        .userdetailprovider!
-                                                        .hourlyRate
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetailprovider!.hourlyRate.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .hourlyRate
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .hourlyRate
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.hourlyRate.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.hourlyRate.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
                                                     "\$ ${snapshot.data!.data!.userdetailprovider!.hourlyRate.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.hourlyRate.toString()}",
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -996,24 +970,19 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // Date
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Date Of Birth",
@@ -1028,8 +997,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             height: 8,
                                           ),
                                           Text(
-                                            snapshot.data!.data!.userdetail!.dob
-                                                .toString(),
+                                            snapshot.data!.data!.userdetail!.dob.toString(),
                                             style: TextStyle(
                                               color: CustomColors.hintText,
                                               fontSize: 16,
@@ -1044,24 +1012,19 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // Zip Code
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Zip Code",
@@ -1075,18 +1038,9 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                           const SizedBox(
                                             height: 8,
                                           ),
-                                          snapshot.data!.data!.userdetail!.zip
-                                                      .toString() ==
-                                                  "null"
+                                          snapshot.data!.data!.userdetail!.zip.toString() == "null"
                                               ? Text(
-                                                  snapshot.data!.data!
-                                                              .userdetail!.zip
-                                                              .toString() ==
-                                                          "null"
-                                                      ? "Required"
-                                                      : snapshot.data!.data!
-                                                          .userdetail!.zip
-                                                          .toString(),
+                                                  snapshot.data!.data!.userdetail!.zip.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.zip.toString(),
                                                   style: TextStyle(
                                                     color: CustomColors.red,
                                                     fontSize: 16,
@@ -1095,17 +1049,9 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                   ),
                                                 )
                                               : Text(
-                                                  snapshot.data!.data!
-                                                              .userdetail!.zip
-                                                              .toString() ==
-                                                          "null"
-                                                      ? "Required"
-                                                      : snapshot.data!.data!
-                                                          .userdetail!.zip
-                                                          .toString(),
+                                                  snapshot.data!.data!.userdetail!.zip.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.zip.toString(),
                                                   style: TextStyle(
-                                                    color:
-                                                        CustomColors.hintText,
+                                                    color: CustomColors.hintText,
                                                     fontSize: 16,
                                                     fontFamily: "Rubik",
                                                     fontWeight: FontWeight.w200,
@@ -1118,31 +1064,25 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // Additional Service
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Additional Services",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -1151,60 +1091,25 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot
-                                                        .data!
-                                                        .data!
-                                                        .userdetailprovider!
-                                                        .keywords
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .keywords
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .keywords
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.keywords.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .keywords
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .keywords
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.keywords.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -1215,31 +1120,25 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // Education
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Education",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -1251,47 +1150,31 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             ListView.builder(
                                               shrinkWrap: true,
                                               scrollDirection: Axis.vertical,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount: snapshot.data!.data!
-                                                  .educations!.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
+                                              physics: const NeverScrollableScrollPhysics(),
+                                              itemCount: snapshot.data!.data!.educations!.length,
+                                              itemBuilder: (BuildContext context, int index) {
                                                 return Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 5),
-                                                  margin: const EdgeInsets
-                                                      .symmetric(vertical: 5),
+                                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                                  margin: const EdgeInsets.symmetric(vertical: 5),
                                                   decoration: BoxDecoration(
                                                     border: Border.all(
-                                                      color: CustomColors
-                                                          .paraColor,
+                                                      color: CustomColors.paraColor,
                                                       width: 0.5,
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
+                                                    borderRadius: BorderRadius.circular(10),
                                                   ),
                                                   child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
                                                         "Institue Name: ${snapshot.data!.data!.educations![index].name}",
                                                         softWrap: true,
                                                         style: TextStyle(
-                                                          color: CustomColors
-                                                              .hintText,
+                                                          color: CustomColors.hintText,
                                                           fontSize: 14,
                                                           fontFamily: "Rubik",
-                                                          fontWeight:
-                                                              FontWeight.w200,
+                                                          fontWeight: FontWeight.w200,
                                                         ),
                                                       ),
                                                       const SizedBox(
@@ -1301,12 +1184,10 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                         "Major: ${snapshot.data!.data!.educations![index].major}",
                                                         softWrap: true,
                                                         style: TextStyle(
-                                                          color: CustomColors
-                                                              .hintText,
+                                                          color: CustomColors.hintText,
                                                           fontSize: 12,
                                                           fontFamily: "Rubik",
-                                                          fontWeight:
-                                                              FontWeight.w200,
+                                                          fontWeight: FontWeight.w200,
                                                         ),
                                                       ),
                                                       const SizedBox(
@@ -1316,35 +1197,22 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                         "From: ${snapshot.data!.data!.educations![index].from}",
                                                         softWrap: true,
                                                         style: TextStyle(
-                                                          color: CustomColors
-                                                              .hintText,
+                                                          color: CustomColors.hintText,
                                                           fontSize: 12,
                                                           fontFamily: "Rubik",
-                                                          fontWeight:
-                                                              FontWeight.w200,
+                                                          fontWeight: FontWeight.w200,
                                                         ),
                                                       ),
-                                                      snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .educations![
-                                                                      index]
-                                                                  .to ==
-                                                              ""
+                                                      snapshot.data!.data!.educations![index].to == ""
                                                           ? Text(
                                                               "Time Period: Currently Studying",
                                                               softWrap: true,
                                                               style: TextStyle(
                                                                 height: 2,
-                                                                color:
-                                                                    CustomColors
-                                                                        .hintText,
+                                                                color: CustomColors.hintText,
                                                                 fontSize: 12,
-                                                                fontFamily:
-                                                                    "Rubik",
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w200,
+                                                                fontFamily: "Rubik",
+                                                                fontWeight: FontWeight.w200,
                                                               ),
                                                             )
                                                           : Text(
@@ -1352,15 +1220,10 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                               softWrap: true,
                                                               style: TextStyle(
                                                                 height: 0,
-                                                                color:
-                                                                    CustomColors
-                                                                        .hintText,
+                                                                color: CustomColors.hintText,
                                                                 fontSize: 12,
-                                                                fontFamily:
-                                                                    "Rubik",
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w200,
+                                                                fontFamily: "Rubik",
+                                                                fontWeight: FontWeight.w200,
                                                               ),
                                                             ),
                                                     ],
@@ -1376,31 +1239,25 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // User Information
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "User Information",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -1409,57 +1266,25 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot.data!.data!.userdetail!
-                                                        .userInfo
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetail!.userInfo.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetail!
-                                                                .userInfo
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetail!
-                                                            .userInfo
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.userInfo.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetail!
-                                                                .userInfo
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetail!
-                                                            .userInfo
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.userInfo.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -1470,31 +1295,25 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // Availability
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Availability",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -1503,60 +1322,25 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot
-                                                        .data!
-                                                        .data!
-                                                        .userdetailprovider!
-                                                        .availability
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetailprovider!.availability.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .availability
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .availability
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.availability.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.availability.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .availability
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .availability
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.availability.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.availability.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -1567,31 +1351,25 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 ),
                                 // Additional Service
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Additional Services",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -1600,64 +1378,62 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot
-                                                        .data!
-                                                        .data!
-                                                        .userdetailprovider!
-                                                        .keywords
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .keywords
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .keywords
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.keywords.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .keywords
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .keywords
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.keywords.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
                                         ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                  margin: const EdgeInsets.only(bottom: 15),
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    color: CustomColors.white,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Badges",
+                                        style: TextStyle(
+                                          color: CustomColors.primaryColor,
+                                          fontSize: 10,
+                                          fontFamily: "Rubik",
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      Wrap(
+                                        spacing: 05,
+                                        children: List.generate(badges.length, (index) {
+                                          return Image(
+                                            height: 50,
+                                            image: NetworkImage("${AppUrl.webStorageUrl}/${badges[index]}"),
+                                          );
+                                        }),
                                       ),
                                     ],
                                   ),
@@ -1669,8 +1445,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                   borderType: BorderType.RRect,
                                   color: CustomColors.primaryColor,
                                   child: Container(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 5),
+                                    padding: const EdgeInsets.symmetric(vertical: 5),
                                     decoration: BoxDecoration(
                                       color: CustomColors.primaryLight,
                                       borderRadius: BorderRadius.circular(10),
@@ -1702,407 +1477,54 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                GestureDetector(
+                                BasicDocumentDownloadList(
                                   onTap: () {
-                                    if (snapshot
-                                        .data!
-                                        .data!
-                                        .providerverification!
-                                        .enhancedCriminal!
-                                        .isNotEmpty) {
-                                      doDownloadFile(snapshot
-                                          .data!
-                                          .data!
-                                          .providerverification!
-                                          .enhancedCriminal);
+                                    if (snapshot.data!.data!.providerverification!.enhancedCriminal!.isNotEmpty) {
+                                      doDownloadFile(snapshot.data!.data!.providerverification!.enhancedCriminal);
                                     }
                                   },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: CustomColors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            if (snapshot
-                                                .data!
-                                                .data!
-                                                .providerverification!
-                                                .enhancedCriminal!
-                                                .isNotEmpty) {
-                                              doDownloadFile(snapshot
-                                                  .data!
-                                                  .data!
-                                                  .providerverification!
-                                                  .enhancedCriminal);
-                                            }
-                                          },
-                                          icon: Icon(
-                                            Icons.picture_as_pdf_rounded,
-                                            color: CustomColors.red,
-                                          ),
-                                          label: Text(
-                                            downloading
-                                                ? "Download Enhanced Criminal Document $downloadProgress"
-                                                : "Download Enhanced Criminal Document",
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color:
-                                                    CustomColors.primaryText),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {},
-                                          child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14, horizontal: 5),
-                                            radius: const Radius.circular(4),
-                                            borderType: BorderType.RRect,
-                                            color: CustomColors.primaryColor,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.picture_as_pdf_rounded,
-                                                  color: CustomColors.red,
-                                                  size: 16,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .providerverification!
-                                                              .enhancedCriminalVerify
-                                                              .toString() ==
-                                                          "0")
-                                                      ? "Pending"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .providerverification!
-                                                                  .enhancedCriminalVerify
-                                                                  .toString() ==
-                                                              "1")
-                                                          ? "Approved"
-                                                          : (snapshot
-                                                                      .data!
-                                                                      .data!
-                                                                      .providerverification!
-                                                                      .enhancedCriminalVerify
-                                                                      .toString() ==
-                                                                  "2")
-                                                              ? "Rejected"
-                                                              : "File Not Available",
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: CustomColors
-                                                        .primaryText,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  fileStatus: snapshot.data!.data!.providerverification!.enhancedCriminalVerify.toString(),
+                                  downloading: downloading,
+                                  downloadProgress: downloadProgress,
+                                  title: "Download Enhanced Criminal Document",
+                                ),
+
+                                const SizedBox(height: 15),
+                                BasicDocumentDownloadList(
+                                  onTap: () {
+                                    if (snapshot.data!.data!.providerverification!.basicCriminal!.isNotEmpty) {
+                                      doDownloadFile(snapshot.data!.data!.providerverification!.basicCriminal);
+                                    }
+                                  },
+                                  fileStatus: snapshot.data!.data!.providerverification!.basicCriminalVerify.toString(),
+                                  downloading: downloading,
+                                  downloadProgress: downloadProgress,
+                                  title: "Download Basic Criminal Document",
                                 ),
                                 const SizedBox(height: 15),
-                                GestureDetector(
+                                BasicDocumentDownloadList(
                                   onTap: () {
-                                    doDownloadFile(snapshot.data!.data!
-                                        .providerverification!.basicCriminal);
+                                    if (snapshot.data!.data!.providerverification!.firstAid.isNotEmpty) {
+                                      doDownloadFile(snapshot.data!.data!.providerverification!.firstAid);
+                                    }
                                   },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: CustomColors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            doDownloadFile(snapshot
-                                                .data!
-                                                .data!
-                                                .providerverification!
-                                                .basicCriminal);
-                                          },
-                                          icon: Icon(
-                                            Icons.picture_as_pdf_rounded,
-                                            color: CustomColors.red,
-                                          ),
-                                          label: Text(
-                                            downloading
-                                                ? "Download Basic Criminal Document $downloadProgress"
-                                                : "Download Basic Criminal Document",
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color:
-                                                    CustomColors.primaryText),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            // getEnhancedPdfFile();
-                                          },
-                                          child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14, horizontal: 5),
-                                            radius: const Radius.circular(4),
-                                            borderType: BorderType.RRect,
-                                            color: CustomColors.primaryColor,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.picture_as_pdf_rounded,
-                                                  color: CustomColors.red,
-                                                  size: 16,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .providerverification!
-                                                              .basicCriminalVerify
-                                                              .toString() ==
-                                                          "0")
-                                                      ? "Pending"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .providerverification!
-                                                                  .basicCriminalVerify
-                                                                  .toString() ==
-                                                              "1")
-                                                          ? "Approved"
-                                                          : (snapshot
-                                                                      .data!
-                                                                      .data!
-                                                                      .providerverification!
-                                                                      .basicCriminalVerify
-                                                                      .toString() ==
-                                                                  "2")
-                                                              ? "Rejected"
-                                                              : "File Not Available",
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: CustomColors
-                                                        .primaryText,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  fileStatus: snapshot.data!.data!.providerverification!.firstAidVerify.toString(),
+                                  downloading: downloading,
+                                  downloadProgress: downloadProgress,
+                                  title: "Download First Aid Document",
                                 ),
+
                                 const SizedBox(height: 15),
-                                GestureDetector(
+                                BasicDocumentDownloadList(
                                   onTap: () {
-                                    doDownloadFile(snapshot.data!.data!
-                                        .providerverification!.firstAid);
+                                    if (snapshot.data!.data!.providerverification!.vehicleRecord.isNotEmpty) {
+                                      doDownloadFile(snapshot.data!.data!.providerverification!.vehicleRecord);
+                                    }
                                   },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: CustomColors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            doDownloadFile(snapshot
-                                                .data!
-                                                .data!
-                                                .providerverification!
-                                                .firstAid);
-                                          },
-                                          icon: Icon(
-                                            Icons.picture_as_pdf_rounded,
-                                            color: CustomColors.red,
-                                          ),
-                                          label: Text(
-                                            "Download First Aid Document",
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color:
-                                                    CustomColors.primaryText),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            // getEnhancedPdfFile();
-                                          },
-                                          child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14, horizontal: 5),
-                                            radius: const Radius.circular(4),
-                                            borderType: BorderType.RRect,
-                                            color: CustomColors.primaryColor,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.picture_as_pdf_rounded,
-                                                  color: CustomColors.red,
-                                                  size: 16,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .providerverification!
-                                                              .firstAidVerify
-                                                              .toString() ==
-                                                          "0")
-                                                      ? "Pending"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .providerverification!
-                                                                  .firstAidVerify
-                                                                  .toString() ==
-                                                              "1")
-                                                          ? "Approved"
-                                                          : (snapshot
-                                                                      .data!
-                                                                      .data!
-                                                                      .providerverification!
-                                                                      .firstAidVerify
-                                                                      .toString() ==
-                                                                  "2")
-                                                              ? "Rejected"
-                                                              : "File Not Available",
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: CustomColors
-                                                        .primaryText,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 15),
-                                GestureDetector(
-                                  onTap: () {
-                                    doDownloadFile(snapshot.data!.data!
-                                        .providerverification!.vehicleRecord);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: CustomColors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            doDownloadFile(snapshot
-                                                .data!
-                                                .data!
-                                                .providerverification!
-                                                .vehicleRecord);
-                                          },
-                                          icon: Icon(
-                                            Icons.picture_as_pdf_rounded,
-                                            color: CustomColors.red,
-                                          ),
-                                          label: Text(
-                                            "Download Vehicle Record Document",
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color:
-                                                    CustomColors.primaryText),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            // getEnhancedPdfFile();
-                                          },
-                                          child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14, horizontal: 5),
-                                            radius: const Radius.circular(4),
-                                            borderType: BorderType.RRect,
-                                            color: CustomColors.primaryColor,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.picture_as_pdf_rounded,
-                                                  color: CustomColors.red,
-                                                  size: 16,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .providerverification!
-                                                              .vehicleRecordVerify
-                                                              .toString() ==
-                                                          "0")
-                                                      ? "Pending"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .providerverification!
-                                                                  .vehicleRecordVerify
-                                                                  .toString() ==
-                                                              "1")
-                                                          ? "Approved"
-                                                          : (snapshot
-                                                                      .data!
-                                                                      .data!
-                                                                      .providerverification!
-                                                                      .vehicleRecordVerify
-                                                                      .toString() ==
-                                                                  "2")
-                                                              ? "Rejected"
-                                                              : "File Not Available",
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: CustomColors
-                                                        .primaryText,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  fileStatus: snapshot.data!.data!.providerverification!.vehicleRecordVerify.toString(),
+                                  downloading: downloading,
+                                  downloadProgress: downloadProgress,
+                                  title: "Download Vehicle Record Document",
                                 ),
                               ],
                             ),
@@ -2121,13 +1543,97 @@ class _ProfileGiverState extends State<ProfileGiver> {
   }
 }
 
+class BasicDocumentDownloadList extends StatelessWidget {
+  const BasicDocumentDownloadList({
+    super.key,
+    required this.onTap,
+    required this.downloading,
+    required this.downloadProgress,
+    required this.fileStatus,
+    required this.title,
+  });
+  final void Function()? onTap;
+  final bool downloading;
+  final String downloadProgress;
+  final String fileStatus;
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          color: CustomColors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Icon(
+              Icons.picture_as_pdf_rounded,
+              color: CustomColors.red,
+            ),
+            const SizedBox(width: 5),
+            Expanded(
+              child: Text(
+                downloading ? "$title $downloadProgress" : title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
+              ),
+            ),
+            DottedBorder(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              radius: const Radius.circular(4),
+              borderType: BorderType.RRect,
+              color: CustomColors.primaryColor,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.picture_as_pdf_rounded,
+                    color: CustomColors.red,
+                    size: 16,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    (fileStatus == "0")
+                        ? "Pending"
+                        : (fileStatus == "1")
+                            ? "Approved"
+                            : (fileStatus == "2")
+                                ? "Rejected"
+                                : "File Not Available",
+                    maxLines: 1,
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: CustomColors.primaryText,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 // class HeaderCurvedContainer extends CustomPainter {
 //   @override
 //   void paint(Canvas canvas, Size size) {
 //     Paint paint = Paint()
 //       ..color = const Color(0xffea5d49)
 //       ..style = PaintingStyle.fill;
-
 //     Path path = Path()
 //       ..relativeLineTo(0, 100)
 //       ..quadraticBezierTo(size.width / 2, 80, size.width, 100)
@@ -2136,13 +1642,10 @@ class _ProfileGiverState extends State<ProfileGiver> {
 //     // Path topStrokePath = Path()
 //     //   ..moveTo(0, 0)
 //     //   ..lineTo(size.width, 0);
-
 //     // // Combine the main path and top stroke path
 //     // path.addPath(topStrokePath, Offset.zero);
-
 //     canvas.drawPath(path, paint);
 //   }
-
 //   @override
 //   bool shouldRepaint(CustomPainter oldDelegate) => false;
 // }
@@ -2191,8 +1694,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         },
       );
     } catch (e) {
-      customErrorSnackBar(
-          context, "something went wrong please try again later");
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -2215,8 +1717,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         },
       );
     } catch (e) {
-      customErrorSnackBar(
-          context, "something went wrong please try again later");
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -2239,8 +1740,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         },
       );
     } catch (e) {
-      customErrorSnackBar(
-          context, "something went wrong please try again later");
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -2263,8 +1763,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
         },
       );
     } catch (e) {
-      customErrorSnackBar(
-          context, "something went wrong please try again later");
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -2468,8 +1967,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                               Positioned(
                                 top: -25,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
                                   decoration: BoxDecoration(
                                     color: CustomColors.primaryColor,
                                     borderRadius: const BorderRadius.only(
@@ -2504,8 +2002,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                     children: [
                                       const SizedBox(height: 20),
                                       Text(
-                                        snapshot.data!.data!.firstName
-                                            .toString(),
+                                        snapshot.data!.data!.firstName.toString(),
                                         style: TextStyle(
                                           fontSize: 20,
                                           fontFamily: "Rubik",
@@ -2524,18 +2021,15 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                       ),
                                       const SizedBox(height: 20),
                                       Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 7, horizontal: 4),
+                                            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
                                             decoration: const BoxDecoration(
                                               color: Colors.white,
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Color.fromARGB(
-                                                      13, 0, 0, 0),
+                                                  color: Color.fromARGB(13, 0, 0, 0),
                                                   blurRadius: 4.0,
                                                   spreadRadius: 2.0,
                                                   offset: Offset(2.0, 2.0),
@@ -2553,28 +2047,20 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                 children: [
                                                   WidgetSpan(
                                                     child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 1,
-                                                              right: 5),
+                                                      padding: const EdgeInsets.only(left: 1, right: 5),
                                                       child: Icon(
                                                         Icons.phone_outlined,
                                                         size: 14,
-                                                        color: CustomColors
-                                                            .primaryTextLight,
+                                                        color: CustomColors.primaryTextLight,
                                                       ),
                                                     ),
                                                   ),
                                                   TextSpan(
-                                                    text: snapshot
-                                                        .data!.data!.phone
-                                                        .toString(),
+                                                    text: snapshot.data!.data!.phone.toString(),
                                                     style: TextStyle(
                                                       fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      color: CustomColors
-                                                          .primaryTextLight,
+                                                      fontWeight: FontWeight.w400,
+                                                      color: CustomColors.primaryTextLight,
                                                     ),
                                                   ),
                                                 ],
@@ -2585,16 +2071,13 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             height: 5,
                                           ),
                                           Container(
-                                            margin: const EdgeInsets.symmetric(
-                                                horizontal: 14),
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 7, horizontal: 4),
+                                            margin: const EdgeInsets.symmetric(horizontal: 14),
+                                            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
                                             decoration: const BoxDecoration(
                                               color: Colors.white,
                                               boxShadow: [
                                                 BoxShadow(
-                                                  color: Color.fromARGB(
-                                                      13, 0, 0, 0),
+                                                  color: Color.fromARGB(13, 0, 0, 0),
                                                   blurRadius: 4.0,
                                                   spreadRadius: 2.0,
                                                   offset: Offset(2.0, 2.0),
@@ -2612,57 +2095,29 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                 children: [
                                                   WidgetSpan(
                                                     child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 3,
-                                                              right: 5),
+                                                      padding: const EdgeInsets.only(left: 3, right: 5),
                                                       child: Icon(
-                                                        Icons
-                                                            .location_on_outlined,
+                                                        Icons.location_on_outlined,
                                                         size: 14,
-                                                        color: CustomColors
-                                                            .primaryTextLight,
+                                                        color: CustomColors.primaryTextLight,
                                                       ),
                                                     ),
                                                   ),
-                                                  snapshot
-                                                              .data!
-                                                              .data!
-                                                              .userdetail!
-                                                              .address
-                                                              .toString() !=
-                                                          "null"
+                                                  snapshot.data!.data!.userdetail!.address.toString() != "null"
                                                       ? TextSpan(
-                                                          text: snapshot
-                                                                      .data!
-                                                                      .data!
-                                                                      .userdetail!
-                                                                      .address
-                                                                      .toString() ==
-                                                                  "null"
-                                                              ? "Not Available"
-                                                              : snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .userdetail!
-                                                                  .address
-                                                                  .toString(),
+                                                          text: snapshot.data!.data!.userdetail!.address.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.address.toString(),
                                                           style: TextStyle(
                                                             fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color: CustomColors
-                                                                .primaryTextLight,
+                                                            fontWeight: FontWeight.w400,
+                                                            color: CustomColors.primaryTextLight,
                                                           ),
                                                         )
                                                       : TextSpan(
                                                           text: "Required",
                                                           style: TextStyle(
                                                             fontSize: 12,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color: CustomColors
-                                                                .red,
+                                                            fontWeight: FontWeight.w400,
+                                                            color: CustomColors.red,
                                                           ),
                                                         ),
                                                 ],
@@ -2680,8 +2135,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 left: 100,
                                 right: 100,
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20),
+                                  padding: const EdgeInsets.symmetric(horizontal: 20),
                                   decoration: const BoxDecoration(
                                     borderRadius: BorderRadius.only(
                                       bottomLeft: Radius.circular(50),
@@ -2716,93 +2170,26 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                ProfileGiverPendingEdit(
-                                              avatar: snapshot
-                                                  .data!.data!.avatar
-                                                  .toString(),
-                                              gender: snapshot.data!.data!
-                                                  .userdetail!.gender
-                                                  .toString(),
-                                              phoneNumber: snapshot
-                                                  .data!.data!.phone
-                                                  .toString(),
-                                              dob: snapshot
-                                                  .data!.data!.userdetail!.dob
-                                                  .toString(),
-                                              yoe: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .userdetailprovider!
-                                                  .experience
-                                                  .toString(),
-                                              hourlyRate: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .userdetailprovider!
-                                                  .hourlyRate
-                                                  .toString(),
-                                              userAddress: snapshot.data!.data!
-                                                  .userdetail!.address
-                                                  .toString(),
-                                              zipCode: snapshot
-                                                  .data!.data!.userdetail!.zip
-                                                  .toString(),
-                                              additionalService: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .userdetailprovider!
-                                                  .keywords
-                                                  .toString(),
-                                              availability: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .userdetailprovider!
-                                                  .availability
-                                                  .toString(),
-                                              userInfo: snapshot.data!.data!
-                                                  .userdetail!.userInfo
-                                                  .toString(),
-                                              enhancedCriminal: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .providerverification!
-                                                  .enhancedCriminal,
-                                              enhancedCriminalStatus: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .providerverification!
-                                                  .enhancedCriminalVerify,
-                                              basicCriminal: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .providerverification!
-                                                  .basicCriminal,
-                                              basicCriminalStatus: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .providerverification!
-                                                  .basicCriminalVerify,
-                                              firstAid: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .providerverification!
-                                                  .firstAid,
-                                              firstAidStatus: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .providerverification!
-                                                  .firstAidVerify,
-                                              vehicleRecord: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .providerverification!
-                                                  .vehicleRecord,
-                                              vehicleRecordStatus: snapshot
-                                                  .data!
-                                                  .data!
-                                                  .providerverification!
-                                                  .vehicleRecordVerify,
+                                            builder: (context) => ProfileGiverPendingEdit(
+                                              avatar: snapshot.data!.data!.avatar.toString(),
+                                              gender: snapshot.data!.data!.userdetail!.gender.toString(),
+                                              phoneNumber: snapshot.data!.data!.phone.toString(),
+                                              dob: snapshot.data!.data!.userdetail!.dob.toString(),
+                                              yoe: snapshot.data!.data!.userdetailprovider!.experience.toString(),
+                                              hourlyRate: snapshot.data!.data!.userdetailprovider!.hourlyRate.toString(),
+                                              userAddress: snapshot.data!.data!.userdetail!.address.toString(),
+                                              zipCode: snapshot.data!.data!.userdetail!.zip.toString(),
+                                              additionalService: snapshot.data!.data!.userdetailprovider!.keywords.toString(),
+                                              availability: snapshot.data!.data!.userdetailprovider!.availability.toString(),
+                                              userInfo: snapshot.data!.data!.userdetail!.userInfo.toString(),
+                                              enhancedCriminal: snapshot.data!.data!.providerverification!.enhancedCriminal,
+                                              enhancedCriminalStatus: snapshot.data!.data!.providerverification!.enhancedCriminalVerify,
+                                              basicCriminal: snapshot.data!.data!.providerverification!.basicCriminal,
+                                              basicCriminalStatus: snapshot.data!.data!.providerverification!.basicCriminalVerify,
+                                              firstAid: snapshot.data!.data!.providerverification!.firstAid,
+                                              firstAidStatus: snapshot.data!.data!.providerverification!.firstAidVerify,
+                                              vehicleRecord: snapshot.data!.data!.providerverification!.vehicleRecord,
+                                              vehicleRecordStatus: snapshot.data!.data!.providerverification!.vehicleRecordVerify,
                                             ),
                                           ),
                                         );
@@ -2833,24 +2220,19 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Name
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Name",
@@ -2880,24 +2262,19 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Gender
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Gender",
@@ -2911,52 +2288,24 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                           const SizedBox(
                                             height: 8,
                                           ),
-                                          snapshot.data!.data!.userdetail!
-                                                      .gender
-                                                      .toString() !=
-                                                  "null"
+                                          snapshot.data!.data!.userdetail!.gender.toString() != "null"
                                               ? Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .userdetail!
-                                                              .gender
-                                                              .toString() ==
-                                                          "1")
+                                                  (snapshot.data!.data!.userdetail!.gender.toString() == "1")
                                                       ? "Male"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .userdetail!
-                                                                  .gender
-                                                                  .toString() ==
-                                                              "2")
+                                                      : (snapshot.data!.data!.userdetail!.gender.toString() == "2")
                                                           ? "Female"
                                                           : "Required",
                                                   style: TextStyle(
-                                                    color:
-                                                        CustomColors.hintText,
+                                                    color: CustomColors.hintText,
                                                     fontSize: 16,
                                                     fontFamily: "Rubik",
                                                     fontWeight: FontWeight.w200,
                                                   ),
                                                 )
                                               : Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .userdetail!
-                                                              .gender
-                                                              .toString() ==
-                                                          "1")
+                                                  (snapshot.data!.data!.userdetail!.gender.toString() == "1")
                                                       ? "Male"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .userdetail!
-                                                                  .gender
-                                                                  .toString() ==
-                                                              "2")
+                                                      : (snapshot.data!.data!.userdetail!.gender.toString() == "2")
                                                           ? "Female"
                                                           : "Required",
                                                   style: TextStyle(
@@ -2974,24 +2323,19 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Services
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Area of Insterest",
@@ -3006,14 +2350,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             height: 8,
                                           ),
                                           Text(
-                                            snapshot.data!.data!.userdetail!
-                                                        .service!.name
-                                                        .toString() ==
-                                                    "null"
-                                                ? "Not Available"
-                                                : snapshot.data!.data!
-                                                    .userdetail!.service!.name
-                                                    .toString(),
+                                            snapshot.data!.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.service!.name.toString(),
                                             style: TextStyle(
                                               color: CustomColors.hintText,
                                               fontSize: 16,
@@ -3028,31 +2365,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 //  Experience
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Years of Experience",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -3061,60 +2392,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot
-                                                        .data!
-                                                        .data!
-                                                        .userdetailprovider!
-                                                        .experience
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetailprovider!.experience.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .experience
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .experience
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.experience.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.experience.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .experience
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .experience
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.experience.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.experience.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -3125,31 +2421,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Hourly
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Hourly Rate",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -3158,47 +2448,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot
-                                                        .data!
-                                                        .data!
-                                                        .userdetailprovider!
-                                                        .hourlyRate
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetailprovider!.hourlyRate.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .hourlyRate
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .hourlyRate
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.hourlyRate.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.hourlyRate.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
                                                     "\$ ${snapshot.data!.data!.userdetailprovider!.hourlyRate.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.hourlyRate.toString()}",
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -3209,24 +2477,19 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Date
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Date Of Birth",
@@ -3241,8 +2504,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             height: 8,
                                           ),
                                           Text(
-                                            snapshot.data!.data!.userdetail!.dob
-                                                .toString(),
+                                            snapshot.data!.data!.userdetail!.dob.toString(),
                                             style: TextStyle(
                                               color: CustomColors.hintText,
                                               fontSize: 16,
@@ -3257,24 +2519,19 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Zip Code
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             "Zip Code",
@@ -3288,18 +2545,9 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                           const SizedBox(
                                             height: 8,
                                           ),
-                                          snapshot.data!.data!.userdetail!.zip
-                                                      .toString() ==
-                                                  "null"
+                                          snapshot.data!.data!.userdetail!.zip.toString() == "null"
                                               ? Text(
-                                                  snapshot.data!.data!
-                                                              .userdetail!.zip
-                                                              .toString() ==
-                                                          "null"
-                                                      ? "Required"
-                                                      : snapshot.data!.data!
-                                                          .userdetail!.zip
-                                                          .toString(),
+                                                  snapshot.data!.data!.userdetail!.zip.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.zip.toString(),
                                                   style: TextStyle(
                                                     color: CustomColors.red,
                                                     fontSize: 16,
@@ -3308,17 +2556,9 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                   ),
                                                 )
                                               : Text(
-                                                  snapshot.data!.data!
-                                                              .userdetail!.zip
-                                                              .toString() ==
-                                                          "null"
-                                                      ? "Required"
-                                                      : snapshot.data!.data!
-                                                          .userdetail!.zip
-                                                          .toString(),
+                                                  snapshot.data!.data!.userdetail!.zip.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.zip.toString(),
                                                   style: TextStyle(
-                                                    color:
-                                                        CustomColors.hintText,
+                                                    color: CustomColors.hintText,
                                                     fontSize: 16,
                                                     fontFamily: "Rubik",
                                                     fontWeight: FontWeight.w200,
@@ -3331,31 +2571,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Additional Service
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Additional Services",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -3364,60 +2598,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot
-                                                        .data!
-                                                        .data!
-                                                        .userdetailprovider!
-                                                        .keywords
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .keywords
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .keywords
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.keywords.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .keywords
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .keywords
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.keywords.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -3428,31 +2627,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Education
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Education",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -3464,47 +2657,31 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             ListView.builder(
                                               shrinkWrap: true,
                                               scrollDirection: Axis.vertical,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount: snapshot.data!.data!
-                                                  .educations!.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
+                                              physics: const NeverScrollableScrollPhysics(),
+                                              itemCount: snapshot.data!.data!.educations!.length,
+                                              itemBuilder: (BuildContext context, int index) {
                                                 return Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 5),
-                                                  margin: const EdgeInsets
-                                                      .symmetric(vertical: 5),
+                                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                                  margin: const EdgeInsets.symmetric(vertical: 5),
                                                   decoration: BoxDecoration(
                                                     border: Border.all(
-                                                      color: CustomColors
-                                                          .paraColor,
+                                                      color: CustomColors.paraColor,
                                                       width: 0.5,
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
+                                                    borderRadius: BorderRadius.circular(10),
                                                   ),
                                                   child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
                                                       Text(
                                                         "Institue Name: ${snapshot.data!.data!.educations![index].name}",
                                                         softWrap: true,
                                                         style: TextStyle(
-                                                          color: CustomColors
-                                                              .hintText,
+                                                          color: CustomColors.hintText,
                                                           fontSize: 14,
                                                           fontFamily: "Rubik",
-                                                          fontWeight:
-                                                              FontWeight.w200,
+                                                          fontWeight: FontWeight.w200,
                                                         ),
                                                       ),
                                                       const SizedBox(
@@ -3514,12 +2691,10 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                         "Major: ${snapshot.data!.data!.educations![index].major}",
                                                         softWrap: true,
                                                         style: TextStyle(
-                                                          color: CustomColors
-                                                              .hintText,
+                                                          color: CustomColors.hintText,
                                                           fontSize: 12,
                                                           fontFamily: "Rubik",
-                                                          fontWeight:
-                                                              FontWeight.w200,
+                                                          fontWeight: FontWeight.w200,
                                                         ),
                                                       ),
                                                       const SizedBox(
@@ -3529,35 +2704,22 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                         "From: ${snapshot.data!.data!.educations![index].from}",
                                                         softWrap: true,
                                                         style: TextStyle(
-                                                          color: CustomColors
-                                                              .hintText,
+                                                          color: CustomColors.hintText,
                                                           fontSize: 12,
                                                           fontFamily: "Rubik",
-                                                          fontWeight:
-                                                              FontWeight.w200,
+                                                          fontWeight: FontWeight.w200,
                                                         ),
                                                       ),
-                                                      snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .educations![
-                                                                      index]
-                                                                  .to ==
-                                                              ""
+                                                      snapshot.data!.data!.educations![index].to == ""
                                                           ? Text(
                                                               "Time Period: Currently Studying",
                                                               softWrap: true,
                                                               style: TextStyle(
                                                                 height: 2,
-                                                                color:
-                                                                    CustomColors
-                                                                        .hintText,
+                                                                color: CustomColors.hintText,
                                                                 fontSize: 12,
-                                                                fontFamily:
-                                                                    "Rubik",
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w200,
+                                                                fontFamily: "Rubik",
+                                                                fontWeight: FontWeight.w200,
                                                               ),
                                                             )
                                                           : Text(
@@ -3565,15 +2727,10 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                               softWrap: true,
                                                               style: TextStyle(
                                                                 height: 0,
-                                                                color:
-                                                                    CustomColors
-                                                                        .hintText,
+                                                                color: CustomColors.hintText,
                                                                 fontSize: 12,
-                                                                fontFamily:
-                                                                    "Rubik",
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w200,
+                                                                fontFamily: "Rubik",
+                                                                fontWeight: FontWeight.w200,
                                                               ),
                                                             ),
                                                     ],
@@ -3589,31 +2746,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // User Information
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "User Information",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -3622,57 +2773,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot.data!.data!.userdetail!
-                                                        .userInfo
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetail!.userInfo.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetail!
-                                                                .userInfo
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetail!
-                                                            .userInfo
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.userInfo.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetail!
-                                                                .userInfo
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetail!
-                                                            .userInfo
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.userInfo.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -3683,31 +2802,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Availability
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Availability",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -3716,60 +2829,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot
-                                                        .data!
-                                                        .data!
-                                                        .userdetailprovider!
-                                                        .availability
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetailprovider!.availability.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .availability
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .availability
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.availability.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.availability.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .availability
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .availability
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.availability.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.availability.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -3780,31 +2858,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 // Additional Service
                                 Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 17, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
                                   decoration: BoxDecoration(
                                     color: CustomColors.white,
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
                                               "Additional Services",
                                               style: TextStyle(
-                                                color:
-                                                    CustomColors.primaryColor,
+                                                color: CustomColors.primaryColor,
                                                 fontSize: 10,
                                                 fontFamily: "Rubik",
                                                 fontWeight: FontWeight.w600,
@@ -3813,60 +2885,25 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            snapshot
-                                                        .data!
-                                                        .data!
-                                                        .userdetailprovider!
-                                                        .keywords
-                                                        .toString() ==
-                                                    "null"
+                                            snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null"
                                                 ? Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .keywords
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .keywords
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.keywords.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       color: CustomColors.red,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   )
                                                 : Text(
-                                                    snapshot
-                                                                .data!
-                                                                .data!
-                                                                .userdetailprovider!
-                                                                .keywords
-                                                                .toString() ==
-                                                            "null"
-                                                        ? "Required"
-                                                        : snapshot
-                                                            .data!
-                                                            .data!
-                                                            .userdetailprovider!
-                                                            .keywords
-                                                            .toString(),
+                                                    snapshot.data!.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : snapshot.data!.data!.userdetailprovider!.keywords.toString(),
                                                     softWrap: true,
                                                     style: TextStyle(
-                                                      color:
-                                                          CustomColors.hintText,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
-                                                      fontWeight:
-                                                          FontWeight.w200,
+                                                      fontWeight: FontWeight.w200,
                                                     ),
                                                   ),
                                           ],
@@ -3882,8 +2919,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                   borderType: BorderType.RRect,
                                   color: CustomColors.primaryColor,
                                   child: Container(
-                                    padding:
-                                        const EdgeInsets.symmetric(vertical: 5),
+                                    padding: const EdgeInsets.symmetric(vertical: 5),
                                     decoration: BoxDecoration(
                                       color: CustomColors.primaryLight,
                                       borderRadius: BorderRadius.circular(10),
@@ -3927,8 +2963,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         TextButton.icon(
                                           onPressed: () {
@@ -3939,20 +2974,14 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             color: CustomColors.red,
                                           ),
                                           label: Text(
-                                            downloading
-                                                ? "Download Enhanced Criminal Document $downloadProgress"
-                                                : "Download Enhanced Criminal Document",
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color:
-                                                    CustomColors.primaryText),
+                                            downloading ? "Download Enhanced Criminal Document $downloadProgress" : "Download Enhanced Criminal Document",
+                                            style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
                                           ),
                                         ),
                                         GestureDetector(
                                           onTap: () async {},
                                           child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14, horizontal: 5),
+                                            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
                                             radius: const Radius.circular(4),
                                             borderType: BorderType.RRect,
                                             color: CustomColors.primaryColor,
@@ -3967,35 +2996,16 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                   width: 5,
                                                 ),
                                                 Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .providerverification!
-                                                              .enhancedCriminalVerify
-                                                              .toString() ==
-                                                          "0")
+                                                  (snapshot.data!.data!.providerverification!.enhancedCriminalVerify.toString() == "0")
                                                       ? "Pending"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .providerverification!
-                                                                  .enhancedCriminalVerify
-                                                                  .toString() ==
-                                                              "1")
+                                                      : (snapshot.data!.data!.providerverification!.enhancedCriminalVerify.toString() == "1")
                                                           ? "Approved"
-                                                          : (snapshot
-                                                                      .data!
-                                                                      .data!
-                                                                      .providerverification!
-                                                                      .enhancedCriminalVerify
-                                                                      .toString() ==
-                                                                  "2")
+                                                          : (snapshot.data!.data!.providerverification!.enhancedCriminalVerify.toString() == "2")
                                                               ? "Rejected"
                                                               : "File Not Available Enhanced Criminal Document",
                                                   style: TextStyle(
                                                     fontSize: 11,
-                                                    color: CustomColors
-                                                        .primaryText,
+                                                    color: CustomColors.primaryText,
                                                   ),
                                                 ),
                                               ],
@@ -4019,8 +3029,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         TextButton.icon(
                                           onPressed: () {
@@ -4031,13 +3040,8 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             color: CustomColors.red,
                                           ),
                                           label: Text(
-                                            downloading
-                                                ? "Download Basic Criminal Document $downloadProgress"
-                                                : "Download Basic Criminal Document",
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color:
-                                                    CustomColors.primaryText),
+                                            downloading ? "Download Basic Criminal Document $downloadProgress" : "Download Basic Criminal Document",
+                                            style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
                                           ),
                                         ),
                                         GestureDetector(
@@ -4045,8 +3049,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             // getEnhancedPdfFile();
                                           },
                                           child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14, horizontal: 5),
+                                            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
                                             radius: const Radius.circular(4),
                                             borderType: BorderType.RRect,
                                             color: CustomColors.primaryColor,
@@ -4061,35 +3064,16 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                   width: 5,
                                                 ),
                                                 Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .providerverification!
-                                                              .basicCriminalVerify
-                                                              .toString() ==
-                                                          "0")
+                                                  (snapshot.data!.data!.providerverification!.basicCriminalVerify.toString() == "0")
                                                       ? "Pending"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .providerverification!
-                                                                  .basicCriminalVerify
-                                                                  .toString() ==
-                                                              "1")
+                                                      : (snapshot.data!.data!.providerverification!.basicCriminalVerify.toString() == "1")
                                                           ? "Approved"
-                                                          : (snapshot
-                                                                      .data!
-                                                                      .data!
-                                                                      .providerverification!
-                                                                      .basicCriminalVerify
-                                                                      .toString() ==
-                                                                  "2")
+                                                          : (snapshot.data!.data!.providerverification!.basicCriminalVerify.toString() == "2")
                                                               ? "Rejected"
                                                               : "File Not Available Basic Criminal Document",
                                                   style: TextStyle(
                                                     fontSize: 11,
-                                                    color: CustomColors
-                                                        .primaryText,
+                                                    color: CustomColors.primaryText,
                                                   ),
                                                 ),
                                               ],
@@ -4113,8 +3097,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         TextButton.icon(
                                           onPressed: () {
@@ -4126,10 +3109,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                           ),
                                           label: Text(
                                             "Download First Aid Document",
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color:
-                                                    CustomColors.primaryText),
+                                            style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
                                           ),
                                         ),
                                         GestureDetector(
@@ -4137,8 +3117,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             // getEnhancedPdfFile();
                                           },
                                           child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14, horizontal: 5),
+                                            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
                                             radius: const Radius.circular(4),
                                             borderType: BorderType.RRect,
                                             color: CustomColors.primaryColor,
@@ -4153,35 +3132,16 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                   width: 5,
                                                 ),
                                                 Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .providerverification!
-                                                              .firstAidVerify
-                                                              .toString() ==
-                                                          "0")
+                                                  (snapshot.data!.data!.providerverification!.firstAidVerify.toString() == "0")
                                                       ? "Pending"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .providerverification!
-                                                                  .firstAidVerify
-                                                                  .toString() ==
-                                                              "1")
+                                                      : (snapshot.data!.data!.providerverification!.firstAidVerify.toString() == "1")
                                                           ? "Approved"
-                                                          : (snapshot
-                                                                      .data!
-                                                                      .data!
-                                                                      .providerverification!
-                                                                      .firstAidVerify
-                                                                      .toString() ==
-                                                                  "2")
+                                                          : (snapshot.data!.data!.providerverification!.firstAidVerify.toString() == "2")
                                                               ? "Rejected"
                                                               : "File Not Available First Aid Document",
                                                   style: TextStyle(
                                                     fontSize: 11,
-                                                    color: CustomColors
-                                                        .primaryText,
+                                                    color: CustomColors.primaryText,
                                                   ),
                                                 ),
                                               ],
@@ -4204,8 +3164,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         TextButton.icon(
                                           onPressed: () {
@@ -4217,10 +3176,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                           ),
                                           label: Text(
                                             "Download Vehicle Record Document",
-                                            style: TextStyle(
-                                                fontSize: 10,
-                                                color:
-                                                    CustomColors.primaryText),
+                                            style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
                                           ),
                                         ),
                                         GestureDetector(
@@ -4228,8 +3184,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                             // getEnhancedPdfFile();
                                           },
                                           child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 14, horizontal: 5),
+                                            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
                                             radius: const Radius.circular(4),
                                             borderType: BorderType.RRect,
                                             color: CustomColors.primaryColor,
@@ -4244,35 +3199,16 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                   width: 5,
                                                 ),
                                                 Text(
-                                                  (snapshot
-                                                              .data!
-                                                              .data!
-                                                              .providerverification!
-                                                              .vehicleRecordVerify
-                                                              .toString() ==
-                                                          "0")
+                                                  (snapshot.data!.data!.providerverification!.vehicleRecordVerify.toString() == "0")
                                                       ? "Pending"
-                                                      : (snapshot
-                                                                  .data!
-                                                                  .data!
-                                                                  .providerverification!
-                                                                  .vehicleRecordVerify
-                                                                  .toString() ==
-                                                              "1")
+                                                      : (snapshot.data!.data!.providerverification!.vehicleRecordVerify.toString() == "1")
                                                           ? "Approved"
-                                                          : (snapshot
-                                                                      .data!
-                                                                      .data!
-                                                                      .providerverification!
-                                                                      .vehicleRecordVerify
-                                                                      .toString() ==
-                                                                  "2")
+                                                          : (snapshot.data!.data!.providerverification!.vehicleRecordVerify.toString() == "2")
                                                               ? "Rejected"
                                                               : "File Not Available Vehicle Record  Document",
                                                   style: TextStyle(
                                                     fontSize: 11,
-                                                    color: CustomColors
-                                                        .primaryText,
+                                                    color: CustomColors.primaryText,
                                                   ),
                                                 ),
                                               ],

@@ -237,7 +237,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                 padding: EdgeInsets.all(12.0),
                 child: Badge(
                   child: Icon(
-                    Icons.notifications_none,
+                    Icons.message_outlined,
                     size: 30,
                   ),
                 ),
