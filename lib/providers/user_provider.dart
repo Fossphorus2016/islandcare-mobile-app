@@ -63,8 +63,8 @@ class UserProvider extends ChangeNotifier {
           'Failed to load Profile Model',
         );
       }
-    } on DioError catch (e) {
-      print("error on fetch profile ${e.response!.data}");
+    } on DioError {
+      // print("error on fetch profile ${e.response!.data}");
     }
   }
 

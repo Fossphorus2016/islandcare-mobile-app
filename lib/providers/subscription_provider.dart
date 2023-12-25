@@ -24,8 +24,8 @@ class SubscriptionProvider extends ChangeNotifier {
         allPackages = response.data['subscription_package'];
         notifyListeners();
       }
-    } on DioError catch (e) {
-      print("error on get packages $e");
+    } on DioError {
+      // print("error on get packages $e");
     }
   }
 

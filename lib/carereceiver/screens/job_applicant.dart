@@ -93,7 +93,7 @@ class _JobApplicantsState extends State<JobApplicants> {
   Future<ServiceReceiverJobApplicantModel> fetchJobApplicantModel() async {
     var token = await getUserToken();
     final response = await Dio().get(
-      '${CareReceiverURl.serviceReceiverApplication}',
+      CareReceiverURl.serviceReceiverApplication,
       options: Options(
         headers: {
           'Accept': 'application/json',
