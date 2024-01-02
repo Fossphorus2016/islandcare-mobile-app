@@ -251,6 +251,170 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
               return Column(
                 children: [
                   Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Job Title",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          snapshot.data!.jobDetail![index].jobTitle.toString(),
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w600,
+                            color: CustomColors.primaryText,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("Date"),
+                                  const SizedBox(height: 05),
+                                  Text(
+                                    snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingDate.toString(),
+                                    style: TextStyle(
+                                      color: CustomColors.primaryText,
+                                      fontFamily: "Poppins",
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text("Start Time"),
+                                  const SizedBox(height: 05),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 00, horizontal: 08),
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.primaryLight,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Text(
+                                      snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingTime.toString(),
+                                      style: const TextStyle(
+                                        fontFamily: "Poppins",
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        Column(
+                          children: [
+                            const Text("Duration"),
+                            const SizedBox(height: 05),
+                            Text(
+                              "${snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].duration.toString()} hours",
+                              style: TextStyle(
+                                color: CustomColors.primaryText,
+                                fontFamily: "Poppins",
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    color: Colors.white,
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    child: const Column(
+                      children: [
+                        Text(
+                          "INFORMATION",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        ),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text("Name: "),
+                                Expanded(
+                                  child: Text("asdaldwodihawdoagwidsddw"),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 05),
+                            Row(
+                              children: [
+                                Text("Age: "),
+                                Expanded(
+                                  child: Text("asdaldwodihawdoagwidsddw"),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 05),
+                            Row(
+                              children: [
+                                Text(
+                                  "Date Of Birth: ",
+                                  style: TextStyle(fontSize: 13),
+                                ),
+                                Expanded(
+                                  child: Text("asdaldwodihawdoagwidsddw"),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 05),
+                            Row(
+                              children: [
+                                Text("Medical Condition: "),
+                                Expanded(
+                                  child: Text("asdaldwodihawdoagwidsddw"),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 05),
+                            Row(
+                              children: [
+                                Text("Hourly Rate: "),
+                                Expanded(
+                                  child: Text("asdaldwodihawdoagwidsddw"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
                     padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 12),
                     margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                     alignment: Alignment.center,
@@ -326,9 +490,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                             ],
                           ),
                         ],
-                        const SizedBox(
-                          height: 5,
-                        ),
+                        const SizedBox(height: 5),
                         if (snapshot.data!.jobDetail![index].hourlyRate != null) ...[
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
