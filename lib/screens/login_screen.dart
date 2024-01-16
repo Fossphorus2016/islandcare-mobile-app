@@ -315,7 +315,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             await pref.setString('isProfileCompleted', isProfileCompleted.toString());
                                             await pref.setString('userName', "$name $last");
 
-                                            Navigator.pushNamedAndRemoveUntil(context, 'bottom-bar-giver-2', (route) => false);
+                                            // Navigator.pushNamedAndRemoveUntil(context, 'bottom-bar-giver-2', (route) => false);
                                           } else {
                                             SharedPreferences pref = await SharedPreferences.getInstance();
                                             await pref.setString('userRole', data["user"]["role"].toString());

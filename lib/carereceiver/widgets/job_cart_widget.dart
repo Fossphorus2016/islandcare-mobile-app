@@ -21,7 +21,7 @@ class JobBoardCartWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 15),
-      height: 80,
+      height: 90,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         border: Border(
@@ -36,7 +36,6 @@ class JobBoardCartWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            flex: 7,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -54,6 +53,8 @@ class JobBoardCartWidget extends StatelessWidget {
                 ),
                 Text(
                   jobType.toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.fade,
                   style: TextStyle(
                     color: CustomColors.hintText,
                     fontFamily: "Poppins",
@@ -65,26 +66,20 @@ class JobBoardCartWidget extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          Expanded(
-            flex: 3,
-            child: GestureDetector(
-              onTap: detail,
-              child: Container(
-                height: 24,
-                width: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2),
-                  color: CustomColors.primaryColor,
-                ),
-                child: Center(
-                  child: Text(
-                    "DETAIL".toUpperCase(),
-                    style: TextStyle(
-                      color: CustomColors.white,
-                      fontSize: 12,
-                      fontFamily: "Poppins",
-                      fontWeight: FontWeight.w500,
-                    ),
+          GestureDetector(
+            onTap: detail,
+            child: Container(
+              height: 24,
+              width: 70,
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: CustomColors.primaryColor),
+              child: Center(
+                child: Text(
+                  "DETAIL",
+                  style: TextStyle(
+                    color: CustomColors.white,
+                    fontSize: 12,
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),

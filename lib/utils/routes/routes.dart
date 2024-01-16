@@ -29,8 +29,8 @@ class Routes {
         return CustomPageRoute(child: const BottomBar2(), direction: AxisDirection.left);
       case RoutesName.bottomBarGiver:
         return CustomPageRoute(child: const BottomBarGiver(), direction: AxisDirection.left);
-      case RoutesName.bottomBarGiver2:
-        return CustomPageRoute(child: const BottomBarGiver2(), direction: AxisDirection.left);
+      // case RoutesName.bottomBarGiver2:
+      //   return CustomPageRoute(child: const BottomBarGiver2(), direction: AxisDirection.left);
 
       default:
         return MaterialPageRoute(builder: (_) {

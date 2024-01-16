@@ -153,11 +153,11 @@ class AuthService {
                   await pref.setString('userAvatar', avatar.toString());
                   await pref.setString('userId', userId.toString());
 
-                  Navigator.pushNamedAndRemoveUntil(
-                    context,
-                    'bottom-bar-giver-2',
-                    (route) => false,
-                  );
+                  // Navigator.pushNamedAndRemoveUntil(
+                  //   context,
+                  //   'bottom-bar-giver-2',
+                  //   (route) => false,
+                  // );
                 } else {
                   Navigator.pushNamedAndRemoveUntil(
                     context,

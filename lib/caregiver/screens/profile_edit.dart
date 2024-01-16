@@ -7,7 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
-import 'package:island_app/caregiver/screens/profile_provider.dart';
+import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -2062,8 +2062,7 @@ class ProfileGiverPendingEdit extends StatefulWidget {
     this.vehicleRecordStatus,
   }) : super(key: key);
   @override
-  State<ProfileGiverPendingEdit> createState() =>
-      _ProfileGiverPendingEditState();
+  State<ProfileGiverPendingEdit> createState() => _ProfileGiverPendingEditState();
 }
 
 class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
@@ -2407,45 +2406,24 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         'hourly_rate': hourlyController.text.toString(),
         'availability': availabilityController.text.toString(),
         'keywords': keywordController.text.toString(),
-        "avatar": imageFileDio == null
-            ? null
-            : await MultipartFile.fromFile(imageFileDio!.path),
+        "avatar": imageFileDio == null ? null : await MultipartFile.fromFile(imageFileDio!.path),
         "institute_name[]": instituteMapList,
         "start_date[]": startDateMapList,
         "end_date[]": endDateMapList,
         "current[]": currentMapList,
         "major[]": majorMapList,
-        "enhanced_criminal": _getEnhanceFile == null
-            ? null
-            : await MultipartFile.fromFile(_getEnhanceFile.toString()),
-        "basic_criminal": _getBasicFile == null
-            ? null
-            : await MultipartFile.fromFile(_getBasicFile.toString()),
-        "first_aid": _getFirstAidFile == null
-            ? null
-            : await MultipartFile.fromFile(_getFirstAidFile.toString()),
-        "vehicle_record": _getVehicleRecordFile == null
-            ? null
-            : await MultipartFile.fromFile(_getVehicleRecordFile.toString()),
+        "enhanced_criminal": _getEnhanceFile == null ? null : await MultipartFile.fromFile(_getEnhanceFile.toString()),
+        "basic_criminal": _getBasicFile == null ? null : await MultipartFile.fromFile(_getBasicFile.toString()),
+        "first_aid": _getFirstAidFile == null ? null : await MultipartFile.fromFile(_getFirstAidFile.toString()),
+        "vehicle_record": _getVehicleRecordFile == null ? null : await MultipartFile.fromFile(_getVehicleRecordFile.toString()),
       },
     );
 
     Dio dio = Dio();
     try {
-      var response = await dio.post(
-          'https://islandcare.bm/api/service-provider-profile/$usersId',
-          data: formData,
-          options: Options(
-              contentType: 'application/json',
-              followRedirects: false,
-              validateStatus: (status) => true,
-              headers: {
-                "Accept": "application/json",
-                "Authorization": "Bearer $token"
-              }));
+      var response = await dio.post('https://islandcare.bm/api/service-provider-profile/$usersId', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
       if (response.statusCode == 200) {
-        Provider.of<ProfileProvider>(context, listen: false)
-            .fetchProfileGiverModel();
+        Provider.of<ProfileProvider>(context, listen: false).fetchProfileGiverModel();
         customSuccesSnackBar(
           context,
           "Profile Updated Successfully.",
@@ -2588,14 +2566,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   child: Center(
                                     child: widget.avatar != null
                                         ? ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(100),
+                                            borderRadius: BorderRadius.circular(100),
                                             child: Image(
                                               width: 100,
                                               height: 100,
                                               fit: BoxFit.fitWidth,
-                                              image: NetworkImage(
-                                                  "${AppUrl.webStorageUrl}/${widget.avatar}"),
+                                              image: NetworkImage("${AppUrl.webStorageUrl}/${widget.avatar}"),
                                             ),
                                           )
                                         : const Text("Upload"),
@@ -2617,8 +2593,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       const SizedBox(height: 15),
                       // Gender
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
@@ -2654,24 +2629,19 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                       height: 50.45,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
-                                        color: _isSelectedGender == "1"
-                                            ? CustomColors.primaryColor
-                                            : CustomColors.white,
+                                        color: _isSelectedGender == "1" ? CustomColors.primaryColor : CustomColors.white,
                                         borderRadius: BorderRadius.circular(8),
                                         boxShadow: const [
                                           BoxShadow(
                                             color: Color.fromARGB(15, 0, 0, 0),
                                             blurRadius: 4,
                                             spreadRadius: 4,
-                                            offset:
-                                                Offset(2, 2), // Shadow position
+                                            offset: Offset(2, 2), // Shadow position
                                           ),
                                         ],
                                       ),
                                       child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            splashFactory:
-                                                NoSplash.splashFactory),
+                                        style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                                         onPressed: () {
                                           setState(() {
                                             _isSelectedGender = "1";
@@ -2681,9 +2651,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                           "Male",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            color: _isSelectedGender == "1"
-                                                ? CustomColors.white
-                                                : CustomColors.primaryText,
+                                            color: _isSelectedGender == "1" ? CustomColors.white : CustomColors.primaryText,
                                             fontFamily: "Rubik",
                                             fontSize: 12,
                                             fontWeight: FontWeight.w300,
@@ -2707,9 +2675,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                       height: 50.45,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
-                                        color: _isSelectedGender == "2"
-                                            ? CustomColors.primaryColor
-                                            : CustomColors.white,
+                                        color: _isSelectedGender == "2" ? CustomColors.primaryColor : CustomColors.white,
                                         borderRadius: BorderRadius.circular(8),
                                         boxShadow: const [
                                           BoxShadow(
@@ -2721,9 +2687,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         ],
                                       ),
                                       child: TextButton(
-                                        style: TextButton.styleFrom(
-                                            splashFactory:
-                                                NoSplash.splashFactory),
+                                        style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                                         onPressed: () {
                                           setState(() {
                                             _isSelectedGender = "2";
@@ -2733,9 +2697,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                           "Female",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            color: _isSelectedGender == "2"
-                                                ? CustomColors.white
-                                                : CustomColors.primaryText,
+                                            color: _isSelectedGender == "2" ? CustomColors.white : CustomColors.primaryText,
                                             fontFamily: "Rubik",
                                             fontSize: 12,
                                             fontWeight: FontWeight.w300,
@@ -2752,8 +2714,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       ),
                       // Phone Number
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
@@ -2792,13 +2753,11 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   borderRadius: BorderRadius.circular(0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                               ),
@@ -2808,8 +2767,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       ),
                       // DOB
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
@@ -2848,8 +2806,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       ),
                       // Experrience
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
@@ -2888,13 +2845,11 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   borderRadius: BorderRadius.circular(0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                               ),
@@ -2904,8 +2859,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       ),
                       // Hourly
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
@@ -2944,13 +2898,11 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   borderRadius: BorderRadius.circular(0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                               ),
@@ -2960,8 +2912,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       ),
                       // User Address
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
@@ -3000,13 +2951,11 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   borderRadius: BorderRadius.circular(0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                               ),
@@ -3016,8 +2965,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       ),
                       // Zip Code
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
@@ -3056,13 +3004,11 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   borderRadius: BorderRadius.circular(0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                               ),
@@ -3072,8 +3018,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       ),
                       // AdditionalService
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
@@ -3112,13 +3057,11 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   borderRadius: BorderRadius.circular(0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                               ),
@@ -3153,50 +3096,38 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         // Institute Name
                                         Container(
                                           height: 50,
-                                          margin: const EdgeInsets.only(
-                                              bottom: 15, top: 15),
+                                          margin: const EdgeInsets.only(bottom: 15, top: 15),
                                           decoration: BoxDecoration(
                                             color: CustomColors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                           child: TextFormField(
                                             controller: instituteController,
                                             keyboardType: TextInputType.name,
-                                            textInputAction:
-                                                TextInputAction.next,
+                                            textInputAction: TextInputAction.next,
                                             style: const TextStyle(
                                               fontSize: 16,
                                               fontFamily: "Rubik",
                                               fontWeight: FontWeight.w400,
                                             ),
-                                            textAlignVertical:
-                                                TextAlignVertical.bottom,
+                                            textAlignVertical: TextAlignVertical.bottom,
                                             maxLines: 1,
                                             decoration: InputDecoration(
                                               hintText: "Institute Name",
-                                              fillColor:
-                                                  CustomColors.myJobDetail,
+                                              fillColor: CustomColors.myJobDetail,
                                               focusColor: CustomColors.white,
                                               hoverColor: CustomColors.white,
                                               filled: true,
                                               border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                                borderRadius: BorderRadius.circular(10),
                                               ),
                                               focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: CustomColors.white,
-                                                    width: 0.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
+                                                borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                borderRadius: BorderRadius.circular(10.0),
                                               ),
                                               enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: CustomColors.white,
-                                                    width: 0.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
+                                                borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                borderRadius: BorderRadius.circular(10.0),
                                               ),
                                             ),
                                           ),
@@ -3206,46 +3137,35 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                           height: 50,
                                           decoration: BoxDecoration(
                                             color: CustomColors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                           child: TextFormField(
                                             controller: majorController,
                                             keyboardType: TextInputType.name,
-                                            textInputAction:
-                                                TextInputAction.next,
+                                            textInputAction: TextInputAction.next,
                                             style: const TextStyle(
                                               fontSize: 16,
                                               fontFamily: "Rubik",
                                               fontWeight: FontWeight.w400,
                                             ),
-                                            textAlignVertical:
-                                                TextAlignVertical.bottom,
+                                            textAlignVertical: TextAlignVertical.bottom,
                                             maxLines: 1,
                                             decoration: InputDecoration(
                                               hintText: "Major",
-                                              fillColor:
-                                                  CustomColors.myJobDetail,
+                                              fillColor: CustomColors.myJobDetail,
                                               focusColor: CustomColors.white,
                                               hoverColor: CustomColors.white,
                                               filled: true,
                                               border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                                borderRadius: BorderRadius.circular(10),
                                               ),
                                               focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: CustomColors.white,
-                                                    width: 0.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
+                                                borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                borderRadius: BorderRadius.circular(10.0),
                                               ),
                                               enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: CustomColors.white,
-                                                    width: 0.0),
-                                                borderRadius:
-                                                    BorderRadius.circular(10.0),
+                                                borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                borderRadius: BorderRadius.circular(10.0),
                                               ),
                                             ),
                                           ),
@@ -3255,25 +3175,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                           height: 15,
                                         ),
                                         TextButton.icon(
-                                          style: TextButton.styleFrom(
-                                              splashFactory:
-                                                  NoSplash.splashFactory),
+                                          style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                                           onPressed: () {
                                             _toggleradio();
                                             setState(() {});
                                           },
                                           icon: CircleAvatar(
-                                            backgroundColor:
-                                                const Color.fromARGB(
-                                                    181, 171, 171, 171),
+                                            backgroundColor: const Color.fromARGB(181, 171, 171, 171),
                                             radius: 8,
                                             child: CircleAvatar(
                                               radius: 4,
-                                              backgroundColor:
-                                                  isPeriodSeleted == "1"
-                                                      ? CustomColors.primaryText
-                                                      : const Color.fromARGB(
-                                                          181, 171, 171, 171),
+                                              backgroundColor: isPeriodSeleted == "1" ? CustomColors.primaryText : const Color.fromARGB(181, 171, 171, 171),
                                             ),
                                           ),
                                           label: Text(
@@ -3293,8 +3205,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                           height: 50,
                                           decoration: BoxDecoration(
                                             color: CustomColors.myJobDetail,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                           child: CustomTextFieldWidget(
                                             borderColor: CustomColors.white,
@@ -3315,8 +3226,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                           height: 50,
                                           decoration: BoxDecoration(
                                             color: CustomColors.myJobDetail,
-                                            borderRadius:
-                                                BorderRadius.circular(12),
+                                            borderRadius: BorderRadius.circular(12),
                                           ),
                                           child: CustomTextFieldWidget(
                                             borderColor: CustomColors.white,
@@ -3333,18 +3243,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         GestureDetector(
                                           onTap: () async {
                                             {
-                                              String institute =
-                                                  instituteController.text
-                                                      .trim();
-                                              String major =
-                                                  majorController.text.trim();
-                                              String from = fromController.text
-                                                  .toString();
-                                              String to =
-                                                  toController.text.toString();
+                                              String institute = instituteController.text.trim();
+                                              String major = majorController.text.trim();
+                                              String from = fromController.text.toString();
+                                              String to = toController.text.toString();
 
-                                              if (institute.isNotEmpty &&
-                                                  major.isNotEmpty) {
+                                              if (institute.isNotEmpty && major.isNotEmpty) {
                                                 instituteController.text = '';
                                                 majorController.text = '';
                                                 fromController.text = '';
@@ -3353,17 +3257,14 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                 majorMapList.add(major);
                                                 startDateMapList.add(from);
                                                 endDateMapList.add(to);
-                                                currentMapList
-                                                    .add(isPeriodSeleted);
+                                                currentMapList.add(isPeriodSeleted);
                                                 setState(() {
                                                   educationApiList.add(
                                                     {
-                                                      "name":
-                                                          institute.toString(),
+                                                      "name": institute.toString(),
                                                       "major": major.toString(),
                                                       "from": from.toString(),
-                                                      "current": isPeriodSeleted
-                                                          .toString(),
+                                                      "current": isPeriodSeleted.toString(),
                                                       "to": to.toString(),
                                                     },
                                                   );
@@ -3375,47 +3276,36 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                   fromController.text = '';
                                                   toController.text = '';
                                                 });
-                                                SharedPreferences pref =
-                                                    await SharedPreferences
-                                                        .getInstance();
-                                                var data = await pref.setString(
-                                                    'ListData',
-                                                    education.toString());
+                                                SharedPreferences pref = await SharedPreferences.getInstance();
+                                                var data = await pref.setString('ListData', education.toString());
 
                                                 Navigator.pop(context, true);
                                               }
                                             }
                                           },
                                           child: Container(
-                                            width: MediaQuery.of(context)
-                                                .size
-                                                .width,
+                                            width: MediaQuery.of(context).size.width,
                                             height: 50,
-                                            margin:
-                                                const EdgeInsets.only(top: 20),
+                                            margin: const EdgeInsets.only(top: 20),
                                             decoration: BoxDecoration(
                                               gradient: LinearGradient(
                                                 begin: Alignment.center,
                                                 end: Alignment.center,
                                                 colors: [
-                                                  const Color(0xff90EAB4)
-                                                      .withOpacity(0.1),
-                                                  const Color(0xff6BD294)
-                                                      .withOpacity(0.8),
+                                                  const Color(0xff90EAB4).withOpacity(0.1),
+                                                  const Color(0xff6BD294).withOpacity(0.8),
                                                 ],
                                               ),
                                               color: CustomColors.white,
                                               boxShadow: const [
                                                 BoxShadow(
-                                                  color: Color.fromARGB(
-                                                      13, 0, 0, 0),
+                                                  color: Color.fromARGB(13, 0, 0, 0),
                                                   blurRadius: 4.0,
                                                   spreadRadius: 2.0,
                                                   offset: Offset(2.0, 2.0),
                                                 ),
                                               ],
-                                              borderRadius:
-                                                  BorderRadius.circular(6),
+                                              borderRadius: BorderRadius.circular(6),
                                             ),
                                             child: Center(
                                               child: Text(
@@ -3459,9 +3349,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       if (educationApiList.isNotEmpty) ...[
                         Column(
                           children: [
-                            for (var i = 0;
-                                i < educationApiList.length;
-                                i++) ...[
+                            for (var i = 0; i < educationApiList.length; i++) ...[
                               SizedBox(
                                 height: 100,
                                 width: MediaQuery.of(context).size.width,
@@ -3470,9 +3358,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                     Positioned(
                                       top: 10,
                                       child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width -
-                                                40,
+                                        width: MediaQuery.of(context).size.width - 40,
                                         height: 90,
                                         padding: const EdgeInsets.symmetric(
                                           horizontal: 10,
@@ -3480,8 +3366,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         ),
                                         decoration: BoxDecoration(
                                           color: CustomColors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                         child: Column(
                                           children: [
@@ -3542,8 +3427,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         },
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.only(
+                                            borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(100),
                                               bottomLeft: Radius.circular(100),
                                               bottomRight: Radius.circular(100),
@@ -3552,8 +3436,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                             color: CustomColors.white,
                                             boxShadow: const [
                                               BoxShadow(
-                                                color:
-                                                    Color.fromARGB(13, 0, 0, 0),
+                                                color: Color.fromARGB(13, 0, 0, 0),
                                                 blurRadius: 4.0,
                                                 spreadRadius: 2.0,
                                                 offset: Offset(2.0, 2.0),
@@ -3584,8 +3467,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       // ),
                       // Availability
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15, top: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
@@ -3624,13 +3506,11 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   borderRadius: BorderRadius.circular(0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                               ),
@@ -3640,8 +3520,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       ),
                       // User Info
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 17, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
@@ -3680,13 +3559,11 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   borderRadius: BorderRadius.circular(0),
                                 ),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                                 enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: CustomColors.white, width: 0.0),
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
                               ),
@@ -3732,8 +3609,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                      if (widget.enhancedCriminalStatus == 2 ||
-                          widget.enhancedCriminalStatus == 0) ...[
+                      if (widget.enhancedCriminalStatus == 2 || widget.enhancedCriminalStatus == 0) ...[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -3745,9 +3621,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               ),
                               label: Text(
                                 "Enhanced Criminal",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: CustomColors.primaryText),
+                                style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
                               ),
                             ),
                             GestureDetector(
@@ -3755,8 +3629,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 getEnhancedPdfFile();
                               },
                               child: DottedBorder(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 14, horizontal: 5),
+                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
                                 radius: const Radius.circular(4),
                                 borderType: BorderType.RRect,
                                 color: CustomColors.primaryColor,
@@ -3771,9 +3644,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                       width: 5,
                                     ),
                                     Text(
-                                      _getEnhanceFile.toString() == null
-                                          ? "Quick File Uploader"
-                                          : "File Selected",
+                                      _getEnhanceFile.toString() == null ? "Quick File Uploader" : "File Selected",
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: CustomColors.primaryText,
@@ -3787,8 +3658,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         ),
                         const SizedBox(height: 15),
                       ],
-                      if (widget.basicCriminalStatus == 2 ||
-                          widget.basicCriminalStatus == 0) ...[
+                      if (widget.basicCriminalStatus == 2 || widget.basicCriminalStatus == 0) ...[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -3800,9 +3670,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               ),
                               label: Text(
                                 "Basic Criminal",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: CustomColors.primaryText),
+                                style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
                               ),
                             ),
                             GestureDetector(
@@ -3810,8 +3678,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 getBasicFile();
                               },
                               child: DottedBorder(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 14, horizontal: 5),
+                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
                                 radius: const Radius.circular(4),
                                 borderType: BorderType.RRect,
                                 color: CustomColors.primaryColor,
@@ -3826,9 +3693,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                       width: 5,
                                     ),
                                     Text(
-                                      _getBasicFile.toString() == null
-                                          ? "Quick File Uploader"
-                                          : "File Selected",
+                                      _getBasicFile.toString() == null ? "Quick File Uploader" : "File Selected",
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: CustomColors.primaryText,
@@ -3842,8 +3707,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         ),
                         const SizedBox(height: 15),
                       ],
-                      if (widget.firstAidStatus == 2 ||
-                          widget.firstAidStatus == 0) ...[
+                      if (widget.firstAidStatus == 2 || widget.firstAidStatus == 0) ...[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -3855,9 +3719,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               ),
                               label: Text(
                                 "First aid certification",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: CustomColors.primaryText),
+                                style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
                               ),
                             ),
                             GestureDetector(
@@ -3865,8 +3727,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 getFirstAidFile();
                               },
                               child: DottedBorder(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 14, horizontal: 5),
+                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
                                 radius: const Radius.circular(4),
                                 borderType: BorderType.RRect,
                                 color: CustomColors.primaryColor,
@@ -3881,9 +3742,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                       width: 5,
                                     ),
                                     Text(
-                                      _getFirstAidFile.toString() == null
-                                          ? "Quick File Uploader"
-                                          : "File Selected",
+                                      _getFirstAidFile.toString() == null ? "Quick File Uploader" : "File Selected",
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: CustomColors.primaryText,
@@ -3897,8 +3756,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         ),
                         const SizedBox(height: 15),
                       ],
-                      if (widget.vehicleRecordStatus == 2 ||
-                          widget.vehicleRecordStatus == 0) ...[
+                      if (widget.vehicleRecordStatus == 2 || widget.vehicleRecordStatus == 0) ...[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -3910,9 +3768,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               ),
                               label: Text(
                                 "Vehicle Records",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    color: CustomColors.primaryText),
+                                style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
                               ),
                             ),
                             GestureDetector(
@@ -3920,8 +3776,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 getVehicleRecordFile();
                               },
                               child: DottedBorder(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 14, horizontal: 5),
+                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
                                 radius: const Radius.circular(4),
                                 borderType: BorderType.RRect,
                                 color: CustomColors.primaryColor,
@@ -3936,9 +3791,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                       width: 5,
                                     ),
                                     Text(
-                                      _getVehicleRecordFile.toString() == null
-                                          ? "Quick File Uploader"
-                                          : "File Selected",
+                                      _getVehicleRecordFile.toString() == null ? "Quick File Uploader" : "File Selected",
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: CustomColors.primaryText,
@@ -3956,35 +3809,25 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         child: GestureDetector(
                           onTap: () async {
                             if (_isSelectedGender == null) {
-                              customErrorSnackBar(
-                                  context, "Please Select Gender");
+                              customErrorSnackBar(context, "Please Select Gender");
                             } else if (dobController.text.isEmpty) {
-                              customErrorSnackBar(
-                                  context, "Please Select Date Of Birth");
+                              customErrorSnackBar(context, "Please Select Date Of Birth");
                             } else if (zipController.text.isEmpty) {
-                              customErrorSnackBar(
-                                  context, "Please Enter Zip Code");
+                              customErrorSnackBar(context, "Please Enter Zip Code");
                             } else if (phoneController.text.isEmpty) {
-                              customErrorSnackBar(
-                                  context, "Please Enter Phone Number");
+                              customErrorSnackBar(context, "Please Enter Phone Number");
                             } else if (addressController.text.isEmpty) {
-                              customErrorSnackBar(
-                                  context, "Please Enter User Address");
+                              customErrorSnackBar(context, "Please Enter User Address");
                             } else if (experienceController.text.isEmpty) {
-                              customErrorSnackBar(
-                                  context, "Please Enter User Experience");
+                              customErrorSnackBar(context, "Please Enter User Experience");
                             } else if (hourlyController.text.isEmpty) {
-                              customErrorSnackBar(
-                                  context, "Please Enter User Hourly Rate");
+                              customErrorSnackBar(context, "Please Enter User Hourly Rate");
                             } else if (availabilityController.text.isEmpty) {
-                              customErrorSnackBar(
-                                  context, "Please Enter User Availability");
+                              customErrorSnackBar(context, "Please Enter User Availability");
                             } else if (keywordController.text.isEmpty) {
-                              customErrorSnackBar(
-                                  context, "Please Enter User Keyword");
+                              customErrorSnackBar(context, "Please Enter User Keyword");
                             } else if (instituteMapList.isEmpty) {
-                              customErrorSnackBar(
-                                  context, "Please Enter education");
+                              customErrorSnackBar(context, "Please Enter education");
                             } else {
                               uploadImageDio();
                             }
@@ -4055,9 +3898,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
           bottom: 5,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 5),
-            decoration: BoxDecoration(
-                color: CustomColors.white,
-                borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(color: CustomColors.white, borderRadius: BorderRadius.circular(10)),
             alignment: Alignment.centerLeft,
             width: MediaQuery.of(context).size.width,
             height: 100,
@@ -4113,8 +3954,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     return Card(
       child: ListTile(
         leading: CircleAvatar(
-          backgroundColor:
-              index % 2 == 0 ? Colors.deepPurpleAccent : Colors.purple,
+          backgroundColor: index % 2 == 0 ? Colors.deepPurpleAccent : Colors.purple,
           foregroundColor: Colors.white,
           child: Text(
             education[index]["institute_name[]"].toString(),

@@ -12,17 +12,11 @@ class ProfileProvider extends ChangeNotifier {
     var token = await getUserToken();
     final response = await Dio().get(
       CareGiverUrl.serviceProviderProfile,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+      options: Options(headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'}),
     );
     if (response.statusCode == 200) {
       fetchProfile = ProfileGiverModel.fromJson(response.data);
-      badges =
-          fetchProfile!.data!.userdetailprovider!.badge.toString().split(',');
+      badges = fetchProfile!.data!.userdetailprovider!.badge.toString().split(',');
       notifyListeners();
     }
   }

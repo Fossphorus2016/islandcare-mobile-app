@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:island_app/caregiver/screens/profile_provider.dart';
+import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
 import 'package:island_app/caregiver/widgets/bottombar.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
@@ -121,9 +121,9 @@ class _MyAppState extends State<MyApp> {
       case 'bottom-bar-giver':
         page = CustomPageRoute(child: const BottomBarGiver(), direction: AxisDirection.left);
         break;
-      case 'bottom-bar-giver-2':
-        page = CustomPageRoute(child: const BottomBarGiver2(), direction: AxisDirection.left);
-        break;
+      // case 'bottom-bar-giver-2':
+      //   page = CustomPageRoute(child: const BottomBarGiver2(), direction: AxisDirection.left);
+      //   break;
       case 'bottom-bar-2':
         page = CustomPageRoute(child: const BottomBar2(), direction: AxisDirection.left);
         break;

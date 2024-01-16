@@ -571,11 +571,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                     await pref.setString('userName', "$name $last");
                                     await pref.setString('isProfileCompleted', isProfileCompleted.toString());
 
-                                    Navigator.pushNamedAndRemoveUntil(
-                                      context,
-                                      'bottom-bar-giver-2',
-                                      (route) => false,
-                                    );
+                                    // Navigator.pushNamedAndRemoveUntil(
+                                    //   context,
+                                    //   'bottom-bar-giver-2',
+                                    //   (route) => false,
+                                    // );
                                   } else {
                                     Navigator.pushNamedAndRemoveUntil(
                                       context,
