@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
+import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/res/app_url.dart';
@@ -290,34 +291,37 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   // print(snapshot.data!.data!.userSubscriptionDetail!.periodType);
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0xffFFFFFF),
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color.fromARGB(15, 0, 0, 0),
-                            blurRadius: 4,
-                            spreadRadius: 4,
-                            offset: Offset(2, 2), // Shadow position
-                          ),
-                        ],
-                      ),
-                      child: CircleAvatar(
-                        radius: 20,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(40),
+                  return InkWell(
+                    onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(3),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xffFFFFFF),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromARGB(15, 0, 0, 0),
+                              blurRadius: 4,
+                              spreadRadius: 4,
+                              offset: Offset(2, 2), // Shadow position
+                            ),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          radius: 20,
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: CachedNetworkImage(
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                              imageUrl: "${AppUrl.localStorageUrl}/${snapshot.data!.data!.avatar}",
-                              placeholder: (context, url) => const CircularProgressIndicator(),
-                              errorWidget: (context, url, error) => const Icon(Icons.error),
+                            borderRadius: BorderRadius.circular(40),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: CachedNetworkImage(
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                imageUrl: "${AppUrl.localStorageUrl}/${snapshot.data!.data!.avatar}",
+                                placeholder: (context, url) => const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                              ),
                             ),
                           ),
                         ),

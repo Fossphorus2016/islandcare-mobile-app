@@ -10,6 +10,7 @@ import 'package:island_app/caregiver/widgets/bottombar.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/screens/payment_package_screen.dart';
+import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/widgets/bottom_bar.dart';
@@ -50,6 +51,9 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => ProfileProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => BottomNavigationProvider(),
         ),
       ],
       child: const MyApp(),
@@ -103,32 +107,25 @@ class _MyAppState extends State<MyApp> {
     Route? page;
     switch (settings.name) {
       case '/':
-        page = CustomPageRoute(
-            child: const SplashScreen(), direction: AxisDirection.left);
+        page = CustomPageRoute(child: const SplashScreen(), direction: AxisDirection.left);
         break;
       case 'sign-up':
-        page = CustomPageRoute(
-            child: SignupScreen(), direction: AxisDirection.left);
+        page = CustomPageRoute(child: SignupScreen(), direction: AxisDirection.left);
         break;
       case 'login':
-        page = CustomPageRoute(
-            child: const LoginScreen(), direction: AxisDirection.left);
+        page = CustomPageRoute(child: const LoginScreen(), direction: AxisDirection.left);
         break;
       case 'bottom-bar':
-        page = CustomPageRoute(
-            child: const BottomBar(), direction: AxisDirection.left);
+        page = CustomPageRoute(child: const BottomBar(), direction: AxisDirection.left);
         break;
       case 'bottom-bar-giver':
-        page = CustomPageRoute(
-            child: const BottomBarGiver(), direction: AxisDirection.left);
+        page = CustomPageRoute(child: const BottomBarGiver(), direction: AxisDirection.left);
         break;
       case 'bottom-bar-giver-2':
-        page = CustomPageRoute(
-            child: const BottomBarGiver2(), direction: AxisDirection.left);
+        page = CustomPageRoute(child: const BottomBarGiver2(), direction: AxisDirection.left);
         break;
       case 'bottom-bar-2':
-        page = CustomPageRoute(
-            child: const BottomBar2(), direction: AxisDirection.left);
+        page = CustomPageRoute(child: const BottomBar2(), direction: AxisDirection.left);
         break;
     }
     return page!;
@@ -141,8 +138,7 @@ class _MyAppState extends State<MyApp> {
       title: 'APP',
       theme: ThemeData(
         primarySwatch: Colors.green,
-        appBarTheme:
-            const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
+        appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
       ),
       initialRoute: '/',
       onGenerateRoute: onGenerateRoute,

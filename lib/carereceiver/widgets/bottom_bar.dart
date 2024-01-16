@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
+import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
@@ -23,32 +24,19 @@ class BottomBar extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<BottomBar> createState() => _BottomBarState();
+  State<BottomBar> createState() => BottomBarState();
 }
 
-class _BottomBarState extends State<BottomBar> {
-  int _page = 0;
+class BottomBarState extends State<BottomBar> {
   double bottomBarWidth = 42;
   double bottomBarBorderWidth = 5;
 
   late List<Widget> pages;
 
-  void updatePage(int page) {
-    setState(() {
-      _page = page;
-    });
-    // setState(() {
-    //   getUserToken();
-    // });
-  }
-
-  // getUserToken() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var userToken = preferences.getString(
-  //     'userToken',
-  //   );
-  //   // print("userTokenBottom $userToken");
-  //   return userToken.toString();
+  // void updatePage(int page) {
+  //   setState(() {
+  //     _page = page;
+  //   });
   // }
 
   callUserData() async {
@@ -84,11 +72,14 @@ class _BottomBarState extends State<BottomBar> {
     super.initState();
   }
 
+  final GlobalKey<ScaffoldState> homaPageKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
+    int page = Provider.of<BottomNavigationProvider>(context).page;
     return Scaffold(
+      key: homaPageKey,
       backgroundColor: CustomColors.loginBg,
-      body: pages[_page],
+      body: pages[Provider.of<BottomNavigationProvider>(context).page],
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
           splashColor: CustomColors.primaryColor,
@@ -113,12 +104,12 @@ class _BottomBarState extends State<BottomBar> {
               ],
             ),
             child: BottomNavigationBar(
-              currentIndex: _page,
+              currentIndex: page,
               selectedItemColor: CustomColors.primaryColor,
               unselectedItemColor: CustomColors.white,
               backgroundColor: CustomColors.white,
               iconSize: 28,
-              onTap: updatePage,
+              onTap: Provider.of<BottomNavigationProvider>(context, listen: false).updatePage,
               type: BottomNavigationBarType.fixed,
               showSelectedLabels: false,
               showUnselectedLabels: false,
@@ -129,12 +120,12 @@ class _BottomBarState extends State<BottomBar> {
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
-                      color: _page == 0 ? CustomColors.primaryColor : Colors.transparent,
+                      color: page == 0 ? CustomColors.primaryColor : Colors.transparent,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.home,
-                      color: _page == 0 ? CustomColors.white : CustomColors.primaryColor,
+                      color: page == 0 ? CustomColors.white : CustomColors.primaryColor,
                     ),
                   ),
                   label: '',
@@ -145,12 +136,12 @@ class _BottomBarState extends State<BottomBar> {
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
-                      color: _page == 1 ? CustomColors.primaryColor : Colors.transparent,
+                      color: page == 1 ? CustomColors.primaryColor : Colors.transparent,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.favorite,
-                      color: _page == 1 ? CustomColors.white : CustomColors.primaryColor,
+                      color: page == 1 ? CustomColors.white : CustomColors.primaryColor,
                     ),
                   ),
                   label: '',
@@ -160,12 +151,12 @@ class _BottomBarState extends State<BottomBar> {
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
-                      color: _page == 2 ? CustomColors.primaryColor : CustomColors.white,
+                      color: page == 2 ? CustomColors.primaryColor : CustomColors.white,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.textsms_rounded,
-                      color: _page == 2 ? CustomColors.white : CustomColors.primaryColor,
+                      color: page == 2 ? CustomColors.white : CustomColors.primaryColor,
                     ),
                   ),
                   label: '',
@@ -175,12 +166,12 @@ class _BottomBarState extends State<BottomBar> {
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
-                      color: _page == 3 ? CustomColors.primaryColor : CustomColors.white,
+                      color: page == 3 ? CustomColors.primaryColor : CustomColors.white,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.person,
-                      color: _page == 3 ? CustomColors.white : CustomColors.primaryColor,
+                      color: page == 3 ? CustomColors.white : CustomColors.primaryColor,
                     ),
                   ),
                   label: '',
