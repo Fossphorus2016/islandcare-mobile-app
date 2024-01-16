@@ -10,9 +10,11 @@ import 'package:island_app/carereceiver/screens/job_applicant.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/screens/payment_package_screen.dart';
 import 'package:island_app/carereceiver/screens/post_job.dart';
+import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
+import 'package:island_app/screens/notification.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:island_app/screens/onboard_screen.dart';
@@ -125,9 +127,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ),
               onPressed: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
+                Provider.of<NotificationProvider>(context, listen: false).unSubscribeChannels(4);
                 prefs.remove('userRole');
                 prefs.remove('userToken');
                 prefs.remove("userStatus");
+                Provider.of<BottomNavigationProvider>(context, listen: false).page = 0;
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -269,62 +273,67 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     future: context.watch<UserProvider>().userProfile,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 25, bottom: 60),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              CircleAvatar(
-                                radius: 40,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(40),
+                        return InkWell(
+                          onTap: () {
+                            // Scaffold.of(context).
+                            // BottomBarState().updatePage(3);
+                            Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(3);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 25, bottom: 60),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 40,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: CachedNetworkImage(
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                      imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
-                                      placeholder: (context, url) => const CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: CachedNetworkImage(
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                        imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
+                                        placeholder: (context, url) => const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(
-                                    child: Text(
-                                      "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: "Rubik",
-                                        color: CustomColors.white,
+                                const SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      child: Text(
+                                        "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: "Rubik",
+                                          color: CustomColors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  SizedBox(
-                                    child: Text(
-                                      snapshot.data!.data!.phone.toString(),
-                                      style: TextStyle(
-                                        color: CustomColors.white,
-                                        fontFamily: "Rubik",
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    SizedBox(
+                                      child: Text(
+                                        snapshot.data!.data!.phone.toString(),
+                                        style: TextStyle(
+                                          color: CustomColors.white,
+                                          fontFamily: "Rubik",
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         );
                       } else {
