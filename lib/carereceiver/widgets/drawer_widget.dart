@@ -14,6 +14,7 @@ import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
+import 'package:island_app/screens/notification.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:island_app/screens/onboard_screen.dart';
@@ -126,9 +127,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               ),
               onPressed: () async {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
+                Provider.of<NotificationProvider>(context, listen: false).unSubscribeChannels(4);
                 prefs.remove('userRole');
                 prefs.remove('userToken');
                 prefs.remove("userStatus");
+                Provider.of<BottomNavigationProvider>(context, listen: false).page = 0;
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

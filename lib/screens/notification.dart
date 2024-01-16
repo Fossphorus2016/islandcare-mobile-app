@@ -323,7 +323,6 @@ class NotificationProvider extends ChangeNotifier {
 
   onEvent(event) {
     log("onEventxsxsxsXS: ${event.toString()}");
-
     getNotifications();
   }
 
@@ -359,6 +358,15 @@ class NotificationProvider extends ChangeNotifier {
       print("error on notifiacation get $error");
     }
   }
+
+  unSubscribeChannels(userRole) async {
+    var notiChannelName = IslandPusher().getPusherNotificationChannel(userRole);
+    var notiEventname = IslandPusher().getPusherNotificationEvent(userRole);
+    var chatChannelName = IslandPusher().getPusherChatsChannel(userRole);
+    var chatEventname = IslandPusher().getPusherChatsEvent(userRole);
+    await IslandPusher.pusher.unsubscribe(channelName: notiChannelName);
+    await IslandPusher.pusher.unsubscribe(channelName: chatChannelName);
+  }
 }
 
 class IslandPusher {
@@ -367,11 +375,7 @@ class IslandPusher {
   static PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
   initPusher() async {
     try {
-      await pusher.init(
-        apiKey: apiKey,
-        cluster: cluster,
-      );
-
+      await pusher.init(apiKey: apiKey, cluster: cluster);
       await pusher.connect();
     } catch (e) {
       log("ERROR: $e");
