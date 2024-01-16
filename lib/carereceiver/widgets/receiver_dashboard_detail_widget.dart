@@ -50,84 +50,276 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: CustomColors.white,
-          ),
+          height: 250,
+          width: MediaQuery.of(context).size.width,
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          color: CustomColors.primaryColor,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CircleAvatar(
-                radius: 40,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(40),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: CachedNetworkImage(
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.cover,
-                      imageUrl: imgPath.toString(),
-                      placeholder: (context, url) => const CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => const Icon(Icons.error),
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(08),
+                      child: Image(
+                        width: 130,
+                        height: 110,
+                        alignment: Alignment.center,
+                        image: NetworkImage(imgPath.toString()),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title.toString(),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontFamily: "Rubik",
+                              fontWeight: FontWeight.w700,
+                              color: CustomColors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            services.toString(),
+                            style: TextStyle(fontSize: 14, fontFamily: "Rubik", fontWeight: FontWeight.w400, color: CustomColors.white),
+                          ),
+                          const SizedBox(width: 10),
+                          RatingBar(
+                            ignoreGestures: true,
+                            itemCount: 5,
+                            itemSize: 26,
+                            initialRating: initialRating! == null ? 0.0 : double.parse(initialRating.toString()),
+                            minRating: 0,
+                            ratingWidget: RatingWidget(
+                              full: const Icon(
+                                Icons.star_rounded,
+                                color: Colors.amber,
+                              ),
+                              half: const Icon(
+                                Icons.star_rounded,
+                                color: Colors.amber,
+                              ),
+                              empty: const Icon(
+                                Icons.star_rounded,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            onRatingUpdate: (rating) {
+                              // print(rating);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(13, 0, 0, 0),
+                          blurRadius: 4.0,
+                          spreadRadius: 2.0,
+                          offset: Offset(2.0, 2.0),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(6),
+                        bottomRight: Radius.circular(6),
+                        topLeft: Radius.circular(6),
+                        topRight: Radius.circular(6),
+                      ),
+                    ),
+                    child: Text(
+                      "$hour/hour ",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: CustomColors.primaryTextLight,
+                      ),
                     ),
                   ),
-                ),
+                  const SizedBox(width: 10),
+                  Container(
+                      // margin: const EdgeInsets.symmetric(
+                      //     horizontal: 14),
+                      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(13, 0, 0, 0),
+                            blurRadius: 4.0,
+                            spreadRadius: 2.0,
+                            offset: Offset(2.0, 2.0),
+                          ),
+                        ],
+                        borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(6),
+                          bottomRight: Radius.circular(6),
+                          topLeft: Radius.circular(6),
+                          topRight: Radius.circular(6),
+                        ),
+                      ),
+                      child: Text(
+                        "$experience years experience",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: CustomColors.primaryTextLight,
+                        ),
+                      )),
+                ],
               ),
-              Text(
-                title.toString(),
-                style: TextStyle(
-                  color: CustomColors.primaryText,
-                  fontFamily: "Poppins",
-                  fontSize: 24,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Text(
-                services.toString(),
-                style: TextStyle(
-                  color: CustomColors.primaryText,
-                  fontFamily: "Poppins",
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              SizedBox(
-                child: Text(
-                  "$experience years experience \n \$$hour/hour \n  $address \n $zip",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: CustomColors.primaryText,
-                    fontFamily: "Poppins",
-                    fontSize: 13,
-                    fontWeight: FontWeight.w400,
+              const SizedBox(height: 10),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    // margin: const EdgeInsets.symmetric(
+                    //     horizontal: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color.fromARGB(13, 0, 0, 0),
+                          blurRadius: 4.0,
+                          spreadRadius: 2.0,
+                          offset: Offset(2.0, 2.0),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(6),
+                        bottomRight: Radius.circular(6),
+                        topLeft: Radius.circular(6),
+                        topRight: Radius.circular(6),
+                      ),
+                    ),
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          WidgetSpan(
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 3, right: 5),
+                              child: Icon(
+                                Icons.location_on_outlined,
+                                size: 14,
+                                color: CustomColors.primaryTextLight,
+                              ),
+                            ),
+                          ),
+                          TextSpan(
+                            text: "$address",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: CustomColors.primaryTextLight,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              if (initialRating != null) ...[
-                RatingBar.builder(
-                  initialRating: initialRating!,
-                  minRating: 1,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  ignoreGestures: false,
-                  itemSize: 20,
-                  itemCount: 5,
-                  itemBuilder: (context, _) => const Icon(
-                    Icons.star,
-                    color: Colors.amber,
-                  ),
-                  onRatingUpdate: (rating) {},
-                ),
-              ],
-              const SizedBox(
-                height: 10,
+                ],
               ),
             ],
           ),
         ),
+        // Container(
+        //   alignment: Alignment.center,
+        //   decoration: BoxDecoration(
+        //     color: CustomColors.white,
+        //   ),
+        //   child: Column(
+        //     children: [
+        //       CircleAvatar(
+        //         radius: 40,
+        //         child: ClipRRect(
+        //           borderRadius: BorderRadius.circular(40),
+        //           child: ClipRRect(
+        //             borderRadius: BorderRadius.circular(100),
+        //             child: CachedNetworkImage(
+        //               width: 100,
+        //               height: 100,
+        //               fit: BoxFit.cover,
+        //               imageUrl: imgPath.toString(),
+        //               placeholder: (context, url) => const CircularProgressIndicator(),
+        //               errorWidget: (context, url, error) => const Icon(Icons.error),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //       Text(
+        //         title.toString(),
+        //         style: TextStyle(
+        //           color: CustomColors.primaryText,
+        //           fontFamily: "Poppins",
+        //           fontSize: 24,
+        //           fontWeight: FontWeight.w600,
+        //         ),
+        //       ),
+        //       Text(
+        //         services.toString(),
+        //         style: TextStyle(
+        //           color: CustomColors.primaryText,
+        //           fontFamily: "Poppins",
+        //           fontSize: 16,
+        //           fontWeight: FontWeight.w600,
+        //         ),
+        //       ),
+        //       SizedBox(
+        //         child: Text(
+        //           "$experience years experience \n \$$hour/hour \n  $address \n $zip",
+        //           textAlign: TextAlign.center,
+        //           style: TextStyle(
+        //             color: CustomColors.primaryText,
+        //             fontFamily: "Poppins",
+        //             fontSize: 13,
+        //             fontWeight: FontWeight.w400,
+        //           ),
+        //         ),
+        //       ),
+        //       const SizedBox(
+        //         height: 5,
+        //       ),
+        //       if (initialRating != null) ...[
+        //         RatingBar.builder(
+        //           initialRating: initialRating!,
+        //           minRating: 1,
+        //           direction: Axis.horizontal,
+        //           allowHalfRating: true,
+        //           ignoreGestures: false,
+        //           itemSize: 20,
+        //           itemCount: 5,
+        //           itemBuilder: (context, _) => const Icon(
+        //             Icons.star,
+        //             color: Colors.amber,
+        //           ),
+        //           onRatingUpdate: (rating) {},
+        //         ),
+        //       ],
+        //       const SizedBox(
+        //         height: 10,
+        //       ),
+        //     ],
+        //   ),
+        // ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Column(

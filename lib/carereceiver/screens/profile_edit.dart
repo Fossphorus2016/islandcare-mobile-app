@@ -22,7 +22,7 @@ class ProfileReceiverEdit extends StatefulWidget {
   String? zipCode;
   String? userInfo;
   String? userAddress;
-
+  String? profileImage;
   ProfileReceiverEdit({
     Key? key,
     this.name,
@@ -33,6 +33,7 @@ class ProfileReceiverEdit extends StatefulWidget {
     this.zipCode,
     this.userInfo,
     this.userAddress,
+    this.profileImage,
   }) : super(key: key);
   @override
   State<ProfileReceiverEdit> createState() => _ProfileReceiverEditState();
@@ -280,8 +281,9 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                   height: 100.45,
                                   width: 100.45,
                                   padding: const EdgeInsets.all(4),
+                                  clipBehavior: Clip.antiAlias,
                                   decoration: BoxDecoration(
-                                    color: CustomColors.primaryColor,
+                                    // color: CustomColors.primaryColor,
                                     borderRadius: BorderRadius.circular(100),
                                     boxShadow: const [
                                       BoxShadow(
@@ -292,7 +294,12 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                       ),
                                     ],
                                   ),
-                                  child: const Center(child: Text("Upload")),
+                                  child: widget.profileImage != null
+                                      ? Image(
+                                          image: NetworkImage("${AppUrl.webStorageUrl}/${widget.profileImage}"),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : const Center(child: Text("Upload")),
                                 ),
                               )
                             : Center(
