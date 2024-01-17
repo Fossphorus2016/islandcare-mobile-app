@@ -63,11 +63,13 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(08),
-                      child: Image(
+                      child: CachedNetworkImage(
                         width: 130,
                         height: 110,
                         alignment: Alignment.center,
-                        image: NetworkImage(imgPath.toString()),
+                        imageUrl: imgPath.toString(),
+                        placeholder: (context, url) => const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -96,7 +98,7 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                             ignoreGestures: true,
                             itemCount: 5,
                             itemSize: 26,
-                            initialRating: initialRating! == null ? 0.0 : double.parse(initialRating.toString()),
+                            initialRating: initialRating == null ? 0.0 : double.parse(initialRating.toString()),
                             minRating: 0,
                             ratingWidget: RatingWidget(
                               full: const Icon(

@@ -1,7 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, await_only_futures
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/receiver_reviews_given.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -54,9 +54,9 @@ class _ReceiverReviewsScreenState extends State<ReceiverReviewsScreen> {
     var userToken = await preferences.getString(
       'userToken',
     );
-    if (kDebugMode) {
-      print(userToken);
-    }
+    // if (kDebugMode) {
+    //   print(userToken);
+    // }
     return userToken.toString();
   }
 

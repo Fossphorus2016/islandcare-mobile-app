@@ -182,55 +182,55 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                     zip: snapshot.data!.data![0].userdetail!.zip.toString() == "null" ? "Not Available" : snapshot.data!.data![0].userdetail!.zip.toString(),
                     documentsSection: Column(
                       children: [
-                        BasicDocumentDownloadList(
-                          onTap: () {
-                            if (snapshot.data!.data![0].providerverification!.enhancedCriminal!.isNotEmpty) {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.enhancedCriminal);
-                            }
-                          },
-                          fileStatus: snapshot.data!.data![0].providerverification!.enhancedCriminalVerify.toString(),
-                          downloading: downloading,
-                          downloadProgress: downloadProgress,
-                          title: "Download Enhanced Criminal Document",
-                        ),
-
-                        const SizedBox(height: 15),
-                        BasicDocumentDownloadList(
-                          onTap: () {
-                            if (snapshot.data!.data![0].providerverification!.basicCriminal!.isNotEmpty) {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.basicCriminal);
-                            }
-                          },
-                          fileStatus: snapshot.data!.data![0].providerverification!.basicCriminalVerify.toString(),
-                          downloading: downloading,
-                          downloadProgress: downloadProgress,
-                          title: "Download Basic Criminal Document",
-                        ),
-                        const SizedBox(height: 15),
-                        BasicDocumentDownloadList(
-                          onTap: () {
-                            if (snapshot.data!.data![0].providerverification!.firstAid.isNotEmpty) {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.firstAid);
-                            }
-                          },
-                          fileStatus: snapshot.data!.data![0].providerverification!.firstAidVerify.toString(),
-                          downloading: downloading,
-                          downloadProgress: downloadProgress,
-                          title: "Download First Aid Document",
-                        ),
-
-                        const SizedBox(height: 15),
-                        BasicDocumentDownloadList(
-                          onTap: () {
-                            if (snapshot.data!.data![0].providerverification!.vehicleRecord.isNotEmpty) {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.vehicleRecord);
-                            }
-                          },
-                          fileStatus: snapshot.data!.data![0].providerverification!.vehicleRecordVerify.toString(),
-                          downloading: downloading,
-                          downloadProgress: downloadProgress,
-                          title: "Download Vehicle Record Document",
-                        ),
+                        if (snapshot.data!.data![0].providerverification != null) ...[
+                          BasicDocumentDownloadList(
+                            onTap: () {
+                              if (snapshot.data!.data![0].providerverification!.enhancedCriminal!.isNotEmpty) {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.enhancedCriminal);
+                              }
+                            },
+                            fileStatus: snapshot.data!.data![0].providerverification!.enhancedCriminalVerify.toString(),
+                            downloading: downloading,
+                            downloadProgress: downloadProgress,
+                            title: "Download Enhanced Criminal Document",
+                          ),
+                          const SizedBox(height: 15),
+                          BasicDocumentDownloadList(
+                            onTap: () {
+                              if (snapshot.data!.data![0].providerverification!.basicCriminal!.isNotEmpty) {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.basicCriminal);
+                              }
+                            },
+                            fileStatus: snapshot.data!.data![0].providerverification!.basicCriminalVerify.toString(),
+                            downloading: downloading,
+                            downloadProgress: downloadProgress,
+                            title: "Download Basic Criminal Document",
+                          ),
+                          const SizedBox(height: 15),
+                          BasicDocumentDownloadList(
+                            onTap: () {
+                              if (snapshot.data!.data![0].providerverification!.firstAid.isNotEmpty) {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.firstAid);
+                              }
+                            },
+                            fileStatus: snapshot.data!.data![0].providerverification!.firstAidVerify.toString(),
+                            downloading: downloading,
+                            downloadProgress: downloadProgress,
+                            title: "Download First Aid Document",
+                          ),
+                          const SizedBox(height: 15),
+                          BasicDocumentDownloadList(
+                            onTap: () {
+                              if (snapshot.data!.data![0].providerverification!.vehicleRecord.isNotEmpty) {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.vehicleRecord);
+                              }
+                            },
+                            fileStatus: snapshot.data!.data![0].providerverification!.vehicleRecordVerify.toString(),
+                            downloading: downloading,
+                            downloadProgress: downloadProgress,
+                            title: "Download Vehicle Record Document",
+                          ),
+                        ],
                         // Download Enhanced File
                         // GestureDetector(
                         //   onTap: () {

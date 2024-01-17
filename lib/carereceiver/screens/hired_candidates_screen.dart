@@ -98,9 +98,9 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
     setState(() {
       token = userToken;
     });
-    if (kDebugMode) {
-      print("token == $token");
-    }
+    // if (kDebugMode) {
+    //   print("token == $token");
+    // }
     return userToken.toString();
   }
 

@@ -1,9 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, unused_local_variable, use_build_context_synchronously
 
 import 'package:dio/dio.dart';
-import 'package:dotted_border/dotted_border.dart';
 import 'package:external_path/external_path.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
@@ -12,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/models/applicant_profile_detail-model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_applicant_profile_widget.dart';
+import 'package:island_app/caregiver/screens/profile_screen.dart';
 
 class ApplicantProfileDetail extends StatefulWidget {
   final String jobTitle;
@@ -174,13 +174,15 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
     );
   }
 
-  Future downloadEnhancedFile(String downloadDirectory) async {
+  Future downloadFile(String downloadDirectory, String fileUrl) async {
     Dio dio = Dio();
-    var downloadingPdfPath = '$downloadDirectory/enhanced.pdf';
 
+    var filname = fileUrl.split('.');
+    String savename = '${filname.first}${DateTime.now()}.${filname.last}';
+    var downloadingPdfPath = '$downloadDirectory/$savename';
     try {
-      await dio.download(
-        hostPath + '/' + pdfEnhancePath!,
+      var fileRes = await dio.download(
+        "${AppUrl.webStorageUrl}/$fileUrl",
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {
           setState(() {
@@ -189,89 +191,11 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
           });
         },
       );
+      if (fileRes.statusCode == 200) {
+        customSuccesSnackBar(context, "file is downloaded successfully");
+      }
     } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
-    }
-    await Future.delayed(const Duration(seconds: 3));
-
-    return downloadingPdfPath;
-  }
-
-  Future downloadBasicFile(String downloadDirectory) async {
-    Dio dio = Dio();
-    var downloadingPdfPath = '$downloadDirectory/enhanced.pdf';
-
-    try {
-      await dio.download(
-        hostPath + '/' + pdfBasicPath!,
-        downloadingPdfPath,
-        onReceiveProgress: (rec, total) {
-          setState(() {
-            downloading = true;
-            downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
-          });
-        },
-      );
-    } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
-    }
-    await Future.delayed(const Duration(seconds: 3));
-
-    return downloadingPdfPath;
-  }
-
-  Future downloadFirstAidFile(String downloadDirectory) async {
-    Dio dio = Dio();
-    var downloadingPdfPath = '$downloadDirectory/enhanced.pdf';
-
-    try {
-      await dio.download(
-        hostPath + '/' + pdfFirstAddPath!,
-        downloadingPdfPath,
-        onReceiveProgress: (rec, total) {
-          setState(() {
-            downloading = true;
-            downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
-          });
-        },
-      );
-    } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
-    }
-    await Future.delayed(const Duration(seconds: 3));
-
-    return downloadingPdfPath;
-  }
-
-  Future downloadVehicleRecordFile(String downloadDirectory) async {
-    Dio dio = Dio();
-    var downloadingPdfPath = '$downloadDirectory/enhanced.pdf';
-
-    try {
-      await dio.download(
-        hostPath + '/' + pdfvehicleRecordPath!,
-        downloadingPdfPath,
-        onReceiveProgress: (rec, total) {
-          setState(() {
-            downloading = true;
-            downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
-          });
-        },
-      );
-    } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+      customErrorSnackBar(context, "something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 
@@ -279,43 +203,10 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
   }
 
   // Download by user click
-  Future<void> doDownloadEnhancedFile() async {
+  Future<void> doDownloadFile(fileUrl) async {
     if (await getStoragePermission()) {
       String downloadDirectory = await getDownloadFolderPath();
-      await downloadEnhancedFile(downloadDirectory).then(
-        (value) {
-          displayPDF(value);
-        },
-      );
-    }
-  }
-
-  Future<void> doDownloadBasicFile() async {
-    if (await getStoragePermission()) {
-      String downloadDirectory = await getDownloadFolderPath();
-      await downloadBasicFile(downloadDirectory).then(
-        (value) {
-          displayPDF(value);
-        },
-      );
-    }
-  }
-
-  Future<void> doDownloadFirstAidFile() async {
-    if (await getStoragePermission()) {
-      String downloadDirectory = await getDownloadFolderPath();
-      await downloadFirstAidFile(downloadDirectory).then(
-        (value) {
-          displayPDF(value);
-        },
-      );
-    }
-  }
-
-  Future<void> doDownloadVehicleFile() async {
-    if (await getStoragePermission()) {
-      String downloadDirectory = await getDownloadFolderPath();
-      await downloadVehicleRecordFile(downloadDirectory).then(
+      await downloadFile(downloadDirectory, fileUrl).then(
         (value) {
           displayPDF(value);
         },
@@ -336,9 +227,9 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
     var userToken = preferences.getString(
       'userToken',
     );
-    if (kDebugMode) {
-      print(userToken);
-    }
+    // if (kDebugMode) {
+    //   print(userToken);
+    // }
     return userToken.toString();
   }
 
@@ -443,273 +334,322 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           zip: snapshot.data!.data![0].userdetail!.zip.toString() == "null" ? " " : snapshot.data!.data![0].userdetail!.zip.toString(),
                           documentsSection: Column(
                             children: [
-                              // Download Enhanced File
-                              GestureDetector(
+                              BasicDocumentDownloadList(
                                 onTap: () {
-                                  doDownloadEnhancedFile();
+                                  if (snapshot.data!.data![0].providerverification!.enhancedCriminal!.isNotEmpty) {
+                                    doDownloadFile(snapshot.data!.data![0].providerverification!.enhancedCriminal);
+                                  }
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextButton.icon(
-                                        onPressed: () {
-                                          doDownloadEnhancedFile();
-                                        },
-                                        icon: Icon(
-                                          Icons.picture_as_pdf_rounded,
-                                          color: CustomColors.red,
-                                        ),
-                                        label: Text(
-                                          downloading ? "Download Enhanced Criminal Document $downloadProgress" : "Download Enhanced Criminal Document",
-                                          style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () async {},
-                                        child: DottedBorder(
-                                          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                          radius: const Radius.circular(4),
-                                          borderType: BorderType.RRect,
-                                          color: CustomColors.primaryColor,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.picture_as_pdf_rounded,
-                                                color: CustomColors.red,
-                                                size: 16,
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                (snapshot.data!.data![0].providerverification!.enhancedCriminalVerify.toString() == "0")
-                                                    ? "Pending"
-                                                    : (snapshot.data!.data![0].providerverification!.enhancedCriminalVerify.toString() == "1")
-                                                        ? "Approved"
-                                                        : (snapshot.data!.data![0].providerverification!.enhancedCriminalVerify.toString() == "2")
-                                                            ? "Rejected"
-                                                            : "File Not Available Enhanced Criminal Document",
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: CustomColors.primaryText,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                fileStatus: snapshot.data!.data![0].providerverification!.enhancedCriminalVerify.toString(),
+                                downloading: downloading,
+                                downloadProgress: downloadProgress,
+                                title: "Download Enhanced Criminal Document",
+                              ),
+
+                              const SizedBox(height: 15),
+                              BasicDocumentDownloadList(
+                                onTap: () {
+                                  if (snapshot.data!.data![0].providerverification!.basicCriminal!.isNotEmpty) {
+                                    doDownloadFile(snapshot.data!.data![0].providerverification!.basicCriminal);
+                                  }
+                                },
+                                fileStatus: snapshot.data!.data![0].providerverification!.basicCriminalVerify.toString(),
+                                downloading: downloading,
+                                downloadProgress: downloadProgress,
+                                title: "Download Basic Criminal Document",
                               ),
                               const SizedBox(height: 15),
-                              // doDownloadBasicFile
-                              GestureDetector(
+                              BasicDocumentDownloadList(
                                 onTap: () {
-                                  doDownloadBasicFile();
+                                  if (snapshot.data!.data![0].providerverification!.firstAid.isNotEmpty) {
+                                    doDownloadFile(snapshot.data!.data![0].providerverification!.firstAid);
+                                  }
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextButton.icon(
-                                        onPressed: () {
-                                          doDownloadBasicFile();
-                                        },
-                                        icon: Icon(
-                                          Icons.picture_as_pdf_rounded,
-                                          color: CustomColors.red,
-                                        ),
-                                        label: Text(
-                                          downloading ? "Download Basic Criminal Document $downloadProgress" : "Download Basic Criminal Document",
-                                          style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          // getEnhancedPdfFile();
-                                        },
-                                        child: DottedBorder(
-                                          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                          radius: const Radius.circular(4),
-                                          borderType: BorderType.RRect,
-                                          color: CustomColors.primaryColor,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.picture_as_pdf_rounded,
-                                                color: CustomColors.red,
-                                                size: 16,
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                (snapshot.data!.data![0].providerverification!.basicCriminalVerify.toString() == "0")
-                                                    ? "Pending"
-                                                    : (snapshot.data!.data![0].providerverification!.basicCriminalVerify.toString() == "1")
-                                                        ? "Approved"
-                                                        : (snapshot.data!.data![0].providerverification!.basicCriminalVerify.toString() == "2")
-                                                            ? "Rejected"
-                                                            : "File Not Available Basic Criminal Document",
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: CustomColors.primaryText,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                fileStatus: snapshot.data!.data![0].providerverification!.firstAidVerify.toString(),
+                                downloading: downloading,
+                                downloadProgress: downloadProgress,
+                                title: "Download First Aid Document",
                               ),
+
                               const SizedBox(height: 15),
-                              // doDownloadFirstAidFile
-                              GestureDetector(
+                              BasicDocumentDownloadList(
                                 onTap: () {
-                                  doDownloadFirstAidFile();
+                                  if (snapshot.data!.data![0].providerverification!.vehicleRecord.isNotEmpty) {
+                                    doDownloadFile(snapshot.data!.data![0].providerverification!.vehicleRecord);
+                                  }
                                 },
-                                child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextButton.icon(
-                                        onPressed: () {
-                                          doDownloadFirstAidFile();
-                                        },
-                                        icon: Icon(
-                                          Icons.picture_as_pdf_rounded,
-                                          color: CustomColors.red,
-                                        ),
-                                        label: Text(
-                                          "Download First Aid Document",
-                                          style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          // getEnhancedPdfFile();
-                                        },
-                                        child: DottedBorder(
-                                          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                          radius: const Radius.circular(4),
-                                          borderType: BorderType.RRect,
-                                          color: CustomColors.primaryColor,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.picture_as_pdf_rounded,
-                                                color: CustomColors.red,
-                                                size: 16,
-                                              ),
-                                              const SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                (snapshot.data!.data![0].providerverification!.firstAidVerify.toString() == "0")
-                                                    ? "Pending"
-                                                    : (snapshot.data!.data![0].providerverification!.firstAidVerify.toString() == "1")
-                                                        ? "Approved"
-                                                        : (snapshot.data!.data![0].providerverification!.firstAidVerify.toString() == "2")
-                                                            ? "Rejected"
-                                                            : "File Not Available First Aid Document",
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: CustomColors.primaryText,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                fileStatus: snapshot.data!.data![0].providerverification!.vehicleRecordVerify.toString(),
+                                downloading: downloading,
+                                downloadProgress: downloadProgress,
+                                title: "Download Vehicle Record Document",
                               ),
-                              const SizedBox(height: 15),
-                              // doDownloadVehicleFile
-                              GestureDetector(
-                                onTap: () {
-                                  doDownloadVehicleFile();
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(5),
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      TextButton.icon(
-                                        onPressed: () {
-                                          doDownloadVehicleFile();
-                                        },
-                                        icon: Icon(
-                                          Icons.picture_as_pdf_rounded,
-                                          color: CustomColors.red,
-                                        ),
-                                        label: Text(
-                                          "Download Vehicle Record Document",
-                                          style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () async {
-                                          // getEnhancedPdfFile();
-                                        },
-                                        child: DottedBorder(
-                                          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                          radius: const Radius.circular(4),
-                                          borderType: BorderType.RRect,
-                                          color: CustomColors.primaryColor,
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                Icons.picture_as_pdf_rounded,
-                                                color: CustomColors.red,
-                                                size: 16,
-                                              ),
-                                              const SizedBox(width: 5),
-                                              Text(
-                                                (snapshot.data!.data![0].providerverification!.vehicleRecordVerify.toString() == "0")
-                                                    ? "Pending"
-                                                    : (snapshot.data!.data![0].providerverification!.vehicleRecordVerify.toString() == "1")
-                                                        ? "Approved"
-                                                        : (snapshot.data!.data![0].providerverification!.vehicleRecordVerify.toString() == "2")
-                                                            ? "Rejected"
-                                                            : "File Not Available Vehicle Record  Document",
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: CustomColors.primaryText,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
+                              // // Download Enhanced File
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     doDownloadEnhancedFile();
+                              //   },
+                              //   child: Container(
+                              //     padding: const EdgeInsets.all(5),
+                              //     decoration: BoxDecoration(
+                              //       color: CustomColors.white,
+                              //       borderRadius: BorderRadius.circular(12),
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              //       children: [
+                              //         TextButton.icon(
+                              //           onPressed: () {
+                              //             doDownloadEnhancedFile();
+                              //           },
+                              //           icon: Icon(
+                              //             Icons.picture_as_pdf_rounded,
+                              //             color: CustomColors.red,
+                              //           ),
+                              //           label: Text(
+                              //             downloading ? "Download Enhanced Criminal Document $downloadProgress" : "Download Enhanced Criminal Document",
+                              //             style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
+                              //           ),
+                              //         ),
+                              //         GestureDetector(
+                              //           onTap: () async {},
+                              //           child: DottedBorder(
+                              //             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                              //             radius: const Radius.circular(4),
+                              //             borderType: BorderType.RRect,
+                              //             color: CustomColors.primaryColor,
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon(
+                              //                   Icons.picture_as_pdf_rounded,
+                              //                   color: CustomColors.red,
+                              //                   size: 16,
+                              //                 ),
+                              //                 const SizedBox(
+                              //                   width: 5,
+                              //                 ),
+                              //                 Text(
+                              //                   (snapshot.data!.data![0].providerverification!.enhancedCriminalVerify.toString() == "0")
+                              //                       ? "Pending"
+                              //                       : (snapshot.data!.data![0].providerverification!.enhancedCriminalVerify.toString() == "1")
+                              //                           ? "Approved"
+                              //                           : (snapshot.data!.data![0].providerverification!.enhancedCriminalVerify.toString() == "2")
+                              //                               ? "Rejected"
+                              //                               : "File Not Available Enhanced Criminal Document",
+                              //                   style: TextStyle(
+                              //                     fontSize: 11,
+                              //                     color: CustomColors.primaryText,
+                              //                   ),
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
+                              // const SizedBox(height: 15),
+                              // // doDownloadBasicFile
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     doDownloadBasicFile();
+                              //   },
+                              //   child: Container(
+                              //     padding: const EdgeInsets.all(5),
+                              //     decoration: BoxDecoration(
+                              //       color: CustomColors.white,
+                              //       borderRadius: BorderRadius.circular(12),
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              //       children: [
+                              //         TextButton.icon(
+                              //           onPressed: () {
+                              //             doDownloadBasicFile();
+                              //           },
+                              //           icon: Icon(
+                              //             Icons.picture_as_pdf_rounded,
+                              //             color: CustomColors.red,
+                              //           ),
+                              //           label: Text(
+                              //             downloading ? "Download Basic Criminal Document $downloadProgress" : "Download Basic Criminal Document",
+                              //             style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
+                              //           ),
+                              //         ),
+                              //         GestureDetector(
+                              //           onTap: () async {
+                              //             // getEnhancedPdfFile();
+                              //           },
+                              //           child: DottedBorder(
+                              //             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                              //             radius: const Radius.circular(4),
+                              //             borderType: BorderType.RRect,
+                              //             color: CustomColors.primaryColor,
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon(
+                              //                   Icons.picture_as_pdf_rounded,
+                              //                   color: CustomColors.red,
+                              //                   size: 16,
+                              //                 ),
+                              //                 const SizedBox(
+                              //                   width: 5,
+                              //                 ),
+                              //                 Text(
+                              //                   (snapshot.data!.data![0].providerverification!.basicCriminalVerify.toString() == "0")
+                              //                       ? "Pending"
+                              //                       : (snapshot.data!.data![0].providerverification!.basicCriminalVerify.toString() == "1")
+                              //                           ? "Approved"
+                              //                           : (snapshot.data!.data![0].providerverification!.basicCriminalVerify.toString() == "2")
+                              //                               ? "Rejected"
+                              //                               : "File Not Available Basic Criminal Document",
+                              //                   style: TextStyle(
+                              //                     fontSize: 11,
+                              //                     color: CustomColors.primaryText,
+                              //                   ),
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
+                              // const SizedBox(height: 15),
+                              // // doDownloadFirstAidFile
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     doDownloadFirstAidFile();
+                              //   },
+                              //   child: Container(
+                              //     padding: const EdgeInsets.all(5),
+                              //     decoration: BoxDecoration(
+                              //       color: CustomColors.white,
+                              //       borderRadius: BorderRadius.circular(12),
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              //       children: [
+                              //         TextButton.icon(
+                              //           onPressed: () {
+                              //             doDownloadFirstAidFile();
+                              //           },
+                              //           icon: Icon(
+                              //             Icons.picture_as_pdf_rounded,
+                              //             color: CustomColors.red,
+                              //           ),
+                              //           label: Text(
+                              //             "Download First Aid Document",
+                              //             style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
+                              //           ),
+                              //         ),
+                              //         GestureDetector(
+                              //           onTap: () async {
+                              //             // getEnhancedPdfFile();
+                              //           },
+                              //           child: DottedBorder(
+                              //             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                              //             radius: const Radius.circular(4),
+                              //             borderType: BorderType.RRect,
+                              //             color: CustomColors.primaryColor,
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon(
+                              //                   Icons.picture_as_pdf_rounded,
+                              //                   color: CustomColors.red,
+                              //                   size: 16,
+                              //                 ),
+                              //                 const SizedBox(
+                              //                   width: 5,
+                              //                 ),
+                              //                 Text(
+                              //                   (snapshot.data!.data![0].providerverification!.firstAidVerify.toString() == "0")
+                              //                       ? "Pending"
+                              //                       : (snapshot.data!.data![0].providerverification!.firstAidVerify.toString() == "1")
+                              //                           ? "Approved"
+                              //                           : (snapshot.data!.data![0].providerverification!.firstAidVerify.toString() == "2")
+                              //                               ? "Rejected"
+                              //                               : "File Not Available First Aid Document",
+                              //                   style: TextStyle(
+                              //                     fontSize: 11,
+                              //                     color: CustomColors.primaryText,
+                              //                   ),
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
+                              // const SizedBox(height: 15),
+                              // // doDownloadVehicleFile
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     doDownloadVehicleFile();
+                              //   },
+                              //   child: Container(
+                              //     padding: const EdgeInsets.all(5),
+                              //     decoration: BoxDecoration(
+                              //       color: CustomColors.white,
+                              //       borderRadius: BorderRadius.circular(12),
+                              //     ),
+                              //     child: Row(
+                              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              //       children: [
+                              //         TextButton.icon(
+                              //           onPressed: () {
+                              //             doDownloadVehicleFile();
+                              //           },
+                              //           icon: Icon(
+                              //             Icons.picture_as_pdf_rounded,
+                              //             color: CustomColors.red,
+                              //           ),
+                              //           label: Text(
+                              //             "Download Vehicle Record Document",
+                              //             style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
+                              //           ),
+                              //         ),
+                              //         GestureDetector(
+                              //           onTap: () async {
+                              //             // getEnhancedPdfFile();
+                              //           },
+                              //           child: DottedBorder(
+                              //             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                              //             radius: const Radius.circular(4),
+                              //             borderType: BorderType.RRect,
+                              //             color: CustomColors.primaryColor,
+                              //             child: Row(
+                              //               children: [
+                              //                 Icon(
+                              //                   Icons.picture_as_pdf_rounded,
+                              //                   color: CustomColors.red,
+                              //                   size: 16,
+                              //                 ),
+                              //                 const SizedBox(width: 5),
+                              //                 Text(
+                              //                   (snapshot.data!.data![0].providerverification!.vehicleRecordVerify.toString() == "0")
+                              //                       ? "Pending"
+                              //                       : (snapshot.data!.data![0].providerverification!.vehicleRecordVerify.toString() == "1")
+                              //                           ? "Approved"
+                              //                           : (snapshot.data!.data![0].providerverification!.vehicleRecordVerify.toString() == "2")
+                              //                               ? "Rejected"
+                              //                               : "File Not Available Vehicle Record  Document",
+                              //                   style: TextStyle(
+                              //                     fontSize: 11,
+                              //                     color: CustomColors.primaryText,
+                              //                   ),
+                              //                 ),
+                              //               ],
+                              //             ),
+                              //           ),
+                              //         ),
+                              //       ],
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                           review: null,
