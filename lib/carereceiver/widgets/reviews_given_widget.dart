@@ -51,19 +51,21 @@ class ReviewsGivenWidget extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * .3,
-                alignment: Alignment.center,
-                child: Text(
-                  email.toString(),
-                  style: TextStyle(
-                    color: CustomColors.hintText,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
+              if (email != null) ...[
+                Container(
+                  width: MediaQuery.of(context).size.width * .3,
+                  alignment: Alignment.center,
+                  child: Text(
+                    email.toString(),
+                    style: TextStyle(
+                      color: CustomColors.hintText,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
-              ),
+              ],
             ],
           ),
           Container(

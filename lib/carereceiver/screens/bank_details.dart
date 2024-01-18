@@ -6,6 +6,7 @@ import 'package:island_app/caregiver/models/bank_details_models.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
+import 'package:island_app/widgets/bank_detail_panel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:core';
 
@@ -271,9 +272,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
@@ -563,9 +562,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 // Listing
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
@@ -612,288 +609,14 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                           shrinkWrap: true,
                           itemCount: snapshot.data!.bankDetails!.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Column(
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    if (showItem.contains(index)) {
-                                      showItem.remove(index);
-                                    } else {
-                                      showItem.add(index);
-                                    }
-
-                                    setState(() {});
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                                    decoration: BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          color: CustomColors.borderLight,
-                                          width: 0.1,
-                                        ),
-                                      ),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Container(
-                                                  width: MediaQuery.of(context).size.width * .4,
-                                                  alignment: Alignment.center,
-                                                  child: Text(
-                                                    snapshot.data!.bankDetails![index].nameOfBank.toString(),
-                                                    style: TextStyle(
-                                                      color: CustomColors.primaryText,
-                                                      fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w600,
-                                                      fontSize: 13,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Container(
-                                              width: MediaQuery.of(context).size.width * .4,
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                snapshot.data!.bankDetails![index].nameOnAccount.toString(),
-                                                style: TextStyle(
-                                                  color: CustomColors.primaryText,
-                                                  fontFamily: "Poppins",
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize: 13,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                showItem.contains(index)
-                                    ? Container(
-                                        padding: const EdgeInsets.symmetric(vertical: 5),
-                                        decoration: BoxDecoration(
-                                          color: CustomColors.loginBg,
-                                          border: Border(
-                                            top: BorderSide(
-                                              color: CustomColors.borderLight,
-                                              width: 0.1,
-                                            ),
-                                          ),
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      width: MediaQuery.of(context).size.width * .4,
-                                                      alignment: Alignment.center,
-                                                      child: Text(
-                                                        "Account Number",
-                                                        // "Babysitters",
-                                                        style: TextStyle(
-                                                          color: CustomColors.primaryText,
-                                                          fontFamily: "Poppins",
-                                                          fontWeight: FontWeight.w600,
-                                                          fontSize: 13,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Container(
-                                                      width: MediaQuery.of(context).size.width * .4,
-                                                      alignment: Alignment.center,
-                                                      child: Text(
-                                                        snapshot.data!.bankDetails![index].accountNumber.toString(),
-                                                        // "One-Time",
-                                                        style: TextStyle(
-                                                          color: CustomColors.hintText,
-                                                          fontFamily: "Poppins",
-                                                          fontWeight: FontWeight.w500,
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      width: MediaQuery.of(context).size.width * .4,
-                                                      alignment: Alignment.center,
-                                                      child: Text(
-                                                        "Selected Default Bank",
-                                                        // "Babysitters",
-                                                        style: TextStyle(
-                                                          color: CustomColors.primaryText,
-                                                          fontFamily: "Poppins",
-                                                          fontWeight: FontWeight.w600,
-                                                          fontSize: 13,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    if (snapshot.data?.bankDetails![index].status == 1 && snapshot.data!.bankDetails![index].selected == 1) ...[
-                                                      Container(
-                                                        width: MediaQuery.of(context).size.width * .4,
-                                                        padding: const EdgeInsets.all(6),
-                                                        decoration: BoxDecoration(color: snapshot.data!.bankDetails![index].selected.toString() == "1" ? CustomColors.green : CustomColors.loginBg, borderRadius: BorderRadius.circular(6)),
-                                                        alignment: Alignment.center,
-                                                        child: Text(
-                                                          "Default Bank",
-                                                          // "One-Time",
-                                                          style: TextStyle(
-                                                            color: snapshot.data!.bankDetails![index].selected == 1 ? Colors.white : CustomColors.red,
-                                                            fontFamily: "Poppins",
-                                                            fontWeight: FontWeight.w500,
-                                                            fontSize: 12,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ] else ...[
-                                                      GestureDetector(
-                                                        onTap: () {
-                                                          selectBank(snapshot.data!.bankDetails![index].id);
-                                                        },
-                                                        child: Container(
-                                                          width: MediaQuery.of(context).size.width * .4,
-                                                          padding: const EdgeInsets.all(6),
-                                                          decoration: BoxDecoration(color: snapshot.data!.bankDetails![index].selected.toString() == "1" ? CustomColors.green : CustomColors.loginBg, borderRadius: BorderRadius.circular(6)),
-                                                          alignment: Alignment.center,
-                                                          child: Text(
-                                                            snapshot.data!.bankDetails![index].status == 0 ? "" : "Select",
-                                                            // "One-Time",
-                                                            style: TextStyle(
-                                                              color: snapshot.data!.bankDetails![index].selected.toString() == "1" ? CustomColors.white : CustomColors.red,
-                                                              fontFamily: "Poppins",
-                                                              fontWeight: FontWeight.w500,
-                                                              fontSize: 12,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ]
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      width: MediaQuery.of(context).size.width * .4,
-                                                      alignment: Alignment.center,
-                                                      child: Text(
-                                                        "Status",
-                                                        // "Babysitters",
-                                                        style: TextStyle(
-                                                          color: CustomColors.primaryText,
-                                                          fontFamily: "Poppins",
-                                                          fontWeight: FontWeight.w600,
-                                                          fontSize: 13,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    Container(
-                                                      width: MediaQuery.of(context).size.width * .4,
-                                                      alignment: Alignment.center,
-                                                      child: Text(
-                                                        snapshot.data!.bankDetails![index].status == 0 ? "Pending" : "Approved",
-                                                        // "One-Time",
-                                                        style: TextStyle(
-                                                          color: snapshot.data!.bankDetails![index].status == 0 ? CustomColors.red : CustomColors.green,
-                                                          fontFamily: "Poppins",
-                                                          fontWeight: FontWeight.w500,
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                                  children: [
-                                                    Container(
-                                                      width: MediaQuery.of(context).size.width * .4,
-                                                      alignment: Alignment.center,
-                                                      child: Text(
-                                                        "Action",
-                                                        // "Babysitters",
-                                                        style: TextStyle(
-                                                          color: CustomColors.primaryText,
-                                                          fontFamily: "Poppins",
-                                                          fontWeight: FontWeight.w600,
-                                                          fontSize: 13,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 5,
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        deleteBank(snapshot.data?.bankDetails![index].id);
-                                                      },
-                                                      child: Container(
-                                                        width: MediaQuery.of(context).size.width * .4,
-                                                        padding: const EdgeInsets.all(6),
-                                                        decoration: BoxDecoration(color: CustomColors.red, borderRadius: BorderRadius.circular(6)),
-                                                        alignment: Alignment.center,
-                                                        child: Text(
-                                                          snapshot.data!.bankDetails![index].selected.toString() == "1" ? "Delete" : "Delete",
-                                                          // "One-Time",
-                                                          style: TextStyle(
-                                                            color: CustomColors.white,
-                                                            fontFamily: "Poppins",
-                                                            fontWeight: FontWeight.w500,
-                                                            fontSize: 12,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                          ],
-                                        ),
-                                      )
-                                    : Container(),
-                              ],
+                            return BankDetailPanel(
+                              bankName: snapshot.data!.bankDetails![index].nameOfBank.toString(),
+                              accountTitle: snapshot.data!.bankDetails![index].nameOnAccount.toString(),
+                              accountNumber: snapshot.data!.bankDetails![index].accountNumber.toString(),
+                              defaulBank: snapshot.data?.bankDetails![index].status == 1 ? true : false,
+                              status: snapshot.data!.bankDetails![index].status == 0 ? "Pending" : "Approved",
+                              deleteBank: () => deleteBank(snapshot.data?.bankDetails![index].id),
+                              setDefaultBank: () => selectBank(snapshot.data!.bankDetails![index].id),
                             );
                           },
                         );
