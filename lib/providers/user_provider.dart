@@ -40,6 +40,7 @@ class UserProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  String profilePerentage = '';
 // fetchPRofile
   ProfileReceiverModel? _userProfile;
   fetchProfileReceiverModel() async {
@@ -57,6 +58,7 @@ class UserProvider extends ChangeNotifier {
       if (response.statusCode == 200) {
         // print("data fetched ${response.data}");
         _userProfile = ProfileReceiverModel.fromJson(response.data);
+        profilePerentage = response.data['percentage'].toString();
         notifyListeners();
       } else {
         throw Exception(

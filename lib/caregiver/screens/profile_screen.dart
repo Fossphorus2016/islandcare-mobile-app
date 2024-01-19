@@ -139,6 +139,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
   @override
   Widget build(BuildContext context) {
     var userProfile = Provider.of<ProfileProvider>(context).fetchProfile;
+    bool profileStatus = Provider.of<ProfileProvider>(context).profileStatus;
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomColors.loginBg,
@@ -158,12 +159,29 @@ class _ProfileGiverState extends State<ProfileGiver> {
           actions: [
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationScreen(),
-                  ),
-                );
+                if (profileStatus) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NotificationScreen(),
+                    ),
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      content: const Text(
+                        "Please Complete Your \n Profile For Approval",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  );
+                }
               },
               child: const Padding(
                 padding: EdgeInsets.all(12.0),
@@ -383,7 +401,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      "53%",
+                                                      "${Provider.of<ProfileProvider>(context).profilePerentage}%",
                                                       style: TextStyle(
                                                         fontSize: 14,
                                                         fontFamily: "Rubik",
@@ -397,7 +415,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                 LinearProgressIndicator(
                                                   minHeight: 08,
                                                   borderRadius: BorderRadius.circular(08),
-                                                  value: 0.53,
+                                                  value: double.parse(Provider.of<ProfileProvider>(context).profilePerentage) / 100,
                                                   valueColor: AlwaysStoppedAnimation<Color>(Colors.red.shade300),
                                                 ),
                                               ],

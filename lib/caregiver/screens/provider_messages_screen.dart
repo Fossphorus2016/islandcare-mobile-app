@@ -5,6 +5,8 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:island_app/caregiver/screens/home_screen.dart';
+import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/widgets/provider_conversational_widget.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/chatroom_model.dart';
@@ -40,6 +42,7 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool profileStatus = Provider.of<ProfileProvider>(context).profileStatus;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -56,41 +59,43 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
+        body: profileStatus
+            ? SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 20),
 
-                // Messsages
-                Consumer<ServiceProviderChat>(
-                  builder: (context, provider, child) {
-                    if (provider.chatList.isNotEmpty) {
-                      return ListView.builder(
-                        itemCount: provider.chatList.length,
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(top: 16),
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return ProviderConversationList(
-                            roomId: provider.chatList[index]["roomId"],
-                            name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].lastName}",
-                            messageText: provider.chatList[index]['lastMessage'],
-                            imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
-                            time: provider.chatList[index]['lastMessageTime'].toString(),
-                            isMessageRead: provider.chatList[index]['lastMessagesCount'] == 0 ? false : true,
-                          );
+                      // Messsages
+                      Consumer<ServiceProviderChat>(
+                        builder: (context, provider, child) {
+                          if (provider.chatList.isNotEmpty) {
+                            return ListView.builder(
+                              itemCount: provider.chatList.length,
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.only(top: 16),
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return ProviderConversationList(
+                                  roomId: provider.chatList[index]["roomId"],
+                                  name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].lastName}",
+                                  messageText: provider.chatList[index]['lastMessage'],
+                                  imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
+                                  time: provider.chatList[index]['lastMessageTime'].toString(),
+                                  isMessageRead: provider.chatList[index]['lastMessagesCount'] == 0 ? false : true,
+                                );
+                              },
+                            );
+                          }
+                          return const Center(child: Text("No chat found"));
                         },
-                      );
-                    }
-                    return const Center(child: Text("No chat found"));
-                  },
+                      ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              )
+            : const ProfileCompletContainer(),
       ),
     );
   }

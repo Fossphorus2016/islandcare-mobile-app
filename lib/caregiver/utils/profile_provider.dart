@@ -8,6 +8,8 @@ class ProfileProvider extends ChangeNotifier {
   // fetchPRofile
   ProfileGiverModel? fetchProfile;
   List badges = [];
+  bool profileStatus = false;
+  bool profileIsLoading = true;
   fetchProfileGiverModel() async {
     var token = await getUserToken();
     final response = await Dio().get(
@@ -16,6 +18,8 @@ class ProfileProvider extends ChangeNotifier {
     );
     if (response.statusCode == 200) {
       fetchProfile = ProfileGiverModel.fromJson(response.data);
+      profileStatus = fetchProfile!.data!.status == 1;
+      profileIsLoading = false;
       badges = fetchProfile!.data!.userdetailprovider!.badge.toString().split(',');
       notifyListeners();
     }
@@ -23,9 +27,19 @@ class ProfileProvider extends ChangeNotifier {
 
   getUserToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
+    var userToken = preferences.getString('userToken');
     return userToken.toString();
+  }
+
+  String profilePerentage = '';
+  getProfilePercentage() async {
+    var token = await getUserToken();
+    final response = await Dio().post(
+      CareGiverUrl.serviceProviderProfilePercentage,
+      options: Options(headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'}),
+    );
+    if (response.statusCode == 200) {
+      profilePerentage = response.data['percentage'].toString();
+    }
   }
 }

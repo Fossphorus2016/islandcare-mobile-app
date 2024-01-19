@@ -7,7 +7,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/hired_candidate_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/providers/user_provider.dart';
+// import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
@@ -53,9 +53,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
         return HiredCandidateModel.fromJson({});
       }
     } else {
-      throw Exception(
-        'Failed to load Hired Candidates',
-      );
+      throw Exception('Failed to load Hired Candidates');
     }
   }
 
@@ -116,7 +114,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=$currentDate');
+    // print('${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=$currentDate');
     // print(UserProvider.userToken);
     return SafeArea(
       child: Scaffold(

@@ -35,27 +35,13 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
     const ProfileGiver(),
   ];
 
-  // void updatePage(int page) {
-  //   setState(() {
-  //     _page = page;
-  //   });
-  //   // setState(() {
-  //   //   getUserToken();
-  //   // });
-  // }
-
   callUserData() async {
     await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
     await Provider.of<ProfileProvider>(context, listen: false).fetchProfileGiverModel();
+    await Provider.of<ProfileProvider>(context, listen: false).getProfilePercentage();
     await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(3);
     await Provider.of<ServiceProviderChat>(context, listen: false).connectChatChannel(3);
   }
-  // getUserToken() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var userToken = preferences.getString('userToken');
-
-  //   return userToken.toString();
-  // }
 
   @override
   void initState() {
