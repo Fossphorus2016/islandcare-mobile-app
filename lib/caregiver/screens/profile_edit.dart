@@ -2083,9 +2083,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   final TextEditingController toController = TextEditingController();
   @override
   void initState() {
-    userTokenProfile();
-    getUserToken();
-    getUserId();
     super.initState();
     // this.getSWData();
     fetchProfileEdit = fetchProfileGiverModelEdit();
@@ -2244,7 +2241,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   List educationApiList = [];
   late Future<ProfileGiverModel> fetchProfileEdit;
   Future<ProfileGiverModel> fetchProfileGiverModelEdit() async {
-    var token = await userTokenProfile();
+    var token = await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
       CareGiverUrl.serviceProviderProfile,
       options: Options(
@@ -2312,86 +2309,86 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     }
   }
 
-  String? _getEnhanceFile;
-  String? _getBasicFile;
-  String? _getFirstAidFile;
-  String? _getVehicleRecordFile;
+  // String? _getEnhanceFile;
+  // String? _getBasicFile;
+  // String? _getFirstAidFile;
+  // String? _getVehicleRecordFile;
 
-  Future getEnhancedPdfFile() async {
-    FilePickerResult? file = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'docx', 'doc'],
-    );
-    if (file != null) {
-      if (checkDocuFileTypes(context, file.files.single.extension)) {
-        File pdfFileEnhance = File(file.files.single.path ?? " ");
+  // Future getEnhancedPdfFile() async {
+  //   FilePickerResult? file = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: ['pdf', 'docx', 'doc'],
+  //   );
+  //   if (file != null) {
+  //     if (checkDocuFileTypes(context, file.files.single.extension)) {
+  //       File pdfFileEnhance = File(file.files.single.path ?? " ");
 
-        String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-        String? enhancePath = pdfFileEnhance.path;
-        setState(() {
-          _getEnhanceFile = enhancePath;
-        });
-      }
-    }
-  }
+  //       String? enhanceFileName = pdfFileEnhance.path.split('/').last;
+  //       String? enhancePath = pdfFileEnhance.path;
+  //       setState(() {
+  //         _getEnhanceFile = enhancePath;
+  //       });
+  //     }
+  //   }
+  // }
 
-  Future getBasicFile() async {
-    FilePickerResult? file = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'docx', 'doc'],
-    );
-    if (file != null) {
-      if (checkDocuFileTypes(context, file.files.single.extension)) {
-        File pdfFileEnhance = File(file.files.single.path ?? " ");
+  // Future getBasicFile() async {
+  //   FilePickerResult? file = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: ['pdf', 'docx', 'doc'],
+  //   );
+  //   if (file != null) {
+  //     if (checkDocuFileTypes(context, file.files.single.extension)) {
+  //       File pdfFileEnhance = File(file.files.single.path ?? " ");
 
-        String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-        String? enhancePath = pdfFileEnhance.path;
-        setState(() {
-          _getBasicFile = enhancePath;
-        });
-      }
-    }
-  }
+  //       String? enhanceFileName = pdfFileEnhance.path.split('/').last;
+  //       String? enhancePath = pdfFileEnhance.path;
+  //       setState(() {
+  //         _getBasicFile = enhancePath;
+  //       });
+  //     }
+  //   }
+  // }
 
-  Future getFirstAidFile() async {
-    FilePickerResult? file = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'docx', 'doc'],
-    );
-    if (file != null) {
-      if (checkDocuFileTypes(context, file.files.single.extension)) {
-        File pdfFileEnhance = File(file.files.single.path ?? " ");
+  // Future getFirstAidFile() async {
+  //   FilePickerResult? file = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: ['pdf', 'docx', 'doc'],
+  //   );
+  //   if (file != null) {
+  //     if (checkDocuFileTypes(context, file.files.single.extension)) {
+  //       File pdfFileEnhance = File(file.files.single.path ?? " ");
 
-        String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-        String? enhancePath = pdfFileEnhance.path;
-        setState(() {
-          _getFirstAidFile = enhancePath;
-        });
-      }
-    }
-  }
+  //       String? enhanceFileName = pdfFileEnhance.path.split('/').last;
+  //       String? enhancePath = pdfFileEnhance.path;
+  //       setState(() {
+  //         _getFirstAidFile = enhancePath;
+  //       });
+  //     }
+  //   }
+  // }
 
-  Future getVehicleRecordFile() async {
-    FilePickerResult? file = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['pdf', 'docx', 'doc'],
-    );
-    if (file != null) {
-      if (checkDocuFileTypes(context, file.files.single.extension)) {
-        File pdfFileEnhance = File(file.files.single.path ?? " ");
+  // Future getVehicleRecordFile() async {
+  //   FilePickerResult? file = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: ['pdf', 'docx', 'doc'],
+  //   );
+  //   if (file != null) {
+  //     if (checkDocuFileTypes(context, file.files.single.extension)) {
+  //       File pdfFileEnhance = File(file.files.single.path ?? " ");
 
-        String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-        String? enhancePath = pdfFileEnhance.path;
-        setState(() {
-          _getVehicleRecordFile = enhancePath;
-        });
-      }
-    }
-  }
+  //       String? enhanceFileName = pdfFileEnhance.path.split('/').last;
+  //       String? enhancePath = pdfFileEnhance.path;
+  //       setState(() {
+  //         _getVehicleRecordFile = enhancePath;
+  //       });
+  //     }
+  //   }
+  // }
 
   uploadImageDio() async {
-    var usersId = await getUserId();
-    var token = await userTokenProfile();
+    var usersId = await Provider.of<ProfileProvider>(context, listen: false).getUserId();
+    var token = await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
 
     var formData = FormData.fromMap(
       {
@@ -2412,10 +2409,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         "end_date[]": endDateMapList,
         "current[]": currentMapList,
         "major[]": majorMapList,
-        "enhanced_criminal": _getEnhanceFile == null ? null : await MultipartFile.fromFile(_getEnhanceFile.toString()),
-        "basic_criminal": _getBasicFile == null ? null : await MultipartFile.fromFile(_getBasicFile.toString()),
-        "first_aid": _getFirstAidFile == null ? null : await MultipartFile.fromFile(_getFirstAidFile.toString()),
-        "vehicle_record": _getVehicleRecordFile == null ? null : await MultipartFile.fromFile(_getVehicleRecordFile.toString()),
+        // "enhanced_criminal": _getEnhanceFile == null ? null : await MultipartFile.fromFile(_getEnhanceFile.toString()),
+        // "basic_criminal": _getBasicFile == null ? null : await MultipartFile.fromFile(_getBasicFile.toString()),
+        // "first_aid": _getFirstAidFile == null ? null : await MultipartFile.fromFile(_getFirstAidFile.toString()),
+        // "vehicle_record": _getVehicleRecordFile == null ? null : await MultipartFile.fromFile(_getVehicleRecordFile.toString()),
       },
     );
 
@@ -2439,29 +2436,21 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     }
   }
 
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-    return userToken.toString();
-  }
+  // getUserToken() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var userToken = preferences.getString(
+  //     'userToken',
+  //   );
+  //   return userToken.toString();
+  // }
 
-  getUserId() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString(
-      'userId',
-    );
-    return userId.toString();
-  }
-
-  userTokenProfile() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-    return userToken.toString();
-  }
+  // userTokenProfile() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var userToken = preferences.getString(
+  //     'userToken',
+  //   );
+  //   return userToken.toString();
+  // }
 
   @override
   void dispose() {
@@ -3610,199 +3599,199 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       ),
                       const SizedBox(height: 10),
                       if (widget.enhancedCriminalStatus == 2 || widget.enhancedCriminalStatus == 0) ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton.icon(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.picture_as_pdf_rounded,
-                                color: CustomColors.red,
-                              ),
-                              label: Text(
-                                "Enhanced Criminal",
-                                style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                getEnhancedPdfFile();
-                              },
-                              child: DottedBorder(
-                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                radius: const Radius.circular(4),
-                                borderType: BorderType.RRect,
-                                color: CustomColors.primaryColor,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.picture_as_pdf_rounded,
-                                      color: CustomColors.red,
-                                      size: 16,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      _getEnhanceFile.toString() == null ? "Quick File Uploader" : "File Selected",
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: CustomColors.primaryText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     TextButton.icon(
+                        //       onPressed: () {},
+                        //       icon: Icon(
+                        //         Icons.picture_as_pdf_rounded,
+                        //         color: CustomColors.red,
+                        //       ),
+                        //       label: Text(
+                        //         "Enhanced Criminal",
+                        //         style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
+                        //       ),
+                        //     ),
+                        //     GestureDetector(
+                        //       onTap: () async {
+                        //         getEnhancedPdfFile();
+                        //       },
+                        //       child: DottedBorder(
+                        //         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                        //         radius: const Radius.circular(4),
+                        //         borderType: BorderType.RRect,
+                        //         color: CustomColors.primaryColor,
+                        //         child: Row(
+                        //           children: [
+                        //             Icon(
+                        //               Icons.picture_as_pdf_rounded,
+                        //               color: CustomColors.red,
+                        //               size: 16,
+                        //             ),
+                        //             const SizedBox(
+                        //               width: 5,
+                        //             ),
+                        //             Text(
+                        //               _getEnhanceFile.toString() == null ? "Quick File Uploader" : "File Selected",
+                        //               style: TextStyle(
+                        //                 fontSize: 11,
+                        //                 color: CustomColors.primaryText,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         const SizedBox(height: 15),
                       ],
                       if (widget.basicCriminalStatus == 2 || widget.basicCriminalStatus == 0) ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton.icon(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.picture_as_pdf_rounded,
-                                color: CustomColors.red,
-                              ),
-                              label: Text(
-                                "Basic Criminal",
-                                style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                getBasicFile();
-                              },
-                              child: DottedBorder(
-                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                radius: const Radius.circular(4),
-                                borderType: BorderType.RRect,
-                                color: CustomColors.primaryColor,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.picture_as_pdf_rounded,
-                                      color: CustomColors.red,
-                                      size: 16,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      _getBasicFile.toString() == null ? "Quick File Uploader" : "File Selected",
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: CustomColors.primaryText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     TextButton.icon(
+                        //       onPressed: () {},
+                        //       icon: Icon(
+                        //         Icons.picture_as_pdf_rounded,
+                        //         color: CustomColors.red,
+                        //       ),
+                        //       label: Text(
+                        //         "Basic Criminal",
+                        //         style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
+                        //       ),
+                        //     ),
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         getBasicFile();
+                        //       },
+                        //       child: DottedBorder(
+                        //         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                        //         radius: const Radius.circular(4),
+                        //         borderType: BorderType.RRect,
+                        //         color: CustomColors.primaryColor,
+                        //         child: Row(
+                        //           children: [
+                        //             Icon(
+                        //               Icons.picture_as_pdf_rounded,
+                        //               color: CustomColors.red,
+                        //               size: 16,
+                        //             ),
+                        //             const SizedBox(
+                        //               width: 5,
+                        //             ),
+                        //             Text(
+                        //               _getBasicFile.toString() == null ? "Quick File Uploader" : "File Selected",
+                        //               style: TextStyle(
+                        //                 fontSize: 11,
+                        //                 color: CustomColors.primaryText,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         const SizedBox(height: 15),
                       ],
                       if (widget.firstAidStatus == 2 || widget.firstAidStatus == 0) ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton.icon(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.picture_as_pdf_rounded,
-                                color: CustomColors.red,
-                              ),
-                              label: Text(
-                                "First aid certification",
-                                style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                getFirstAidFile();
-                              },
-                              child: DottedBorder(
-                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                radius: const Radius.circular(4),
-                                borderType: BorderType.RRect,
-                                color: CustomColors.primaryColor,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.picture_as_pdf_rounded,
-                                      color: CustomColors.red,
-                                      size: 16,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      _getFirstAidFile.toString() == null ? "Quick File Uploader" : "File Selected",
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: CustomColors.primaryText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     TextButton.icon(
+                        //       onPressed: () {},
+                        //       icon: Icon(
+                        //         Icons.picture_as_pdf_rounded,
+                        //         color: CustomColors.red,
+                        //       ),
+                        //       label: Text(
+                        //         "First aid certification",
+                        //         style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
+                        //       ),
+                        //     ),
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         getFirstAidFile();
+                        //       },
+                        //       child: DottedBorder(
+                        //         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                        //         radius: const Radius.circular(4),
+                        //         borderType: BorderType.RRect,
+                        //         color: CustomColors.primaryColor,
+                        //         child: Row(
+                        //           children: [
+                        //             Icon(
+                        //               Icons.picture_as_pdf_rounded,
+                        //               color: CustomColors.red,
+                        //               size: 16,
+                        //             ),
+                        //             const SizedBox(
+                        //               width: 5,
+                        //             ),
+                        //             Text(
+                        //               _getFirstAidFile.toString() == null ? "Quick File Uploader" : "File Selected",
+                        //               style: TextStyle(
+                        //                 fontSize: 11,
+                        //                 color: CustomColors.primaryText,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         const SizedBox(height: 15),
                       ],
                       if (widget.vehicleRecordStatus == 2 || widget.vehicleRecordStatus == 0) ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            TextButton.icon(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.picture_as_pdf_rounded,
-                                color: CustomColors.red,
-                              ),
-                              label: Text(
-                                "Vehicle Records",
-                                style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                getVehicleRecordFile();
-                              },
-                              child: DottedBorder(
-                                padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                radius: const Radius.circular(4),
-                                borderType: BorderType.RRect,
-                                color: CustomColors.primaryColor,
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.picture_as_pdf_rounded,
-                                      color: CustomColors.red,
-                                      size: 16,
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      _getVehicleRecordFile.toString() == null ? "Quick File Uploader" : "File Selected",
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        color: CustomColors.primaryText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     TextButton.icon(
+                        //       onPressed: () {},
+                        //       icon: Icon(
+                        //         Icons.picture_as_pdf_rounded,
+                        //         color: CustomColors.red,
+                        //       ),
+                        //       label: Text(
+                        //         "Vehicle Records",
+                        //         style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
+                        //       ),
+                        //     ),
+                        //     GestureDetector(
+                        //       onTap: () {
+                        //         getVehicleRecordFile();
+                        //       },
+                        //       child: DottedBorder(
+                        //         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                        //         radius: const Radius.circular(4),
+                        //         borderType: BorderType.RRect,
+                        //         color: CustomColors.primaryColor,
+                        //         child: Row(
+                        //           children: [
+                        //             Icon(
+                        //               Icons.picture_as_pdf_rounded,
+                        //               color: CustomColors.red,
+                        //               size: 16,
+                        //             ),
+                        //             const SizedBox(
+                        //               width: 5,
+                        //             ),
+                        //             Text(
+                        //               _getVehicleRecordFile.toString() == null ? "Quick File Uploader" : "File Selected",
+                        //               style: TextStyle(
+                        //                 fontSize: 11,
+                        //                 color: CustomColors.primaryText,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0),

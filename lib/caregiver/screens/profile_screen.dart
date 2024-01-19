@@ -8,13 +8,15 @@ import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
-import 'package:island_app/caregiver/screens/profile_edit.dart';
+// import 'package:island_app/caregiver/screens/profile_edit.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
+import 'package:island_app/widgets/custom_appbar.dart';
+import 'package:island_app/widgets/document_download_list.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,17 +122,8 @@ class _ProfileGiverState extends State<ProfileGiver> {
     }
   }
 
-  // getUserToken() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var userToken = preferences.getString(
-  //     'userToken',
-  //   );
-  //   return userToken.toString();
-  // }
-
   @override
   void initState() {
-    // getUserToken();
     super.initState();
     fetchProfile = fetchProfileGiverModel();
     Provider.of<ProfileProvider>(context, listen: false).fetchProfileGiverModel();
@@ -143,57 +136,14 @@ class _ProfileGiverState extends State<ProfileGiver> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomColors.loginBg,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: CustomColors.primaryColor,
-          centerTitle: true,
-          title: Text(
-            "Profile",
-            style: TextStyle(
-              fontSize: 20,
-              color: CustomColors.white,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Rubik",
-            ),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: CustomAppBar(
+            fetchProfile: fetchProfile,
+            profileStatus: profileStatus,
+            showProfileIcon: false,
+            title: "Profile",
           ),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                if (profileStatus) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NotificationScreen(),
-                    ),
-                  );
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      backgroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      content: const Text(
-                        "Please Complete Your \n Profile For Approval",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                      ),
-                    ),
-                  );
-                }
-              },
-              child: const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Badge(
-                  child: Icon(
-                    Icons.message_outlined,
-                    size: 30,
-                  ),
-                ),
-              ),
-            ),
-          ],
         ),
         drawer: Drawer(
           backgroundColor: CustomColors.primaryColor,
@@ -259,32 +209,32 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               alignment: Alignment.topRight,
                                               child: InkWell(
                                                 onTap: () {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) => ProfileGiverPendingEdit(
-                                                        avatar: userProfile.data!.avatar.toString(),
-                                                        gender: userProfile.data!.userdetail!.gender.toString(),
-                                                        phoneNumber: userProfile.data!.phone.toString(),
-                                                        dob: userProfile.data!.userdetail!.dob.toString(),
-                                                        yoe: userProfile.data!.userdetailprovider!.experience.toString(),
-                                                        hourlyRate: userProfile.data!.userdetailprovider!.hourlyRate.toString(),
-                                                        userAddress: userProfile.data!.userdetail!.address.toString(),
-                                                        zipCode: userProfile.data!.userdetail!.zip.toString(),
-                                                        additionalService: userProfile.data!.userdetailprovider!.keywords.toString(),
-                                                        availability: userProfile.data!.userdetailprovider!.availability.toString(),
-                                                        userInfo: userProfile.data!.userdetail!.userInfo.toString(),
-                                                        enhancedCriminal: userProfile.data!.providerverification!.enhancedCriminal,
-                                                        enhancedCriminalStatus: userProfile.data!.providerverification!.enhancedCriminalVerify,
-                                                        basicCriminal: userProfile.data!.providerverification!.basicCriminal,
-                                                        basicCriminalStatus: userProfile.data!.providerverification!.basicCriminalVerify,
-                                                        firstAid: userProfile.data!.providerverification!.firstAid,
-                                                        firstAidStatus: userProfile.data!.providerverification!.firstAidVerify,
-                                                        vehicleRecord: userProfile.data!.providerverification!.vehicleRecord,
-                                                        vehicleRecordStatus: userProfile.data!.providerverification!.vehicleRecordVerify,
-                                                      ),
-                                                    ),
-                                                  );
+                                                  // Navigator.push(
+                                                  //   context,
+                                                  //   MaterialPageRoute(
+                                                  //     builder: (context) => ProfileGiverPendingEdit(
+                                                  //       avatar: userProfile.data!.avatar.toString(),
+                                                  //       gender: userProfile.data!.userdetail!.gender.toString(),
+                                                  //       phoneNumber: userProfile.data!.phone.toString(),
+                                                  //       dob: userProfile.data!.userdetail!.dob.toString(),
+                                                  //       yoe: userProfile.data!.userdetailprovider!.experience.toString(),
+                                                  //       hourlyRate: userProfile.data!.userdetailprovider!.hourlyRate.toString(),
+                                                  //       userAddress: userProfile.data!.userdetail!.address.toString(),
+                                                  //       zipCode: userProfile.data!.userdetail!.zip.toString(),
+                                                  //       additionalService: userProfile.data!.userdetailprovider!.keywords.toString(),
+                                                  //       availability: userProfile.data!.userdetailprovider!.availability.toString(),
+                                                  //       userInfo: userProfile.data!.userdetail!.userInfo.toString(),
+                                                  //       enhancedCriminal: userProfile.data!.providerverification!.enhancedCriminal,
+                                                  //       enhancedCriminalStatus: userProfile.data!.providerverification!.enhancedCriminalVerify,
+                                                  //       basicCriminal: userProfile.data!.providerverification!.basicCriminal,
+                                                  //       basicCriminalStatus: userProfile.data!.providerverification!.basicCriminalVerify,
+                                                  //       firstAid: userProfile.data!.providerverification!.firstAid,
+                                                  //       firstAidStatus: userProfile.data!.providerverification!.firstAidVerify,
+                                                  //       vehicleRecord: userProfile.data!.providerverification!.vehicleRecord,
+                                                  //       vehicleRecordStatus: userProfile.data!.providerverification!.vehicleRecordVerify,
+                                                  //     ),
+                                                  //   ),
+                                                  // );
                                                 },
                                                 child: const Icon(Icons.edit, color: Colors.white),
                                               ),
@@ -1218,45 +1168,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                   ),
                                 ),
 
-                                // Badges
-
-                                // Container(
-                                //   padding: const EdgeInsets.symmetric(
-                                //       horizontal: 17, vertical: 10),
-                                //   margin: const EdgeInsets.only(bottom: 15),
-                                //   width: MediaQuery.of(context).size.width,
-                                //   decoration: BoxDecoration(
-                                //     color: CustomColors.white,
-                                //     borderRadius: BorderRadius.circular(12),
-                                //   ),
-                                //   child: Column(
-                                //     crossAxisAlignment:
-                                //         CrossAxisAlignment.start,
-                                //     children: [
-                                //       Text(
-                                //         "Badges",
-                                //         style: TextStyle(
-                                //           color: CustomColors.primaryColor,
-                                //           fontSize: 10,
-                                //           fontFamily: "Rubik",
-                                //           fontWeight: FontWeight.w600,
-                                //         ),
-                                //       ),
-                                //       Wrap(
-                                //         spacing: 05,
-                                //         children: List.generate(badges.length,
-                                //             (index) {
-                                //           return Image(
-                                //             height: 50,
-                                //             image: NetworkImage(
-                                //                 "${AppUrl.webStorageUrl}/${badges[index]}"),
-                                //           );
-                                //         }),
-                                //       ),
-                                //     ],
-                                //   ),
-                                // ),
-
                                 // Background Verified
                                 DottedBorder(
                                   radius: const Radius.circular(10),
@@ -1295,55 +1206,155 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                   ),
                                 ),
                                 const SizedBox(height: 10),
-                                BasicDocumentDownloadList(
-                                  onTap: () {
-                                    if (userProfile.data!.providerverification!.enhancedCriminal!.isNotEmpty) {
-                                      doDownloadFile(userProfile.data!.providerverification!.enhancedCriminal);
-                                    }
-                                  },
-                                  fileStatus: userProfile.data!.providerverification!.enhancedCriminalVerify.toString(),
-                                  downloading: downloading,
-                                  downloadProgress: downloadProgress,
-                                  title: "Download Enhanced Criminal Document",
-                                ),
 
-                                const SizedBox(height: 15),
+                                // file type 1
                                 BasicDocumentDownloadList(
                                   onTap: () {
-                                    if (userProfile.data!.providerverification!.basicCriminal!.isNotEmpty) {
-                                      doDownloadFile(userProfile.data!.providerverification!.basicCriminal);
+                                    if (userProfile.data!.providerverification!.validDriverLicense != null) {
+                                      doDownloadFile(userProfile.data!.providerverification!.validDriverLicense);
                                     }
                                   },
-                                  fileStatus: userProfile.data!.providerverification!.basicCriminalVerify.toString(),
+                                  fileStatus: userProfile.data!.providerverification!.validDriverLicenseVerify.toString(),
                                   downloading: downloading,
                                   downloadProgress: downloadProgress,
-                                  title: "Download Basic Criminal Document",
+                                  title: "Valid Driver's License",
                                 ),
-                                const SizedBox(height: 15),
+                                const SizedBox(height: 10),
+                                // file type 2
                                 BasicDocumentDownloadList(
                                   onTap: () {
-                                    if (userProfile.data!.providerverification!.firstAid.isNotEmpty) {
-                                      doDownloadFile(userProfile.data!.providerverification!.firstAid);
+                                    if (userProfile.data!.providerverification!.scarsAwarenessCertification != null) {
+                                      doDownloadFile(userProfile.data!.providerverification!.scarsAwarenessCertification);
                                     }
                                   },
-                                  fileStatus: userProfile.data!.providerverification!.firstAidVerify.toString(),
+                                  fileStatus: userProfile.data!.providerverification!.scarsAwarenessCertificationVerify.toString(),
                                   downloading: downloading,
                                   downloadProgress: downloadProgress,
-                                  title: "Download First Aid Document",
+                                  title: "Scars Awareness Certification",
                                 ),
-
-                                const SizedBox(height: 15),
+                                const SizedBox(height: 10),
+                                // file type 8
                                 BasicDocumentDownloadList(
                                   onTap: () {
-                                    if (userProfile.data!.providerverification!.vehicleRecord.isNotEmpty) {
-                                      doDownloadFile(userProfile.data!.providerverification!.vehicleRecord);
+                                    if (userProfile.data!.providerverification!.policeBackgroundCheck != null) {
+                                      doDownloadFile(userProfile.data!.providerverification!.policeBackgroundCheck);
                                     }
                                   },
-                                  fileStatus: userProfile.data!.providerverification!.vehicleRecordVerify.toString(),
+                                  fileStatus: userProfile.data!.providerverification!.policeBackgroundCheckVerify.toString(),
                                   downloading: downloading,
                                   downloadProgress: downloadProgress,
-                                  title: "Download Vehicle Record Document",
+                                  title: "Police Background Check",
                                 ),
+                                if (userProfile.data!.userdetail!.service!.name.toString().toLowerCase() == "senior care") ...[
+                                  const SizedBox(height: 10),
+                                  // file type 3
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      if (userProfile.data!.providerverification!.cprFirstAidCertification != null) {
+                                        doDownloadFile(userProfile.data!.providerverification!.cprFirstAidCertification);
+                                      }
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.cprFirstAidCertificationVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "CPR/First Aid Certificate",
+                                  ),
+                                  const SizedBox(height: 10),
+                                  // file type 7
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      if (userProfile.data!.providerverification!.governmentRegisteredCareProvider != null) {
+                                        doDownloadFile(userProfile.data!.providerverification!.governmentRegisteredCareProvider);
+                                      }
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.governmentRegisteredCareProviderVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Government Registered Care Provider",
+                                  ),
+                                ] else if (userProfile.data!.userdetail!.service!.name.toString().toLowerCase() == "pet care") ...[
+                                  // file type 4
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      if (userProfile.data!.providerverification!.animalCareProviderCertification != null) {
+                                        doDownloadFile(userProfile.data!.providerverification!.animalCareProviderCertification);
+                                      }
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.animalCareProviderCertificationVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Animal Care Provider Certificate",
+                                  ),
+                                  // file type 6
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      if (userProfile.data!.providerverification!.animailFirstAid != null) {
+                                        doDownloadFile(userProfile.data!.providerverification!.animailFirstAid);
+                                      }
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.animailFirstAidVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Animal First Aid",
+                                  ),
+                                ] else if (userProfile.data!.userdetail!.service!.name.toString().toLowerCase() == "house keeping")
+                                  ...[]
+                                else if (userProfile.data!.userdetail!.service!.name.toString().toLowerCase() == "child care" || userProfile.data!.userdetail!.service!.name.toString().toLowerCase() == "school support") ...[
+                                  // file type 3a
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      if (userProfile.data!.providerverification!.redCrossBabysittingCertification != null) {
+                                        doDownloadFile(userProfile.data!.providerverification!.redCrossBabysittingCertification);
+                                      }
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.redCrossBabysittingCertificationVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Red Cross Babysitting Certification",
+                                  ),
+                                  // file type 3b
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      if (userProfile.data!.providerverification!.cprFirstAidCertification != null) {
+                                        doDownloadFile(userProfile.data!.providerverification!.cprFirstAidCertification);
+                                      }
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.cprFirstAidCertificationVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "CPR/First Aid Certificate",
+                                  ),
+                                  // file type 5
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      if (userProfile.data!.providerverification!.chaildAndFamilyServicesAndAbuse != null) {
+                                        doDownloadFile(userProfile.data!.providerverification!.chaildAndFamilyServicesAndAbuse);
+                                      }
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.chaildAndFamilyServicesAndAbuseVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Dept Child and Family Services Child Abuse Check",
+                                  ),
+                                  // file type 7
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      if (userProfile.data!.providerverification!.governmentRegisteredCareProvider != null) {
+                                        doDownloadFile(userProfile.data!.providerverification!.governmentRegisteredCareProvider);
+                                      }
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.governmentRegisteredCareProviderVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Government Registered Care Provider",
+                                  ),
+                                ],
                               ],
                             ),
                           ),
@@ -1357,112 +1368,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
   }
 }
 
-class BasicDocumentDownloadList extends StatelessWidget {
-  const BasicDocumentDownloadList({
-    super.key,
-    required this.onTap,
-    required this.downloading,
-    required this.downloadProgress,
-    required this.fileStatus,
-    required this.title,
-  });
-  final void Function()? onTap;
-  final bool downloading;
-  final String downloadProgress;
-  final String fileStatus;
-  final String title;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-        height: 50,
-        width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-          color: CustomColors.white,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Icon(
-              Icons.picture_as_pdf_rounded,
-              color: CustomColors.red,
-            ),
-            const SizedBox(width: 5),
-            Expanded(
-              child: Text(
-                downloading ? "$title $downloadProgress" : title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
-              ),
-            ),
-            DottedBorder(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-              radius: const Radius.circular(4),
-              borderType: BorderType.RRect,
-              color: CustomColors.primaryColor,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.picture_as_pdf_rounded,
-                    color: CustomColors.red,
-                    size: 16,
-                  ),
-                  const SizedBox(
-                    width: 5,
-                  ),
-                  Text(
-                    (fileStatus == "0")
-                        ? "Pending"
-                        : (fileStatus == "1")
-                            ? "Approved"
-                            : (fileStatus == "2")
-                                ? "Rejected"
-                                : "File Not Available",
-                    maxLines: 1,
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: CustomColors.primaryText,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// class HeaderCurvedContainer extends CustomPainter {
-//   @override
-//   void paint(Canvas canvas, Size size) {
-//     Paint paint = Paint()
-//       ..color = const Color(0xffea5d49)
-//       ..style = PaintingStyle.fill;
-//     Path path = Path()
-//       ..relativeLineTo(0, 100)
-//       ..quadraticBezierTo(size.width / 2, 80, size.width, 100)
-//       ..relativeLineTo(0, -100)
-//       ..close();
-//     // Path topStrokePath = Path()
-//     //   ..moveTo(0, 0)
-//     //   ..lineTo(size.width, 0);
-//     // // Combine the main path and top stroke path
-//     // path.addPath(topStrokePath, Offset.zero);
-//     canvas.drawPath(path, paint);
-//   }
-//   @override
-//   bool shouldRepaint(CustomPainter oldDelegate) => false;
-// }
+// fake
 
 class ProfileGiverPending extends StatefulWidget {
   const ProfileGiverPending({super.key});
@@ -1981,32 +1887,32 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                     ),
                                     child: GestureDetector(
                                       onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ProfileGiverPendingEdit(
-                                              avatar: snapshot.data!.data!.avatar.toString(),
-                                              gender: snapshot.data!.data!.userdetail!.gender.toString(),
-                                              phoneNumber: snapshot.data!.data!.phone.toString(),
-                                              dob: snapshot.data!.data!.userdetail!.dob.toString(),
-                                              yoe: snapshot.data!.data!.userdetailprovider!.experience.toString(),
-                                              hourlyRate: snapshot.data!.data!.userdetailprovider!.hourlyRate.toString(),
-                                              userAddress: snapshot.data!.data!.userdetail!.address.toString(),
-                                              zipCode: snapshot.data!.data!.userdetail!.zip.toString(),
-                                              additionalService: snapshot.data!.data!.userdetailprovider!.keywords.toString(),
-                                              availability: snapshot.data!.data!.userdetailprovider!.availability.toString(),
-                                              userInfo: snapshot.data!.data!.userdetail!.userInfo.toString(),
-                                              enhancedCriminal: snapshot.data!.data!.providerverification!.enhancedCriminal,
-                                              enhancedCriminalStatus: snapshot.data!.data!.providerverification!.enhancedCriminalVerify,
-                                              basicCriminal: snapshot.data!.data!.providerverification!.basicCriminal,
-                                              basicCriminalStatus: snapshot.data!.data!.providerverification!.basicCriminalVerify,
-                                              firstAid: snapshot.data!.data!.providerverification!.firstAid,
-                                              firstAidStatus: snapshot.data!.data!.providerverification!.firstAidVerify,
-                                              vehicleRecord: snapshot.data!.data!.providerverification!.vehicleRecord,
-                                              vehicleRecordStatus: snapshot.data!.data!.providerverification!.vehicleRecordVerify,
-                                            ),
-                                          ),
-                                        );
+                                        // Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) => ProfileGiverPendingEdit(
+                                        //       avatar: snapshot.data!.data!.avatar.toString(),
+                                        //       gender: snapshot.data!.data!.userdetail!.gender.toString(),
+                                        //       phoneNumber: snapshot.data!.data!.phone.toString(),
+                                        //       dob: snapshot.data!.data!.userdetail!.dob.toString(),
+                                        //       yoe: snapshot.data!.data!.userdetailprovider!.experience.toString(),
+                                        //       hourlyRate: snapshot.data!.data!.userdetailprovider!.hourlyRate.toString(),
+                                        //       userAddress: snapshot.data!.data!.userdetail!.address.toString(),
+                                        //       zipCode: snapshot.data!.data!.userdetail!.zip.toString(),
+                                        //       additionalService: snapshot.data!.data!.userdetailprovider!.keywords.toString(),
+                                        //       availability: snapshot.data!.data!.userdetailprovider!.availability.toString(),
+                                        //       userInfo: snapshot.data!.data!.userdetail!.userInfo.toString(),
+                                        //       enhancedCriminal: snapshot.data!.data!.providerverification!.enhancedCriminal,
+                                        //       enhancedCriminalStatus: snapshot.data!.data!.providerverification!.enhancedCriminalVerify,
+                                        //       basicCriminal: snapshot.data!.data!.providerverification!.basicCriminal,
+                                        //       basicCriminalStatus: snapshot.data!.data!.providerverification!.basicCriminalVerify,
+                                        //       firstAid: snapshot.data!.data!.providerverification!.firstAid,
+                                        //       firstAidStatus: snapshot.data!.data!.providerverification!.firstAidVerify,
+                                        //       vehicleRecord: snapshot.data!.data!.providerverification!.vehicleRecord,
+                                        //       vehicleRecordStatus: snapshot.data!.data!.providerverification!.vehicleRecordVerify,
+                                        //     ),
+                                        //   ),
+                                        // );
                                       },
                                     ),
                                   ),
@@ -2809,19 +2715,19 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                                 const SizedBox(
                                                   width: 5,
                                                 ),
-                                                Text(
-                                                  (snapshot.data!.data!.providerverification!.enhancedCriminalVerify.toString() == "0")
-                                                      ? "Pending"
-                                                      : (snapshot.data!.data!.providerverification!.enhancedCriminalVerify.toString() == "1")
-                                                          ? "Approved"
-                                                          : (snapshot.data!.data!.providerverification!.enhancedCriminalVerify.toString() == "2")
-                                                              ? "Rejected"
-                                                              : "File Not Available Enhanced Criminal Document",
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: CustomColors.primaryText,
-                                                  ),
-                                                ),
+                                                // Text(
+                                                //   (snapshot.data!.data!.providerverification!.enhancedCriminalVerify.toString() == "0")
+                                                //       ? "Pending"
+                                                //       : (snapshot.data!.data!.providerverification!.enhancedCriminalVerify.toString() == "1")
+                                                //           ? "Approved"
+                                                //           : (snapshot.data!.data!.providerverification!.enhancedCriminalVerify.toString() == "2")
+                                                //               ? "Rejected"
+                                                //               : "File Not Available Enhanced Criminal Document",
+                                                //   style: TextStyle(
+                                                //     fontSize: 11,
+                                                //     color: CustomColors.primaryText,
+                                                //   ),
+                                                // ),
                                               ],
                                             ),
                                           ),
@@ -2832,207 +2738,207 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                 ),
                                 const SizedBox(height: 15),
                                 // doDownloadBasicFile
-                                GestureDetector(
-                                  onTap: () {
-                                    doDownloadBasicFile();
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: CustomColors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            doDownloadBasicFile();
-                                          },
-                                          icon: Icon(
-                                            Icons.picture_as_pdf_rounded,
-                                            color: CustomColors.red,
-                                          ),
-                                          label: Text(
-                                            downloading ? "Download Basic Criminal Document $downloadProgress" : "Download Basic Criminal Document",
-                                            style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            // getEnhancedPdfFile();
-                                          },
-                                          child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                            radius: const Radius.circular(4),
-                                            borderType: BorderType.RRect,
-                                            color: CustomColors.primaryColor,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.picture_as_pdf_rounded,
-                                                  color: CustomColors.red,
-                                                  size: 16,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  (snapshot.data!.data!.providerverification!.basicCriminalVerify.toString() == "0")
-                                                      ? "Pending"
-                                                      : (snapshot.data!.data!.providerverification!.basicCriminalVerify.toString() == "1")
-                                                          ? "Approved"
-                                                          : (snapshot.data!.data!.providerverification!.basicCriminalVerify.toString() == "2")
-                                                              ? "Rejected"
-                                                              : "File Not Available Basic Criminal Document",
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: CustomColors.primaryText,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 15),
-                                // doDownloadFirstAidFile
-                                GestureDetector(
-                                  onTap: () {
-                                    doDownloadFirstAidFile();
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: CustomColors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            doDownloadFirstAidFile();
-                                          },
-                                          icon: Icon(
-                                            Icons.picture_as_pdf_rounded,
-                                            color: CustomColors.red,
-                                          ),
-                                          label: Text(
-                                            "Download First Aid Document",
-                                            style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            // getEnhancedPdfFile();
-                                          },
-                                          child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                            radius: const Radius.circular(4),
-                                            borderType: BorderType.RRect,
-                                            color: CustomColors.primaryColor,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.picture_as_pdf_rounded,
-                                                  color: CustomColors.red,
-                                                  size: 16,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  (snapshot.data!.data!.providerverification!.firstAidVerify.toString() == "0")
-                                                      ? "Pending"
-                                                      : (snapshot.data!.data!.providerverification!.firstAidVerify.toString() == "1")
-                                                          ? "Approved"
-                                                          : (snapshot.data!.data!.providerverification!.firstAidVerify.toString() == "2")
-                                                              ? "Rejected"
-                                                              : "File Not Available First Aid Document",
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: CustomColors.primaryText,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 15),
-                                GestureDetector(
-                                  onTap: () {
-                                    doDownloadVehicleFile();
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: CustomColors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        TextButton.icon(
-                                          onPressed: () {
-                                            doDownloadVehicleFile();
-                                          },
-                                          icon: Icon(
-                                            Icons.picture_as_pdf_rounded,
-                                            color: CustomColors.red,
-                                          ),
-                                          label: Text(
-                                            "Download Vehicle Record Document",
-                                            style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            // getEnhancedPdfFile();
-                                          },
-                                          child: DottedBorder(
-                                            padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                                            radius: const Radius.circular(4),
-                                            borderType: BorderType.RRect,
-                                            color: CustomColors.primaryColor,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.picture_as_pdf_rounded,
-                                                  color: CustomColors.red,
-                                                  size: 16,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                Text(
-                                                  (snapshot.data!.data!.providerverification!.vehicleRecordVerify.toString() == "0")
-                                                      ? "Pending"
-                                                      : (snapshot.data!.data!.providerverification!.vehicleRecordVerify.toString() == "1")
-                                                          ? "Approved"
-                                                          : (snapshot.data!.data!.providerverification!.vehicleRecordVerify.toString() == "2")
-                                                              ? "Rejected"
-                                                              : "File Not Available Vehicle Record  Document",
-                                                  style: TextStyle(
-                                                    fontSize: 11,
-                                                    color: CustomColors.primaryText,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     doDownloadBasicFile();
+                                //   },
+                                //   child: Container(
+                                //     padding: const EdgeInsets.all(5),
+                                //     decoration: BoxDecoration(
+                                //       color: CustomColors.white,
+                                //       borderRadius: BorderRadius.circular(12),
+                                //     ),
+                                //     child: Row(
+                                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //       children: [
+                                //         TextButton.icon(
+                                //           onPressed: () {
+                                //             doDownloadBasicFile();
+                                //           },
+                                //           icon: Icon(
+                                //             Icons.picture_as_pdf_rounded,
+                                //             color: CustomColors.red,
+                                //           ),
+                                //           label: Text(
+                                //             downloading ? "Download Basic Criminal Document $downloadProgress" : "Download Basic Criminal Document",
+                                //             style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
+                                //           ),
+                                //         ),
+                                //         GestureDetector(
+                                //           onTap: () async {
+                                //             // getEnhancedPdfFile();
+                                //           },
+                                //           child: DottedBorder(
+                                //             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                                //             radius: const Radius.circular(4),
+                                //             borderType: BorderType.RRect,
+                                //             color: CustomColors.primaryColor,
+                                //             child: Row(
+                                //               children: [
+                                //                 Icon(
+                                //                   Icons.picture_as_pdf_rounded,
+                                //                   color: CustomColors.red,
+                                //                   size: 16,
+                                //                 ),
+                                //                 const SizedBox(
+                                //                   width: 5,
+                                //                 ),
+                                //                 Text(
+                                //                   (snapshot.data!.data!.providerverification!.basicCriminalVerify.toString() == "0")
+                                //                       ? "Pending"
+                                //                       : (snapshot.data!.data!.providerverification!.basicCriminalVerify.toString() == "1")
+                                //                           ? "Approved"
+                                //                           : (snapshot.data!.data!.providerverification!.basicCriminalVerify.toString() == "2")
+                                //                               ? "Rejected"
+                                //                               : "File Not Available Basic Criminal Document",
+                                //                   style: TextStyle(
+                                //                     fontSize: 11,
+                                //                     color: CustomColors.primaryText,
+                                //                   ),
+                                //                 ),
+                                //               ],
+                                //             ),
+                                //           ),
+                                //         ),
+                                //       ],
+                                //     ),
+                                //   ),
+                                // ),
+                                // const SizedBox(height: 15),
+                                // // doDownloadFirstAidFile
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     doDownloadFirstAidFile();
+                                //   },
+                                //   child: Container(
+                                //     padding: const EdgeInsets.all(5),
+                                //     decoration: BoxDecoration(
+                                //       color: CustomColors.white,
+                                //       borderRadius: BorderRadius.circular(12),
+                                //     ),
+                                //     child: Row(
+                                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //       children: [
+                                //         TextButton.icon(
+                                //           onPressed: () {
+                                //             doDownloadFirstAidFile();
+                                //           },
+                                //           icon: Icon(
+                                //             Icons.picture_as_pdf_rounded,
+                                //             color: CustomColors.red,
+                                //           ),
+                                //           label: Text(
+                                //             "Download First Aid Document",
+                                //             style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
+                                //           ),
+                                //         ),
+                                //         GestureDetector(
+                                //           onTap: () async {
+                                //             // getEnhancedPdfFile();
+                                //           },
+                                //           child: DottedBorder(
+                                //             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                                //             radius: const Radius.circular(4),
+                                //             borderType: BorderType.RRect,
+                                //             color: CustomColors.primaryColor,
+                                //             child: Row(
+                                //               children: [
+                                //                 Icon(
+                                //                   Icons.picture_as_pdf_rounded,
+                                //                   color: CustomColors.red,
+                                //                   size: 16,
+                                //                 ),
+                                //                 const SizedBox(
+                                //                   width: 5,
+                                //                 ),
+                                //                 Text(
+                                //                   (snapshot.data!.data!.providerverification!.firstAidVerify.toString() == "0")
+                                //                       ? "Pending"
+                                //                       : (snapshot.data!.data!.providerverification!.firstAidVerify.toString() == "1")
+                                //                           ? "Approved"
+                                //                           : (snapshot.data!.data!.providerverification!.firstAidVerify.toString() == "2")
+                                //                               ? "Rejected"
+                                //                               : "File Not Available First Aid Document",
+                                //                   style: TextStyle(
+                                //                     fontSize: 11,
+                                //                     color: CustomColors.primaryText,
+                                //                   ),
+                                //                 ),
+                                //               ],
+                                //             ),
+                                //           ),
+                                //         ),
+                                //       ],
+                                //     ),
+                                //   ),
+                                // ),
+                                // const SizedBox(height: 15),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     doDownloadVehicleFile();
+                                //   },
+                                //   child: Container(
+                                //     padding: const EdgeInsets.all(5),
+                                //     decoration: BoxDecoration(
+                                //       color: CustomColors.white,
+                                //       borderRadius: BorderRadius.circular(12),
+                                //     ),
+                                //     child: Row(
+                                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //       children: [
+                                //         TextButton.icon(
+                                //           onPressed: () {
+                                //             doDownloadVehicleFile();
+                                //           },
+                                //           icon: Icon(
+                                //             Icons.picture_as_pdf_rounded,
+                                //             color: CustomColors.red,
+                                //           ),
+                                //           label: Text(
+                                //             "Download Vehicle Record Document",
+                                //             style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
+                                //           ),
+                                //         ),
+                                //         GestureDetector(
+                                //           onTap: () async {
+                                //             // getEnhancedPdfFile();
+                                //           },
+                                //           child: DottedBorder(
+                                //             padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
+                                //             radius: const Radius.circular(4),
+                                //             borderType: BorderType.RRect,
+                                //             color: CustomColors.primaryColor,
+                                //             child: Row(
+                                //               children: [
+                                //                 Icon(
+                                //                   Icons.picture_as_pdf_rounded,
+                                //                   color: CustomColors.red,
+                                //                   size: 16,
+                                //                 ),
+                                //                 const SizedBox(
+                                //                   width: 5,
+                                //                 ),
+                                //                 Text(
+                                //                   (snapshot.data!.data!.providerverification!.vehicleRecordVerify.toString() == "0")
+                                //                       ? "Pending"
+                                //                       : (snapshot.data!.data!.providerverification!.vehicleRecordVerify.toString() == "1")
+                                //                           ? "Approved"
+                                //                           : (snapshot.data!.data!.providerverification!.vehicleRecordVerify.toString() == "2")
+                                //                               ? "Rejected"
+                                //                               : "File Not Available Vehicle Record  Document",
+                                //                   style: TextStyle(
+                                //                     fontSize: 11,
+                                //                     color: CustomColors.primaryText,
+                                //                   ),
+                                //                 ),
+                                //               ],
+                                //             ),
+                                //           ),
+                                //         ),
+                                //       ],
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ),

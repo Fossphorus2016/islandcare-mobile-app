@@ -31,6 +31,14 @@ class ProfileProvider extends ChangeNotifier {
     return userToken.toString();
   }
 
+  getUserId() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var userId = preferences.getString(
+      'userId',
+    );
+    return userId.toString();
+  }
+
   String profilePerentage = '';
   getProfilePercentage() async {
     var token = await getUserToken();

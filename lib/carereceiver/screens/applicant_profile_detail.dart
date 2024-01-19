@@ -6,12 +6,12 @@ import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
+import 'package:island_app/widgets/document_download_list.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/models/applicant_profile_detail-model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_applicant_profile_widget.dart';
-import 'package:island_app/caregiver/screens/profile_screen.dart';
 
 class ApplicantProfileDetail extends StatefulWidget {
   final String jobTitle;
