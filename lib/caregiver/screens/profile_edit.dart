@@ -10,6 +10,7 @@ import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
+import 'package:island_app/widgets/document_download_list.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/screens/notification.dart';
@@ -26,6 +27,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //   @override
 //   State<ProfileGiverEdit> createState() => _ProfileGiverEditState();
 // }
+
 // class _ProfileGiverEditState extends State<ProfileGiverEdit> {
 //   var _isSelectedGender = "1";
 //   final TextEditingController dobController = TextEditingController();
@@ -56,6 +58,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       }
 //     }
 //   }
+
 //   List<Map<String, String>> education = [];
 //   var arr1 = [];
 //   List instituteMapList = [];
@@ -82,7 +85,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //           data: ThemeData.light().copyWith(
 //             colorScheme: ColorScheme.fromSwatch(
 //               primarySwatch: Colors.teal,
-//               primaryColorDark: CustomColors.primaryColor,
+//               // primaryColorDark: CustomColors.primaryColor,
 //               accentColor: const Color(0xff55CE86),
 //             ),
 //             dialogBackgroundColor: Colors.white,
@@ -103,6 +106,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       // print("GetPickedDate $getPickedDate");
 //     }
 //   }
+
 //   _fromDate(BuildContext context) async {
 //     final DateTime? picked = await showDatePicker(
 //       context: context,
@@ -114,7 +118,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //           data: ThemeData.light().copyWith(
 //             colorScheme: ColorScheme.fromSwatch(
 //               primarySwatch: Colors.teal,
-//               primaryColorDark: CustomColors.primaryColor,
+//               // primaryColorDark: CustomColors.primaryColor,
 //               accentColor: const Color(0xff55CE86),
 //             ),
 //             dialogBackgroundColor: Colors.white,
@@ -135,6 +139,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       // print("GetfromPickedDate $getfromPickedDate");
 //     }
 //   }
+
 //   _toDate(BuildContext context) async {
 //     final DateTime? picked = await showDatePicker(
 //       context: context,
@@ -146,7 +151,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //           data: ThemeData.light().copyWith(
 //             colorScheme: ColorScheme.fromSwatch(
 //               primarySwatch: Colors.teal,
-//               primaryColorDark: CustomColors.primaryColor,
+//               // primaryColorDark: CustomColors.primaryColor,
 //               accentColor: const Color(0xff55CE86),
 //             ),
 //             dialogBackgroundColor: Colors.white,
@@ -167,67 +172,71 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       // print("GettoPickedDate $gettoPickedDate");
 //     }
 //   }
+
 //   List educationApiList = [];
 //   late Future<ProfileGiverModel> fetchProfileEdit;
 //   Future<ProfileGiverModel> fetchProfileGiverModelEdit() async {
 //     var token = await getUserToken();
-//     final response = await http.get(
-//         Uri.parse(
-//           CareGiverUrl.serviceProviderProfile,
-//         ),
-//         headers: {
-//           'Authorization': 'Bearer $token',
-//           "Accept": "application/json",
-//         });
-//     if (response.statusCode == 200) {
-//       final body = jsonDecode(response.body) as Map<String, dynamic>;
-//       final data = body["data"] as List<dynamic>;
-//       // final listEdu = body['data']['educations'] as List<dynamic>;
-//       final responseeducationListApi = data.map((d) => (d as Map<String, dynamic>)["educations"].toString()).toList();
-//       // print("responseeducationListApi== $responseeducationListApi");
-//       setState(() {
-//         educationApiList = responseeducationListApi;
-//       });
-//       // print(jsonDecode(response.body));
-//       return ProfileGiverModel.fromJson(jsonDecode(response.body));
-//     } else {
-//       throw Exception(
-//         customErrorSnackBar('Failed to load Profile Model', context),
-//       );
-//     }
+//     // final response = await http.get(
+//     //     Uri.parse(
+//     //       CareGiverUrl.serviceProviderProfile,
+//     //     ),
+//     //     headers: {
+//     //       'Authorization': 'Bearer $token',
+//     //       "Accept": "application/json",
+//     //     });
+//     // if (response.statusCode == 200) {
+//     //   // final body = jsonDecode(response.body) as Map<String, dynamic>;
+//     //   final data = body["data"] as List<dynamic>;
+//     //   // final listEdu = body['data']['educations'] as List<dynamic>;
+//     //   final responseeducationListApi = data.map((d) => (d as Map<String, dynamic>)["educations"].toString()).toList();
+//     //   // print("responseeducationListApi== $responseeducationListApi");
+//     //   setState(() {
+//     //     educationApiList = responseeducationListApi;
+//     //   });
+//     //   // print(jsonDecode(response.body));
+//     return ProfileGiverModel.fromJson(jsonDecode(response.body));
+//     // } else {
+//     //   throw Exception(
+//     //     customErrorSnackBar('Failed to load Profile Model', context),
+//     //   );
+//     // }
 //   }
+
 //   // Image Picking
 //   ProgressDialog? pr;
 //   void showProgress(context) async {
 //     pr ??= ProgressDialog(context);
 //     await pr!.show();
-//  }
+//   }
+
 //   void hideProgress() async {
 //     if (pr != null && pr!.isShowing()) {
 //       await pr!.hide();
 //     }
 //   }
+
 //   File? image;
 //   File? imageFileDio;
-//   final picker = ImagePicker();
-//   final _pickerDio = ImagePicker();
-//   bool showSpinner = false;
-//   var myimg;
-//   Future getImageDio() async {
-//     XFile? pickedFileDio = await _pickerDio.pickImage(source: ImageSource.gallery, imageQuality: 80);
-//     if (pickedFileDio != null) {
-//       setState(() {
-//         imageFileDio = File(pickedFileDio.path);
-//       });
-//     } else {
-//       // print("No image selected");
-//     }
-//   }
+//   // final picker = ImagePicker();
+//   // final _pickerDio = ImagePicker();
+//   // bool showSpinner = false;
+//   // var myimg;
+//   // Future getImageDio() async {
+//   //   XFile? pickedFileDio = await _pickerDio.pickImage(source: ImageSource.gallery, imageQuality: 80);
+//   //   if (pickedFileDio != null) {
+//   //     setState(() {
+//   //       imageFileDio = File(pickedFileDio.path);
+//   //     });
+//   //   } else {
+//   //     // print("No image selected");
+//   //   }
+//   // }
 //   // Future getEnhancePdf() async {
 //   //   FilePickerResult? result = await FilePicker.platform.pickFiles();
 //   //   if (result != null) {
 //   //     File pdfFileEnhance = File(result.files.single.path ?? " ");
-//  //     String? enhanceFileName = pdfFileEnhance.path.split('/').last;
+//   //     String? enhanceFileName = pdfFileEnhance.path.split('/').last;
 //   //     String? enhancePath = pdfFileEnhance.path;
 //   //   }
 //   // }
@@ -247,6 +256,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       });
 //     }
 //   }
+
 //   Future getBasicFile() async {
 //     FilePickerResult? file = await FilePicker.platform.pickFiles();
 //     if (file != null) {
@@ -259,6 +269,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       });
 //     }
 //   }
+
 //   Future getFirstAidFile() async {
 //     FilePickerResult? file = await FilePicker.platform.pickFiles();
 //     if (file != null) {
@@ -271,6 +282,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       });
 //     }
 //   }
+
 //   Future getVehicleRecordFile() async {
 //     FilePickerResult? file = await FilePicker.platform.pickFiles();
 //     if (file != null) {
@@ -283,6 +295,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       });
 //     }
 //   }
+
 //   uploadImageDio() async {
 //     var usersId = await getUserId();
 //     var token = await getUserToken();
@@ -340,11 +353,13 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       // print(e);
 //     }
 //   }
+
 //   //Upload PDF
 //   Future uploadPdf() async {
 //     var dio = Dio();
 //     // FilePickerResult? result
 //   }
+
 //   getUserToken() async {
 //     SharedPreferences preferences = await SharedPreferences.getInstance();
 //     var userToken = preferences.getString(
@@ -353,6 +368,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //     // print(userToken);
 //     return userToken.toString();
 //   }
+
 //   getUserId() async {
 //     SharedPreferences preferences = await SharedPreferences.getInstance();
 //     var userId = preferences.getString(
@@ -361,6 +377,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //     // print(userId);
 //     return userId.toString();
 //   }
+
 //   @override
 //   void initState() {
 //     getUserToken();
@@ -370,6 +387,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //     // this.getSWData();
 //     fetchProfileEdit = fetchProfileGiverModelEdit();
 //   }
+
 //   @override
 //   void dispose() {
 //     super.dispose();
@@ -388,6 +406,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //     fromController.dispose();
 //     toController.dispose();
 //   }
+
 //   int selectedIndex = -1;
 //   @override
 //   Widget build(BuildContext context) {
@@ -1297,7 +1316,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //                                             shrinkWrap: true,
 //                                             scrollDirection: Axis.vertical,
 //                                             physics: const NeverScrollableScrollPhysics(),
-//                                             itemCount: snapshot.data!.data![0].educations!.length,
+//                                             itemCount: snapshot.data!.data!.educations!.length,
 //                                             itemBuilder: (context, index) {
 //                                               return Stack(
 //                                                 children: [
@@ -1348,7 +1367,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //                                                                         ),
 //                                                                       ),
 //                                                                       Expanded(
-//                                                                         child: Text("${snapshot.data!.data![0].educations![index].name}"),
+//                                                                         child: Text("${snapshot.data!.data!.educations![index].name}"),
 //                                                                       ),
 //                                                                     ],
 //                                                                   ),
@@ -1365,7 +1384,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //                                                                       ),
 //                                                                       Expanded(
 //                                                                         // width: 300,
-//                                                                         child: Text("${snapshot.data!.data![0].educations![index].major}"),
+//                                                                         child: Text("${snapshot.data!.data!.educations![index].major}"),
 //                                                                       ),
 //                                                                     ],
 //                                                                   ),
@@ -1382,7 +1401,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //                                                                       ),
 //                                                                       Expanded(
 //                                                                         // width: 300,
-//                                                                         child: Text("${snapshot.data!.data![0].educations![index].from}"),
+//                                                                         child: Text("${snapshot.data!.data!.educations![index].from}"),
 //                                                                       ),
 //                                                                     ],
 //                                                                   ),
@@ -1407,7 +1426,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //                                                         //
 //                                                         setState(() {
 //                                                           // education.removeAt(index);
-//                                                           snapshot.data!.data![0].educations!.removeAt(index);
+//                                                           snapshot.data!.data!.educations!.removeAt(index);
 //                                                           instituteMapList.removeAt(index);
 //                                                           majorMapList.removeAt(index);
 //                                                           startDateMapList.removeAt(index);
@@ -1744,7 +1763,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //                           ),
 //                         ],
 //                       ),
-//                      const SizedBox(
+//                       const SizedBox(
 //                         height: 15,
 //                       ),
 //                       Row(
@@ -1871,6 +1890,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       ),
 //     );
 //   }
+
 //   Widget getEducation(int index) {
 //     return Stack(
 //       children: [
@@ -1953,6 +1973,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //       ],
 //     );
 //   }
+
 //   Widget getRow(int index) {
 //     return Card(
 //       child: ListTile(
@@ -2020,6 +2041,8 @@ import 'package:island_app/widgets/progress_dialog.dart';
 // }
 
 class ProfileGiverPendingEdit extends StatefulWidget {
+  final String? name;
+  final String? email;
   final String? avatar;
   final String? gender;
   final String? phoneNumber;
@@ -2031,16 +2054,11 @@ class ProfileGiverPendingEdit extends StatefulWidget {
   final String? additionalService;
   final String? availability;
   final String? userInfo;
-  final String? enhancedCriminal;
-  final int? enhancedCriminalStatus;
-  final String? basicCriminal;
-  final int? basicCriminalStatus;
-  final String? firstAid;
-  final int? firstAidStatus;
-  final String? vehicleRecord;
-  final int? vehicleRecordStatus;
+
   const ProfileGiverPendingEdit({
     Key? key,
+    this.name,
+    this.email,
     this.avatar,
     this.gender,
     this.phoneNumber,
@@ -2052,14 +2070,6 @@ class ProfileGiverPendingEdit extends StatefulWidget {
     this.additionalService,
     this.availability,
     this.userInfo,
-    this.enhancedCriminal,
-    this.enhancedCriminalStatus,
-    this.basicCriminal,
-    this.basicCriminalStatus,
-    this.firstAid,
-    this.firstAidStatus,
-    this.vehicleRecord,
-    this.vehicleRecordStatus,
   }) : super(key: key);
   @override
   State<ProfileGiverPendingEdit> createState() => _ProfileGiverPendingEditState();
@@ -2142,7 +2152,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   List currentMapList = [];
   var stringListData = [];
   FilePickerResult? enhanceResult;
-// DatePicker
+  // DatePicker
   var getPickedDate;
   var gettoPickedDate;
   var getfromPickedDate;
@@ -2254,6 +2264,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     if (response.statusCode == 200) {
       setState(() {
         educationApiList = response.data['data']["educations"];
+        selectedArea = response.data['data']["userdetail"]['area'].toString();
       });
       for (int i = 0; i < educationApiList.length; i++) {
         instituteMapList.add(educationApiList[i]['name']);
@@ -2301,7 +2312,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     if (pickedFileDio != null) {
       if (checkImageFileTypes(context, pickedFileDio.files.single.extension)) {
         setState(() {
-          imageFileDio = File(pickedFileDio.files.single.path ?? " ");
+          imageFileDio = File(pickedFileDio.files.single.path ?? "");
         });
       }
     } else {
@@ -2309,83 +2320,33 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     }
   }
 
-  // String? _getEnhanceFile;
-  // String? _getBasicFile;
-  // String? _getFirstAidFile;
-  // String? _getVehicleRecordFile;
+  var lists = {
+    "valid_driver_license": "",
+    "scars_awareness_certification": "",
+    "red_cross_babysitting_certification": "",
+    "cpr_first_aid_certification": "",
+    "animal_care_provider_certification": "",
+    "chaild_and_family_services_and_abuse": "",
+    "animail_first_aid": "",
+    "government_registered_care_provider": "",
+    "police_background_check": "",
+  };
 
-  // Future getEnhancedPdfFile() async {
-  //   FilePickerResult? file = await FilePicker.platform.pickFiles(
-  //     type: FileType.custom,
-  //     allowedExtensions: ['pdf', 'docx', 'doc'],
-  //   );
-  //   if (file != null) {
-  //     if (checkDocuFileTypes(context, file.files.single.extension)) {
-  //       File pdfFileEnhance = File(file.files.single.path ?? " ");
+  uploadDocument(String documentType) async {
+    FilePickerResult? file = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf', 'docx', 'doc'],
+      allowMultiple: false,
+    );
+    if (file != null) {
+      setState(() {
+        lists[documentType] = file.files.single.path.toString();
+      });
+      // print(lists);
+    }
+  }
 
-  //       String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-  //       String? enhancePath = pdfFileEnhance.path;
-  //       setState(() {
-  //         _getEnhanceFile = enhancePath;
-  //       });
-  //     }
-  //   }
-  // }
-
-  // Future getBasicFile() async {
-  //   FilePickerResult? file = await FilePicker.platform.pickFiles(
-  //     type: FileType.custom,
-  //     allowedExtensions: ['pdf', 'docx', 'doc'],
-  //   );
-  //   if (file != null) {
-  //     if (checkDocuFileTypes(context, file.files.single.extension)) {
-  //       File pdfFileEnhance = File(file.files.single.path ?? " ");
-
-  //       String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-  //       String? enhancePath = pdfFileEnhance.path;
-  //       setState(() {
-  //         _getBasicFile = enhancePath;
-  //       });
-  //     }
-  //   }
-  // }
-
-  // Future getFirstAidFile() async {
-  //   FilePickerResult? file = await FilePicker.platform.pickFiles(
-  //     type: FileType.custom,
-  //     allowedExtensions: ['pdf', 'docx', 'doc'],
-  //   );
-  //   if (file != null) {
-  //     if (checkDocuFileTypes(context, file.files.single.extension)) {
-  //       File pdfFileEnhance = File(file.files.single.path ?? " ");
-
-  //       String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-  //       String? enhancePath = pdfFileEnhance.path;
-  //       setState(() {
-  //         _getFirstAidFile = enhancePath;
-  //       });
-  //     }
-  //   }
-  // }
-
-  // Future getVehicleRecordFile() async {
-  //   FilePickerResult? file = await FilePicker.platform.pickFiles(
-  //     type: FileType.custom,
-  //     allowedExtensions: ['pdf', 'docx', 'doc'],
-  //   );
-  //   if (file != null) {
-  //     if (checkDocuFileTypes(context, file.files.single.extension)) {
-  //       File pdfFileEnhance = File(file.files.single.path ?? " ");
-
-  //       String? enhanceFileName = pdfFileEnhance.path.split('/').last;
-  //       String? enhancePath = pdfFileEnhance.path;
-  //       setState(() {
-  //         _getVehicleRecordFile = enhancePath;
-  //       });
-  //     }
-  //   }
-  // }
-
+  var error;
   uploadImageDio() async {
     var usersId = await Provider.of<ProfileProvider>(context, listen: false).getUserId();
     var token = await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
@@ -2393,6 +2354,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     var formData = FormData.fromMap(
       {
         '_method': 'PUT',
+        'id': usersId,
         'user_info': userInfoController.text.toString(),
         'phone': phoneController.text.toString(),
         'address': addressController.text.toString(),
@@ -2409,16 +2371,24 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         "end_date[]": endDateMapList,
         "current[]": currentMapList,
         "major[]": majorMapList,
-        // "enhanced_criminal": _getEnhanceFile == null ? null : await MultipartFile.fromFile(_getEnhanceFile.toString()),
-        // "basic_criminal": _getBasicFile == null ? null : await MultipartFile.fromFile(_getBasicFile.toString()),
-        // "first_aid": _getFirstAidFile == null ? null : await MultipartFile.fromFile(_getFirstAidFile.toString()),
-        // "vehicle_record": _getVehicleRecordFile == null ? null : await MultipartFile.fromFile(_getVehicleRecordFile.toString()),
+        "valid_driver_license": lists['valid_driver_license'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['valid_driver_license'].toString()),
+        "scars_awareness_certification": lists['scars_awareness_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['scars_awareness_certification'].toString()),
+        "red_cross_babysitting_certification": lists['red_cross_babysitting_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['red_cross_babysitting_certification'].toString()),
+        "cpr_first_aid_certification": lists['cpr_first_aid_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['cpr_first_aid_certification'].toString()),
+        "animal_care_provider_certification": lists['animal_care_provider_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animal_care_provider_certification'].toString()),
+        "chaild_and_family_services_and_abuse": lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['chaild_and_family_services_and_abuse'].toString()),
+        "animail_first_aid": lists['animail_first_aid'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animail_first_aid'].toString()),
+        "government_registered_care_provider": lists['government_registered_care_provider'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['government_registered_care_provider'].toString()),
+        "police_background_check": lists['police_background_check'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['police_background_check'].toString()),
       },
     );
 
     Dio dio = Dio();
     try {
-      var response = await dio.post('https://islandcare.bm/api/service-provider-profile/$usersId', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
+      var response = await dio.post('https://islandcare.bm/api/service-provider-profile/update', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
+      setState(() {
+        sendRequest = false;
+      });
       if (response.statusCode == 200) {
         Provider.of<ProfileProvider>(context, listen: false).fetchProfileGiverModel();
         customSuccesSnackBar(
@@ -2426,31 +2396,29 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
           "Profile Updated Successfully.",
         );
       } else {
+        // print(response.data);
+        setState(() {
+          error = response.data;
+        });
         customErrorSnackBar(
           context,
           "Something went wrong please try agan later.",
         );
       }
     } catch (e) {
+      // print(e);
       customErrorSnackBar(context, e.toString());
     }
   }
 
-  // getUserToken() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var userToken = preferences.getString(
-  //     'userToken',
-  //   );
-  //   return userToken.toString();
-  // }
+  var areaList = [
+    {"name": "Select Area", "value": "select"},
+    {"name": "East", "value": "0"},
+    {"name": "Central", "value": "1"},
+    {"name": "West", "value": "2"},
+  ];
 
-  // userTokenProfile() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var userToken = preferences.getString(
-  //     'userToken',
-  //   );
-  //   return userToken.toString();
-  // }
+  var selectedArea = "select";
 
   @override
   void dispose() {
@@ -2472,7 +2440,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   }
 
   int selectedIndex = -1;
-
+  bool sendRequest = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -2578,6 +2546,31 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   ),
                                 ),
                               ),
+                      ),
+                      const SizedBox(height: 15),
+                      Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (widget.name != null) ...[
+                              Text(
+                                "${widget.name}",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ],
+                            if (widget.email != null) ...[
+                              Text(
+                                "${widget.email}",
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ],
+                        ),
                       ),
                       const SizedBox(height: 15),
                       // Gender
@@ -2793,6 +2786,55 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           ],
                         ),
                       ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        margin: const EdgeInsets.only(bottom: 15),
+                        decoration: BoxDecoration(color: CustomColors.white, borderRadius: BorderRadius.circular(12)),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Area",
+                                    style: TextStyle(
+                                      color: CustomColors.primaryColor,
+                                      fontSize: 12,
+                                      fontFamily: "Rubik",
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  DropdownButton(
+                                    value: selectedArea,
+                                    underline: Container(),
+                                    isExpanded: true,
+                                    items: areaList
+                                        .map(
+                                          (e) => DropdownMenuItem(
+                                            value: e["value"],
+                                            child: Text(e["name"].toString()),
+                                          ),
+                                        )
+                                        .toList(),
+                                    onChanged: (value) {
+                                      // print(value.runtimeType);
+                                      setState(() {
+                                        selectedArea = value!;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
                       // Experrience
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -3597,202 +3639,219 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           ),
                         ),
                       ),
+                      const SizedBox(height: 20),
+
+                      // file type 1
+                      UploadBasicDocumentList(
+                        onTap: () {
+                          uploadDocument("valid_driver_license");
+                        },
+                        title: "Valid Driver's License",
+                        fileSelectText: lists['valid_driver_license'].toString().isEmpty ? "Select File" : "Change File",
+                      ),
+                      if (error != null && error['errors']['valid_driver_license'] != null) ...[
+                        const SizedBox(height: 05),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            error['errors']['valid_driver_license'].toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 09,
+                            ),
+                          ),
+                        ),
+                      ],
                       const SizedBox(height: 10),
-                      if (widget.enhancedCriminalStatus == 2 || widget.enhancedCriminalStatus == 0) ...[
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     TextButton.icon(
-                        //       onPressed: () {},
-                        //       icon: Icon(
-                        //         Icons.picture_as_pdf_rounded,
-                        //         color: CustomColors.red,
-                        //       ),
-                        //       label: Text(
-                        //         "Enhanced Criminal",
-                        //         style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
-                        //       ),
-                        //     ),
-                        //     GestureDetector(
-                        //       onTap: () async {
-                        //         getEnhancedPdfFile();
-                        //       },
-                        //       child: DottedBorder(
-                        //         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                        //         radius: const Radius.circular(4),
-                        //         borderType: BorderType.RRect,
-                        //         color: CustomColors.primaryColor,
-                        //         child: Row(
-                        //           children: [
-                        //             Icon(
-                        //               Icons.picture_as_pdf_rounded,
-                        //               color: CustomColors.red,
-                        //               size: 16,
-                        //             ),
-                        //             const SizedBox(
-                        //               width: 5,
-                        //             ),
-                        //             Text(
-                        //               _getEnhanceFile.toString() == null ? "Quick File Uploader" : "File Selected",
-                        //               style: TextStyle(
-                        //                 fontSize: 11,
-                        //                 color: CustomColors.primaryText,
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        const SizedBox(height: 15),
+                      // file type 2
+                      UploadBasicDocumentList(
+                        onTap: () {
+                          uploadDocument("scars_awareness_certification");
+                        },
+                        title: "Scars Awareness Certification",
+                        fileSelectText: lists['scars_awareness_certification'].toString().isEmpty ? "Select File" : "Change File",
+                      ),
+                      if (error != null && error['errors']['scars_awareness_certification'] != null) ...[
+                        const SizedBox(height: 05),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            error['errors']['scars_awareness_certification'].toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 09,
+                            ),
+                          ),
+                        ),
                       ],
-                      if (widget.basicCriminalStatus == 2 || widget.basicCriminalStatus == 0) ...[
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     TextButton.icon(
-                        //       onPressed: () {},
-                        //       icon: Icon(
-                        //         Icons.picture_as_pdf_rounded,
-                        //         color: CustomColors.red,
-                        //       ),
-                        //       label: Text(
-                        //         "Basic Criminal",
-                        //         style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
-                        //       ),
-                        //     ),
-                        //     GestureDetector(
-                        //       onTap: () {
-                        //         getBasicFile();
-                        //       },
-                        //       child: DottedBorder(
-                        //         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                        //         radius: const Radius.circular(4),
-                        //         borderType: BorderType.RRect,
-                        //         color: CustomColors.primaryColor,
-                        //         child: Row(
-                        //           children: [
-                        //             Icon(
-                        //               Icons.picture_as_pdf_rounded,
-                        //               color: CustomColors.red,
-                        //               size: 16,
-                        //             ),
-                        //             const SizedBox(
-                        //               width: 5,
-                        //             ),
-                        //             Text(
-                        //               _getBasicFile.toString() == null ? "Quick File Uploader" : "File Selected",
-                        //               style: TextStyle(
-                        //                 fontSize: 11,
-                        //                 color: CustomColors.primaryText,
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        const SizedBox(height: 15),
+                      const SizedBox(height: 10),
+                      // file type 8
+                      UploadBasicDocumentList(
+                        onTap: () {
+                          uploadDocument("police_background_check");
+                        },
+                        title: "Police Background Check",
+                        fileSelectText: lists['police_background_check'].toString().isEmpty ? "Select File" : "Change File",
+                      ),
+                      if (error != null && error['errors']['police_background_check'] != null) ...[
+                        const SizedBox(height: 05),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            error['errors']['police_background_check'].toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 09,
+                            ),
+                          ),
+                        ),
                       ],
-                      if (widget.firstAidStatus == 2 || widget.firstAidStatus == 0) ...[
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     TextButton.icon(
-                        //       onPressed: () {},
-                        //       icon: Icon(
-                        //         Icons.picture_as_pdf_rounded,
-                        //         color: CustomColors.red,
-                        //       ),
-                        //       label: Text(
-                        //         "First aid certification",
-                        //         style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
-                        //       ),
-                        //     ),
-                        //     GestureDetector(
-                        //       onTap: () {
-                        //         getFirstAidFile();
-                        //       },
-                        //       child: DottedBorder(
-                        //         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                        //         radius: const Radius.circular(4),
-                        //         borderType: BorderType.RRect,
-                        //         color: CustomColors.primaryColor,
-                        //         child: Row(
-                        //           children: [
-                        //             Icon(
-                        //               Icons.picture_as_pdf_rounded,
-                        //               color: CustomColors.red,
-                        //               size: 16,
-                        //             ),
-                        //             const SizedBox(
-                        //               width: 5,
-                        //             ),
-                        //             Text(
-                        //               _getFirstAidFile.toString() == null ? "Quick File Uploader" : "File Selected",
-                        //               style: TextStyle(
-                        //                 fontSize: 11,
-                        //                 color: CustomColors.primaryText,
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
-                        const SizedBox(height: 15),
+                      const SizedBox(height: 10),
+                      // file type 3
+                      UploadBasicDocumentList(
+                        onTap: () {
+                          uploadDocument("cpr_first_aid_certification");
+                        },
+                        title: "CPR/First Aid Certificate",
+                        fileSelectText: lists['cpr_first_aid_certification'].toString().isEmpty ? "Select File" : "Change File",
+                      ),
+                      if (error != null && error['errors']['cpr_first_aid_certification'] != null) ...[
+                        const SizedBox(height: 05),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            error['errors']['cpr_first_aid_certification'].toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 09,
+                            ),
+                          ),
+                        ),
                       ],
-                      if (widget.vehicleRecordStatus == 2 || widget.vehicleRecordStatus == 0) ...[
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     TextButton.icon(
-                        //       onPressed: () {},
-                        //       icon: Icon(
-                        //         Icons.picture_as_pdf_rounded,
-                        //         color: CustomColors.red,
-                        //       ),
-                        //       label: Text(
-                        //         "Vehicle Records",
-                        //         style: TextStyle(fontSize: 12, color: CustomColors.primaryText),
-                        //       ),
-                        //     ),
-                        //     GestureDetector(
-                        //       onTap: () {
-                        //         getVehicleRecordFile();
-                        //       },
-                        //       child: DottedBorder(
-                        //         padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 5),
-                        //         radius: const Radius.circular(4),
-                        //         borderType: BorderType.RRect,
-                        //         color: CustomColors.primaryColor,
-                        //         child: Row(
-                        //           children: [
-                        //             Icon(
-                        //               Icons.picture_as_pdf_rounded,
-                        //               color: CustomColors.red,
-                        //               size: 16,
-                        //             ),
-                        //             const SizedBox(
-                        //               width: 5,
-                        //             ),
-                        //             Text(
-                        //               _getVehicleRecordFile.toString() == null ? "Quick File Uploader" : "File Selected",
-                        //               style: TextStyle(
-                        //                 fontSize: 11,
-                        //                 color: CustomColors.primaryText,
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
+                      const SizedBox(height: 10),
+                      // file type 7
+                      UploadBasicDocumentList(
+                        onTap: () {
+                          uploadDocument("government_registered_care_provider");
+                        },
+                        title: "Government Registered Care Provider",
+                        fileSelectText: lists['government_registered_care_provider'].toString().isEmpty ? "Select File" : "Change File",
+                      ),
+                      if (error != null && error['errors']['government_registered_care_provider'] != null) ...[
+                        const SizedBox(height: 05),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            error['errors']['government_registered_care_provider'].toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 09,
+                            ),
+                          ),
+                        ),
                       ],
+                      // file type 4
+                      const SizedBox(height: 10),
+                      UploadBasicDocumentList(
+                        onTap: () {
+                          uploadDocument("animal_care_provider_certification");
+                        },
+                        title: "Animal Care Provider Certificate",
+                        fileSelectText: lists['animal_care_provider_certification'].toString().isEmpty ? "Select File" : "Change File",
+                      ),
+                      if (error != null && error['errors']['animal_care_provider_certification'] != null) ...[
+                        const SizedBox(height: 05),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: Text(
+                            error['errors']['animal_care_provider_certification'].toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 09,
+                            ),
+                          ),
+                        ),
+                      ],
+                      // file type 6
+                      const SizedBox(height: 10),
+                      UploadBasicDocumentList(
+                        onTap: () {
+                          uploadDocument("animail_first_aid");
+                        },
+                        title: "Animal First Aid",
+                        fileSelectText: lists['animail_first_aid'].toString().isEmpty ? "Select File" : "Change File",
+                      ),
+                      if (error != null && error['errors']['animail_first_aid'] != null) ...[
+                        const SizedBox(height: 05),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            error['errors']['animail_first_aid'][0].toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 09,
+                            ),
+                          ),
+                        ),
+                      ],
+                      // file type 3a
+                      const SizedBox(height: 10),
+                      UploadBasicDocumentList(
+                        onTap: () {
+                          uploadDocument("red_cross_babysitting_certification");
+                        },
+                        title: "Red Cross Babysitting Certification",
+                        fileSelectText: lists['red_cross_babysitting_certification'].toString().isEmpty ? "Select File" : "Change File",
+                      ),
+                      if (error != null && error['errors']['red_cross_babysitting_certification'] != null) ...[
+                        const SizedBox(height: 05),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            error['errors']['red_cross_babysitting_certification'][0].toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 09,
+                            ),
+                          ),
+                        ),
+                      ],
+                      // file type 3b
+                      // const SizedBox(height: 10),
+                      // UploadBasicDocumentList(
+                      //   onTap: () {},
+                      //   title: "CPR/First Aid Certificate",
+                      // ),
+
+                      // file type 5
+                      const SizedBox(height: 10),
+                      UploadBasicDocumentList(
+                        onTap: () {
+                          uploadDocument("chaild_and_family_services_and_abuse");
+                        },
+                        title: "Dept Child and Family Services Child Abuse Check",
+                        fileSelectText: lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? "Select File" : "Change File",
+                      ),
+                      if (error != null && error['errors']['chaild_and_family_services_and_abuse'] != null) ...[
+                        const SizedBox(height: 05),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            error['errors']['chaild_and_family_services_and_abuse'][0].toString(),
+                            style: const TextStyle(
+                              color: Colors.red,
+                              fontSize: 09,
+                            ),
+                          ),
+                        ),
+                      ],
+                      // file type 7
+                      // const SizedBox(height: 10),
+                      // UploadBasicDocumentList(
+                      //   onTap: () {},
+                      //   title: "Government Registered Care Provider",
+                      // ),
+
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 0),
                         child: GestureDetector(
@@ -3807,6 +3866,8 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               customErrorSnackBar(context, "Please Enter Phone Number");
                             } else if (addressController.text.isEmpty) {
                               customErrorSnackBar(context, "Please Enter User Address");
+                            } else if (selectedArea == "select") {
+                              customErrorSnackBar(context, "Please Select Area");
                             } else if (experienceController.text.isEmpty) {
                               customErrorSnackBar(context, "Please Enter User Experience");
                             } else if (hourlyController.text.isEmpty) {
@@ -3818,6 +3879,9 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             } else if (instituteMapList.isEmpty) {
                               customErrorSnackBar(context, "Please Enter education");
                             } else {
+                              setState(() {
+                                sendRequest = true;
+                              });
                               uploadImageDio();
                             }
                           },
@@ -3838,15 +3902,19 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Center(
-                              child: Text(
-                                "Save",
-                                style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: "Rubik",
-                                ),
-                              ),
+                              child: sendRequest
+                                  ? const CircularProgressIndicator(
+                                      color: Colors.white,
+                                    )
+                                  : Text(
+                                      "Save",
+                                      style: TextStyle(
+                                        color: CustomColors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.w600,
+                                        fontFamily: "Rubik",
+                                      ),
+                                    ),
                             ),
                           ),
                         ),

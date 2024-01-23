@@ -8,6 +8,7 @@ import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
+import 'package:island_app/caregiver/screens/profile_edit.dart';
 // import 'package:island_app/caregiver/screens/profile_edit.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
@@ -209,32 +210,34 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               alignment: Alignment.topRight,
                                               child: InkWell(
                                                 onTap: () {
-                                                  // Navigator.push(
-                                                  //   context,
-                                                  //   MaterialPageRoute(
-                                                  //     builder: (context) => ProfileGiverPendingEdit(
-                                                  //       avatar: userProfile.data!.avatar.toString(),
-                                                  //       gender: userProfile.data!.userdetail!.gender.toString(),
-                                                  //       phoneNumber: userProfile.data!.phone.toString(),
-                                                  //       dob: userProfile.data!.userdetail!.dob.toString(),
-                                                  //       yoe: userProfile.data!.userdetailprovider!.experience.toString(),
-                                                  //       hourlyRate: userProfile.data!.userdetailprovider!.hourlyRate.toString(),
-                                                  //       userAddress: userProfile.data!.userdetail!.address.toString(),
-                                                  //       zipCode: userProfile.data!.userdetail!.zip.toString(),
-                                                  //       additionalService: userProfile.data!.userdetailprovider!.keywords.toString(),
-                                                  //       availability: userProfile.data!.userdetailprovider!.availability.toString(),
-                                                  //       userInfo: userProfile.data!.userdetail!.userInfo.toString(),
-                                                  //       enhancedCriminal: userProfile.data!.providerverification!.enhancedCriminal,
-                                                  //       enhancedCriminalStatus: userProfile.data!.providerverification!.enhancedCriminalVerify,
-                                                  //       basicCriminal: userProfile.data!.providerverification!.basicCriminal,
-                                                  //       basicCriminalStatus: userProfile.data!.providerverification!.basicCriminalVerify,
-                                                  //       firstAid: userProfile.data!.providerverification!.firstAid,
-                                                  //       firstAidStatus: userProfile.data!.providerverification!.firstAidVerify,
-                                                  //       vehicleRecord: userProfile.data!.providerverification!.vehicleRecord,
-                                                  //       vehicleRecordStatus: userProfile.data!.providerverification!.vehicleRecordVerify,
-                                                  //     ),
-                                                  //   ),
-                                                  // );
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => ProfileGiverPendingEdit(
+                                                        name: "${userProfile.data!.firstName} ${userProfile.data!.lastName}",
+                                                        email: userProfile.data!.email,
+                                                        avatar: userProfile.data!.avatar.toString(),
+                                                        gender: userProfile.data!.userdetail!.gender.toString(),
+                                                        phoneNumber: userProfile.data!.phone.toString(),
+                                                        dob: userProfile.data!.userdetail!.dob.toString(),
+                                                        yoe: userProfile.data!.userdetailprovider!.experience.toString(),
+                                                        hourlyRate: userProfile.data!.userdetailprovider!.hourlyRate.toString(),
+                                                        userAddress: userProfile.data!.userdetail!.address.toString(),
+                                                        zipCode: userProfile.data!.userdetail!.zip.toString(),
+                                                        additionalService: userProfile.data!.userdetailprovider!.keywords.toString(),
+                                                        availability: userProfile.data!.userdetailprovider!.availability.toString(),
+                                                        userInfo: userProfile.data!.userdetail!.userInfo.toString(),
+                                                        // enhancedCriminal: userProfile.data!.providerverification!.enhancedCriminal,
+                                                        // enhancedCriminalStatus: userProfile.data!.providerverification!.enhancedCriminalVerify,
+                                                        // basicCriminal: userProfile.data!.providerverification!.basicCriminal,
+                                                        // basicCriminalStatus: userProfile.data!.providerverification!.basicCriminalVerify,
+                                                        // firstAid: userProfile.data!.providerverification!.firstAid,
+                                                        // firstAidStatus: userProfile.data!.providerverification!.firstAidVerify,
+                                                        // vehicleRecord: userProfile.data!.providerverification!.vehicleRecord,
+                                                        // vehicleRecordStatus: userProfile.data!.providerverification!.vehicleRecordVerify,
+                                                      ),
+                                                    ),
+                                                  );
                                                 },
                                                 child: const Icon(Icons.edit, color: Colors.white),
                                               ),
@@ -620,6 +623,51 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                     ],
                                   ),
                                 ),
+
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                  margin: const EdgeInsets.only(bottom: 15),
+                                  decoration: BoxDecoration(
+                                    color: CustomColors.white,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Years of Experience",
+                                              style: TextStyle(
+                                                color: CustomColors.primaryColor,
+                                                fontSize: 10,
+                                                fontFamily: "Rubik",
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              userProfile.data!.userdetail!.area.toString() == "0"
+                                                  ? "East"
+                                                  : userProfile.data!.userdetail!.area.toString() == "1"
+                                                      ? "Central"
+                                                      : userProfile.data!.userdetail!.area.toString() == "2"
+                                                          ? "West"
+                                                          : "Not Available",
+                                              softWrap: true,
+                                              style: TextStyle(color: CustomColors.hintText, fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w200),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+
                                 //  Experience
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -1112,61 +1160,61 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                   ),
                                 ),
                                 // Additional Service
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                  margin: const EdgeInsets.only(bottom: 15),
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "Additional Services",
-                                              style: TextStyle(
-                                                color: CustomColors.primaryColor,
-                                                fontSize: 10,
-                                                fontFamily: "Rubik",
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
-                                            userProfile.data!.userdetailprovider!.keywords.toString() == "null"
-                                                ? Text(
-                                                    userProfile.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.keywords.toString(),
-                                                    softWrap: true,
-                                                    style: TextStyle(
-                                                      color: CustomColors.red,
-                                                      fontSize: 16,
-                                                      fontFamily: "Rubik",
-                                                      fontWeight: FontWeight.w200,
-                                                    ),
-                                                  )
-                                                : Text(
-                                                    userProfile.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.keywords.toString(),
-                                                    softWrap: true,
-                                                    style: TextStyle(
-                                                      color: CustomColors.hintText,
-                                                      fontSize: 16,
-                                                      fontFamily: "Rubik",
-                                                      fontWeight: FontWeight.w200,
-                                                    ),
-                                                  ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // Container(
+                                //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                //   margin: const EdgeInsets.only(bottom: 15),
+                                //   decoration: BoxDecoration(
+                                //     color: CustomColors.white,
+                                //     borderRadius: BorderRadius.circular(12),
+                                //   ),
+                                //   child: Row(
+                                //     crossAxisAlignment: CrossAxisAlignment.center,
+                                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //     children: [
+                                //       Expanded(
+                                //         child: Column(
+                                //           crossAxisAlignment: CrossAxisAlignment.start,
+                                //           mainAxisAlignment: MainAxisAlignment.center,
+                                //           children: [
+                                //             Text(
+                                //               "Additional Services",
+                                //               style: TextStyle(
+                                //                 color: CustomColors.primaryColor,
+                                //                 fontSize: 10,
+                                //                 fontFamily: "Rubik",
+                                //                 fontWeight: FontWeight.w600,
+                                //               ),
+                                //             ),
+                                //             const SizedBox(
+                                //               height: 8,
+                                //             ),
+                                //             userProfile.data!.userdetailprovider!.keywords.toString() == "null"
+                                //                 ? Text(
+                                //                     userProfile.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.keywords.toString(),
+                                //                     softWrap: true,
+                                //                     style: TextStyle(
+                                //                       color: CustomColors.red,
+                                //                       fontSize: 16,
+                                //                       fontFamily: "Rubik",
+                                //                       fontWeight: FontWeight.w200,
+                                //                     ),
+                                //                   )
+                                //                 : Text(
+                                //                     userProfile.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.keywords.toString(),
+                                //                     softWrap: true,
+                                //                     style: TextStyle(
+                                //                       color: CustomColors.hintText,
+                                //                       fontSize: 16,
+                                //                       fontFamily: "Rubik",
+                                //                       fontWeight: FontWeight.w200,
+                                //                     ),
+                                //                   ),
+                                //           ],
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
 
                                 // Background Verified
                                 DottedBorder(
@@ -1205,149 +1253,65 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 10),
 
                                 // file type 1
-                                BasicDocumentDownloadList(
-                                  onTap: () {
-                                    if (userProfile.data!.providerverification!.validDriverLicense != null) {
+                                if (userProfile.data!.providerverification!.validDriverLicense != null) ...[
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
                                       doDownloadFile(userProfile.data!.providerverification!.validDriverLicense);
-                                    }
-                                  },
-                                  fileStatus: userProfile.data!.providerverification!.validDriverLicenseVerify.toString(),
-                                  downloading: downloading,
-                                  downloadProgress: downloadProgress,
-                                  title: "Valid Driver's License",
-                                ),
-                                const SizedBox(height: 10),
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.validDriverLicenseVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Valid Driver's License",
+                                  ),
+                                ],
                                 // file type 2
-                                BasicDocumentDownloadList(
-                                  onTap: () {
-                                    if (userProfile.data!.providerverification!.scarsAwarenessCertification != null) {
+                                if (userProfile.data!.providerverification!.scarsAwarenessCertification != null) ...[
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
                                       doDownloadFile(userProfile.data!.providerverification!.scarsAwarenessCertification);
-                                    }
-                                  },
-                                  fileStatus: userProfile.data!.providerverification!.scarsAwarenessCertificationVerify.toString(),
-                                  downloading: downloading,
-                                  downloadProgress: downloadProgress,
-                                  title: "Scars Awareness Certification",
-                                ),
-                                const SizedBox(height: 10),
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.scarsAwarenessCertificationVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Scars Awareness Certification",
+                                  ),
+                                ],
                                 // file type 8
-                                BasicDocumentDownloadList(
-                                  onTap: () {
-                                    if (userProfile.data!.providerverification!.policeBackgroundCheck != null) {
+                                if (userProfile.data!.providerverification!.policeBackgroundCheck != null) ...[
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
                                       doDownloadFile(userProfile.data!.providerverification!.policeBackgroundCheck);
-                                    }
-                                  },
-                                  fileStatus: userProfile.data!.providerverification!.policeBackgroundCheckVerify.toString(),
-                                  downloading: downloading,
-                                  downloadProgress: downloadProgress,
-                                  title: "Police Background Check",
-                                ),
-                                if (userProfile.data!.userdetail!.service!.name.toString().toLowerCase() == "senior care") ...[
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.policeBackgroundCheckVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Police Background Check",
+                                  ),
+                                ],
+                                // file type 3
+                                if (userProfile.data!.providerverification!.cprFirstAidCertification != null) ...[
                                   const SizedBox(height: 10),
-                                  // file type 3
                                   BasicDocumentDownloadList(
                                     onTap: () {
-                                      if (userProfile.data!.providerverification!.cprFirstAidCertification != null) {
-                                        doDownloadFile(userProfile.data!.providerverification!.cprFirstAidCertification);
-                                      }
+                                      doDownloadFile(userProfile.data!.providerverification!.cprFirstAidCertification);
                                     },
                                     fileStatus: userProfile.data!.providerverification!.cprFirstAidCertificationVerify.toString(),
                                     downloading: downloading,
                                     downloadProgress: downloadProgress,
                                     title: "CPR/First Aid Certificate",
                                   ),
-                                  const SizedBox(height: 10),
-                                  // file type 7
-                                  BasicDocumentDownloadList(
-                                    onTap: () {
-                                      if (userProfile.data!.providerverification!.governmentRegisteredCareProvider != null) {
-                                        doDownloadFile(userProfile.data!.providerverification!.governmentRegisteredCareProvider);
-                                      }
-                                    },
-                                    fileStatus: userProfile.data!.providerverification!.governmentRegisteredCareProviderVerify.toString(),
-                                    downloading: downloading,
-                                    downloadProgress: downloadProgress,
-                                    title: "Government Registered Care Provider",
-                                  ),
-                                ] else if (userProfile.data!.userdetail!.service!.name.toString().toLowerCase() == "pet care") ...[
-                                  // file type 4
+                                ],
+                                // file type 7
+                                if (userProfile.data!.providerverification!.governmentRegisteredCareProvider != null) ...[
                                   const SizedBox(height: 10),
                                   BasicDocumentDownloadList(
                                     onTap: () {
-                                      if (userProfile.data!.providerverification!.animalCareProviderCertification != null) {
-                                        doDownloadFile(userProfile.data!.providerverification!.animalCareProviderCertification);
-                                      }
-                                    },
-                                    fileStatus: userProfile.data!.providerverification!.animalCareProviderCertificationVerify.toString(),
-                                    downloading: downloading,
-                                    downloadProgress: downloadProgress,
-                                    title: "Animal Care Provider Certificate",
-                                  ),
-                                  // file type 6
-                                  const SizedBox(height: 10),
-                                  BasicDocumentDownloadList(
-                                    onTap: () {
-                                      if (userProfile.data!.providerverification!.animailFirstAid != null) {
-                                        doDownloadFile(userProfile.data!.providerverification!.animailFirstAid);
-                                      }
-                                    },
-                                    fileStatus: userProfile.data!.providerverification!.animailFirstAidVerify.toString(),
-                                    downloading: downloading,
-                                    downloadProgress: downloadProgress,
-                                    title: "Animal First Aid",
-                                  ),
-                                ] else if (userProfile.data!.userdetail!.service!.name.toString().toLowerCase() == "house keeping")
-                                  ...[]
-                                else if (userProfile.data!.userdetail!.service!.name.toString().toLowerCase() == "child care" || userProfile.data!.userdetail!.service!.name.toString().toLowerCase() == "school support") ...[
-                                  // file type 3a
-                                  const SizedBox(height: 10),
-                                  BasicDocumentDownloadList(
-                                    onTap: () {
-                                      if (userProfile.data!.providerverification!.redCrossBabysittingCertification != null) {
-                                        doDownloadFile(userProfile.data!.providerverification!.redCrossBabysittingCertification);
-                                      }
-                                    },
-                                    fileStatus: userProfile.data!.providerverification!.redCrossBabysittingCertificationVerify.toString(),
-                                    downloading: downloading,
-                                    downloadProgress: downloadProgress,
-                                    title: "Red Cross Babysitting Certification",
-                                  ),
-                                  // file type 3b
-                                  const SizedBox(height: 10),
-                                  BasicDocumentDownloadList(
-                                    onTap: () {
-                                      if (userProfile.data!.providerverification!.cprFirstAidCertification != null) {
-                                        doDownloadFile(userProfile.data!.providerverification!.cprFirstAidCertification);
-                                      }
-                                    },
-                                    fileStatus: userProfile.data!.providerverification!.cprFirstAidCertificationVerify.toString(),
-                                    downloading: downloading,
-                                    downloadProgress: downloadProgress,
-                                    title: "CPR/First Aid Certificate",
-                                  ),
-                                  // file type 5
-                                  const SizedBox(height: 10),
-                                  BasicDocumentDownloadList(
-                                    onTap: () {
-                                      if (userProfile.data!.providerverification!.chaildAndFamilyServicesAndAbuse != null) {
-                                        doDownloadFile(userProfile.data!.providerverification!.chaildAndFamilyServicesAndAbuse);
-                                      }
-                                    },
-                                    fileStatus: userProfile.data!.providerverification!.chaildAndFamilyServicesAndAbuseVerify.toString(),
-                                    downloading: downloading,
-                                    downloadProgress: downloadProgress,
-                                    title: "Dept Child and Family Services Child Abuse Check",
-                                  ),
-                                  // file type 7
-                                  const SizedBox(height: 10),
-                                  BasicDocumentDownloadList(
-                                    onTap: () {
-                                      if (userProfile.data!.providerverification!.governmentRegisteredCareProvider != null) {
-                                        doDownloadFile(userProfile.data!.providerverification!.governmentRegisteredCareProvider);
-                                      }
+                                      doDownloadFile(userProfile.data!.providerverification!.governmentRegisteredCareProvider);
                                     },
                                     fileStatus: userProfile.data!.providerverification!.governmentRegisteredCareProviderVerify.toString(),
                                     downloading: downloading,
@@ -1355,6 +1319,87 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                     title: "Government Registered Care Provider",
                                   ),
                                 ],
+                                // file type 4
+                                if (userProfile.data!.providerverification!.animalCareProviderCertification != null) ...[
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      doDownloadFile(userProfile.data!.providerverification!.animalCareProviderCertification);
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.animalCareProviderCertificationVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Animal Care Provider Certificate",
+                                  ),
+                                ],
+
+                                // file type 6
+                                if (userProfile.data!.providerverification!.animailFirstAid != null) ...[
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      doDownloadFile(userProfile.data!.providerverification!.animailFirstAid);
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.animailFirstAidVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Animal First Aid",
+                                  ),
+                                ],
+                                // file type 3a
+
+                                if (userProfile.data!.providerverification!.redCrossBabysittingCertification != null) ...[
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      doDownloadFile(userProfile.data!.providerverification!.redCrossBabysittingCertification);
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.redCrossBabysittingCertificationVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Red Cross Babysitting Certification",
+                                  ),
+                                ],
+                                // file type 3b
+                                // const SizedBox(height: 10),
+                                // BasicDocumentDownloadList(
+                                //   onTap: () {
+                                //     if (userProfile.data!.providerverification!.cprFirstAidCertification != null) {
+                                //       doDownloadFile(userProfile.data!.providerverification!.cprFirstAidCertification);
+                                //     }
+                                //   },
+                                //   fileStatus: userProfile.data!.providerverification!.cprFirstAidCertificationVerify.toString(),
+                                //   downloading: downloading,
+                                //   downloadProgress: downloadProgress,
+                                //   title: "CPR/First Aid Certificate",
+                                // ),
+
+                                // file type 5
+                                if (userProfile.data!.providerverification!.chaildAndFamilyServicesAndAbuse != null) ...[
+                                  const SizedBox(height: 10),
+                                  BasicDocumentDownloadList(
+                                    onTap: () {
+                                      doDownloadFile(userProfile.data!.providerverification!.chaildAndFamilyServicesAndAbuse);
+                                    },
+                                    fileStatus: userProfile.data!.providerverification!.chaildAndFamilyServicesAndAbuseVerify.toString(),
+                                    downloading: downloading,
+                                    downloadProgress: downloadProgress,
+                                    title: "Dept Child and Family Services Child Abuse Check",
+                                  ),
+                                ],
+                                // file type 7
+                                // const SizedBox(height: 10),
+                                // BasicDocumentDownloadList(
+                                //   onTap: () {
+                                //     if (userProfile.data!.providerverification!.governmentRegisteredCareProvider != null) {
+                                //       doDownloadFile(userProfile.data!.providerverification!.governmentRegisteredCareProvider);
+                                //     }
+                                //   },
+                                //   fileStatus: userProfile.data!.providerverification!.governmentRegisteredCareProviderVerify.toString(),
+                                //   downloading: downloading,
+                                //   downloadProgress: downloadProgress,
+                                //   title: "Government Registered Care Provider",
+                                // ),
                               ],
                             ),
                           ),

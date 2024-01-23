@@ -41,13 +41,13 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
     );
     if (response.statusCode == 200) {
       var json = response.data as Map;
-      print(response.data);
+      // print(response.data);
       if (json['data'].isNotEmpty) {
         var hired = json['data'] as List;
         setState(() {
           hiredCandidates = hired;
         });
-        print(hired);
+        // print(hired);
         return HiredCandidateModel.fromJson(response.data);
       } else {
         return HiredCandidateModel.fromJson({});

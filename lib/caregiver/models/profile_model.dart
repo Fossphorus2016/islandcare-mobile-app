@@ -310,6 +310,7 @@ class Userdetail {
     this.servicesRequired,
     this.zip,
     this.address,
+    this.area,
     this.userInfo,
     this.createdAt,
     this.updatedAt,
@@ -323,6 +324,7 @@ class Userdetail {
   String? servicesRequired;
   String? zip;
   String? address;
+  String? area;
   String? userInfo;
   String? createdAt;
   String? updatedAt;
@@ -336,6 +338,7 @@ class Userdetail {
         servicesRequired: json["services_required"],
         zip: json["zip"],
         address: json["address"],
+        area: json['area'].toString(),
         userInfo: json["user_info"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
@@ -350,6 +353,7 @@ class Userdetail {
         "services_required": servicesRequired,
         "zip": zip,
         "address": address,
+        'area': area,
         "user_info": userInfo,
         "created_at": createdAt,
         "updated_at": updatedAt,
