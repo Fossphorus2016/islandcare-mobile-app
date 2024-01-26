@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_null_aware_operators
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
@@ -7,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class ProfileProvider extends ChangeNotifier {
   // fetchPRofile
   ProfileGiverModel? fetchProfile;
-  List badges = [];
+  List? badges = [];
   bool profileStatus = false;
   bool profileIsLoading = true;
   fetchProfileGiverModel() async {
@@ -17,10 +19,11 @@ class ProfileProvider extends ChangeNotifier {
       options: Options(headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'}),
     );
     if (response.statusCode == 200) {
+      // print(response.data['data']["avg_rating"].runtimeType);
       fetchProfile = ProfileGiverModel.fromJson(response.data);
       profileStatus = fetchProfile!.data!.status == 1;
       profileIsLoading = false;
-      badges = fetchProfile!.data!.userdetailprovider!.badge.toString().split(',');
+      badges = fetchProfile!.data!.userdetailprovider!.badge != null ? fetchProfile!.data!.userdetailprovider!.badge.toString().split(',') : null;
       notifyListeners();
     }
   }

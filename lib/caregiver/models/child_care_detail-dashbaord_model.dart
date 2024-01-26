@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
+
 ChildCareDetailDashboardModel childCareDetailDashboardModelFromJson(String str) => ChildCareDetailDashboardModel.fromJson(json.decode(str));
 
 String childCareDetailDashboardModelToJson(ChildCareDetailDashboardModel data) => json.encode(data.toJson());
@@ -50,6 +52,8 @@ class JobDetail {
     this.schedule,
     this.childinfo,
     this.learning,
+    this.schoolCamp,
+    this.additionalInfo,
   });
 
   int? id;
@@ -74,6 +78,8 @@ class JobDetail {
   List<Schedule>? schedule;
   List<Childinfo>? childinfo;
   Learning? learning;
+  SchoolCamp? schoolCamp;
+  String? additionalInfo;
 
   factory JobDetail.fromJson(Map<String, dynamic> json) => JobDetail(
         id: json["id"],
@@ -98,6 +104,8 @@ class JobDetail {
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
         childinfo: json["childinfo"] == null ? [] : List<Childinfo>.from(json["childinfo"]!.map((x) => Childinfo.fromJson(x))),
         learning: json["learning"] == null ? null : Learning.fromJson(json["learning"]),
+        schoolCamp: json["school_camp"] == null ? null : SchoolCamp.fromJson(json["school_camp"]),
+        additionalInfo: json["additional_info"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -123,6 +131,8 @@ class JobDetail {
         "schedule": schedule == null ? [] : List<dynamic>.from(schedule!.map((x) => x.toJson())),
         "childinfo": childinfo == null ? [] : List<dynamic>.from(childinfo!.map((x) => x.toJson())),
         "learning": learning?.toJson(),
+        "school_camp": schoolCamp?.toJson(),
+        "additional_info": additionalInfo,
       };
 }
 

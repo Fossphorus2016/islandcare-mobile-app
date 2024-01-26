@@ -634,18 +634,75 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                                   onRatingUpdate: (rating) {},
                                 ),
                               ),
-                              Container(
-                                alignment: Alignment.center,
-                                width: 100,
-                                child: Text(
-                                  providerComment.toString(),
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w400,
-                                    color: CustomColors.primaryText,
-                                  ),
-                                ),
+                              // Container(
+                              //   alignment: Alignment.center,
+                              //   width: 100,
+                              //   child: Text(
+                              //     providerComment.toString(),
+                              //     style: TextStyle(
+                              //       fontSize: 13,
+                              //       fontFamily: "Poppins",
+                              //       fontWeight: FontWeight.w400,
+                              //       color: CustomColors.primaryText,
+                              //     ),
+                              //   ),
+                              // ),
+                              IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      content: SizedBox(
+                                        height: 250,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              providerName.toString(),
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontFamily: "Poppins",
+                                                fontWeight: FontWeight.bold,
+                                                color: CustomColors.primaryText,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 15),
+                                            SizedBox(
+                                              width: 150,
+                                              child: RatingBar.builder(
+                                                initialRating: providerRating!.toDouble(),
+                                                minRating: 1,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                ignoreGestures: false,
+                                                itemSize: 24,
+                                                itemCount: 5,
+                                                itemBuilder: (context, _) => const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                ),
+                                                onRatingUpdate: (rating) {},
+                                              ),
+                                            ),
+                                            const SizedBox(height: 15),
+                                            Text(
+                                              providerComment.toString(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: "Poppins",
+                                                fontWeight: FontWeight.w400,
+                                                color: CustomColors.primaryText,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.keyboard_arrow_right_sharp),
                               ),
                             ],
                           ),

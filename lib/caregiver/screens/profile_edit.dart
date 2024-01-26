@@ -2047,7 +2047,7 @@ class ProfileGiverPendingEdit extends StatefulWidget {
   final String? gender;
   final String? phoneNumber;
   final String? dob;
-  final String? yoe;
+  final int? yoe;
   final String? hourlyRate;
   final String? userAddress;
   final String? zipCode;
@@ -2106,7 +2106,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
       dobController.text = widget.dob!;
     }
     if (widget.yoe != null) {
-      experienceController.text = widget.yoe!;
+      experienceController.text = widget.yoe!.toString();
     }
     if (widget.hourlyRate != null) {
       hourlyController.text = widget.hourlyRate!;
@@ -2264,7 +2264,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     if (response.statusCode == 200) {
       setState(() {
         educationApiList = response.data['data']["educations"];
-        selectedArea = response.data['data']["userdetail"]['area'].toString();
+        selectedArea = response.data['data']["userdetail"]['area'] != null ? response.data['data']["userdetail"]['area'].toString() : 'select';
       });
       for (int i = 0; i < educationApiList.length; i++) {
         instituteMapList.add(educationApiList[i]['name']);
@@ -2360,11 +2360,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         'address': addressController.text.toString(),
         'gender': _isSelectedGender,
         'dob': dobController.text.toString(),
+        'area': selectedArea,
         'zip': zipController.text.toString(),
         'experience': experienceController.text.toString(),
         'hourly_rate': hourlyController.text.toString(),
         'availability': availabilityController.text.toString(),
-        'keywords': keywordController.text.toString(),
+        'service': keywordController.text.toString(),
         "avatar": imageFileDio == null ? null : await MultipartFile.fromFile(imageFileDio!.path),
         "institute_name[]": instituteMapList,
         "start_date[]": startDateMapList,
@@ -2594,9 +2595,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const SizedBox(
-                              height: 5,
-                            ),
+                            const SizedBox(height: 5),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -2643,9 +2642,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(
-                                  width: 15,
-                                ),
+                                const SizedBox(width: 15),
                                 Expanded(
                                   child: GestureDetector(
                                     onTap: () {
@@ -3120,238 +3117,255 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 builder: (BuildContext context) {
                                   return SingleChildScrollView(
                                     scrollDirection: Axis.vertical,
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        const Text("Add Education"),
-                                        // Institute Name
-                                        Container(
-                                          height: 50,
-                                          margin: const EdgeInsets.only(bottom: 15, top: 15),
-                                          decoration: BoxDecoration(
-                                            color: CustomColors.white,
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          child: TextFormField(
-                                            controller: instituteController,
-                                            keyboardType: TextInputType.name,
-                                            textInputAction: TextInputAction.next,
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontFamily: "Rubik",
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                            textAlignVertical: TextAlignVertical.bottom,
-                                            maxLines: 1,
-                                            decoration: InputDecoration(
-                                              hintText: "Institute Name",
-                                              fillColor: CustomColors.myJobDetail,
-                                              focusColor: CustomColors.white,
-                                              hoverColor: CustomColors.white,
-                                              filled: true,
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                borderRadius: BorderRadius.circular(10.0),
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                borderRadius: BorderRadius.circular(10.0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 15,
+                                        right: 15,
+                                        top: 15,
+                                      ),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          const Align(
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              "Add Education",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w600,
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        // Major
-                                        Container(
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: CustomColors.white,
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          child: TextFormField(
-                                            controller: majorController,
-                                            keyboardType: TextInputType.name,
-                                            textInputAction: TextInputAction.next,
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontFamily: "Rubik",
-                                              fontWeight: FontWeight.w400,
+                                          // Institute Name
+                                          Container(
+                                            height: 50,
+                                            margin: const EdgeInsets.only(bottom: 15, top: 15),
+                                            decoration: BoxDecoration(
+                                              color: CustomColors.white,
+                                              borderRadius: BorderRadius.circular(12),
                                             ),
-                                            textAlignVertical: TextAlignVertical.bottom,
-                                            maxLines: 1,
-                                            decoration: InputDecoration(
-                                              hintText: "Major",
-                                              fillColor: CustomColors.myJobDetail,
-                                              focusColor: CustomColors.white,
-                                              hoverColor: CustomColors.white,
-                                              filled: true,
-                                              border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10),
+                                            child: TextFormField(
+                                              controller: instituteController,
+                                              keyboardType: TextInputType.name,
+                                              textInputAction: TextInputAction.next,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: "Rubik",
+                                                fontWeight: FontWeight.w400,
                                               ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                borderRadius: BorderRadius.circular(10.0),
+                                              textAlignVertical: TextAlignVertical.bottom,
+                                              maxLines: 1,
+                                              decoration: InputDecoration(
+                                                hintText: "Institute Name",
+                                                fillColor: CustomColors.myJobDetail,
+                                                focusColor: CustomColors.white,
+                                                hoverColor: CustomColors.white,
+                                                filled: true,
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                ),
                                               ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                borderRadius: BorderRadius.circular(10.0),
+                                            ),
+                                          ),
+                                          // Major
+                                          Container(
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color: CustomColors.white,
+                                              borderRadius: BorderRadius.circular(12),
+                                            ),
+                                            child: TextFormField(
+                                              controller: majorController,
+                                              keyboardType: TextInputType.name,
+                                              textInputAction: TextInputAction.next,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: "Rubik",
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                              textAlignVertical: TextAlignVertical.bottom,
+                                              maxLines: 1,
+                                              decoration: InputDecoration(
+                                                hintText: "Major",
+                                                fillColor: CustomColors.myJobDetail,
+                                                focusColor: CustomColors.white,
+                                                hoverColor: CustomColors.white,
+                                                filled: true,
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                ),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                  borderRadius: BorderRadius.circular(10.0),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        // Time period
-                                        const SizedBox(
-                                          height: 15,
-                                        ),
-                                        TextButton.icon(
-                                          style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
-                                          onPressed: () {
-                                            _toggleradio();
-                                            setState(() {});
-                                          },
-                                          icon: CircleAvatar(
-                                            backgroundColor: const Color.fromARGB(181, 171, 171, 171),
-                                            radius: 8,
-                                            child: CircleAvatar(
-                                              radius: 4,
-                                              backgroundColor: isPeriodSeleted == "1" ? CustomColors.primaryText : const Color.fromARGB(181, 171, 171, 171),
-                                            ),
+                                          // Time period
+                                          const SizedBox(
+                                            height: 15,
                                           ),
-                                          label: Text(
-                                            "Currently Studying?",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: CustomColors.primaryText,
-                                              fontFamily: "Rubik",
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ),
-                                        // From Date
-                                        Container(
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: CustomColors.myJobDetail,
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          child: CustomTextFieldWidget(
-                                            borderColor: CustomColors.white,
-                                            obsecure: false,
-                                            keyboardType: TextInputType.number,
-                                            controller: fromController,
-                                            hintText: "From",
-                                            onTap: () async {
-                                              _fromDate(context);
+                                          TextButton.icon(
+                                            style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
+                                            onPressed: () {
+                                              _toggleradio();
+                                              setState(() {});
                                             },
+                                            icon: CircleAvatar(
+                                              backgroundColor: const Color.fromARGB(181, 171, 171, 171),
+                                              radius: 8,
+                                              child: CircleAvatar(
+                                                radius: 4,
+                                                backgroundColor: isPeriodSeleted == "1" ? CustomColors.primaryText : const Color.fromARGB(181, 171, 171, 171),
+                                              ),
+                                            ),
+                                            label: Text(
+                                              "Currently Studying?",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                color: CustomColors.primaryText,
+                                                fontFamily: "Rubik",
+                                                fontStyle: FontStyle.normal,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        // To Date
-                                        const SizedBox(
-                                          height: 15,
-                                        ),
-                                        Container(
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: CustomColors.myJobDetail,
-                                            borderRadius: BorderRadius.circular(12),
+                                          // From Date
+                                          Container(
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color: CustomColors.myJobDetail,
+                                              borderRadius: BorderRadius.circular(12),
+                                            ),
+                                            child: CustomTextFieldWidget(
+                                              borderColor: CustomColors.white,
+                                              obsecure: false,
+                                              keyboardType: TextInputType.number,
+                                              controller: fromController,
+                                              hintText: "From",
+                                              onTap: () async {
+                                                _fromDate(context);
+                                              },
+                                            ),
                                           ),
-                                          child: CustomTextFieldWidget(
-                                            borderColor: CustomColors.white,
-                                            obsecure: false,
-                                            keyboardType: TextInputType.number,
-                                            controller: toController,
-                                            hintText: "To",
+                                          // To Date
+                                          const SizedBox(
+                                            height: 15,
+                                          ),
+                                          Container(
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color: CustomColors.myJobDetail,
+                                              borderRadius: BorderRadius.circular(12),
+                                            ),
+                                            child: CustomTextFieldWidget(
+                                              borderColor: CustomColors.white,
+                                              obsecure: false,
+                                              keyboardType: TextInputType.number,
+                                              controller: toController,
+                                              hintText: "To",
+                                              onTap: () async {
+                                                _toDate(context);
+                                              },
+                                            ),
+                                          ),
+                                          // AddBtn
+                                          GestureDetector(
                                             onTap: () async {
-                                              _toDate(context);
-                                            },
-                                          ),
-                                        ),
-                                        // AddBtn
-                                        GestureDetector(
-                                          onTap: () async {
-                                            {
-                                              String institute = instituteController.text.trim();
-                                              String major = majorController.text.trim();
-                                              String from = fromController.text.toString();
-                                              String to = toController.text.toString();
+                                              {
+                                                String institute = instituteController.text.trim();
+                                                String major = majorController.text.trim();
+                                                String from = fromController.text.toString();
+                                                String to = toController.text.toString();
 
-                                              if (institute.isNotEmpty && major.isNotEmpty) {
-                                                instituteController.text = '';
-                                                majorController.text = '';
-                                                fromController.text = '';
-                                                toController.text = '';
-                                                instituteMapList.add(institute);
-                                                majorMapList.add(major);
-                                                startDateMapList.add(from);
-                                                endDateMapList.add(to);
-                                                currentMapList.add(isPeriodSeleted);
-                                                setState(() {
-                                                  educationApiList.add(
-                                                    {
-                                                      "name": institute.toString(),
-                                                      "major": major.toString(),
-                                                      "from": from.toString(),
-                                                      "current": isPeriodSeleted.toString(),
-                                                      "to": to.toString(),
-                                                    },
-                                                  );
-                                                });
-
-                                                setState(() {
+                                                if (institute.isNotEmpty && major.isNotEmpty) {
                                                   instituteController.text = '';
                                                   majorController.text = '';
                                                   fromController.text = '';
                                                   toController.text = '';
-                                                });
-                                                SharedPreferences pref = await SharedPreferences.getInstance();
-                                                var data = await pref.setString('ListData', education.toString());
+                                                  instituteMapList.add(institute);
+                                                  majorMapList.add(major);
+                                                  startDateMapList.add(from);
+                                                  endDateMapList.add(to);
+                                                  currentMapList.add(isPeriodSeleted);
+                                                  setState(() {
+                                                    educationApiList.add(
+                                                      {
+                                                        "name": institute.toString(),
+                                                        "major": major.toString(),
+                                                        "from": from.toString(),
+                                                        "current": isPeriodSeleted.toString(),
+                                                        "to": to.toString(),
+                                                      },
+                                                    );
+                                                  });
 
-                                                Navigator.pop(context, true);
+                                                  setState(() {
+                                                    instituteController.text = '';
+                                                    majorController.text = '';
+                                                    fromController.text = '';
+                                                    toController.text = '';
+                                                  });
+                                                  SharedPreferences pref = await SharedPreferences.getInstance();
+                                                  var data = await pref.setString('ListData', education.toString());
+
+                                                  Navigator.pop(context, true);
+                                                }
                                               }
-                                            }
-                                          },
-                                          child: Container(
-                                            width: MediaQuery.of(context).size.width,
-                                            height: 50,
-                                            margin: const EdgeInsets.only(top: 20),
-                                            decoration: BoxDecoration(
-                                              gradient: LinearGradient(
-                                                begin: Alignment.center,
-                                                end: Alignment.center,
-                                                colors: [
-                                                  const Color(0xff90EAB4).withOpacity(0.1),
-                                                  const Color(0xff6BD294).withOpacity(0.8),
-                                                ],
-                                              ),
-                                              color: CustomColors.white,
-                                              boxShadow: const [
-                                                BoxShadow(
-                                                  color: Color.fromARGB(13, 0, 0, 0),
-                                                  blurRadius: 4.0,
-                                                  spreadRadius: 2.0,
-                                                  offset: Offset(2.0, 2.0),
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width,
+                                              height: 50,
+                                              margin: const EdgeInsets.only(top: 20),
+                                              decoration: BoxDecoration(
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.center,
+                                                  end: Alignment.center,
+                                                  colors: [
+                                                    const Color(0xff90EAB4).withOpacity(0.1),
+                                                    const Color(0xff6BD294).withOpacity(0.8),
+                                                  ],
                                                 ),
-                                              ],
-                                              borderRadius: BorderRadius.circular(6),
-                                            ),
-                                            child: Center(
-                                              child: Text(
-                                                "Save",
-                                                style: TextStyle(
-                                                  color: CustomColors.white,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: "Rubik",
+                                                color: CustomColors.white,
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                    blurRadius: 4.0,
+                                                    spreadRadius: 2.0,
+                                                    offset: Offset(2.0, 2.0),
+                                                  ),
+                                                ],
+                                                borderRadius: BorderRadius.circular(6),
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  "Save",
+                                                  style: TextStyle(
+                                                    color: CustomColors.white,
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: "Rubik",
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
@@ -3649,7 +3663,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         title: "Valid Driver's License",
                         fileSelectText: lists['valid_driver_license'].toString().isEmpty ? "Select File" : "Change File",
                       ),
-                      if (error != null && error['errors']['valid_driver_license'] != null) ...[
+                      if (error != null && error['errors'] != null && error['errors']!['valid_driver_license'] != null) ...[
                         const SizedBox(height: 05),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
@@ -3671,7 +3685,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         title: "Scars Awareness Certification",
                         fileSelectText: lists['scars_awareness_certification'].toString().isEmpty ? "Select File" : "Change File",
                       ),
-                      if (error != null && error['errors']['scars_awareness_certification'] != null) ...[
+                      if (error != null && error['errors'] != null && error['errors']!['scars_awareness_certification'] != null) ...[
                         const SizedBox(height: 05),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
@@ -3693,7 +3707,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         title: "Police Background Check",
                         fileSelectText: lists['police_background_check'].toString().isEmpty ? "Select File" : "Change File",
                       ),
-                      if (error != null && error['errors']['police_background_check'] != null) ...[
+                      if (error != null && error['errors'] != null && error['errors']!['police_background_check'] != null) ...[
                         const SizedBox(height: 05),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
@@ -3715,7 +3729,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         title: "CPR/First Aid Certificate",
                         fileSelectText: lists['cpr_first_aid_certification'].toString().isEmpty ? "Select File" : "Change File",
                       ),
-                      if (error != null && error['errors']['cpr_first_aid_certification'] != null) ...[
+                      if (error != null && error['errors'] != null && error['errors']!['cpr_first_aid_certification'] != null) ...[
                         const SizedBox(height: 05),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
@@ -3737,7 +3751,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         title: "Government Registered Care Provider",
                         fileSelectText: lists['government_registered_care_provider'].toString().isEmpty ? "Select File" : "Change File",
                       ),
-                      if (error != null && error['errors']['government_registered_care_provider'] != null) ...[
+                      if (error != null && error['errors'] != null && error['errors']!['government_registered_care_provider'] != null) ...[
                         const SizedBox(height: 05),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
@@ -3759,7 +3773,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         title: "Animal Care Provider Certificate",
                         fileSelectText: lists['animal_care_provider_certification'].toString().isEmpty ? "Select File" : "Change File",
                       ),
-                      if (error != null && error['errors']['animal_care_provider_certification'] != null) ...[
+                      if (error != null && error['errors'] != null && error['errors']!['animal_care_provider_certification'] != null) ...[
                         const SizedBox(height: 05),
                         Padding(
                           padding: const EdgeInsets.only(left: 5.0),
@@ -3781,7 +3795,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         title: "Animal First Aid",
                         fileSelectText: lists['animail_first_aid'].toString().isEmpty ? "Select File" : "Change File",
                       ),
-                      if (error != null && error['errors']['animail_first_aid'] != null) ...[
+                      if (error != null && error['errors'] != null && error['errors']!['animail_first_aid'] != null) ...[
                         const SizedBox(height: 05),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
@@ -3803,7 +3817,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         title: "Red Cross Babysitting Certification",
                         fileSelectText: lists['red_cross_babysitting_certification'].toString().isEmpty ? "Select File" : "Change File",
                       ),
-                      if (error != null && error['errors']['red_cross_babysitting_certification'] != null) ...[
+                      if (error != null && error['errors'] != null && error['errors']!['red_cross_babysitting_certification'] != null) ...[
                         const SizedBox(height: 05),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
@@ -3832,7 +3846,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         title: "Dept Child and Family Services Child Abuse Check",
                         fileSelectText: lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? "Select File" : "Change File",
                       ),
-                      if (error != null && error['errors']['chaild_and_family_services_and_abuse'] != null) ...[
+                      if (error != null && error['errors'] != null && error['errors']!['chaild_and_family_services_and_abuse'] != null) ...[
                         const SizedBox(height: 05),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),

@@ -22,6 +22,8 @@ class CareGiverUrl {
   static String serviceProviderProfile = "${AppUrl.webBaseURL}/api/service-provider-profile";
   static String serviceProviderProfileReviews = "${AppUrl.webBaseURL}/api/provider-reviews";
   static String serviceProviderDashboard = "${AppUrl.webBaseURL}/api/service-provider-dashboard";
+  static String serviceProviderDashboardSearch = "${AppUrl.webBaseURL}/api/service-provider-dashboard-search";
+
   static String serviceProviderBankDetails = "${AppUrl.webBaseURL}/api/service-receiver-bank-details";
   static String serviceProviderAllJob = "${AppUrl.webBaseURL}/api/service-provider-my-jobs";
   static String serviceProviderJobDetail = "${AppUrl.webBaseURL}/api/service-provider-job-detail";

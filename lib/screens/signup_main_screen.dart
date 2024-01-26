@@ -239,15 +239,40 @@ class _SignupScreenState extends State<SignupScreen> {
                     hintText: "Phone Number",
                   ),
                   const SizedBox(height: 20),
-                  CustomTextFieldWidget(
-                    obsecure: false,
-                    keyboardType: TextInputType.number,
-                    controller: dobController,
-                    hintText: "DOB",
-                    onTap: () async {
+                  InkWell(
+                    onTap: () {
                       _selectDate(context);
                     },
+                    child: Container(
+                      height: 54,
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey, width: 0.7),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 12),
+                      child: Text(
+                        dobController.text.toString(),
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.black,
+                          fontFamily: "Rubik",
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
                   ),
+
+                  // CustomTextFieldWidget(
+                  //   obsecure: false,
+                  //   keyboardType: TextInputType.number,
+                  //   controller: dobController,
+                  //   hintText: "DOB",
+                  //   onTap: () async {
+                  //     _selectDate(context);
+                  //   },
+                  // ),
                   // Choose Service
                   const SizedBox(height: 20),
                   Row(
@@ -373,7 +398,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton(
-                            hint: const Text("Services You Provide"),
+                            hint: _isSelectedService == "4" ? const Text("Service You Require") : const Text("Services You Provide"),
                             isExpanded: true,
                             items: data!.map((item) {
                               return DropdownMenuItem(
@@ -525,6 +550,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         );
                       } else {
                         if (_signUpFormKey.currentState!.validate()) {
+                          // print(dobController.text.toString());
                           var request = RegisterModel(
                             firstName: firstNameController.text.toString(),
                             lastName: lastNameController.text.toString(),
@@ -536,6 +562,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             role: _isSelectedService.toString(),
                             service: selectedService.toString(),
                           );
+                          // print(request);
                           postRegister(request).then((response) async {
                             if (response.statusCode == 200) {
                               var data = response.data;
@@ -546,8 +573,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               var userId = data["user"]['id'];
                               var name = data["user"]['first_name'];
                               var last = data["user"]['last_name'];
-                              var isProfileCompleted = data["is_profile_completed"];
-
+                              // var isProfileCompleted = data["is_profile_completed"];
                               if (status == 3) {
                                 customErrorSnackBar(
                                   context,
@@ -562,67 +588,33 @@ class _SignupScreenState extends State<SignupScreen> {
                                     ),
                                   );
                                 } else if (data["user"]["role"] == 3) {
-                                  if (data["user"]["status"] == 0) {
-                                    SharedPreferences pref = await SharedPreferences.getInstance();
-                                    await pref.setString('userStatus', status.toString());
-                                    await pref.setString('userToken', data["token"].toString());
-                                    await pref.setString('userAvatar', avatar.toString());
-                                    await pref.setString('userId', userId.toString());
-                                    await pref.setString('userName', "$name $last");
-                                    await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-
-                                    // Navigator.pushNamedAndRemoveUntil(
-                                    //   context,
-                                    //   'bottom-bar-giver-2',
-                                    //   (route) => false,
-                                    // );
-                                  } else {
-                                    Navigator.pushNamedAndRemoveUntil(
-                                      context,
-                                      'bottom-bar-giver',
-                                      (route) => false,
-                                    );
-
-                                    SharedPreferences pref = await SharedPreferences.getInstance();
-                                    await pref.setString('userRole', data["user"]["role"].toString());
-                                    await pref.setString('userToken', data["token"].toString());
-                                    await pref.setString('userStatus', status.toString());
-                                    await pref.setString('userId', userId.toString());
-                                    await pref.setString('userAvatar', avatar.toString());
-                                    await pref.setString('userName', "$name $last");
-                                    await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                  }
+                                  SharedPreferences pref = await SharedPreferences.getInstance();
+                                  await pref.setString('userRole', data["user"]["role"].toString());
+                                  await pref.setString('userToken', data["token"].toString());
+                                  await pref.setString('userStatus', status.toString());
+                                  await pref.setString('userId', userId.toString());
+                                  await pref.setString('userAvatar', avatar.toString());
+                                  await pref.setString('userName', "$name $last");
+                                  // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    'bottom-bar-giver',
+                                    (route) => false,
+                                  );
                                 } else if (data["user"]["role"] == 4) {
-                                  if (data["user"]["status"] == 0) {
-                                    SharedPreferences pref = await SharedPreferences.getInstance();
-                                    await pref.setString('userStatus', status.toString());
-                                    await pref.setString('userToken', data["token"].toString());
-                                    await pref.setString('userId', userId.toString());
-                                    await pref.setString('userAvatar', avatar.toString());
-                                    await pref.setString('userTokenProfile', data["token"].toString());
-                                    await pref.setString('userName', "$name $last");
-                                    await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                    Navigator.pushNamedAndRemoveUntil(
-                                      context,
-                                      'bottom-bar-2',
-                                      (route) => false,
-                                    );
-                                  } else {
-                                    Navigator.pushNamedAndRemoveUntil(
-                                      context,
-                                      'bottom-bar',
-                                      (route) => false,
-                                    );
-
-                                    SharedPreferences pref = await SharedPreferences.getInstance();
-                                    await pref.setString('userRole', data["user"]["role"].toString());
-                                    await pref.setString('userToken', data["token"].toString());
-                                    await pref.setString('userStatus', status.toString());
-                                    await pref.setString('userId', userId.toString());
-                                    await pref.setString('userAvatar', avatar.toString());
-                                    await pref.setString('userName', "$name $last");
-                                    await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                  }
+                                  SharedPreferences pref = await SharedPreferences.getInstance();
+                                  await pref.setString('userRole', data["user"]["role"].toString());
+                                  await pref.setString('userToken', data["token"].toString());
+                                  await pref.setString('userStatus', status.toString());
+                                  await pref.setString('userId', userId.toString());
+                                  await pref.setString('userAvatar', avatar.toString());
+                                  await pref.setString('userName', "$name $last");
+                                  // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    'bottom-bar',
+                                    (route) => false,
+                                  );
                                 }
                               }
                             } else {

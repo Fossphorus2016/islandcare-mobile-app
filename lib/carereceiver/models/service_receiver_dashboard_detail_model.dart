@@ -156,42 +156,96 @@ class Providerverification {
   Providerverification({
     this.id,
     this.userId,
-    this.enhancedCriminal,
-    this.enhancedCriminalVerify,
-    this.basicCriminal,
-    this.basicCriminalVerify,
-    this.firstAid,
-    this.firstAidVerify,
-    this.vehicleRecord,
-    this.vehicleRecordVerify,
+    this.validDriverLicense,
+    this.validDriverLicenseVerify,
+    this.scarsAwarenessCertification,
+    this.scarsAwarenessCertificationVerify,
+    this.redCrossBabysittingCertification,
+    this.redCrossBabysittingCertificationVerify,
+    this.cprFirstAidCertification,
+    this.cprFirstAidCertificationVerify,
+    this.animalCareProviderCertification,
+    this.animalCareProviderCertificationVerify,
+    this.animailFirstAid,
+    this.animailFirstAidVerify,
+    this.chaildAndFamilyServicesAndAbuse,
+    this.chaildAndFamilyServicesAndAbuseVerify,
+    this.governmentRegisteredCareProvider,
+    this.governmentRegisteredCareProviderVerify,
+    this.policeBackgroundCheck,
+    this.policeBackgroundCheckVerify,
+    // this.enhancedCriminal,
+    // this.enhancedCriminalVerify,
+    // this.basicCriminal,
+    // this.basicCriminalVerify,
+    // this.firstAid,
+    // this.firstAidVerify,
+    // this.vehicleRecord,
+    // this.vehicleRecordVerify,
     this.createdAt,
     this.updatedAt,
   });
 
   int? id;
   int? userId;
-  String? enhancedCriminal;
-  int? enhancedCriminalVerify;
-  dynamic basicCriminal;
-  int? basicCriminalVerify;
-  dynamic firstAid;
-  int? firstAidVerify;
-  dynamic vehicleRecord;
-  int? vehicleRecordVerify;
+  // String? enhancedCriminal;
+  // int? enhancedCriminalVerify;
+  // dynamic basicCriminal;
+  // int? basicCriminalVerify;
+  // dynamic firstAid;
+  // int? firstAidVerify;
+  // dynamic vehicleRecord;
+  // int? vehicleRecordVerify;
+  String? validDriverLicense;
+  int? validDriverLicenseVerify;
+  String? scarsAwarenessCertification;
+  int? scarsAwarenessCertificationVerify;
+  String? redCrossBabysittingCertification;
+  int? redCrossBabysittingCertificationVerify;
+  String? cprFirstAidCertification;
+  int? cprFirstAidCertificationVerify;
+  String? animalCareProviderCertification;
+  int? animalCareProviderCertificationVerify;
+  String? chaildAndFamilyServicesAndAbuse;
+  int? chaildAndFamilyServicesAndAbuseVerify;
+  String? animailFirstAid;
+  int? animailFirstAidVerify;
+  String? governmentRegisteredCareProvider;
+  int? governmentRegisteredCareProviderVerify;
+  String? policeBackgroundCheck;
+  int? policeBackgroundCheckVerify;
   DateTime? createdAt;
   DateTime? updatedAt;
 
   factory Providerverification.fromJson(Map<String, dynamic> json) => Providerverification(
         id: json["id"],
         userId: json["user_id"],
-        enhancedCriminal: json["enhanced_criminal"],
-        enhancedCriminalVerify: json["enhanced_criminal_verify"],
-        basicCriminal: json["basic_criminal"],
-        basicCriminalVerify: json["basic_criminal_verify"],
-        firstAid: json["first_aid"],
-        firstAidVerify: json["first_aid_verify"],
-        vehicleRecord: json["vehicle_record"],
-        vehicleRecordVerify: json["vehicle_record_verify"],
+        validDriverLicense: json["valid_driver_license"],
+        validDriverLicenseVerify: json["valid_driver_license_verify"],
+        scarsAwarenessCertification: json["scars_awareness_certification"],
+        scarsAwarenessCertificationVerify: json["scars_awareness_certification_verify"],
+        redCrossBabysittingCertification: json["red_cross_babysitting_certification"],
+        redCrossBabysittingCertificationVerify: json["red_cross_babysitting_certification_verify"],
+        cprFirstAidCertification: json["cpr_first_aid_certification"],
+        cprFirstAidCertificationVerify: json["cpr_first_aid_certification_verify"],
+        animalCareProviderCertification: json["animal_care_provider_certification"],
+        animalCareProviderCertificationVerify: json["animal_care_provider_certification_verify"],
+        chaildAndFamilyServicesAndAbuse: json["chaild_and_family_services_and_abuse"],
+        chaildAndFamilyServicesAndAbuseVerify: json["chaild_and_family_services_and_abuse_verify"],
+        animailFirstAid: json["animail_first_aid"],
+        animailFirstAidVerify: json["animail_first_aid_verify"],
+        governmentRegisteredCareProvider: json["government_registered_care_provider"],
+        governmentRegisteredCareProviderVerify: json["government_registered_care_provider_verify"],
+        policeBackgroundCheck: json["police_background_check"],
+        policeBackgroundCheckVerify: json["police_background_check_verify"],
+        // enhancedCriminal: json["enhanced_criminal"],
+        // enhancedCriminalVerify: json["enhanced_criminal_verify"],
+        // basicCriminal: json["basic_criminal"],
+        // basicCriminalVerify: json["basic_criminal_verify"],
+        // firstAid: json["first_aid"],
+        // firstAidVerify: json["first_aid_verify"],
+        // vehicleRecord: json["vehicle_record"],
+        // vehicleRecordVerify: json["vehicle_record_verify"],
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
       );
@@ -199,14 +253,32 @@ class Providerverification {
   Map<String, dynamic> toJson() => {
         "id": id,
         "user_id": userId,
-        "enhanced_criminal": enhancedCriminal,
-        "enhanced_criminal_verify": enhancedCriminalVerify,
-        "basic_criminal": basicCriminal,
-        "basic_criminal_verify": basicCriminalVerify,
-        "first_aid": firstAid,
-        "first_aid_verify": firstAidVerify,
-        "vehicle_record": vehicleRecord,
-        "vehicle_record_verify": vehicleRecordVerify,
+        "valid_driver_license": validDriverLicense,
+        "valid_driver_license_verify": validDriverLicenseVerify,
+        "scars_awareness_certification": scarsAwarenessCertification,
+        "scars_awareness_certification_verify": scarsAwarenessCertificationVerify,
+        "red_cross_babysitting_certification": redCrossBabysittingCertification,
+        "red_cross_babysitting_certification_verify": redCrossBabysittingCertificationVerify,
+        "cpr_first_aid_certification": cprFirstAidCertification,
+        "cpr_first_aid_certification_verify": cprFirstAidCertificationVerify,
+        "animal_care_provider_certification": animalCareProviderCertification,
+        "animal_care_provider_certification_verify": animalCareProviderCertificationVerify,
+        "chaild_and_family_services_and_abuse": chaildAndFamilyServicesAndAbuse,
+        "chaild_and_family_services_and_abuse_verify": chaildAndFamilyServicesAndAbuseVerify,
+        "animail_first_aid": animailFirstAid,
+        "animail_first_aid_verify": animailFirstAidVerify,
+        "government_registered_care_provider": governmentRegisteredCareProvider,
+        "government_registered_care_provider_verify": governmentRegisteredCareProviderVerify,
+        "police_background_check": policeBackgroundCheck,
+        "police_background_check_verify": policeBackgroundCheckVerify,
+        // "enhanced_criminal": enhancedCriminal,
+        // "enhanced_criminal_verify": enhancedCriminalVerify,
+        // "basic_criminal": basicCriminal,
+        // "basic_criminal_verify": basicCriminalVerify,
+        // "first_aid": firstAid,
+        // "first_aid_verify": firstAidVerify,
+        // "vehicle_record": vehicleRecord,
+        // "vehicle_record_verify": vehicleRecordVerify,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };

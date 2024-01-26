@@ -49,6 +49,7 @@ class JobDetail {
     this.service,
     this.schedule,
     this.seniorCare,
+    this.additionalInfo,
   });
 
   int? id;
@@ -72,6 +73,7 @@ class JobDetail {
   Service? service;
   List<Schedule>? schedule;
   SeniorCare? seniorCare;
+  String? additionalInfo;
 
   factory JobDetail.fromJson(Map<String, dynamic> json) => JobDetail(
         id: json["id"],
@@ -95,6 +97,7 @@ class JobDetail {
         service: json["service"] == null ? null : Service.fromJson(json["service"]),
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
         seniorCare: json["senior_care"] == null ? null : SeniorCare.fromJson(json["senior_care"]),
+        additionalInfo: json["additional_info"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -119,6 +122,7 @@ class JobDetail {
         "service": service?.toJson(),
         "schedule": schedule == null ? [] : List<dynamic>.from(schedule!.map((x) => x.toJson())),
         "senior_care": seniorCare?.toJson(),
+        "additional_info": additionalInfo,
       };
 }
 

@@ -8,8 +8,9 @@ import 'package:island_app/carereceiver/models/favourite_get_model.dart';
 import 'package:island_app/carereceiver/screens/provider_profile_detail_for_giver.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/recommendation_widget.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -30,7 +31,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
   late Future<FavouriteGetModel>? futureFavourite;
   Future<FavouriteGetModel> fetchFavourite() async {
-    var token = await getUserToken();
+    var token = UserProvider.userToken;
     final response = await Dio().get(
       CareReceiverURl.serviceReceiverFavourite,
       options: Options(
@@ -50,9 +51,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
       });
       return FavouriteGetModel.fromJson(response.data);
     } else {
-      throw Exception(
-        'Failed to load Service Provider Dashboard',
-      );
+      throw Exception('Failed to load Service Provider Dashboard');
     }
   }
 
@@ -60,7 +59,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
   var favouriteList = [];
   var providerId;
   Future<Response> favourited(url) async {
-    var token = await getUserToken();
+    var token = UserProvider.userToken;
     var url = '${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=$providerId';
     var response = await Dio().post(
       url,
@@ -82,13 +81,13 @@ class _WishlistScreenState extends State<WishlistScreen> {
     return response;
   }
 
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-    return userToken.toString();
-  }
+  // getUserToken() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var userToken = preferences.getString(
+  //     'userToken',
+  //   );
+  //   return userToken.toString();
+  // }
 
   // Search bar
   List foundProviders = [];
@@ -96,9 +95,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
     List results = [];
 
     if (enteredKeyword.isEmpty) {
-      results = providerList;
-
-      setState(() {});
+      setState(() {
+        results = providerList;
+      });
     } else {
       results = providerList.where((user) => user['first_name'].toLowerCase().contains(enteredKeyword.toLowerCase())).toList();
     }
@@ -109,7 +108,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
   @override
   void initState() {
-    getUserToken();
+    // getUserToken();
     super.initState();
     ratingController = TextEditingController(text: '3.0');
     rating = initialRating;

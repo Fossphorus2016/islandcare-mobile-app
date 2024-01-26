@@ -61,22 +61,22 @@ class Datum {
   Userdetail? userdetail;
   UserSubscriptionDetail? userSubscriptionDetail;
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
-        firstName: json["first_name"],
-        lastName: json["last_name"],
-        email: json["email"],
-        phone: json["phone"],
-        emailVerifiedAt: json["email_verified_at"] == null ? null : DateTime.parse(json["email_verified_at"]),
-        providerId: json["provider_id"],
-        avatar: json["avatar"],
-        role: json["role"],
-        status: json["status"],
-        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-        deletedAt: json["deleted_at"],
-        userdetailprovider: json["userdetailprovider"],
-        userdetail: json["userdetail"] == null ? null : Userdetail.fromJson(json["userdetail"]),
-        userSubscriptionDetail: json['user_subscription_detail'] == null ? null : UserSubscriptionDetail.fromJson(json['user_subscription_detail']),
+        id: json["user"]["id"],
+        firstName: json["user"]["first_name"],
+        lastName: json["user"]["last_name"],
+        email: json["user"]["email"],
+        phone: json["user"]["phone"],
+        emailVerifiedAt: json["user"]["email_verified_at"] == null ? null : DateTime.parse(json["user"]["email_verified_at"]),
+        providerId: json["user"]["provider_id"],
+        avatar: json["user"]["avatar"],
+        role: json["user"]["role"],
+        status: json["user"]["status"],
+        createdAt: json["user"]["created_at"] == null ? null : DateTime.parse(json["user"]["created_at"]),
+        updatedAt: json["user"]["updated_at"] == null ? null : DateTime.parse(json["user"]["updated_at"]),
+        deletedAt: json["user"]["deleted_at"],
+        userdetailprovider: json["user"]["userdetailprovider"],
+        userdetail: json["user"]["userdetail"] == null ? null : Userdetail.fromJson(json['user']["userdetail"]),
+        userSubscriptionDetail: json['subscription'] == null ? null : UserSubscriptionDetail.fromJson(json['subscription']),
       );
 
   Map<String, dynamic> toJson() => {

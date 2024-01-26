@@ -121,9 +121,6 @@ class _MyAppState extends State<MyApp> {
       case 'bottom-bar-giver':
         page = CustomPageRoute(child: const BottomBarGiver(), direction: AxisDirection.left);
         break;
-      case 'bottom-bar-2':
-        page = CustomPageRoute(child: const BottomBar2(), direction: AxisDirection.left);
-        break;
     }
     return page!;
   }

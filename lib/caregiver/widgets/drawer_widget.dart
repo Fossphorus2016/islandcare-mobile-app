@@ -265,8 +265,10 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                         if (snapshot.hasData) {
                           return InkWell(
                             onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(2),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 25, bottom: 60),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 200,
+                              padding: const EdgeInsets.only(top: 25, bottom: 60, left: 20, right: 20),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
@@ -290,28 +292,27 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                   const SizedBox(width: 10),
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
-                                      SizedBox(
-                                        child: Text(
-                                          "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "Rubik",
-                                            color: CustomColors.white,
-                                          ),
+                                      Text(
+                                        "${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}",
+                                        overflow: TextOverflow.visible,
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: "Rubik",
+                                          color: CustomColors.white,
                                         ),
                                       ),
                                       const SizedBox(height: 10),
-                                      SizedBox(
-                                        child: Text(
-                                          snapshot.data!.data!.phone.toString(),
-                                          style: TextStyle(
-                                            color: CustomColors.white,
-                                            fontFamily: "Rubik",
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                          ),
+                                      Text(
+                                        snapshot.data!.data!.phone.toString(),
+                                        overflow: TextOverflow.visible,
+                                        style: TextStyle(
+                                          color: CustomColors.white,
+                                          fontFamily: "Rubik",
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ],

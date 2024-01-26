@@ -86,7 +86,7 @@ class Datum {
         userdetailprovider: json["userdetailprovider"] == null ? null : Userdetailprovider.fromJson(json["userdetailprovider"]),
         educations: json["educations"] == null ? [] : List<Education>.from(json["educations"]!.map((x) => Education.fromJson(x))),
         userdetail: json["userdetail"] == null ? null : Userdetail.fromJson(json["userdetail"]),
-        avgRating: json["avg_rating"] == null ? null : json["avg_rating"][0],
+        avgRating: json["avg_rating"].isEmpty ? null : json["avg_rating"][0],
       );
 
   Map<String, dynamic> toJson() => {

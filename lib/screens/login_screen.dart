@@ -58,7 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
         SessionUrl.login,
         data: jsonEncode(model.toJson()),
         options: Options(
-          headers: {"Content-Type": "application/json"},
+          headers: {"Content-Type": "application/json", "Accept": "application/json"},
           validateStatus: (status) => true,
         ),
       );
@@ -291,7 +291,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       var role = data["user"]["role"];
                                       var status = data["user"]["status"];
                                       var token = data["token"];
-                                      var isProfileCompleted = data["is_profile_completed"];
+                                      // var isProfileCompleted = data["is_profile_completed"];
                                       var userId = data["user"]['id'];
                                       var avatar = data["user"]['avatar'];
                                       var name = data["user"]['first_name'];
@@ -306,27 +306,27 @@ class _LoginScreenState extends State<LoginScreen> {
                                             MaterialPageRoute(builder: (context) => VerifyEmail(token: data["token"])),
                                           );
                                         } else if (data["user"]["role"] == 3) {
-                                          if (data["user"]["status"] == 0) {
-                                            SharedPreferences pref = await SharedPreferences.getInstance();
-                                            await pref.setString('userStatus', status.toString());
-                                            await pref.setString('userTokenProfile', data["token"].toString());
-                                            await pref.setString('userAvatar', avatar.toString());
-                                            await pref.setString('userId', userId.toString());
-                                            await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                            await pref.setString('userName', "$name $last");
+                                          // if (data["user"]["status"] == 0) {
+                                          //   SharedPreferences pref = await SharedPreferences.getInstance();
+                                          //   await pref.setString('userStatus', status.toString());
+                                          //   await pref.setString('userTokenProfile', data["token"].toString());
+                                          //   await pref.setString('userAvatar', avatar.toString());
+                                          //   await pref.setString('userId', userId.toString());
+                                          //   await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                          //   await pref.setString('userName', "$name $last");
 
-                                            // Navigator.pushNamedAndRemoveUntil(context, 'bottom-bar-giver-2', (route) => false);
-                                          } else {
-                                            SharedPreferences pref = await SharedPreferences.getInstance();
-                                            await pref.setString('userRole', data["user"]["role"].toString());
-                                            await pref.setString('userToken', data["token"].toString());
-                                            await pref.setString('userStatus', status.toString());
-                                            await pref.setString('userId', userId.toString());
-                                            await pref.setString('userAvatar', avatar.toString());
-                                            await pref.setString('userName', "$name $last");
-                                            await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
-                                          }
+                                          //   Navigator.pushNamedAndRemoveUntil(context, 'bottom-bar-giver-2', (route) => false);
+                                          // } else {
+                                          SharedPreferences pref = await SharedPreferences.getInstance();
+                                          await pref.setString('userRole', data["user"]["role"].toString());
+                                          await pref.setString('userToken', data["token"].toString());
+                                          await pref.setString('userStatus', status.toString());
+                                          await pref.setString('userId', userId.toString());
+                                          await pref.setString('userAvatar', avatar.toString());
+                                          await pref.setString('userName', "$name $last");
+                                          // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
+                                          // }
 
                                           Provider.of<UserProvider>(context, listen: false).getUserToken();
                                         } else if (data["user"]["role"] == 4) {
@@ -337,7 +337,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             await pref.setString('userAvatar', avatar.toString());
                                             await pref.setString('userId', userId.toString());
                                             await pref.setString('userName', "$name $last");
-                                            await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                            // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
 
                                             Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomBar(data: data['token'].toString())), (route) => false);
                                           } else {
@@ -348,7 +348,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             await pref.setString('userId', userId.toString());
                                             await pref.setString('userAvatar', avatar.toString());
                                             await pref.setString('userName', "$name $last");
-                                            await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                            // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
                                           }
                                           Provider.of<UserProvider>(context, listen: false).getUserToken();

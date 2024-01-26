@@ -187,157 +187,157 @@ class BottomBarState extends State<BottomBar> {
 
 // Fake
 
-class BottomBar2 extends StatefulWidget {
-  static const String routeName = '/actual-home';
-  const BottomBar2({Key? key}) : super(key: key);
+// class BottomBar2 extends StatefulWidget {
+//   static const String routeName = '/actual-home';
+//   const BottomBar2({Key? key}) : super(key: key);
 
-  @override
-  State<BottomBar2> createState() => _BottomBar2State();
-}
+//   @override
+//   State<BottomBar2> createState() => _BottomBar2State();
+// }
 
-class _BottomBar2State extends State<BottomBar2> {
-  @override
-  void initState() {
-    super.initState();
-    Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(4);
-    Provider.of<ChatProvider>(context, listen: false).connectChatChannel(4);
-  }
+// class _BottomBar2State extends State<BottomBar2> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(4);
+//     Provider.of<ChatProvider>(context, listen: false).connectChatChannel(4);
+//   }
 
-  int _page = 0;
-  double bottomBarWidth = 42;
-  double bottomBarBorderWidth = 5;
+//   int _page = 0;
+//   double bottomBarWidth = 42;
+//   double bottomBarBorderWidth = 5;
 
-  List<Widget> pages = [
-    const Scaffold(
-      body: Center(
-        child: Text("Your profile is pending"),
-      ),
-    ),
-    const Scaffold(
-      body: Center(
-        child: Text("Your profile is pending"),
-      ),
-    ),
-    const Scaffold(
-      body: Center(
-        child: Text("Your profile is pending"),
-      ),
-    ),
-    const ProfileReceiverPendingScreen()
-  ];
+//   List<Widget> pages = [
+//     const Scaffold(
+//       body: Center(
+//         child: Text("Your profile is pending"),
+//       ),
+//     ),
+//     const Scaffold(
+//       body: Center(
+//         child: Text("Your profile is pending"),
+//       ),
+//     ),
+//     const Scaffold(
+//       body: Center(
+//         child: Text("Your profile is pending"),
+//       ),
+//     ),
+//     const ProfileReceiverPendingScreen()
+//   ];
 
-  void updatePage(int page) {
-    setState(() {
-      _page = page;
-    });
-  }
+//   void updatePage(int page) {
+//     setState(() {
+//       _page = page;
+//     });
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CustomColors.loginBg,
-      body: pages[_page],
-      bottomNavigationBar: Theme(
-        data: Theme.of(context).copyWith(
-          splashColor: CustomColors.primaryColor,
-          highlightColor: CustomColors.primaryColor,
-          hoverColor: CustomColors.primaryColor,
-        ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(30.0),
-            topRight: Radius.circular(30.0),
-          ),
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.transparent,
-              boxShadow: [
-                BoxShadow(
-                  color: Color.fromARGB(59, 0, 0, 0),
-                  blurRadius: 8.0,
-                  spreadRadius: 8.0,
-                  offset: Offset(4.0, 4.0),
-                ),
-              ],
-            ),
-            child: BottomNavigationBar(
-              currentIndex: _page,
-              selectedItemColor: CustomColors.primaryColor,
-              unselectedItemColor: CustomColors.white,
-              backgroundColor: CustomColors.white,
-              iconSize: 28,
-              onTap: updatePage,
-              type: BottomNavigationBarType.fixed,
-              showSelectedLabels: false,
-              showUnselectedLabels: false,
-              items: [
-                // HOME
-                BottomNavigationBarItem(
-                  icon: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: _page == 0 ? CustomColors.primaryColor : Colors.transparent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.home,
-                      color: _page == 0 ? CustomColors.white : CustomColors.primaryColor,
-                    ),
-                  ),
-                  label: '',
-                ),
-                // Favorite
-                BottomNavigationBarItem(
-                  icon: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: _page == 1 ? CustomColors.primaryColor : Colors.transparent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.favorite,
-                      color: _page == 1 ? CustomColors.white : CustomColors.primaryColor,
-                    ),
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: _page == 2 ? CustomColors.primaryColor : CustomColors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.textsms_rounded,
-                      color: _page == 2 ? CustomColors.white : CustomColors.primaryColor,
-                    ),
-                  ),
-                  label: '',
-                ),
-                BottomNavigationBarItem(
-                  icon: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      color: _page == 3 ? CustomColors.primaryColor : CustomColors.white,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Icon(
-                      Icons.person,
-                      color: _page == 3 ? CustomColors.white : CustomColors.primaryColor,
-                    ),
-                  ),
-                  label: '',
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: CustomColors.loginBg,
+//       body: pages[_page],
+//       bottomNavigationBar: Theme(
+//         data: Theme.of(context).copyWith(
+//           splashColor: CustomColors.primaryColor,
+//           highlightColor: CustomColors.primaryColor,
+//           hoverColor: CustomColors.primaryColor,
+//         ),
+//         child: ClipRRect(
+//           borderRadius: const BorderRadius.only(
+//             topLeft: Radius.circular(30.0),
+//             topRight: Radius.circular(30.0),
+//           ),
+//           child: Container(
+//             decoration: const BoxDecoration(
+//               color: Colors.transparent,
+//               boxShadow: [
+//                 BoxShadow(
+//                   color: Color.fromARGB(59, 0, 0, 0),
+//                   blurRadius: 8.0,
+//                   spreadRadius: 8.0,
+//                   offset: Offset(4.0, 4.0),
+//                 ),
+//               ],
+//             ),
+//             child: BottomNavigationBar(
+//               currentIndex: _page,
+//               selectedItemColor: CustomColors.primaryColor,
+//               unselectedItemColor: CustomColors.white,
+//               backgroundColor: CustomColors.white,
+//               iconSize: 28,
+//               onTap: updatePage,
+//               type: BottomNavigationBarType.fixed,
+//               showSelectedLabels: false,
+//               showUnselectedLabels: false,
+//               items: [
+//                 // HOME
+//                 BottomNavigationBarItem(
+//                   icon: Container(
+//                     height: 50,
+//                     width: 50,
+//                     decoration: BoxDecoration(
+//                       color: _page == 0 ? CustomColors.primaryColor : Colors.transparent,
+//                       shape: BoxShape.circle,
+//                     ),
+//                     child: Icon(
+//                       Icons.home,
+//                       color: _page == 0 ? CustomColors.white : CustomColors.primaryColor,
+//                     ),
+//                   ),
+//                   label: '',
+//                 ),
+//                 // Favorite
+//                 BottomNavigationBarItem(
+//                   icon: Container(
+//                     height: 50,
+//                     width: 50,
+//                     decoration: BoxDecoration(
+//                       color: _page == 1 ? CustomColors.primaryColor : Colors.transparent,
+//                       shape: BoxShape.circle,
+//                     ),
+//                     child: Icon(
+//                       Icons.favorite,
+//                       color: _page == 1 ? CustomColors.white : CustomColors.primaryColor,
+//                     ),
+//                   ),
+//                   label: '',
+//                 ),
+//                 BottomNavigationBarItem(
+//                   icon: Container(
+//                     height: 50,
+//                     width: 50,
+//                     decoration: BoxDecoration(
+//                       color: _page == 2 ? CustomColors.primaryColor : CustomColors.white,
+//                       shape: BoxShape.circle,
+//                     ),
+//                     child: Icon(
+//                       Icons.textsms_rounded,
+//                       color: _page == 2 ? CustomColors.white : CustomColors.primaryColor,
+//                     ),
+//                   ),
+//                   label: '',
+//                 ),
+//                 BottomNavigationBarItem(
+//                   icon: Container(
+//                     height: 50,
+//                     width: 50,
+//                     decoration: BoxDecoration(
+//                       color: _page == 3 ? CustomColors.primaryColor : CustomColors.white,
+//                       shape: BoxShape.circle,
+//                     ),
+//                     child: Icon(
+//                       Icons.person,
+//                       color: _page == 3 ? CustomColors.white : CustomColors.primaryColor,
+//                     ),
+//                   ),
+//                   label: '',
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

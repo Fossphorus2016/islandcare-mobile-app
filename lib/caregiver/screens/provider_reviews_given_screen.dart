@@ -6,7 +6,7 @@ import 'package:island_app/caregiver/models/provider_reviews_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/reviews_given_widget.dart';
 import 'package:island_app/res/app_url.dart';
-import 'package:island_app/utils/utils.dart';
+// import 'package:island_app/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProviderReviewsScreen extends StatefulWidget {
@@ -18,9 +18,10 @@ class ProviderReviewsScreen extends StatefulWidget {
 
 class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
   List? allJobs = [];
+  bool isLoading = true;
   // Get all jobs
-  late Future<ProviderReviewsModel> futurereviews;
-  Future<ProviderReviewsModel> fetchReviewsModel() async {
+  ProviderReviewsModel? futurereviews;
+  fetchReviewsModel() async {
     var token = await getUserToken();
     final response = await Dio().get(
       CareGiverUrl.serviceProviderProfileReviews,
@@ -31,15 +32,21 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
         },
       ),
     );
-    if (response.statusCode == 200) {
-      return ProviderReviewsModel.fromJson(response.data);
+    print(response.data);
+    if (response.statusCode == 200 && response.data['data'] != null) {
+      setState(() {
+        futurereviews = ProviderReviewsModel.fromJson(response.data);
+        isLoading = false;
+      });
     } else {
-      throw Exception(
-        customErrorSnackBar(
-          context,
-          'Failed to load Reviews Model',
-        ),
-      );
+      setState(() {
+        isLoading = false;
+      });
+      // customErrorSnackBar(
+      //   context,
+      //   'Failed to load Reviews Model',
+      // );
+      // throw Exception();
     }
   }
 
@@ -56,7 +63,8 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
   void initState() {
     getUserToken();
     super.initState();
-    futurereviews = fetchReviewsModel();
+    fetchReviewsModel();
+    // futurereviews = fetchReviewsModel();
   }
 
   @override
@@ -109,87 +117,91 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-
-                // Listing
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: CustomColors.blackLight,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: CustomColors.borderLight,
-                        width: 0.1,
-                      ),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+        body: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Column(
                     children: [
-                      Text(
-                        "Name",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
+                      const SizedBox(height: 20),
+
+                      // Listing
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                        decoration: BoxDecoration(
+                          color: CustomColors.blackLight,
+                          border: Border(
+                            bottom: BorderSide(
+                              color: CustomColors.borderLight,
+                              width: 0.1,
+                            ),
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Name",
+                              style: TextStyle(
+                                color: CustomColors.black,
+                                fontSize: 12,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              "Ratings",
+                              style: TextStyle(
+                                color: CustomColors.black,
+                                fontSize: 12,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              "Comment",
+                              style: TextStyle(
+                                color: CustomColors.black,
+                                fontSize: 12,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Text(
-                        "Ratings",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
+                      // FutureBuilder<ProviderReviewsModel>(
+                      //   future: futurereviews,
+                      //   builder: (context, snapshot) {
+                      //     if (snapshot.hasData) {
+                      // return
+                      if (futurereviews != null && futurereviews!.data!.isNotEmpty) ...[
+                        ListView.builder(
+                          itemCount: futurereviews!.data!.length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(top: 16),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return ReviewsGivenWidget(
+                              name: '${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}',
+                              rating: futurereviews!.data![index].rating!.toDouble(),
+                              comment: futurereviews!.data![index].comment.toString() == "null" ? "Not Available" : futurereviews!.data![index].comment.toString(),
+                            );
+                          },
                         ),
-                      ),
-                      Text(
-                        "Comment",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      ] else ...[
+                        const Center(
+                          child: Text("No Review Yet!"),
+                        )
+                      ],
                     ],
                   ),
                 ),
-                FutureBuilder<ProviderReviewsModel>(
-                  future: futurereviews,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        itemCount: snapshot.data!.data!.length,
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(top: 16),
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return ReviewsGivenWidget(
-                            name: '${snapshot.data!.data![index].receiverRating!.firstName} ${snapshot.data!.data![index].receiverRating!.lastName}',
-                            rating: snapshot.data!.data![index].rating!.toDouble(),
-                            comment: snapshot.data!.data![index].comment.toString() == "null" ? "Not Available" : snapshot.data!.data![index].comment.toString(),
-                          );
-                        },
-                      );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
       ),
     );
   }
