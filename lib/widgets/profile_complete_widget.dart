@@ -15,7 +15,7 @@ class ProfileCompletContainer extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: const Text(
-          "Please Complete Your \n Profile For Approval",
+          "Please Complete your \n Profile for Approval",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
         ),
       ),

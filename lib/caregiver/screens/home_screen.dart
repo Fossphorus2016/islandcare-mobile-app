@@ -35,7 +35,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
 
   late Future<ServiceProviderDashboardModel>? futureProviderDashboard;
   Future<ServiceProviderDashboardModel> fetchProviderDashboardModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
       CareGiverUrl.serviceProviderDashboard,
       options: Options(
@@ -55,7 +55,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   }
 
   Future<ServiceProviderDashboardModel> fetchFindedJobsDashboardModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
     final response = await Dio().post(
       CareGiverUrl.serviceProviderDashboardSearch,
       data: {
@@ -90,17 +90,17 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
     }
   }
 
-  var token = '';
-  Future getUserToken() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = prefs.getString('userToken');
-    setState(() {
-      token = userToken!;
-    });
+  // var token = '';
+  // Future getUserToken() async {
+  //   SharedPreferences? prefs = await SharedPreferences.getInstance();
+  //   await prefs.reload();
+  //   var userToken = prefs.getString('userToken');
+  //   setState(() {
+  //     token = userToken!;
+  //   });
 
-    return userToken.toString();
-  }
+  //   return userToken.toString();
+  // }
 
   var name;
   Future getUserName() async {
@@ -190,7 +190,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   // fetchPRofile
   late Future<ProfileGiverModel> fetchProfile;
   Future<ProfileGiverModel> fetchProfileGiverModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
       CareGiverUrl.serviceProviderProfile,
       options: Options(headers: {
@@ -212,7 +212,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
 
   @override
   void initState() {
-    getUserToken();
     getUserName();
 
     super.initState();

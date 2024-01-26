@@ -1596,7 +1596,7 @@ import 'package:island_app/widgets/progress_dialog.dart';
 //                               color: CustomColors.primaryColor,
 //                             ),
 //                             title: Text(
-//                               "Background Varified",
+//                               "Background Verified",
 //                               style: TextStyle(
 //                                 color: CustomColors.primaryText,
 //                                 fontSize: 12,
@@ -2156,6 +2156,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   var getPickedDate;
   var gettoPickedDate;
   var getfromPickedDate;
+  bool _isDateSelectable(DateTime date) {
+    // Disable dates before today
+    return date.isBefore(DateTime.now());
+  }
 
   DateTime? selectedDate = DateTime.now();
   var myFormat = DateFormat('d-MM-yyyy');
@@ -2163,8 +2167,9 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate!,
-      firstDate: DateTime(1930),
-      lastDate: DateTime(2050),
+      firstDate: DateTime(1975),
+      lastDate: DateTime.now(),
+      selectableDayPredicate: _isDateSelectable,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
@@ -2193,7 +2198,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate!,
-      firstDate: DateTime(1930),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -2223,7 +2228,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate!,
-      firstDate: DateTime(1930),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -2745,42 +2750,28 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         ),
                       ),
                       // DOB
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                          color: CustomColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Date Of Birth",
-                              style: TextStyle(
-                                color: CustomColors.primaryColor,
-                                fontSize: 12,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w600,
-                              ),
+                      InkWell(
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                          alignment: Alignment.centerLeft,
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            dobController.text.isEmpty ? "Date Of Birth" : dobController.text.toString(),
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontFamily: "Rubik",
                             ),
-                            CustomTextFieldWidget(
-                              borderColor: CustomColors.white,
-                              obsecure: false,
-                              keyboardType: TextInputType.number,
-                              controller: dobController,
-                              onChanged: (value) {
-                                setState(() {
-                                  getPickedDate = value;
-                                });
-                              },
-                              hintText: "DOB",
-                              onTap: () async {
-                                _selectDate(context);
-                              },
-                            ),
-                          ],
+                          ),
                         ),
                       ),
                       Container(
@@ -3113,260 +3104,274 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           GestureDetector(
                             onTap: () {
                               showModalBottomSheet(
+                                isScrollControlled: true,
                                 context: context,
+                                backgroundColor: Colors.white,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    topRight: Radius.circular(30.0),
+                                  ),
+                                ),
                                 builder: (BuildContext context) {
-                                  return SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 15,
-                                        right: 15,
-                                        top: 15,
-                                      ),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: <Widget>[
-                                          const Align(
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              "Add Education",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.w600,
-                                              ),
+                                  return StatefulBuilder(
+                                    builder: (BuildContext context, StateSetter setState) {
+                                      return SingleChildScrollView(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                          child: Container(
+                                            padding: const EdgeInsets.only(
+                                              left: 15,
+                                              right: 15,
+                                              top: 15,
                                             ),
-                                          ),
-                                          // Institute Name
-                                          Container(
-                                            height: 50,
-                                            margin: const EdgeInsets.only(bottom: 15, top: 15),
-                                            decoration: BoxDecoration(
-                                              color: CustomColors.white,
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            child: TextFormField(
-                                              controller: instituteController,
-                                              keyboardType: TextInputType.name,
-                                              textInputAction: TextInputAction.next,
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontFamily: "Rubik",
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                              textAlignVertical: TextAlignVertical.bottom,
-                                              maxLines: 1,
-                                              decoration: InputDecoration(
-                                                hintText: "Institute Name",
-                                                fillColor: CustomColors.myJobDetail,
-                                                focusColor: CustomColors.white,
-                                                hoverColor: CustomColors.white,
-                                                filled: true,
-                                                border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                ),
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          // Major
-                                          Container(
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              color: CustomColors.white,
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            child: TextFormField(
-                                              controller: majorController,
-                                              keyboardType: TextInputType.name,
-                                              textInputAction: TextInputAction.next,
-                                              style: const TextStyle(
-                                                fontSize: 16,
-                                                fontFamily: "Rubik",
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                              textAlignVertical: TextAlignVertical.bottom,
-                                              maxLines: 1,
-                                              decoration: InputDecoration(
-                                                hintText: "Major",
-                                                fillColor: CustomColors.myJobDetail,
-                                                focusColor: CustomColors.white,
-                                                hoverColor: CustomColors.white,
-                                                filled: true,
-                                                border: OutlineInputBorder(
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                ),
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                  borderRadius: BorderRadius.circular(10.0),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          // Time period
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          TextButton.icon(
-                                            style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
-                                            onPressed: () {
-                                              _toggleradio();
-                                              setState(() {});
-                                            },
-                                            icon: CircleAvatar(
-                                              backgroundColor: const Color.fromARGB(181, 171, 171, 171),
-                                              radius: 8,
-                                              child: CircleAvatar(
-                                                radius: 4,
-                                                backgroundColor: isPeriodSeleted == "1" ? CustomColors.primaryText : const Color.fromARGB(181, 171, 171, 171),
-                                              ),
-                                            ),
-                                            label: Text(
-                                              "Currently Studying?",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                color: CustomColors.primaryText,
-                                                fontFamily: "Rubik",
-                                                fontStyle: FontStyle.normal,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            ),
-                                          ),
-                                          // From Date
-                                          Container(
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              color: CustomColors.myJobDetail,
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            child: CustomTextFieldWidget(
-                                              borderColor: CustomColors.white,
-                                              obsecure: false,
-                                              keyboardType: TextInputType.number,
-                                              controller: fromController,
-                                              hintText: "From",
-                                              onTap: () async {
-                                                _fromDate(context);
-                                              },
-                                            ),
-                                          ),
-                                          // To Date
-                                          const SizedBox(
-                                            height: 15,
-                                          ),
-                                          Container(
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              color: CustomColors.myJobDetail,
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            child: CustomTextFieldWidget(
-                                              borderColor: CustomColors.white,
-                                              obsecure: false,
-                                              keyboardType: TextInputType.number,
-                                              controller: toController,
-                                              hintText: "To",
-                                              onTap: () async {
-                                                _toDate(context);
-                                              },
-                                            ),
-                                          ),
-                                          // AddBtn
-                                          GestureDetector(
-                                            onTap: () async {
-                                              {
-                                                String institute = instituteController.text.trim();
-                                                String major = majorController.text.trim();
-                                                String from = fromController.text.toString();
-                                                String to = toController.text.toString();
-
-                                                if (institute.isNotEmpty && major.isNotEmpty) {
-                                                  instituteController.text = '';
-                                                  majorController.text = '';
-                                                  fromController.text = '';
-                                                  toController.text = '';
-                                                  instituteMapList.add(institute);
-                                                  majorMapList.add(major);
-                                                  startDateMapList.add(from);
-                                                  endDateMapList.add(to);
-                                                  currentMapList.add(isPeriodSeleted);
-                                                  setState(() {
-                                                    educationApiList.add(
-                                                      {
-                                                        "name": institute.toString(),
-                                                        "major": major.toString(),
-                                                        "from": from.toString(),
-                                                        "current": isPeriodSeleted.toString(),
-                                                        "to": to.toString(),
-                                                      },
-                                                    );
-                                                  });
-
-                                                  setState(() {
-                                                    instituteController.text = '';
-                                                    majorController.text = '';
-                                                    fromController.text = '';
-                                                    toController.text = '';
-                                                  });
-                                                  SharedPreferences pref = await SharedPreferences.getInstance();
-                                                  var data = await pref.setString('ListData', education.toString());
-
-                                                  Navigator.pop(context, true);
-                                                }
-                                              }
-                                            },
-                                            child: Container(
-                                              width: MediaQuery.of(context).size.width,
-                                              height: 50,
-                                              margin: const EdgeInsets.only(top: 20),
-                                              decoration: BoxDecoration(
-                                                gradient: LinearGradient(
-                                                  begin: Alignment.center,
-                                                  end: Alignment.center,
-                                                  colors: [
-                                                    const Color(0xff90EAB4).withOpacity(0.1),
-                                                    const Color(0xff6BD294).withOpacity(0.8),
-                                                  ],
-                                                ),
-                                                color: CustomColors.white,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Color.fromARGB(13, 0, 0, 0),
-                                                    blurRadius: 4.0,
-                                                    spreadRadius: 2.0,
-                                                    offset: Offset(2.0, 2.0),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: <Widget>[
+                                                const Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text(
+                                                    "Add Education",
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
                                                   ),
-                                                ],
-                                                borderRadius: BorderRadius.circular(6),
-                                              ),
-                                              child: Center(
-                                                child: Text(
-                                                  "Save",
-                                                  style: TextStyle(
+                                                ),
+                                                // Institute Name
+                                                Container(
+                                                  height: 50,
+                                                  margin: const EdgeInsets.only(bottom: 15, top: 15),
+                                                  decoration: BoxDecoration(
                                                     color: CustomColors.white,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: "Rubik",
+                                                    borderRadius: BorderRadius.circular(12),
+                                                  ),
+                                                  child: TextFormField(
+                                                    controller: instituteController,
+                                                    keyboardType: TextInputType.name,
+                                                    textInputAction: TextInputAction.next,
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontFamily: "Rubik",
+                                                      fontWeight: FontWeight.w400,
+                                                    ),
+                                                    textAlignVertical: TextAlignVertical.bottom,
+                                                    maxLines: 1,
+                                                    decoration: InputDecoration(
+                                                      hintText: "Institute Name",
+                                                      fillColor: CustomColors.myJobDetail,
+                                                      focusColor: CustomColors.white,
+                                                      hoverColor: CustomColors.white,
+                                                      filled: true,
+                                                      border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                      ),
+                                                      focusedBorder: OutlineInputBorder(
+                                                        borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                      ),
+                                                      enabledBorder: OutlineInputBorder(
+                                                        borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
+                                                // Major
+                                                Container(
+                                                  height: 50,
+                                                  decoration: BoxDecoration(
+                                                    color: CustomColors.white,
+                                                    borderRadius: BorderRadius.circular(12),
+                                                  ),
+                                                  child: TextFormField(
+                                                    controller: majorController,
+                                                    keyboardType: TextInputType.name,
+                                                    textInputAction: TextInputAction.next,
+                                                    style: const TextStyle(
+                                                      fontSize: 16,
+                                                      fontFamily: "Rubik",
+                                                      fontWeight: FontWeight.w400,
+                                                    ),
+                                                    textAlignVertical: TextAlignVertical.bottom,
+                                                    maxLines: 1,
+                                                    decoration: InputDecoration(
+                                                      hintText: "Major",
+                                                      fillColor: CustomColors.myJobDetail,
+                                                      focusColor: CustomColors.white,
+                                                      hoverColor: CustomColors.white,
+                                                      filled: true,
+                                                      border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                      ),
+                                                      focusedBorder: OutlineInputBorder(
+                                                        borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                      ),
+                                                      enabledBorder: OutlineInputBorder(
+                                                        borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                        borderRadius: BorderRadius.circular(10.0),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                // Time period
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                TextButton.icon(
+                                                  style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
+                                                  onPressed: () {
+                                                    _toggleradio();
+                                                    setState(() {});
+                                                  },
+                                                  icon: CircleAvatar(
+                                                    backgroundColor: const Color.fromARGB(181, 171, 171, 171),
+                                                    radius: 8,
+                                                    child: CircleAvatar(
+                                                      radius: 4,
+                                                      backgroundColor: isPeriodSeleted == "1" ? CustomColors.primaryText : const Color.fromARGB(181, 171, 171, 171),
+                                                    ),
+                                                  ),
+                                                  label: Text(
+                                                    "Currently Studying?",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      color: CustomColors.primaryText,
+                                                      fontFamily: "Rubik",
+                                                      fontStyle: FontStyle.normal,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w400,
+                                                    ),
+                                                  ),
+                                                ),
+                                                // From Date
+                                                Container(
+                                                  height: 50,
+                                                  decoration: BoxDecoration(
+                                                    color: CustomColors.myJobDetail,
+                                                    borderRadius: BorderRadius.circular(12),
+                                                  ),
+                                                  child: CustomTextFieldWidget(
+                                                    borderColor: CustomColors.white,
+                                                    obsecure: false,
+                                                    keyboardType: TextInputType.number,
+                                                    controller: fromController,
+                                                    hintText: "From",
+                                                    onTap: () async {
+                                                      _fromDate(context);
+                                                    },
+                                                  ),
+                                                ),
+                                                // To Date
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Container(
+                                                  height: 50,
+                                                  decoration: BoxDecoration(
+                                                    color: CustomColors.myJobDetail,
+                                                    borderRadius: BorderRadius.circular(12),
+                                                  ),
+                                                  child: CustomTextFieldWidget(
+                                                    borderColor: CustomColors.white,
+                                                    obsecure: false,
+                                                    keyboardType: TextInputType.number,
+                                                    controller: toController,
+                                                    hintText: "To",
+                                                    onTap: () async {
+                                                      _toDate(context);
+                                                    },
+                                                  ),
+                                                ),
+                                                // AddBtn
+                                                GestureDetector(
+                                                  onTap: () async {
+                                                    {
+                                                      String institute = instituteController.text.trim();
+                                                      String major = majorController.text.trim();
+                                                      String from = fromController.text.toString();
+                                                      String to = toController.text.toString();
+
+                                                      if (institute.isNotEmpty && major.isNotEmpty) {
+                                                        instituteController.text = '';
+                                                        majorController.text = '';
+                                                        fromController.text = '';
+                                                        toController.text = '';
+                                                        instituteMapList.add(institute);
+                                                        majorMapList.add(major);
+                                                        startDateMapList.add(from);
+                                                        endDateMapList.add(to);
+                                                        currentMapList.add(isPeriodSeleted);
+                                                        setState(() {
+                                                          educationApiList.add(
+                                                            {
+                                                              "name": institute.toString(),
+                                                              "major": major.toString(),
+                                                              "from": from.toString(),
+                                                              "current": isPeriodSeleted.toString(),
+                                                              "to": to.toString(),
+                                                            },
+                                                          );
+                                                        });
+
+                                                        setState(() {
+                                                          instituteController.text = '';
+                                                          majorController.text = '';
+                                                          fromController.text = '';
+                                                          toController.text = '';
+                                                        });
+                                                        SharedPreferences pref = await SharedPreferences.getInstance();
+                                                        var data = await pref.setString('ListData', education.toString());
+
+                                                        Navigator.pop(context, true);
+                                                      }
+                                                    }
+                                                  },
+                                                  child: Container(
+                                                    width: MediaQuery.of(context).size.width,
+                                                    height: 50,
+                                                    margin: const EdgeInsets.only(top: 20),
+                                                    decoration: BoxDecoration(
+                                                      gradient: LinearGradient(
+                                                        begin: Alignment.center,
+                                                        end: Alignment.center,
+                                                        colors: [
+                                                          const Color(0xff90EAB4).withOpacity(0.1),
+                                                          const Color(0xff6BD294).withOpacity(0.8),
+                                                        ],
+                                                      ),
+                                                      color: CustomColors.white,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          color: Color.fromARGB(13, 0, 0, 0),
+                                                          blurRadius: 4.0,
+                                                          spreadRadius: 2.0,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                      borderRadius: BorderRadius.circular(6),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "Save",
+                                                        style: TextStyle(
+                                                          color: CustomColors.white,
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.w600,
+                                                          fontFamily: "Rubik",
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
+                                        ),
+                                      );
+                                    },
                                   );
                                 },
                               );
@@ -3633,7 +3638,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               color: CustomColors.primaryColor,
                             ),
                             title: Text(
-                              "Background Varified",
+                              "Background Verified",
                               style: TextStyle(
                                 color: CustomColors.primaryText,
                                 fontSize: 12,

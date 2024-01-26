@@ -52,12 +52,19 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
   var getPickedDate;
   DateTime? selectedDate = DateTime.now();
   var myFormat = DateFormat('d-MM-yyyy');
+  bool _isDateSelectable(DateTime date) {
+    // Disable dates before today
+    return date.isBefore(DateTime.now());
+  }
+
   _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate!,
-      firstDate: DateTime(1930),
-      lastDate: DateTime(2050),
+      firstDate: DateTime(1975),
+      lastDate: DateTime.now(),
+      selectableDayPredicate: _isDateSelectable,
+      initialDatePickerMode: DatePickerMode.day,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
@@ -73,17 +80,10 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
       },
     );
     if (picked != null) {
-      if (picked.isAfter(DateTime.now())) {
-        customErrorSnackBar(
-          context,
-          "Please select correct date",
-        );
-        return;
-      }
       dobController.text = DateFormat('yyyy-MM-dd').format(picked);
 
       setState(() {
-        getPickedDate = dobController.text;
+        getPickedDate == picked;
       });
     }
   }
@@ -438,39 +438,20 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
+                        width: MediaQuery.of(context).size.width,
+                        height: 60,
+                        alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
                           color: CustomColors.white,
                           borderRadius: BorderRadius.circular(12),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Date Of Birth",
-                              style: TextStyle(
-                                color: CustomColors.primaryColor,
-                                fontSize: 12,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            CustomTextFieldWidget(
-                              borderColor: CustomColors.white,
-                              obsecure: false,
-                              keyboardType: TextInputType.number,
-                              controller: dobController,
-                              onChanged: (value) {
-                                setState(() {
-                                  getPickedDate = value;
-                                });
-                              },
-                              hintText: "DOB",
-                              onTap: () async {
-                                _selectDate(context);
-                              },
-                            ),
-                          ],
+                        child: Text(
+                          dobController.text.isEmpty ? "Date Of Birth" : dobController.text.toString(),
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontFamily: "Rubik",
+                          ),
                         ),
                       ),
                       Container(
@@ -842,12 +823,19 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
     });
   }
 
+  bool _isDateSelectable(DateTime date) {
+    // Disable dates before today
+    return date.isBefore(DateTime.now());
+  }
+
   _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate!,
-      firstDate: DateTime(1930),
+      firstDate: DateTime(1975),
       lastDate: DateTime.now(),
+      selectableDayPredicate: _isDateSelectable,
+      initialDatePickerMode: DatePickerMode.day,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
@@ -866,7 +854,7 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
       dobController.text = DateFormat('yyyy-MM-dd').format(picked);
 
       setState(() {
-        getPickedDate = dobController.text;
+        getPickedDate == picked;
       });
     }
   }

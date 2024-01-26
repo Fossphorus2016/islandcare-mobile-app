@@ -96,7 +96,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                 prefs.remove('userRole');
                 prefs.remove('userToken');
                 prefs.remove("userStatus");
-
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(

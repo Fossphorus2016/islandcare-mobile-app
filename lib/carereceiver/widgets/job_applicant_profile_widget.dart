@@ -492,7 +492,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  "Background Varified",
+                  "Background Verified",
                   style: TextStyle(
                     color: CustomColors.primaryText,
                     fontFamily: "Poppins",

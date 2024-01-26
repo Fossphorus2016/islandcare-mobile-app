@@ -243,12 +243,15 @@ class _ScheduleState extends State<Schedule> {
   DateTime? selectedDate = DateTime.now();
 
   var getfromPickedDate;
-
+// bool _isDateSelectable(DateTime date) {
+//     // Disable dates before today
+//     return date.isAfter(DateTime.now());
+//   }
   _fromDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate!,
-      firstDate: DateTime(1930),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -277,7 +280,7 @@ class _ScheduleState extends State<Schedule> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate!,
-      firstDate: DateTime(1930),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2050),
       builder: (BuildContext context, Widget? child) {
         return Theme(

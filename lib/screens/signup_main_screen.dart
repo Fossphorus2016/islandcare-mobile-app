@@ -52,12 +52,35 @@ class _SignupScreenState extends State<SignupScreen> {
   var getPickedDate;
   DateTime? selectedDate = DateTime.now();
   var myFormat = DateFormat('d-MM-yyyy');
+  // DateTime selectedDate = DateTime.now();
+
+  bool _isDateSelectable(DateTime date) {
+    // Disable dates before today
+    return date.isBefore(DateTime.now());
+  }
+
+  // Future<void> _selectDate(BuildContext context) async {
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: selectedDate,
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime.now(), // Example: Allow selection for the next year
+  //     selectableDayPredicate: _isDateSelectable,
+  //   );
+  //   if (picked != null && picked != selectedDate) {
+  //     setState(() {
+  //       selectedDate = picked;
+  //     });
+  //   }
+  // }
+
   _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate!,
-      firstDate: DateTime(1930),
-      lastDate: DateTime(2050),
+      firstDate: DateTime(1975),
+      lastDate: DateTime.now(),
+      selectableDayPredicate: _isDateSelectable,
       initialDatePickerMode: DatePickerMode.day,
       builder: (BuildContext context, Widget? child) {
         return Theme(
@@ -253,7 +276,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.only(left: 12),
                       child: Text(
-                        dobController.text.toString(),
+                        dobController.text.isEmpty ? "Date Of Birth" : dobController.text.toString(),
                         style: const TextStyle(
                           fontSize: 15,
                           color: Colors.black,
@@ -264,15 +287,6 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
 
-                  // CustomTextFieldWidget(
-                  //   obsecure: false,
-                  //   keyboardType: TextInputType.number,
-                  //   controller: dobController,
-                  //   hintText: "DOB",
-                  //   onTap: () async {
-                  //     _selectDate(context);
-                  //   },
-                  // ),
                   // Choose Service
                   const SizedBox(height: 20),
                   Row(

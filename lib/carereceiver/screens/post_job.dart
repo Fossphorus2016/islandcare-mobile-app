@@ -47,11 +47,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
 
   @override
   Widget build(BuildContext context) {
-    UserSubscriptionDetail? subscriptionDetail = context
-        .watch<UserProvider>()
-        .gWAUserProfile!
-        .data!
-        .userSubscriptionDetail;
+    UserSubscriptionDetail? subscriptionDetail = context.watch<UserProvider>().gWAUserProfile!.data!.userSubscriptionDetail;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -117,8 +113,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: snapshot.data!.services!.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                           crossAxisSpacing: 3,
                         ),
@@ -128,21 +123,17 @@ class _PostJobScreenState extends State<PostJobScreen> {
                               setState(() {
                                 selectedJob = index;
                               });
-                              if (subscriptionDetail != null &&
-                                  subscriptionDetail.isActive != 0) {
+                              if (subscriptionDetail != null && subscriptionDetail.isActive != 0) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => Schedule(
-                                      serviceId: snapshot
-                                          .data!.services![index].id
-                                          .toString(),
+                                      serviceId: snapshot.data!.services![index].id.toString(),
                                     ),
                                   ),
                                 );
                               } else {
-                                customErrorSnackBar(
-                                    context, "Please subscribe package first");
+                                customErrorSnackBar(context, "Please subscribe package first");
                               }
                             },
                             child: Center(
@@ -150,9 +141,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                 margin: const EdgeInsets.all(4),
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                  color: selectedJob == index
-                                      ? CustomColors.primaryColor
-                                      : CustomColors.white,
+                                  color: selectedJob == index ? CustomColors.primaryColor : CustomColors.white,
                                   borderRadius: BorderRadius.circular(9),
                                   boxShadow: const [
                                     BoxShadow(
@@ -173,27 +162,21 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                         width: 60,
                                         height: 60,
                                         fit: BoxFit.contain,
-                                        imageUrl:
-                                            "${snapshot.data!.folderPath}/${snapshot.data!.services![index].image}",
-                                        placeholder: (context, url) =>
-                                            const CircularProgressIndicator(),
-                                        errorWidget: (context, url, error) =>
-                                            const Icon(Icons.error),
+                                        imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.services![index].image}",
+                                        placeholder: (context, url) => const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) => const Icon(Icons.error),
                                       ),
                                     ),
                                     const SizedBox(
                                       height: 20,
                                     ),
                                     Text(
-                                      snapshot.data!.services![index].name
-                                          .toString(),
+                                      snapshot.data!.services![index].name.toString(),
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: "Poppins",
-                                        color: selectedJob == index
-                                            ? CustomColors.white
-                                            : CustomColors.primaryColor,
+                                        color: selectedJob == index ? CustomColors.white : CustomColors.primaryColor,
                                       ),
                                     ),
                                   ],

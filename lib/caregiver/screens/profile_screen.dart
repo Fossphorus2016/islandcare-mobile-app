@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously
+// ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously, unnecessary_null_comparison
 
 // import 'dart:typed_data';
 
@@ -290,36 +290,18 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                       children: [
                                         Container(
                                           padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                                          // decoration: const BoxDecoration(
-                                          //   color: Colors.white,
-                                          //   boxShadow: [
-                                          //     BoxShadow(
-                                          //       color: Color.fromARGB(13, 0, 0, 0),
-                                          //       blurRadius: 4.0,
-                                          //       spreadRadius: 2.0,
-                                          //       offset: Offset(2.0, 2.0),
-                                          //     ),
-                                          //   ],
-                                          //   borderRadius: BorderRadius.only(
-                                          //     bottomLeft: Radius.circular(6),
-                                          //     bottomRight: Radius.circular(6),
-                                          //     topLeft: Radius.circular(6),
-                                          //     topRight: Radius.circular(6),
-                                          //   ),
-                                          // ),
-                                          // height: 50,
                                           width: 130,
-                                          child: const Row(
+                                          child: Row(
                                             children: [
-                                              Icon(
+                                              const Icon(
                                                 Icons.phone_outlined,
                                                 size: 14,
                                                 color: Colors.white,
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  "+92135478963214",
-                                                  style: TextStyle(
+                                                  userProfile.data!.phone.toString(),
+                                                  style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 12,
                                                     fontWeight: FontWeight.w600,
@@ -350,21 +332,21 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             //     topRight: Radius.circular(6),
                                             //   ),
                                             // ),
-                                            child: const Flex(
+                                            child: Flex(
                                               direction: Axis.horizontal,
                                               crossAxisAlignment: CrossAxisAlignment.start,
                                               children: [
-                                                Icon(
+                                                const Icon(
                                                   Icons.location_on_outlined,
                                                   size: 18,
                                                   color: Colors.white,
                                                 ),
                                                 Flexible(
                                                   child: Text(
-                                                    "139, South Perimeter Road DD 03, Saint George's Bermuda, BM (BMU)",
+                                                    userProfile.data!.userdetail!.address.toString(),
                                                     maxLines: 6,
                                                     overflow: TextOverflow.visible,
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 12,
                                                       fontWeight: FontWeight.w600,
@@ -375,139 +357,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             ),
                                           ),
                                         ),
-
-                                        // Container(
-                                        //   padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                                        //   decoration: const BoxDecoration(
-                                        //     color: Colors.white,
-                                        //     boxShadow: [
-                                        //       BoxShadow(
-                                        //         color: Color.fromARGB(13, 0, 0, 0),
-                                        //         blurRadius: 4.0,
-                                        //         spreadRadius: 2.0,
-                                        //         offset: Offset(2.0, 2.0),
-                                        //       ),
-                                        //     ],
-                                        //     borderRadius: BorderRadius.only(
-                                        //       bottomLeft: Radius.circular(6),
-                                        //       bottomRight: Radius.circular(6),
-                                        //       topLeft: Radius.circular(6),
-                                        //       topRight: Radius.circular(6),
-                                        //     ),
-                                        //   ),
-                                        //   child: Row(
-                                        //     children: [
-                                        //       Icon(
-                                        //         Icons.location_on_outlined,
-                                        //         size: 14,
-                                        //         color: CustomColors.primaryTextLight,
-                                        //       ),
-                                        //       const Text(
-                                        //         "+Profile Completion ProfileProfile CompletionProfileProfile CompletionProfileProfile CompletionProfileProfile CompletionProfileProfile CompletionProfile",
-                                        //         maxLines: 2,
-                                        //       ),
-                                        //     ],
-                                        //   ),
-                                        // ),
-                                        // Container(
-                                        //   padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                                        //   decoration: const BoxDecoration(
-                                        //     color: Colors.white,
-                                        //     boxShadow: [
-                                        //       BoxShadow(
-                                        //         color: Color.fromARGB(13, 0, 0, 0),
-                                        //         blurRadius: 4.0,
-                                        //         spreadRadius: 2.0,
-                                        //         offset: Offset(2.0, 2.0),
-                                        //       ),
-                                        //     ],
-                                        //     borderRadius: BorderRadius.only(
-                                        //       bottomLeft: Radius.circular(6),
-                                        //       bottomRight: Radius.circular(6),
-                                        //       topLeft: Radius.circular(6),
-                                        //       topRight: Radius.circular(6),
-                                        //     ),
-                                        //   ),
-                                        //   child: RichText(
-                                        //     text: TextSpan(
-                                        //       children: [
-                                        //         WidgetSpan(
-                                        //           child: Padding(
-                                        //             padding: const EdgeInsets.only(left: 1, right: 5),
-                                        //             child: Icon(
-                                        //               Icons.phone_outlined,
-                                        //               size: 14,
-                                        //               color: CustomColors.primaryTextLight,
-                                        //             ),
-                                        //           ),
-                                        //         ),
-                                        //         TextSpan(
-                                        //           text: userProfile.data!.phone,
-                                        //           style: TextStyle(
-                                        //             fontSize: 12,
-                                        //             fontWeight: FontWeight.w400,
-                                        //             color: CustomColors.primaryTextLight,
-                                        //           ),
-                                        //         ),
-                                        //       ],
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                        // const SizedBox(width: 10),
-                                        // Container(
-                                        //   padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                                        //   decoration: const BoxDecoration(
-                                        //     color: Colors.white,
-                                        //     boxShadow: [
-                                        //       BoxShadow(
-                                        //         color: Color.fromARGB(13, 0, 0, 0),
-                                        //         blurRadius: 4.0,
-                                        //         spreadRadius: 2.0,
-                                        //         offset: Offset(2.0, 2.0),
-                                        //       ),
-                                        //     ],
-                                        //     borderRadius: BorderRadius.only(
-                                        //       bottomLeft: Radius.circular(6),
-                                        //       bottomRight: Radius.circular(6),
-                                        //       topLeft: Radius.circular(6),
-                                        //       topRight: Radius.circular(6),
-                                        //     ),
-                                        //   ),
-                                        //   child: RichText(
-                                        //     maxLines: 2,
-                                        //     text: TextSpan(
-                                        //       children: [
-                                        //         WidgetSpan(
-                                        //           child: Padding(
-                                        //             padding: const EdgeInsets.only(left: 3, right: 5),
-                                        //             child: Icon(
-                                        //               Icons.location_on_outlined,
-                                        //               size: 14,
-                                        //               color: CustomColors.primaryTextLight,
-                                        //             ),
-                                        //           ),
-                                        //         ),
-                                        //         userProfile.data!.userdetail!.address.toString() != "null"
-                                        //             ? TextSpan(
-                                        //                 text: "Profile CompletionProfile CompletionProfile CompletionProfile CompletionProfile CompletionProfile CompletionProfile CompletionProfile Completion",
-                                        //                 style: TextStyle(
-                                        //                   fontSize: 12,
-                                        //                   fontWeight: FontWeight.w400,
-                                        //                   color: CustomColors.primaryTextLight,
-                                        //                 ),
-                                        //               )
-                                        //             : TextSpan(
-                                        //                 text: "Not Available",
-                                        //                 style: TextStyle(
-                                        //                   fontSize: 12,
-                                        //                   fontWeight: FontWeight.w400,
-                                        //                   color: CustomColors.red,
-                                        //                 ),
-                                        //               ),
-                                        //       ],
-                                        //     ),
-                                        //   ),
-                                        // ),
                                       ],
                                     ),
                                   ),
@@ -549,7 +398,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               LinearProgressIndicator(
                                                 minHeight: 08,
                                                 borderRadius: BorderRadius.circular(08),
-                                                value: double.parse(Provider.of<ProfileProvider>(context).profilePerentage) / 100,
+                                                value: Provider.of<ProfileProvider>(context).profilePerentage != null ? double.parse(Provider.of<ProfileProvider>(context).profilePerentage) / 100 : 00,
                                                 valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
                                               ),
                                             ],
@@ -1358,7 +1207,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                           color: CustomColors.primaryColor,
                                         ),
                                         title: Text(
-                                          "Background Varified",
+                                          "Background Verified",
                                           style: TextStyle(
                                             color: CustomColors.primaryText,
                                             fontSize: 12,
@@ -2821,7 +2670,7 @@ class _ProfileGiverPendingState extends State<ProfileGiverPending> {
                                         color: CustomColors.primaryColor,
                                       ),
                                       title: Text(
-                                        "Background Varified",
+                                        "Background Verified",
                                         style: TextStyle(
                                           color: CustomColors.primaryText,
                                           fontSize: 12,
