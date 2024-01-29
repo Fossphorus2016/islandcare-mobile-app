@@ -328,7 +328,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
                                           // }
 
-                                          Provider.of<UserProvider>(context, listen: false).getUserToken();
+                                          Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
                                         } else if (data["user"]["role"] == 4) {
                                           if (data["user"]["status"] == 0) {
                                             SharedPreferences pref = await SharedPreferences.getInstance();
@@ -351,7 +351,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
                                             Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
                                           }
-                                          Provider.of<UserProvider>(context, listen: false).getUserToken();
+                                          Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
                                         }
                                       }
                                     } else {

@@ -6,7 +6,7 @@ import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserProvider extends ChangeNotifier {
+class RecieverUserProvider extends ChangeNotifier {
   // UserModel _userModel = UserModel(
   //   token: '',
   //   user: User(

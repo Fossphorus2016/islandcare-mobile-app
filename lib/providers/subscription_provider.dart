@@ -10,12 +10,12 @@ class SubscriptionProvider extends ChangeNotifier {
   List allPackages = [];
   getPackages() async {
     try {
-      // print("user provider token ${UserProvider.userToken}");
+      // print("user provider token ${RecieverUserProvider.userToken}");
       var response = await Dio().get(
         CareReceiverURl.serviceSubscribe,
         options: Options(
           headers: {
-            'Authorization': 'Bearer ${UserProvider.userToken}',
+            'Authorization': 'Bearer ${RecieverUserProvider.userToken}',
             'Accept': 'application/json',
           },
         ),
@@ -46,7 +46,7 @@ class SubscriptionProvider extends ChangeNotifier {
       },
       options: Options(
         headers: {
-          'Authorization': 'Bearer ${UserProvider.userToken}',
+          'Authorization': 'Bearer ${RecieverUserProvider.userToken}',
           'Accept': 'application/json',
         },
       ),
@@ -96,7 +96,7 @@ class SubscriptionProvider extends ChangeNotifier {
       },
       options: Options(
         headers: {
-          'Authorization': 'Bearer ${UserProvider.userToken}',
+          'Authorization': 'Bearer ${RecieverUserProvider.userToken}',
           'Accept': 'application/json',
         },
       ),

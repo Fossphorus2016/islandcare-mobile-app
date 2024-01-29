@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:island_app/constants/error_handling.dart';
 import 'package:island_app/models/user_model.dart';
 import 'package:island_app/providers/user_provider.dart';
+// import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/screens/verify_email.dart';
 import 'package:island_app/utils/utils.dart';
@@ -129,7 +130,7 @@ class AuthService {
             var userId = data["user"]['id'];
             var avatar = data["user"]['avatar'];
             SharedPreferences prefs = await SharedPreferences.getInstance();
-            Provider.of<UserProvider>(context, listen: false).fetchProfileReceiverModel();
+            Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
             await prefs.setString('x-auth-token', token);
             // print("UserData = $data");
             if (status == 3) {
@@ -224,7 +225,7 @@ class AuthService {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
 
-      var userProvider = Provider.of<UserProvider>(context, listen: false);
+      var recieverUserProvider = Provider.of<RecieverUserProvider>(context, listen: false);
     } catch (e) {
       customErrorSnackBar(
         context,

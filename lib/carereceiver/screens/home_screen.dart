@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             FutureBuilder<ProfileReceiverModel?>(
-              future: context.watch<UserProvider>().userProfile,
+              future: context.watch<RecieverUserProvider>().userProfile,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   // print(snapshot.data!.data!.userSubscriptionDetail!.periodType);

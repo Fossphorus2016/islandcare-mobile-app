@@ -47,7 +47,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
 
   @override
   Widget build(BuildContext context) {
-    UserSubscriptionDetail? subscriptionDetail = context.watch<UserProvider>().gWAUserProfile!.data!.userSubscriptionDetail;
+    UserSubscriptionDetail? subscriptionDetail = context.watch<RecieverUserProvider>().gWAUserProfile!.data!.userSubscriptionDetail;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

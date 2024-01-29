@@ -32,7 +32,7 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
         },
       ),
     );
-    print(response.data);
+    // print(response.data);
     if (response.statusCode == 200 && response.data['data'] != null) {
       setState(() {
         futurereviews = ProviderReviewsModel.fromJson(response.data);

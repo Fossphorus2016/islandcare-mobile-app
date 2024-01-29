@@ -194,7 +194,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
 
   @override
   Widget build(BuildContext context) {
-    print('${CareGiverUrl.serviceProviderJobDetail}/${widget.id}');
+    // print('${CareGiverUrl.serviceProviderJobDetail}/${widget.id}');
     return Scaffold(
       backgroundColor: CustomColors.loginBg,
       appBar: AppBar(

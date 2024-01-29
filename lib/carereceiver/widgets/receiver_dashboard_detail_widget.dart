@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/widgets/custom_expansion_panel.dart';
 
 class ReceiverDashboardDetailWidget extends StatelessWidget {
   final String? imgPath;
@@ -18,9 +19,10 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
   final String? to;
   final String? zip;
   final String? imgProviderPath;
-  final String? providerName;
-  final double? providerRating;
-  final String? providerComment;
+  // final String? providerName;
+  // final double? providerRating;
+  // final String? providerComment;
+  final List? ratings;
   final Widget? documentsSection;
 
   const ReceiverDashboardDetailWidget({
@@ -39,9 +41,11 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
     this.to,
     this.zip,
     this.imgProviderPath,
-    this.providerName,
-    this.providerRating,
-    this.providerComment,
+    this.ratings,
+    // this.providerName,
+    // this.providerRating,
+    // this.providerComment,
+
     this.documentsSection,
   }) : super(key: key);
 
@@ -485,14 +489,13 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                 ),
               ),
               documentsSection!,
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               // Verified
 
               // Reviews
-              const SizedBox(
-                height: 15,
+              const SizedBox(height: 15),
+              ReviewExpansionList(
+                list: ratings,
               ),
               Container(
                 alignment: Alignment.topLeft,
@@ -562,151 +565,92 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: CustomColors.paraColor,
-                                width: .5,
-                              ),
-                              bottom: BorderSide(
-                                color: CustomColors.paraColor,
-                                width: .5,
-                              ),
-                            ),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SizedBox(
-                                width: 100,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 15,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(15),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(15),
-                                          child: CachedNetworkImage(
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.cover,
-                                            imageUrl: imgProviderPath.toString(),
-                                            placeholder: (context, url) => const CircularProgressIndicator(),
-                                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4),
-                                    Text(
-                                      providerName.toString(),
-                                      style: TextStyle(
-                                        fontSize: 13,
-                                        fontFamily: "Poppins",
-                                        fontWeight: FontWeight.w400,
-                                        color: CustomColors.primaryText,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: 100,
-                                child: RatingBar.builder(
-                                  initialRating: providerRating!.toDouble(),
-                                  minRating: 1,
-                                  direction: Axis.horizontal,
-                                  allowHalfRating: true,
-                                  ignoreGestures: false,
-                                  itemSize: 15,
-                                  itemCount: 5,
-                                  itemBuilder: (context, _) => const Icon(
-                                    Icons.star,
-                                    color: Colors.amber,
-                                  ),
-                                  onRatingUpdate: (rating) {},
-                                ),
-                              ),
-                              // Container(
-                              //   alignment: Alignment.center,
-                              //   width: 100,
-                              //   child: Text(
-                              //     providerComment.toString(),
-                              //     style: TextStyle(
-                              //       fontSize: 13,
-                              //       fontFamily: "Poppins",
-                              //       fontWeight: FontWeight.w400,
-                              //       color: CustomColors.primaryText,
-                              //     ),
-                              //   ),
-                              // ),
-                              IconButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      content: SizedBox(
-                                        height: 250,
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              providerName.toString(),
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                fontFamily: "Poppins",
-                                                fontWeight: FontWeight.bold,
-                                                color: CustomColors.primaryText,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 15),
-                                            SizedBox(
-                                              width: 150,
-                                              child: RatingBar.builder(
-                                                initialRating: providerRating!.toDouble(),
-                                                minRating: 1,
-                                                direction: Axis.horizontal,
-                                                allowHalfRating: true,
-                                                ignoreGestures: false,
-                                                itemSize: 24,
-                                                itemCount: 5,
-                                                itemBuilder: (context, _) => const Icon(
-                                                  Icons.star,
-                                                  color: Colors.amber,
-                                                ),
-                                                onRatingUpdate: (rating) {},
-                                              ),
-                                            ),
-                                            const SizedBox(height: 15),
-                                            Text(
-                                              providerComment.toString(),
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontFamily: "Poppins",
-                                                fontWeight: FontWeight.w400,
-                                                color: CustomColors.primaryText,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(Icons.keyboard_arrow_right_sharp),
-                              ),
-                            ],
-                          ),
-                        ),
+                        const SizedBox(height: 10),
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(vertical: 5),
+                        //   decoration: BoxDecoration(
+                        //     border: Border(
+                        //       top: BorderSide(
+                        //         color: CustomColors.paraColor,
+                        //         width: .5,
+                        //       ),
+                        //       bottom: BorderSide(
+                        //         color: CustomColors.paraColor,
+                        //         width: .5,
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //     children: [
+                        //       SizedBox(
+                        //         width: 100,
+                        //         child: Column(
+                        //           crossAxisAlignment: CrossAxisAlignment.start,
+                        //           children: [
+                        //             // CircleAvatar(
+                        //             //   radius: 15,
+                        //             //   child: ClipRRect(
+                        //             //     borderRadius: BorderRadius.circular(15),
+                        //             //     child: ClipRRect(
+                        //             //       borderRadius: BorderRadius.circular(15),
+                        //             //       child: CachedNetworkImage(
+                        //             //         width: 100,
+                        //             //         height: 100,
+                        //             //         fit: BoxFit.cover,
+                        //             //         imageUrl: imgProviderPath.toString(),
+                        //             //         placeholder: (context, url) => const CircularProgressIndicator(),
+                        //             //         errorWidget: (context, url, error) => const Icon(Icons.error),
+                        //             //       ),
+                        //             //     ),
+                        //             //   ),
+                        //             // ),
+                        //             const SizedBox(width: 4),
+                        //             Text(
+                        //               providerName.toString(),
+                        //               style: TextStyle(
+                        //                 fontSize: 13,
+                        //                 fontFamily: "Poppins",
+                        //                 fontWeight: FontWeight.w400,
+                        //                 color: CustomColors.primaryText,
+                        //               ),
+                        //             ),
+                        //           ],
+                        //         ),
+                        //       ),
+                        //       SizedBox(
+                        //         width: 100,
+                        //         child: RatingBar.builder(
+                        //           initialRating: providerRating!.toDouble(),
+                        //           minRating: 1,
+                        //           direction: Axis.horizontal,
+                        //           allowHalfRating: true,
+                        //           ignoreGestures: false,
+                        //           itemSize: 15,
+                        //           itemCount: 5,
+                        //           itemBuilder: (context, _) => const Icon(
+                        //             Icons.star,
+                        //             color: Colors.amber,
+                        //           ),
+                        //           onRatingUpdate: (rating) {},
+                        //         ),
+                        //       ),
+                        //       Container(
+                        //         alignment: Alignment.center,
+                        //         width: 100,
+                        //         child: Text(
+                        //           providerComment.toString(),
+                        //           style: TextStyle(
+                        //             fontSize: 13,
+                        //             fontFamily: "Poppins",
+                        //             fontWeight: FontWeight.w400,
+                        //             color: CustomColors.primaryText,
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                       ],
                     ),
                   ],
@@ -717,5 +661,211 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class ReviewExpansionList extends StatefulWidget {
+  const ReviewExpansionList({super.key, this.list});
+  final List? list;
+  @override
+  State<ReviewExpansionList> createState() => _ReviewExpansionListState();
+}
+
+class _ReviewExpansionListState extends State<ReviewExpansionList> {
+  @override
+  Widget build(BuildContext context) {
+    return widget.list == null
+        ? Container()
+        : Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Name",
+                      style: TextStyle(
+                        fontFamily: "Rubik",
+                        fontSize: 14,
+                        color: CustomColors.primaryTextLight,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      "Ratings",
+                      style: TextStyle(
+                        fontFamily: "Rubik",
+                        fontSize: 14,
+                        color: CustomColors.primaryTextLight,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              CustomExpansionPanelList(
+                children: [
+                  CustomExpansionPanel(
+                    isExpanded: true,
+                    headerBuilder: (context, isExpanded) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "providerName.toString()",
+                            style: TextStyle(
+                              fontFamily: "Rubik",
+                              fontSize: 14,
+                              color: CustomColors.primaryTextLight,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 100,
+                            // child: RatingBar.builder(
+                            //   initialRating: "providerRating!.toDouble()",
+                            //   minRating: 1,
+                            //   direction: Axis.horizontal,
+                            //   allowHalfRating: true,
+                            //   ignoreGestures: false,
+                            //   itemSize: 15,
+                            //   itemCount: 5,
+                            //   itemBuilder: (context, _) => const Icon(
+                            //     Icons.star,
+                            //     color: Colors.amber,
+                            //   ),
+                            //   onRatingUpdate: (rating) {},
+                            // ),
+                          ),
+                        ],
+                      );
+                    },
+                    body: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                            color: CustomColors.paraColor,
+                            width: .5,
+                          ),
+                          bottom: BorderSide(
+                            color: CustomColors.paraColor,
+                            width: .5,
+                          ),
+                        ),
+                      ),
+                      child: Column(
+                        children: [
+                          // CircleAvatar(
+                          //   radius: 60,
+                          //   child: ClipRRect(
+                          //     borderRadius: BorderRadius.circular(15),
+                          //     child: ClipRRect(
+                          //       borderRadius: BorderRadius.circular(15),
+                          //       child: CachedNetworkImage(
+                          //         width: 100,
+                          //         height: 100,
+                          //         fit: BoxFit.cover,
+                          //         imageUrl: imgProviderPath.toString(),
+                          //         placeholder: (context, url) => const CircularProgressIndicator(),
+                          //         errorWidget: (context, url, error) => const Icon(Icons.error),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          const SizedBox(height: 10),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Name:",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w400,
+                                  color: CustomColors.primaryText,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Text(
+                                "providerName.toString()",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w600,
+                                  color: CustomColors.primaryText,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Rating:",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w400,
+                                  color: CustomColors.primaryText,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              // RatingBar.builder(
+                              //   initialRating: providerRating!.toDouble(),
+                              //   minRating: 1,
+                              //   direction: Axis.horizontal,
+                              //   allowHalfRating: true,
+                              //   ignoreGestures: false,
+                              //   itemSize: 15,
+                              //   itemCount: 5,
+                              //   itemBuilder: (context, _) => const Icon(
+                              //     Icons.star,
+                              //     color: Colors.amber,
+                              //   ),
+                              //   onRatingUpdate: (rating) {},
+                              // ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Comment:",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w400,
+                                  color: CustomColors.primaryText,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  "providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()",
+                                  maxLines: 20,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w400,
+                                    color: CustomColors.primaryText,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
   }
 }

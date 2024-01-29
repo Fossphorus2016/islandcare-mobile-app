@@ -147,27 +147,27 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   }
 
   // fetchPRofile
-  late Future<ProfileReceiverModel> fetchProfile;
-  Future<ProfileReceiverModel> fetchProfileReceiverModel() async {
-    var token = await getUserToken();
-    final response = await Dio().get(
-      CareReceiverURl.serviceReceiverProfile,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      return ProfileReceiverModel.fromJson(response.data);
-    } else {
-      // print()
-      throw Exception(
-        'Failed to load Profile Model',
-      );
-    }
-  }
+  // late Future<ProfileReceiverModel> fetchProfile;
+  // Future<ProfileReceiverModel> fetchProfileReceiverModel() async {
+  //   var token = await getUserToken();
+  //   final response = await Dio().get(
+  //     CareReceiverURl.serviceReceiverProfile,
+  //     options: Options(
+  //       headers: {
+  //         'Authorization': 'Bearer $token',
+  //         'Accept': 'application/json',
+  //       },
+  //     ),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     return ProfileReceiverModel.fromJson(response.data);
+  //   } else {
+  //     // print()
+  //     throw Exception(
+  //       'Failed to load Profile Model',
+  //     );
+  //   }
+  // }
 
   // Post Change Password Req
   ProgressDialog? pr;
@@ -255,7 +255,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     getUserAvatar();
 
     super.initState();
-    fetchProfile = fetchProfileReceiverModel();
+    // fetchProfile = fetchProfileReceiverModel();
   }
 
   @override
@@ -270,7 +270,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               Column(
                 children: [
                   FutureBuilder<ProfileReceiverModel?>(
-                    future: context.watch<UserProvider>().userProfile,
+                    future: context.watch<RecieverUserProvider>().userProfile,
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         return InkWell(

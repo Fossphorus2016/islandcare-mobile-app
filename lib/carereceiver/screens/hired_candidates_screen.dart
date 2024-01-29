@@ -115,7 +115,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
   @override
   Widget build(BuildContext context) {
     // print('${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=$currentDate');
-    // print(UserProvider.userToken);
+    // print(RecieverUserProvider.userToken);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

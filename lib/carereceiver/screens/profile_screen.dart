@@ -23,7 +23,7 @@ class ProfileReceiverScreen extends StatefulWidget {
 class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
   // late Future<ProfileReceiverModel> fetchProfile;
   // Future<ProfileReceiverModel> fetchProfileReceiverModel() async {
-  //   var token = await Provider.of<UserProvider>(context).getUserToken();
+  //   var token = await Provider.of<RecieverUserProvider>(context).getUserToken();
   //   final response = await Dio().get(
   //     CareReceiverURl.serviceReceiverProfile,
   //     options: Options(
@@ -63,7 +63,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var userProfile = Provider.of<UserProvider>(context).gWAUserProfile;
+    var userProfile = Provider.of<RecieverUserProvider>(context).gWAUserProfile;
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomColors.loginBg,

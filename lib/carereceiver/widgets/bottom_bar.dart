@@ -40,8 +40,8 @@ class BottomBarState extends State<BottomBar> {
   // }
 
   callUserData() async {
-    await Provider.of<UserProvider>(context, listen: false).getUserToken();
-    await Provider.of<UserProvider>(context, listen: false).fetchProfileReceiverModel();
+    await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    await Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
     await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(4);
     await Provider.of<ChatProvider>(context, listen: false).connectChatChannel(4);
     await Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
@@ -58,7 +58,7 @@ class BottomBarState extends State<BottomBar> {
     //   getUserToken();
     // });
     // print(lol);
-    // var res = Provider.of<UserProvider>(context, listen: false).getUserToken();
+    // var res = Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
 
     pages = [
       HomeScreen(

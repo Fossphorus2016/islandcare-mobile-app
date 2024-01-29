@@ -349,7 +349,7 @@ class _ScheduleState extends State<Schedule> {
       'duration[]': durationMapList,
     });
     Dio dio = Dio();
-    var userSubs = await Provider.of<UserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await dio.post(
@@ -401,7 +401,7 @@ class _ScheduleState extends State<Schedule> {
     );
 
     Dio dio = Dio();
-    var userSubs = await Provider.of<UserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await dio.post(
@@ -445,7 +445,7 @@ class _ScheduleState extends State<Schedule> {
     );
 
     Dio dio = Dio();
-    var userSubs = await Provider.of<UserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await dio.post(
@@ -496,7 +496,7 @@ class _ScheduleState extends State<Schedule> {
     );
 
     Dio dio = Dio();
-    var userSubs = await Provider.of<UserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await dio.post(
@@ -541,7 +541,7 @@ class _ScheduleState extends State<Schedule> {
     );
 
     Dio dio = Dio();
-    var userSubs = await Provider.of<UserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await dio.post(

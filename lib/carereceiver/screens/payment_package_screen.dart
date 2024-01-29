@@ -37,7 +37,7 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
   @override
   Widget build(BuildContext context) {
     List allpackages = context.watch<SubscriptionProvider>().allPackages;
-    ProfileReceiverModel? user = context.watch<UserProvider>().gWAUserProfile;
+    ProfileReceiverModel? user = context.watch<RecieverUserProvider>().gWAUserProfile;
     UserSubscriptionDetail? userSubsDetail = user!.data!.userSubscriptionDetail;
     // print(user.data!.id);
     return Scaffold(
@@ -116,33 +116,17 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
 
                 for (int i = 0; i < allpackages.length; i++) ...[
                   if (userSubsDetail != null) ...[
-                    if (userSubsDetail.subscriptionId.toString() ==
-                            allpackages[i]['id'].toString() &&
-                        userSubsDetail.isActive == 1) ...[
+                    if (userSubsDetail.subscriptionId.toString() == allpackages[i]['id'].toString() && userSubsDetail.isActive == 1) ...[
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         decoration: BoxDecoration(
                             gradient: LinearGradient(
                               begin: Alignment.center,
                               end: Alignment.center,
-                              colors: [
-                                const Color(0xff90EAB4).withOpacity(0.1),
-                                const Color(0xff6BD294).withOpacity(0.8)
-                              ],
+                              colors: [const Color(0xff90EAB4).withOpacity(0.1), const Color(0xff6BD294).withOpacity(0.8)],
                             ),
-                            boxShadow: const [
-                              BoxShadow(
-                                  color: Color.fromARGB(25, 0, 0, 0),
-                                  blurRadius: 4.0,
-                                  spreadRadius: 2.0,
-                                  offset: Offset(2.0, 2.0))
-                            ],
-                            borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10))),
+                            boxShadow: const [BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))],
+                            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                         width: MediaQuery.of(context).size.width * .90,
                         height: 195,
                         child: Column(
@@ -206,68 +190,44 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                             ),
                                             Text(
                                               "Confirm Unsubscribe",
-                                              style:
-                                                  TextStyle(color: Colors.red),
+                                              style: TextStyle(color: Colors.red),
                                             ),
                                             Text(
                                               "Please make sure this action is irreversible",
-                                              style:
-                                                  TextStyle(color: Colors.red),
+                                              style: TextStyle(color: Colors.red),
                                             ),
                                           ],
                                         ),
                                       ),
-                                      actionsAlignment:
-                                          MainAxisAlignment.center,
-                                      actionsOverflowAlignment:
-                                          OverflowBarAlignment.center,
+                                      actionsAlignment: MainAxisAlignment.center,
+                                      actionsOverflowAlignment: OverflowBarAlignment.center,
                                       alignment: Alignment.center,
                                       actions: [
                                         TextButton(
                                           onPressed: () async {
                                             try {
-                                              var resp = await Provider.of<
-                                                          SubscriptionProvider>(
-                                                      context,
-                                                      listen: false)
-                                                  .unSubscribe(
-                                                      userSubsDetail.id);
-                                              if (resp.statusCode == 200 &&
-                                                  resp.data['success']) {
-                                                Provider.of<UserProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .fetchProfileReceiverModel();
+                                              var resp = await Provider.of<SubscriptionProvider>(context, listen: false).unSubscribe(userSubsDetail.id);
+                                              if (resp.statusCode == 200 && resp.data['success']) {
+                                                Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
 
-                                                Provider.of<SubscriptionProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .getPackages();
+                                                Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
                                                 Navigator.pop(context);
-                                                customSuccesSnackBar(
-                                                    context,
-                                                    resp.data['message']
-                                                        .toString());
+                                                customSuccesSnackBar(context, resp.data['message'].toString());
                                               } else {
                                                 throw "something went wrong please try again later";
                                               }
                                             } catch (e) {
                                               // print(e);
                                               // Navigator.pop(context);
-                                              customErrorSnackBar(
-                                                  context, e.toString());
+                                              customErrorSnackBar(context, e.toString());
                                             }
                                           },
                                           style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty
-                                                    .resolveWith((states) =>
-                                                        Colors.blue),
+                                            backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.blue),
                                           ),
                                           child: const Text(
                                             "Yes, unsubscribe please!",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(color: Colors.white),
                                           ),
                                         ),
                                         TextButton(
@@ -276,15 +236,11 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                             Navigator.pop(context);
                                           },
                                           style: ButtonStyle(
-                                            backgroundColor:
-                                                MaterialStateProperty
-                                                    .resolveWith((states) =>
-                                                        Colors.red.shade400),
+                                            backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.red.shade400),
                                           ),
                                           child: const Text(
                                             "No, cancel please!",
-                                            style:
-                                                TextStyle(color: Colors.white),
+                                            style: TextStyle(color: Colors.white),
                                           ),
                                         ),
                                       ],
@@ -293,14 +249,11 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                 }
                               },
                               style: ButtonStyle(
-                                maximumSize: MaterialStateProperty.resolveWith(
-                                    (states) => const Size(250, 80)),
+                                maximumSize: MaterialStateProperty.resolveWith((states) => const Size(250, 80)),
                                 padding: MaterialStateProperty.resolveWith(
-                                  (states) => const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
+                                  (states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                 ),
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith(
+                                backgroundColor: MaterialStateProperty.resolveWith(
                                   (states) => Colors.red,
                                 ),
                               ),
@@ -320,9 +273,7 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                     ] else ...[
                       InkWell(
                         onTap: () {
-                          Provider.of<SubscriptionProvider>(context,
-                                  listen: false)
-                              .setSelectedPackage(allpackages[i]);
+                          Provider.of<SubscriptionProvider>(context, listen: false).setSelectedPackage(allpackages[i]);
                           // print(Provider.of<SubscriptionProvider>(context, listen: false).selectedPackage);
                           Navigator.push(
                             context,
@@ -339,23 +290,10 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                               gradient: LinearGradient(
                                 begin: Alignment.center,
                                 end: Alignment.center,
-                                colors: [
-                                  const Color(0xff90EAB4).withOpacity(0.1),
-                                  const Color(0xff6BD294).withOpacity(0.8)
-                                ],
+                                colors: [const Color(0xff90EAB4).withOpacity(0.1), const Color(0xff6BD294).withOpacity(0.8)],
                               ),
-                              boxShadow: const [
-                                BoxShadow(
-                                    color: Color.fromARGB(25, 0, 0, 0),
-                                    blurRadius: 4.0,
-                                    spreadRadius: 2.0,
-                                    offset: Offset(2.0, 2.0))
-                              ],
-                              borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(10),
-                                  bottomRight: Radius.circular(10),
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10))),
+                              boxShadow: const [BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))],
+                              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                           width: MediaQuery.of(context).size.width * .90,
                           height: 165,
                           child: Column(
@@ -496,8 +434,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                       style: const TextStyle(color: Colors.black),
                     ),
                   ),
-                  if (selectedCard != null &&
-                      selectedCard!.id == allCards[j].id) ...[
+                  if (selectedCard != null && selectedCard!.id == allCards[j].id) ...[
                     cardFormWidget(context),
                   ],
                 ],
@@ -512,13 +449,9 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                     });
                   },
                   leading: Icon(
-                    newCard
-                        ? Icons.radio_button_checked_outlined
-                        : Icons.radio_button_off_outlined,
+                    newCard ? Icons.radio_button_checked_outlined : Icons.radio_button_off_outlined,
                     size: 22,
-                    color: newCard
-                        ? const Color(0xff6BD294).withOpacity(0.8)
-                        : Colors.grey.shade600,
+                    color: newCard ? const Color(0xff6BD294).withOpacity(0.8) : Colors.grey.shade600,
                   ),
                 ),
                 if (newCard) ...[
@@ -535,8 +468,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
   bool sendReq = false;
   dynamic cardFormWidget(BuildContext context) {
     // CreditCard? selectedCard = context.watch<SubscriptionProvider>().cardValue;
-    Map selectedSubscribe =
-        Provider.of<SubscriptionProvider>(context).selectedPackage;
+    Map selectedSubscribe = Provider.of<SubscriptionProvider>(context).selectedPackage;
     return selectedCard != null
         ? Column(
             children: [
@@ -662,8 +594,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                       padding: const EdgeInsets.only(left: 10),
                       width: MediaQuery.of(context).size.width,
                       height: 40,
-                      child: Text(
-                          "${selectedCard!.cardExpirationMonth}-${selectedCard!.cardExpirationYear}"),
+                      child: Text("${selectedCard!.cardExpirationMonth}-${selectedCard!.cardExpirationYear}"),
                     ),
                     const SizedBox(height: 15),
                     // Card CVV
@@ -781,44 +712,30 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                               });
                               try {
                                 var response = await Dio().post(
-                                  CareReceiverURl
-                                      .serviceReceiverSubscribePackage,
+                                  CareReceiverURl.serviceReceiverSubscribePackage,
                                   data: {
                                     "subscription_id": selectedSubscribe['id'],
                                     "card_data": selectedCard!.id.toString(),
                                     "save_card": false,
-                                    "name_on_card":
-                                        selectedCard!.nameOnCard.toString(),
-                                    "card_number":
-                                        selectedCard!.cardNumber.toString(),
-                                    "card_expiration_month": selectedCard!
-                                        .cardExpirationMonth
-                                        .toString(),
-                                    "card_expiration_year": selectedCard!
-                                        .cardExpirationYear
-                                        .toString(),
+                                    "name_on_card": selectedCard!.nameOnCard.toString(),
+                                    "card_number": selectedCard!.cardNumber.toString(),
+                                    "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
+                                    "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
                                     "cvv": selectedCard!.cvv.toString(),
                                   },
                                   options: Options(
                                     headers: {
-                                      'Authorization':
-                                          'Bearer ${UserProvider.userToken}',
+                                      'Authorization': 'Bearer ${RecieverUserProvider.userToken}',
                                       'Accept': 'application/json',
                                     },
                                   ),
                                 );
                                 // print(response);
-                                if (response.statusCode == 200 &&
-                                    response.data['success']) {
-                                  Provider.of<UserProvider>(context,
-                                          listen: false)
-                                      .fetchProfileReceiverModel();
-                                  Provider.of<SubscriptionProvider>(context,
-                                          listen: false)
-                                      .getPackages();
+                                if (response.statusCode == 200 && response.data['success']) {
+                                  Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
+                                  Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
 
-                                  customSuccesSnackBar(
-                                      context, response.data['message']);
+                                  customSuccesSnackBar(context, response.data['message']);
                                   Navigator.pop(context);
                                 } else {
                                   throw response.data['message'];
@@ -860,8 +777,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                               ),
                             )
                           : const Center(
-                              child: CircularProgressIndicator(
-                                  color: Colors.green),
+                              child: CircularProgressIndicator(color: Colors.green),
                             ),
                     ),
                   ],
@@ -875,8 +791,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
   final RegExp _dateRegex = RegExp(r'^(0[1-9]|1[0-2])-\d{4}$');
   bool saveFrom = false;
   Form newCardForm() {
-    Map selectedSubscribe =
-        Provider.of<SubscriptionProvider>(context).selectedPackage;
+    Map selectedSubscribe = Provider.of<SubscriptionProvider>(context).selectedPackage;
     return Form(
       key: newPaymentForm,
       child: Padding(
@@ -939,18 +854,15 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                   ),
                   filled: true,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
@@ -1020,18 +932,15 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                   ),
                   filled: true,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
@@ -1106,18 +1015,15 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                   ),
                   filled: true,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
@@ -1182,18 +1088,15 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                   ),
                   filled: true,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
@@ -1256,18 +1159,15 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                   ),
                   filled: true,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                        color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
@@ -1335,41 +1235,26 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                               "subscription_id": selectedSubscribe['id'],
                               "card_data": "card-form",
                               "save_card": saveFrom,
-                              "name_on_card":
-                                  cardHolderNameController.text.toString(),
-                              "card_number":
-                                  cardNumberController.text.toString(),
-                              "card_expiration_month": cardExpiryDateController
-                                  .text
-                                  .toString()
-                                  .substring(0, 2),
-                              "card_expiration_year": cardExpiryDateController
-                                  .text
-                                  .toString()
-                                  .substring(3, 7),
+                              "name_on_card": cardHolderNameController.text.toString(),
+                              "card_number": cardNumberController.text.toString(),
+                              "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
+                              "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
                               "cvv": cardCvvController.text.toString(),
                             },
                             options: Options(
                               headers: {
-                                'Authorization':
-                                    'Bearer ${UserProvider.userToken}',
+                                'Authorization': 'Bearer ${RecieverUserProvider.userToken}',
                                 'Accept': 'application/json',
                               },
                             ),
                           );
                           // print(response);
                           // print(response.data['message']);
-                          if (response.statusCode == 200 &&
-                              response.data['success']) {
-                            Provider.of<UserProvider>(context, listen: false)
-                                .fetchProfileReceiverModel();
-                            Provider.of<SubscriptionProvider>(context,
-                                    listen: false)
-                                .getPackages();
-                            Provider.of<CardProvider>(context, listen: false)
-                                .fetchManageCardsModel();
-                            customSuccesSnackBar(
-                                context, response.data['message']);
+                          if (response.statusCode == 200 && response.data['success']) {
+                            Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
+                            Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
+                            Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
+                            customSuccesSnackBar(context, response.data['message']);
                             Navigator.pop(context);
                           } else {
                             throw response.data['message'];
@@ -1422,15 +1307,13 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
 
 class DateTextFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     //this fixes backspace bug
     if (oldValue.text.length >= newValue.text.length) {
       return newValue;
     }
     var dateText = _addSeperators(newValue.text, '-');
-    return newValue.copyWith(
-        text: dateText, selection: updateCursorPosition(dateText));
+    return newValue.copyWith(text: dateText, selection: updateCursorPosition(dateText));
   }
 
   String _addSeperators(String value, String seperator) {

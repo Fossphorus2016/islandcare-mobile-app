@@ -1143,7 +1143,7 @@ class CardProvider extends ChangeNotifier {
   Future<List<CreditCard>> get allCards async => _allCards;
   List<CreditCard> get gWAallCards => _allCards;
   Future<dynamic> fetchManageCardsModel() async {
-    var token = await UserProvider.userToken;
+    var token = await RecieverUserProvider.userToken;
     final response = await Dio().get(
       CareReceiverURl.serviceReceiverGetCreditCards,
       options: Options(

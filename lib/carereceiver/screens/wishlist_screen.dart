@@ -31,7 +31,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
   late Future<FavouriteGetModel>? futureFavourite;
   Future<FavouriteGetModel> fetchFavourite() async {
-    var token = UserProvider.userToken;
+    var token = RecieverUserProvider.userToken;
     final response = await Dio().get(
       CareReceiverURl.serviceReceiverFavourite,
       options: Options(
@@ -59,7 +59,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
   var favouriteList = [];
   var providerId;
   Future<Response> favourited(url) async {
-    var token = UserProvider.userToken;
+    var token = RecieverUserProvider.userToken;
     var url = '${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=$providerId';
     var response = await Dio().post(
       url,

@@ -30,7 +30,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
   // Service Receiver Dashboard
   late Future<ServiceReceiverDashboardDetailModel>? futureReceiverDashboardDetail;
   Future<ServiceReceiverDashboardDetailModel> fetchReceiverDashboardDetailModel() async {
-    var token = UserProvider.userToken;
+    var token = RecieverUserProvider.userToken;
     final response = await Dio().get(
       "${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}",
       options: Options(
@@ -291,9 +291,9 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                       ],
                     ),
                     imgProviderPath: snapshot.data!.data![index].ratings!.isEmpty ? "https://img.icons8.com/material-rounded/256/question-mark.png" : "https://islandcare.bm/storage/${snapshot.data!.data![index].ratings![index].receiverRating!.avatar}",
-                    providerName: snapshot.data!.data![index].ratings!.isEmpty ? "Not Available" : "${snapshot.data!.data![index].ratings![index].receiverRating!.firstName} ${snapshot.data!.data![index].ratings![index].receiverRating!.lastName}",
-                    providerComment: snapshot.data!.data![index].ratings!.isEmpty ? "Not Available" : snapshot.data!.data![index].ratings![index].comment.toString(),
-                    providerRating: snapshot.data!.data![index].ratings!.isEmpty ? 0.0 : snapshot.data!.data![index].ratings![index].rating!.toDouble(),
+                    // providerName: snapshot.data!.data![index].ratings!.isEmpty ? "Not Available" : "${snapshot.data!.data![index].ratings![index].receiverRating!.firstName} ${snapshot.data!.data![index].ratings![index].receiverRating!.lastName}",
+                    // providerComment: snapshot.data!.data![index].ratings!.isEmpty ? "Not Available" : snapshot.data!.data![index].ratings![index].comment.toString(),
+                    // providerRating: snapshot.data!.data![index].ratings!.isEmpty ? 0.0 : snapshot.data!.data![index].ratings![index].rating!.toDouble(),
                   );
                 },
               );
