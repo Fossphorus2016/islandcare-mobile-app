@@ -649,7 +649,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                   ),
                                                                 );
                                                                 if (response.statusCode == 200) {
-                                                                  print(response.data);
+                                                                  // print(response.data);
                                                                   // var json = response.data as Map;
                                                                   // var listOfJobs = json['jobs'] as List;
                                                                 }
