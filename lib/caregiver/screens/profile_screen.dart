@@ -341,18 +341,31 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                   size: 18,
                                                   color: Colors.white,
                                                 ),
-                                                Flexible(
-                                                  child: Text(
-                                                    userProfile.data!.userdetail!.address.toString(),
+                                                if (userProfile.data!.userdetail!.address != null) ...[
+                                                  Flexible(
+                                                    child: Text(
+                                                      userProfile.data!.userdetail!.address.toString(),
+                                                      maxLines: 6,
+                                                      overflow: TextOverflow.visible,
+                                                      style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ] else ...[
+                                                  const Text(
+                                                    "Not Available",
                                                     maxLines: 6,
                                                     overflow: TextOverflow.visible,
-                                                    style: const TextStyle(
+                                                    style: TextStyle(
                                                       color: Colors.white,
                                                       fontSize: 12,
                                                       fontWeight: FontWeight.w600,
                                                     ),
                                                   ),
-                                                ),
+                                                ],
                                               ],
                                             ),
                                           ),
@@ -528,7 +541,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                         ? "Male"
                                                         : (userProfile.data!.userdetail!.gender.toString() == "2")
                                                             ? "Female"
-                                                            : "Required",
+                                                            : "Not Available",
                                                     style: TextStyle(
                                                       color: CustomColors.hintText,
                                                       fontSize: 16,
@@ -537,13 +550,9 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                     ),
                                                   )
                                                 : Text(
-                                                    (userProfile.data!.userdetail!.gender.toString() == "1")
-                                                        ? "Male"
-                                                        : (userProfile.data!.userdetail!.gender.toString() == "2")
-                                                            ? "Female"
-                                                            : "Required",
+                                                    "Not Available",
                                                     style: TextStyle(
-                                                      color: CustomColors.red,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
                                                       fontWeight: FontWeight.w200,
@@ -597,7 +606,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                       ],
                                     ),
                                   ),
-
+                                  //  Experience
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                     margin: const EdgeInsets.only(bottom: 15),
@@ -642,60 +651,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                     ),
                                   ),
 
-                                  //  Experience
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                    margin: const EdgeInsets.only(bottom: 15),
-                                    decoration: BoxDecoration(
-                                      color: CustomColors.white,
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                "Years of Experience",
-                                                style: TextStyle(
-                                                  color: CustomColors.primaryColor,
-                                                  fontSize: 10,
-                                                  fontFamily: "Rubik",
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 8),
-                                              userProfile.data!.userdetailprovider!.experience.toString() == "null"
-                                                  ? Text(
-                                                      userProfile.data!.userdetailprovider!.experience.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.experience.toString(),
-                                                      softWrap: true,
-                                                      style: TextStyle(
-                                                        color: CustomColors.red,
-                                                        fontSize: 16,
-                                                        fontFamily: "Rubik",
-                                                        fontWeight: FontWeight.w200,
-                                                      ),
-                                                    )
-                                                  : Text(
-                                                      userProfile.data!.userdetailprovider!.experience.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.experience.toString(),
-                                                      softWrap: true,
-                                                      style: TextStyle(
-                                                        color: CustomColors.hintText,
-                                                        fontSize: 16,
-                                                        fontFamily: "Rubik",
-                                                        fontWeight: FontWeight.w200,
-                                                      ),
-                                                    ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
                                   // Hourly
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -725,9 +680,9 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               const SizedBox(
                                                 height: 8,
                                               ),
-                                              userProfile.data!.userdetailprovider!.hourlyRate.toString() == "null"
+                                              userProfile.data!.userdetailprovider!.hourlyRate.toString() != "null"
                                                   ? Text(
-                                                      userProfile.data!.userdetailprovider!.hourlyRate.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.hourlyRate.toString(),
+                                                      "\$ ${userProfile.data!.userdetailprovider!.hourlyRate.toString()}",
                                                       softWrap: true,
                                                       style: TextStyle(
                                                         color: CustomColors.red,
@@ -737,7 +692,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       ),
                                                     )
                                                   : Text(
-                                                      "\$ ${userProfile.data!.userdetailprovider!.hourlyRate.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.hourlyRate.toString()}",
+                                                      "Not Available",
                                                       softWrap: true,
                                                       style: TextStyle(
                                                         color: CustomColors.hintText,
@@ -819,14 +774,12 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             ),
-                                            const SizedBox(
-                                              height: 8,
-                                            ),
+                                            const SizedBox(height: 8),
                                             userProfile.data!.userdetail!.zip.toString() == "null"
                                                 ? Text(
-                                                    userProfile.data!.userdetail!.zip.toString() == "null" ? "Required" : userProfile.data!.userdetail!.zip.toString(),
+                                                    "Not Available",
                                                     style: TextStyle(
-                                                      color: CustomColors.red,
+                                                      color: CustomColors.hintText,
                                                       fontSize: 16,
                                                       fontFamily: "Rubik",
                                                       fontWeight: FontWeight.w200,
@@ -877,10 +830,10 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               ),
                                               userProfile.data!.userdetailprovider!.keywords.toString() == "null"
                                                   ? Text(
-                                                      userProfile.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.keywords.toString(),
+                                                      "Not Available",
                                                       softWrap: true,
                                                       style: TextStyle(
-                                                        color: CustomColors.red,
+                                                        color: CustomColors.hintText,
                                                         fontSize: 16,
                                                         fontFamily: "Rubik",
                                                         fontWeight: FontWeight.w200,
@@ -931,6 +884,18 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               const SizedBox(
                                                 height: 8,
                                               ),
+                                              if (userProfile.data!.educations!.isEmpty) ...[
+                                                Text(
+                                                  "Not Available",
+                                                  softWrap: true,
+                                                  style: TextStyle(
+                                                    color: CustomColors.hintText,
+                                                    fontSize: 16,
+                                                    fontFamily: "Rubik",
+                                                    fontWeight: FontWeight.w200,
+                                                  ),
+                                                )
+                                              ],
                                               ListView.builder(
                                                 shrinkWrap: true,
                                                 scrollDirection: Axis.vertical,
@@ -1052,10 +1017,10 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               ),
                                               userProfile.data!.userdetail!.userInfo.toString() == "null"
                                                   ? Text(
-                                                      userProfile.data!.userdetail!.userInfo.toString() == "null" ? "Required" : userProfile.data!.userdetail!.userInfo.toString(),
+                                                      "Not Available",
                                                       softWrap: true,
                                                       style: TextStyle(
-                                                        color: CustomColors.red,
+                                                        color: CustomColors.hintText,
                                                         fontSize: 16,
                                                         fontFamily: "Rubik",
                                                         fontWeight: FontWeight.w200,
@@ -1108,10 +1073,10 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               ),
                                               userProfile.data!.userdetailprovider!.availability.toString() == "null"
                                                   ? Text(
-                                                      userProfile.data!.userdetailprovider!.availability.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.availability.toString(),
+                                                      "Not Available",
                                                       softWrap: true,
                                                       style: TextStyle(
-                                                        color: CustomColors.red,
+                                                        color: CustomColors.hintText,
                                                         fontSize: 16,
                                                         fontFamily: "Rubik",
                                                         fontWeight: FontWeight.w200,
@@ -1133,62 +1098,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                       ],
                                     ),
                                   ),
-                                  // Additional Service
-                                  // Container(
-                                  //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                  //   margin: const EdgeInsets.only(bottom: 15),
-                                  //   decoration: BoxDecoration(
-                                  //     color: CustomColors.white,
-                                  //     borderRadius: BorderRadius.circular(12),
-                                  //   ),
-                                  //   child: Row(
-                                  //     crossAxisAlignment: CrossAxisAlignment.center,
-                                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  //     children: [
-                                  //       Expanded(
-                                  //         child: Column(
-                                  //           crossAxisAlignment: CrossAxisAlignment.start,
-                                  //           mainAxisAlignment: MainAxisAlignment.center,
-                                  //           children: [
-                                  //             Text(
-                                  //               "Additional Services",
-                                  //               style: TextStyle(
-                                  //                 color: CustomColors.primaryColor,
-                                  //                 fontSize: 10,
-                                  //                 fontFamily: "Rubik",
-                                  //                 fontWeight: FontWeight.w600,
-                                  //               ),
-                                  //             ),
-                                  //             const SizedBox(
-                                  //               height: 8,
-                                  //             ),
-                                  //             userProfile.data!.userdetailprovider!.keywords.toString() == "null"
-                                  //                 ? Text(
-                                  //                     userProfile.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.keywords.toString(),
-                                  //                     softWrap: true,
-                                  //                     style: TextStyle(
-                                  //                       color: CustomColors.red,
-                                  //                       fontSize: 16,
-                                  //                       fontFamily: "Rubik",
-                                  //                       fontWeight: FontWeight.w200,
-                                  //                     ),
-                                  //                   )
-                                  //                 : Text(
-                                  //                     userProfile.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.keywords.toString(),
-                                  //                     softWrap: true,
-                                  //                     style: TextStyle(
-                                  //                       color: CustomColors.hintText,
-                                  //                       fontSize: 16,
-                                  //                       fontFamily: "Rubik",
-                                  //                       fontWeight: FontWeight.w200,
-                                  //                     ),
-                                  //                   ),
-                                  //           ],
-                                  //         ),
-                                  //       ),
-                                  //     ],
-                                  //   ),
-                                  // ),
 
                                   // Background Verified
                                   DottedBorder(

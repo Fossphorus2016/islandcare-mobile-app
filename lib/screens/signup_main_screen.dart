@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/models/register_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -48,7 +49,7 @@ class _SignupScreenState extends State<SignupScreen> {
     });
   }
 
-// DatePicker
+  // DatePicker
   var getPickedDate;
   DateTime? selectedDate = DateTime.now();
   var myFormat = DateFormat('d-MM-yyyy');
@@ -239,6 +240,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     keyboardType: TextInputType.name,
                     controller: firstNameController,
                     hintText: "First Name",
+                    validation: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Enter your First Name';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 20),
                   CustomTextFieldWidget(
@@ -246,6 +253,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     keyboardType: TextInputType.name,
                     controller: lastNameController,
                     hintText: "Last Name",
+                    validation: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Enter your Last Name';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 20),
                   CustomTextFieldWidget(
@@ -253,13 +266,32 @@ class _SignupScreenState extends State<SignupScreen> {
                     keyboardType: TextInputType.emailAddress,
                     controller: emailController,
                     hintText: "Email",
+                    validation: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Enter your Email';
+                      } else if (!val.contains(RegExp(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-z]'))) {
+                        return 'Please Enter Email Properly';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 20),
                   CustomTextFieldWidget(
                     obsecure: false,
                     keyboardType: TextInputType.number,
                     controller: phoneNumController,
-                    hintText: "Phone Number",
+                    hintText: "Phone Number (e.g: 16502515321)",
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                      LengthLimitingTextInputFormatter(10),
+                      // CustomTextInputFormatter(),
+                    ],
+                    validation: (val) {
+                      if (val == null || val.isEmpty) {
+                        return 'Enter your Phone Number';
+                      }
+                      return null;
+                    },
                   ),
                   const SizedBox(height: 20),
                   InkWell(
@@ -436,6 +468,16 @@ class _SignupScreenState extends State<SignupScreen> {
                     obsecure: !_showPassword,
                     controller: passwordController,
                     hintText: "Password",
+                    validation: (value) {
+                      if (value!.isEmpty) {
+                        return 'please enter Password';
+                      } else if (value.length < 8) {
+                        return "The password field must be at least 8 characters";
+                      } else if (!value.contains(RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)"))) {
+                        return 'please enter Capital letter, Special Character and Number';
+                      }
+                      return null;
+                    },
                     sufIcon: GestureDetector(
                       onTap: () {
                         _togglevisibility();
@@ -455,6 +497,12 @@ class _SignupScreenState extends State<SignupScreen> {
                     obsecure: !_cshowPassword,
                     controller: cpasswordController,
                     hintText: "Confirm Password",
+                    validation: (p0) {
+                      if (cpasswordController.text.isEmpty || passwordController.text != cpasswordController.text) {
+                        return "Password dosn't Match";
+                      }
+                      return null;
+                    },
                     sufIcon: GestureDetector(
                       onTap: () {
                         _ctogglevisibility();
@@ -469,9 +517,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 30,
-                  ),
+                  const SizedBox(height: 30),
                   TextButton.icon(
                     style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                     onPressed: () {
@@ -497,71 +543,17 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-                      if (firstNameController.text.isEmpty) {
-                        customErrorSnackBar(
-                          context,
-                          "Please Enter First Name",
-                        );
-                      } else if (lastNameController.text.isEmpty) {
-                        customErrorSnackBar(
-                          context,
-                          "Please Enter Last Name",
-                        );
-                      } else if (emailController.text.isEmpty) {
-                        customErrorSnackBar(
-                          context,
-                          "Please Enter Email",
-                        );
-                      } else if (passwordController.text.isEmpty) {
-                        customErrorSnackBar(
-                          context,
-                          "Please Enter Password",
-                        );
-                      } else if (passwordController.text.length < 7) {
-                        customErrorSnackBar(
-                          context,
-                          "Please Enter 8 digit Password",
-                        );
-                      } else if (cpasswordController.text.isEmpty) {
-                        customErrorSnackBar(
-                          context,
-                          "Please Enter 8 digit Password",
-                        );
-                      } else if (cpasswordController.text != passwordController.text) {
-                        customErrorSnackBar(
-                          context,
-                          "Password Not Match",
-                        );
-                      } else if (dobController.text.isEmpty) {
-                        customErrorSnackBar(
-                          context,
-                          "Please Enter Date of Birth",
-                        );
-                      } else if (phoneNumController.text.isEmpty) {
-                        customErrorSnackBar(
-                          context,
-                          "Please Enter Phone Number",
-                        );
+                      if (dobController.text.isEmpty) {
+                        customErrorSnackBar(context, "Please Enter Date of Birth");
                       } else if (_isSelectedService == null) {
-                        customErrorSnackBar(
-                          context,
-                          "Please Select Service ",
-                        );
+                        customErrorSnackBar(context, "Please Select Service ");
                       } else if (selectedService == null) {
-                        customErrorSnackBar(
-                          context,
-                          "Please Select Services You Provide ",
-                        );
+                        customErrorSnackBar(context, "Please Select Services You Provide ");
                       } else if (_isRadioSelected == "0") {
-                        customErrorSnackBar(
-                          context,
-                          "Please Select Terms of Services & Privacy Policy",
-                        );
+                        customErrorSnackBar(context, "Please Select Terms of Services & Privacy Policy");
                       } else {
                         if (_signUpFormKey.currentState!.validate()) {
                           // print(dobController.text.toString());
@@ -662,9 +654,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
                       Navigator.pushNamed(context, "login");
@@ -684,9 +674,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -694,5 +682,52 @@ class _SignupScreenState extends State<SignupScreen> {
         ),
       ),
     );
+  }
+}
+
+class CustomTextInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    final StringBuffer newText = StringBuffer(newValue.text);
+
+    // Always add a '+' sign at the beginning
+    final String updatedText = newText.toString();
+    final String finalText = updatedText.isNotEmpty && updatedText[0] != '+' ? '+$updatedText' : newText.toString();
+
+    return TextEditingValue(
+      text: finalText,
+      selection: TextSelection.collapsed(offset: finalText.length),
+    );
+  }
+}
+
+class NumericRangeFormatter extends TextInputFormatter {
+  final double min;
+  final double max;
+
+  NumericRangeFormatter({required this.min, required this.max});
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.isEmpty) {
+      return newValue;
+    }
+
+    final newValueNumber = double.tryParse(newValue.text);
+
+    if (newValueNumber == null) {
+      return oldValue;
+    }
+
+    if (newValueNumber < min) {
+      return newValue.copyWith(text: min.toString());
+    } else if (newValueNumber > max) {
+      return newValue.copyWith(text: max.toString());
+    } else {
+      return newValue;
+    }
   }
 }

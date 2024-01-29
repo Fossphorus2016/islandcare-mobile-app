@@ -7,7 +7,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
-// import 'package:island_app/caregiver/widgets/receommend_job_widget.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_appbar.dart';
@@ -163,28 +162,36 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   List<Map>? rate = [
     {
       "id": 0,
-      "name": "\$17-\$25",
+      "name": "select",
     },
     {
       "id": 1,
-      "name": "\$25-\$50",
+      "name": "\$17-\$25",
+      "minValue": "17",
+      "maxValue": "25",
     },
     {
       "id": 2,
-      "name": "\$50-\$100",
+      "name": "\$25-\$50",
+      "minValue": "25",
+      "maxValue": "50",
     },
     {
       "id": 3,
-      "name": "\$100+",
+      "name": "\$50-\$100",
+      "minValue": "50",
+      "maxValue": "100",
     },
     {
       "id": 4,
-      "name": "No Prefrences",
+      "name": "\$100+",
+      "minValue": "100",
+      "maxValue": "100",
     },
   ];
   String? findSelected;
   String? findArea;
-  String? findRate;
+  Map? findRate;
   String serviceId = '';
 
   // fetchPRofile
@@ -342,9 +349,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                       mainAxisAlignment: MainAxisAlignment.center,
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
-                                                        const SizedBox(
-                                                          height: 20,
-                                                        ),
+                                                        const SizedBox(height: 20),
                                                         Center(
                                                           child: Container(
                                                             width: 130,
@@ -355,9 +360,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                             ),
                                                           ),
                                                         ),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
+                                                        const SizedBox(height: 10),
                                                         Column(
                                                           mainAxisAlignment: MainAxisAlignment.center,
                                                           children: [
@@ -372,9 +375,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            const SizedBox(
-                                                              height: 40,
-                                                            ),
+                                                            const SizedBox(height: 40),
                                                             Container(
                                                               decoration: BoxDecoration(
                                                                 borderRadius: const BorderRadius.only(
@@ -423,9 +424,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                   focusColor: CustomColors.white,
                                                                   hoverColor: CustomColors.white,
                                                                   filled: true,
-                                                                  border: OutlineInputBorder(
-                                                                    borderRadius: BorderRadius.circular(4),
-                                                                  ),
+                                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
                                                                   focusedBorder: OutlineInputBorder(
                                                                     borderSide: BorderSide(color: CustomColors.white, width: 2.0),
                                                                     borderRadius: BorderRadius.circular(4.0),
@@ -437,9 +436,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
+                                                            const SizedBox(height: 20),
                                                             Center(
                                                               child: Column(
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -453,9 +450,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                       color: CustomColors.primaryText,
                                                                     ),
                                                                   ),
-                                                                  const SizedBox(
-                                                                    height: 5,
-                                                                  ),
+                                                                  const SizedBox(height: 5),
                                                                   DecoratedBox(
                                                                     decoration: BoxDecoration(
                                                                       borderRadius: const BorderRadius.only(
@@ -502,9 +497,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                 ],
                                                               ),
                                                             ),
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
+                                                            const SizedBox(height: 20),
                                                             Center(
                                                               child: Column(
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -518,9 +511,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                       color: CustomColors.primaryText,
                                                                     ),
                                                                   ),
-                                                                  const SizedBox(
-                                                                    height: 5,
-                                                                  ),
+                                                                  const SizedBox(height: 5),
                                                                   DecoratedBox(
                                                                     decoration: BoxDecoration(
                                                                       borderRadius: const BorderRadius.only(
@@ -567,9 +558,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                 ],
                                                               ),
                                                             ),
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
+                                                            const SizedBox(height: 20),
                                                             Center(
                                                               child: Column(
                                                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -583,9 +572,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                       color: CustomColors.primaryText,
                                                                     ),
                                                                   ),
-                                                                  const SizedBox(
-                                                                    height: 5,
-                                                                  ),
+                                                                  const SizedBox(height: 5),
                                                                   DecoratedBox(
                                                                     decoration: BoxDecoration(
                                                                       borderRadius: const BorderRadius.only(
@@ -615,13 +602,13 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                           isExpanded: true,
                                                                           items: rate!.map((item) {
                                                                             return DropdownMenuItem(
-                                                                              value: item['id'].toString(),
+                                                                              value: item,
                                                                               child: Text(item['name']),
                                                                             );
                                                                           }).toList(),
                                                                           onChanged: (newVal) {
                                                                             setState(() {
-                                                                              findRate = newVal;
+                                                                              findRate = newVal!;
                                                                             });
                                                                           },
                                                                           value: findRate,
@@ -633,13 +620,39 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                               ),
                                                             ),
                                                             // OTP
-                                                            const SizedBox(
-                                                              height: 20,
-                                                            ),
+                                                            const SizedBox(height: 20),
                                                             GestureDetector(
-                                                              onTap: () {
-                                                                fetchFindedJobsDashboardModel();
-                                                                Navigator.pop(context);
+                                                              onTap: () async {
+                                                                // fetchFindedJobsDashboardModel();
+                                                                // Navigator.pop(context);
+                                                                var token = await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
+                                                                var minRate = "";
+                                                                var maxRate = "";
+                                                                if (findRate != null && findRate!['id'] != 0) {
+                                                                  maxRate = findRate!['maxValue'];
+                                                                  minRate = findRate!['minValue'];
+                                                                }
+                                                                final response = await Dio().post(
+                                                                  CareGiverUrl.serviceProviderDashboardSearch,
+                                                                  data: {
+                                                                    "title": findSelected,
+                                                                    "serviceType": serviceId,
+                                                                    "area": findArea,
+                                                                    "priceMin": minRate,
+                                                                    "priceMax": maxRate,
+                                                                  },
+                                                                  options: Options(
+                                                                    headers: {
+                                                                      'Authorization': 'Bearer $token',
+                                                                      'Accept': 'application/json',
+                                                                    },
+                                                                  ),
+                                                                );
+                                                                if (response.statusCode == 200) {
+                                                                  print(response.data);
+                                                                  // var json = response.data as Map;
+                                                                  // var listOfJobs = json['jobs'] as List;
+                                                                }
                                                               },
                                                               child: Container(
                                                                 width: MediaQuery.of(context).size.width,
@@ -662,9 +675,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                 ),
                                                               ),
                                                             ),
-                                                            const SizedBox(
-                                                              height: 30,
-                                                            ),
+                                                            const SizedBox(height: 30),
                                                           ],
                                                         ),
                                                       ],
@@ -695,9 +706,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                       focusColor: CustomColors.white,
                                       hoverColor: CustomColors.white,
                                       filled: true,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
+                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
                                       focusedBorder: OutlineInputBorder(
                                         borderSide: BorderSide(color: CustomColors.white, width: 2.0),
                                         borderRadius: BorderRadius.circular(4.0),
