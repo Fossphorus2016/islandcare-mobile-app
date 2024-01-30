@@ -250,7 +250,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
 
   @override
   Widget build(BuildContext context) {
-    bool profileStatus = Provider.of<ProfileProvider>(context).profileStatus;
+    bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
     return profileStatus
         ? SingleChildScrollView(
             child: Column(

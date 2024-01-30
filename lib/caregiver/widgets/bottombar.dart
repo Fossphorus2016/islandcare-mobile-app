@@ -36,9 +36,9 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
   ];
 
   callUserData() async {
-    await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
-    await Provider.of<ProfileProvider>(context, listen: false).fetchProfileGiverModel();
-    await Provider.of<ProfileProvider>(context, listen: false).getProfilePercentage();
+    await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    await Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
+    await Provider.of<ServiceGiverProvider>(context, listen: false).getProfilePercentage();
     await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(3);
     await Provider.of<ServiceProviderChat>(context, listen: false).connectChatChannel(3);
   }
@@ -62,7 +62,7 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
       body: pages[page],
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
-          splashColor: CustomColors.primaryColor,
+          // splashColor: CustomColors.primaryColor,
           highlightColor: CustomColors.primaryColor,
           hoverColor: CustomColors.primaryColor,
         ),

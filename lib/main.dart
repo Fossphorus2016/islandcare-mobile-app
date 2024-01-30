@@ -50,7 +50,7 @@ void main() {
           child: const ManageCards(),
         ),
         ChangeNotifierProvider(
-          create: (context) => ProfileProvider(),
+          create: (context) => ServiceGiverProvider(),
         ),
         ChangeNotifierProvider(
           create: (context) => BottomNavigationProvider(),

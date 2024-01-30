@@ -1,4 +1,5 @@
 // import 'package:badges/badges.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/providers/user_provider.dart';
@@ -21,44 +22,9 @@ class ProfileReceiverScreen extends StatefulWidget {
 }
 
 class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
-  // late Future<ProfileReceiverModel> fetchProfile;
-  // Future<ProfileReceiverModel> fetchProfileReceiverModel() async {
-  //   var token = await Provider.of<RecieverUserProvider>(context).getUserToken();
-  //   final response = await Dio().get(
-  //     CareReceiverURl.serviceReceiverProfile,
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return ProfileReceiverModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Profile Model',
-  //     );
-  //   }
-  // }
-
-  // getUserToken() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var userToken = preferences.getString(
-  //     'userToken',
-  //   );
-  //   // print(userToken);
-  //   return userToken.toString();
-  // }
-
   @override
   void initState() {
-    // getUserToken();
-
     super.initState();
-    // setState(() {
-    //   fetchProfile = fetchProfileReceiverModel();
-    // });
   }
 
   @override
@@ -110,7 +76,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
           child: Column(
             children: [
               Container(
-                height: 240,
+                height: 260,
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                 color: CustomColors.primaryColor,
@@ -124,11 +90,11 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(08),
-                            child: Image(
+                            child: CachedNetworkImage(
                               width: 130,
                               height: 110,
                               alignment: Alignment.center,
-                              image: NetworkImage("${AppUrl.webStorageUrl}/${userProfile!.data!.avatar.toString()}"),
+                              imageUrl: "${AppUrl.webStorageUrl}/${userProfile!.data!.avatar.toString()}",
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -201,158 +167,271 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 40,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Color.fromARGB(13, 0, 0, 0),
-                                      blurRadius: 4.0,
-                                      spreadRadius: 2.0,
-                                      offset: Offset(2.0, 2.0),
-                                    ),
-                                  ],
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(6),
-                                    bottomRight: Radius.circular(6),
-                                    topLeft: Radius.circular(6),
-                                    topRight: Radius.circular(6),
-                                  ),
-                                ),
-                                child: RichText(
-                                  text: TextSpan(
-                                    children: [
-                                      WidgetSpan(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 1, right: 5),
-                                          child: Icon(
-                                            Icons.phone_outlined,
-                                            size: 14,
-                                            color: CustomColors.primaryTextLight,
-                                          ),
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: userProfile.data!.phone,
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: CustomColors.primaryTextLight,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 15),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          "Profile Completion",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontFamily: "Rubik",
-                                            fontWeight: FontWeight.w400,
-                                            color: CustomColors.white,
-                                          ),
-                                        ),
-                                        Text(
-                                          "53%",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontFamily: "Rubik",
-                                            fontWeight: FontWeight.w400,
-                                            color: CustomColors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 05),
-                                    LinearProgressIndicator(
-                                      minHeight: 08,
-                                      borderRadius: BorderRadius.circular(08),
-                                      value: 0.53,
-                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.red.shade300),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        Container(
-                          // margin: const EdgeInsets.symmetric(
-                          //     horizontal: 14),
-                          padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromARGB(13, 0, 0, 0),
-                                blurRadius: 4.0,
-                                spreadRadius: 2.0,
-                                offset: Offset(2.0, 2.0),
-                              ),
-                            ],
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(6),
-                              bottomRight: Radius.circular(6),
-                              topLeft: Radius.circular(6),
-                              topRight: Radius.circular(6),
-                            ),
-                          ),
-                          child: RichText(
-                            text: TextSpan(
+                    SizedBox(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                            width: 130,
+                            child: Row(
                               children: [
-                                WidgetSpan(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 3, right: 5),
-                                    child: Icon(
-                                      Icons.location_on_outlined,
-                                      size: 14,
-                                      color: CustomColors.primaryTextLight,
+                                const Icon(
+                                  Icons.phone_outlined,
+                                  size: 14,
+                                  color: Colors.white,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    userProfile.data!.phone.toString(),
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
-                                userProfile.data!.userdetail!.address.toString() != "null"
-                                    ? TextSpan(
-                                        text: userProfile.data!.userdetail!.address.toString(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: CustomColors.primaryTextLight,
-                                        ),
-                                      )
-                                    : TextSpan(
-                                        text: "Not Available",
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                          color: CustomColors.red,
-                                        ),
-                                      ),
                               ],
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 05),
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                              child: Flex(
+                                direction: Axis.horizontal,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Icon(
+                                    Icons.location_on_outlined,
+                                    size: 18,
+                                    color: Colors.white,
+                                  ),
+                                  if (userProfile.data!.userdetail!.address != null) ...[
+                                    Flexible(
+                                      child: Text(
+                                        userProfile.data!.userdetail!.address.toString(),
+                                        maxLines: 6,
+                                        overflow: TextOverflow.visible,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
+                                  ] else ...[
+                                    const Text(
+                                      "Not Available",
+                                      maxLines: 6,
+                                      overflow: TextOverflow.visible,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                    const SizedBox(height: 5),
+                    SizedBox(
+                      height: 40,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Profile Completion",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "Rubik",
+                                        fontWeight: FontWeight.w400,
+                                        color: CustomColors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                      "53%",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: "Rubik",
+                                        fontWeight: FontWeight.w400,
+                                        color: CustomColors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 05),
+                                LinearProgressIndicator(
+                                  minHeight: 08,
+                                  borderRadius: BorderRadius.circular(08),
+                                  value: double.parse(Provider.of<RecieverUserProvider>(context).profilePerentage) / 100,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // SizedBox(
+                    //   height: 50,
+                    //   child: Row(
+                    //     crossAxisAlignment: CrossAxisAlignment.center,
+                    //     children: [
+                    //       Container(
+                    //         padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                    //         decoration: const BoxDecoration(
+                    //           color: Colors.white,
+                    //           boxShadow: [
+                    //             BoxShadow(
+                    //               color: Color.fromARGB(13, 0, 0, 0),
+                    //               blurRadius: 4.0,
+                    //               spreadRadius: 2.0,
+                    //               offset: Offset(2.0, 2.0),
+                    //             ),
+                    //           ],
+                    //           borderRadius: BorderRadius.only(
+                    //             bottomLeft: Radius.circular(6),
+                    //             bottomRight: Radius.circular(6),
+                    //             topLeft: Radius.circular(6),
+                    //             topRight: Radius.circular(6),
+                    //           ),
+                    //         ),
+                    //         child: RichText(
+                    //           text: TextSpan(
+                    //             children: [
+                    //               WidgetSpan(
+                    //                 child: Padding(
+                    //                   padding: const EdgeInsets.only(left: 1, right: 5),
+                    //                   child: Icon(
+                    //                     Icons.phone_outlined,
+                    //                     size: 14,
+                    //                     color: CustomColors.primaryTextLight,
+                    //                   ),
+                    //                 ),
+                    //               ),
+                    //               TextSpan(
+                    //                 text: userProfile.data!.phone,
+                    //                 style: TextStyle(
+                    //                   fontSize: 12,
+                    //                   fontWeight: FontWeight.w400,
+                    //                   color: CustomColors.primaryTextLight,
+                    //                 ),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       const SizedBox(width: 15),
+                    //       Expanded(
+                    //         child: Column(
+                    //           crossAxisAlignment: CrossAxisAlignment.center,
+                    //           mainAxisAlignment: MainAxisAlignment.center,
+                    //           children: [
+                    //             Row(
+                    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //               children: [
+                    //                 Text(
+                    //                   "Profile Completion",
+                    //                   style: TextStyle(
+                    //                     fontSize: 14,
+                    //                     fontFamily: "Rubik",
+                    //                     fontWeight: FontWeight.w400,
+                    //                     color: CustomColors.white,
+                    //                   ),
+                    //                 ),
+                    //                 Text(
+                    //                   "53%",
+                    //                   style: TextStyle(
+                    //                     fontSize: 14,
+                    //                     fontFamily: "Rubik",
+                    //                     fontWeight: FontWeight.w400,
+                    //                     color: CustomColors.white,
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //             const SizedBox(height: 05),
+                    //             LinearProgressIndicator(
+                    //               minHeight: 08,
+                    //               borderRadius: BorderRadius.circular(08),
+                    //               value: 0.53,
+                    //               valueColor: AlwaysStoppedAnimation<Color>(Colors.red.shade300),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 5),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                    //   decoration: const BoxDecoration(
+                    //     color: Colors.white,
+                    //     boxShadow: [
+                    //       BoxShadow(
+                    //         color: Color.fromARGB(13, 0, 0, 0),
+                    //         blurRadius: 4.0,
+                    //         spreadRadius: 2.0,
+                    //         offset: Offset(2.0, 2.0),
+                    //       ),
+                    //     ],
+                    //     borderRadius: BorderRadius.only(
+                    //       bottomLeft: Radius.circular(6),
+                    //       bottomRight: Radius.circular(6),
+                    //       topLeft: Radius.circular(6),
+                    //       topRight: Radius.circular(6),
+                    //     ),
+                    //   ),
+                    //   child: RichText(
+                    //     text: TextSpan(
+                    //       children: [
+                    //         WidgetSpan(
+                    //           child: Padding(
+                    //             padding: const EdgeInsets.only(left: 3, right: 5),
+                    //             child: Icon(
+                    //               Icons.location_on_outlined,
+                    //               size: 14,
+                    //               color: CustomColors.primaryTextLight,
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         userProfile.data!.userdetail!.address.toString() != "null"
+                    //             ? TextSpan(
+                    //                 text: userProfile.data!.userdetail!.address.toString(),
+                    //                 style: TextStyle(
+                    //                   fontSize: 12,
+                    //                   fontWeight: FontWeight.w400,
+                    //                   color: CustomColors.primaryTextLight,
+                    //                 ),
+                    //               )
+                    //             : TextSpan(
+                    //                 text: "Not Available",
+                    //                 style: TextStyle(
+                    //                   fontSize: 12,
+                    //                   fontWeight: FontWeight.w400,
+                    //                   color: CustomColors.hintText,
+                    //                 ),
+                    //               ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -446,7 +525,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                           ? "Male"
                                           : (userProfile.data!.userdetail!.gender.toString() == "2")
                                               ? "Female"
-                                              : "Required",
+                                              : "Not Available",
                                       style: TextStyle(
                                         color: CustomColors.hintText,
                                         fontSize: 16,
@@ -459,9 +538,9 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                           ? "Male"
                                           : (userProfile.data!.userdetail!.gender.toString() == "2")
                                               ? "Female"
-                                              : "Required",
+                                              : "Not Available",
                                       style: TextStyle(
-                                        color: CustomColors.red,
+                                        color: CustomColors.hintText,
                                         fontSize: 16,
                                         fontFamily: "Rubik",
                                         fontWeight: FontWeight.w200,
@@ -578,16 +657,16 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                               const SizedBox(height: 8),
                               userProfile.data!.userdetail!.zip.toString() == "null"
                                   ? Text(
-                                      userProfile.data!.userdetail!.zip.toString() == "null" ? "Required" : userProfile.data!.userdetail!.zip.toString(),
+                                      userProfile.data!.userdetail!.zip.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.zip.toString(),
                                       style: TextStyle(
-                                        color: CustomColors.red,
+                                        color: CustomColors.hintText,
                                         fontSize: 16,
                                         fontFamily: "Rubik",
                                         fontWeight: FontWeight.w200,
                                       ),
                                     )
                                   : Text(
-                                      userProfile.data!.userdetail!.zip.toString() == "null" ? "Required" : userProfile.data!.userdetail!.zip.toString(),
+                                      userProfile.data!.userdetail!.zip.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.zip.toString(),
                                       style: TextStyle(
                                         color: CustomColors.hintText,
                                         fontSize: 16,
@@ -628,17 +707,17 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                 const SizedBox(height: 8),
                                 userProfile.data!.userdetail!.userInfo.toString() == "null"
                                     ? Text(
-                                        userProfile.data!.userdetail!.userInfo.toString() == "null" ? "Required" : userProfile.data!.userdetail!.userInfo.toString(),
+                                        userProfile.data!.userdetail!.userInfo.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.userInfo.toString(),
                                         softWrap: true,
                                         style: TextStyle(
-                                          color: CustomColors.red,
+                                          color: CustomColors.hintText,
                                           fontSize: 16,
                                           fontFamily: "Rubik",
                                           fontWeight: FontWeight.w200,
                                         ),
                                       )
                                     : Text(
-                                        userProfile.data!.userdetail!.userInfo.toString() == "null" ? "Required" : userProfile.data!.userdetail!.userInfo.toString(),
+                                        userProfile.data!.userdetail!.userInfo.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.userInfo.toString(),
                                         softWrap: true,
                                         style: TextStyle(
                                           color: CustomColors.hintText,
@@ -657,11 +736,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                 ),
               ),
             ],
-            //     );
-            //   } else {
-            //     return const Center(child: CircularProgressIndicator());
-            //   }
-            // },
           ),
         ),
       ),
@@ -920,7 +994,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                             ),
                                             snapshot.data!.data!.userdetail!.address.toString() == "null"
                                                 ? TextSpan(
-                                                    text: snapshot.data!.data!.userdetail!.address.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.address.toString(),
+                                                    text: snapshot.data!.data!.userdetail!.address.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.address.toString(),
                                                     style: TextStyle(
                                                       fontSize: 12,
                                                       fontWeight: FontWeight.w400,
@@ -928,7 +1002,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                                     ),
                                                   )
                                                 : TextSpan(
-                                                    text: snapshot.data!.data!.userdetail!.address.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.address.toString(),
+                                                    text: snapshot.data!.data!.userdetail!.address.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.address.toString(),
                                                     style: TextStyle(
                                                       fontSize: 12,
                                                       fontWeight: FontWeight.w400,
@@ -1088,7 +1162,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                                 ? "Male"
                                                 : (snapshot.data!.data!.userdetail!.gender.toString() == "2")
                                                     ? "Female"
-                                                    : "Required",
+                                                    : "Not Available",
                                             style: TextStyle(
                                               color: CustomColors.hintText,
                                               fontSize: 16,
@@ -1101,7 +1175,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                                 ? "Male"
                                                 : (snapshot.data!.data!.userdetail!.gender.toString() == "2")
                                                     ? "Female"
-                                                    : "Required",
+                                                    : "Not Available",
                                             style: TextStyle(
                                               color: CustomColors.red,
                                               fontSize: 16,
@@ -1226,7 +1300,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                     ),
                                     snapshot.data!.data!.userdetail!.zip.toString() == "null"
                                         ? Text(
-                                            snapshot.data!.data!.userdetail!.zip.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.zip.toString(),
+                                            snapshot.data!.data!.userdetail!.zip.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.zip.toString(),
                                             style: TextStyle(
                                               color: CustomColors.red,
                                               fontSize: 16,
@@ -1235,7 +1309,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                             ),
                                           )
                                         : Text(
-                                            snapshot.data!.data!.userdetail!.zip.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.zip.toString(),
+                                            snapshot.data!.data!.userdetail!.zip.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.zip.toString(),
                                             style: TextStyle(
                                               color: CustomColors.hintText,
                                               fontSize: 16,
@@ -1278,7 +1352,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                       ),
                                       snapshot.data!.data!.userdetail!.userInfo.toString() == "null"
                                           ? Text(
-                                              snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.userInfo.toString(),
+                                              snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.userInfo.toString(),
                                               softWrap: true,
                                               style: TextStyle(
                                                 color: CustomColors.red,
@@ -1288,7 +1362,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                               ),
                                             )
                                           : Text(
-                                              snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : snapshot.data!.data!.userdetail!.userInfo.toString(),
+                                              snapshot.data!.data!.userdetail!.userInfo.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.userInfo.toString(),
                                               softWrap: true,
                                               style: TextStyle(
                                                 color: CustomColors.hintText,

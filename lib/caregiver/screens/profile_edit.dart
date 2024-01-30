@@ -235,7 +235,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   List educationApiList = [];
   late Future<ProfileGiverModel> fetchProfileEdit;
   Future<ProfileGiverModel> fetchProfileGiverModelEdit() async {
-    var token = await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
       CareGiverUrl.serviceProviderProfile,
       options: Options(
@@ -332,8 +332,8 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
 
   var error;
   uploadImageDio() async {
-    var usersId = await Provider.of<ProfileProvider>(context, listen: false).getUserId();
-    var token = await Provider.of<ProfileProvider>(context, listen: false).getUserToken();
+    var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
 
     var formData = FormData.fromMap(
       {
@@ -375,7 +375,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         sendRequest = false;
       });
       if (response.statusCode == 200) {
-        Provider.of<ProfileProvider>(context, listen: false).fetchProfileGiverModel();
+        Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
         customSuccesSnackBar(
           context,
           "Profile Updated Successfully.",

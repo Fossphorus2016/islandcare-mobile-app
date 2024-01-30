@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
@@ -315,6 +316,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                               ),
                       ),
                       const SizedBox(height: 15),
+                      //  Gender
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
@@ -435,25 +437,46 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           ],
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        width: MediaQuery.of(context).size.width,
-                        height: 60,
-                        alignment: Alignment.centerLeft,
-                        decoration: BoxDecoration(
-                          color: CustomColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          dobController.text.isEmpty ? "Date Of Birth" : dobController.text.toString(),
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontFamily: "Rubik",
+                      // Date Of Birth
+                      InkWell(
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          width: MediaQuery.of(context).size.width,
+                          alignment: Alignment.centerLeft,
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Date Of Birth",
+                                style: TextStyle(
+                                  color: CustomColors.primaryColor,
+                                  fontSize: 12,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                dobController.text.isEmpty ? "Date Of Birth" : dobController.text.toString(),
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontFamily: "Rubik",
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
+                      // Services
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
@@ -466,7 +489,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Services ",
+                              "Services",
                               style: TextStyle(
                                 color: CustomColors.primaryColor,
                                 fontSize: 12,
@@ -510,6 +533,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           ],
                         ),
                       ),
+                      //  Phone Number
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
@@ -530,6 +554,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
+                            const SizedBox(height: 05),
                             TextFormField(
                               controller: phoneController,
                               keyboardType: TextInputType.number,
@@ -539,7 +564,16 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 fontWeight: FontWeight.w400,
                               ),
                               textAlignVertical: TextAlignVertical.bottom,
-                              maxLines: 1,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                LengthLimitingTextInputFormatter(10),
+                              ],
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Enter your Phone Number';
+                                }
+                                return null;
+                              },
                               decoration: InputDecoration(
                                 hintText: "Phone Number",
                                 fillColor: CustomColors.white,
@@ -557,115 +591,20 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                   borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                          color: CustomColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Zip Code",
-                              style: TextStyle(
-                                color: CustomColors.primaryColor,
-                                fontSize: 12,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            TextFormField(
-                              controller: zipController,
-                              keyboardType: TextInputType.number,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textAlignVertical: TextAlignVertical.bottom,
-                              maxLines: 1,
-                              decoration: InputDecoration(
-                                hintText: "Zip Code",
-                                fillColor: CustomColors.white,
-                                focusColor: CustomColors.white,
-                                hoverColor: CustomColors.white,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(0),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                          color: CustomColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "User Info",
-                              style: TextStyle(
-                                color: CustomColors.primaryColor,
-                                fontSize: 12,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            TextFormField(
-                              controller: userInfoController,
-                              keyboardType: TextInputType.name,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textAlignVertical: TextAlignVertical.bottom,
-                              maxLines: 1,
-                              decoration: InputDecoration(
-                                hintText: "User Info",
-                                fillColor: CustomColors.white,
-                                focusColor: CustomColors.white,
-                                hoverColor: CustomColors.white,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      // User Address
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
@@ -696,6 +635,12 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                               ),
                               textAlignVertical: TextAlignVertical.bottom,
                               maxLines: 1,
+                              validator: (value) {
+                                if (value != null || value!.isEmpty) {
+                                  return "please add Address";
+                                }
+                                return null;
+                              },
                               decoration: InputDecoration(
                                 hintText: "User Address",
                                 fillColor: CustomColors.white,
@@ -713,6 +658,147 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                   borderSide: BorderSide(color: CustomColors.white, width: 0.0),
                                   borderRadius: BorderRadius.circular(0.0),
                                 ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Zip Code
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        margin: const EdgeInsets.only(bottom: 15),
+                        decoration: BoxDecoration(
+                          color: CustomColors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Zip Code",
+                              style: TextStyle(
+                                color: CustomColors.primaryColor,
+                                fontSize: 12,
+                                fontFamily: "Rubik",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 05),
+                            TextFormField(
+                              controller: zipController,
+                              keyboardType: TextInputType.number,
+                              textAlignVertical: TextAlignVertical.bottom,
+                              maxLines: 1,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                                LengthLimitingTextInputFormatter(06),
+                              ],
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please enter Zip Code";
+                                }
+                                return null;
+                              },
+                              style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
+                              decoration: InputDecoration(
+                                hintText: "Zip Code",
+                                fillColor: CustomColors.white,
+                                focusColor: CustomColors.white,
+                                hoverColor: CustomColors.white,
+                                filled: true,
+                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                  borderRadius: BorderRadius.circular(0.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                  borderRadius: BorderRadius.circular(0.0),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // User Information
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        margin: const EdgeInsets.only(bottom: 15),
+                        decoration: BoxDecoration(
+                          color: CustomColors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "User Info",
+                              style: TextStyle(
+                                color: CustomColors.primaryColor,
+                                fontSize: 12,
+                                fontFamily: "Rubik",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            TextFormField(
+                              controller: userInfoController,
+                              keyboardType: TextInputType.name,
+                              textAlignVertical: TextAlignVertical.bottom,
+                              maxLines: 1,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: "Rubik",
+                                fontWeight: FontWeight.w400,
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return "Please add User Info";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: "User Info",
+                                fillColor: CustomColors.white,
+                                focusColor: CustomColors.white,
+                                hoverColor: CustomColors.white,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
                               ),
                             ),
                           ],
@@ -729,12 +815,14 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                               customErrorSnackBar(context, "Please Select Date Of Birth");
                             } else if (selectedService == null) {
                               customErrorSnackBar(context, "Please Select Services");
-                            } else if (zipController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter Zip Code");
                             } else if (phoneController.text.isEmpty) {
                               customErrorSnackBar(context, "Please Enter Phone Number");
                             } else if (addressController.text.isEmpty) {
                               customErrorSnackBar(context, "Please Enter User Address");
+                            } else if (zipController.text.isEmpty) {
+                              customErrorSnackBar(context, "Please Enter Zip Code");
+                            } else if (userInfoController.text.isEmpty) {
+                              customErrorSnackBar(context, "Please Enter User Info");
                             } else {
                               uploadImage();
                             }

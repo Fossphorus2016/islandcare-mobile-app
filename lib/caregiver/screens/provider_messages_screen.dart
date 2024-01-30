@@ -42,7 +42,7 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool profileStatus = Provider.of<ProfileProvider>(context).profileStatus;
+    bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
