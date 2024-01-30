@@ -280,7 +280,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     obsecure: false,
                     keyboardType: TextInputType.number,
                     controller: phoneNumController,
-                    hintText: "Phone Number (e.g: 16502515321)",
+                    hintText: "Phone Number (e.g: 1650251531)",
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                       LengthLimitingTextInputFormatter(10),

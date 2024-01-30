@@ -136,10 +136,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
 
   @override
   void initState() {
-    // getUserName();
-
     super.initState();
-    // futureProviderDashboard = fetchProviderDashboardModel();
     fetchProfile = fetchProfileGiverModel();
     Provider.of<ServiceGiverProvider>(context, listen: false).fetchProviderDashboardModel();
   }

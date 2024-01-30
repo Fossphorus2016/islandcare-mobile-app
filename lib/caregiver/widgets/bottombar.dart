@@ -45,12 +45,7 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
 
   @override
   void initState() {
-    // setState(() {
-    //   getUserToken();
-    // });
     callUserData();
-    // Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(3);
-    // Provider.of<ServiceProviderChat>(context, listen: false).connectChatChannel(3);
     super.initState();
   }
 
