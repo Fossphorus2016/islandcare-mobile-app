@@ -6,7 +6,6 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-// import 'package:shimmer/shimmer.dart';
 
 class GiverCustomAppBar extends StatelessWidget {
   const GiverCustomAppBar({
