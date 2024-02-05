@@ -30,14 +30,23 @@ class RecieverUserProvider extends ChangeNotifier {
   //   ),
   // );
   static String userToken = '';
-  Future<dynamic> getUserToken() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var token = prefs.getString('userToken');
+  getUserToken() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var token = preferences.getString('userToken');
+    // print(userToken);
     if (token != null) {
       userToken = token;
     }
-    notifyListeners();
+
+    return userToken.toString();
+  }
+
+  getUserId() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    var userId = preferences.getString(
+      'userId',
+    );
+    return userId.toString();
   }
 
   String profilePerentage = '';
@@ -56,7 +65,7 @@ class RecieverUserProvider extends ChangeNotifier {
         ),
       );
       if (response.statusCode == 200) {
-        // print("data fetched ${response.data}");
+        // print("data fetched ${response.data['subscription']}");
         profilePerentage = response.data['percentage'].toString();
         _userProfile = ProfileReceiverModel.fromJson(response.data);
         notifyListeners();

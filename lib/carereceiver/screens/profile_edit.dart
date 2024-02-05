@@ -1042,7 +1042,7 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
   getUserToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var userToken = preferences.getString(
-      'userTokenProfile',
+      'userToken',
     );
     return userToken.toString();
   }

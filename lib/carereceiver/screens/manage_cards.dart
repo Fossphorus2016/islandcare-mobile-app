@@ -1142,6 +1142,7 @@ class CardProvider extends ChangeNotifier {
   List<CreditCard> _allCards = [];
   Future<List<CreditCard>> get allCards async => _allCards;
   List<CreditCard> get gWAallCards => _allCards;
+
   Future<dynamic> fetchManageCardsModel() async {
     var token = await RecieverUserProvider.userToken;
     final response = await Dio().get(

@@ -123,6 +123,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                               setState(() {
                                 selectedJob = index;
                               });
+
                               if (subscriptionDetail != null && subscriptionDetail.isActive != 0) {
                                 Navigator.push(
                                   context,

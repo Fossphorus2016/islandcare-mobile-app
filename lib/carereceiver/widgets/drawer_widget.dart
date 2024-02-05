@@ -33,37 +33,9 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
-  TextEditingController oldPasswordController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController cpasswordController = TextEditingController();
-  // Show/Hide
-  bool _showPassword1 = true;
-  void _togglevisibility1() {
-    setState(() {
-      _showPassword1 = !_showPassword1;
-    });
-  }
-
-  bool _showPassword2 = true;
-  void _togglevisibility2() {
-    setState(() {
-      _showPassword2 = !_showPassword2;
-    });
-  }
-
-  bool _showPassword3 = true;
-  void _togglevisibility3() {
-    setState(() {
-      _showPassword3 = !_showPassword3;
-    });
-  }
-
   @override
   void dispose() {
     super.dispose();
-    oldPasswordController.dispose();
-    passwordController.dispose();
-    cpasswordController.dispose();
   }
 
   final changePassKey = GlobalKey<FormState>();
@@ -181,60 +153,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     }
   }
 
-  chnagePassword() async {
-    var token = await getUserToken();
-    var userId = await getUserId();
-    var formData = FormData.fromMap({"_method": "PUT", "old_password": oldPasswordController.text.toString(), "password": passwordController.text.toString(), "password_confirmation": cpasswordController.text.toString()});
-    Dio dio = Dio();
-    try {
-      var response = await dio.post(
-        '${AppUrl.webBaseURL}/api/password-update/$userId',
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
-      );
-      if (response.statusCode == 200 && response.data['success']) {
-        customSuccesSnackBar(
-          context,
-          response.data['message'],
-        );
-      } else {
-        customErrorSnackBar(
-          context,
-          response.data['message'],
-        );
-      }
-    } on DioError catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
-    }
-  }
-
-  getUserId() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString(
-      'userId',
-    );
-    return userId.toString();
-  }
-
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-    // print(userToken);
-    return userToken.toString();
-  }
-
   var avatar;
   getUserAvatar() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -249,12 +167,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   @override
   void initState() {
-    getUserId();
-    getUserToken();
     getUserAvatar();
-
     super.initState();
-    // fetchProfile = fetchProfileReceiverModel();
   }
 
   @override
@@ -274,8 +188,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       if (snapshot.hasData) {
                         return InkWell(
                           onTap: () {
-                            // Scaffold.of(context).
-                            // BottomBarState().updatePage(3);
                             Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(3);
                           },
                           child: Padding(
@@ -711,242 +623,238 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
-                          title: Text('Change Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomColors.white, fontFamily: "Rubik")),
-                          trailing: Icon(Icons.arrow_forward_ios, color: CustomColors.white, size: 16),
-                          onTap: () {
-                            showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              backgroundColor: Colors.white,
-                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
-                              builder: (BuildContext context) {
-                                return StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
-                                    return SingleChildScrollView(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const SizedBox(height: 20),
-                                              Center(
-                                                child: Container(
-                                                  width: 130,
-                                                  height: 5,
-                                                  decoration: BoxDecoration(
-                                                    color: const Color(0xffC4C4C4),
-                                                    borderRadius: BorderRadius.circular(6),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 40),
-                                              Center(
-                                                child: Text(
-                                                  "Change Password",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: CustomColors.black,
-                                                    fontFamily: "Rubik",
-                                                    fontStyle: FontStyle.normal,
-                                                    fontSize: 24,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 10),
-                                              Center(
-                                                child: Text(
-                                                  "Set the new password for your account so you can login and access all the features.",
-                                                  textAlign: TextAlign.center,
-                                                  style: TextStyle(
-                                                    color: CustomColors.primaryText,
-                                                    fontFamily: "Rubik",
-                                                    fontStyle: FontStyle.normal,
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 40),
-                                              Form(
-                                                key: changePassKey,
-                                                child: Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CustomTextFieldWidget(
-                                                      borderColor: CustomColors.loginBorder,
-                                                      textStyle: TextStyle(
-                                                        fontSize: 15,
-                                                        color: CustomColors.hintText,
-                                                        fontFamily: "Calibri",
-                                                        fontWeight: FontWeight.w400,
-                                                      ),
-                                                      hintText: "Old Password",
-                                                      controller: oldPasswordController,
-                                                      obsecure: !_showPassword1,
-                                                      sufIcon: GestureDetector(
-                                                        onTap: () {
-                                                          setState(
-                                                            () {
-                                                              _togglevisibility1();
-                                                            },
-                                                          );
-                                                        },
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.only(left: 8.0),
-                                                          child: Icon(
-                                                            _showPassword1 ? Icons.visibility : Icons.visibility_off,
-                                                            size: 20,
-                                                            color: CustomColors.hintText,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 10),
-                                                    CustomTextFieldWidget(
-                                                      borderColor: CustomColors.loginBorder,
-                                                      textStyle: TextStyle(
-                                                        fontSize: 15,
-                                                        color: CustomColors.hintText,
-                                                        fontFamily: "Calibri",
-                                                        fontWeight: FontWeight.w400,
-                                                      ),
-                                                      hintText: "New Password",
-                                                      controller: passwordController,
-                                                      obsecure: !_showPassword2,
-                                                      sufIcon: GestureDetector(
-                                                        onTap: () {
-                                                          setState(
-                                                            () {},
-                                                          );
-                                                          _togglevisibility2();
-                                                        },
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.only(left: 8.0),
-                                                          child: Icon(
-                                                            _showPassword2 ? Icons.visibility : Icons.visibility_off,
-                                                            size: 20,
-                                                            color: CustomColors.hintText,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 10),
-                                                    CustomTextFieldWidget(
-                                                      borderColor: CustomColors.loginBorder,
-                                                      textStyle: TextStyle(
-                                                        fontSize: 15,
-                                                        color: CustomColors.hintText,
-                                                        fontFamily: "Calibri",
-                                                        fontWeight: FontWeight.w400,
-                                                      ),
-                                                      hintText: "Re-enter Password",
-                                                      controller: cpasswordController,
-                                                      obsecure: !_showPassword3,
-                                                      sufIcon: GestureDetector(
-                                                        onTap: () {
-                                                          setState(
-                                                            () {},
-                                                          );
-                                                          _togglevisibility3();
-                                                        },
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.only(left: 8.0),
-                                                          child: Icon(
-                                                            _showPassword3 ? Icons.visibility : Icons.visibility_off,
-                                                            size: 20,
-                                                            color: CustomColors.hintText,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 20),
-                                                    // OTP
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        if (oldPasswordController.text.isEmpty) {
-                                                          Navigator.pop(context);
-                                                          customErrorSnackBar(
-                                                            context,
-                                                            "Please Enter Old Password",
-                                                          );
-                                                        } else if (passwordController.text.isEmpty) {
-                                                          Navigator.pop(context);
-                                                          customErrorSnackBar(
-                                                            context,
-                                                            "Please Enter Password",
-                                                          );
-                                                        } else if (passwordController.text.length < 7) {
-                                                          Navigator.pop(context);
-                                                          customErrorSnackBar(
-                                                            context,
-                                                            "Please Enter 3 digit Password",
-                                                          );
-                                                        } else if (passwordController == cpasswordController) {
-                                                          Navigator.pop(context);
-                                                          customErrorSnackBar(
-                                                            context,
-                                                            "New Password Not Match",
-                                                          );
-                                                        } else {
-                                                          if (changePassKey.currentState!.validate()) {
-                                                            chnagePassword();
-                                                            Navigator.pop(context);
-                                                          }
-                                                        }
-                                                      },
-                                                      child: Container(
-                                                        width: MediaQuery.of(context).size.width,
-                                                        height: 54,
-                                                        decoration: BoxDecoration(
-                                                          color: CustomColors.primaryColor,
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        child: Center(
-                                                          child: Text(
-                                                            "Continue",
-                                                            style: TextStyle(
-                                                              color: CustomColors.white,
-                                                              fontFamily: "Rubik",
-                                                              fontStyle: FontStyle.normal,
-                                                              fontWeight: FontWeight.w500,
-                                                              fontSize: 18,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 30),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              },
-                            );
-                          }),
-                    ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 6),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
+                    child: ListTile(
+                        hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                        selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                        focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                        leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
+                        title: Text('Change Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomColors.white, fontFamily: "Rubik")),
+                        trailing: Icon(Icons.arrow_forward_ios, color: CustomColors.white, size: 16),
+                        onTap: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            backgroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+                            builder: (BuildContext context) {
+                              return StatefulBuilder(
+                                builder: (BuildContext context, StateSetter setState) {
+                                  return const ChangePasswordWidget();
+                                  // SingleChildScrollView(
+                                  //   child: Padding(
+                                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                  //     child: Container(
+                                  //       padding: const EdgeInsets.symmetric(horizontal: 25),
+                                  //       child: Column(
+                                  //         crossAxisAlignment: CrossAxisAlignment.start,
+                                  //         mainAxisAlignment: MainAxisAlignment.center,
+                                  //         mainAxisSize: MainAxisSize.min,
+                                  //         children: [
+                                  //           const SizedBox(height: 20),
+                                  //           Center(
+                                  //             child: Container(
+                                  //               width: 130,
+                                  //               height: 5,
+                                  //               decoration: BoxDecoration(
+                                  //                 color: const Color(0xffC4C4C4),
+                                  //                 borderRadius: BorderRadius.circular(6),
+                                  //               ),
+                                  //             ),
+                                  //           ),
+                                  //           const SizedBox(height: 40),
+                                  //           Center(
+                                  //             child: Text(
+                                  //               "Change Password",
+                                  //               textAlign: TextAlign.center,
+                                  //               style: TextStyle(
+                                  //                 color: CustomColors.black,
+                                  //                 fontFamily: "Rubik",
+                                  //                 fontStyle: FontStyle.normal,
+                                  //                 fontSize: 24,
+                                  //                 fontWeight: FontWeight.w600,
+                                  //               ),
+                                  //             ),
+                                  //           ),
+                                  //           const SizedBox(height: 10),
+                                  //           Center(
+                                  //             child: Text(
+                                  //               "Set the new password for your account so you can login and access all the features.",
+                                  //               textAlign: TextAlign.center,
+                                  //               style: TextStyle(
+                                  //                 color: CustomColors.primaryText,
+                                  //                 fontFamily: "Rubik",
+                                  //                 fontStyle: FontStyle.normal,
+                                  //                 fontSize: 14,
+                                  //                 fontWeight: FontWeight.w400,
+                                  //               ),
+                                  //             ),
+                                  //           ),
+                                  //           const SizedBox(height: 40),
+                                  //           Form(
+                                  //             key: changePassKey,
+                                  //             child: Column(
+                                  //               mainAxisAlignment: MainAxisAlignment.center,
+                                  //               children: [
+                                  //                 CustomTextFieldWidget(
+                                  //                   borderColor: CustomColors.loginBorder,
+                                  //                   textStyle: TextStyle(
+                                  //                     fontSize: 15,
+                                  //                     color: CustomColors.hintText,
+                                  //                     fontFamily: "Calibri",
+                                  //                     fontWeight: FontWeight.w400,
+                                  //                   ),
+                                  //                   hintText: "Old Password",
+                                  //                   controller: oldPasswordController,
+                                  //                   obsecure: !_showPassword1,
+                                  //                   sufIcon: GestureDetector(
+                                  //                     onTap: () {
+                                  //                       setState(
+                                  //                         () {
+                                  //                           _togglevisibility1();
+                                  //                         },
+                                  //                       );
+                                  //                     },
+                                  //                     child: Padding(
+                                  //                       padding: const EdgeInsets.only(left: 8.0),
+                                  //                       child: Icon(
+                                  //                         _showPassword1 ? Icons.visibility : Icons.visibility_off,
+                                  //                         size: 20,
+                                  //                         color: CustomColors.hintText,
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                 ),
+                                  //                 const SizedBox(height: 10),
+                                  //                 CustomTextFieldWidget(
+                                  //                   borderColor: CustomColors.loginBorder,
+                                  //                   textStyle: TextStyle(
+                                  //                     fontSize: 15,
+                                  //                     color: CustomColors.hintText,
+                                  //                     fontFamily: "Calibri",
+                                  //                     fontWeight: FontWeight.w400,
+                                  //                   ),
+                                  //                   hintText: "New Password",
+                                  //                   controller: passwordController,
+                                  //                   obsecure: !_showPassword2,
+                                  //                   sufIcon: GestureDetector(
+                                  //                     onTap: () {
+                                  //                       setState(
+                                  //                         () {},
+                                  //                       );
+                                  //                       _togglevisibility2();
+                                  //                     },
+                                  //                     child: Padding(
+                                  //                       padding: const EdgeInsets.only(left: 8.0),
+                                  //                       child: Icon(
+                                  //                         _showPassword2 ? Icons.visibility : Icons.visibility_off,
+                                  //                         size: 20,
+                                  //                         color: CustomColors.hintText,
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                 ),
+                                  //                 const SizedBox(height: 10),
+                                  //                 CustomTextFieldWidget(
+                                  //                   borderColor: CustomColors.loginBorder,
+                                  //                   textStyle: TextStyle(
+                                  //                     fontSize: 15,
+                                  //                     color: CustomColors.hintText,
+                                  //                     fontFamily: "Calibri",
+                                  //                     fontWeight: FontWeight.w400,
+                                  //                   ),
+                                  //                   hintText: "Re-enter Password",
+                                  //                   controller: cpasswordController,
+                                  //                   obsecure: !_showPassword3,
+                                  //                   sufIcon: GestureDetector(
+                                  //                     onTap: () {
+                                  //                       setState(
+                                  //                         () {},
+                                  //                       );
+                                  //                       _togglevisibility3();
+                                  //                     },
+                                  //                     child: Padding(
+                                  //                       padding: const EdgeInsets.only(left: 8.0),
+                                  //                       child: Icon(
+                                  //                         _showPassword3 ? Icons.visibility : Icons.visibility_off,
+                                  //                         size: 20,
+                                  //                         color: CustomColors.hintText,
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                 ),
+                                  //                 const SizedBox(height: 20),
+                                  //                 // OTP
+                                  //                 GestureDetector(
+                                  //                   onTap: () {
+                                  //                     if (oldPasswordController.text.isEmpty) {
+                                  //                       Navigator.pop(context);
+                                  //                       customErrorSnackBar(
+                                  //                         context,
+                                  //                         "Please Enter Old Password",
+                                  //                       );
+                                  //                     } else if (passwordController.text.isEmpty) {
+                                  //                       Navigator.pop(context);
+                                  //                       customErrorSnackBar(
+                                  //                         context,
+                                  //                         "Please Enter Password",
+                                  //                       );
+                                  //                     } else if (passwordController.text.length < 7) {
+                                  //                       Navigator.pop(context);
+                                  //                       customErrorSnackBar(
+                                  //                         context,
+                                  //                         "Please Enter 3 digit Password",
+                                  //                       );
+                                  //                     } else if (passwordController == cpasswordController) {
+                                  //                       Navigator.pop(context);
+                                  //                       customErrorSnackBar(
+                                  //                         context,
+                                  //                         "New Password Not Match",
+                                  //                       );
+                                  //                     } else {
+                                  //                       if (changePassKey.currentState!.validate()) {
+                                  //                         chnagePassword();
+                                  //                         Navigator.pop(context);
+                                  //                       }
+                                  //                     }
+                                  //                   },
+                                  //                   child: Container(
+                                  //                     width: MediaQuery.of(context).size.width,
+                                  //                     height: 54,
+                                  //                     decoration: BoxDecoration(
+                                  //                       color: CustomColors.primaryColor,
+                                  //                       borderRadius: BorderRadius.circular(10),
+                                  //                     ),
+                                  //                     child: Center(
+                                  //                       child: Text(
+                                  //                         "Continue",
+                                  //                         style: TextStyle(
+                                  //                           color: CustomColors.white,
+                                  //                           fontFamily: "Rubik",
+                                  //                           fontStyle: FontStyle.normal,
+                                  //                           fontWeight: FontWeight.w500,
+                                  //                           fontSize: 18,
+                                  //                         ),
+                                  //                       ),
+                                  //                     ),
+                                  //                   ),
+                                  //                 ),
+                                  //                 const SizedBox(height: 30),
+                                  //               ],
+                                  //             ),
+                                  //           ),
+                                  //         ],
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  // );
+                                },
+                              );
+                            },
+                          );
+                        }),
                   )
                 ],
               ),
@@ -985,6 +893,290 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ChangePasswordWidget extends StatefulWidget {
+  const ChangePasswordWidget({super.key});
+
+  @override
+  State<ChangePasswordWidget> createState() => _ChangePasswordWidgetState();
+}
+
+class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
+  TextEditingController oldPasswordController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController cpasswordController = TextEditingController();
+  // Show/Hide
+  bool showPassword1 = false;
+  void togglevisibility1() {
+    setState(() {
+      showPassword1 = !showPassword1;
+    });
+  }
+
+  bool showPassword2 = false;
+  void togglevisibility2() {
+    setState(() {
+      showPassword2 = !showPassword2;
+    });
+  }
+
+  bool showPassword3 = false;
+  void togglevisibility3() {
+    setState(() {
+      showPassword3 = !showPassword3;
+    });
+  }
+
+  chnagePassword() async {
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var userId = await Provider.of<RecieverUserProvider>(context, listen: false).getUserId();
+    // print('route url ${AppUrl.webBaseURL}/api/password-update/$userId');
+    // print(token);
+    var formData = FormData.fromMap(
+      {"_method": "PUT", "old_password": oldPasswordController.text.toString(), "password": passwordController.text.toString(), "password_confirmation": cpasswordController.text.toString()},
+    );
+    // print('route url ${formData.fields}');
+
+    Dio dio = Dio();
+    try {
+      var response = await dio.post(
+        '${AppUrl.webBaseURL}/api/password-update/$userId',
+        data: formData,
+        options: Options(
+          followRedirects: false,
+          validateStatus: (status) => true,
+          headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
+        ),
+      );
+      // print(response.data);
+      Navigator.pop(context);
+      if (response.data['success']) {
+        customSuccesSnackBar(context, "Password Updated Successfully");
+      } else {
+        customErrorSnackBar(context, response.data['message'].toString());
+      }
+    } catch (e) {
+      // print("print in error $e");
+      Navigator.pop(context);
+      customErrorSnackBar(
+        context,
+        e.toString(),
+      );
+    }
+  }
+
+  final changePassKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    super.dispose();
+    oldPasswordController.dispose();
+    passwordController.dispose();
+    cpasswordController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 20),
+              Center(
+                child: Container(
+                  width: 130,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffC4C4C4),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              Center(
+                child: Text(
+                  "Change Password",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: CustomColors.black,
+                    fontFamily: "Rubik",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  "Set the new password for your account so you can login and access all the features.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: CustomColors.primaryText,
+                    fontFamily: "Rubik",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              Form(
+                key: changePassKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomTextFieldWidget(
+                      borderColor: CustomColors.loginBorder,
+                      textStyle: TextStyle(
+                        fontSize: 15,
+                        color: CustomColors.hintText,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.w400,
+                      ),
+                      hintText: "Old Password",
+                      controller: oldPasswordController,
+                      obsecure: !showPassword1,
+                      validation: (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return "Please Enter Old Password";
+                        } else if (p0.length < 8) {
+                          return "The password field must be at least 8 characters";
+                        } else if (!p0.contains(RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)"))) {
+                          return 'please enter Capital letter, Special Character and Number';
+                        }
+                        return null;
+                      },
+                      sufIcon: GestureDetector(
+                        onTap: () {
+                          togglevisibility1();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Icon(
+                            showPassword1 ? Icons.visibility : Icons.visibility_off,
+                            size: 20,
+                            color: CustomColors.hintText,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    CustomTextFieldWidget(
+                      borderColor: CustomColors.loginBorder,
+                      textStyle: TextStyle(
+                        fontSize: 15,
+                        color: CustomColors.hintText,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.w400,
+                      ),
+                      hintText: "New Password",
+                      controller: passwordController,
+                      obsecure: !showPassword2,
+                      validation: (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return "Please Enter New Password";
+                        } else if (p0.length < 8) {
+                          return "The password field must be at least 8 characters";
+                        } else if (!p0.contains(RegExp(r"(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W)"))) {
+                          return 'please enter Capital letter, Special Character and Number';
+                        }
+                        return null;
+                      },
+                      sufIcon: GestureDetector(
+                        onTap: () {
+                          togglevisibility2();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Icon(
+                            showPassword2 ? Icons.visibility : Icons.visibility_off,
+                            size: 20,
+                            color: CustomColors.hintText,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    CustomTextFieldWidget(
+                      borderColor: CustomColors.loginBorder,
+                      hintText: "Re-enter Password",
+                      controller: cpasswordController,
+                      obsecure: !showPassword3,
+                      textStyle: TextStyle(
+                        fontSize: 15,
+                        color: CustomColors.hintText,
+                        fontFamily: "Calibri",
+                        fontWeight: FontWeight.w400,
+                      ),
+                      validation: (p0) {
+                        if (p0 == null || p0.isEmpty) {
+                          return "Please Re-enter New Password";
+                        } else if (p0 != passwordController.text) {
+                          return "Password did not Match";
+                        }
+                        return null;
+                      },
+                      sufIcon: GestureDetector(
+                        onTap: () {
+                          togglevisibility3();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Icon(
+                            showPassword3 ? Icons.visibility : Icons.visibility_off,
+                            size: 20,
+                            color: CustomColors.hintText,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // OTP
+                    GestureDetector(
+                      onTap: () {
+                        if (changePassKey.currentState!.validate()) {
+                          chnagePassword();
+                        }
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 54,
+                        decoration: BoxDecoration(
+                          color: CustomColors.primaryColor,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Center(
+                          child: Text(
+                            "Continue",
+                            style: TextStyle(
+                              color: CustomColors.white,
+                              fontFamily: "Rubik",
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

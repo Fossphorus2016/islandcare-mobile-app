@@ -285,7 +285,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     password: passwordController.text.toString(),
                                   );
                                   postLogin(request).then((response) async {
-                                    print(response.data);
+                                    // print(response.data);
                                     if (response.statusCode == 200) {
                                       var data = response.data;
                                       var role = data["user"]["role"];
@@ -320,7 +320,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           if (data["user"]["status"] == 0) {
                                             SharedPreferences pref = await SharedPreferences.getInstance();
                                             await pref.setString('userStatus', status.toString());
-                                            await pref.setString('userTokenProfile', data["token"].toString());
+                                            await pref.setString('userToken', data["token"].toString());
                                             await pref.setString('userAvatar', avatar.toString());
                                             await pref.setString('userId', userId.toString());
                                             await pref.setString('userName', "$name $last");
