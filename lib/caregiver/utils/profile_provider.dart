@@ -35,6 +35,7 @@ class ServiceGiverProvider extends ChangeNotifier {
   getUserToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     var userToken = preferences.getString('userToken');
+    // print(userToken);
     return userToken.toString();
   }
 
@@ -101,6 +102,7 @@ class ServiceGiverProvider extends ChangeNotifier {
     searchIsLoading = true;
     notifyListeners();
     var token = await getUserToken();
+    // print(token);
     var minRate = "";
     var maxRate = "";
     if (rate != null && rate!['id'] != 0) {
@@ -108,8 +110,9 @@ class ServiceGiverProvider extends ChangeNotifier {
       minRate = rate!['minValue'];
     }
     var serviceId = '';
+    // print(service);
     if (service != null) {
-      serviceId = service['id'];
+      serviceId = service;
     }
     final response = await Dio().post(
       CareGiverUrl.serviceProviderDashboardSearch,
@@ -127,12 +130,14 @@ class ServiceGiverProvider extends ChangeNotifier {
         },
       ),
     );
+    // print(response);
     searchIsLoading = false;
     notifyListeners();
 
     // Navigator.pop(context);
     if (response.statusCode == 200) {
       serviceJobs = ServiceProviderDashboardModel.fromJson(response.data);
+      notifyListeners();
     } else {
       throw Exception(
         'Failed to load Service Jobs Dashboard',

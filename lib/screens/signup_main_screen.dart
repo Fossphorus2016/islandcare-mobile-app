@@ -209,7 +209,7 @@ class _SignupScreenState extends State<SignupScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(errors);
+    // print(errors);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

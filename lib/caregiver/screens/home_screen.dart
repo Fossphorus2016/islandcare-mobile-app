@@ -146,6 +146,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   Widget build(BuildContext context) {
     bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
     bool dashboardLoading = Provider.of<ServiceGiverProvider>(context).dashboardIsLoading;
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: CustomColors.loginBg,

@@ -624,16 +624,18 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                     // ),
                     const SizedBox(height: 10),
                   ],
-                  const SizedBox(height: 10),
-                  AssistanceContainer(
-                    dd: [
-                      if (snapshot.data!.jobDetail![index].learning!.assistanceInReading == 1) ...["Reading"],
-                      if (snapshot.data!.jobDetail![index].learning!.assistanceInEnglish == 1) ...["English"],
-                      if (snapshot.data!.jobDetail![index].learning!.assistanceInMath == 1) ...["Math"],
-                      if (snapshot.data!.jobDetail![index].learning!.assistanceInScience == 1) ...["Science"],
-                      if (snapshot.data!.jobDetail![index].learning!.assistanceInOther != null) ...[snapshot.data!.jobDetail![index].learning!.assistanceInOther.toString()],
-                    ],
-                  ),
+                  if (snapshot.data!.jobDetail![index].learning != null) ...[
+                    const SizedBox(height: 10),
+                    AssistanceContainer(
+                      dd: [
+                        if (snapshot.data!.jobDetail![index].learning!.assistanceInReading == 1) ...["Reading"],
+                        if (snapshot.data!.jobDetail![index].learning!.assistanceInEnglish == 1) ...["English"],
+                        if (snapshot.data!.jobDetail![index].learning!.assistanceInMath == 1) ...["Math"],
+                        if (snapshot.data!.jobDetail![index].learning!.assistanceInScience == 1) ...["Science"],
+                        if (snapshot.data!.jobDetail![index].learning!.assistanceInOther != null) ...[snapshot.data!.jobDetail![index].learning!.assistanceInOther.toString()],
+                      ],
+                    ),
+                  ],
                   const SizedBox(height: 10),
                   if (snapshot.data!.jobDetail![index].learning != null && snapshot.data!.jobDetail![index].learning!.learningStyle != null) ...[
                     JobDetailTile(
