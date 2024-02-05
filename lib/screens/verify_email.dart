@@ -3,7 +3,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/res/app_url.dart';
-import 'package:island_app/screens/onboard_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 
@@ -102,12 +101,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                             top: 554 * fem,
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const OnBoardScreen(),
-                                  ),
-                                );
+                                Navigator.pushReplacementNamed(context, '/');
                               },
                               child: Container(
                                 width: 100 * fem,

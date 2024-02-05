@@ -18,7 +18,7 @@ import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/login_screen.dart';
 import 'package:island_app/screens/signup_main_screen.dart';
 import 'package:island_app/screens/splash_screen.dart';
-import 'package:island_app/widgets/custom_page_route.dart';
+// import 'package:island_app/widgets/custom_page_route.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -103,28 +103,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
   }
 
-  Route? onGenerateRoute(RouteSettings settings) {
-    Route? page;
-    switch (settings.name) {
-      case '/':
-        page = CustomPageRoute(child: const SplashScreen(), direction: AxisDirection.left);
-        break;
-      case 'sign-up':
-        page = CustomPageRoute(child: SignupScreen(), direction: AxisDirection.left);
-        break;
-      case 'login':
-        page = CustomPageRoute(child: const LoginScreen(), direction: AxisDirection.left);
-        break;
-      case 'bottom-bar':
-        page = CustomPageRoute(child: const BottomBar(), direction: AxisDirection.left);
-        break;
-      case 'bottom-bar-giver':
-        page = CustomPageRoute(child: const BottomBarGiver(), direction: AxisDirection.left);
-        break;
-    }
-    return page!;
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -134,8 +112,10 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.green,
         appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
       ),
+      onGenerateRoute: RouteGenerator.generateRoutes,
       initialRoute: '/',
-      onGenerateRoute: onGenerateRoute,
+      navigatorKey: NavigationService().navigatorKey,
+      navigatorObservers: [NavigationService()],
       builder: (context, child) => ResponsiveBreakpoints.builder(
         child: child!,
         breakpoints: [
@@ -146,5 +126,64 @@ class _MyAppState extends State<MyApp> {
         ],
       ),
     );
+  }
+}
+
+class NavigationService extends NavigatorObserver {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  static final NavigationService _instance = NavigationService._internal();
+  NavigationService._internal();
+
+  factory NavigationService() => _instance;
+
+  List history = [];
+
+  dynamic push(String route, {dynamic arguments}) {
+    history.add(route);
+
+    return navigatorKey.currentState?.pushNamed(route, arguments: arguments);
+  }
+
+  dynamic pushReplacement(String route, {dynamic arguments}) {
+    return navigatorKey.currentState?.pushReplacementNamed(route, arguments: arguments);
+  }
+
+  dynamic popUntils(bool Function(Route<dynamic>) route, {dynamic arguments}) {
+    return navigatorKey.currentState?.popUntil(route);
+  }
+
+  dynamic pushNamedAndRemoveUntil(String route) {
+    return navigatorKey.currentState?.pushNamedAndRemoveUntil(
+      route,
+      ModalRoute.withName('/'),
+    );
+  }
+
+  dynamic pop() {
+    return navigatorKey.currentState?.pop();
+  }
+}
+
+class RouteGenerator {
+  static Route<dynamic> generateRoutes(RouteSettings settings) {
+    // final Map? args = settings.arguments as Map?;
+    switch (settings.name) {
+      case '/':
+        return MaterialPageRoute(builder: (context) => const SplashScreen());
+      case '/sign-up':
+        return MaterialPageRoute(builder: (context) => SignupScreen());
+
+      case '/login':
+        return MaterialPageRoute(builder: (context) => const LoginScreen());
+
+      case '/bottom-bar':
+        return MaterialPageRoute(builder: (context) => const BottomBar());
+
+      case '/bottom-bar-giver':
+        return MaterialPageRoute(builder: (context) => const BottomBarGiver());
+
+      default:
+        return MaterialPageRoute(builder: (context) => const SplashScreen());
+    }
   }
 }

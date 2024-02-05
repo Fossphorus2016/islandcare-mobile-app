@@ -11,6 +11,7 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/chatroom_model.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/screens/notification.dart';
+import 'package:island_app/widgets/custom_expansion_panel.dart';
 import 'package:island_app/widgets/profile_complete_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,6 +66,55 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     children: [
+                      // const Align(
+                      //   alignment: Alignment.centerLeft,
+                      //   child: Text(
+                      //     "Admin Chats",
+                      //     style: TextStyle(
+                      //       color: Colors.black,
+                      //       fontSize: 18,
+                      //       fontWeight: FontWeight.w600,
+                      //     ),
+                      //   ),
+                      // ),
+                      const SizedBox(height: 20),
+                      CustomExpansionPanelList(
+                        children: [
+                          CustomExpansionPanel(
+                            isExpanded: true,
+                            headerBuilder: (context, isExpanded) {
+                              return const Row(
+                                children: [
+                                  Text(
+                                    "Admin Chats",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                            body: ListView.builder(
+                              itemCount: 5,
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.only(top: 16),
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                return ProviderConversationList(
+                                  roomId: 2,
+                                  name: "Dummy Admin Chat $index",
+                                  messageText: "Dummy Text",
+                                  imageUrl: "",
+                                  time: "3:17 PM",
+                                  isMessageRead: true,
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 20),
 
                       // Messsages

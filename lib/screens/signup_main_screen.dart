@@ -205,8 +205,11 @@ class _SignupScreenState extends State<SignupScreen> {
     cpasswordController.dispose();
   }
 
+  var errors;
+
   @override
   Widget build(BuildContext context) {
+    print(errors);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -232,9 +235,7 @@ class _SignupScreenState extends State<SignupScreen> {
               padding: const EdgeInsets.all(15),
               child: Column(
                 children: [
-                  const SizedBox(
-                    height: 20,
-                  ),
+                  const SizedBox(height: 20),
                   CustomTextFieldWidget(
                     obsecure: false,
                     keyboardType: TextInputType.name,
@@ -275,6 +276,20 @@ class _SignupScreenState extends State<SignupScreen> {
                       return null;
                     },
                   ),
+                  if (errors != null && errors['email'] != null) ...[
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          errors['email'][0].toString(),
+                          style: TextStyle(
+                            color: CustomColors.red,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 20),
                   CustomTextFieldWidget(
                     obsecure: false,
@@ -318,7 +333,6 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-
                   // Choose Service
                   const SizedBox(height: 20),
                   Row(
@@ -517,7 +531,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
                   TextButton.icon(
                     style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                     onPressed: () {
@@ -534,6 +548,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     label: Text(
                       "I agree with the Terms of Service & Privacy Policy",
                       textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: CustomColors.primaryText,
                         fontFamily: "Rubik",
@@ -546,7 +562,8 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-                      if (dobController.text.isEmpty) {
+                      if (!_signUpFormKey.currentState!.validate()) {
+                      } else if (dobController.text.isEmpty) {
                         customErrorSnackBar(context, "Please Enter Date of Birth");
                       } else if (_isSelectedService == null) {
                         customErrorSnackBar(context, "Please Select Service ");
@@ -555,82 +572,84 @@ class _SignupScreenState extends State<SignupScreen> {
                       } else if (_isRadioSelected == "0") {
                         customErrorSnackBar(context, "Please Select Terms of Services & Privacy Policy");
                       } else {
-                        if (_signUpFormKey.currentState!.validate()) {
-                          // print(dobController.text.toString());
-                          var request = RegisterModel(
-                            firstName: firstNameController.text.toString(),
-                            lastName: lastNameController.text.toString(),
-                            email: emailController.text.toString(),
-                            date: dobController.text.toString(),
-                            password: passwordController.text.toString(),
-                            passwordConfirmation: cpasswordController.text.toString(),
-                            phone: phoneNumController.text.toString(),
-                            role: _isSelectedService.toString(),
-                            service: selectedService.toString(),
-                          );
-                          // print(request);
-                          postRegister(request).then((response) async {
-                            if (response.statusCode == 200) {
-                              var data = response.data;
-                              var role = data["user"]["role"];
-                              var status = data["user"]["status"];
-                              var token = data["token"];
-                              var avatar = data["user"]["avatar"];
-                              var userId = data["user"]['id'];
-                              var name = data["user"]['first_name'];
-                              var last = data["user"]['last_name'];
-                              // var isProfileCompleted = data["is_profile_completed"];
-                              if (status == 3) {
-                                customErrorSnackBar(
-                                  context,
-                                  "User Blocked",
-                                );
-                              } else {
-                                if (data["user"]["email_verified_at"] == null) {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => VerifyEmail(token: data["token"]),
-                                    ),
-                                  );
-                                } else if (data["user"]["role"] == 3) {
-                                  SharedPreferences pref = await SharedPreferences.getInstance();
-                                  await pref.setString('userRole', data["user"]["role"].toString());
-                                  await pref.setString('userToken', data["token"].toString());
-                                  await pref.setString('userStatus', status.toString());
-                                  await pref.setString('userId', userId.toString());
-                                  await pref.setString('userAvatar', avatar.toString());
-                                  await pref.setString('userName', "$name $last");
-                                  // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                  Navigator.pushNamedAndRemoveUntil(
-                                    context,
-                                    'bottom-bar-giver',
-                                    (route) => false,
-                                  );
-                                } else if (data["user"]["role"] == 4) {
-                                  SharedPreferences pref = await SharedPreferences.getInstance();
-                                  await pref.setString('userRole', data["user"]["role"].toString());
-                                  await pref.setString('userToken', data["token"].toString());
-                                  await pref.setString('userStatus', status.toString());
-                                  await pref.setString('userId', userId.toString());
-                                  await pref.setString('userAvatar', avatar.toString());
-                                  await pref.setString('userName', "$name $last");
-                                  // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                  Navigator.pushNamedAndRemoveUntil(
-                                    context,
-                                    'bottom-bar',
-                                    (route) => false,
-                                  );
-                                }
-                              }
-                            } else {
+                        // print(dobController.text.toString());
+                        var request = RegisterModel(
+                          firstName: firstNameController.text.toString(),
+                          lastName: lastNameController.text.toString(),
+                          email: emailController.text.toString(),
+                          date: dobController.text.toString(),
+                          password: passwordController.text.toString(),
+                          passwordConfirmation: cpasswordController.text.toString(),
+                          phone: phoneNumController.text.toString(),
+                          role: _isSelectedService.toString(),
+                          service: selectedService.toString(),
+                        );
+                        // print(request);
+                        postRegister(request).then((response) async {
+                          if (response.statusCode == 200) {
+                            var data = response.data;
+                            var role = data["user"]["role"];
+                            var status = data["user"]["status"];
+                            var token = data["token"];
+                            var avatar = data["user"]["avatar"];
+                            var userId = data["user"]['id'];
+                            var name = data["user"]['first_name'];
+                            var last = data["user"]['last_name'];
+                            // var isProfileCompleted = data["is_profile_completed"];
+                            if (status == 3) {
                               customErrorSnackBar(
                                 context,
-                                response.data['message'],
+                                "User Blocked",
                               );
+                            } else {
+                              if (data["user"]["email_verified_at"] == null) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => VerifyEmail(token: data["token"]),
+                                  ),
+                                );
+                              } else if (data["user"]["role"] == 3) {
+                                SharedPreferences pref = await SharedPreferences.getInstance();
+                                await pref.setString('userRole', data["user"]["role"].toString());
+                                await pref.setString('userToken', data["token"].toString());
+                                await pref.setString('userStatus', status.toString());
+                                await pref.setString('userId', userId.toString());
+                                await pref.setString('userAvatar', avatar.toString());
+                                await pref.setString('userName', "$name $last");
+                                // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  '/bottom-bar-giver',
+                                  (route) => false,
+                                );
+                              } else if (data["user"]["role"] == 4) {
+                                SharedPreferences pref = await SharedPreferences.getInstance();
+                                await pref.setString('userRole', data["user"]["role"].toString());
+                                await pref.setString('userToken', data["token"].toString());
+                                await pref.setString('userStatus', status.toString());
+                                await pref.setString('userId', userId.toString());
+                                await pref.setString('userAvatar', avatar.toString());
+                                await pref.setString('userName', "$name $last");
+                                // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  '/bottom-bar',
+                                  (route) => false,
+                                );
+                              }
                             }
-                          });
-                        }
+                          } else {
+                            // print(response.data);
+                            setState(() {
+                              errors = response.data['errors'];
+                            });
+                            customErrorSnackBar(
+                              context,
+                              response.data['message'],
+                            );
+                          }
+                        });
                       }
                     },
                     child: Container(
@@ -657,7 +676,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, "login");
+                      Navigator.pushNamed(context, "/login");
                     },
                     child: SizedBox(
                       width: MediaQuery.of(context).size.width,

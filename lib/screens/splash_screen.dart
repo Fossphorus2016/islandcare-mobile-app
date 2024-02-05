@@ -24,13 +24,13 @@ class _SplashScreenState extends State<SplashScreen> {
     } else if (userRole == "3") {
       Navigator.pushNamedAndRemoveUntil(
         context,
-        'bottom-bar-giver',
+        '/bottom-bar-giver',
         (route) => false,
       );
     } else if (userRole == "4") {
       Navigator.pushNamedAndRemoveUntil(
         context,
-        'bottom-bar',
+        '/bottom-bar',
         (route) => false,
       );
     }

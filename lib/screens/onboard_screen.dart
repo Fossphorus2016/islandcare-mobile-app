@@ -18,7 +18,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 8),
           child: GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, "login");
+              Navigator.pushNamed(context, "/login");
             },
             child: Container(
               width: MediaQuery.of(context).size.width,

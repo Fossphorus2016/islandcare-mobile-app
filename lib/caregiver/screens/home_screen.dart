@@ -929,6 +929,7 @@ class JobCardContainer extends StatelessWidget {
                   height: 50,
                   width: 50,
                   fit: BoxFit.contain,
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 ),
               ),
               const SizedBox(width: 05),

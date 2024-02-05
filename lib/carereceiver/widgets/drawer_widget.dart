@@ -17,7 +17,7 @@ import 'package:island_app/res/app_url.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:island_app/screens/onboard_screen.dart';
+// import 'package:island_app/screens/onboard_screen.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
@@ -132,11 +132,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 prefs.remove('userToken');
                 prefs.remove("userStatus");
                 Provider.of<BottomNavigationProvider>(context, listen: false).page = 0;
-                Navigator.pushReplacement(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (BuildContext ctx) => const OnBoardScreen(),
-                  ),
+                  '/',
+                  (route) => false,
                 );
               },
             ),

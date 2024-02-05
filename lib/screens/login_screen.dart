@@ -334,7 +334,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                             await pref.setString('userId', userId.toString());
                                             await pref.setString('userAvatar', avatar.toString());
                                             await pref.setString('userName', "$name $last");
-                                            Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
+                                            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
                                           }
                                           Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
                                         }
@@ -415,7 +415,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               TextSpan(
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
-                                    Navigator.pushNamed(context, "sign-up");
+                                    Navigator.pushNamed(context, "/sign-up");
                                   },
                                 text: ' Register here',
                                 style: TextStyle(

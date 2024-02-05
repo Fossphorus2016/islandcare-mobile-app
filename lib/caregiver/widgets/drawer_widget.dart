@@ -13,7 +13,6 @@ import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/screens/notification.dart';
-import 'package:island_app/screens/onboard_screen.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
@@ -49,9 +48,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 Text(
                   'Are you sure you want to logout?',
                   style: TextStyle(
@@ -96,11 +93,10 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                 prefs.remove('userRole');
                 prefs.remove('userToken');
                 prefs.remove("userStatus");
-                Navigator.pushReplacement(
+                Navigator.pushNamedAndRemoveUntil(
                   context,
-                  MaterialPageRoute(
-                    builder: (BuildContext ctx) => const OnBoardScreen(),
-                  ),
+                  '/', // Replace with the name of the new route you want to push
+                  (Route<dynamic> route) => false, // This condition removes all routes
                 );
               },
             ),
