@@ -138,7 +138,7 @@ class Userdetails {
   String? servicesRequired;
   String? zip;
   String? address;
-  int? area;
+  String? area;
   String? userInfo;
   String? createdAt;
   String? updatedAt;

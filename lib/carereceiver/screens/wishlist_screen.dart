@@ -214,7 +214,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                               setState(() {});
                                             }
                                             providerId = foundProviders[index]['users']['id'];
-                                            favourited("http://192.168.0.244:9999/api/service-receiver-add-to-favourite?favourite_id=${foundProviders[index]['users']['id'].toString()}");
+                                            favourited("https://islandcare.bm/api/service-receiver-add-to-favourite?favourite_id=${foundProviders[index]['users']['id'].toString()}");
                                             setState(() {});
                                           },
                                           child: favouriteList.contains(foundProviders[index]['users']['id'].toString())

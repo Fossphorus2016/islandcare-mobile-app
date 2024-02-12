@@ -31,6 +31,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
   late Future<ServiceReceiverDashboardDetailModel>? futureReceiverDashboardDetail;
   Future<ServiceReceiverDashboardDetailModel> fetchReceiverDashboardDetailModel() async {
     var token = RecieverUserProvider.userToken;
+    // print(token);
     final response = await Dio().get(
       "${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}",
       options: Options(
@@ -41,8 +42,9 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         },
       ),
     );
-
+    // print(response.data);
     if (response.statusCode == 200) {
+      // print("data in giver profile view  ${response.data}");
       return ServiceReceiverDashboardDetailModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -171,123 +173,125 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                     zip: snapshot.data!.data![0].userdetail!.zip.toString() == "null" ? "Not Available" : snapshot.data!.data![0].userdetail!.zip.toString(),
                     documentsSection: Column(
                       children: [
-                        // file type 1
-                        if (snapshot.data!.data![0].providerverification!.validDriverLicense != null) ...[
-                          const SizedBox(height: 10),
-                          BasicDocumentDownloadList(
-                            onTap: () {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.validDriverLicense);
-                            },
-                            fileStatus: snapshot.data!.data![0].providerverification!.validDriverLicenseVerify.toString(),
-                            downloading: downloading,
-                            downloadProgress: downloadProgress,
-                            title: "Valid Driver's License",
-                          ),
-                        ],
-                        // file type 2
-                        if (snapshot.data!.data![0].providerverification!.scarsAwarenessCertification != null) ...[
-                          const SizedBox(height: 10),
-                          BasicDocumentDownloadList(
-                            onTap: () {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.scarsAwarenessCertification);
-                            },
-                            fileStatus: snapshot.data!.data![0].providerverification!.scarsAwarenessCertificationVerify.toString(),
-                            downloading: downloading,
-                            downloadProgress: downloadProgress,
-                            title: "Scars Awareness Certification",
-                          ),
-                        ],
-                        // file type 8
-                        if (snapshot.data!.data![0].providerverification!.policeBackgroundCheck != null) ...[
-                          const SizedBox(height: 10),
-                          BasicDocumentDownloadList(
-                            onTap: () {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.policeBackgroundCheck);
-                            },
-                            fileStatus: snapshot.data!.data![0].providerverification!.policeBackgroundCheckVerify.toString(),
-                            downloading: downloading,
-                            downloadProgress: downloadProgress,
-                            title: "Police Background Check",
-                          ),
-                        ],
-                        // file type 3
-                        if (snapshot.data!.data![0].providerverification!.cprFirstAidCertification != null) ...[
-                          const SizedBox(height: 10),
-                          BasicDocumentDownloadList(
-                            onTap: () {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.cprFirstAidCertification);
-                            },
-                            fileStatus: snapshot.data!.data![0].providerverification!.cprFirstAidCertificationVerify.toString(),
-                            downloading: downloading,
-                            downloadProgress: downloadProgress,
-                            title: "CPR/First Aid Certificate",
-                          ),
-                        ],
-                        // file type 7
-                        if (snapshot.data!.data![0].providerverification!.governmentRegisteredCareProvider != null) ...[
-                          const SizedBox(height: 10),
-                          BasicDocumentDownloadList(
-                            onTap: () {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.governmentRegisteredCareProvider);
-                            },
-                            fileStatus: snapshot.data!.data![0].providerverification!.governmentRegisteredCareProviderVerify.toString(),
-                            downloading: downloading,
-                            downloadProgress: downloadProgress,
-                            title: "Government Registered Care Provider",
-                          ),
-                        ],
-                        // file type 4
-                        if (snapshot.data!.data![0].providerverification!.animalCareProviderCertification != null) ...[
-                          const SizedBox(height: 10),
-                          BasicDocumentDownloadList(
-                            onTap: () {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.animalCareProviderCertification);
-                            },
-                            fileStatus: snapshot.data!.data![0].providerverification!.animalCareProviderCertificationVerify.toString(),
-                            downloading: downloading,
-                            downloadProgress: downloadProgress,
-                            title: "Animal Care Provider Certificate",
-                          ),
-                        ],
-                        // file type 6
-                        if (snapshot.data!.data![0].providerverification!.animailFirstAid != null) ...[
-                          const SizedBox(height: 10),
-                          BasicDocumentDownloadList(
-                            onTap: () {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.animailFirstAid);
-                            },
-                            fileStatus: snapshot.data!.data![0].providerverification!.animailFirstAidVerify.toString(),
-                            downloading: downloading,
-                            downloadProgress: downloadProgress,
-                            title: "Animal First Aid",
-                          ),
-                        ],
-                        // file type 3a
-                        if (snapshot.data!.data![0].providerverification!.redCrossBabysittingCertification != null) ...[
-                          const SizedBox(height: 10),
-                          BasicDocumentDownloadList(
-                            onTap: () {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.redCrossBabysittingCertification);
-                            },
-                            fileStatus: snapshot.data!.data![0].providerverification!.redCrossBabysittingCertificationVerify.toString(),
-                            downloading: downloading,
-                            downloadProgress: downloadProgress,
-                            title: "Red Cross Babysitting Certification",
-                          ),
-                        ],
-                        // file type 5
-                        if (snapshot.data!.data![0].providerverification!.chaildAndFamilyServicesAndAbuse != null) ...[
-                          const SizedBox(height: 10),
-                          BasicDocumentDownloadList(
-                            onTap: () {
-                              doDownloadFile(snapshot.data!.data![0].providerverification!.chaildAndFamilyServicesAndAbuse);
-                            },
-                            fileStatus: snapshot.data!.data![0].providerverification!.chaildAndFamilyServicesAndAbuseVerify.toString(),
-                            downloading: downloading,
-                            downloadProgress: downloadProgress,
-                            title: "Dept Child and Family Services Child Abuse Check",
-                          ),
-                        ],
+                        if (snapshot.data!.data![0].providerverification != null) ...[
+                          // file type 1
+                          if (snapshot.data!.data![0].providerverification!.validDriverLicense != null) ...[
+                            const SizedBox(height: 10),
+                            BasicDocumentDownloadList(
+                              onTap: () {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.validDriverLicense);
+                              },
+                              fileStatus: snapshot.data!.data![0].providerverification!.validDriverLicenseVerify.toString(),
+                              downloading: downloading,
+                              downloadProgress: downloadProgress,
+                              title: "Valid Driver's License",
+                            ),
+                          ],
+                          // file type 2
+                          if (snapshot.data!.data![0].providerverification!.scarsAwarenessCertification != null) ...[
+                            const SizedBox(height: 10),
+                            BasicDocumentDownloadList(
+                              onTap: () {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.scarsAwarenessCertification);
+                              },
+                              fileStatus: snapshot.data!.data![0].providerverification!.scarsAwarenessCertificationVerify.toString(),
+                              downloading: downloading,
+                              downloadProgress: downloadProgress,
+                              title: "Scars Awareness Certification",
+                            ),
+                          ],
+                          // file type 8
+                          if (snapshot.data!.data![0].providerverification!.policeBackgroundCheck != null) ...[
+                            const SizedBox(height: 10),
+                            BasicDocumentDownloadList(
+                              onTap: () {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.policeBackgroundCheck);
+                              },
+                              fileStatus: snapshot.data!.data![0].providerverification!.policeBackgroundCheckVerify.toString(),
+                              downloading: downloading,
+                              downloadProgress: downloadProgress,
+                              title: "Police Background Check",
+                            ),
+                          ],
+                          // file type 3
+                          if (snapshot.data!.data![0].providerverification!.cprFirstAidCertification != null) ...[
+                            const SizedBox(height: 10),
+                            BasicDocumentDownloadList(
+                              onTap: () {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.cprFirstAidCertification);
+                              },
+                              fileStatus: snapshot.data!.data![0].providerverification!.cprFirstAidCertificationVerify.toString(),
+                              downloading: downloading,
+                              downloadProgress: downloadProgress,
+                              title: "CPR/First Aid Certificate",
+                            ),
+                          ],
+                          // file type 7
+                          if (snapshot.data!.data![0].providerverification!.governmentRegisteredCareProvider != null) ...[
+                            const SizedBox(height: 10),
+                            BasicDocumentDownloadList(
+                              onTap: () {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.governmentRegisteredCareProvider);
+                              },
+                              fileStatus: snapshot.data!.data![0].providerverification!.governmentRegisteredCareProviderVerify.toString(),
+                              downloading: downloading,
+                              downloadProgress: downloadProgress,
+                              title: "Government Registered Care Provider",
+                            ),
+                          ],
+                          // file type 4
+                          if (snapshot.data!.data![0].providerverification!.animalCareProviderCertification != null) ...[
+                            const SizedBox(height: 10),
+                            BasicDocumentDownloadList(
+                              onTap: () {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.animalCareProviderCertification);
+                              },
+                              fileStatus: snapshot.data!.data![0].providerverification!.animalCareProviderCertificationVerify.toString(),
+                              downloading: downloading,
+                              downloadProgress: downloadProgress,
+                              title: "Animal Care Provider Certificate",
+                            ),
+                          ],
+                          // file type 6
+                          if (snapshot.data!.data![0].providerverification!.animailFirstAid != null) ...[
+                            const SizedBox(height: 10),
+                            BasicDocumentDownloadList(
+                              onTap: () {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.animailFirstAid);
+                              },
+                              fileStatus: snapshot.data!.data![0].providerverification!.animailFirstAidVerify.toString(),
+                              downloading: downloading,
+                              downloadProgress: downloadProgress,
+                              title: "Animal First Aid",
+                            ),
+                          ],
+                          // file type 3a
+                          if (snapshot.data!.data![0].providerverification!.redCrossBabysittingCertification != null) ...[
+                            const SizedBox(height: 10),
+                            BasicDocumentDownloadList(
+                              onTap: () {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.redCrossBabysittingCertification);
+                              },
+                              fileStatus: snapshot.data!.data![0].providerverification!.redCrossBabysittingCertificationVerify.toString(),
+                              downloading: downloading,
+                              downloadProgress: downloadProgress,
+                              title: "Red Cross Babysitting Certification",
+                            ),
+                          ],
+                          // file type 5
+                          if (snapshot.data!.data![0].providerverification!.chaildAndFamilyServicesAndAbuse != null) ...[
+                            const SizedBox(height: 10),
+                            BasicDocumentDownloadList(
+                              onTap: () {
+                                doDownloadFile(snapshot.data!.data![0].providerverification!.chaildAndFamilyServicesAndAbuse);
+                              },
+                              fileStatus: snapshot.data!.data![0].providerverification!.chaildAndFamilyServicesAndAbuseVerify.toString(),
+                              downloading: downloading,
+                              downloadProgress: downloadProgress,
+                              title: "Dept Child and Family Services Child Abuse Check",
+                            ),
+                          ],
+                        ]
                       ],
                     ),
                     imgProviderPath: snapshot.data!.data![index].ratings!.isEmpty ? "https://img.icons8.com/material-rounded/256/question-mark.png" : "https://islandcare.bm/storage/${snapshot.data!.data![index].ratings![index].receiverRating!.avatar}",

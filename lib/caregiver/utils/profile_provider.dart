@@ -41,9 +41,7 @@ class ServiceGiverProvider extends ChangeNotifier {
 
   getUserId() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString(
-      'userId',
-    );
+    var userId = preferences.getString('userId');
     return userId.toString();
   }
 

@@ -49,7 +49,8 @@ class RecieverUserProvider extends ChangeNotifier {
     return userId.toString();
   }
 
-  String profilePerentage = '';
+  bool profileIsLoading = true;
+  int? profilePerentage;
   // fetchPRofile
   ProfileReceiverModel? _userProfile;
   fetchProfileReceiverModel() async {
@@ -65,14 +66,13 @@ class RecieverUserProvider extends ChangeNotifier {
         ),
       );
       if (response.statusCode == 200) {
-        // print("data fetched ${response.data['subscription']}");
-        profilePerentage = response.data['percentage'].toString();
+        // print("data fetched ${response.data}");
+        profilePerentage = response.data['data']['percentage'];
+        profileIsLoading = false;
         _userProfile = ProfileReceiverModel.fromJson(response.data);
         notifyListeners();
       } else {
-        throw Exception(
-          'Failed to load Profile Model',
-        );
+        throw Exception('Failed to load Profile Model');
       }
     } on DioError {
       // print("error on fetch profile ${e.response!.data}");

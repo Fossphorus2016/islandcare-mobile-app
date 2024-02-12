@@ -37,6 +37,7 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
         'Authorization': 'Bearer $token',
       }),
     );
+    // print(response.data);
     if (response.statusCode == 200) {
       return JobApplicantDetailModel.fromJson(response.data);
     } else {
@@ -122,10 +123,7 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
-
+                const SizedBox(height: 20),
                 // Listing
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),

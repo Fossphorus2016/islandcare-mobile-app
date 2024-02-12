@@ -8,7 +8,6 @@ import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
-
 import 'package:island_app/carereceiver/screens/home_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/screens/profile_screen.dart';
@@ -33,15 +32,11 @@ class BottomBarState extends State<BottomBar> {
 
   late List<Widget> pages;
 
-  // void updatePage(int page) {
-  //   setState(() {
-  //     _page = page;
-  //   });
-  // }
-
   callUserData() async {
     await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     await Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
+
+    //
     await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(4);
     await Provider.of<ChatProvider>(context, listen: false).connectChatChannel(4);
     await Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
@@ -54,12 +49,6 @@ class BottomBarState extends State<BottomBar> {
 
   @override
   void initState() {
-    // setState(() {
-    //   getUserToken();
-    // });
-    // print(lol);
-    // var res = Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-
     pages = [
       HomeScreen(
         passedToken: widget.data.toString(),
@@ -82,7 +71,7 @@ class BottomBarState extends State<BottomBar> {
       body: pages[Provider.of<BottomNavigationProvider>(context).page],
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
-          splashColor: CustomColors.primaryColor,
+          // splashColor: CustomColors.primaryColor,
           highlightColor: CustomColors.primaryColor,
           hoverColor: CustomColors.primaryColor,
         ),
