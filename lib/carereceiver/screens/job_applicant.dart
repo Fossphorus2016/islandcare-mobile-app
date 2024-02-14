@@ -195,8 +195,7 @@ class _JobApplicantsState extends State<JobApplicants> {
 
                 // Listing
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                   decoration: BoxDecoration(
                     color: CustomColors.blackLight,
                     border: Border(
@@ -251,40 +250,70 @@ class _JobApplicantsState extends State<JobApplicants> {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return JobApplicantsWidget(
-                            name:
-                                snapshot.data!.data![index].jobTitle.toString(),
-                            jobType: (snapshot.data!.data![index].serviceId
-                                        .toString() ==
-                                    "1")
+                            name: snapshot.data!.data![index].jobTitle.toString(),
+                            jobType: (snapshot.data!.data![index].serviceId.toString() == "1")
                                 ? "Senior Care"
-                                : (snapshot.data!.data![index].serviceId
-                                            .toString() ==
-                                        "2")
+                                : (snapshot.data!.data![index].serviceId.toString() == "2")
                                     ? "Pet Care"
-                                    : (snapshot.data!.data![index].serviceId
-                                                .toString() ==
-                                            "3")
+                                    : (snapshot.data!.data![index].serviceId.toString() == "3")
                                         ? "House Keeping"
-                                        : (snapshot.data!.data![index].serviceId
-                                                    .toString() ==
-                                                "4")
+                                        : (snapshot.data!.data![index].serviceId.toString() == "4")
                                             ? "Child Care"
                                             : "School Support",
-                            count: snapshot
-                                .data!.applicationCounts![index].count
-                                .toString(),
+                            count: snapshot.data!.applicationCounts![index].count.toString(),
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => JobApplicantsDetail(
-                                    name: snapshot.data!.data![index].jobTitle
-                                        .toString(),
-                                    jobId: snapshot.data!.data![index].id
-                                        .toString(),
+                              if (snapshot.data!.data![index].isFunded == 1) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => JobApplicantsDetail(
+                                      name: snapshot.data!.data![index].jobTitle.toString(),
+                                      jobId: snapshot.data!.data![index].id.toString(),
+                                    ),
                                   ),
-                                ),
-                              );
+                                );
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    content: Column(
+                                      children: [
+                                        Text("Total Applications Available : ${snapshot.data!.applicationCounts![index].count.toString()}"),
+                                        Text("Fund The Job Amount ${snapshot.data!.data![index].totalAmount}  With Service Charges of 7.5%"),
+                                        Text(" Total Amount To Be Paid  \$ ${(double.parse(snapshot.data!.data![index].totalAmount.toString()) + double.parse(snapshot.data!.data![index].totalAmount.toString()))}  To View Applicant"),
+                                      ],
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.resolveWith(
+                                            (states) => CustomColors.darkRed,
+                                          ),
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text(
+                                          "close",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                      TextButton(
+                                        style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.resolveWith(
+                                            (states) => CustomColors.greenLight,
+                                          ),
+                                        ),
+                                        onPressed: () {},
+                                        child: const Text(
+                                          "Payment Now",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
                             },
                           );
                         },

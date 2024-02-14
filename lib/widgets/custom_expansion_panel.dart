@@ -135,6 +135,7 @@ class CustomExpansionPanelList extends StatefulWidget {
     this.elevation = 2,
     this.expandIconColor,
     this.borderColor,
+    this.showBorder,
   })  : _allowOnlyOnePanelOpen = false,
         initialOpenPanelValue = null;
 
@@ -162,6 +163,7 @@ class CustomExpansionPanelList extends StatefulWidget {
     this.elevation = 2,
     this.expandIconColor,
     this.borderColor,
+    this.showBorder,
   }) : _allowOnlyOnePanelOpen = true;
 
   /// The children of the expansion panel list. They are laid out in a similar
@@ -219,6 +221,7 @@ class CustomExpansionPanelList extends StatefulWidget {
   final Color? expandIconColor;
 
   final Color? borderColor;
+  final bool? showBorder;
 
   @override
   State<StatefulWidget> createState() => _CustomExpansionPanelListState();
@@ -361,11 +364,14 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
           child: InkWell(
             onTap: () => _handlePressed(_isChildExpanded(index), index),
             child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(width: 1, color: widget.borderColor ?? Colors.black),
-                ),
-              ),
+              decoration: const BoxDecoration(
+                  // border:
+                  // border: widget.showBorder == true
+                  //     ? Border(
+                  //         bottom: BorderSide(width: 1, color: widget.borderColor ?? Colors.black),
+                  //       )
+                  //     : null,
+                  ),
               child: header,
             ),
           ),
@@ -399,7 +405,7 @@ class _CustomExpansionPanelListState extends State<CustomExpansionPanelList> {
 
     return MergeableMaterial(
       hasDividers: true,
-      dividerColor: widget.dividerColor,
+      dividerColor: Colors.amber,
       elevation: widget.elevation,
       children: items,
     );

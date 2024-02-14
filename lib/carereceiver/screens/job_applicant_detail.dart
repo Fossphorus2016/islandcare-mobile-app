@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/screens/applicant_profile_detail.dart';
+// import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -70,6 +71,8 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
 
   @override
   Widget build(BuildContext context) {
+    // print(RecieverUserProvider.userToken);
+    // print("${CareReceiverURl.serviceReceiverApplicantionApplicants}/${widget.name}/${widget.jobId}");
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(

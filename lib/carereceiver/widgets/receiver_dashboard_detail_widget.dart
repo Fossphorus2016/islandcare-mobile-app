@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/res/app_url.dart';
 import 'package:island_app/widgets/custom_expansion_panel.dart';
 
 class ReceiverDashboardDetailWidget extends StatelessWidget {
@@ -493,10 +494,11 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
               // Verified
 
               // Reviews
+
               const SizedBox(height: 15),
-              ReviewExpansionList(
-                list: ratings,
-              ),
+              // ReviewExpansionList(
+              //   list: ratings,
+              // ),
               Container(
                 alignment: Alignment.topLeft,
                 padding: const EdgeInsets.all(10),
@@ -528,131 +530,133 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
+                    const SizedBox(height: 10),
+                    ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: ratings!.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ReviewExpansionList(
+                          imgProviderPath: ratings![index].receiverRating.avatar == null ? null : "${AppUrl.webStorageUrl}/${ratings![index].receiverRating.avatar}",
+                          name: "${ratings![index].receiverRating.firstName} ${ratings![index].receiverRating.lastName}",
+                          rating: ratings![index]!.rating,
+                          comment: ratings![index]!.comment,
+                        );
+                      },
                     ),
-                    Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Name",
-                              style: TextStyle(
-                                fontFamily: "Rubik",
-                                fontSize: 14,
-                                color: CustomColors.primaryTextLight,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              "Ratings",
-                              style: TextStyle(
-                                fontFamily: "Rubik",
-                                fontSize: 14,
-                                color: CustomColors.primaryTextLight,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              "Comment",
-                              style: TextStyle(
-                                fontFamily: "Rubik",
-                                fontSize: 14,
-                                color: CustomColors.primaryTextLight,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        // Container(
-                        //   padding: const EdgeInsets.symmetric(vertical: 5),
-                        //   decoration: BoxDecoration(
-                        //     border: Border(
-                        //       top: BorderSide(
-                        //         color: CustomColors.paraColor,
-                        //         width: .5,
-                        //       ),
-                        //       bottom: BorderSide(
-                        //         color: CustomColors.paraColor,
-                        //         width: .5,
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //     children: [
-                        //       SizedBox(
-                        //         width: 100,
-                        //         child: Column(
-                        //           crossAxisAlignment: CrossAxisAlignment.start,
-                        //           children: [
-                        //             // CircleAvatar(
-                        //             //   radius: 15,
-                        //             //   child: ClipRRect(
-                        //             //     borderRadius: BorderRadius.circular(15),
-                        //             //     child: ClipRRect(
-                        //             //       borderRadius: BorderRadius.circular(15),
-                        //             //       child: CachedNetworkImage(
-                        //             //         width: 100,
-                        //             //         height: 100,
-                        //             //         fit: BoxFit.cover,
-                        //             //         imageUrl: imgProviderPath.toString(),
-                        //             //         placeholder: (context, url) => const CircularProgressIndicator(),
-                        //             //         errorWidget: (context, url, error) => const Icon(Icons.error),
-                        //             //       ),
-                        //             //     ),
-                        //             //   ),
-                        //             // ),
-                        //             const SizedBox(width: 4),
-                        //             Text(
-                        //               providerName.toString(),
-                        //               style: TextStyle(
-                        //                 fontSize: 13,
-                        //                 fontFamily: "Poppins",
-                        //                 fontWeight: FontWeight.w400,
-                        //                 color: CustomColors.primaryText,
-                        //               ),
-                        //             ),
-                        //           ],
-                        //         ),
-                        //       ),
-                        //       SizedBox(
-                        //         width: 100,
-                        //         child: RatingBar.builder(
-                        //           initialRating: providerRating!.toDouble(),
-                        //           minRating: 1,
-                        //           direction: Axis.horizontal,
-                        //           allowHalfRating: true,
-                        //           ignoreGestures: false,
-                        //           itemSize: 15,
-                        //           itemCount: 5,
-                        //           itemBuilder: (context, _) => const Icon(
-                        //             Icons.star,
-                        //             color: Colors.amber,
-                        //           ),
-                        //           onRatingUpdate: (rating) {},
-                        //         ),
-                        //       ),
-                        //       Container(
-                        //         alignment: Alignment.center,
-                        //         width: 100,
-                        //         child: Text(
-                        //           providerComment.toString(),
-                        //           style: TextStyle(
-                        //             fontSize: 13,
-                        //             fontFamily: "Poppins",
-                        //             fontWeight: FontWeight.w400,
-                        //             color: CustomColors.primaryText,
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                      ],
-                    ),
+                    // Column( ${widget.list![i].receiverRating.firstName} ${widget.list![i].receiverRating.lastName}
+                    //   children: [
+                    //     Row(
+                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //       children: [
+                    //         Text(
+                    //           "Name",
+                    //           style: TextStyle(
+                    //             fontFamily: "Rubik",
+                    //             fontSize: 14,
+                    //             color: CustomColors.primaryTextLight,
+                    //             fontWeight: FontWeight.w600,
+                    //           ),
+                    //         ),
+                    //         Text(
+                    //           "Ratings",
+                    //           style: TextStyle(
+                    //             fontFamily: "Rubik",
+                    //             fontSize: 14,
+                    //             color: CustomColors.primaryTextLight,
+                    //             fontWeight: FontWeight.w600,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //     const SizedBox(height: 10),
+                    //     // Container(
+                    //     //   padding: const EdgeInsets.symmetric(vertical: 5),
+                    //     //   decoration: BoxDecoration(
+                    //     //     border: Border(
+                    //     //       top: BorderSide(
+                    //     //         color: CustomColors.paraColor,
+                    //     //         width: .5,
+                    //     //       ),
+                    //     //       bottom: BorderSide(
+                    //     //         color: CustomColors.paraColor,
+                    //     //         width: .5,
+                    //     //       ),
+                    //     //     ),
+                    //     //   ),
+                    //     //   child: Row(
+                    //     //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //     //     children: [
+                    //     //       SizedBox(
+                    //     //         width: 100,
+                    //     //         child: Column(
+                    //     //           crossAxisAlignment: CrossAxisAlignment.start,
+                    //     //           children: [
+                    //     //             // CircleAvatar(
+                    //     //             //   radius: 15,
+                    //     //             //   child: ClipRRect(
+                    //     //             //     borderRadius: BorderRadius.circular(15),
+                    //     //             //     child: ClipRRect(
+                    //     //             //       borderRadius: BorderRadius.circular(15),
+                    //     //             //       child: CachedNetworkImage(
+                    //     //             //         width: 100,
+                    //     //             //         height: 100,
+                    //     //             //         fit: BoxFit.cover,
+                    //     //             //         imageUrl: imgProviderPath.toString(),
+                    //     //             //         placeholder: (context, url) => const CircularProgressIndicator(),
+                    //     //             //         errorWidget: (context, url, error) => const Icon(Icons.error),
+                    //     //             //       ),
+                    //     //             //     ),
+                    //     //             //   ),
+                    //     //             // ),
+                    //     //             const SizedBox(width: 4),
+                    //     //             Text(
+                    //     //               providerName.toString(),
+                    //     //               style: TextStyle(
+                    //     //                 fontSize: 13,
+                    //     //                 fontFamily: "Poppins",
+                    //     //                 fontWeight: FontWeight.w400,
+                    //     //                 color: CustomColors.primaryText,
+                    //     //               ),
+                    //     //             ),
+                    //     //           ],
+                    //     //         ),
+                    //     //       ),
+                    //     //       SizedBox(
+                    //     //         width: 100,
+                    //     //         child: RatingBar.builder(
+                    //     //           initialRating: providerRating!.toDouble(),
+                    //     //           minRating: 1,
+                    //     //           direction: Axis.horizontal,
+                    //     //           allowHalfRating: true,
+                    //     //           ignoreGestures: false,
+                    //     //           itemSize: 15,
+                    //     //           itemCount: 5,
+                    //     //           itemBuilder: (context, _) => const Icon(
+                    //     //             Icons.star,
+                    //     //             color: Colors.amber,
+                    //     //           ),
+                    //     //           onRatingUpdate: (rating) {},
+                    //     //         ),
+                    //     //       ),
+                    //     //       Container(
+                    //     //         alignment: Alignment.center,
+                    //     //         width: 100,
+                    //     //         child: Text(
+                    //     //           providerComment.toString(),
+                    //     //           style: TextStyle(
+                    //     //             fontSize: 13,
+                    //     //             fontFamily: "Poppins",
+                    //     //             fontWeight: FontWeight.w400,
+                    //     //             color: CustomColors.primaryText,
+                    //     //           ),
+                    //     //         ),
+                    //     //       ),
+                    //     //     ],
+                    //     //   ),
+                    //     // ),
+                    //   ],
+                    // ),
                   ],
                 ),
               ),
@@ -665,207 +669,169 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
 }
 
 class ReviewExpansionList extends StatefulWidget {
-  const ReviewExpansionList({super.key, this.list});
-  final List? list;
+  const ReviewExpansionList({super.key, required this.name, this.rating, this.comment, this.imgProviderPath});
+  // final List? list;
+  final String name;
+  final int? rating;
+  final String? comment;
+  final String? imgProviderPath;
   @override
   State<ReviewExpansionList> createState() => _ReviewExpansionListState();
 }
 
 class _ReviewExpansionListState extends State<ReviewExpansionList> {
+  bool expanded = false;
   @override
   Widget build(BuildContext context) {
-    return widget.list == null
-        ? Container()
-        : Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Name",
-                      style: TextStyle(
-                        fontFamily: "Rubik",
-                        fontSize: 14,
-                        color: CustomColors.primaryTextLight,
-                        fontWeight: FontWeight.w600,
-                      ),
+    return Theme(
+      data: ThemeData(expansionTileTheme: const ExpansionTileThemeData(shape: RoundedRectangleBorder(side: BorderSide.none))),
+      child: CustomExpansionPanelList(
+        borderColor: Colors.white,
+        expandedHeaderPadding: EdgeInsets.zero,
+        elevation: 1,
+        expansionCallback: (panelIndex, isExpanded) {
+          setState(() {
+            expanded = !expanded;
+          });
+        },
+        children: [
+          CustomExpansionPanel(
+            canTapOnHeader: true,
+            isExpanded: expanded,
+            backgroundColor: Colors.white,
+            headerBuilder: (context, isExpanded) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.name,
+                    style: TextStyle(
+                      fontFamily: "Rubik",
+                      fontSize: 14,
+                      color: CustomColors.primaryTextLight,
+                      fontWeight: FontWeight.w600,
                     ),
-                    Text(
-                      "Ratings",
-                      style: TextStyle(
-                        fontFamily: "Rubik",
-                        fontSize: 14,
-                        color: CustomColors.primaryTextLight,
-                        fontWeight: FontWeight.w600,
+                  ),
+                  if (widget.imgProviderPath != null) ...[
+                    ClipRRect(
+                      clipBehavior: Clip.hardEdge,
+                      borderRadius: BorderRadius.circular(500),
+                      child: CachedNetworkImage(
+                        width: 40,
+                        height: 40,
+                        fit: BoxFit.cover,
+                        imageUrl: widget.imgProviderPath.toString(),
+                        placeholder: (context, url) => const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => const Icon(Icons.error),
                       ),
                     ),
                   ],
-                ),
-              ),
-              CustomExpansionPanelList(
+                ],
+              );
+            },
+            body: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              color: Colors.white,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomExpansionPanel(
-                    isExpanded: true,
-                    headerBuilder: (context, isExpanded) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "providerName.toString()",
-                            style: TextStyle(
-                              fontFamily: "Rubik",
-                              fontSize: 14,
-                              color: CustomColors.primaryTextLight,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 100,
-                            // child: RatingBar.builder(
-                            //   initialRating: "providerRating!.toDouble()",
-                            //   minRating: 1,
-                            //   direction: Axis.horizontal,
-                            //   allowHalfRating: true,
-                            //   ignoreGestures: false,
-                            //   itemSize: 15,
-                            //   itemCount: 5,
-                            //   itemBuilder: (context, _) => const Icon(
-                            //     Icons.star,
-                            //     color: Colors.amber,
-                            //   ),
-                            //   onRatingUpdate: (rating) {},
-                            // ),
-                          ),
-                        ],
-                      );
-                    },
-                    body: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                            color: CustomColors.paraColor,
-                            width: .5,
-                          ),
-                          bottom: BorderSide(
-                            color: CustomColors.paraColor,
-                            width: .5,
-                          ),
+                  const SizedBox(height: 10),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Name:",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w400,
+                          color: CustomColors.primaryText,
                         ),
                       ),
-                      child: Column(
-                        children: [
-                          // CircleAvatar(
-                          //   radius: 60,
-                          //   child: ClipRRect(
-                          //     borderRadius: BorderRadius.circular(15),
-                          //     child: ClipRRect(
-                          //       borderRadius: BorderRadius.circular(15),
-                          //       child: CachedNetworkImage(
-                          //         width: 100,
-                          //         height: 100,
-                          //         fit: BoxFit.cover,
-                          //         imageUrl: imgProviderPath.toString(),
-                          //         placeholder: (context, url) => const CircularProgressIndicator(),
-                          //         errorWidget: (context, url, error) => const Icon(Icons.error),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-                          const SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Name:",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w400,
-                                  color: CustomColors.primaryText,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                "providerName.toString()",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w600,
-                                  color: CustomColors.primaryText,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Rating:",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w400,
-                                  color: CustomColors.primaryText,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              // RatingBar.builder(
-                              //   initialRating: providerRating!.toDouble(),
-                              //   minRating: 1,
-                              //   direction: Axis.horizontal,
-                              //   allowHalfRating: true,
-                              //   ignoreGestures: false,
-                              //   itemSize: 15,
-                              //   itemCount: 5,
-                              //   itemBuilder: (context, _) => const Icon(
-                              //     Icons.star,
-                              //     color: Colors.amber,
-                              //   ),
-                              //   onRatingUpdate: (rating) {},
-                              // ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Comment:",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w400,
-                                  color: CustomColors.primaryText,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Text(
-                                  "providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()providerComment.toString()",
-                                  maxLines: 20,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w400,
-                                    color: CustomColors.primaryText,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                      const SizedBox(width: 10),
+                      Text(
+                        widget.name,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w600,
+                          color: CustomColors.primaryText,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
+                  const SizedBox(height: 10),
+                  if (widget.rating != null) ...[
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Rating:",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w400,
+                            color: CustomColors.primaryText,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        // widget.list![i]!.rating.toDouble()
+                        RatingBar.builder(
+                          initialRating: widget.rating!.toDouble(),
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          ignoreGestures: false,
+                          itemSize: 15,
+                          itemCount: 5,
+                          itemBuilder: (context, _) => const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {},
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                  if (widget.comment != null && widget.comment!.isNotEmpty && widget.comment != "null") ...[
+                    Wrap(
+                      // crossAxisAlignment: CrossAxisAlignment.start,
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Comment:",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w400,
+                            color: CustomColors.primaryText,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        // widget.list![i]!.comment
+                        Text(
+                          widget.comment.toString(),
+                          maxLines: 20,
+                          softWrap: true,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w400,
+                            color: CustomColors.primaryText,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                  const Divider(),
                 ],
               ),
-            ],
-          );
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

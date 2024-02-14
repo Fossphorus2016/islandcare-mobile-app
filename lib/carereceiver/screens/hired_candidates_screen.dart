@@ -7,11 +7,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/hired_candidate_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/providers/user_provider.dart';
 // import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class HiredCandidatesScreen extends StatefulWidget {
   const HiredCandidatesScreen({super.key});
@@ -29,7 +30,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
   List hiredCandidates = [];
 
   Future<HiredCandidateModel> fetchHiredCandidateModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
       '${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=$currentDate',
       options: Options(
@@ -62,6 +63,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
   var jobId;
   jobCompleted() async {
     var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     var response = await Dio().post(
       url,
       options: Options(
@@ -91,31 +93,29 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
     }
   }
 
-  var token;
-  Future getUserToken() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = await prefs.getString('userToken');
-    setState(() {
-      token = userToken;
-    });
-    // if (kDebugMode) {
-    //   print("token == $token");
-    // }
-    return userToken.toString();
-  }
+  // var token;
+  // Future getUserToken() async {
+  //   SharedPreferences? prefs = await SharedPreferences.getInstance();
+  //   await prefs.reload();
+  //   var userToken = await prefs.getString('userToken');
+  //   setState(() {
+  //     token = userToken;
+  //   });
+  //   // if (kDebugMode) {
+  //   //   print("token == $token");
+  //   // }
+  //   return userToken.toString();
+  // }
 
   @override
   void initState() {
-    getUserToken();
+    // getUserToken();
     super.initState();
     futureHiredCandidate = fetchHiredCandidateModel();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print('${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=$currentDate');
-    // print(RecieverUserProvider.userToken);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -173,7 +173,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                  height: 80,
+                  height: 90,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
                     border: Border(
@@ -188,7 +188,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Expanded(
-                        flex: 6,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -216,182 +215,180 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                           ],
                         ),
                       ),
-                      Expanded(
-                        flex: 4,
-                        child: GestureDetector(
-                          onTap: () {
-                            providerId = hiredCandidates[index]['provider_id'];
-                            jobId = hiredCandidates[index]['job_id'];
-                            hiredCandidates[index]['status'] == 3
-                                ? () {}
-                                : showModalBottomSheet(
-                                    isScrollControlled: true,
-                                    context: context,
-                                    backgroundColor: Colors.white,
-                                    shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(30.0),
-                                        topRight: Radius.circular(30.0),
-                                      ),
+                      GestureDetector(
+                        onTap: () {
+                          providerId = hiredCandidates[index]['provider_id'];
+                          jobId = hiredCandidates[index]['job_id'];
+                          hiredCandidates[index]['status'] == 3
+                              ? () {}
+                              : showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  context: context,
+                                  backgroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(30.0),
+                                      topRight: Radius.circular(30.0),
                                     ),
-                                    builder: (BuildContext context) {
-                                      return SingleChildScrollView(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(horizontal: 25),
-                                            child: Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                const SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Center(
-                                                  child: Container(
-                                                    width: 130,
-                                                    height: 5,
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(0xffC4C4C4),
-                                                      borderRadius: BorderRadius.circular(6),
-                                                    ),
+                                  ),
+                                  builder: (BuildContext context) {
+                                    return SingleChildScrollView(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const SizedBox(
+                                                height: 20,
+                                              ),
+                                              Center(
+                                                child: Container(
+                                                  width: 130,
+                                                  height: 5,
+                                                  decoration: BoxDecoration(
+                                                    color: const Color(0xffC4C4C4),
+                                                    borderRadius: BorderRadius.circular(6),
                                                   ),
                                                 ),
-                                                const SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Center(
-                                                  child: Text(
-                                                    "Candidate Rating",
-                                                    textAlign: TextAlign.center,
-                                                    style: TextStyle(
-                                                      color: CustomColors.black,
-                                                      fontFamily: "Rubik",
-                                                      fontStyle: FontStyle.normal,
-                                                      fontSize: 22,
-                                                      fontWeight: FontWeight.w600,
-                                                    ),
+                                              ),
+                                              const SizedBox(
+                                                height: 10,
+                                              ),
+                                              Center(
+                                                child: Text(
+                                                  "Candidate Rating",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    color: CustomColors.black,
+                                                    fontFamily: "Rubik",
+                                                    fontStyle: FontStyle.normal,
+                                                    fontSize: 22,
+                                                    fontWeight: FontWeight.w600,
                                                   ),
                                                 ),
-                                                const SizedBox(
-                                                  height: 40,
-                                                ),
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  child: RatingBar.builder(
-                                                    initialRating: 0,
-                                                    minRating: 1,
-                                                    direction: Axis.horizontal,
-                                                    itemSize: 24,
-                                                    itemCount: 5,
-                                                    itemBuilder: (context, _) => const Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                    ),
-                                                    onRatingUpdate: (ratingValue) {
-                                                      setState(() {
-                                                        rating = ratingValue.ceil();
-                                                      });
-                                                    },
+                                              ),
+                                              const SizedBox(
+                                                height: 40,
+                                              ),
+                                              Container(
+                                                alignment: Alignment.center,
+                                                child: RatingBar.builder(
+                                                  initialRating: 0,
+                                                  minRating: 1,
+                                                  direction: Axis.horizontal,
+                                                  itemSize: 24,
+                                                  itemCount: 5,
+                                                  itemBuilder: (context, _) => const Icon(
+                                                    Icons.star,
+                                                    color: Colors.amber,
                                                   ),
+                                                  onRatingUpdate: (ratingValue) {
+                                                    setState(() {
+                                                      rating = ratingValue.ceil();
+                                                    });
+                                                  },
                                                 ),
-                                                const SizedBox(
-                                                  height: 15,
-                                                ),
-                                                Column(
-                                                  mainAxisAlignment: MainAxisAlignment.center,
-                                                  children: [
-                                                    CustomTextFieldWidget(
-                                                      borderColor: CustomColors.loginBorder,
-                                                      textStyle: TextStyle(
-                                                        fontSize: 15,
-                                                        color: CustomColors.hintText,
-                                                        fontFamily: "Calibri",
-                                                        fontWeight: FontWeight.w400,
-                                                      ),
-                                                      hintText: "Comment",
-                                                      controller: commentController,
-                                                      obsecure: false,
+                                              ),
+                                              const SizedBox(
+                                                height: 15,
+                                              ),
+                                              Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  CustomTextFieldWidget(
+                                                    borderColor: CustomColors.loginBorder,
+                                                    textStyle: TextStyle(
+                                                      fontSize: 15,
+                                                      color: CustomColors.hintText,
+                                                      fontFamily: "Calibri",
+                                                      fontWeight: FontWeight.w400,
                                                     ),
-                                                    const SizedBox(
-                                                      height: 20,
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
-                                                        var response = await Dio().post(
-                                                          url,
-                                                          options: Options(
-                                                            headers: {
-                                                              'Accept': 'application/json',
-                                                              'Authorization': 'Bearer $token',
-                                                            },
-                                                          ),
-                                                        );
+                                                    hintText: "Comment",
+                                                    controller: commentController,
+                                                    obsecure: false,
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: () async {
+                                                      var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
+                                                      var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+                                                      var response = await Dio().post(
+                                                        url,
+                                                        options: Options(
+                                                          headers: {
+                                                            'Accept': 'application/json',
+                                                            'Authorization': 'Bearer $token',
+                                                          },
+                                                        ),
+                                                      );
 
-                                                        if (response.statusCode == 200) {
-                                                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response.data['message'].toString())));
-                                                          commentController.clear();
-                                                          setState(
-                                                            () {
-                                                              rating = 0;
-                                                            },
-                                                          );
-                                                          fetchHiredCandidateModel();
-                                                        }
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: Container(
-                                                        width: MediaQuery.of(context).size.width,
-                                                        height: 54,
-                                                        decoration: BoxDecoration(
-                                                          color: CustomColors.primaryColor,
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        child: Center(
-                                                          child: Text(
-                                                            "Continue",
-                                                            style: TextStyle(
-                                                              color: CustomColors.white,
-                                                              fontFamily: "Rubik",
-                                                              fontStyle: FontStyle.normal,
-                                                              fontWeight: FontWeight.w500,
-                                                              fontSize: 18,
-                                                            ),
+                                                      if (response.statusCode == 200) {
+                                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response.data['message'].toString())));
+                                                        commentController.clear();
+                                                        setState(
+                                                          () {
+                                                            rating = 0;
+                                                          },
+                                                        );
+                                                        fetchHiredCandidateModel();
+                                                      }
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Container(
+                                                      width: MediaQuery.of(context).size.width,
+                                                      height: 54,
+                                                      decoration: BoxDecoration(
+                                                        color: CustomColors.primaryColor,
+                                                        borderRadius: BorderRadius.circular(10),
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          "Continue",
+                                                          style: TextStyle(
+                                                            color: CustomColors.white,
+                                                            fontFamily: "Rubik",
+                                                            fontStyle: FontStyle.normal,
+                                                            fontWeight: FontWeight.w500,
+                                                            fontSize: 18,
                                                           ),
                                                         ),
                                                       ),
                                                     ),
-                                                    const SizedBox(
-                                                      height: 15,
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 15,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                      );
-                                    },
-                                  );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            height: 24,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(2),
-                              color: hiredCandidates[index]['status'] == 3 ? CustomColors.primaryLight : CustomColors.primaryColor,
-                            ),
-                            child: Center(
-                              child: Text(
-                                hiredCandidates[index]['status'] == 3 ? "Job Completed" : "Mark As Complete",
-                                style: TextStyle(
-                                  color: CustomColors.white,
-                                  fontSize: 12,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                      ),
+                                    );
+                                  },
+                                );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(2),
+                            color: hiredCandidates[index]['status'] == 3 ? CustomColors.primaryLight : CustomColors.primaryColor,
+                          ),
+                          child: Center(
+                            child: Text(
+                              hiredCandidates[index]['status'] == 3 ? "Job Completed" : "Mark As Complete",
+                              style: TextStyle(
+                                color: CustomColors.white,
+                                fontSize: 14,
+                                fontFamily: "Poppins",
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),

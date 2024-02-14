@@ -31,7 +31,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
   late Future<ServiceReceiverDashboardDetailModel>? futureReceiverDashboardDetail;
   Future<ServiceReceiverDashboardDetailModel> fetchReceiverDashboardDetailModel() async {
     var token = RecieverUserProvider.userToken;
-    // print(token);
+    // print("${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}");
     final response = await Dio().get(
       "${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}",
       options: Options(
@@ -129,6 +129,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
 
   @override
   Widget build(BuildContext context) {
+    // print(RecieverUserProvider.userToken);
     return Scaffold(
       backgroundColor: CustomColors.loginBg,
       appBar: AppBar(
@@ -295,6 +296,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                       ],
                     ),
                     imgProviderPath: snapshot.data!.data![index].ratings!.isEmpty ? "https://img.icons8.com/material-rounded/256/question-mark.png" : "https://islandcare.bm/storage/${snapshot.data!.data![index].ratings![index].receiverRating!.avatar}",
+                    ratings: snapshot.data!.data![index].ratings,
                     // providerName: snapshot.data!.data![index].ratings!.isEmpty ? "Not Available" : "${snapshot.data!.data![index].ratings![index].receiverRating!.firstName} ${snapshot.data!.data![index].ratings![index].receiverRating!.lastName}",
                     // providerComment: snapshot.data!.data![index].ratings!.isEmpty ? "Not Available" : snapshot.data!.data![index].ratings![index].comment.toString(),
                     // providerRating: snapshot.data!.data![index].ratings!.isEmpty ? 0.0 : snapshot.data!.data![index].ratings![index].rating!.toDouble(),

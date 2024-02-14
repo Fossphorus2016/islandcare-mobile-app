@@ -18,7 +18,6 @@ import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/login_screen.dart';
 import 'package:island_app/screens/signup_main_screen.dart';
 import 'package:island_app/screens/splash_screen.dart';
-// import 'package:island_app/widgets/custom_page_route.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:responsive_framework/responsive_framework.dart';

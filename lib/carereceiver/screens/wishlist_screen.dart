@@ -45,6 +45,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
     if (response.statusCode == 200) {
       var json = response.data as Map;
       var listOfProviders = json['data'] as List;
+      // print(listOfProviders);
       setState(() {
         providerList = listOfProviders;
         foundProviders = listOfProviders;
@@ -233,9 +234,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => ProviderProfileDetailForReceiver(
-                                                      id: snapshot.data!.data![index].id.toString(),
-                                                    )),
+                                              builder: (context) => ProviderProfileDetailForReceiver(id: snapshot.data!.data![index].users!.id.toString()),
+                                            ),
                                           );
                                         },
                                       );

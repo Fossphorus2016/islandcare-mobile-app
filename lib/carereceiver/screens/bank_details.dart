@@ -4,10 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/bank_details_models.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-import 'package:island_app/widgets/bank_detail_panel.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+// import 'package:island_app/widgets/bank_detail_panel.dart';
 import 'dart:core';
 
 class ReceiverBankDetails extends StatefulWidget {
@@ -21,13 +22,11 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
   List? allCards = [];
   List showItem = [];
 
-  late Future<BankDetailsModel>? futureBankDetails;
+  BankDetailsModel? futureBankDetails;
   List bankDetails = [];
-  TextEditingController accountTitleController = TextEditingController();
-  TextEditingController accountNumberController = TextEditingController();
-  final bankKey = GlobalKey<FormState>();
-  Future<BankDetailsModel> fetchBankDetailsModel() async {
-    var token = await getUserToken();
+  FocusNode focus = FocusNode();
+  fetchBankDetailsModel() async {
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
       CareReceiverURl.serviceReceiverBankDetails,
       options: Options(
@@ -39,11 +38,19 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
     );
     if (response.statusCode == 200) {
       var json = response.data as Map;
-      var bankDetails = json['bank_details'] as List;
+      var bankdetails = json['bank_details'] as List;
+
+      futureBankDetails = BankDetailsModel.fromJson(response.data);
       setState(() {
-        bankDetails = bankDetails;
+        bankDetails = bankdetails;
+        // print(json['bank_details']);
+        if (futureBankDetails != null && futureBankDetails!.bankDetails != null) {
+          filteredList = futureBankDetails!.bankDetails;
+        } else {
+          filteredList = null;
+        }
       });
-      return BankDetailsModel.fromJson(response.data);
+      // FocusScope.of(context).
     } else {
       throw Exception(
         'Failed to load Manage Cards',
@@ -51,8 +58,8 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
     }
   }
 
-  selectBank(var bankId) async {
-    var token = await getUserToken();
+  selectBank(bankId) async {
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     var formData = FormData.fromMap(
       {
         "id": bankId,
@@ -72,14 +79,12 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
           },
         ),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && !response.data['message'].contains("Unable To Select Unverified Banks")) {
         customSuccesSnackBar(
           context,
           "Bank Account Selected",
         );
-        setState(() {
-          futureBankDetails = fetchBankDetailsModel();
-        });
+        fetchBankDetailsModel();
       } else {
         customErrorSnackBar(
           context,
@@ -94,8 +99,8 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
     }
   }
 
-  deleteBank(var bankId) async {
-    var token = await getUserToken();
+  deleteBank(bankId) async {
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     var formData = FormData.fromMap(
       {
         "id": bankId,
@@ -121,9 +126,8 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
           context,
           "Bank Account Removed Successfully",
         );
-        setState(() {
-          futureBankDetails = fetchBankDetailsModel();
-        });
+        focus.requestFocus();
+        fetchBankDetailsModel();
       } else {
         customErrorSnackBar(
           context,
@@ -146,7 +150,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
       'account_number': accountNumberController.text.toString(),
     };
     try {
-      var token = await getUserToken();
+      var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
       final response = await Dio().post(
         CareReceiverURl.addServiceReceiverBank,
         data: requestBody,
@@ -163,9 +167,8 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
             context,
             response.data['message'],
           );
-          setState(() {
-            futureBankDetails = fetchBankDetailsModel();
-          });
+          fetchBankDetailsModel();
+          focus.requestFocus();
           accountTitleController.clear();
           accountNumberController.clear();
         } else {
@@ -190,32 +193,46 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
     }
   }
 
+  TextEditingController accountTitleController = TextEditingController();
+  TextEditingController accountNumberController = TextEditingController();
+  final bankKey = GlobalKey<FormState>();
   List dataNames = [
     {"name": "CLARIEN", "value": "CLARIEN"},
     {"name": "BNTB", "value": "BNTB"},
     {"name": "HSBC", "value": "HSBC"},
   ]; //edited line
   var selectedNames;
+  // var now = DateTime.now();
+  // DateTime today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  // getUserToken() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var userToken = await preferences.getString(
+  //     'userToken',
+  //   );
 
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = await preferences.getString(
-      'userToken',
-    );
+  //   return userToken.toString();
+  // }
 
-    return userToken.toString();
-  }
-
-  var now = DateTime.now();
-  DateTime today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-
+  TextEditingController textController = TextEditingController();
   @override
   void initState() {
-    getUserToken();
     super.initState();
-    futureBankDetails = fetchBankDetailsModel();
+    fetchBankDetailsModel();
+
+    textController.addListener(() {
+      // setState(() {
+      //   if (textController.text.isEmpty) {
+      //     filteredList = bankDetails;
+      //   } else {
+      //     filteredList = bankDetails.where((element) => element.toString().toLowerCase().contains(textController.text.toLowerCase())).toList();
+      //   }
+      // });
+    });
   }
 
+  List<BankDetail>? filteredList = [];
+
+  BankDetail? selectedBank;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -268,7 +285,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -402,8 +419,9 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                               width: MediaQuery.of(context).size.width,
                                               height: 50,
                                               child: TextFormField(
-                                                keyboardType: TextInputType.name,
+                                                keyboardType: TextInputType.text,
                                                 controller: accountTitleController,
+                                                textInputAction: TextInputAction.next,
                                                 style: const TextStyle(
                                                   fontSize: 16,
                                                   fontFamily: "Rubik",
@@ -457,6 +475,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                               height: 50,
                                               child: TextFormField(
                                                 keyboardType: TextInputType.text,
+                                                textInputAction: TextInputAction.done,
                                                 controller: accountNumberController,
                                                 style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
                                                 textAlignVertical: TextAlignVertical.bottom,
@@ -564,68 +583,295 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                 ),
                 const SizedBox(height: 10),
                 // Listing
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: CustomColors.blackLight,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: CustomColors.borderLight,
-                        width: 0.1,
-                      ),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                //   decoration: BoxDecoration(
+                //     color: CustomColors.blackLight,
+                //     border: Border(
+                //       bottom: BorderSide(
+                //         color: CustomColors.borderLight,
+                //         width: 0.1,
+                //       ),
+                //     ),
+                //   ),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         "Bank Name",
+                //         style: TextStyle(
+                //           color: CustomColors.black,
+                //           fontSize: 12,
+                //           fontFamily: "Poppins",
+                //           fontWeight: FontWeight.w600,
+                //         ),
+                //       ),
+                //       Text(
+                //         "Account Title",
+                //         style: TextStyle(
+                //           color: CustomColors.black,
+                //           fontSize: 12,
+                //           fontFamily: "Poppins",
+                //           fontWeight: FontWeight.w600,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                if (filteredList != null) ...[
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: FocusScope.of(context).hasFocus ? 250 : 80,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text(
+                        //       widget.title,
+                        //       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        //     ),
+                        //     IconButton(
+                        //       icon: const Icon(Icons.close),
+                        //       onPressed: () {
+                        //         FocusScope.of(context).unfocus();
+                        //         Navigator.pop(context);
+                        //       },
+                        //     ),
+                        //     /*Align(
+                        //                                 alignment: Alignment.centerRight,
+                        //                                 child: TextButton(
+                        //                                     onPressed: () {
+                        //                                       FocusScope.of(context).unfocus();
+                        //                                       Navigator.pop(context);
+                        //                                     },
+                        //                                     child: Text(
+                        //                                       'Close',
+                        //                                       style: widget.titleStyle != null
+                        //                                           ? widget.titleStyle
+                        //                                           : TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        //                                     )),
+                        //                               )*/
+                        //   ],
+                        // ),
+                        // const SizedBox(height: 5),
+                        TextField(
+                          focusNode: focus,
+                          autofocus: true,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            prefixIcon: const Icon(Icons.search),
+                            hintText: "Search Bank...",
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Colors.black26),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Colors.black12),
+                            ),
+                          ),
+                          style: const TextStyle(fontSize: 14),
+                          controller: textController,
+                        ),
+                        const SizedBox(height: 15),
+                        if (FocusScope.of(context).hasFocus) ...[
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            decoration: const BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.grey),
+                              ),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Bank Name",
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  "Account Title",
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: filteredList!.length,
+                              cacheExtent: 50,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    // widget.onSelected(filteredList[index]);
+                                    setState(() {
+                                      selectedBank = filteredList![index];
+                                    });
+                                    // print(filteredList![index]);
+                                  },
+                                  child: Container(
+                                    // color: Colors.red,
+                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(color: Colors.grey),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          filteredList![index].nameOfBank.toString(),
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                        Text(
+                                          filteredList![index].nameOnAccount.toString(),
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Bank Name",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
+                  //  ListView.builder(
+                  //   physics: const NeverScrollableScrollPhysics(),
+                  //   shrinkWrap: true,
+                  //   itemCount: snapshot.data!.bankDetails!.length,
+                  //   itemBuilder: (BuildContext context, int index) {
+                  //     return BankDetailPanel(
+                  //       bankName: snapshot.data!.bankDetails![index].nameOfBank.toString(),
+                  //       accountTitle: snapshot.data!.bankDetails![index].nameOnAccount.toString(),
+                  //       accountNumber: snapshot.data!.bankDetails![index].accountNumber.toString(),
+                  //       defaulBank: snapshot.data?.bankDetails![index].status == 1 ? true : false,
+                  //       status: snapshot.data!.bankDetails![index].status == 0 ? "Pending" : "Approved",
+                  //       deleteBank: () => deleteBank(snapshot.data?.bankDetails![index].id),
+                  //       setDefaultBank: () => selectBank(snapshot.data!.bankDetails![index].id),
+                  //     );
+                  //   },
+                  // );
+                  //     } else {
+                  //       return const Center(
+                  //         child: CircularProgressIndicator(),
+                  //       );
+                  //     }
+                  //   },
+                  // ),
+                  if (selectedBank != null && !FocusScope.of(context).hasFocus) ...[
+                    Row(
+                      children: [
+                        const Text(
+                          "Name Of Bank: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      Text(
-                        "Account Title",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
+                        const SizedBox(width: 10),
+                        Text(selectedBank!.nameOfBank.toString()),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const Text(
+                          "Account Title: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                FutureBuilder<BankDetailsModel>(
-                    future: futureBankDetails,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.bankDetails!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return BankDetailPanel(
-                              bankName: snapshot.data!.bankDetails![index].nameOfBank.toString(),
-                              accountTitle: snapshot.data!.bankDetails![index].nameOnAccount.toString(),
-                              accountNumber: snapshot.data!.bankDetails![index].accountNumber.toString(),
-                              defaulBank: snapshot.data?.bankDetails![index].status == 1 ? true : false,
-                              status: snapshot.data!.bankDetails![index].status == 0 ? "Pending" : "Approved",
-                              deleteBank: () => deleteBank(snapshot.data?.bankDetails![index].id),
-                              setDefaultBank: () => selectBank(snapshot.data!.bankDetails![index].id),
-                            );
+                        const SizedBox(width: 10),
+                        Text(selectedBank!.nameOnAccount.toString()),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const Text(
+                          "Account Number: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(selectedBank!.accountNumber.toString()),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Status: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          selectedBank!.status == 0 ? "Pending" : "Approved",
+                          style: TextStyle(
+                            color: selectedBank!.status == 1 ? Colors.green : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Selected Default Bank: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(selectedBank!.status == 1 ? "true" : "false"),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        if (selectedBank!.selected == 0) ...[
+                          TextButton(
+                            onPressed: () {
+                              selectBank(selectedBank!.id);
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.green),
+                              shape: MaterialStateProperty.resolveWith(
+                                (states) => RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            child: const Text(
+                              "Set Default Bank",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                        ],
+                        TextButton(
+                          onPressed: () {
+                            deleteBank(selectedBank!.id);
                           },
-                        );
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    }),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.red),
+                            shape: MaterialStateProperty.resolveWith(
+                              (states) => RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          child: const Text(
+                            "Delete",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]
+                ],
               ],
             ),
           ),
