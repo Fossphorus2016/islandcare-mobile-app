@@ -2,7 +2,7 @@
 
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:dotted_border/dotted_border.dart';
+// import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +12,7 @@ import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/document_download_list.dart';
+import 'package:island_app/widgets/profile_container_field.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/screens/notification.dart';
@@ -332,68 +333,69 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
 
   var error;
   uploadImageDio() async {
-    var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    // var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
+    // var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
 
-    var formData = FormData.fromMap(
-      {
-        '_method': 'PUT',
-        'id': usersId,
-        'user_info': userInfoController.text.toString(),
-        'phone': phoneController.text.toString(),
-        'address': addressController.text.toString(),
-        'gender': _isSelectedGender,
-        'dob': dobController.text.toString(),
-        'area': selectedArea,
-        'zip': zipController.text.toString(),
-        'experience': experienceController.text.toString(),
-        'hourly_rate': hourlyController.text.toString(),
-        'availability': availabilityController.text.toString(),
-        'service': keywordController.text.toString(),
-        "avatar": imageFileDio == null ? null : await MultipartFile.fromFile(imageFileDio!.path),
-        "institute_name[]": instituteMapList,
-        "start_date[]": startDateMapList,
-        "end_date[]": endDateMapList,
-        "current[]": currentMapList,
-        "major[]": majorMapList,
-        "valid_driver_license": lists['valid_driver_license'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['valid_driver_license'].toString()),
-        "scars_awareness_certification": lists['scars_awareness_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['scars_awareness_certification'].toString()),
-        "red_cross_babysitting_certification": lists['red_cross_babysitting_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['red_cross_babysitting_certification'].toString()),
-        "cpr_first_aid_certification": lists['cpr_first_aid_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['cpr_first_aid_certification'].toString()),
-        "animal_care_provider_certification": lists['animal_care_provider_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animal_care_provider_certification'].toString()),
-        "chaild_and_family_services_and_abuse": lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['chaild_and_family_services_and_abuse'].toString()),
-        "animail_first_aid": lists['animail_first_aid'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animail_first_aid'].toString()),
-        "government_registered_care_provider": lists['government_registered_care_provider'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['government_registered_care_provider'].toString()),
-        "police_background_check": lists['police_background_check'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['police_background_check'].toString()),
-      },
-    );
+    // var formData = FormData.fromMap(
+    //   {
+    //     '_method': 'PUT',
+    //     'id': usersId,
+    //     'user_info': userInfoController.text.toString(),
+    //     'phone': phoneController.text.toString(),
+    //     'address': addressController.text.toString(),
+    //     'gender': _isSelectedGender,
+    //     'dob': dobController.text.toString(),
+    //     'area': selectedArea,
+    //     'zip': zipController.text.toString(),
+    //     'experience': experienceController.text.toString(),
+    //     'hourly_rate': hourlyController.text.toString(),
+    //     'availability': availabilityController.text.toString(),
+    //     'service': keywordController.text.toString(),
+    //     "avatar": imageFileDio == null ? null : await MultipartFile.fromFile(imageFileDio!.path),
+    //     "institute_name[]": instituteMapList,
+    //     "start_date[]": startDateMapList,
+    //     "end_date[]": endDateMapList,
+    //     "current[]": currentMapList,
+    //     "major[]": majorMapList,
+    //     "valid_driver_license": lists['valid_driver_license'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['valid_driver_license'].toString()),
+    //     "scars_awareness_certification": lists['scars_awareness_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['scars_awareness_certification'].toString()),
+    //     "red_cross_babysitting_certification": lists['red_cross_babysitting_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['red_cross_babysitting_certification'].toString()),
+    //     "cpr_first_aid_certification": lists['cpr_first_aid_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['cpr_first_aid_certification'].toString()),
+    //     "animal_care_provider_certification": lists['animal_care_provider_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animal_care_provider_certification'].toString()),
+    //     "chaild_and_family_services_and_abuse": lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['chaild_and_family_services_and_abuse'].toString()),
+    //     "animail_first_aid": lists['animail_first_aid'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animail_first_aid'].toString()),
+    //     "government_registered_care_provider": lists['government_registered_care_provider'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['government_registered_care_provider'].toString()),
+    //     "police_background_check": lists['police_background_check'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['police_background_check'].toString()),
+    //   },
+    // );
 
-    Dio dio = Dio();
-    try {
-      var response = await dio.post('https://islandcare.bm/api/service-provider-profile/update', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
-      setState(() {
-        sendRequest = false;
-      });
-      if (response.statusCode == 200) {
-        Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
-        customSuccesSnackBar(
-          context,
-          "Profile Updated Successfully.",
-        );
-      } else {
-        // print(response.data);
-        setState(() {
-          error = response.data;
-        });
-        customErrorSnackBar(
-          context,
-          "Something went wrong please try agan later.",
-        );
-      }
-    } catch (e) {
-      // print(e);
-      customErrorSnackBar(context, e.toString());
-    }
+    // Dio dio = Dio();
+    // try {
+    //   var response = await dio.post('https://islandcare.bm/api/service-provider-profile/update', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
+    //   setState(() {
+    //     sendRequest = false;
+    //   });
+    //   // print(response.data);
+    //   if (response.statusCode == 200) {
+    //     Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
+    //     customSuccesSnackBar(
+    //       context,
+    //       "Profile Updated Successfully.",
+    //     );
+    //   } else {
+    //     // print(response.data);
+    //     setState(() {
+    //       error = response.data;
+    //     });
+    //     customErrorSnackBar(
+    //       context,
+    //       "Something went wrong please try agan later.",
+    //     );
+    //   }
+    // } catch (e) {
+    //   // print(e);
+    //   customErrorSnackBar(context, e.toString());
+    // }
   }
 
   var areaList = [
@@ -680,79 +682,101 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             ],
                           ),
                         ),
-                        // Phone Number
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          margin: const EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(
-                            color: CustomColors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Phone Number",
-                                style: TextStyle(
-                                  color: CustomColors.primaryColor,
-                                  fontSize: 12,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 05),
-                              TextFormField(
-                                controller: phoneController,
-                                keyboardType: TextInputType.number,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlignVertical: TextAlignVertical.bottom,
-                                maxLines: 1,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                  LengthLimitingTextInputFormatter(10),
-                                  // CustomTextInputFormatter(),
-                                ],
-                                validator: (val) {
-                                  if (val == null || val.isEmpty) {
-                                    return 'Enter your Phone Number';
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "Phone Number",
-                                  fillColor: CustomColors.white,
-                                  focusColor: CustomColors.white,
-                                  hoverColor: CustomColors.white,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        ProfileContainerField(
+                          title: "Phone Number",
+                          controller: phoneController,
+                          hintText: "Phone Number",
+                          keyboardType: TextInputType.phone,
+                          textInputAction: TextInputAction.next,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            LengthLimitingTextInputFormatter(15),
+                            // CustomTextInputFormatter(),
+                          ],
+                          validator: (value) {
+                            if (value == null) {
+                              return "error in validator";
+                            } else if (value.toString().length < 10) {
+                              return "error in validator";
+                            }
+                            return null;
+                          },
                         ),
+                        // Phone Number
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        //   decoration: BoxDecoration(
+                        //     color: CustomColors.white,
+                        //     borderRadius: BorderRadius.circular(12),
+                        //   ),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Text(
+                        //         "Phone Number",
+                        //         style: TextStyle(
+                        //           color: CustomColors.primaryColor,
+                        //           fontSize: 12,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       // const SizedBox(height: 05),
+                        //       TextFormField(
+                        //         controller: phoneController,
+                        //         keyboardType: TextInputType.number,
+                        //         style: const TextStyle(
+                        //           fontSize: 16,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w400,
+                        //         ),
+                        //         textAlignVertical: TextAlignVertical.bottom,
+                        //         maxLines: 1,
+                        //         inputFormatters: [
+                        //           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                        //           LengthLimitingTextInputFormatter(15),
+                        //           // CustomTextInputFormatter(),
+                        //         ],
+                        //         validator: (value) {
+                        //           if (value == null) {
+                        //             return "error in validator";
+                        //           } else if (value.toString().length < 10) {
+                        //             return "error in validator";
+                        //           }
+                        //           return null;
+                        //         },
+                        //         decoration: InputDecoration(
+                        //           // constraints: const BoxConstraints(maxHeight: 40, minHeight: 40),
+                        //           // contentPadding: EdgeInsets.zero,
+                        //           hintText: "Phone Number",
+                        //           fillColor: CustomColors.white,
+                        //           focusColor: CustomColors.white,
+                        //           hoverColor: CustomColors.white,
+                        //           filled: true,
+                        //           border: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
+                        //           focusedBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           enabledBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           errorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //           focusedErrorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        const SizedBox(height: 15),
                         // DOB
                         InkWell(
                           onTap: () {
@@ -933,7 +957,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              const SizedBox(height: 05),
+                              // const SizedBox(height: 05),
                               TextFormField(
                                 controller: hourlyController,
                                 keyboardType: TextInputType.number,
@@ -1613,7 +1637,16 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             ],
                           ),
                         ],
-
+                        const SizedBox(height: 10),
+                        Text(
+                          "Bio",
+                          style: TextStyle(
+                            color: CustomColors.primaryText,
+                            fontSize: 16,
+                            fontFamily: "Poppins",
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                         // Availability
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -1695,7 +1728,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "User Info",
+                                "About Me",
                                 style: TextStyle(
                                   color: CustomColors.primaryColor,
                                   fontSize: 12,
@@ -1751,43 +1784,43 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           ),
                         ),
                         // Background Verified
-                        DottedBorder(
-                          radius: const Radius.circular(10),
-                          borderType: BorderType.RRect,
-                          color: CustomColors.primaryColor,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            decoration: BoxDecoration(
-                              color: CustomColors.primaryLight,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: ListTile(
-                              leading: Icon(
-                                Icons.workspace_premium,
-                                color: CustomColors.primaryColor,
-                              ),
-                              title: Text(
-                                "Background Verified",
-                                style: TextStyle(
-                                  color: CustomColors.primaryText,
-                                  fontSize: 12,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              subtitle: Text(
-                                "We encourage parents to conduct their own screenings using the background check tools. See what each of the badges covered, or learn more about keeping your family safe by visiting the Trust & Safety Center.",
-                                style: TextStyle(
-                                  color: CustomColors.primaryText,
-                                  fontSize: 10,
-                                  fontFamily: "Poppins",
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
+                        // DottedBorder(
+                        //   radius: const Radius.circular(10),
+                        //   borderType: BorderType.RRect,
+                        //   color: CustomColors.primaryColor,
+                        //   child: Container(
+                        //     padding: const EdgeInsets.symmetric(vertical: 5),
+                        //     decoration: BoxDecoration(
+                        //       color: CustomColors.primaryLight,
+                        //       borderRadius: BorderRadius.circular(10),
+                        //     ),
+                        //     child: ListTile(
+                        //       leading: Icon(
+                        //         Icons.workspace_premium,
+                        //         color: CustomColors.primaryColor,
+                        //       ),
+                        //       title: Text(
+                        //         "Background Verified",
+                        //         style: TextStyle(
+                        //           color: CustomColors.primaryText,
+                        //           fontSize: 12,
+                        //           fontFamily: "Poppins",
+                        //           fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       subtitle: Text(
+                        //         "We encourage parents to conduct their own screenings using the background check tools. See what each of the badges covered, or learn more about keeping your family safe by visiting the Trust & Safety Center.",
+                        //         style: TextStyle(
+                        //           color: CustomColors.primaryText,
+                        //           fontSize: 10,
+                        //           fontFamily: "Poppins",
+                        //           fontWeight: FontWeight.w300,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 20),
                         // file type 1
                         UploadBasicDocumentList(
                           onTap: () {

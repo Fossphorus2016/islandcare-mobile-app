@@ -1,5 +1,10 @@
 import 'dart:convert';
 
+import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
+import 'package:island_app/models/learning_model.dart';
+import 'package:island_app/models/schedule_model.dart';
+import 'package:island_app/models/service_model.dart';
+
 ChildCareDetailModel childCareDetailModelFromJson(String str) => ChildCareDetailModel.fromJson(json.decode(str));
 
 String childCareDetailModelToJson(ChildCareDetailModel data) => json.encode(data.toJson());
@@ -44,6 +49,9 @@ class Job {
     this.learning,
     this.service,
     this.schedule,
+    // this.learning,
+    this.schoolCamp,
+    // this.additionalInfo,
   });
 
   int? id;
@@ -68,6 +76,9 @@ class Job {
   Learning? learning;
   Service? service;
   List<Schedule>? schedule;
+  // Learning? learning;
+  SchoolCamp? schoolCamp;
+  // String? additionalInfo;
 
   factory Job.fromJson(Map<String, dynamic> json) => Job(
         id: json["id"],
@@ -92,6 +103,8 @@ class Job {
         learning: json["learning"] == null ? null : Learning.fromJson(json["learning"]),
         service: json["service"] == null ? null : Service.fromJson(json["service"]),
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
+        schoolCamp: json["school_camp"] == null ? null : SchoolCamp.fromJson(json["school_camp"]),
+        // additionalInfo: json["additional_info"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -117,6 +130,8 @@ class Job {
         "learning": learning?.toJson(),
         "service": service?.toJson(),
         "schedule": schedule == null ? [] : List<dynamic>.from(schedule!.map((x) => x.toJson())),
+        "school_camp": schoolCamp?.toJson(),
+        // "additional_info": additionalInfo,
       };
 }
 
@@ -160,138 +175,138 @@ class Childinfo {
       };
 }
 
-class Learning {
-  Learning({
-    this.id,
-    this.jobId,
-    this.learningStyle,
-    this.learningChallenge,
-    this.assistanceInMath,
-    this.assistanceInEnglish,
-    this.assistanceInScience,
-    this.assistanceInReading,
-    this.assistanceInOther,
-    this.createdAt,
-    this.updatedAt,
-  });
+// class Learning {
+//   Learning({
+//     this.id,
+//     this.jobId,
+//     this.learningStyle,
+//     this.learningChallenge,
+//     this.assistanceInMath,
+//     this.assistanceInEnglish,
+//     this.assistanceInScience,
+//     this.assistanceInReading,
+//     this.assistanceInOther,
+//     this.createdAt,
+//     this.updatedAt,
+//   });
 
-  int? id;
-  int? jobId;
-  String? learningStyle;
-  String? learningChallenge;
-  int? assistanceInMath;
-  dynamic assistanceInEnglish;
-  dynamic assistanceInScience;
-  int? assistanceInReading;
-  String? assistanceInOther;
-  String? createdAt;
-  String? updatedAt;
+//   int? id;
+//   int? jobId;
+//   String? learningStyle;
+//   String? learningChallenge;
+//   int? assistanceInMath;
+//   dynamic assistanceInEnglish;
+//   dynamic assistanceInScience;
+//   int? assistanceInReading;
+//   String? assistanceInOther;
+//   String? createdAt;
+//   String? updatedAt;
 
-  factory Learning.fromJson(Map<String, dynamic> json) => Learning(
-        id: json["id"],
-        jobId: json["job_id"],
-        learningStyle: json["learning_style"],
-        learningChallenge: json["learning_challenge"],
-        assistanceInMath: json["assistance_in_math"],
-        assistanceInEnglish: json["assistance_in_english"],
-        assistanceInScience: json["assistance_in_science"],
-        assistanceInReading: json["assistance_in_reading"],
-        assistanceInOther: json["assistance_in_other"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-      );
+//   factory Learning.fromJson(Map<String, dynamic> json) => Learning(
+//         id: json["id"],
+//         jobId: json["job_id"],
+//         learningStyle: json["learning_style"],
+//         learningChallenge: json["learning_challenge"],
+//         assistanceInMath: json["assistance_in_math"],
+//         assistanceInEnglish: json["assistance_in_english"],
+//         assistanceInScience: json["assistance_in_science"],
+//         assistanceInReading: json["assistance_in_reading"],
+//         assistanceInOther: json["assistance_in_other"],
+//         createdAt: json["created_at"],
+//         updatedAt: json["updated_at"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "job_id": jobId,
-        "learning_style": learningStyle,
-        "learning_challenge": learningChallenge,
-        "assistance_in_math": assistanceInMath,
-        "assistance_in_english": assistanceInEnglish,
-        "assistance_in_science": assistanceInScience,
-        "assistance_in_reading": assistanceInReading,
-        "assistance_in_other": assistanceInOther,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "job_id": jobId,
+//         "learning_style": learningStyle,
+//         "learning_challenge": learningChallenge,
+//         "assistance_in_math": assistanceInMath,
+//         "assistance_in_english": assistanceInEnglish,
+//         "assistance_in_science": assistanceInScience,
+//         "assistance_in_reading": assistanceInReading,
+//         "assistance_in_other": assistanceInOther,
+//         "created_at": createdAt,
+//         "updated_at": updatedAt,
+//       };
+// }
 
-class Schedule {
-  Schedule({
-    this.id,
-    this.jobId,
-    this.startingDate,
-    this.startingTime,
-    this.duration,
-    this.createdAt,
-    this.updatedAt,
-  });
+// class Schedule {
+//   Schedule({
+//     this.id,
+//     this.jobId,
+//     this.startingDate,
+//     this.startingTime,
+//     this.duration,
+//     this.createdAt,
+//     this.updatedAt,
+//   });
 
-  int? id;
-  int? jobId;
-  String? startingDate;
-  String? startingTime;
-  String? duration;
-  String? createdAt;
-  String? updatedAt;
+//   int? id;
+//   int? jobId;
+//   String? startingDate;
+//   String? startingTime;
+//   String? duration;
+//   String? createdAt;
+//   String? updatedAt;
 
-  factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
-        id: json["id"],
-        jobId: json["job_id"],
-        startingDate: json["starting_date"],
-        startingTime: json["starting_time"],
-        duration: json["duration"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-      );
+//   factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
+//         id: json["id"],
+//         jobId: json["job_id"],
+//         startingDate: json["starting_date"],
+//         startingTime: json["starting_time"],
+//         duration: json["duration"],
+//         createdAt: json["created_at"],
+//         updatedAt: json["updated_at"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "job_id": jobId,
-        "starting_date": startingDate,
-        "starting_time": startingTime,
-        "duration": duration,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "job_id": jobId,
+//         "starting_date": startingDate,
+//         "starting_time": startingTime,
+//         "duration": duration,
+//         "created_at": createdAt,
+//         "updated_at": updatedAt,
+//       };
+// }
 
-class Service {
-  Service({
-    this.id,
-    this.name,
-    this.image,
-    this.description,
-    this.deletedAt,
-    this.createdAt,
-    this.updatedAt,
-  });
+// class Service {
+//   Service({
+//     this.id,
+//     this.name,
+//     this.image,
+//     this.description,
+//     this.deletedAt,
+//     this.createdAt,
+//     this.updatedAt,
+//   });
 
-  int? id;
-  String? name;
-  String? image;
-  String? description;
-  dynamic deletedAt;
-  String? createdAt;
-  String? updatedAt;
+//   int? id;
+//   String? name;
+//   String? image;
+//   String? description;
+//   dynamic deletedAt;
+//   String? createdAt;
+//   String? updatedAt;
 
-  factory Service.fromJson(Map<String, dynamic> json) => Service(
-        id: json["id"],
-        name: json["name"],
-        image: json["image"],
-        description: json["description"],
-        deletedAt: json["deleted_at"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-      );
+//   factory Service.fromJson(Map<String, dynamic> json) => Service(
+//         id: json["id"],
+//         name: json["name"],
+//         image: json["image"],
+//         description: json["description"],
+//         deletedAt: json["deleted_at"],
+//         createdAt: json["created_at"],
+//         updatedAt: json["updated_at"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "image": image,
-        "description": description,
-        "deleted_at": deletedAt,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "name": name,
+//         "image": image,
+//         "description": description,
+//         "deleted_at": deletedAt,
+//         "created_at": createdAt,
+//         "updated_at": updatedAt,
+//       };
+// }

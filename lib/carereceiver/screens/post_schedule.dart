@@ -11,20 +11,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import '../../widgets/custom_text_field.dart';
 
-class Schedule extends StatefulWidget {
+class PostSchedule extends StatefulWidget {
   final String? serviceId;
   final String? jobId;
-  const Schedule({
+  const PostSchedule({
     Key? key,
     this.serviceId,
     this.jobId,
   }) : super(key: key);
 
   @override
-  State<Schedule> createState() => _ScheduleState();
+  State<PostSchedule> createState() => _PostScheduleState();
 }
 
-class _ScheduleState extends State<Schedule> {
+class _PostScheduleState extends State<PostSchedule> {
   final TextEditingController dateController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController descController = TextEditingController();

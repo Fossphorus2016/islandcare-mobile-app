@@ -180,13 +180,9 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
-
                 // Listing
                 FutureBuilder<ServiceProviderJobBoardModel>(
                   future: fetchJobBoard,
@@ -195,27 +191,32 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                       return ListView.builder(
                         itemCount: snapshot.data!.job!.length,
                         shrinkWrap: true,
-                        padding: const EdgeInsets.only(top: 16),
+                        padding: const EdgeInsets.only(
+                          top: 16,
+                        ),
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return snapshot.data!.job!.isNotEmpty
-                              ? JobBoardCartWidget(
-                                  jobTitle: snapshot.data!.job![index].jobTitle.toString(),
-                                  jobType: snapshot.data!.job![index].service!.name.toString(),
-                                  delete: () {
-                                    _showDeleteDialog();
-                                  },
-                                  detail: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ServiceProviderJobsDetail(
-                                          id: snapshot.data!.job![index].id.toString(),
-                                          service: snapshot.data!.job![index].service!.name.toString(),
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: JobBoardCartWidget(
+                                    jobTitle: snapshot.data!.job![index].jobTitle.toString(),
+                                    jobType: snapshot.data!.job![index].service!.name.toString(),
+                                    delete: () {
+                                      _showDeleteDialog();
+                                    },
+                                    detail: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ServiceProviderJobsDetail(
+                                            id: snapshot.data!.job![index].id.toString(),
+                                            service: snapshot.data!.job![index].service!.name.toString(),
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 )
                               : Container(
                                   width: MediaQuery.of(context).size.width,

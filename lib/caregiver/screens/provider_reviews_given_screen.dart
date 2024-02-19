@@ -3,11 +3,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/provider_reviews_model.dart';
+import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/carereceiver/widgets/reviews_given_widget.dart';
 import 'package:island_app/res/app_url.dart';
-// import 'package:island_app/utils/utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:island_app/widgets/review_expansion_list.dart';
+import 'package:provider/provider.dart';
 
 class ProviderReviewsScreen extends StatefulWidget {
   const ProviderReviewsScreen({super.key});
@@ -22,7 +22,7 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
   // Get all jobs
   ProviderReviewsModel? futurereviews;
   fetchReviewsModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
       CareGiverUrl.serviceProviderProfileReviews,
       options: Options(
@@ -42,29 +42,13 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
       setState(() {
         isLoading = false;
       });
-      // customErrorSnackBar(
-      //   context,
-      //   'Failed to load Reviews Model',
-      // );
-      // throw Exception();
     }
-  }
-
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-
-    return userToken.toString();
   }
 
   @override
   void initState() {
-    getUserToken();
     super.initState();
     fetchReviewsModel();
-    // futurereviews = fetchReviewsModel();
   }
 
   @override
@@ -132,7 +116,7 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                         decoration: BoxDecoration(
-                          color: CustomColors.blackLight,
+                          color: CustomColors.greenhighlight,
                           border: Border(
                             bottom: BorderSide(
                               color: CustomColors.borderLight,
@@ -174,11 +158,6 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                           ],
                         ),
                       ),
-                      // FutureBuilder<ProviderReviewsModel>(
-                      //   future: futurereviews,
-                      //   builder: (context, snapshot) {
-                      //     if (snapshot.hasData) {
-                      // return
                       if (futurereviews != null && futurereviews!.data!.isNotEmpty) ...[
                         ListView.builder(
                           itemCount: futurereviews!.data!.length,
@@ -186,10 +165,10 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                           padding: const EdgeInsets.only(top: 16),
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return ReviewsGivenWidget(
+                            return ReviewExpansionList(
                               name: '${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}',
-                              rating: futurereviews!.data![index].rating!.toDouble(),
                               comment: futurereviews!.data![index].comment.toString() == "null" ? "Not Available" : futurereviews!.data![index].comment.toString(),
+                              rating: futurereviews!.data![index].rating!,
                             );
                           },
                         ),

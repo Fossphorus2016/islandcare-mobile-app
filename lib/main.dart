@@ -1,4 +1,4 @@
-// ignore_for_file: await_only_futures, prefer_typing_uninitialized_variables, avoid_print
+// ignore_for_file: await_only_futures, prefer_typing_uninitialized_variables
 
 import 'dart:async';
 
@@ -169,6 +169,7 @@ class RouteGenerator {
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(builder: (context) => const SplashScreen());
+
       case '/sign-up':
         return MaterialPageRoute(builder: (context) => SignupScreen());
 

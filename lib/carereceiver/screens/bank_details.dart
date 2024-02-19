@@ -50,7 +50,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
           filteredList = null;
         }
       });
-      // FocusScope.of(context).
     } else {
       throw Exception(
         'Failed to load Manage Cards',
@@ -88,7 +87,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
       } else {
         customErrorSnackBar(
           context,
-          "Unable To Select Unverified Banks",
+          response.data['message'].toString(),
         );
       }
     } catch (e) {

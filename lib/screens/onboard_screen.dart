@@ -29,7 +29,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
               ),
               child: Center(
                 child: Text(
-                  "Signin",
+                  "Login",
                   style: TextStyle(
                     color: CustomColors.white,
                     fontFamily: "Rubik",
@@ -42,95 +42,66 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: [
-                Stack(
+        body: SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            children: [
+              Expanded(
+                flex: 7,
+                child: Stack(
                   children: [
-                    Column(
-                      children: <Widget>[
-                        Container(
-                          height: MediaQuery.of(context).size.height * .60,
-                          color: Colors.blue,
-                          child: Image.asset(
-                            "assets/images/onboardBg.png",
-                            height: MediaQuery.of(context).size.height * .7,
-                            width: MediaQuery.of(context).size.width,
-                            fit: BoxFit.cover,
-                            alignment: Alignment.topCenter,
-                            color: const Color.fromARGB(46, 0, 0, 0),
-                            colorBlendMode: BlendMode.darken,
-                          ),
-                        ),
-                        Container(
-                          height: MediaQuery.of(context).size.height * .35,
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(40),
-                              topRight: Radius.circular(40),
-                              bottomLeft: Radius.circular(0),
-                              bottomRight: Radius.circular(0),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
+                    Image.asset(
+                      "assets/images/main-bg.png",
+                      height: MediaQuery.of(context).size.height * .7,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
                       alignment: Alignment.topCenter,
-                      padding: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height * .55,
-                        right: 0.0,
-                        left: 0.0,
+                      color: const Color.fromARGB(46, 0, 0, 0),
+                      colorBlendMode: BlendMode.darken,
+                    ),
+                    const Center(
+                      child: Image(
+                        image: AssetImage("assets/images/Logo-light.png"),
                       ),
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40),
-                          topRight: Radius.circular(40),
-                        ),
-                      ),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40),
-                            topRight: Radius.circular(40),
-                          ),
-                        ),
-                        height: MediaQuery.of(context).size.height * .4,
-                        width: MediaQuery.of(context).size.width,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage("assets/images/rectangle.png"),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Island Care In Your Neighbourhood",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: CustomColors.primaryText,
-                                  fontFamily: "Poppins",
-                                  fontSize: 26.2702,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                            ],
-                          ),
-                        ),
-                      ),
-                    )
+                    ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      Text(
+                        "Welcome to Island Care",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: CustomColors.primaryText,
+                          fontFamily: "Poppins",
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        "Everyone needs a community network they can rely on... we’re here to help!",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: CustomColors.primaryText,
+                          fontFamily: "Poppins",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

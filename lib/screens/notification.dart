@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unused_element, unused_local_variable, use_build_context_synchronously
+// ignore_for_file: unused_element, unused_local_variable, use_build_context_synchronously
 
 import 'dart:developer';
 
@@ -355,7 +355,7 @@ class NotificationProvider extends ChangeNotifier {
         notifyListeners();
       }
     } catch (error) {
-      print("error on notifiacation get $error");
+      // print("error on notifiacation get $error");
     }
   }
 

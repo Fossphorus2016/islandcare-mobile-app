@@ -41,6 +41,8 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
     super.initState();
   }
 
+  bool adminChatExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
@@ -79,9 +81,15 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
                       // ),
                       const SizedBox(height: 20),
                       CustomExpansionPanelList(
+                        expansionCallback: (panelIndex, isExpanded) {
+                          setState(() {
+                            adminChatExpanded = !adminChatExpanded;
+                          });
+                        },
                         children: [
                           CustomExpansionPanel(
-                            isExpanded: true,
+                            isExpanded: adminChatExpanded,
+                            canTapOnHeader: true,
                             headerBuilder: (context, isExpanded) {
                               return const Row(
                                 children: [

@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/bank_details_models.dart';
+import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-import 'package:island_app/widgets/bank_detail_panel.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'dart:core';
 
 import 'package:dio/dio.dart';
@@ -22,13 +22,13 @@ class _BankDetailsState extends State<BankDetails> {
   List? allCards = [];
   List showItem = [];
 
-  late Future<BankDetailsModel>? futureBankDetails;
+  BankDetailsModel? futureBankDetails;
   List bankDetails = [];
   TextEditingController accountTitleController = TextEditingController();
   TextEditingController accountNumberController = TextEditingController();
   final bankKey = GlobalKey<FormState>();
-  Future<BankDetailsModel> fetchBankDetailsModel() async {
-    var token = await getUserToken();
+  fetchBankDetailsModel() async {
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
       CareGiverUrl.serviceProviderBankDetails,
       options: Options(headers: {
@@ -38,11 +38,18 @@ class _BankDetailsState extends State<BankDetails> {
     );
     if (response.statusCode == 200) {
       var json = response.data as Map;
-      var bankDetails = json['bank_details'] as List;
+      var bankdetails = json['bank_details'] as List;
+
+      futureBankDetails = BankDetailsModel.fromJson(response.data);
       setState(() {
-        bankDetails = bankDetails;
+        bankDetails = bankdetails;
+        // print(json['bank_details']);
+        if (futureBankDetails != null && futureBankDetails!.bankDetails != null) {
+          filteredList = futureBankDetails!.bankDetails;
+        } else {
+          filteredList = null;
+        }
       });
-      return BankDetailsModel.fromJson(response.data);
     } else {
       throw Exception(
         'Failed to load Manage Cards',
@@ -51,7 +58,7 @@ class _BankDetailsState extends State<BankDetails> {
   }
 
   selectBank(var bankId) async {
-    var token = await getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     var formData = FormData.fromMap(
       {
         "id": bankId,
@@ -71,15 +78,13 @@ class _BankDetailsState extends State<BankDetails> {
           },
         ),
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && !response.data['message'].contains("Unable To Select Unverified Banks")) {
         customSuccesSnackBar(context, "Bank Account Selected");
-        setState(() {
-          futureBankDetails = fetchBankDetailsModel();
-        });
+        fetchBankDetailsModel();
       } else {
         customErrorSnackBar(
           context,
-          "Unable To Select Unverified Banks",
+          response.data['message'].toString(),
         );
       }
     } catch (e) {
@@ -91,7 +96,7 @@ class _BankDetailsState extends State<BankDetails> {
   }
 
   deleteBank(var bankId) async {
-    var token = await getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     var formData = FormData.fromMap(
       {
         "id": bankId,
@@ -116,13 +121,12 @@ class _BankDetailsState extends State<BankDetails> {
           context,
           "Bank Account Removed Successfully",
         );
-        setState(() {
-          futureBankDetails = fetchBankDetailsModel();
-        });
+        focus.requestFocus();
+        fetchBankDetailsModel();
       } else {
         customErrorSnackBar(
           context,
-          "Unable To Delete Unverified Banks",
+          response.data['message'].toString(),
         );
       }
     } catch (e) {
@@ -141,7 +145,7 @@ class _BankDetailsState extends State<BankDetails> {
       'account_number': accountNumberController.text.toString(),
     };
     try {
-      var token = await getUserToken();
+      var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
       final response = await Dio().post(
         CareGiverUrl.addServiceProviderBank,
         data: requestBody,
@@ -158,9 +162,8 @@ class _BankDetailsState extends State<BankDetails> {
             context,
             response.data['message'],
           );
-          setState(() {
-            futureBankDetails = fetchBankDetailsModel();
-          });
+          fetchBankDetailsModel();
+          focus.requestFocus();
           accountTitleController.clear();
           accountNumberController.clear();
         } else {
@@ -192,25 +195,29 @@ class _BankDetailsState extends State<BankDetails> {
   ]; //edited line
   var selectedNames;
 
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
+  // getUserToken() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var userToken = preferences.getString(
+  //     'userToken',
+  //   );
 
-    return userToken.toString();
-  }
+  //   return userToken.toString();
+  // }
 
   var now = DateTime.now();
   DateTime today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
 
   @override
   void initState() {
-    getUserToken();
+    // getUserToken();
     super.initState();
-    futureBankDetails = fetchBankDetailsModel();
+    fetchBankDetailsModel();
   }
 
+  List<BankDetail>? filteredList = [];
+  BankDetail? selectedBank;
+  FocusNode focus = FocusNode();
+  TextEditingController textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -263,13 +270,11 @@ class _BankDetailsState extends State<BankDetails> {
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 20,
-                ),
+                const SizedBox(height: 20),
                 GestureDetector(
                   onTap: () {
                     showModalBottomSheet(
@@ -357,19 +362,20 @@ class _BankDetailsState extends State<BankDetails> {
                                                     vertical: 4,
                                                   ),
                                                   child: DropdownButtonHideUnderline(
-                                                      child: DropdownButton(
-                                                    isExpanded: true,
-                                                    hint: const Text("Select Banks"),
-                                                    value: selectedNames,
-                                                    onChanged: (value) {
-                                                      setState(() {
-                                                        selectedNames = value.toString();
-                                                      });
-                                                    },
-                                                    items: dataNames.map((itemone) {
-                                                      return DropdownMenuItem(value: itemone['value'], child: Text(itemone['name']));
-                                                    }).toList(),
-                                                  )),
+                                                    child: DropdownButton(
+                                                      isExpanded: true,
+                                                      hint: const Text("Select Banks"),
+                                                      value: selectedNames,
+                                                      onChanged: (value) {
+                                                        setState(() {
+                                                          selectedNames = value.toString();
+                                                        });
+                                                      },
+                                                      items: dataNames.map((itemone) {
+                                                        return DropdownMenuItem(value: itemone['value'], child: Text(itemone['name']));
+                                                      }).toList(),
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -398,9 +404,9 @@ class _BankDetailsState extends State<BankDetails> {
                                               width: MediaQuery.of(context).size.width,
                                               height: 50,
                                               child: TextFormField(
-                                                keyboardType: TextInputType.name,
-                                                textInputAction: TextInputAction.next,
+                                                keyboardType: TextInputType.text,
                                                 controller: accountTitleController,
+                                                textInputAction: TextInputAction.next,
                                                 style: const TextStyle(
                                                   fontSize: 16,
                                                   fontFamily: "Rubik",
@@ -454,12 +460,9 @@ class _BankDetailsState extends State<BankDetails> {
                                               height: 50,
                                               child: TextFormField(
                                                 keyboardType: TextInputType.text,
+                                                textInputAction: TextInputAction.done,
                                                 controller: accountNumberController,
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontFamily: "Rubik",
-                                                  fontWeight: FontWeight.w400,
-                                                ),
+                                                style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
                                                 textAlignVertical: TextAlignVertical.bottom,
                                                 maxLines: 1,
                                                 decoration: InputDecoration(
@@ -563,345 +566,297 @@ class _BankDetailsState extends State<BankDetails> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
+                const SizedBox(height: 10),
                 // Listing
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: CustomColors.blackLight,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: CustomColors.borderLight,
-                        width: 0.1,
-                      ),
+                // Container(
+                //   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                //   decoration: BoxDecoration(
+                //     color: CustomColors.blackLight,
+                //     border: Border(
+                //       bottom: BorderSide(
+                //         color: CustomColors.borderLight,
+                //         width: 0.1,
+                //       ),
+                //     ),
+                //   ),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     crossAxisAlignment: CrossAxisAlignment.start,
+                //     children: [
+                //       Text(
+                //         "Bank Name",
+                //         style: TextStyle(
+                //           color: CustomColors.black,
+                //           fontSize: 12,
+                //           fontFamily: "Poppins",
+                //           fontWeight: FontWeight.w600,
+                //         ),
+                //       ),
+                //       Text(
+                //         "Account Title",
+                //         style: TextStyle(
+                //           color: CustomColors.black,
+                //           fontSize: 12,
+                //           fontFamily: "Poppins",
+                //           fontWeight: FontWeight.w600,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                if (filteredList != null) ...[
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: FocusScope.of(context).hasFocus ? 250 : 80,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Row(
+                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        //   children: [
+                        //     Text(
+                        //       widget.title,
+                        //       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        //     ),
+                        //     IconButton(
+                        //       icon: const Icon(Icons.close),
+                        //       onPressed: () {
+                        //         FocusScope.of(context).unfocus();
+                        //         Navigator.pop(context);
+                        //       },
+                        //     ),
+                        //     /*Align(
+                        //                                 alignment: Alignment.centerRight,
+                        //                                 child: TextButton(
+                        //                                     onPressed: () {
+                        //                                       FocusScope.of(context).unfocus();
+                        //                                       Navigator.pop(context);
+                        //                                     },
+                        //                                     child: Text(
+                        //                                       'Close',
+                        //                                       style: widget.titleStyle != null
+                        //                                           ? widget.titleStyle
+                        //                                           : TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                        //                                     )),
+                        //                               )*/
+                        //   ],
+                        // ),
+                        // const SizedBox(height: 5),
+                        TextField(
+                          focusNode: focus,
+                          autofocus: true,
+                          decoration: InputDecoration(
+                            isDense: true,
+                            prefixIcon: const Icon(Icons.search),
+                            hintText: "Search Bank...",
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Colors.black26),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: const BorderSide(color: Colors.black12),
+                            ),
+                          ),
+                          style: const TextStyle(fontSize: 14),
+                          controller: textController,
+                        ),
+                        const SizedBox(height: 15),
+                        if (FocusScope.of(context).hasFocus) ...[
+                          Container(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            decoration: const BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(color: Colors.grey),
+                              ),
+                            ),
+                            child: const Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Bank Name",
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text(
+                                  "Account Title",
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: filteredList!.length,
+                              cacheExtent: 50,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    // widget.onSelected(filteredList[index]);
+                                    setState(() {
+                                      selectedBank = filteredList![index];
+                                    });
+                                    // print(filteredList![index]);
+                                  },
+                                  child: Container(
+                                    // color: Colors.red,
+                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(color: Colors.grey),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          filteredList![index].nameOfBank.toString(),
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                        Text(
+                                          filteredList![index].nameOnAccount.toString(),
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Bank Name",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
+                  //  ListView.builder(
+                  //   physics: const NeverScrollableScrollPhysics(),
+                  //   shrinkWrap: true,
+                  //   itemCount: snapshot.data!.bankDetails!.length,
+                  //   itemBuilder: (BuildContext context, int index) {
+                  //     return BankDetailPanel(
+                  //       bankName: snapshot.data!.bankDetails![index].nameOfBank.toString(),
+                  //       accountTitle: snapshot.data!.bankDetails![index].nameOnAccount.toString(),
+                  //       accountNumber: snapshot.data!.bankDetails![index].accountNumber.toString(),
+                  //       defaulBank: snapshot.data?.bankDetails![index].status == 1 ? true : false,
+                  //       status: snapshot.data!.bankDetails![index].status == 0 ? "Pending" : "Approved",
+                  //       deleteBank: () => deleteBank(snapshot.data?.bankDetails![index].id),
+                  //       setDefaultBank: () => selectBank(snapshot.data!.bankDetails![index].id),
+                  //     );
+                  //   },
+                  // );
+                  //     } else {
+                  //       return const Center(
+                  //         child: CircularProgressIndicator(),
+                  //       );
+                  //     }
+                  //   },
+                  // ),
+                  if (selectedBank != null && !FocusScope.of(context).hasFocus) ...[
+                    Row(
+                      children: [
+                        const Text(
+                          "Name Of Bank: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      Text(
-                        "Account Title",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
+                        const SizedBox(width: 10),
+                        Text(selectedBank!.nameOfBank.toString()),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const Text(
+                          "Account Title: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                FutureBuilder<BankDetailsModel>(
-                    future: futureBankDetails,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: snapshot.data!.bankDetails!.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return BankDetailPanel(
-                              bankName: snapshot.data!.bankDetails![index].nameOfBank.toString(),
-                              accountTitle: snapshot.data!.bankDetails![index].nameOnAccount.toString(),
-                              accountNumber: snapshot.data!.bankDetails![index].accountNumber.toString(),
-                              defaulBank: snapshot.data?.bankDetails![index].status == 1 ? true : false,
-                              status: snapshot.data!.bankDetails![index].status == 0 ? "Pending" : "Approved",
-                              deleteBank: () => deleteBank(snapshot.data?.bankDetails![index].id),
-                              setDefaultBank: () => selectBank(snapshot.data!.bankDetails![index].id),
-                            );
-                            // Column(
-                            //   children: [
-                            //     GestureDetector(
-                            //       onTap: () {
-                            //         if (showItem.contains(index)) {
-                            //           showItem.remove(index);
-                            //         } else {
-                            //           showItem.add(index);
-                            //         }
-
-                            //         setState(() {});
-                            //       },
-                            //       child: Container(
-                            //         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                            //         decoration: BoxDecoration(
-                            //           border: Border(
-                            //             bottom: BorderSide(
-                            //               color: CustomColors.borderLight,
-                            //               width: 0.1,
-                            //             ),
-                            //           ),
-                            //         ),
-                            //         child: Column(
-                            //           children: [
-                            //             Row(
-                            //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //               crossAxisAlignment: CrossAxisAlignment.start,
-                            //               children: [
-                            //                 Column(
-                            //                   crossAxisAlignment: CrossAxisAlignment.center,
-                            //                   children: [
-                            //                     Container(
-                            //                       width: MediaQuery.of(context).size.width * .4,
-                            //                       alignment: Alignment.center,
-                            //                       child: Text(
-                            //                         // "Babysitters",
-                            //                         snapshot.data!.bankDetails![index].nameOfBank.toString(),
-                            //                         style: TextStyle(
-                            //                           color: CustomColors.primaryText,
-                            //                           fontFamily: "Poppins",
-                            //                           fontWeight: FontWeight.w600,
-                            //                           fontSize: 13,
-                            //                         ),
-                            //                       ),
-                            //                     ),
-                            //                   ],
-                            //                 ),
-                            //                 Container(
-                            //                   width: MediaQuery.of(context).size.width * .4,
-                            //                   alignment: Alignment.center,
-                            //                   child: Text(
-                            //                     snapshot.data!.bankDetails![index].nameOnAccount.toString(),
-                            //                     style: TextStyle(
-                            //                       color: CustomColors.primaryText,
-                            //                       fontFamily: "Poppins",
-                            //                       fontWeight: FontWeight.w600,
-                            //                       fontSize: 13,
-                            //                     ),
-                            //                   ),
-                            //                 ),
-                            //               ],
-                            //             ),
-                            //             const SizedBox(
-                            //               height: 10,
-                            //             ),
-                            //           ],
-                            //         ),
-                            //       ),
-                            //     ),
-                            //     showItem.contains(index)
-                            //         ? Container(
-                            //             padding: const EdgeInsets.symmetric(vertical: 5),
-                            //             decoration: BoxDecoration(
-                            //               color: CustomColors.loginBg,
-                            //               border: Border(
-                            //                 top: BorderSide(
-                            //                   color: CustomColors.borderLight,
-                            //                   width: 0.1,
-                            //                 ),
-                            //               ),
-                            //             ),
-                            //             child: Column(
-                            //               children: [
-                            //                 Row(
-                            //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //                   crossAxisAlignment: CrossAxisAlignment.start,
-                            //                   children: [
-                            //                     Column(
-                            //                       crossAxisAlignment: CrossAxisAlignment.center,
-                            //                       children: [
-                            //                         Container(
-                            //                           width: MediaQuery.of(context).size.width * .4,
-                            //                           alignment: Alignment.center,
-                            //                           child: Text(
-                            //                             "Account Number",
-                            //                             style: TextStyle(
-                            //                               color: CustomColors.primaryText,
-                            //                               fontFamily: "Poppins",
-                            //                               fontWeight: FontWeight.w600,
-                            //                               fontSize: 13,
-                            //                             ),
-                            //                           ),
-                            //                         ),
-                            //                         const SizedBox(
-                            //                           height: 5,
-                            //                         ),
-                            //                         Container(
-                            //                           width: MediaQuery.of(context).size.width * .4,
-                            //                           alignment: Alignment.center,
-                            //                           child: Text(
-                            //                             snapshot.data!.bankDetails![index].accountNumber.toString(),
-                            //                             style: TextStyle(
-                            //                               color: CustomColors.hintText,
-                            //                               fontFamily: "Poppins",
-                            //                               fontWeight: FontWeight.w500,
-                            //                               fontSize: 12,
-                            //                             ),
-                            //                           ),
-                            //                         ),
-                            //                       ],
-                            //                     ),
-                            //                     Column(
-                            //                       crossAxisAlignment: CrossAxisAlignment.center,
-                            //                       children: [
-                            //                         Container(
-                            //                           width: MediaQuery.of(context).size.width * .4,
-                            //                           alignment: Alignment.center,
-                            //                           child: Text(
-                            //                             "Selected Default Bank",
-                            //                             style: TextStyle(
-                            //                               color: CustomColors.primaryText,
-                            //                               fontFamily: "Poppins",
-                            //                               fontWeight: FontWeight.w600,
-                            //                               fontSize: 13,
-                            //                             ),
-                            //                           ),
-                            //                         ),
-                            //                         const SizedBox(
-                            //                           height: 5,
-                            //                         ),
-                            //                         if (snapshot.data?.bankDetails![index].status == 1 && snapshot.data!.bankDetails![index].selected == 1) ...[
-                            //                           Container(
-                            //                             width: MediaQuery.of(context).size.width * .4,
-                            //                             padding: const EdgeInsets.all(6),
-                            //                             decoration: BoxDecoration(color: snapshot.data!.bankDetails![index].selected.toString() == "1" ? CustomColors.green : CustomColors.loginBg, borderRadius: BorderRadius.circular(6)),
-                            //                             alignment: Alignment.center,
-                            //                             child: Text(
-                            //                               "Default Bank",
-                            //                               style: TextStyle(
-                            //                                 color: snapshot.data!.bankDetails![index].selected == 1 ? Colors.white : CustomColors.red,
-                            //                                 fontFamily: "Poppins",
-                            //                                 fontWeight: FontWeight.w500,
-                            //                                 fontSize: 12,
-                            //                               ),
-                            //                             ),
-                            //                           ),
-                            //                         ] else ...[
-                            //                           GestureDetector(
-                            //                             onTap: () {
-                            //                               selectBank(snapshot.data!.bankDetails![index].id);
-                            //                             },
-                            //                             child: Container(
-                            //                               width: MediaQuery.of(context).size.width * .4,
-                            //                               padding: const EdgeInsets.all(6),
-                            //                               decoration: BoxDecoration(color: snapshot.data!.bankDetails![index].selected.toString() == "1" ? CustomColors.green : CustomColors.loginBg, borderRadius: BorderRadius.circular(6)),
-                            //                               alignment: Alignment.center,
-                            //                               child: Text(
-                            //                                 snapshot.data!.bankDetails![index].status == 0 ? "" : "Select",
-                            //                                 style: TextStyle(
-                            //                                   color: snapshot.data!.bankDetails![index].selected.toString() == "1" ? CustomColors.white : CustomColors.red,
-                            //                                   fontFamily: "Poppins",
-                            //                                   fontWeight: FontWeight.w500,
-                            //                                   fontSize: 12,
-                            //                                 ),
-                            //                               ),
-                            //                             ),
-                            //                           ),
-                            //                         ]
-                            //                       ],
-                            //                     ),
-                            //                   ],
-                            //                 ),
-                            //                 const SizedBox(
-                            //                   height: 10,
-                            //                 ),
-                            //                 Row(
-                            //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //                   crossAxisAlignment: CrossAxisAlignment.start,
-                            //                   children: [
-                            //                     Column(
-                            //                       crossAxisAlignment: CrossAxisAlignment.center,
-                            //                       children: [
-                            //                         Container(
-                            //                           width: MediaQuery.of(context).size.width * .4,
-                            //                           alignment: Alignment.center,
-                            //                           child: Text(
-                            //                             "Status",
-                            //                             style: TextStyle(
-                            //                               color: CustomColors.primaryText,
-                            //                               fontFamily: "Poppins",
-                            //                               fontWeight: FontWeight.w600,
-                            //                               fontSize: 13,
-                            //                             ),
-                            //                           ),
-                            //                         ),
-                            //                         const SizedBox(
-                            //                           height: 5,
-                            //                         ),
-                            //                         Container(
-                            //                           width: MediaQuery.of(context).size.width * .4,
-                            //                           alignment: Alignment.center,
-                            //                           child: Text(
-                            //                             snapshot.data!.bankDetails![index].status == 0 ? "Pending" : "Approved",
-                            //                             style: TextStyle(
-                            //                               color: snapshot.data!.bankDetails![index].status == 0 ? CustomColors.red : CustomColors.green,
-                            //                               fontFamily: "Poppins",
-                            //                               fontWeight: FontWeight.w500,
-                            //                               fontSize: 12,
-                            //                             ),
-                            //                           ),
-                            //                         ),
-                            //                       ],
-                            //                     ),
-                            //                     Column(
-                            //                       crossAxisAlignment: CrossAxisAlignment.center,
-                            //                       children: [
-                            //                         Container(
-                            //                           width: MediaQuery.of(context).size.width * .4,
-                            //                           alignment: Alignment.center,
-                            //                           child: Text(
-                            //                             "Action",
-                            //                             style: TextStyle(
-                            //                               color: CustomColors.primaryText,
-                            //                               fontFamily: "Poppins",
-                            //                               fontWeight: FontWeight.w600,
-                            //                               fontSize: 13,
-                            //                             ),
-                            //                           ),
-                            //                         ),
-                            //                         const SizedBox(
-                            //                           height: 5,
-                            //                         ),
-                            //                         GestureDetector(
-                            //                           onTap: () {
-                            //                             deleteBank(snapshot.data?.bankDetails![index].id);
-                            //                           },
-                            //                           child: Container(
-                            //                             width: MediaQuery.of(context).size.width * .4,
-                            //                             padding: const EdgeInsets.all(6),
-                            //                             decoration: BoxDecoration(color: CustomColors.red, borderRadius: BorderRadius.circular(6)),
-                            //                             alignment: Alignment.center,
-                            //                             child: Text(
-                            //                               snapshot.data!.bankDetails![index].selected.toString() == "1" ? "Delete" : "Delete",
-                            //                               style: TextStyle(
-                            //                                 color: CustomColors.white,
-                            //                                 fontFamily: "Poppins",
-                            //                                 fontWeight: FontWeight.w500,
-                            //                                 fontSize: 12,
-                            //                               ),
-                            //                             ),
-                            //                           ),
-                            //                         ),
-                            //                       ],
-                            //                     ),
-                            //                   ],
-                            //                 ),
-                            //                 const SizedBox(height: 10),
-                            //               ],
-                            //             ),
-                            //           )
-                            //         : Container(),
-                            //   ],
-                            // );
+                        const SizedBox(width: 10),
+                        Text(selectedBank!.nameOnAccount.toString()),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const Text(
+                          "Account Number: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(selectedBank!.accountNumber.toString()),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Status: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          selectedBank!.status == 0 ? "Pending" : "Approved",
+                          style: TextStyle(
+                            color: selectedBank!.status == 1 ? Colors.green : null,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Selected Default Bank: ",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(selectedBank!.status == 1 ? "true" : "false"),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        if (selectedBank!.selected == 0) ...[
+                          TextButton(
+                            onPressed: () {
+                              selectBank(selectedBank!.id);
+                            },
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.green),
+                              shape: MaterialStateProperty.resolveWith(
+                                (states) => RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+                            child: const Text(
+                              "Set Default Bank",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                        ],
+                        TextButton(
+                          onPressed: () {
+                            deleteBank(selectedBank!.id);
                           },
-                        );
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    }),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.red),
+                            shape: MaterialStateProperty.resolveWith(
+                              (states) => RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          child: const Text(
+                            "Delete",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ]
+                ],
               ],
             ),
           ),

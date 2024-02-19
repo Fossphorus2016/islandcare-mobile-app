@@ -207,7 +207,19 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       ),
                                                     );
                                                   },
-                                                  child: const Icon(Icons.edit, color: Colors.white),
+                                                  child: Container(
+                                                    width: 30,
+                                                    height: 30,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.grey.shade200,
+                                                      borderRadius: BorderRadius.circular(05),
+                                                    ),
+                                                    child: const Icon(
+                                                      Icons.edit,
+                                                      color: Colors.grey,
+                                                      size: 20,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                               Text(
@@ -217,7 +229,12 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               const SizedBox(width: 10),
                                               Text(
                                                 userProfile.data!.email.toString(),
-                                                style: TextStyle(fontSize: 12, fontFamily: "Rubik", fontWeight: FontWeight.w400, color: CustomColors.white),
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontFamily: "Rubik",
+                                                  fontWeight: FontWeight.w400,
+                                                  color: CustomColors.white,
+                                                ),
                                               ),
                                               const SizedBox(width: 10),
                                               if (userProfile.data!.avgRating != null) ...[
@@ -1068,6 +1085,42 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                   ),
 
                                   // Background Verified
+                                  DottedBorder(
+                                    radius: const Radius.circular(10),
+                                    borderType: BorderType.RRect,
+                                    color: CustomColors.red,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 5),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFf1416c),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: ListTile(
+                                        leading: Icon(
+                                          Icons.workspace_premium,
+                                          color: CustomColors.primaryColor,
+                                        ),
+                                        title: Text(
+                                          "Account Verification",
+                                          style: TextStyle(
+                                            color: CustomColors.white,
+                                            fontSize: 12,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          "Service Providers are encouraged to verify their accounts by submitting the required documents. Verified profiles build trust and safety in the community. Submit your documents to enhance your profile and gain the trust of care seekers.",
+                                          style: TextStyle(
+                                            color: CustomColors.white,
+                                            fontSize: 10,
+                                            fontFamily: "Poppins",
+                                            fontWeight: FontWeight.w300,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                   DottedBorder(
                                     radius: const Radius.circular(10),
                                     borderType: BorderType.RRect,

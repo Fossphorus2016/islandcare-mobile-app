@@ -8,6 +8,10 @@ import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart
 import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
+import 'package:island_app/widgets/assistance_container.dart';
+import 'package:island_app/widgets/job_detail_tile.dart';
+import 'package:island_app/widgets/job_info_container.dart';
+import 'package:island_app/widgets/job_schedule_container.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/caregiver/models/senior_care_detail_dashboard_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -255,7 +259,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
         margin: const EdgeInsets.symmetric(horizontal: 10),
         child: Center(
           child: Text(
-            "Apply Now",
+            isApplied ? "Apply Now" : "Applied",
             style: TextStyle(
               color: CustomColors.white,
               fontFamily: "Poppins",
@@ -365,9 +369,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                   const SizedBox(height: 10),
                   if (snapshot.data!.jobDetail![index].schedule!.isNotEmpty) ...[
                     JobScheduleContainer(
-                      date: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingDate.toString(),
-                      startTime: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingTime.toString(),
-                      duration: "${snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].duration.toString()} hours",
+                      data: snapshot.data!.jobDetail![index].schedule,
                     ),
                   ],
                   const SizedBox(height: 20),
@@ -441,7 +443,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                     ),
                     const SizedBox(height: 10),
                     JobDetailTile(
-                      name: "Grade Level",
+                      name: "Child Grade",
                       title: snapshot.data!.jobDetail![index].childinfo![i].grade.toString(),
                     ),
                     const SizedBox(height: 10),
@@ -660,9 +662,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                   ],
                   if (snapshot.data!.jobDetail![index].schedule!.isNotEmpty) ...[
                     JobScheduleContainer(
-                      date: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingDate.toString(),
-                      startTime: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingTime.toString(),
-                      duration: "${snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].duration.toString()} hours",
+                      data: snapshot.data!.jobDetail![index].schedule,
                     ),
                   ],
                   const SizedBox(height: 20),
@@ -746,17 +746,15 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                     ),
                     const SizedBox(height: 10),
                   ],
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Additional Info",
-                    title: snapshot.data!.jobDetail![index].additionalInfo ?? "",
-                  ),
+                  // const SizedBox(height: 10),
+                  // JobDetailTile(
+                  //   name: "Additional Info",
+                  //   title: snapshot.data!.jobDetail![index].additionalInfo ?? "",
+                  // ),
                   const SizedBox(height: 10),
                   if (snapshot.data!.jobDetail![index].schedule!.isNotEmpty) ...[
                     JobScheduleContainer(
-                      date: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingDate.toString(),
-                      startTime: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingTime.toString(),
-                      duration: "${snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].duration.toString()} hours",
+                      data: snapshot.data!.jobDetail![index].schedule,
                     ),
                   ],
                   const SizedBox(height: 20),
@@ -841,9 +839,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                   ),
                   const SizedBox(height: 10),
                   JobScheduleContainer(
-                    date: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingDate.toString(),
-                    startTime: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingTime.toString(),
-                    duration: "${snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].duration.toString()} hours",
+                    data: snapshot.data!.jobDetail![index].schedule,
                   ),
                   const SizedBox(height: 20),
                   applyButton(snapshot.data!.isApplied == 0),
@@ -943,9 +939,10 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                   const SizedBox(height: 10),
                   if (snapshot.data!.jobDetail![index].schedule!.isNotEmpty) ...[
                     JobScheduleContainer(
-                      date: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingDate.toString(),
-                      startTime: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingTime.toString(),
-                      duration: "${snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].duration.toString()} hours",
+                      data: snapshot.data!.jobDetail![index].schedule,
+                      // date: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingDate.toString(),
+                      // startTime: snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].startingTime.toString(),
+                      // duration: "${snapshot.data!.jobDetail![index].schedule!.isEmpty ? "Data Not Available" : snapshot.data!.jobDetail![index].schedule![index].duration.toString()} hours",
                     ),
                   ],
                   const SizedBox(height: 10),
@@ -960,229 +957,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
           );
         }
       },
-    );
-  }
-}
-
-class JobScheduleContainer extends StatelessWidget {
-  const JobScheduleContainer({
-    super.key,
-    required this.date,
-    required this.startTime,
-    required this.duration,
-  });
-
-  final String date;
-  final String startTime;
-  final String duration;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          "Job schedule",
-          style: TextStyle(
-            fontFamily: "Poppins",
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 10),
-        JobDetailTile(
-          name: "Date :",
-          title: date,
-        ),
-        const SizedBox(height: 10),
-        JobDetailTile(
-          name: "Start Time :",
-          title: startTime,
-        ),
-        const SizedBox(height: 10),
-        JobDetailTile(
-          name: "Duration :",
-          title: duration,
-        ),
-      ],
-    );
-  }
-}
-
-class AssistanceContainer extends StatelessWidget {
-  const AssistanceContainer({super.key, this.dd});
-
-  final List? dd;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: CustomColors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            alignment: Alignment.topLeft,
-            // width: 150,
-            child: const Text(
-              "Requires Assistance ",
-              style: TextStyle(
-                // color: CustomColors.primaryColor,
-                fontFamily: "Poppins",
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: Wrap(
-                  runSpacing: 5.0,
-                  spacing: 5.0,
-                  children: [
-                    if (dd != null) ...[
-                      for (var i = 0; i < dd!.length; i++) ...[
-                        AssistanceTagContainer(
-                          title: dd![i].toString(),
-                        ),
-                      ],
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class JobInfoContainer extends StatelessWidget {
-  const JobInfoContainer({
-    super.key,
-    required this.title,
-    required this.address,
-    required this.location,
-    required this.hourlyRate,
-  });
-
-  final String title;
-  final String address;
-  final String location;
-  final String hourlyRate;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            "Job Information",
-            style: TextStyle(
-              fontFamily: "Poppins",
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        JobDetailTile(
-          name: "Job Title",
-          title: title,
-        ),
-        const SizedBox(height: 10),
-        JobDetailTile(
-          name: "Job Address",
-          title: address,
-        ),
-        const SizedBox(height: 10),
-        JobDetailTile(
-          name: "Job Area",
-          title: location,
-        ),
-        const SizedBox(height: 10),
-        JobDetailTile(
-          name: "Hourly Rate",
-          title: hourlyRate,
-        ),
-      ],
-    );
-  }
-}
-
-class AssistanceTagContainer extends StatelessWidget {
-  const AssistanceTagContainer({
-    super.key,
-    required this.title,
-  });
-  final String title;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 3),
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 13,
-          fontFamily: "Poppins",
-          fontWeight: FontWeight.w500,
-          color: CustomColors.primaryTextLight,
-        ),
-      ),
-    );
-  }
-}
-
-class JobDetailTile extends StatelessWidget {
-  const JobDetailTile({super.key, required this.name, required this.title});
-  final String title;
-  final String name;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-      // margin: const EdgeInsets.only(bottom: 15),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: CustomColors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            name,
-            style: TextStyle(
-              color: CustomColors.primaryColor,
-              fontSize: 14,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 16,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

@@ -128,7 +128,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => Schedule(
+                                    builder: (context) => PostSchedule(
                                       serviceId: snapshot.data!.services![index].id.toString(),
                                     ),
                                   ),

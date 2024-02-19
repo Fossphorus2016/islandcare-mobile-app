@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, use_build_context_synchronously, unused_local_variable, non_constant_identifier_names
+// ignore_for_file: use_build_context_synchronously, unused_local_variable, non_constant_identifier_names
 
 import 'dart:convert';
 import 'package:dio/dio.dart';
@@ -194,14 +194,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: const BorderSide(
                                   style: BorderStyle.solid,
-                                  color: Color(0xff938284),
+                                  color: Colors.white,
                                 ),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: const BorderSide(
                                   style: BorderStyle.solid,
-                                  color: Color(0xff938284),
+                                  color: Colors.white,
                                 ),
                               ),
                               prefixIcon: Icon(
@@ -234,14 +234,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: const BorderSide(
                                   style: BorderStyle.solid,
-                                  color: Color(0xff938284),
+                                  color: Colors.white,
                                 ),
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                                 borderSide: const BorderSide(
                                   style: BorderStyle.solid,
-                                  color: Color(0xff938284),
+                                  color: Colors.white,
+                                  // color: Color(0xff938284),
                                 ),
                               ),
                               prefixIcon: Icon(

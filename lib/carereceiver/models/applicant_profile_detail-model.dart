@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:island_app/models/service_model.dart';
+
 ApplicantDetailProfileModel applicantDetailProfileModelFromJson(String str) => ApplicantDetailProfileModel.fromJson(json.decode(str));
 
 String applicantDetailProfileModelToJson(ApplicantDetailProfileModel data) => json.encode(data.toJson());
@@ -455,45 +457,45 @@ class Userdetail {
       };
 }
 
-class Service {
-  int? id;
-  String? name;
-  String? image;
-  String? description;
-  dynamic deletedAt;
-  String? createdAt;
-  String? updatedAt;
+// class Service {
+//   int? id;
+//   String? name;
+//   String? image;
+//   String? description;
+//   dynamic deletedAt;
+//   String? createdAt;
+//   String? updatedAt;
 
-  Service({
-    this.id,
-    this.name,
-    this.image,
-    this.description,
-    this.deletedAt,
-    this.createdAt,
-    this.updatedAt,
-  });
+//   Service({
+//     this.id,
+//     this.name,
+//     this.image,
+//     this.description,
+//     this.deletedAt,
+//     this.createdAt,
+//     this.updatedAt,
+//   });
 
-  factory Service.fromJson(Map<String, dynamic> json) => Service(
-        id: json["id"],
-        name: json["name"],
-        image: json["image"],
-        description: json["description"],
-        deletedAt: json["deleted_at"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-      );
+//   factory Service.fromJson(Map<String, dynamic> json) => Service(
+//         id: json["id"],
+//         name: json["name"],
+//         image: json["image"],
+//         description: json["description"],
+//         deletedAt: json["deleted_at"],
+//         createdAt: json["created_at"],
+//         updatedAt: json["updated_at"],
+//       );
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "name": name,
-        "image": image,
-        "description": description,
-        "deleted_at": deletedAt,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-      };
-}
+//   Map<String, dynamic> toJson() => {
+//         "id": id,
+//         "name": name,
+//         "image": image,
+//         "description": description,
+//         "deleted_at": deletedAt,
+//         "created_at": createdAt,
+//         "updated_at": updatedAt,
+//       };
+// }
 
 class Userdetailprovider {
   int? id;

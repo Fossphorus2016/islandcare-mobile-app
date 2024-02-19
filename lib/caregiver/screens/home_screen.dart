@@ -2,7 +2,6 @@
 
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
@@ -12,8 +11,6 @@ import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/profile_complete_widget.dart';
 import 'package:provider/provider.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:island_app/caregiver/models/service_provider_dashboard_model.dart';
 import 'package:island_app/caregiver/screens/job_detail.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -645,6 +642,9 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                         jobAddress: provider.serviceJobs!.jobs![index].address.toString(),
                                         jobTitle: provider.serviceJobs!.jobs![index].jobTitle ?? "",
                                         hourlyRate: provider.serviceJobs!.jobs![index].hourlyRate.toString(),
+                                        jobArea: provider.serviceJobs!.jobs![index].location.toString(),
+                                        jobDuration: provider.serviceJobs!.jobs![index].totalDuration.toString(),
+                                        jobAmount: provider.serviceJobs!.jobs![index].totalAmount.toString(),
                                       );
                                     },
                                   );
@@ -886,11 +886,16 @@ class JobCardContainer extends StatelessWidget {
     required this.jobTitle,
     required this.imageUrl,
     required this.hourlyRate,
+    required this.jobArea,
+    required this.jobDuration,
+    required this.jobAmount,
   });
   final String jobId;
   final String serviceId;
-
+  final String jobArea;
+  final String jobDuration;
   final String imageUrl;
+  final String jobAmount;
   final String serviceName;
   final String userName;
   final String jobAddress;
@@ -921,60 +926,65 @@ class JobCardContainer extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            jobTitle,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
           Row(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.contain,
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                ),
-              ),
-              const SizedBox(width: 05),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      serviceName,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    // const SizedBox(height: 05),
-                    Text(
-                      userName,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey.shade700,
-                      ),
-                    ),
-                    // const SizedBox(height: 05),
-                    Text(
-                      jobAddress.toString(),
-                      overflow: TextOverflow.clip,
-                      maxLines: 2,
-                      style: const TextStyle(color: Colors.grey, fontSize: 10),
-                    ),
-                  ],
-                ),
+              const Text("Job Type: "),
+              Text(
+                serviceName,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               ),
             ],
           ),
-          const SizedBox(height: 15),
-          Text(
-            jobTitle,
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              const Text("Job Area: "),
+              Text(
+                jobArea.toUpperCase(),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ],
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              const Text("Job Total Duration: "),
+              Text(
+                jobDuration,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              const Text("Hourly Rate: "),
+              Text(
+                hourlyRate,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Row(
+                children: [
+                  const Text("Job Total Pay: "),
+                  Text(
+                    jobAmount,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+                  ),
+                ],
+              ),
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -988,60 +998,186 @@ class JobCardContainer extends StatelessWidget {
                   );
                 },
                 child: Container(
-                  height: 43,
-                  width: 110,
+                  height: 25,
+                  width: 90,
                   decoration: BoxDecoration(
-                    color: CustomColors.primaryColor,
+                    color: const Color(0xfff1416c),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(
                     child: Text(
-                      "Read More",
+                      "View More",
                       style: TextStyle(
                         fontFamily: "Poppins",
                         color: CustomColors.white,
-                        fontSize: 14,
+                        fontSize: 12,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                ),
-              ),
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    height: 1.1849999428,
-                    color: CustomColors.primaryText,
-                  ),
-                  children: [
-                    TextSpan(
-                      text: '\$ ${hourlyRate.toString()}',
-                      style: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        height: 1.2575,
-                        color: CustomColors.primaryText,
-                      ),
-                    ),
-                    TextSpan(
-                      text: '/hour',
-                      style: TextStyle(
-                        fontFamily: 'Rubik',
-                        fontSize: 15,
-                        fontWeight: FontWeight.w500,
-                        height: 1.185,
-                        color: CustomColors.primaryText,
-                      ),
-                    ),
-                  ],
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 10),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.end,
+          //   children: [
+          //     GestureDetector(
+          //       onTap: () {
+          //         Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => JobDetailGiver(
+          //               id: jobId.toString(),
+          //               serviceId: serviceId,
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //       child: Container(
+          //         height: 43,
+          //         width: 110,
+          //         decoration: BoxDecoration(
+          //           color: CustomColors.red,
+          //           borderRadius: BorderRadius.circular(12),
+          //         ),
+          //         child: Center(
+          //           child: Text(
+          //             "View More",
+          //             style: TextStyle(
+          //               fontFamily: "Poppins",
+          //               color: CustomColors.white,
+          //               fontSize: 14,
+          //               fontWeight: FontWeight.w600,
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // Row(
+          //   children: [
+          //     // ClipRRect(
+          //     //   borderRadius: BorderRadius.circular(50),
+          //     //   child: CachedNetworkImage(
+          //     //     imageUrl: imageUrl,
+          //     //     height: 50,
+          //     //     width: 50,
+          //     //     fit: BoxFit.contain,
+          //     //     errorWidget: (context, url, error) => const Icon(Icons.error),
+          //     //   ),
+          //     // ),
+          //     const SizedBox(width: 05),
+          //     Expanded(
+          //       child: Column(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Text(
+          //             serviceName,
+          //             overflow: TextOverflow.ellipsis,
+          //             maxLines: 1,
+          //             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          //           ),
+          //           // const SizedBox(height: 05),
+          //           Text(
+          //             userName,
+          //             overflow: TextOverflow.ellipsis,
+          //             maxLines: 1,
+          //             style: TextStyle(
+          //               fontSize: 14,
+          //               fontWeight: FontWeight.w600,
+          //               color: Colors.grey.shade700,
+          //             ),
+          //           ),
+          //           // const SizedBox(height: 05),
+          //           Text(
+          //             jobAddress.toString(),
+          //             overflow: TextOverflow.clip,
+          //             maxLines: 2,
+          //             style: const TextStyle(color: Colors.grey, fontSize: 10),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(height: 15),
+          // Text(
+          //   jobTitle,
+          // ),
+          // const SizedBox(height: 15),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     GestureDetector(
+          //       onTap: () {
+          //         Navigator.push(
+          //           context,
+          //           MaterialPageRoute(
+          //             builder: (context) => JobDetailGiver(
+          //               id: jobId.toString(),
+          //               serviceId: serviceId,
+          //             ),
+          //           ),
+          //         );
+          //       },
+          //       child: Container(
+          //         height: 43,
+          //         width: 110,
+          //         decoration: BoxDecoration(
+          //           color: CustomColors.primaryColor,
+          //           borderRadius: BorderRadius.circular(12),
+          //         ),
+          //         child: Center(
+          //           child: Text(
+          //             "Read More",
+          //             style: TextStyle(
+          //               fontFamily: "Poppins",
+          //               color: CustomColors.white,
+          //               fontSize: 14,
+          //               fontWeight: FontWeight.w600,
+          //             ),
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //     RichText(
+          //       text: TextSpan(
+          //         style: TextStyle(
+          //           fontFamily: 'Poppins',
+          //           fontSize: 16,
+          //           fontWeight: FontWeight.w400,
+          //           height: 1.1849999428,
+          //           color: CustomColors.primaryText,
+          //         ),
+          //         children: [
+          //           TextSpan(
+          //             text: '\$ ${hourlyRate.toString()}',
+          //             style: TextStyle(
+          //               fontFamily: 'Poppins',
+          //               fontSize: 16,
+          //               fontWeight: FontWeight.w600,
+          //               height: 1.2575,
+          //               color: CustomColors.primaryText,
+          //             ),
+          //           ),
+          //           TextSpan(
+          //             text: '/hour',
+          //             style: TextStyle(
+          //               fontFamily: 'Rubik',
+          //               fontSize: 15,
+          //               fontWeight: FontWeight.w500,
+          //               height: 1.185,
+          //               color: CustomColors.primaryText,
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     );
