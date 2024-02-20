@@ -4,11 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/service_provider_job_board_model.dart';
 import 'package:island_app/caregiver/screens/my_job_detail.dart';
+import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_cart_widget.dart';
 import 'package:island_app/res/app_url.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class ServiceProviderJobs extends StatefulWidget {
   const ServiceProviderJobs({super.key});
@@ -91,7 +92,7 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
   // Get all jobs
   late Future<ServiceProviderJobBoardModel> fetchJobBoard;
   Future<ServiceProviderJobBoardModel> fetchServiceProviderJobBoardModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
       CareGiverUrl.serviceProviderAllJob,
       options: Options(
@@ -113,17 +114,8 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
     }
   }
 
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-    return userToken.toString();
-  }
-
   @override
   void initState() {
-    getUserToken();
     super.initState();
     fetchJobBoard = fetchServiceProviderJobBoardModel();
   }

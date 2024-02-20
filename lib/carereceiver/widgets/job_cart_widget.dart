@@ -3,6 +3,7 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/utils.dart';
 
 class JobBoardCartWidget extends StatelessWidget {
   String? jobTitle;
@@ -52,9 +53,9 @@ class JobBoardCartWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Icon(
-                  Icons.arrow_circle_right_rounded,
-                  color: Color(0xFF50cd89),
+                Icon(
+                  Icons.arrow_circle_right_outlined,
+                  color: ServiceGiverColor.black,
                 ),
               ],
             ),
@@ -80,56 +81,6 @@ class JobBoardCartWidget extends StatelessWidget {
                 ),
               ],
             ),
-            // Expanded(
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.start,
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       Text(
-            //         jobTitle.toString(),
-            //         overflow: TextOverflow.ellipsis,
-            //         maxLines: 2,
-            //         style: TextStyle(
-            //           color: CustomColors.primaryText,
-            //           fontFamily: "Poppins",
-            //           fontWeight: FontWeight.w600,
-            //           fontSize: 14,
-            //         ),
-            //       ),
-            //       Text(
-            //         jobType.toString(),
-            //         maxLines: 1,
-            //         overflow: TextOverflow.fade,
-            //         style: TextStyle(
-            //           color: CustomColors.hintText,
-            //           fontFamily: "Poppins",
-            //           fontWeight: FontWeight.w500,
-            //           fontSize: 12,
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // const SizedBox(width: 10),
-            // GestureDetector(
-            //   onTap: detail,
-            //   child: Container(
-            //     height: 44,
-            //     decoration: BoxDecoration(borderRadius: BorderRadius.circular(2), color: CustomColors.primaryColor),
-            //     padding: const EdgeInsets.all(10),
-            //     child: Center(
-            //       child: Text(
-            //         "View Detail",
-            //         style: TextStyle(
-            //           color: CustomColors.white,
-            //           fontSize: 12,
-            //           fontFamily: "Poppins",
-            //           fontWeight: FontWeight.w500,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // )
           ],
         ),
       ),

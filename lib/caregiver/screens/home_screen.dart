@@ -155,10 +155,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
             showProfileIcon: true,
           ),
         ),
-        drawer: Drawer(
-          backgroundColor: CustomColors.primaryColor,
-          child: const DrawerGiverWidget(),
-        ),
+        drawer: const DrawerGiverWidget(),
         body: dashboardLoading
             ? const Center(
                 child: CircularProgressIndicator(),
@@ -179,20 +176,21 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                 alignment: Alignment.centerRight,
                                 width: MediaQuery.of(context).size.width,
                                 height: 100,
-                                child: const RotatedBox(
-                                  quarterTurns: 1,
-                                  child: Text(
-                                    'Container 1',
-                                    style: TextStyle(fontSize: 18.0, color: Colors.white),
-                                  ),
-                                ),
+                                // child: const RotatedBox(
+                                //   quarterTurns: 1,
+                                //   child: Text(
+                                //     'Container 1',
+                                //     style: TextStyle(
+                                //         fontSize: 18.0, color: Colors.white),
+                                //   ),
+                                // ),
                               ),
                               Positioned(
                                 top: -25,
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 20),
                                   decoration: BoxDecoration(
-                                    color: CustomColors.primaryColor,
+                                    color: ServiceGiverColor.black,
                                     borderRadius: const BorderRadius.only(
                                       bottomLeft: Radius.circular(12),
                                       bottomRight: Radius.circular(12),
@@ -650,219 +648,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                   );
                                 },
                               )
-                              // findJobs.isEmpty
-                              //     ?
-                              // FutureBuilder<ServiceProviderDashboardModel>(
-                              //   future: futureProviderDashboard,
-                              //   builder: (context, snapshot) {
-                              //     if (snapshot.hasData) {
-                              //       return ListView.builder(
-                              //         shrinkWrap: true,
-                              //         scrollDirection: Axis.vertical,
-                              //         physics: const NeverScrollableScrollPhysics(),
-                              //         itemCount: snapshot.data!.jobs!.length,
-                              //         itemBuilder: (BuildContext context, int index) {
-                              //           return JobCardContainer(
-                              //             jobId: snapshot.data!.jobs![index].id.toString(),
-                              //             serviceId: snapshot.data!.jobs![index].service!.id.toString(),
-                              //             imageUrl: "${AppUrl.webStorageUrl}/${snapshot.data!.jobs![index].userImage}",
-                              //             serviceName: snapshot.data!.jobs![index].service!.name.toString(),
-                              //             userName: "${snapshot.data!.jobs![index].userFirstName} ${snapshot.data!.jobs![index].userLastName}",
-                              //             jobAddress: snapshot.data!.jobs![index].address.toString(),
-                              //             jobTitle: snapshot.data!.jobs![index].jobTitle ?? "",
-                              //             hourlyRate: snapshot.data!.jobs![index].hourlyRate.toString(),
-                              //           );
-                              //         },
-                              //       );
-                              //     } else {
-                              //       return const Center(child: CircularProgressIndicator());
-                              //     }
-                              //   },
-                              // )
-                              // : FutureBuilder<ServiceProviderDashboardModel>(
-                              //     future: fetchFindedJobsDashboard,
-                              //     builder: (context, snapshot) {
-                              //       if (snapshot.hasData) {
-                              //         return ListView.builder(
-                              //           shrinkWrap: true,
-                              //           scrollDirection: Axis.vertical,
-                              //           physics: const NeverScrollableScrollPhysics(),
-                              //           itemCount: snapshot.data!.jobs!.length,
-                              //           itemBuilder: (BuildContext context, int index) {
-                              //             return Container(
-                              //               width: MediaQuery.of(context).size.width * .90,
-                              //               margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                              //               padding: const EdgeInsets.all(20),
-                              //               decoration: const BoxDecoration(
-                              //                 borderRadius: BorderRadius.only(
-                              //                   topLeft: Radius.circular(20),
-                              //                   topRight: Radius.circular(20),
-                              //                   bottomLeft: Radius.circular(20),
-                              //                   bottomRight: Radius.circular(20),
-                              //                 ),
-                              //                 boxShadow: [
-                              //                   BoxShadow(
-                              //                     color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                              //                     offset: Offset(0, 4),
-                              //                     blurRadius: 45,
-                              //                   )
-                              //                 ],
-                              //                 color: Color.fromRGBO(255, 255, 255, 1),
-                              //               ),
-                              //               child: Column(
-                              //                 crossAxisAlignment: CrossAxisAlignment.start,
-                              //                 children: [
-                              //                   Row(
-                              //                     children: [
-                              //                       ClipRRect(
-                              //                         borderRadius: BorderRadius.circular(50),
-                              //                         child: CachedNetworkImage(
-                              //                           imageUrl: "${AppUrl.webStorageUrl}/${snapshot.data!.jobs![index].userImage}",
-                              //                           height: 50,
-                              //                           width: 50,
-                              //                           fit: BoxFit.contain,
-                              //                         ),
-                              //                       ),
-                              //                       const SizedBox(width: 05),
-                              //                       Expanded(
-                              //                         child: Column(
-                              //                           crossAxisAlignment: CrossAxisAlignment.start,
-                              //                           children: [
-                              //                             Text(
-                              //                               snapshot.data!.jobs![index].service!.name.toString(),
-                              //                               overflow: TextOverflow.ellipsis,
-                              //                               maxLines: 1,
-                              //                               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                              //                             ),
-                              //                             // const SizedBox(height: 05),
-                              //                             Text(
-                              //                               "${snapshot.data!.jobs![index].userFirstName} ${snapshot.data!.jobs![index].userLastName}",
-                              //                               overflow: TextOverflow.ellipsis,
-                              //                               maxLines: 1,
-                              //                               style: TextStyle(
-                              //                                 fontSize: 14,
-                              //                                 fontWeight: FontWeight.w600,
-                              //                                 color: Colors.grey.shade700,
-                              //                               ),
-                              //                             ),
-                              //                             // const SizedBox(height: 05),
-                              //                             Text(
-                              //                               snapshot.data!.jobs![index].address.toString(),
-                              //                               overflow: TextOverflow.clip,
-                              //                               maxLines: 2,
-                              //                               style: const TextStyle(color: Colors.grey, fontSize: 10),
-                              //                             ),
-                              //                           ],
-                              //                         ),
-                              //                       ),
-                              //                     ],
-                              //                   ),
-                              //                   const SizedBox(height: 15),
-                              //                   Text(
-                              //                     "${snapshot.data!.jobs![index].jobTitle}",
-                              //                   ),
-                              //                   const SizedBox(height: 15),
-                              //                   Row(
-                              //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              //                     children: [
-                              //                       GestureDetector(
-                              //                         onTap: () {
-                              //                           Navigator.push(
-                              //                             context,
-                              //                             MaterialPageRoute(
-                              //                               builder: (context) => JobDetailGiver(
-                              //                                 id: snapshot.data!.jobs![index].id.toString(),
-                              //                                 serviceId: snapshot.data!.jobs![index].service!.id.toString(),
-                              //                               ),
-                              //                             ),
-                              //                           );
-                              //                         },
-                              //                         child: Container(
-                              //                           height: 43,
-                              //                           width: 110,
-                              //                           decoration: BoxDecoration(
-                              //                             color: CustomColors.primaryColor,
-                              //                             borderRadius: BorderRadius.circular(12),
-                              //                           ),
-                              //                           child: Center(
-                              //                             child: Text(
-                              //                               "Read More",
-                              //                               style: TextStyle(
-                              //                                 fontFamily: "Poppins",
-                              //                                 color: CustomColors.white,
-                              //                                 fontSize: 14,
-                              //                                 fontWeight: FontWeight.w600,
-                              //                               ),
-                              //                             ),
-                              //                           ),
-                              //                         ),
-                              //                       ),
-                              //                       RichText(
-                              //                         text: TextSpan(
-                              //                           style: TextStyle(
-                              //                             fontFamily: 'Poppins',
-                              //                             fontSize: 16,
-                              //                             fontWeight: FontWeight.w400,
-                              //                             height: 1.1849999428,
-                              //                             color: CustomColors.primaryText,
-                              //                           ),
-                              //                           children: [
-                              //                             TextSpan(
-                              //                               text: '\$${snapshot.data!.jobs![index].hourlyRate.toString()}',
-                              //                               style: TextStyle(
-                              //                                 fontFamily: 'Poppins',
-                              //                                 fontSize: 16,
-                              //                                 fontWeight: FontWeight.w600,
-                              //                                 height: 1.2575,
-                              //                                 color: CustomColors.primaryText,
-                              //                               ),
-                              //                             ),
-                              //                             TextSpan(
-                              //                               text: '/hour',
-                              //                               style: TextStyle(
-                              //                                 fontFamily: 'Rubik',
-                              //                                 fontSize: 15,
-                              //                                 fontWeight: FontWeight.w500,
-                              //                                 height: 1.185,
-                              //                                 color: CustomColors.primaryText,
-                              //                               ),
-                              //                             ),
-                              //                           ],
-                              //                         ),
-                              //                       ),
-                              //                     ],
-                              //                   ),
-                              //                 ],
-                              //               ),
-                              //             );
-                              //             // return RecommendationWidget(
-                              //             //   title: findJobs[index]['job_title'].toString(),
-                              //             //   subTitle: findJobs[index]['service']['name'].toString(),
-                              //             //   country: findJobs[index]['address'].toString(),
-                              //             //   price: findJobs[index]['hourly_rate'].toString(),
-                              //             //   isApplied: findJobs[index]['is_applied'],
-                              //             //   isCompleted: completedList.contains(findJobs[index]['id']) ? 1 : 0,
-                              //             //   onTap: () {
-                              //             //     Navigator.push(
-                              //             //       context,
-                              //             //       MaterialPageRoute(
-                              //             //         builder: (context) => JobDetailGiver(
-                              //             //           id: findJobs[index]['id'].toString(),
-                              //             //           serviceId: findJobs[index]['service']['id'].toString(),
-                              //             //         ),
-                              //             //       ),
-                              //             //     );
-                              //             //   },
-                              //             // );
-                              //           },
-                              //         );
-                              //       } else {
-                              //         return const Center(
-                              //           child: CircularProgressIndicator(),
-                              //         );
-                              //       }
-                              //     },
-                              //   ),
                             ],
                           )
                         ],
@@ -1020,164 +805,6 @@ class JobCardContainer extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 10),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.end,
-          //   children: [
-          //     GestureDetector(
-          //       onTap: () {
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //             builder: (context) => JobDetailGiver(
-          //               id: jobId.toString(),
-          //               serviceId: serviceId,
-          //             ),
-          //           ),
-          //         );
-          //       },
-          //       child: Container(
-          //         height: 43,
-          //         width: 110,
-          //         decoration: BoxDecoration(
-          //           color: CustomColors.red,
-          //           borderRadius: BorderRadius.circular(12),
-          //         ),
-          //         child: Center(
-          //           child: Text(
-          //             "View More",
-          //             style: TextStyle(
-          //               fontFamily: "Poppins",
-          //               color: CustomColors.white,
-          //               fontSize: 14,
-          //               fontWeight: FontWeight.w600,
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // Row(
-          //   children: [
-          //     // ClipRRect(
-          //     //   borderRadius: BorderRadius.circular(50),
-          //     //   child: CachedNetworkImage(
-          //     //     imageUrl: imageUrl,
-          //     //     height: 50,
-          //     //     width: 50,
-          //     //     fit: BoxFit.contain,
-          //     //     errorWidget: (context, url, error) => const Icon(Icons.error),
-          //     //   ),
-          //     // ),
-          //     const SizedBox(width: 05),
-          //     Expanded(
-          //       child: Column(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Text(
-          //             serviceName,
-          //             overflow: TextOverflow.ellipsis,
-          //             maxLines: 1,
-          //             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          //           ),
-          //           // const SizedBox(height: 05),
-          //           Text(
-          //             userName,
-          //             overflow: TextOverflow.ellipsis,
-          //             maxLines: 1,
-          //             style: TextStyle(
-          //               fontSize: 14,
-          //               fontWeight: FontWeight.w600,
-          //               color: Colors.grey.shade700,
-          //             ),
-          //           ),
-          //           // const SizedBox(height: 05),
-          //           Text(
-          //             jobAddress.toString(),
-          //             overflow: TextOverflow.clip,
-          //             maxLines: 2,
-          //             style: const TextStyle(color: Colors.grey, fontSize: 10),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ],
-          // ),
-          // const SizedBox(height: 15),
-          // Text(
-          //   jobTitle,
-          // ),
-          // const SizedBox(height: 15),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     GestureDetector(
-          //       onTap: () {
-          //         Navigator.push(
-          //           context,
-          //           MaterialPageRoute(
-          //             builder: (context) => JobDetailGiver(
-          //               id: jobId.toString(),
-          //               serviceId: serviceId,
-          //             ),
-          //           ),
-          //         );
-          //       },
-          //       child: Container(
-          //         height: 43,
-          //         width: 110,
-          //         decoration: BoxDecoration(
-          //           color: CustomColors.primaryColor,
-          //           borderRadius: BorderRadius.circular(12),
-          //         ),
-          //         child: Center(
-          //           child: Text(
-          //             "Read More",
-          //             style: TextStyle(
-          //               fontFamily: "Poppins",
-          //               color: CustomColors.white,
-          //               fontSize: 14,
-          //               fontWeight: FontWeight.w600,
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //     RichText(
-          //       text: TextSpan(
-          //         style: TextStyle(
-          //           fontFamily: 'Poppins',
-          //           fontSize: 16,
-          //           fontWeight: FontWeight.w400,
-          //           height: 1.1849999428,
-          //           color: CustomColors.primaryText,
-          //         ),
-          //         children: [
-          //           TextSpan(
-          //             text: '\$ ${hourlyRate.toString()}',
-          //             style: TextStyle(
-          //               fontFamily: 'Poppins',
-          //               fontSize: 16,
-          //               fontWeight: FontWeight.w600,
-          //               height: 1.2575,
-          //               color: CustomColors.primaryText,
-          //             ),
-          //           ),
-          //           TextSpan(
-          //             text: '/hour',
-          //             style: TextStyle(
-          //               fontFamily: 'Rubik',
-          //               fontSize: 15,
-          //               fontWeight: FontWeight.w500,
-          //               height: 1.185,
-          //               color: CustomColors.primaryText,
-          //             ),
-          //           ),
-          //         ],
-          //       ),
-          //     ),
-          //   ],
-          // ),
         ],
       ),
     );

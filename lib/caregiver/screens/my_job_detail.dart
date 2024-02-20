@@ -588,7 +588,7 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
           return ListView.builder(
             itemCount: snapshot.data!.job!.length,
             shrinkWrap: true,
-            padding: const EdgeInsets.only(top: 16),
+            padding: const EdgeInsets.all(20),
             physics: const NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               return Column(
@@ -663,34 +663,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // const Text(
-                  //   "Job Information",
-                  //   style: TextStyle(
-                  //     fontFamily: "Poppins",
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Job Title",
-                  //   title: snapshot.data!.job![index].jobTitle.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Job Address",
-                  //   title: snapshot.data!.job![index].address.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Job Area",
-                  //   title: snapshot.data!.job![index].location.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Hourly Rate",
-                  //   title: snapshot.data!.job![index].hourlyRate.toString(),
-                  // ),
                   JobInfoContainer(
                     title: snapshot.data!.job![index].jobTitle.toString(),
                     address: snapshot.data!.job![index].address.toString(),
@@ -727,23 +699,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                     ),
                     const SizedBox(height: 10),
                   ],
-                  // JobDetailTile(
-                  //   name: "Child Name",
-                  //   title: snapshot.data!.job![index].childinfo![index].name.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Child Age",
-                  //   title: snapshot.data!.job![index].childinfo![index].age.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // if (snapshot.data!.job![index].childinfo![index].grade != null) ...[
-                  //   JobDetailTile(
-                  //     name: "Child Grade",
-                  //     title: snapshot.data!.job![index].childinfo![index].grade.toString(),
-                  //   ),
-                  //   const SizedBox(height: 10),
-                  // ],
                   if (snapshot.data!.job![index].schoolCamp != null) ...[
                     JobDetailTile(
                       name: "Interest for Child",
@@ -757,111 +712,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                     const SizedBox(height: 10),
                   ],
                   const SizedBox(height: 10),
-                  // if (snapshot.data!.job![index].learning != null) ...[
-                  //   //   AssistanceContainer(
-                  //   //     dd: [
-                  //   //       if (snapshot.data!.job![index].learning!.assistanceInMath.toString() == "1") ...[
-                  //   //         snapshot.data!.job![index].learning!.assistanceInMath.toString() == "1" ? "Math" : snapshot.data!.job![index].learning!.assistanceInMath.toString(),
-                  //   //       ],
-                  //   //       if (snapshot.data!.job![index].learning!.assistanceInEnglish.toString() == "1") ...[snapshot.data!.job![index].learning!.assistanceInEnglish.toString() == "1" ? "English" : snapshot.data!.job![index].learning!.assistanceInEnglish.toString()],
-                  //   //       if (snapshot.data!.job![index].learning!.assistanceInScience.toString() == "1") ...[snapshot.data!.job![index].learning!.assistanceInScience.toString() == "1" ? "Science" : snapshot.data!.job![index].learning!.assistanceInScience.toString()],
-                  //   //       if (snapshot.data!.job![index].learning!.assistanceInReading.toString() == "1") ...[
-                  //   //         snapshot.data!.job![index].learning!.assistanceInReading.toString() == "1" ? "Reading" : snapshot.data!.job![index].learning!.assistanceInReading.toString(),
-                  //   //       ],
-                  //   //     ],
-                  //   //   ),
-                  //   // Container(
-                  //   //   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  //   //   margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                  //   //   alignment: Alignment.center,
-                  //   //   decoration: BoxDecoration(
-                  //   //     color: CustomColors.white,
-                  //   //     borderRadius: BorderRadius.circular(12),
-                  //   //   ),
-                  //   //   child: Column(
-                  //   //     crossAxisAlignment: CrossAxisAlignment.start,
-                  //   //     children: [
-                  //   //       Container(
-                  //   //         alignment: Alignment.topLeft,
-                  //   //         // width: 150,
-                  //   //         child: const Text(
-                  //   //           "Requires Assistance ",
-                  //   //           style: TextStyle(
-                  //   //             // color: CustomColors.primaryColor,
-                  //   //             fontFamily: "Poppins",
-                  //   //             fontSize: 16,
-                  //   //             fontWeight: FontWeight.bold,
-                  //   //           ),
-                  //   //         ),
-                  //   //       ),
-                  //   //       Row(
-                  //   //         children: [
-                  //   //           Expanded(
-                  //   //             child: Wrap(
-                  //   //               runSpacing: 5.0,
-                  //   //               spacing: 5.0,
-                  //   //               children: [
-                  //   //                 if (snapshot.data!.job![index].learning!.assistanceInMath != null) ...[
-                  //   //                   CustomBadge(
-                  //   //                     text: snapshot.data!.job![index].learning!.assistanceInMath.toString() == "1" ? "Math" : snapshot.data!.job![index].learning!.assistanceInMath.toString(),
-                  //   //                   ),
-                  //   //                 ],
-                  //   //                 if (snapshot.data!.job![index].learning!.assistanceInEnglish != null) ...[
-                  //   //                   CustomBadge(
-                  //   //                     text: snapshot.data!.job![index].learning!.assistanceInEnglish.toString() == "1" ? "English" : snapshot.data!.job![index].learning!.assistanceInEnglish.toString(),
-                  //   //                   ),
-                  //   //                 ],
-                  //   //                 if (snapshot.data!.job![index].learning!.assistanceInScience != null) ...[
-                  //   //                   CustomBadge(
-                  //   //                     text: snapshot.data!.job![index].learning!.assistanceInScience.toString() == "1" ? "Science" : snapshot.data!.job![index].learning!.assistanceInScience.toString(),
-                  //   //                   ),
-                  //   //                 ],
-                  //   //                 if (snapshot.data!.job![index].learning!.assistanceInReading != null) ...[
-                  //   //                   CustomBadge(
-                  //   //                     text: snapshot.data!.job![index].learning!.assistanceInReading.toString() == "1" ? "Reading" : snapshot.data!.job![index].learning!.assistanceInReading.toString(),
-                  //   //                   ),
-                  //   //                 ],
-                  //   //                 if (snapshot.data!.job![index].learning!.assistanceInOther != null)
-                  //   //                   Container(
-                  //   //                     margin: const EdgeInsets.symmetric(horizontal: 3),
-                  //   //                     padding: const EdgeInsets.all(4),
-                  //   //                     decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
-                  //   //                     child: Text(
-                  //   //                       snapshot.data!.job![index].learning!.assistanceInOther.toString(),
-                  //   //                       style: TextStyle(
-                  //   //                         fontSize: 13,
-                  //   //                         fontFamily: "Poppins",
-                  //   //                         fontWeight: FontWeight.w500,
-                  //   //                         color: CustomColors.primaryTextLight,
-                  //   //                       ),
-                  //   //                     ),
-                  //   //                   ),
-                  //   //               ],
-                  //   //             ),
-                  //   //           ),
-                  //   //         ],
-                  //   //       ),
-                  //   //     ],
-                  //   //   ),
-                  //   // ),
-                  //   if (snapshot.data!.job![index].learning!.learningStyle != null) ...[
-                  //     const SizedBox(height: 10),
-                  //     JobDetailTile(
-                  //       name: "Learning Style",
-                  //       title: snapshot.data!.job![index].learning!.learningStyle.toString(),
-                  //     ),
-                  //     const SizedBox(height: 10),
-                  //     JobDetailTile(
-                  //       name: "Learning Challenge",
-                  //       title: snapshot.data!.job![index].learning!.learningChallenge.toString(),
-                  //     ),
-                  //   ],
-                  // ],
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Additional Info",
-                  //   title: snapshot.data!.job![index].additionalInfo ?? "",
-                  // ),
                   const SizedBox(height: 10),
                   if (snapshot.data!.job![index].schedule!.isNotEmpty) ...[
                     JobScheduleContainer(
@@ -893,34 +743,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // const Text(
-                  //   "Job Information",
-                  //   style: TextStyle(
-                  //     fontFamily: "Poppins",
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Job Title",
-                  //   title: snapshot.data!.job![index].jobTitle.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Job Address",
-                  //   title: snapshot.data!.job![index].address.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Job Area",
-                  //   title: snapshot.data!.job![index].location.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Hourly Rate",
-                  //   title: snapshot.data!.job![index].hourlyRate.toString(),
-                  // ),
                   JobInfoContainer(
                     title: snapshot.data!.job![index].jobTitle.toString(),
                     address: snapshot.data!.job![index].address.toString(),
@@ -962,15 +784,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                     ),
                     const SizedBox(height: 10),
                   ],
-                  // JobDetailTile(
-                  //   name: "Child Name",
-                  //   title: snapshot.data!.job![index].childinfo![index].name.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Child Age",
-                  //   title: snapshot.data!.job![index].childinfo![index].age.toString(),
-                  // ),
                   if (snapshot.data!.job![index].schoolCamp != null) ...[
                     const SizedBox(height: 10),
                     JobDetailTile(
@@ -985,7 +798,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                   ],
                   const SizedBox(height: 10),
                   if (snapshot.data!.job![index].learning != null) ...[
-                    const SizedBox(height: 10),
                     AssistanceContainer(
                       dd: [
                         if (snapshot.data!.job![index].learning!.assistanceInReading == 1) ...["Reading"],
@@ -995,6 +807,7 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                         if (snapshot.data!.job![index].learning!.assistanceInOther != null) ...[snapshot.data!.job![index].learning!.assistanceInOther.toString()],
                       ],
                     ),
+                    const SizedBox(height: 10),
                   ],
                   if (snapshot.data!.job![index].learning != null && snapshot.data!.job![index].learning!.learningStyle != null) ...[
                     JobDetailTile(
@@ -1022,30 +835,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                       data: snapshot.data!.job![index].schedule,
                     ),
                   ],
-                  // const SizedBox(height: 10),
-                  // const Text(
-                  //   "Job schedule",
-                  //   style: TextStyle(
-                  //     fontFamily: "Poppins",
-                  //     fontSize: 18,
-                  //     fontWeight: FontWeight.bold,
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Date :",
-                  //   title: snapshot.data!.job![index].schedule![index].startingDate.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Start Time :",
-                  //   title: snapshot.data!.job![index].schedule![index].startingTime.toString(),
-                  // ),
-                  // const SizedBox(height: 10),
-                  // JobDetailTile(
-                  //   name: "Duration :",
-                  //   title: "${snapshot.data!.job![index].schedule![index].duration.toString()} hour",
-                  // ),
                 ],
               );
             },

@@ -7,8 +7,9 @@ import 'package:island_app/caregiver/models/provider_reviews_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/res/app_url.dart';
-// import 'package:island_app/widgets/review_expansion_list.dart';
+import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_breakpoints.dart';
 
 class ProviderReviewsScreen extends StatefulWidget {
   const ProviderReviewsScreen({super.key});
@@ -117,7 +118,7 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
                         decoration: BoxDecoration(
-                          color: CustomColors.greenhighlight,
+                          color: ServiceGiverColor.black,
                           border: Border(
                             bottom: BorderSide(
                               color: CustomColors.borderLight,
@@ -132,25 +133,27 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                             Text(
                               "Name",
                               style: TextStyle(
-                                color: CustomColors.black,
+                                color: CustomColors.white,
                                 fontSize: 12,
                                 fontFamily: "Poppins",
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            // Text(
-                            //   "Ratings",
-                            //   style: TextStyle(
-                            //     color: CustomColors.black,
-                            //     fontSize: 12,
-                            //     fontFamily: "Poppins",
-                            //     fontWeight: FontWeight.w600,
-                            //   ),
-                            // ),
+                            if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                              Text(
+                                "Rating",
+                                style: TextStyle(
+                                  color: CustomColors.white,
+                                  fontSize: 12,
+                                  fontFamily: "Poppins",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                             Text(
                               "Comment",
                               style: TextStyle(
-                                color: CustomColors.black,
+                                color: CustomColors.white,
                                 fontSize: 12,
                                 fontFamily: "Poppins",
                                 fontWeight: FontWeight.w600,
@@ -166,75 +169,99 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                           padding: const EdgeInsets.only(top: 16),
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  '${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}',
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => AlertDialog(
-                                        title: Center(child: Text('${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}')),
-                                        alignment: Alignment.center,
-                                        content: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            RatingBar.builder(
-                                              initialRating: futurereviews!.data![index].rating!.toDouble(),
-                                              minRating: 1,
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: true,
-                                              ignoreGestures: false,
-                                              itemSize: 24,
-                                              itemCount: 5,
-                                              itemBuilder: (context, _) => const Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                              ),
-                                              onRatingUpdate: (rating) {},
-                                            ),
-                                            Text(
-                                              futurereviews!.data![index].comment.toString() == "null" ? "Not Available" : futurereviews!.data![index].comment.toString(),
-                                              maxLines: 20,
-                                              softWrap: true,
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                fontFamily: "Poppins",
-                                                fontWeight: FontWeight.w400,
-                                                color: CustomColors.primaryText,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                            return Container(
+                              height: 60,
+                              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 08),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: ServiceGiverColor.black),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  if (ResponsiveBreakpoints.of(context).isMobile) ...[
+                                    Expanded(
+                                      child: Text(
+                                        '${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}',
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                    );
-                                  },
-                                  icon: Icon(
-                                    Icons.arrow_circle_right_rounded,
-                                    color: CustomColors.greenLight,
+                                    ),
+                                  ] else ...[
+                                    Text(
+                                      '${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}',
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                  if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                    RatingBar.builder(
+                                      initialRating: futurereviews!.data![index].rating!.toDouble(),
+                                      minRating: 1,
+                                      direction: Axis.horizontal,
+                                      allowHalfRating: true,
+                                      ignoreGestures: false,
+                                      itemSize: 15,
+                                      itemCount: 5,
+                                      itemBuilder: (context, _) => const Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      onRatingUpdate: (rating) {},
+                                    ),
+                                  ],
+                                  InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: Center(child: Text('${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}')),
+                                          alignment: Alignment.center,
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              RatingBar.builder(
+                                                initialRating: futurereviews!.data![index].rating!.toDouble(),
+                                                minRating: 1,
+                                                direction: Axis.horizontal,
+                                                allowHalfRating: true,
+                                                ignoreGestures: false,
+                                                itemSize: 24,
+                                                itemCount: 5,
+                                                itemBuilder: (context, _) => const Icon(
+                                                  Icons.star,
+                                                  color: Colors.amber,
+                                                ),
+                                                onRatingUpdate: (rating) {},
+                                              ),
+                                              Text(
+                                                futurereviews!.data![index].comment.toString() == "null" ? "Not Available" : futurereviews!.data![index].comment.toString(),
+                                                maxLines: 20,
+                                                softWrap: true,
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w400,
+                                                  color: CustomColors.primaryText,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Icon(
+                                      Icons.arrow_circle_right_outlined,
+                                      color: ServiceGiverColor.black,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             );
                           },
                         ),
-                        // ListView.builder(
-                        //   itemCount: futurereviews!.data!.length,
-                        //   shrinkWrap: true,
-                        //   padding: const EdgeInsets.only(top: 16),
-                        //   physics: const NeverScrollableScrollPhysics(),
-                        //   itemBuilder: (context, index) {
-                        //     return ReviewExpansionList(
-                        //       name: '${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}',
-                        //       comment: futurereviews!.data![index].comment.toString() == "null" ? "Not Available" : futurereviews!.data![index].comment.toString(),
-                        //       rating: futurereviews!.data![index].rating!,
-                        //     );
-                        //   },
-                        // ),
                       ] else ...[
                         const Center(
                           child: Text("No Review Yet!"),

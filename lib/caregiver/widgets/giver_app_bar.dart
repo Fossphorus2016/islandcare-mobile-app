@@ -4,6 +4,7 @@ import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/screens/notification.dart';
+import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -23,7 +24,7 @@ class GiverCustomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0,
-      backgroundColor: CustomColors.primaryColor,
+      backgroundColor: ServiceGiverColor.black,
       centerTitle: true,
       title: title != null
           ? Text(
@@ -80,7 +81,9 @@ class GiverCustomAppBar extends StatelessWidget {
         ),
         if (showProfileIcon) ...[
           InkWell(
-            onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(2),
+            onTap: () =>
+                Provider.of<BottomNavigationProvider>(context, listen: false)
+                    .updatePage(2),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -135,9 +138,12 @@ class GiverCustomAppBar extends StatelessWidget {
                             width: 100,
                             height: 100,
                             fit: BoxFit.cover,
-                            imageUrl: "${provider.fetchProfile!.folderPath}/${provider.fetchProfile!.data!.avatar}",
-                            placeholder: (context, url) => const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                            imageUrl:
+                                "${provider.fetchProfile!.folderPath}/${provider.fetchProfile!.data!.avatar}",
+                            placeholder: (context, url) =>
+                                const CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
                           );
                         },
                       ),

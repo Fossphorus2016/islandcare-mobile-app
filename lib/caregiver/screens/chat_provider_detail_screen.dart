@@ -30,10 +30,11 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
   @override
   Widget build(BuildContext context) {
     ServiceProviderChat chatProvider = Provider.of<ServiceProviderChat>(context);
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: const Color(0xff2dcd95),
+        backgroundColor: ServiceGiverColor.black,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
@@ -170,8 +171,15 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                       alignment: Alignment.center,
                       width: MediaQuery.of(context).size.width,
                       height: 60,
-                      child: TextFormField(
+                      child: TextField(
                         controller: messageController,
+                        onChanged: (value) {
+                          if (value.trim().isNotEmpty) {
+                            chatProvider.setButtonValidation(true);
+                          } else {
+                            chatProvider.setButtonValidation(false);
+                          }
+                        },
                         textAlignVertical: TextAlignVertical.bottom,
                         maxLines: 1,
                         style: const TextStyle(
@@ -203,35 +211,31 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                   const SizedBox(
                     width: 2,
                   ),
-                  SizedBox(
-                    width: 75,
-                    height: 48,
-                    child: FloatingActionButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      onPressed: !chatProvider.sendMessageReq
-                          ? () {
-                              if (messageController.text.isEmpty) {
-                                customErrorSnackBar(context, "please write a message");
-                                return;
-                              }
-                              Provider.of<ServiceProviderChat>(context, listen: false).sendMessage(messageController.text);
-                              messageController.clear();
+                  IconButton(
+                    onPressed: chatProvider.sendMessageReq
+                        ? () {
+                            if (messageController.text.isEmpty) {
+                              customErrorSnackBar(context, "please write a message");
+                              return;
                             }
-                          : null,
-                      backgroundColor: !chatProvider.sendMessageReq ? CustomColors.primaryColor : Colors.grey.shade300,
-                      elevation: 0,
-                      child: Text(
-                        "Send",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Rubik",
-                          color: CustomColors.white,
-                        ),
-                      ),
+                            Provider.of<ServiceProviderChat>(context, listen: false).sendMessage(messageController.text);
+                            messageController.clear();
+                          }
+                        : null,
+                    icon: Icon(
+                      Icons.send_outlined,
+                      color: chatProvider.sendMessageReq ? ServiceGiverColor.redButton : null,
                     ),
+                    // backgroundColor: chatProvider.sendMessageReq ? CustomColors.primaryColor : Colors.grey.shade300,
+                    // child: Text(
+                    //   "Send",
+                    //   style: TextStyle(
+                    //     fontSize: 14,
+                    //     fontWeight: FontWeight.w400,
+                    //     fontFamily: "Rubik",
+                    //     color: CustomColors.white,
+                    //   ),
+                    // ),
                   ),
                 ],
               ),
@@ -258,7 +262,7 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
               bottomLeft: Radius.circular(10),
               bottomRight: Radius.circular(0),
             ),
-            color: CustomColors.otpText,
+            color: ServiceGiverColor.black,
           ),
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -334,7 +338,7 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
               bottomLeft: Radius.circular(0),
               bottomRight: Radius.circular(10),
             ),
-            color: CustomColors.orangeLight.withOpacity(0.1),
+            color: ServiceGiverColor.green,
           ),
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -343,19 +347,19 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
             children: [
               Text(
                 message["message"],
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 13,
                   fontFamily: "Rubik",
-                  color: CustomColors.primaryText,
+                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 05),
               Text(
                 DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 13,
                   fontFamily: "Rubik",
-                  color: CustomColors.chatTime,
+                  color: Colors.white,
                 ),
               ),
             ],

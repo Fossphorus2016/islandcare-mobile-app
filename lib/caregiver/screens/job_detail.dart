@@ -248,13 +248,15 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       onTap: () {
         if (isApplied) {
           jobApply();
+        } else {
+          customSuccesSnackBar(context, "Already Applied");
         }
       },
       child: Container(
         height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          color: isApplied ? CustomColors.primaryColor : CustomColors.primaryLight,
+          color: isApplied ? ServiceGiverColor.redButton : ServiceGiverColor.redButtonLigth,
         ),
         margin: const EdgeInsets.symmetric(horizontal: 10),
         child: Center(

@@ -184,102 +184,52 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
   Widget build(BuildContext context) {
     bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
     return profileStatus
-        ? SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    FutureBuilder<ProfileGiverModel>(
-                      future: fetchProfile,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return InkWell(
-                            onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(2),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 200,
-                              padding: const EdgeInsets.only(top: 25, bottom: 60, left: 20, right: 20),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    radius: 40,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(40),
+        ? Drawer(
+            backgroundColor: ServiceGiverColor.black,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      FutureBuilder<ProfileGiverModel>(
+                        future: fetchProfile,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return InkWell(
+                              onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(2),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 200,
+                                padding: const EdgeInsets.only(top: 25, bottom: 60, left: 20, right: 20),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      radius: 40,
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(100),
-                                        child: CachedNetworkImage(
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
-                                          imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
-                                          placeholder: (context, url) => const CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        borderRadius: BorderRadius.circular(40),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(100),
+                                          child: CachedNetworkImage(
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                            imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
+                                            placeholder: (context, url) => const CircularProgressIndicator(),
+                                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        "${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}",
-                                        overflow: TextOverflow.visible,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: "Rubik",
-                                          color: CustomColors.white,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Text(
-                                        snapshot.data!.data!.phone.toString(),
-                                        overflow: TextOverflow.visible,
-                                        style: TextStyle(
-                                          color: CustomColors.white,
-                                          fontFamily: "Rubik",
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        } else {
-                          return Shimmer.fromColors(
-                            baseColor: CustomColors.primaryColor,
-                            highlightColor: const Color.fromARGB(255, 95, 95, 95),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 25, bottom: 60),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    backgroundColor: CustomColors.paraColor,
-                                    radius: 40,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(40),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(100),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 130,
-                                        color: CustomColors.paraColor,
-                                        child: Text(
-                                          "",
+                                    const SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          "${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}",
+                                          overflow: TextOverflow.visible,
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
@@ -287,13 +237,10 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                             color: CustomColors.white,
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      Container(
-                                        width: 80,
-                                        color: CustomColors.paraColor,
-                                        child: Text(
-                                          " ",
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          snapshot.data!.data!.phone.toString(),
+                                          overflow: TextOverflow.visible,
                                           style: TextStyle(
                                             color: CustomColors.white,
                                             fontFamily: "Rubik",
@@ -301,61 +248,72 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: ListTile(
-                        hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        leading: SizedBox(
-                          child: Image.asset("assets/images/icons/homeIcon.png"),
-                        ),
-                        title: Text(
-                          'Dashboard',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: CustomColors.white,
-                            fontFamily: "Rubik",
-                          ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: CustomColors.white,
-                          size: 16,
-                        ),
-                        onTap: () {
-                          if (Provider.of<BottomNavigationProvider>(context, listen: false).page == 0) {
-                            Navigator.pop(context);
+                            );
                           } else {
-                            Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(0);
+                            return Shimmer.fromColors(
+                              baseColor: ServiceGiverColor.grey,
+                              highlightColor: const Color.fromARGB(255, 95, 95, 95),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 25, bottom: 60),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      backgroundColor: CustomColors.paraColor,
+                                      radius: 40,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(40),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(100),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          width: 130,
+                                          color: CustomColors.paraColor,
+                                          child: Text(
+                                            "",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "Rubik",
+                                              color: CustomColors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Container(
+                                          width: 80,
+                                          color: CustomColors.paraColor,
+                                          child: Text(
+                                            " ",
+                                            style: TextStyle(
+                                              color: CustomColors.white,
+                                              fontFamily: "Rubik",
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
                           }
                         },
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ServiceProviderJobs(),
-                          ),
-                        );
-                      },
-                      child: Container(
+                      Container(
                         padding: const EdgeInsets.symmetric(vertical: 6),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(6),
@@ -365,51 +323,10 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                           selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                           focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
                           leading: SizedBox(
-                            child: Image.asset("assets/images/icons/payments.png"),
+                            child: Image.asset("assets/images/icons/homeIcon.png"),
                           ),
                           title: Text(
-                            'Jobs',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: CustomColors.white,
-                              fontFamily: "Rubik",
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: CustomColors.white,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const ProviderReviewsScreen(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: SizedBox(
-                            child: Icon(
-                              Icons.star_border_outlined,
-                              color: CustomColors.white,
-                            ),
-                          ),
-                          title: Text(
-                            'Reviews Given',
+                            'Dashboard',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -423,128 +340,214 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                             size: 16,
                           ),
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ProviderReviewsScreen(),
-                              ),
-                            );
+                            if (Provider.of<BottomNavigationProvider>(context, listen: false).page == 0) {
+                              Navigator.pop(context);
+                            } else {
+                              Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(0);
+                            }
                           },
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const BankDetails(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: SizedBox(
-                            child: Icon(
-                              Icons.card_membership,
-                              color: CustomColors.white,
-                            ),
-                          ),
-                          title: Text(
-                            'Bank Details',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: CustomColors.white,
-                              fontFamily: "Rubik",
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: CustomColors.white,
-                            size: 16,
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const BankDetails(),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: ListTile(
-                        hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
-                        title: Text(
-                          'Change Password',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: CustomColors.white,
-                            fontFamily: "Rubik",
-                          ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: CustomColors.white,
-                          size: 16,
-                        ),
+                      GestureDetector(
                         onTap: () {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            backgroundColor: Colors.white,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30.0),
-                                topRight: Radius.circular(30.0),
-                              ),
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ServiceProviderJobs(),
                             ),
-                            builder: (context) {
-                              return const ChangePasswordWidget();
-                            },
                           );
                         },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: SizedBox(
+                              child: Image.asset("assets/images/icons/payments.png"),
+                            ),
+                            title: Text(
+                              'Jobs',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                ListTile(
-                  onTap: () {
-                    _showLogoutDialog();
-                  },
-                  leading: Image.asset("assets/images/icons/logout.png"),
-                  title: Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      'Logout',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.white,
-                        fontFamily: "Rubik",
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProviderReviewsScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: SizedBox(
+                              child: Icon(
+                                Icons.star_border_outlined,
+                                color: CustomColors.white,
+                              ),
+                            ),
+                            title: Text(
+                              'Reviews Given',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ProviderReviewsScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const BankDetails(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: SizedBox(
+                              child: Icon(
+                                Icons.card_membership,
+                                color: CustomColors.white,
+                              ),
+                            ),
+                            title: Text(
+                              'Bank Details',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const BankDetails(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: ListTile(
+                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
+                          title: Text(
+                            'Change Password',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: CustomColors.white,
+                              fontFamily: "Rubik",
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: CustomColors.white,
+                            size: 16,
+                          ),
+                          onTap: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30.0),
+                                  topRight: Radius.circular(30.0),
+                                ),
+                              ),
+                              builder: (context) {
+                                return const ChangePasswordWidget();
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  ListTile(
+                    onTap: () {
+                      _showLogoutDialog();
+                    },
+                    leading: Image.asset("assets/images/icons/logout.png"),
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 5),
+                      child: Text(
+                        'Logout',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: CustomColors.white,
+                          fontFamily: "Rubik",
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           )
         : Column(
@@ -940,38 +943,15 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                     // OTP
                     GestureDetector(
                       onTap: () {
-                        // if (oldPasswordController.text.isEmpty) {
-                        //   customErrorSnackBar(
-                        //     context,
-                        //     "Please Enter Old Password",
-                        //   );
-                        // } else if (passwordController.text.isEmpty) {
-                        //   customErrorSnackBar(
-                        //     context,
-                        //     "Please Enter Password",
-                        //   );
-                        // } else if (passwordController.text.length < 8) {
-                        //   customErrorSnackBar(
-                        //     context,
-                        //     "Please Enter 8 digit Password",
-                        //   );
-                        // } else if (passwordController.text != cpasswordController.text) {
-                        //   customErrorSnackBar(
-                        //     context,
-                        //     "New Password Not Match",
-                        //   );
-                        // } else {
                         if (changePassKey.currentState!.validate()) {
                           chnagePassword();
-
-                          // }
                         }
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         height: 54,
                         decoration: BoxDecoration(
-                          color: CustomColors.primaryColor,
+                          color: ServiceGiverColor.black,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Center(

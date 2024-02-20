@@ -156,7 +156,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
               // : ,
-              backgroundColor: CustomColors.primaryColor,
+              backgroundColor: ServiceGiverColor.black,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -185,7 +185,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              // primaryColorDark: CustomColors.primaryColor,
+              // primaryColorDark: ServiceGiverColor.black,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -215,7 +215,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              // primaryColorDark: CustomColors.primaryColor,
+              // primaryColorDark: ServiceGiverColor.black,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -437,7 +437,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         backgroundColor: CustomColors.loginBg,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: CustomColors.primaryColor,
+          backgroundColor: ServiceGiverColor.black,
           centerTitle: true,
           title: Text(
             "Profile Edit",
@@ -500,7 +500,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                     height: 100.45,
                                     width: 100.45,
                                     decoration: BoxDecoration(
-                                      color: CustomColors.primaryColor,
+                                      color: ServiceGiverColor.black,
                                       borderRadius: BorderRadius.circular(100),
                                       boxShadow: const [
                                         BoxShadow(
@@ -580,7 +580,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               Text(
                                 "Gender",
                                 style: TextStyle(
-                                  color: CustomColors.primaryColor,
+                                  color: ServiceGiverColor.black,
                                   fontSize: 12,
                                   fontFamily: "Rubik",
                                   fontWeight: FontWeight.w600,
@@ -601,7 +601,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         height: 50.45,
                                         padding: const EdgeInsets.all(4),
                                         decoration: BoxDecoration(
-                                          color: _isSelectedGender == "1" ? CustomColors.primaryColor : CustomColors.white,
+                                          color: _isSelectedGender == "1" ? ServiceGiverColor.black : CustomColors.white,
                                           borderRadius: BorderRadius.circular(8),
                                           boxShadow: const [
                                             BoxShadow(
@@ -645,7 +645,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         height: 50.45,
                                         padding: const EdgeInsets.all(4),
                                         decoration: BoxDecoration(
-                                          color: _isSelectedGender == "2" ? CustomColors.primaryColor : CustomColors.white,
+                                          color: _isSelectedGender == "2" ? ServiceGiverColor.black : CustomColors.white,
                                           borderRadius: BorderRadius.circular(8),
                                           boxShadow: const [
                                             BoxShadow(
@@ -717,7 +717,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         //       Text(
                         //         "Phone Number",
                         //         style: TextStyle(
-                        //           color: CustomColors.primaryColor,
+                        //           color: ServiceGiverColor.black,
                         //           fontSize: 12,
                         //           fontFamily: "Rubik",
                         //           fontWeight: FontWeight.w600,
@@ -796,7 +796,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 Text(
                                   "Date Of Birth",
                                   style: TextStyle(
-                                    color: CustomColors.primaryColor,
+                                    color: ServiceGiverColor.black,
                                     fontSize: 12,
                                     fontFamily: "Rubik",
                                     fontWeight: FontWeight.w600,
@@ -832,7 +832,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                     Text(
                                       "Area",
                                       style: TextStyle(
-                                        color: CustomColors.primaryColor,
+                                        color: ServiceGiverColor.black,
                                         fontSize: 12,
                                         fontFamily: "Rubik",
                                         fontWeight: FontWeight.w600,
@@ -879,7 +879,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               Text(
                                 "Years Of Experience",
                                 style: TextStyle(
-                                  color: CustomColors.primaryColor,
+                                  color: ServiceGiverColor.black,
                                   fontSize: 12,
                                   fontFamily: "Rubik",
                                   fontWeight: FontWeight.w600,
@@ -952,7 +952,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               Text(
                                 "Hourly Rate",
                                 style: TextStyle(
-                                  color: CustomColors.primaryColor,
+                                  color: ServiceGiverColor.black,
                                   fontSize: 12,
                                   fontFamily: "Rubik",
                                   fontWeight: FontWeight.w600,
@@ -1023,7 +1023,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               Text(
                                 "User Address",
                                 style: TextStyle(
-                                  color: CustomColors.primaryColor,
+                                  color: ServiceGiverColor.black,
                                   fontSize: 12,
                                   fontFamily: "Rubik",
                                   fontWeight: FontWeight.w600,
@@ -1091,7 +1091,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               Text(
                                 "Zip Code",
                                 style: TextStyle(
-                                  color: CustomColors.primaryColor,
+                                  color: ServiceGiverColor.black,
                                   fontSize: 12,
                                   fontFamily: "Rubik",
                                   fontWeight: FontWeight.w600,
@@ -1163,7 +1163,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               Text(
                                 "Additional Services",
                                 style: TextStyle(
-                                  color: CustomColors.primaryColor,
+                                  color: ServiceGiverColor.black,
                                   fontSize: 12,
                                   fontFamily: "Rubik",
                                   fontWeight: FontWeight.w600,
@@ -1288,10 +1288,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                       maxLines: 1,
                                                       decoration: InputDecoration(
                                                         hintText: "Institute Name",
-                                                        fillColor: CustomColors.myJobDetail,
+                                                        // fillColor: ServiceGiverColor.black,
                                                         focusColor: CustomColors.white,
                                                         hoverColor: CustomColors.white,
-                                                        filled: true,
+                                                        // filled: true,
                                                         border: OutlineInputBorder(
                                                           borderRadius: BorderRadius.circular(10),
                                                         ),
@@ -1326,10 +1326,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                       maxLines: 1,
                                                       decoration: InputDecoration(
                                                         hintText: "Major",
-                                                        fillColor: CustomColors.myJobDetail,
+                                                        // fillColor: CustomColors.myJobDetail,
                                                         focusColor: CustomColors.white,
                                                         hoverColor: CustomColors.white,
-                                                        filled: true,
+                                                        // filled: true,
                                                         border: OutlineInputBorder(
                                                           borderRadius: BorderRadius.circular(10),
                                                         ),
@@ -1376,9 +1376,9 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                   ),
                                                   // From Date
                                                   Container(
-                                                    height: 50,
+                                                    // height: 50,
                                                     decoration: BoxDecoration(
-                                                      color: CustomColors.myJobDetail,
+                                                      color: Colors.white,
                                                       borderRadius: BorderRadius.circular(12),
                                                     ),
                                                     child: CustomTextFieldWidget(
@@ -1397,9 +1397,9 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                     height: 15,
                                                   ),
                                                   Container(
-                                                    height: 50,
+                                                    // height: 50,
                                                     decoration: BoxDecoration(
-                                                      color: CustomColors.myJobDetail,
+                                                      color: Colors.white,
                                                       borderRadius: BorderRadius.circular(12),
                                                     ),
                                                     child: CustomTextFieldWidget(
@@ -1466,8 +1466,8 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                           begin: Alignment.center,
                                                           end: Alignment.center,
                                                           colors: [
-                                                            const Color(0xff90EAB4).withOpacity(0.1),
-                                                            const Color(0xff6BD294).withOpacity(0.8),
+                                                            ServiceGiverColor.black,
+                                                            ServiceGiverColor.black,
                                                           ],
                                                         ),
                                                         color: CustomColors.white,
@@ -1476,7 +1476,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                             color: Color.fromARGB(13, 0, 0, 0),
                                                             blurRadius: 4.0,
                                                             spreadRadius: 2.0,
-                                                            offset: Offset(2.0, 2.0),
+                                                            offset: Offset(
+                                                              2.0,
+                                                              2.0,
+                                                            ),
                                                           ),
                                                         ],
                                                         borderRadius: BorderRadius.circular(6),
@@ -1507,7 +1510,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: CustomColors.primaryColor,
+                                  color: ServiceGiverColor.black,
                                   borderRadius: BorderRadius.circular(6),
                                 ),
                                 child: Text(
@@ -1663,7 +1666,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               Text(
                                 "Availability",
                                 style: TextStyle(
-                                  color: CustomColors.primaryColor,
+                                  color: ServiceGiverColor.black,
                                   fontSize: 12,
                                   fontFamily: "Rubik",
                                   fontWeight: FontWeight.w600,
@@ -1731,7 +1734,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               Text(
                                 "About Me",
                                 style: TextStyle(
-                                  color: CustomColors.primaryColor,
+                                  color: ServiceGiverColor.black,
                                   fontSize: 12,
                                   fontFamily: "Rubik",
                                   fontWeight: FontWeight.w600,
@@ -1784,44 +1787,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             ],
                           ),
                         ),
-                        // Background Verified
-                        // DottedBorder(
-                        //   radius: const Radius.circular(10),
-                        //   borderType: BorderType.RRect,
-                        //   color: CustomColors.primaryColor,
-                        //   child: Container(
-                        //     padding: const EdgeInsets.symmetric(vertical: 5),
-                        //     decoration: BoxDecoration(
-                        //       color: CustomColors.primaryLight,
-                        //       borderRadius: BorderRadius.circular(10),
-                        //     ),
-                        //     child: ListTile(
-                        //       leading: Icon(
-                        //         Icons.workspace_premium,
-                        //         color: CustomColors.primaryColor,
-                        //       ),
-                        //       title: Text(
-                        //         "Background Verified",
-                        //         style: TextStyle(
-                        //           color: CustomColors.primaryText,
-                        //           fontSize: 12,
-                        //           fontFamily: "Poppins",
-                        //           fontWeight: FontWeight.w600,
-                        //         ),
-                        //       ),
-                        //       subtitle: Text(
-                        //         "We encourage parents to conduct their own screenings using the background check tools. See what each of the badges covered, or learn more about keeping your family safe by visiting the Trust & Safety Center.",
-                        //         style: TextStyle(
-                        //           color: CustomColors.primaryText,
-                        //           fontSize: 10,
-                        //           fontFamily: "Poppins",
-                        //           fontWeight: FontWeight.w300,
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 20),
+
                         // file type 1
                         UploadBasicDocumentList(
                           onTap: () {
@@ -2066,7 +2032,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               height: 60,
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: const Color(0xff6BD294).withOpacity(0.8),
+                                color: ServiceGiverColor.black,
                                 boxShadow: const [
                                   BoxShadow(
                                     color: Color.fromARGB(13, 0, 0, 0),

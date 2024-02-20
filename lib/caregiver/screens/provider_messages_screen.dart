@@ -259,6 +259,11 @@ class ServiceProviderChat extends ChangeNotifier {
   }
 
   bool sendMessageReq = false;
+  setButtonValidation(bool value) {
+    sendMessageReq = value;
+    notifyListeners();
+  }
+
   sendMessage(value) async {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
     await prefs.reload();

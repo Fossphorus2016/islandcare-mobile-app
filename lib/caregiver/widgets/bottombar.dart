@@ -10,6 +10,7 @@ import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 // import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
@@ -57,9 +58,8 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
       body: pages[page],
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
-          // splashColor: CustomColors.primaryColor,
-          highlightColor: CustomColors.primaryColor,
-          hoverColor: CustomColors.primaryColor,
+          highlightColor: ServiceGiverColor.black,
+          hoverColor: ServiceGiverColor.black,
         ),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
@@ -97,12 +97,12 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(
-                            color: page == 0 ? CustomColors.primaryColor : Colors.transparent,
+                            color: page == 0 ? ServiceGiverColor.black : Colors.transparent,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.home,
-                            color: page == 0 ? CustomColors.white : CustomColors.primaryColor,
+                            color: page == 0 ? CustomColors.white : ServiceGiverColor.black,
                           ),
                         ),
                         label: '',
@@ -112,12 +112,12 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(
-                            color: page == 1 ? CustomColors.primaryColor : CustomColors.white,
+                            color: page == 1 ? ServiceGiverColor.black : CustomColors.white,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.textsms_rounded,
-                            color: page == 1 ? CustomColors.white : CustomColors.primaryColor,
+                            color: page == 1 ? CustomColors.white : ServiceGiverColor.black,
                           ),
                         ),
                         label: '',
@@ -127,12 +127,12 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(
-                            color: page == 2 ? CustomColors.primaryColor : CustomColors.white,
+                            color: page == 2 ? ServiceGiverColor.black : CustomColors.white,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             Icons.person,
-                            color: page == 2 ? CustomColors.white : CustomColors.primaryColor,
+                            color: page == 2 ? CustomColors.white : ServiceGiverColor.black,
                           ),
                         ),
                         label: '',

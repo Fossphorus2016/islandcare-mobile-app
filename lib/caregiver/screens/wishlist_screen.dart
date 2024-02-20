@@ -43,10 +43,7 @@ class _WishlistGiverScreenState extends State<WishlistGiverScreen> {
             )
           ],
         ),
-        drawer: Drawer(
-          backgroundColor: CustomColors.primaryColor,
-          child: const DrawerGiverWidget(),
-        ),
+        drawer: const DrawerGiverWidget(),
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
