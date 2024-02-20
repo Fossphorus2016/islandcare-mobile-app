@@ -107,3 +107,14 @@ bool checkImageFileTypes(context, fileExtension) {
     return false;
   }
 }
+
+class ServiceGiverColor {
+  static Color black = const Color(0xFF3b3b64);
+  static Color activeDrawerTile = const Color(0xFFed1c24);
+  static Color white = Colors.white;
+  static Color green = const Color(0xFF50cd89);
+  static Color redButton = const Color(0xFFf1416c);
+  static Color grey = const Color.fromARGB(1000, 228, 230, 239);
+  static Color backGroundColor = Colors.grey;
+  static Color activeRatingStar = Colors.orange;
+}

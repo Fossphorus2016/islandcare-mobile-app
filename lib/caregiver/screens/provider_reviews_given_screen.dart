@@ -2,11 +2,12 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/caregiver/models/provider_reviews_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/res/app_url.dart';
-import 'package:island_app/widgets/review_expansion_list.dart';
+// import 'package:island_app/widgets/review_expansion_list.dart';
 import 'package:provider/provider.dart';
 
 class ProviderReviewsScreen extends StatefulWidget {
@@ -137,15 +138,15 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Text(
-                              "Ratings",
-                              style: TextStyle(
-                                color: CustomColors.black,
-                                fontSize: 12,
-                                fontFamily: "Poppins",
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            // Text(
+                            //   "Ratings",
+                            //   style: TextStyle(
+                            //     color: CustomColors.black,
+                            //     fontSize: 12,
+                            //     fontFamily: "Poppins",
+                            //     fontWeight: FontWeight.w600,
+                            //   ),
+                            // ),
                             Text(
                               "Comment",
                               style: TextStyle(
@@ -165,13 +166,75 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                           padding: const EdgeInsets.only(top: 16),
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return ReviewExpansionList(
-                              name: '${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}',
-                              comment: futurereviews!.data![index].comment.toString() == "null" ? "Not Available" : futurereviews!.data![index].comment.toString(),
-                              rating: futurereviews!.data![index].rating!,
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}',
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Center(child: Text('${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}')),
+                                        alignment: Alignment.center,
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            RatingBar.builder(
+                                              initialRating: futurereviews!.data![index].rating!.toDouble(),
+                                              minRating: 1,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              ignoreGestures: false,
+                                              itemSize: 24,
+                                              itemCount: 5,
+                                              itemBuilder: (context, _) => const Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                              ),
+                                              onRatingUpdate: (rating) {},
+                                            ),
+                                            Text(
+                                              futurereviews!.data![index].comment.toString() == "null" ? "Not Available" : futurereviews!.data![index].comment.toString(),
+                                              maxLines: 20,
+                                              softWrap: true,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: "Poppins",
+                                                fontWeight: FontWeight.w400,
+                                                color: CustomColors.primaryText,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_circle_right_rounded,
+                                    color: CustomColors.greenLight,
+                                  ),
+                                ),
+                              ],
                             );
                           },
                         ),
+                        // ListView.builder(
+                        //   itemCount: futurereviews!.data!.length,
+                        //   shrinkWrap: true,
+                        //   padding: const EdgeInsets.only(top: 16),
+                        //   physics: const NeverScrollableScrollPhysics(),
+                        //   itemBuilder: (context, index) {
+                        //     return ReviewExpansionList(
+                        //       name: '${futurereviews!.data![index].receiverRating!.firstName} ${futurereviews!.data![index].receiverRating!.lastName}',
+                        //       comment: futurereviews!.data![index].comment.toString() == "null" ? "Not Available" : futurereviews!.data![index].comment.toString(),
+                        //       rating: futurereviews!.data![index].rating!,
+                        //     );
+                        //   },
+                        // ),
                       ] else ...[
                         const Center(
                           child: Text("No Review Yet!"),

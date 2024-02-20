@@ -18,6 +18,7 @@ import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/login_screen.dart';
 import 'package:island_app/screens/signup_main_screen.dart';
 import 'package:island_app/screens/splash_screen.dart';
+import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -108,8 +109,27 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'APP',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primaryColor: ServiceGiverColor.black,
         appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
+        buttonTheme: ButtonThemeData(
+          buttonColor: ServiceGiverColor.redButton,
+        ),
+        iconButtonTheme: IconButtonThemeData(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith(
+              (states) => ServiceGiverColor.grey,
+            ),
+            iconColor: MaterialStateProperty.resolveWith(
+              (states) => ServiceGiverColor.green,
+            ),
+          ),
+        ),
+        toggleButtonsTheme: ToggleButtonsThemeData(
+          color: ServiceGiverColor.green,
+        ),
+        drawerTheme: DrawerThemeData(
+          backgroundColor: ServiceGiverColor.black,
+        ),
       ),
       onGenerateRoute: RouteGenerator.generateRoutes,
       initialRoute: '/',
