@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/utils.dart';
 
 class ProfileContainerField extends StatefulWidget {
   const ProfileContainerField({
@@ -30,7 +31,6 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
 
   @override
   Widget build(BuildContext context) {
-    print(12);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
       decoration: BoxDecoration(
@@ -44,7 +44,7 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
           Text(
             widget.title,
             style: TextStyle(
-              color: CustomColors.primaryColor,
+              color: ServiceGiverColor.black,
               fontSize: 12,
               fontFamily: "Rubik",
               fontWeight: FontWeight.w600,
@@ -52,7 +52,7 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
           ),
           // const SizedBox(height: 05),
           FormField(
-            autovalidateMode: _hasInteractedByUser ? AutovalidateMode.always : AutovalidateMode.disabled,
+            autovalidateMode: _hasInteractedByUser ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
             builder: (FormFieldState<String> state) {
               // print(state.hasError);
               if (state.hasInteractedByUser) {
@@ -70,6 +70,7 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextField(
+                      controller: widget.controller,
                       focusNode: _focusNode,
                       inputFormatters: widget.inputFormatters,
                       decoration: InputDecoration(
@@ -80,9 +81,10 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
                         fillColor: Colors.white24,
                         filled: true,
                       ),
-                      controller: widget.controller,
                       onChanged: (value) {
-                        state.didChange(value);
+                        // ignore: invalid_use_of_protected_member
+                        state.setValue(value);
+                        // state.didChange(value);
                       },
                       onTap: () {
                         if (!_hasInteractedByUser) {

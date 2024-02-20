@@ -333,69 +333,69 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
 
   var error;
   uploadImageDio() async {
-    // var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
-    // var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
 
-    // var formData = FormData.fromMap(
-    //   {
-    //     '_method': 'PUT',
-    //     'id': usersId,
-    //     'user_info': userInfoController.text.toString(),
-    //     'phone': phoneController.text.toString(),
-    //     'address': addressController.text.toString(),
-    //     'gender': _isSelectedGender,
-    //     'dob': dobController.text.toString(),
-    //     'area': selectedArea,
-    //     'zip': zipController.text.toString(),
-    //     'experience': experienceController.text.toString(),
-    //     'hourly_rate': hourlyController.text.toString(),
-    //     'availability': availabilityController.text.toString(),
-    //     'service': keywordController.text.toString(),
-    //     "avatar": imageFileDio == null ? null : await MultipartFile.fromFile(imageFileDio!.path),
-    //     "institute_name[]": instituteMapList,
-    //     "start_date[]": startDateMapList,
-    //     "end_date[]": endDateMapList,
-    //     "current[]": currentMapList,
-    //     "major[]": majorMapList,
-    //     "valid_driver_license": lists['valid_driver_license'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['valid_driver_license'].toString()),
-    //     "scars_awareness_certification": lists['scars_awareness_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['scars_awareness_certification'].toString()),
-    //     "red_cross_babysitting_certification": lists['red_cross_babysitting_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['red_cross_babysitting_certification'].toString()),
-    //     "cpr_first_aid_certification": lists['cpr_first_aid_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['cpr_first_aid_certification'].toString()),
-    //     "animal_care_provider_certification": lists['animal_care_provider_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animal_care_provider_certification'].toString()),
-    //     "chaild_and_family_services_and_abuse": lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['chaild_and_family_services_and_abuse'].toString()),
-    //     "animail_first_aid": lists['animail_first_aid'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animail_first_aid'].toString()),
-    //     "government_registered_care_provider": lists['government_registered_care_provider'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['government_registered_care_provider'].toString()),
-    //     "police_background_check": lists['police_background_check'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['police_background_check'].toString()),
-    //   },
-    // );
+    var formData = FormData.fromMap(
+      {
+        '_method': 'PUT',
+        'id': usersId,
+        'user_info': userInfoController.text.toString(),
+        'phone': phoneController.text.toString(),
+        'address': addressController.text.toString(),
+        'gender': _isSelectedGender,
+        'dob': dobController.text.toString(),
+        'area': selectedArea,
+        'zip': zipController.text.toString(),
+        'experience': experienceController.text.toString(),
+        'hourly_rate': hourlyController.text.toString(),
+        'availability': availabilityController.text.toString(),
+        'service': keywordController.text.toString(),
+        "avatar": imageFileDio == null ? null : await MultipartFile.fromFile(imageFileDio!.path),
+        "institute_name[]": instituteMapList,
+        "start_date[]": startDateMapList,
+        "end_date[]": endDateMapList,
+        "current[]": currentMapList,
+        "major[]": majorMapList,
+        "valid_driver_license": lists['valid_driver_license'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['valid_driver_license'].toString()),
+        "scars_awareness_certification": lists['scars_awareness_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['scars_awareness_certification'].toString()),
+        "red_cross_babysitting_certification": lists['red_cross_babysitting_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['red_cross_babysitting_certification'].toString()),
+        "cpr_first_aid_certification": lists['cpr_first_aid_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['cpr_first_aid_certification'].toString()),
+        "animal_care_provider_certification": lists['animal_care_provider_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animal_care_provider_certification'].toString()),
+        "chaild_and_family_services_and_abuse": lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['chaild_and_family_services_and_abuse'].toString()),
+        "animail_first_aid": lists['animail_first_aid'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animail_first_aid'].toString()),
+        "government_registered_care_provider": lists['government_registered_care_provider'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['government_registered_care_provider'].toString()),
+        "police_background_check": lists['police_background_check'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['police_background_check'].toString()),
+      },
+    );
 
-    // Dio dio = Dio();
-    // try {
-    //   var response = await dio.post('https://islandcare.bm/api/service-provider-profile/update', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
-    //   setState(() {
-    //     sendRequest = false;
-    //   });
-    //   // print(response.data);
-    //   if (response.statusCode == 200) {
-    //     Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
-    //     customSuccesSnackBar(
-    //       context,
-    //       "Profile Updated Successfully.",
-    //     );
-    //   } else {
-    //     // print(response.data);
-    //     setState(() {
-    //       error = response.data;
-    //     });
-    //     customErrorSnackBar(
-    //       context,
-    //       "Something went wrong please try agan later.",
-    //     );
-    //   }
-    // } catch (e) {
-    //   // print(e);
-    //   customErrorSnackBar(context, e.toString());
-    // }
+    Dio dio = Dio();
+    try {
+      var response = await dio.post('https://islandcare.bm/api/service-provider-profile/update', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
+      setState(() {
+        sendRequest = false;
+      });
+      // print(response.data);
+      if (response.statusCode == 200) {
+        Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
+        customSuccesSnackBar(
+          context,
+          "Profile Updated Successfully.",
+        );
+      } else {
+        // print(response.data);
+        setState(() {
+          error = response.data;
+        });
+        customErrorSnackBar(
+          context,
+          "Something went wrong please try agan later.",
+        );
+      }
+    } catch (e) {
+      // print(e);
+      customErrorSnackBar(context, e.toString());
+    }
   }
 
   var areaList = [
@@ -865,357 +865,437 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           ),
                         ),
                         // Experrience
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          margin: const EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(
-                            color: CustomColors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Years Of Experience",
-                                style: TextStyle(
-                                  color: ServiceGiverColor.black,
-                                  fontSize: 12,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 05),
-                              TextFormField(
-                                controller: experienceController,
-                                keyboardType: TextInputType.number,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlignVertical: TextAlignVertical.bottom,
-                                maxLines: 1,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Please add Years Of Experience";
-                                  }
-                                  return null;
-                                },
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                  LengthLimitingTextInputFormatter(02),
-                                  // CustomTextInputFormatter(),
-                                ],
-                                decoration: InputDecoration(
-                                  hintText: "Experience",
-                                  fillColor: CustomColors.white,
-                                  focusColor: CustomColors.white,
-                                  hoverColor: CustomColors.white,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        ProfileContainerField(
+                          title: "Years Of Experience",
+                          controller: experienceController,
+                          hintText: "Years Of Experience",
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            LengthLimitingTextInputFormatter(02),
+                            // CustomTextInputFormatter(),
+                          ],
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please add Years Of Experience";
+                            }
+                            return null;
+                          },
                         ),
+                        const SizedBox(height: 15),
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        //   margin: const EdgeInsets.only(bottom: 15),
+                        //   decoration: BoxDecoration(
+                        //     color: CustomColors.white,
+                        //     borderRadius: BorderRadius.circular(12),
+                        //   ),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Text(
+                        //         "Years Of Experience",
+                        //         style: TextStyle(
+                        //           color: ServiceGiverColor.black,
+                        //           fontSize: 12,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       const SizedBox(height: 05),
+                        //       TextFormField(
+                        //         controller: experienceController,
+                        //         keyboardType: TextInputType.number,
+                        //         style: const TextStyle(
+                        //           fontSize: 16,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w400,
+                        //         ),
+                        //         textAlignVertical: TextAlignVertical.bottom,
+                        //         maxLines: 1,
+                        //         validator: (value) {
+                        //           if (value == null || value.isEmpty) {
+                        //             return "Please add Years Of Experience";
+                        //           }
+                        //           return null;
+                        //         },
+                        //         inputFormatters: [
+                        //           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                        //           LengthLimitingTextInputFormatter(02),
+                        //           // CustomTextInputFormatter(),
+                        //         ],
+                        //         decoration: InputDecoration(
+                        //           hintText: "Experience",
+                        //           fillColor: CustomColors.white,
+                        //           focusColor: CustomColors.white,
+                        //           hoverColor: CustomColors.white,
+                        //           filled: true,
+                        //           border: OutlineInputBorder(
+                        //             borderRadius: BorderRadius.circular(0),
+                        //           ),
+                        //           focusedBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           enabledBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           errorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //           focusedErrorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                         // Hourly
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          margin: const EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(
-                            color: CustomColors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Hourly Rate",
-                                style: TextStyle(
-                                  color: ServiceGiverColor.black,
-                                  fontSize: 12,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              // const SizedBox(height: 05),
-                              TextFormField(
-                                controller: hourlyController,
-                                keyboardType: TextInputType.number,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlignVertical: TextAlignVertical.bottom,
-                                maxLines: 1,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                ],
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Please add Hourly Rate";
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "Hourly",
-                                  fillColor: CustomColors.white,
-                                  focusColor: CustomColors.white,
-                                  hoverColor: CustomColors.white,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        //   margin: const EdgeInsets.only(bottom: 15),
+                        //   decoration: BoxDecoration(
+                        //     color: CustomColors.white,
+                        //     borderRadius: BorderRadius.circular(12),
+                        //   ),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Text(
+                        //         "Hourly Rate",
+                        //         style: TextStyle(
+                        //           color: ServiceGiverColor.black,
+                        //           fontSize: 12,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       // const SizedBox(height: 05),
+                        //       TextFormField(
+                        //         controller: hourlyController,
+                        //         keyboardType: TextInputType.number,
+                        //         style: const TextStyle(
+                        //           fontSize: 16,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w400,
+                        //         ),
+                        //         textAlignVertical: TextAlignVertical.bottom,
+                        //         maxLines: 1,
+                        //         inputFormatters: [
+                        //           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                        //         ],
+                        //         validator: (value) {
+                        //           if (value == null || value.isEmpty) {
+                        //             return "Please add Hourly Rate";
+                        //           }
+                        //           return null;
+                        //         },
+                        //         decoration: InputDecoration(
+                        //           hintText: "Hourly",
+                        //           fillColor: CustomColors.white,
+                        //           focusColor: CustomColors.white,
+                        //           hoverColor: CustomColors.white,
+                        //           filled: true,
+                        //           border: OutlineInputBorder(
+                        //             borderRadius: BorderRadius.circular(0),
+                        //           ),
+                        //           focusedBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           enabledBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           errorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //           focusedErrorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        ProfileContainerField(
+                          title: "Hourly Rate",
+                          controller: hourlyController,
+                          hintText: "Hourly Rate",
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            // LengthLimitingTextInputFormatter(02),
+                            // CustomTextInputFormatter(),
+                          ],
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please add Hourly Rate";
+                            }
+                            return null;
+                          },
                         ),
+                        const SizedBox(height: 15),
                         // User Address
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          margin: const EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(
-                            color: CustomColors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "User Address",
-                                style: TextStyle(
-                                  color: ServiceGiverColor.black,
-                                  fontSize: 12,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 05),
-                              TextFormField(
-                                controller: addressController,
-                                keyboardType: TextInputType.multiline,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlignVertical: TextAlignVertical.bottom,
-                                maxLines: 4,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Please enter User Address";
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "User Address",
-                                  fillColor: CustomColors.white,
-                                  focusColor: CustomColors.white,
-                                  hoverColor: CustomColors.white,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        //   margin: const EdgeInsets.only(bottom: 15),
+                        //   decoration: BoxDecoration(
+                        //     color: CustomColors.white,
+                        //     borderRadius: BorderRadius.circular(12),
+                        //   ),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Text(
+                        //         "User Address",
+                        //         style: TextStyle(
+                        //           color: ServiceGiverColor.black,
+                        //           fontSize: 12,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       const SizedBox(height: 05),
+                        //       TextFormField(
+                        //         controller: addressController,
+                        //         keyboardType: TextInputType.multiline,
+                        //         style: const TextStyle(
+                        //           fontSize: 16,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w400,
+                        //         ),
+                        //         textAlignVertical: TextAlignVertical.bottom,
+                        //         maxLines: 4,
+                        //         validator: (value) {
+                        //           if (value == null || value.isEmpty) {
+                        //             return "Please enter User Address";
+                        //           }
+                        //           return null;
+                        //         },
+                        //         decoration: InputDecoration(
+                        //           hintText: "User Address",
+                        //           fillColor: CustomColors.white,
+                        //           focusColor: CustomColors.white,
+                        //           hoverColor: CustomColors.white,
+                        //           filled: true,
+                        //           border: OutlineInputBorder(
+                        //             borderRadius: BorderRadius.circular(0),
+                        //           ),
+                        //           focusedBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           enabledBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           errorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //           focusedErrorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        ProfileContainerField(
+                          title: "User Address",
+                          controller: addressController,
+                          hintText: "User Address",
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please add User Address";
+                            }
+                            return null;
+                          },
                         ),
+                        const SizedBox(height: 15),
                         // Zip Code
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          margin: const EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(
-                            color: CustomColors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Zip Code",
-                                style: TextStyle(
-                                  color: ServiceGiverColor.black,
-                                  fontSize: 12,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 05),
-                              TextFormField(
-                                controller: zipController,
-                                keyboardType: TextInputType.number,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlignVertical: TextAlignVertical.bottom,
-                                maxLines: 1,
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                                  LengthLimitingTextInputFormatter(06),
-                                ],
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Please enter Zip Code";
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "Zip Code",
-                                  fillColor: CustomColors.white,
-                                  focusColor: CustomColors.white,
-                                  hoverColor: CustomColors.white,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        //   margin: const EdgeInsets.only(bottom: 15),
+                        //   decoration: BoxDecoration(
+                        //     color: CustomColors.white,
+                        //     borderRadius: BorderRadius.circular(12),
+                        //   ),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Text(
+                        //         "Zip Code",
+                        //         style: TextStyle(
+                        //           color: ServiceGiverColor.black,
+                        //           fontSize: 12,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       const SizedBox(height: 05),
+                        //       TextFormField(
+                        //         controller: zipController,
+                        //         keyboardType: TextInputType.number,
+                        //         style: const TextStyle(
+                        //           fontSize: 16,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w400,
+                        //         ),
+                        //         textAlignVertical: TextAlignVertical.bottom,
+                        //         maxLines: 1,
+                        //         inputFormatters: [
+                        //           FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                        //           LengthLimitingTextInputFormatter(06),
+                        //         ],
+                        //         validator: (value) {
+                        //           if (value == null || value.isEmpty) {
+                        //             return "Please enter Zip Code";
+                        //           }
+                        //           return null;
+                        //         },
+                        //         decoration: InputDecoration(
+                        //           hintText: "Zip Code",
+                        //           fillColor: CustomColors.white,
+                        //           focusColor: CustomColors.white,
+                        //           hoverColor: CustomColors.white,
+                        //           filled: true,
+                        //           border: OutlineInputBorder(
+                        //             borderRadius: BorderRadius.circular(0),
+                        //           ),
+                        //           focusedBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           enabledBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           errorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //           focusedErrorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        ProfileContainerField(
+                          title: "Zip Code",
+                          controller: zipController,
+                          hintText: "Zip Code",
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please add Zip Code";
+                            }
+                            return null;
+                          },
                         ),
+                        const SizedBox(height: 15),
                         // AdditionalService
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          margin: const EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(
-                            color: CustomColors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Additional Services",
-                                style: TextStyle(
-                                  color: ServiceGiverColor.black,
-                                  fontSize: 12,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 05),
-                              TextFormField(
-                                controller: keywordController,
-                                keyboardType: TextInputType.multiline,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlignVertical: TextAlignVertical.bottom,
-                                maxLines: 3,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Please fill this field";
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "abc, abc, abc",
-                                  fillColor: CustomColors.white,
-                                  focusColor: CustomColors.white,
-                                  hoverColor: CustomColors.white,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(0),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(0.0),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        //   margin: const EdgeInsets.only(bottom: 15),
+                        //   decoration: BoxDecoration(
+                        //     color: CustomColors.white,
+                        //     borderRadius: BorderRadius.circular(12),
+                        //   ),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Text(
+                        //         "Additional Services",
+                        //         style: TextStyle(
+                        //           color: ServiceGiverColor.black,
+                        //           fontSize: 12,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       const SizedBox(height: 05),
+                        //       TextFormField(
+                        //         controller: keywordController,
+                        //         keyboardType: TextInputType.multiline,
+                        //         style: const TextStyle(
+                        //           fontSize: 16,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w400,
+                        //         ),
+                        //         textAlignVertical: TextAlignVertical.bottom,
+                        //         maxLines: 3,
+                        //         validator: (value) {
+                        //           if (value == null || value.isEmpty) {
+                        //             return "Please fill this field";
+                        //           }
+                        //           return null;
+                        //         },
+                        //         decoration: InputDecoration(
+                        //           hintText: "abc, abc, abc",
+                        //           fillColor: CustomColors.white,
+                        //           focusColor: CustomColors.white,
+                        //           hoverColor: CustomColors.white,
+                        //           filled: true,
+                        //           border: OutlineInputBorder(
+                        //             borderRadius: BorderRadius.circular(0),
+                        //           ),
+                        //           focusedBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           enabledBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(0.0),
+                        //           ),
+                        //           errorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //           focusedErrorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        ProfileContainerField(
+                          title: "Additional Services",
+                          controller: keywordController,
+                          hintText: "Additional Services",
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please add Additional Services";
+                            }
+                            return null;
+                          },
                         ),
+                        const SizedBox(height: 15),
                         // Education
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1719,75 +1799,102 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             ],
                           ),
                         ),
-                        // User Info
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          margin: const EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(
-                            color: CustomColors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "About Me",
-                                style: TextStyle(
-                                  color: ServiceGiverColor.black,
-                                  fontSize: 12,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 05),
-                              TextFormField(
-                                controller: userInfoController,
-                                keyboardType: TextInputType.name,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlignVertical: TextAlignVertical.bottom,
-                                maxLines: 1,
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Please fill this field";
-                                  }
-                                  return null;
-                                },
-                                decoration: InputDecoration(
-                                  hintText: "User Info",
-                                  fillColor: CustomColors.white,
-                                  focusColor: CustomColors.white,
-                                  hoverColor: CustomColors.white,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  focusedErrorBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
+                        ProfileContainerField(
+                          title: "Availability",
+                          controller: availabilityController,
+                          hintText: "Availability",
+                          keyboardType: TextInputType.multiline,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please add Availability";
+                            }
+                            return null;
+                          },
                         ),
-
+                        const SizedBox(height: 15),
+                        // User Info
+                        // Container(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        //   margin: const EdgeInsets.only(bottom: 15),
+                        //   decoration: BoxDecoration(
+                        //     color: CustomColors.white,
+                        //     borderRadius: BorderRadius.circular(12),
+                        //   ),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Text(
+                        //         "About Me",
+                        //         style: TextStyle(
+                        //           color: ServiceGiverColor.black,
+                        //           fontSize: 12,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w600,
+                        //         ),
+                        //       ),
+                        //       const SizedBox(height: 05),
+                        //       TextFormField(
+                        //         controller: userInfoController,
+                        //         keyboardType: TextInputType.name,
+                        //         style: const TextStyle(
+                        //           fontSize: 16,
+                        //           fontFamily: "Rubik",
+                        //           fontWeight: FontWeight.w400,
+                        //         ),
+                        //         textAlignVertical: TextAlignVertical.bottom,
+                        //         maxLines: 1,
+                        //         validator: (value) {
+                        //           if (value == null || value.isEmpty) {
+                        //             return "Please fill this field";
+                        //           }
+                        //           return null;
+                        //         },
+                        //         decoration: InputDecoration(
+                        //           hintText: "User Info",
+                        //           fillColor: CustomColors.white,
+                        //           focusColor: CustomColors.white,
+                        //           hoverColor: CustomColors.white,
+                        //           filled: true,
+                        //           border: OutlineInputBorder(
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //           focusedBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //           errorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //           focusedErrorBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //           enabledBorder: OutlineInputBorder(
+                        //             borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                        //             borderRadius: BorderRadius.circular(12),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        ProfileContainerField(
+                          title: "About Me",
+                          controller: userInfoController,
+                          hintText: "About Me",
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please add About Me";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 15),
                         // file type 1
                         UploadBasicDocumentList(
                           onTap: () {
@@ -1963,7 +2070,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             ),
                           ),
                         ],
-                        // file type 3b
 
                         // file type 5
                         const SizedBox(height: 10),
