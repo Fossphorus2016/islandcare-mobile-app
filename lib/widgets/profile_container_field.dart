@@ -7,7 +7,7 @@ class ProfileContainerField extends StatefulWidget {
   const ProfileContainerField({
     super.key,
     required this.title,
-    this.controller,
+    required this.controller,
     this.hintText,
     this.validator,
     this.inputFormatters,
@@ -15,7 +15,7 @@ class ProfileContainerField extends StatefulWidget {
     this.textInputAction,
   });
   final String title;
-  final TextEditingController? controller;
+  final TextEditingController controller;
   final String? hintText;
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
@@ -58,6 +58,7 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
               if (state.hasInteractedByUser) {
                 _focusNode.requestFocus();
               }
+              print("controller text ${widget.controller.text}");
               return Container(
                 padding: state.hasError ? const EdgeInsets.only(left: 12) : null,
                 decoration: state.hasError
@@ -69,7 +70,7 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextField(
+                    TextFormField(
                       controller: widget.controller,
                       focusNode: _focusNode,
                       inputFormatters: widget.inputFormatters,
@@ -93,6 +94,7 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
                           });
                         }
                       },
+                      validator: widget.validator,
                     ),
                     if (state.hasError) ...[
                       Text(

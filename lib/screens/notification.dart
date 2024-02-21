@@ -42,17 +42,25 @@ class _NotificationScreenState extends State<NotificationScreen> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
-          leading: Padding(
-            padding: const EdgeInsets.all(4.0),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(13.0),
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: CustomColors.loginBg,
-                  borderRadius: BorderRadius.circular(2),
+                  color: const Color(0xffffffff),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(30, 0, 0, 0),
+                      offset: Offset(2, 2),
+                      spreadRadius: 1,
+                      blurRadius: 7,
+                    ),
+                  ],
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(left: 4.0),

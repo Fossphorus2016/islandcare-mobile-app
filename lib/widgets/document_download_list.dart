@@ -63,7 +63,7 @@ class BasicDocumentDownloadList extends StatelessWidget {
                     (fileStatus == "0")
                         ? "Pending"
                         : (fileStatus == "1")
-                            ? "Approved"
+                            ? "Verified"
                             : (fileStatus == "2")
                                 ? "Rejected"
                                 : "File Not Available",

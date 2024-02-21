@@ -6,13 +6,14 @@ import 'package:island_app/caregiver/models/child_care_detail-dashbaord_model.da
 import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
+import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 import 'package:island_app/widgets/job_info_container.dart';
 import 'package:island_app/widgets/job_schedule_container.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:island_app/caregiver/models/senior_care_detail_dashboard_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
@@ -47,7 +48,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   }
 
   Future<Response> jobApply() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context).getUserToken();
     final response = await Dio().put(
       "${CareGiverUrl.serviceProviderJobApply}/${widget.id}",
       options: Options(
@@ -77,7 +78,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   late Future<HouseKeepingDetailDashboardModel>? futureHouseKeepingDetailDashboard;
   late Future<PetCareDetailDashboardModel>? futurePetCareDetailDashboard;
   Future<SeniorCareDetailDashboardModel> fetchSeniorCareDetailDashboardModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context).getUserToken()();
     final response = await Dio().get(
       '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
       options: Options(
@@ -97,7 +98,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   }
 
   Future<SchoolSupportDetailDashboardModel> fetchSchoolSupportDetailDashboardModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context).getUserToken()();
     // print(token);
     final response = await Dio().get(
       '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
@@ -118,7 +119,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   }
 
   Future<ChildCareDetailDashboardModel> fetchChildCareDetailDashboardModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context).getUserToken()();
     final response = await Dio().get(
       '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
       options: Options(
@@ -138,7 +139,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   }
 
   Future<HouseKeepingDetailDashboardModel> fetchHouseKeepingDetailDashboardModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context).getUserToken()();
     final response = await Dio().get(
       '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
       options: Options(
@@ -158,7 +159,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   }
 
   Future<PetCareDetailDashboardModel> fetchPetCareDetailDashboardModel() async {
-    var token = await getUserToken();
+    var token = await Provider.of<ServiceGiverProvider>(context).getUserToken()();
     final response = await Dio().get(
       '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
       options: Options(
@@ -177,17 +178,8 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
     }
   }
 
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-    return userToken.toString();
-  }
-
   @override
   void initState() {
-    getUserToken();
     super.initState();
     futureSeniorCareDetailDashboard = fetchSeniorCareDetailDashboardModel();
     futureSchoolSupportDetailDashboard = fetchSchoolSupportDetailDashboardModel();
@@ -198,15 +190,42 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
 
   @override
   Widget build(BuildContext context) {
-    // print('${CareGiverUrl.serviceProviderJobDetail}/${widget.id}');
     return Scaffold(
       backgroundColor: CustomColors.loginBg,
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: CustomColors.primaryText,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(13.0),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color(0xffffffff),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(30, 0, 0, 0),
+                    offset: Offset(2, 2),
+                    spreadRadius: 1,
+                    blurRadius: 7,
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: CustomColors.primaryColor,
+                  size: 18,
+                ),
+              ),
+            ),
+          ),
         ),
-        elevation: 0,
-        backgroundColor: CustomColors.white,
+        // elevation: 0,
+        // backgroundColor: CustomColors.white,
         centerTitle: true,
         title: Text(
           "Job Detail",
