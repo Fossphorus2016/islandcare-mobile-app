@@ -58,7 +58,7 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
               if (state.hasInteractedByUser) {
                 _focusNode.requestFocus();
               }
-              print("controller text ${widget.controller.text}");
+              // print("controller text ${widget.controller.text}");
               return Container(
                 padding: state.hasError ? const EdgeInsets.only(left: 12) : null,
                 decoration: state.hasError

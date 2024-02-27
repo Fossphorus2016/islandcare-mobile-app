@@ -8,6 +8,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:island_app/caregiver/screens/profile_edit.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
@@ -153,7 +154,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                       ? Column(
                           children: [
                             Container(
-                              height: 260,
+                              height: 280,
                               width: MediaQuery.of(context).size.width,
                               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                               color: ServiceGiverColor.black,
@@ -162,7 +163,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                 children: [
                                   SizedBox(
                                     width: MediaQuery.of(context).size.width,
-                                    height: 110,
+                                    height: 130,
                                     child: Row(
                                       children: [
                                         ClipRRect(
@@ -179,49 +180,61 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Align(
-                                                alignment: Alignment.topRight,
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) => ProfileGiverPendingEdit(
-                                                          name: "${userProfile.data!.firstName} ${userProfile.data!.lastName}",
-                                                          email: userProfile.data!.email,
-                                                          avatar: userProfile.data!.avatar,
-                                                          gender: userProfile.data!.userdetail!.gender.toString(),
-                                                          phoneNumber: userProfile.data!.phone,
-                                                          dob: userProfile.data!.userdetail!.dob,
-                                                          yoe: userProfile.data!.userdetailprovider!.experience,
-                                                          hourlyRate: userProfile.data!.userdetailprovider!.hourlyRate,
-                                                          userAddress: userProfile.data!.userdetail!.address,
-                                                          zipCode: userProfile.data!.userdetail!.zip,
-                                                          additionalService: userProfile.data!.userdetailprovider!.keywords,
-                                                          availability: userProfile.data!.userdetailprovider!.availability,
-                                                          userInfo: userProfile.data!.userdetail!.userInfo,
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  const Icon(
+                                                    Icons.verified_outlined,
+                                                    color: Colors.blue,
+                                                  ),
+                                                  Align(
+                                                    alignment: Alignment.topRight,
+                                                    child: InkWell(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) => ProfileGiverPendingEdit(
+                                                              name: "${userProfile.data!.firstName} ${userProfile.data!.lastName}",
+                                                              email: userProfile.data!.email,
+                                                              avatar: userProfile.data!.avatar,
+                                                              gender: userProfile.data!.userdetail!.gender.toString(),
+                                                              phoneNumber: userProfile.data!.phone,
+                                                              dob: userProfile.data!.userdetail!.dob,
+                                                              yoe: userProfile.data!.userdetailprovider!.experience,
+                                                              hourlyRate: userProfile.data!.userdetailprovider!.hourlyRate,
+                                                              userAddress: userProfile.data!.userdetail!.address,
+                                                              zipCode: userProfile.data!.userdetail!.zip,
+                                                              additionalService: userProfile.data!.userdetailprovider!.keywords,
+                                                              availability: userProfile.data!.userdetailprovider!.availability,
+                                                              userInfo: userProfile.data!.userdetail!.userInfo,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        width: 30,
+                                                        height: 30,
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.grey.shade200,
+                                                          borderRadius: BorderRadius.circular(05),
+                                                        ),
+                                                        child: const Icon(
+                                                          Icons.edit,
+                                                          color: Colors.grey,
+                                                          size: 20,
                                                         ),
                                                       ),
-                                                    );
-                                                  },
-                                                  child: Container(
-                                                    width: 30,
-                                                    height: 30,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey.shade200,
-                                                      borderRadius: BorderRadius.circular(05),
-                                                    ),
-                                                    child: const Icon(
-                                                      Icons.edit,
-                                                      color: Colors.grey,
-                                                      size: 20,
                                                     ),
                                                   ),
-                                                ),
+                                                ],
                                               ),
                                               Text(
                                                 "${userProfile.data!.firstName.toString()} ${userProfile.data!.lastName.toString()}",
-                                                style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
                                               ),
                                               const SizedBox(width: 10),
                                               Text(
@@ -239,7 +252,9 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                   ignoreGestures: true,
                                                   itemCount: 5,
                                                   itemSize: 20,
-                                                  initialRating: userProfile.data!.avgRating!['rating'] == null ? 0.0 : double.parse(userProfile.data!.avgRating!['rating'].toString()),
+                                                  initialRating: userProfile.data!.avgRating!['rating'] == null
+                                                      ? 0.0
+                                                      : double.parse(userProfile.data!.avgRating!['rating'].toString()),
                                                   minRating: 0,
                                                   ratingWidget: RatingWidget(
                                                     full: const Icon(
@@ -378,7 +393,9 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               LinearProgressIndicator(
                                                 minHeight: 08,
                                                 borderRadius: BorderRadius.circular(08),
-                                                value: Provider.of<ServiceGiverProvider>(context).profilePerentage != null ? double.parse(Provider.of<ServiceGiverProvider>(context).profilePerentage) / 100 : 00,
+                                                value: Provider.of<ServiceGiverProvider>(context).profilePerentage != null
+                                                    ? double.parse(Provider.of<ServiceGiverProvider>(context).profilePerentage) / 100
+                                                    : 00,
                                                 valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
                                               ),
                                             ],
@@ -402,6 +419,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                         decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
                                         child: Wrap(
                                           spacing: 05,
+                                          runSpacing: 05,
                                           crossAxisAlignment: WrapCrossAlignment.center,
                                           alignment: WrapAlignment.center,
                                           children: List.generate(provider.badges!.length, (index) {
@@ -531,6 +549,54 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                       ],
                                     ),
                                   ),
+                                  // Parish
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                    margin: const EdgeInsets.only(bottom: 15),
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "Parish",
+                                              style: TextStyle(
+                                                color: ServiceGiverColor.black,
+                                                fontSize: 10,
+                                                fontFamily: "Rubik",
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 8,
+                                            ),
+                                            Text(
+                                              userProfile.data!.userdetail!.area.toString() == "0"
+                                                  ? "East"
+                                                  : userProfile.data!.userdetail!.area.toString() == "1"
+                                                      ? "Central"
+                                                      : userProfile.data!.userdetail!.area.toString() == "2"
+                                                          ? "West"
+                                                          : "Not Available",
+                                              style: TextStyle(
+                                                color: CustomColors.hintText,
+                                                fontSize: 16,
+                                                fontFamily: "Rubik",
+                                                fontWeight: FontWeight.w200,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                   // Services
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -548,7 +614,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              "Area of Insterest",
+                                              "Service Provided",
                                               style: TextStyle(
                                                 color: ServiceGiverColor.black,
                                                 fontSize: 10,
@@ -559,15 +625,19 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             const SizedBox(
                                               height: 8,
                                             ),
-                                            Text(
-                                              userProfile.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.service!.name.toString(),
-                                              style: TextStyle(
-                                                color: CustomColors.hintText,
-                                                fontSize: 16,
-                                                fontFamily: "Rubik",
-                                                fontWeight: FontWeight.w200,
+                                            if (userProfile.data!.userdetail!.service != null) ...[
+                                              Text(
+                                                userProfile.data!.userdetail!.service!.name.toString() == "null"
+                                                    ? "Not Available"
+                                                    : userProfile.data!.userdetail!.service!.name.toString(),
+                                                style: TextStyle(
+                                                  color: CustomColors.hintText,
+                                                  fontSize: 16,
+                                                  fontFamily: "Rubik",
+                                                  fontWeight: FontWeight.w200,
+                                                ),
                                               ),
-                                            ),
+                                            ],
                                           ],
                                         ),
                                       ],
@@ -601,15 +671,10 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               ),
                                               const SizedBox(height: 8),
                                               Text(
-                                                userProfile.data!.userdetail!.area.toString() == "0"
-                                                    ? "East"
-                                                    : userProfile.data!.userdetail!.area.toString() == "1"
-                                                        ? "Central"
-                                                        : userProfile.data!.userdetail!.area.toString() == "2"
-                                                            ? "West"
-                                                            : "Not Available",
+                                                userProfile.data!.userdetailprovider!.experience.toString(),
                                                 softWrap: true,
-                                                style: TextStyle(color: CustomColors.hintText, fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w200),
+                                                style: TextStyle(
+                                                    color: CustomColors.hintText, fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w200),
                                               ),
                                             ],
                                           ),
@@ -751,7 +816,9 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                     ),
                                                   )
                                                 : Text(
-                                                    userProfile.data!.userdetail!.zip.toString() == "null" ? "Required" : userProfile.data!.userdetail!.zip.toString(),
+                                                    userProfile.data!.userdetail!.zip.toString() == "null"
+                                                        ? "Required"
+                                                        : userProfile.data!.userdetail!.zip.toString(),
                                                     style: TextStyle(
                                                       color: CustomColors.hintText,
                                                       fontSize: 16,
@@ -805,7 +872,9 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       ),
                                                     )
                                                   : Text(
-                                                      userProfile.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.keywords.toString(),
+                                                      userProfile.data!.userdetailprovider!.keywords.toString() == "null"
+                                                          ? "Required"
+                                                          : userProfile.data!.userdetailprovider!.keywords.toString(),
                                                       softWrap: true,
                                                       style: TextStyle(
                                                         color: CustomColors.hintText,
@@ -992,7 +1061,9 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       ),
                                                     )
                                                   : Text(
-                                                      userProfile.data!.userdetail!.userInfo.toString() == "null" ? "Required" : userProfile.data!.userdetail!.userInfo.toString(),
+                                                      userProfile.data!.userdetail!.userInfo.toString() == "null"
+                                                          ? "Required"
+                                                          : userProfile.data!.userdetail!.userInfo.toString(),
                                                       softWrap: true,
                                                       style: TextStyle(
                                                         color: CustomColors.hintText,
@@ -1048,7 +1119,9 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       ),
                                                     )
                                                   : Text(
-                                                      userProfile.data!.userdetailprovider!.availability.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.availability.toString(),
+                                                      userProfile.data!.userdetailprovider!.availability.toString() == "null"
+                                                          ? "Required"
+                                                          : userProfile.data!.userdetailprovider!.availability.toString(),
                                                       softWrap: true,
                                                       style: TextStyle(
                                                         color: CustomColors.hintText,
@@ -1065,77 +1138,83 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                   ),
 
                                   // Background Verified
-                                  DottedBorder(
-                                    radius: const Radius.circular(10),
-                                    borderType: BorderType.RRect,
-                                    color: CustomColors.red,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 5),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFf1416c),
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: ListTile(
-                                        leading: Icon(
-                                          Icons.workspace_premium,
-                                          color: ServiceGiverColor.black,
-                                        ),
-                                        title: Text(
-                                          "Account Verification",
-                                          style: TextStyle(
-                                            color: CustomColors.white,
-                                            fontSize: 12,
-                                            fontFamily: "Poppins",
-                                            fontWeight: FontWeight.w600,
+                                  Consumer<ServiceGiverProvider>(
+                                    builder: (context, provider, child) {
+                                      if (provider.providerIsVerified) {
+                                        return DottedBorder(
+                                          radius: const Radius.circular(10),
+                                          borderType: BorderType.RRect,
+                                          color: const Color(0xff009ef7),
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(vertical: 5),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xfff1faff),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: ListTile(
+                                              leading: SvgPicture.asset(
+                                                "assets/images/icons/account-verified.svg",
+                                              ),
+                                              title: Text(
+                                                "Account Verified",
+                                                style: TextStyle(
+                                                  color: CustomColors.primaryText,
+                                                  fontSize: 12,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              subtitle: Text(
+                                                "Thank you for verifying your account! Your profile is now verified, and you have earned the trust of care seekers. If you have any questions or need assistance, feel free to reach out.",
+                                                style: TextStyle(
+                                                  color: CustomColors.primaryText,
+                                                  fontSize: 10,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                        subtitle: Text(
-                                          "Service Providers are encouraged to verify their accounts by submitting the required documents. Verified profiles build trust and safety in the community. Submit your documents to enhance your profile and gain the trust of care seekers.",
-                                          style: TextStyle(
-                                            color: CustomColors.white,
-                                            fontSize: 10,
-                                            fontFamily: "Poppins",
-                                            fontWeight: FontWeight.w300,
+                                        );
+                                      } else {
+                                        return DottedBorder(
+                                          radius: const Radius.circular(10),
+                                          borderType: BorderType.RRect,
+                                          color: CustomColors.red,
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(vertical: 5),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFf1416c),
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: ListTile(
+                                              leading: Icon(
+                                                Icons.workspace_premium,
+                                                color: ServiceGiverColor.black,
+                                              ),
+                                              title: Text(
+                                                "Account Verification",
+                                                style: TextStyle(
+                                                  color: CustomColors.white,
+                                                  fontSize: 12,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              subtitle: Text(
+                                                "Service Providers are encouraged to verify their accounts by submitting the required documents. Verified profiles build trust and safety in the community. Submit your documents to enhance your profile and gain the trust of care seekers.",
+                                                style: TextStyle(
+                                                  color: CustomColors.white,
+                                                  fontSize: 10,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.w300,
+                                                ),
+                                              ),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  DottedBorder(
-                                    radius: const Radius.circular(10),
-                                    borderType: BorderType.RRect,
-                                    color: ServiceGiverColor.black,
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 5),
-                                      decoration: BoxDecoration(
-                                        color: CustomColors.primaryLight,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: ListTile(
-                                        leading: Icon(
-                                          Icons.workspace_premium,
-                                          color: ServiceGiverColor.black,
-                                        ),
-                                        title: Text(
-                                          "Background Verified",
-                                          style: TextStyle(
-                                            color: CustomColors.primaryText,
-                                            fontSize: 12,
-                                            fontFamily: "Poppins",
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        subtitle: Text(
-                                          "We encourage parents to conduct their own screenings using the background check tools. See what each of the badges covered, or learn more about keeping your family safe by visiting the Trust & Safety Center.",
-                                          style: TextStyle(
-                                            color: CustomColors.primaryText,
-                                            fontSize: 10,
-                                            fontFamily: "Poppins",
-                                            fontWeight: FontWeight.w300,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
+                                        );
+                                      }
+                                    },
                                   ),
 
                                   // file type 1

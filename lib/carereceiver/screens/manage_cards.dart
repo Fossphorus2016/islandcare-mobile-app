@@ -1,19 +1,15 @@
 // ignore_for_file: use_build_context_synchronously, await_only_futures, deprecated_member_use
 
-import 'dart:async';
+// import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/manage_cards_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
-// import 'package:http/http.dart' as http;
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-import 'package:island_app/widgets/custom_expansion_panel.dart';
-import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ManageCards extends StatefulWidget {
   const ManageCards({super.key});
@@ -23,10 +19,6 @@ class ManageCards extends StatefulWidget {
 }
 
 class _ManageCardsState extends State<ManageCards> {
-  List? allCards = [];
-  List showItem = [];
-  late Future<CreditCardModel>? futureManageCards;
-  List manageCardsData = [];
   TextEditingController nameOncardController = TextEditingController();
   var cardNumberController = TextEditingController();
   TextEditingController cvvController = TextEditingController();
@@ -150,43 +142,6 @@ class _ManageCardsState extends State<ManageCards> {
   ];
   String? selectedYear;
 
-  ProgressDialog? pr;
-  void showProgress(context) async {
-    pr ??= ProgressDialog(context);
-    await pr!.show();
-  }
-
-  void hideProgress() async {
-    if (pr != null && pr!.isShowing()) {
-      await pr!.hide();
-    }
-  }
-
-  // Future<CreditCardModel> fetchManageCardsModel() async {
-  //   var token = await getUserToken();
-  //   final response = await Dio().get(
-  //     CareReceiverURl.serviceReceiverGetCreditCards,
-  //     options: Options(headers: {
-  //       'Authorization': 'Bearer $token',
-  //       'Accept': 'application/json',
-  //     }),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     var json = response.data as Map;
-  //     var bankDetails = json['credit-cards'] as List;
-  //     // print("response  == ${jsonDecode(response.body)}");
-  //     setState(() {
-  //       manageCardsData = bankDetails;
-  //     });
-  //     // print("manageCardsData= $manageCardsData");
-  //     return CreditCardModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Manage Cards',
-  //     );
-  //   }
-  // }
-
   postAddCard() async {
     var requestBody = {
       'name_on_card': nameOncardController.text.toString(),
@@ -195,7 +150,7 @@ class _ManageCardsState extends State<ManageCards> {
       'card_expiration_year': selectedYear.toString(),
       'cvv': cvvController.text.toString(),
     };
-    var token = await getUserToken();
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     try {
       final response = await Dio().post(
         CareReceiverURl.serviceReceiverAddCreditCards,
@@ -219,10 +174,7 @@ class _ManageCardsState extends State<ManageCards> {
             "Card Added Successfully",
           );
         }
-        Provider.of<CardProvider>(context).fetchManageCardsModel();
-        // setState(() {
-        //   futureManageCards = fetchManageCardsModel();
-        // });
+        Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
       }
       Navigator.pop(context);
     } on DioError catch (e) {
@@ -234,27 +186,18 @@ class _ManageCardsState extends State<ManageCards> {
     }
   }
 
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = await preferences.getString(
-      'userToken',
-    );
-    return userToken.toString();
-  }
-
   @override
   void initState() {
-    getUserToken();
-    // callFetchCards();
     super.initState();
-    // futureManageCards = fetchManageCardsModel();
+    Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
   }
 
-  // bool isLoading = true;
+  TextEditingController textController = TextEditingController();
+  FocusNode focus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
-    var allCards = Provider.of<CardProvider>(context).gWAallCards;
+    CreditCard? selectCard = Provider.of<CardProvider>(context).selectedCard;
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -758,56 +701,20 @@ class _ManageCardsState extends State<ManageCards> {
                 ),
                 const SizedBox(height: 10),
                 // Listing
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: CustomColors.blackLight,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: CustomColors.borderLight,
-                        width: 0.1,
-                      ),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Name on Card",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        "Card Number",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: allCards.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return CardDetailPanel(
-                      cardName: allCards[index].nameOnCard.toString(),
-                      cardNumber: allCards[index].cardNumber.toString(),
-                      expireMonth: allCards[index].cardExpirationMonth.toString(),
-                      expireYers: allCards[index].cardExpirationYear.toString(),
-                      cvv: allCards[index].cvv.toString(),
-                    );
-                  },
-                ),
+                // ListView.builder(
+                //   physics: const NeverScrollableScrollPhysics(),
+                //   shrinkWrap: true,
+                //   itemCount: allCards.length,
+                //   itemBuilder: (BuildContext context, int index) {
+                //     return CardDetailPanel(
+                //       cardName: allCards[index].nameOnCard.toString(),
+                //       cardNumber: allCards[index].cardNumber.toString(),
+                //       expireMonth: allCards[index].cardExpirationMonth.toString(),
+                //       expireYers: allCards[index].cardExpirationYear.toString(),
+                //       cvv: allCards[index].cvv.toString(),
+                //     );
+                //   },
+                // ),
                 // FutureBuilder<List<CreditCard>>(
                 //   future: context.watch<CardProvider>().allCards,
                 //   builder: (context, snapshot) {
@@ -824,7 +731,6 @@ class _ManageCardsState extends State<ManageCards> {
                 //               } else {
                 //                 showItem.add(index);
                 //               }
-
                 //               setState(() {});
                 //             },
                 //             child: Container(
@@ -1016,7 +922,162 @@ class _ManageCardsState extends State<ManageCards> {
                 //     }
                 //   },
                 // ),
+
+                // if (selectCard != null) ...[
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  height: FocusScope.of(context).hasFocus ? MediaQuery.of(context).size.height : 80,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      TextField(
+                        focusNode: focus,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          prefixIcon: const Icon(Icons.search),
+                          hintText: "Search Bank...",
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.black26),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(color: Colors.black12),
+                          ),
+                        ),
+                        style: const TextStyle(fontSize: 14),
+                        controller: textController,
+                        onChanged: (value) {
+                          Provider.of<CardProvider>(context, listen: false).setfilterList(value);
+                        },
+                      ),
+                      const SizedBox(height: 15),
+                      if (FocusScope.of(context).hasFocus) ...[
+                        Container(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          decoration: const BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: Colors.grey),
+                            ),
+                          ),
+                          child: const Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Card Name",
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                              Text(
+                                "Account Title",
+                                style: TextStyle(fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Consumer<CardProvider>(builder: (context, provider, _) {
+                            return ListView.builder(
+                              itemCount: provider.filteredList!.length,
+                              cacheExtent: 50,
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    FocusScope.of(context).unfocus();
+                                    provider.setSelectedCard(provider.filteredList![index]);
+                                  },
+                                  child: Container(
+                                    // color: Colors.red,
+                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    decoration: const BoxDecoration(
+                                      border: Border(
+                                        bottom: BorderSide(color: Colors.grey),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          provider.filteredList![index].nameOnCard.toString(),
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                        Text(
+                                          provider.filteredList![index].cardNumber.toString(),
+                                          style: const TextStyle(fontSize: 14),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+                if (selectCard != null && !FocusScope.of(context).hasFocus) ...[
+                  Row(
+                    children: [
+                      const Text(
+                        "Name Of Card: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(selectCard.nameOnCard.toString()),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Text(
+                        "Card: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(selectCard.cardNumber.toString()),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Text(
+                        "CVV Number: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(selectCard.cvv.toString()),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      const Text(
+                        "Expiry Month: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(selectCard.cardExpirationMonth.toString()),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        "Expiry Year: ",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(
+                        selectCard.cardExpirationYear.toString(),
+                      ),
+                    ],
+                  ),
+                ]
               ],
+              // ],
             ),
           ),
         ),
@@ -1025,125 +1086,11 @@ class _ManageCardsState extends State<ManageCards> {
   }
 }
 
-class CardDetailPanel extends StatefulWidget {
-  const CardDetailPanel({
-    super.key,
-    required this.cardName,
-    required this.cardNumber,
-    required this.expireMonth,
-    required this.expireYers,
-    required this.cvv,
-  });
-  final String cardName;
-  final String cardNumber;
-  final String expireMonth;
-  final String? expireYers;
-  final String cvv;
-  // final void Function()? deleteBank;
-  // final void Function()? setDefaultBank;
-  @override
-  State<CardDetailPanel> createState() => _CardDetailPanelState();
-}
-
-class _CardDetailPanelState extends State<CardDetailPanel> {
-  bool expanded = false;
-  @override
-  Widget build(BuildContext context) {
-    return CustomExpansionPanelList(
-      borderColor: Colors.grey.shade300,
-      expandedHeaderPadding: EdgeInsets.zero,
-      elevation: 1,
-      dividerColor: Colors.grey,
-      expansionCallback: (panelIndex, isExpanded) {
-        setState(() {
-          expanded = !expanded;
-        });
-      },
-      children: [
-        CustomExpansionPanel(
-          canTapOnHeader: true,
-          isExpanded: expanded,
-          headerBuilder: (context, isExpanded) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.cardName.toString(),
-                    style: TextStyle(
-                      color: CustomColors.primaryText,
-                      fontFamily: "Poppins",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                  Text(
-                    widget.cardNumber.toString(),
-                    style: TextStyle(
-                      color: CustomColors.primaryText,
-                      fontFamily: "Poppins",
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-          body: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Expire Month",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(widget.expireMonth),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Expire Yers",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(widget.expireYers.toString()),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "CVV",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    Text(widget.cvv.toString()),
-                  ],
-                ),
-                const Divider(),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class CardProvider extends ChangeNotifier {
-  List<CreditCard> _allCards = [];
-  Future<List<CreditCard>> get allCards async => _allCards;
-  List<CreditCard> get gWAallCards => _allCards;
-
-  Future<dynamic> fetchManageCardsModel() async {
+  List<CreditCard>? allCards = [];
+  List<CreditCard>? filteredList = [];
+  CreditCard? selectedCard;
+  fetchManageCardsModel() async {
     var token = await RecieverUserProvider.userToken;
     final response = await Dio().get(
       CareReceiverURl.serviceReceiverGetCreditCards,
@@ -1155,11 +1102,35 @@ class CardProvider extends ChangeNotifier {
       ),
     );
     if (response.statusCode == 200) {
-      _allCards = List<CreditCard>.from(response.data["credit-cards"]!.map((x) => CreditCard.fromJson(x)));
+      allCards = List<CreditCard>.from(response.data["credit-cards"]!.map((x) => CreditCard.fromJson(x)));
+      filteredList = allCards;
       notifyListeners();
       return {"status": true, "message": "Cards is loaded successfully"};
     } else {
       return {"status": false, "message": "Failed to load Cards"};
     }
+  }
+
+  setfilterList(String value) {
+    if (value.isEmpty) {
+      filteredList = allCards;
+      notifyListeners();
+    } else {
+      filteredList = allCards!.where((element) {
+        if (element.cardNumber.toString().toLowerCase().contains(value.toLowerCase())) {
+          return true;
+        } else if (element.nameOnCard.toString().toLowerCase().contains(value.toLowerCase())) {
+          return true;
+        } else {
+          return false;
+        }
+      }).toList();
+      notifyListeners();
+    }
+  }
+
+  setSelectedCard(CreditCard card) {
+    selectedCard = card;
+    notifyListeners();
   }
 }

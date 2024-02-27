@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/review_expansion_list.dart';
 
 class ReceiverDashboardDetailWidget extends StatelessWidget {
@@ -58,7 +59,7 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
           height: 250,
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          color: CustomColors.primaryColor,
+          color: ServiceRecieverColor.primaryColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

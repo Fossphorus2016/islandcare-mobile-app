@@ -28,13 +28,10 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => RecieverUserProvider()),
+        ChangeNotifierProvider(create: (context) => ChatProvider()),
         ChangeNotifierProvider(
           create: (context) => NotificationProvider(),
           child: const NotificationScreen(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ChatProvider(),
-          child: const MessagesScreen(),
         ),
         ChangeNotifierProvider(
           create: (context) => ServiceProviderChat(),

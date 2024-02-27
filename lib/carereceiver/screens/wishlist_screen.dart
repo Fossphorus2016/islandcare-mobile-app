@@ -82,14 +82,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
     return response;
   }
 
-  // getUserToken() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var userToken = preferences.getString(
-  //     'userToken',
-  //   );
-  //   return userToken.toString();
-  // }
-
   // Search bar
   List foundProviders = [];
   void runFilter(String enteredKeyword) {
@@ -196,6 +188,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                 return foundProviders[index]['data'] == 0
                                     ? Container()
                                     : RecommendationReceiverWidget(
+                                        imgPath: "${AppUrl.webStorageUrl}" '/' + foundProviders[index]['users']['avatar'].toString(),
                                         title: "${foundProviders[index]['users']['first_name']} ${foundProviders[index]['users']['last_name']}",
                                         experience: foundProviders[index]['userdetailproviders']['experience'] == null ? "0" : foundProviders[index]['userdetailproviders']['experience'].toString(),
                                         hourly: foundProviders[index]['userdetailproviders']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailproviders']['hourly_rate'].toString(),

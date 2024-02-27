@@ -15,6 +15,7 @@ class ServiceGiverProvider extends ChangeNotifier {
   bool profileIsLoading = true;
   bool dashboardIsLoading = true;
   bool searchIsLoading = false;
+  bool providerIsVerified = false;
   fetchProfileGiverModel() async {
     getUserName();
     var token = await getUserToken();
@@ -23,9 +24,9 @@ class ServiceGiverProvider extends ChangeNotifier {
       options: Options(headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'}),
     );
     if (response.statusCode == 200) {
-      // print(response.data['data']["avg_rating"].runtimeType);
       fetchProfile = ProfileGiverModel.fromJson(response.data);
       profileStatus = fetchProfile!.data!.status == 1;
+      providerIsVerified = response.data['isVerified'] == 1;
       profileIsLoading = false;
       badges = fetchProfile!.data!.userdetailprovider!.badge != null ? fetchProfile!.data!.userdetailprovider!.badge.toString().split(',') : null;
       notifyListeners();

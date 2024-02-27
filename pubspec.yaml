@@ -53,6 +53,7 @@ dependencies:
   pusher_channels_flutter: ^2.2.0
   syncfusion_flutter_datepicker: ^22.2.11
   responsive_framework: ^1.1.1
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:

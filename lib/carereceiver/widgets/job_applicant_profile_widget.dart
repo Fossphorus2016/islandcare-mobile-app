@@ -6,6 +6,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class JobApplicantProfileWidget extends StatefulWidget {
@@ -79,7 +80,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
           height: 250,
           width: MediaQuery.of(context).size.width,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-          color: CustomColors.primaryColor,
+          color: ServiceRecieverColor.primaryColor,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -269,76 +270,6 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
             ],
           ),
         ),
-        // Container(
-        //   alignment: Alignment.center,
-        //   decoration: BoxDecoration(color: CustomColors.white),
-        //   child: Column(
-        //     children: [
-        //       CircleAvatar(
-        //         radius: 40,
-        //         child: ClipRRect(
-        //           borderRadius: BorderRadius.circular(40),
-        //           child: ClipRRect(
-        //             borderRadius: BorderRadius.circular(100),
-        //             child: CachedNetworkImage(
-        //               width: 100,
-        //               height: 100,
-        //               fit: BoxFit.cover,
-        //               imageUrl: widget.imgPath.toString(),
-        //               placeholder: (context, url) => const CircularProgressIndicator(),
-        //               errorWidget: (context, url, error) => const Icon(Icons.error),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       Text(
-        //         widget.title.toString(),
-        //         style: TextStyle(
-        //           color: CustomColors.primaryText,
-        //           fontFamily: "Poppins",
-        //           fontSize: 24,
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //       Text(
-        //         widget.services.toString(),
-        //         style: TextStyle(
-        //           color: CustomColors.primaryText,
-        //           fontFamily: "Poppins",
-        //           fontSize: 16,
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //       SizedBox(
-        //         child: Text(
-        //           "${widget.experience} years experience \n \$${widget.hour}/hour \n  ${widget.address} \n ${widget.zip}",
-        //           textAlign: TextAlign.center,
-        //           style: TextStyle(
-        //             color: CustomColors.primaryText,
-        //             fontFamily: "Poppins",
-        //             fontSize: 13,
-        //             fontWeight: FontWeight.w400,
-        //           ),
-        //         ),
-        //       ),
-        //       const SizedBox(height: 5),
-        //       RatingBar.builder(
-        //         initialRating: widget.initialRating!,
-        //         minRating: 1,
-        //         direction: Axis.horizontal,
-        //         allowHalfRating: true,
-        //         ignoreGestures: false,
-        //         itemSize: 20,
-        //         itemCount: 5,
-        //         itemBuilder: (context, _) => const Icon(
-        //           Icons.star,
-        //           color: Colors.amber,
-        //         ),
-        //         onRatingUpdate: (rating) {},
-        //       ),
-        //     ],
-        //   ),
-        // ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Column(
@@ -369,12 +300,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -387,9 +313,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -402,9 +326,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -417,9 +339,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               Container(
                 width: MediaQuery.of(context).size.width,
                 padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
@@ -486,9 +406,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               Container(
                 alignment: Alignment.topLeft,
                 child: Text(
@@ -501,15 +419,11 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                   ),
                 ),
               ),
-              const SizedBox(
-                height: 5,
-              ),
+              const SizedBox(height: 5),
               // Verified
               widget.documentsSection!,
               // Reviews
-              const SizedBox(
-                height: 15,
-              ),
+              const SizedBox(height: 15),
               if (widget.review != null) ...[
                 Container(
                   alignment: Alignment.topLeft,
@@ -542,9 +456,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        height: 10,
-                      ),
+                      const SizedBox(height: 10),
                       Column(
                         children: [
                           Row(
@@ -637,9 +549,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 10,
-              ),
+              const SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
                   Provider.of<ChatProvider>(context, listen: false).setActiveChat("new", widget.dataMap);

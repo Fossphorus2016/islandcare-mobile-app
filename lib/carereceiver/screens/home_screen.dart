@@ -265,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: CustomColors.loginBg,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: CustomColors.primaryColor,
+          backgroundColor: ServiceRecieverColor.primaryColor,
           actions: [
             GestureDetector(
               onTap: () {
@@ -330,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 } else {
                   return Shimmer.fromColors(
-                    baseColor: CustomColors.primaryColor,
+                    baseColor: ServiceRecieverColor.primaryColor,
                     highlightColor: const Color.fromARGB(255, 95, 95, 95),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -360,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         drawer: Drawer(
-          backgroundColor: CustomColors.primaryColor,
+          backgroundColor: ServiceRecieverColor.primaryColor,
           child: const DrawerWidget(),
         ),
         body: SingleChildScrollView(
@@ -389,7 +389,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       decoration: BoxDecoration(
-                        color: CustomColors.primaryColor,
+                        color: ServiceRecieverColor.primaryColor,
                         borderRadius: const BorderRadius.only(
                           bottomLeft: Radius.circular(12),
                           bottomRight: Radius.circular(12),
@@ -763,7 +763,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     width: MediaQuery.of(context).size.width,
                                                     height: 54,
                                                     decoration: BoxDecoration(
-                                                      color: CustomColors.primaryColor,
+                                                      color: ServiceRecieverColor.primaryColor,
                                                       borderRadius: BorderRadius.circular(10),
                                                     ),
                                                     child: Center(

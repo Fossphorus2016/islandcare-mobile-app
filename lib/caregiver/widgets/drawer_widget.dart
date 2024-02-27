@@ -200,10 +200,11 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                               onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(2),
                               child: Container(
                                 width: MediaQuery.of(context).size.width,
-                                height: 200,
-                                padding: const EdgeInsets.only(top: 25, bottom: 60, left: 20, right: 20),
+                                height: 140,
+                                padding: const EdgeInsets.only(top: 25, left: 20, right: 20),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     CircleAvatar(
                                       radius: 40,
@@ -223,32 +224,35 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                       ),
                                     ),
                                     const SizedBox(width: 10),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}",
-                                          overflow: TextOverflow.visible,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "Rubik",
-                                            color: CustomColors.white,
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            "${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "Rubik",
+                                              color: CustomColors.white,
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          snapshot.data!.data!.phone.toString(),
-                                          overflow: TextOverflow.visible,
-                                          style: TextStyle(
-                                            color: CustomColors.white,
-                                            fontFamily: "Rubik",
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            snapshot.data!.data!.phone.toString(),
+                                            overflow: TextOverflow.visible,
+                                            style: TextStyle(
+                                              color: CustomColors.white,
+                                              fontFamily: "Rubik",
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),

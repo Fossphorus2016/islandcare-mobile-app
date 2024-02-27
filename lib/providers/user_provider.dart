@@ -7,28 +7,6 @@ import 'package:island_app/res/app_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RecieverUserProvider extends ChangeNotifier {
-  // UserModel _userModel = UserModel(
-  //   token: '',
-  //   user: User(
-  //     id: 1,
-  //     firstName: '',
-  //     lastName: '',
-  //     email: '',
-  //     phone: '',
-  //     password: '',
-  //     confirmPassword: '',
-  //     date: '',
-  //     service: '',
-  //     emailVerifiedAt: '',
-  //     providerId: '',
-  //     avatar: '',
-  //     role: null,
-  //     status: null,
-  //     createdAt: '',
-  //     updatedAt: '',
-  //     deletedAt: '',
-  //   ),
-  // );
   static String userToken = '';
   getUserToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

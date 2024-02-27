@@ -277,17 +277,32 @@ class _JobApplicantsState extends State<JobApplicants> {
                                   context: context,
                                   builder: (context) => AlertDialog(
                                     content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
-                                        Text("Total Applications Available : ${snapshot.data!.applicationCounts![index].count.toString()}"),
-                                        Text("Fund The Job Amount ${snapshot.data!.data![index].totalAmount}  With Service Charges of 7.5%"),
-                                        Text(" Total Amount To Be Paid  \$ ${(double.parse(snapshot.data!.data![index].totalAmount.toString()) + double.parse(snapshot.data!.data![index].totalAmount.toString()))}  To View Applicant"),
+                                        Text(
+                                          "Total Applications Available : ${snapshot.data!.applicationCounts![index].count.toString()}",
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          "Fund The Job Amount ${snapshot.data!.data![index].totalAmount}  With Service Charges of 7.5%",
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          "Total Amount To Be Paid \$ ${(double.parse(snapshot.data!.data![index].totalAmount.toString()) + double.parse(snapshot.data!.data![index].totalAmount.toString()))}  To View Applicant",
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ],
                                     ),
                                     actions: [
                                       TextButton(
                                         style: ButtonStyle(
                                           backgroundColor: MaterialStateProperty.resolveWith(
-                                            (states) => CustomColors.darkRed,
+                                            (states) => ServiceRecieverColor.redButtonLigth,
                                           ),
                                         ),
                                         onPressed: () {
@@ -301,7 +316,7 @@ class _JobApplicantsState extends State<JobApplicants> {
                                       TextButton(
                                         style: ButtonStyle(
                                           backgroundColor: MaterialStateProperty.resolveWith(
-                                            (states) => CustomColors.greenLight,
+                                            (states) => ServiceRecieverColor.primaryColor,
                                           ),
                                         ),
                                         onPressed: () {},

@@ -85,29 +85,29 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
+                // Container(
+                //   alignment: Alignment.center,
+                //   child: Text(
+                //     "Hire with Premium",
+                //     style: TextStyle(
+                //       color: CustomColors.primaryText,
+                //       fontSize: 22,
+                //       fontFamily: "Rubik",
+                //       fontWeight: FontWeight.w500,
+                //     ),
+                //   ),
+                // ),
+                // const SizedBox(height: 5),
                 Container(
                   alignment: Alignment.center,
                   child: Text(
-                    "Hire with Premium",
-                    style: TextStyle(
-                      color: CustomColors.primaryText,
-                      fontSize: 22,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "You`re currently on a limited membership. Get Premium to directly connect with sitters",
+                    "Get recruitment pro perks - Subscribe monthly for flexibility or annually to maximize savings.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: CustomColors.primaryText,
-                      fontSize: 14,
+                      fontSize: 16,
                       fontFamily: "Rubik",
-                      fontWeight: FontWeight.w300,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -115,7 +115,9 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                 // Package Card Basic
 
                 for (int i = 0; i < allpackages.length; i++) ...[
-                  if (userSubsDetail != null && userSubsDetail.subscriptionId.toString() == allpackages[i]['id'].toString() && userSubsDetail.isActive == 1) ...[
+                  if (userSubsDetail != null &&
+                      userSubsDetail.subscriptionId.toString() == allpackages[i]['id'].toString() &&
+                      userSubsDetail.isActive == 1) ...[
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       decoration: BoxDecoration(
@@ -124,10 +126,16 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                             end: Alignment.center,
                             colors: [const Color(0xff90EAB4).withOpacity(0.1), const Color(0xff6BD294).withOpacity(0.8)],
                           ),
-                          boxShadow: const [BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))],
-                          borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+                          boxShadow: const [
+                            BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))
+                          ],
+                          borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10))),
                       width: MediaQuery.of(context).size.width > 320 ? 320 : MediaQuery.of(context).size.width,
-                      height: 210,
+                      height: 170,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -136,15 +144,6 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                             allpackages[i]['subscription_name'],
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Poppins",
-                              color: CustomColors.white,
-                            ),
-                          ),
-                          Text(
-                            "subscribed",
-                            style: TextStyle(
-                              fontSize: 12,
                               fontWeight: FontWeight.w400,
                               fontFamily: "Poppins",
                               color: CustomColors.white,
@@ -160,16 +159,16 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                               color: CustomColors.white,
                             ),
                           ),
-                          const SizedBox(height: 10),
-                          Text(
-                            allpackages[i]['period_type'],
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Poppins",
-                              color: CustomColors.white,
-                            ),
-                          ),
+                          // const SizedBox(height: 10),
+                          // Text(
+                          //   allpackages[i]['period_type'],
+                          //   style: TextStyle(
+                          //     fontSize: 14,
+                          //     fontWeight: FontWeight.w400,
+                          //     fontFamily: "Poppins",
+                          //     color: CustomColors.white,
+                          //   ),
+                          // ),
                           const SizedBox(height: 05),
                           TextButton(
                             onPressed: () async {
@@ -260,7 +259,7 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                               ),
                             ),
                             child: const Text(
-                              "You have Already Subscribed To This Package",
+                              "UnSubscribe",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
@@ -272,76 +271,10 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                         ],
                       ),
                     ),
-                    // ]
-                    // else ...[
-                    //   InkWell(
-                    //     onTap: () {
-                    //       Provider.of<SubscriptionProvider>(context, listen: false).setSelectedPackage(allpackages[i]);
-                    //       // print(Provider.of<SubscriptionProvider>(context, listen: false).selectedPackage);
-                    //       Navigator.push(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: (context) => PaymentsFormScreen(
-                    //             subsId: allpackages[i]['id'].toString(),
-                    //           ),
-                    //         ),
-                    //       );
-                    //     },
-                    //     child: Container(
-                    //       padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //       decoration: BoxDecoration(
-                    //           gradient: LinearGradient(
-                    //             begin: Alignment.center,
-                    //             end: Alignment.center,
-                    //             colors: [const Color(0xff90EAB4).withOpacity(0.1), const Color(0xff6BD294).withOpacity(0.8)],
-                    //           ),
-                    //           boxShadow: const [BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))],
-                    //           borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-                    //       width: MediaQuery.of(context).size.width * .90,
-                    //       height: 165,
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         crossAxisAlignment: CrossAxisAlignment.center,
-                    //         children: [
-                    //           Text(
-                    //             allpackages[i]['subscription_name'],
-                    //             style: TextStyle(
-                    //               fontSize: 18,
-                    //               fontWeight: FontWeight.w400,
-                    //               fontFamily: "Poppins",
-                    //               color: CustomColors.white,
-                    //             ),
-                    //           ),
-                    //           const SizedBox(height: 12),
-                    //           Text(
-                    //             "\$ ${allpackages[i]['price']}",
-                    //             style: TextStyle(
-                    //               fontSize: 40,
-                    //               fontWeight: FontWeight.w500,
-                    //               fontFamily: "Poppins",
-                    //               color: CustomColors.white,
-                    //             ),
-                    //           ),
-                    //           const SizedBox(height: 12),
-                    //           Text(
-                    //             allpackages[i]['period_type'],
-                    //             style: TextStyle(
-                    //               fontSize: 18,
-                    //               fontWeight: FontWeight.w400,
-                    //               fontFamily: "Poppins",
-                    //               color: CustomColors.white,
-                    //             ),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ]
                   ] else ...[
                     InkWell(
                       onTap: () {
                         Provider.of<SubscriptionProvider>(context, listen: false).setSelectedPackage(allpackages[i]);
-                        // print(Provider.of<SubscriptionProvider>(context, listen: false).selectedPackage);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -359,8 +292,14 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                               end: Alignment.center,
                               colors: [const Color(0xff90EAB4).withOpacity(0.1), const Color(0xff6BD294).withOpacity(0.8)],
                             ),
-                            boxShadow: const [BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))],
-                            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+                            boxShadow: const [
+                              BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))
+                            ],
+                            borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10))),
                         width: MediaQuery.of(context).size.width * .90,
                         height: 165,
                         child: Column(
@@ -388,7 +327,7 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              allpackages[i]['period_type'],
+                              "BUY ${allpackages[i]['period_type']} SUBSCRIPTION",
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w400,
@@ -436,7 +375,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List allCards = context.watch<CardProvider>().gWAallCards;
+    List<CreditCard>? allCards = context.watch<CardProvider>().allCards;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -483,25 +422,27 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
             padding: const EdgeInsets.only(top: 20),
             child: Column(
               children: [
-                for (int j = 0; j < allCards.length; j++) ...[
-                  RadioListTile(
-                    groupValue: selectedCard,
-                    activeColor: const Color(0xff6BD294).withOpacity(0.8),
-                    value: allCards[j],
-                    onChanged: (value) {
-                      setState(() {
-                        newCard = false;
-                        selectedCard = value;
-                      });
-                      // Provider.of<SubscriptionProvider>(context, listen: false).setSelectCard(value);
-                    },
-                    title: Text(
-                      "Select Card: ${allCards[j].cardNumber}",
-                      style: const TextStyle(color: Colors.black),
+                if (allCards != null) ...[
+                  for (int j = 0; j < allCards.length; j++) ...[
+                    RadioListTile(
+                      groupValue: selectedCard,
+                      activeColor: ServiceRecieverColor.primaryColor.withOpacity(0.8),
+                      value: allCards[j],
+                      onChanged: (value) {
+                        setState(() {
+                          newCard = false;
+                          selectedCard = value;
+                        });
+                        // Provider.of<SubscriptionProvider>(context, listen: false).setSelectCard(value);
+                      },
+                      title: Text(
+                        "Select Card: ${allCards[j].cardNumber}",
+                        style: const TextStyle(color: Colors.black),
+                      ),
                     ),
-                  ),
-                  if (selectedCard != null && selectedCard!.id == allCards[j].id) ...[
-                    cardFormWidget(context),
+                    if (selectedCard != null && selectedCard!.id == allCards[j].id) ...[
+                      cardFormWidget(context),
+                    ],
                   ],
                 ],
                 ListTile(
@@ -517,7 +458,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                   leading: Icon(
                     newCard ? Icons.radio_button_checked_outlined : Icons.radio_button_off_outlined,
                     size: 22,
-                    color: newCard ? const Color(0xff6BD294).withOpacity(0.8) : Colors.grey.shade600,
+                    color: newCard ? ServiceRecieverColor.primaryColor.withOpacity(0.8) : Colors.grey.shade600,
                   ),
                 ),
                 if (newCard) ...[
@@ -704,47 +645,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    // // Card ZIP CODE
-                    // Container(
-                    //   alignment: Alignment.topLeft,
-                    //   child: Text(
-                    //     "ZIP CODE",
-                    //     style: TextStyle(
-                    //       color: CustomColors.primaryColor,
-                    //       fontFamily: "Rubik",
-                    //       fontSize: 14,
-                    //       fontWeight: FontWeight.w400,
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 5),
-                    // Container(
-                    //   decoration: BoxDecoration(
-                    //     borderRadius: const BorderRadius.only(
-                    //       topLeft: Radius.circular(6),
-                    //       bottomLeft: Radius.circular(6),
-                    //       bottomRight: Radius.circular(6),
-                    //       topRight: Radius.circular(6),
-                    //     ),
-                    //     color: CustomColors.white,
-                    //     boxShadow: const [
-                    //       BoxShadow(
-                    //         color: Color.fromARGB(13, 0, 0, 0),
-                    //         blurRadius: 4.0,
-                    //         spreadRadius: 2.0,
-                    //         offset: Offset(2.0, 2.0),
-                    //       ),
-                    //     ],
-                    //   ),
-                    //   alignment: Alignment.centerLeft,
-                    //   padding: const EdgeInsets.only(left: 10),
-                    //   width: MediaQuery.of(context).size.width,
-                    //   height: 40,
-                    //   child: Text(
-                    //     selectedCard.cardNumber.toString(),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 25),
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -822,14 +723,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                               height: 60,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                gradient: LinearGradient(
-                                  begin: Alignment.center,
-                                  end: Alignment.center,
-                                  colors: [
-                                    const Color(0xff90EAB4).withOpacity(0.1),
-                                    const Color(0xff6BD294).withOpacity(0.8),
-                                  ],
-                                ),
+                                color: ServiceRecieverColor.redButton,
                               ),
                               child: Center(
                                 child: Text(
@@ -921,28 +815,28 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                   ),
                   filled: true,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
             // Card Number
             Container(
               alignment: Alignment.topLeft,
               child: Text(
                 "Card Number",
                 style: TextStyle(
-                  color: CustomColors.primaryColor,
+                  color: ServiceRecieverColor.primaryColor,
                   fontFamily: "Rubik",
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -999,21 +893,21 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                   ),
                   filled: true,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
             // Card Expiry Date
             Container(
               alignment: Alignment.topLeft,
@@ -1082,21 +976,21 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                   ),
                   filled: true,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
             // Card CVV
             Container(
               alignment: Alignment.topLeft,
@@ -1155,94 +1049,95 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                   ),
                   filled: true,
                   border: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+                    borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
                     borderRadius: BorderRadius.circular(4.0),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 10),
             // Card ZIP CODE
-            Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                "ZIP CODE",
-                style: TextStyle(
-                  color: CustomColors.primaryColor,
-                  fontFamily: "Rubik",
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-            ),
-            const SizedBox(height: 5),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(6),
-                  bottomLeft: Radius.circular(6),
-                  bottomRight: Radius.circular(6),
-                  topRight: Radius.circular(6),
-                ),
-                color: CustomColors.white,
-              ),
-              alignment: Alignment.center,
-              width: MediaQuery.of(context).size.width,
-              // height: 40,
-              child: TextFormField(
-                controller: zipCodeController,
-                textInputAction: TextInputAction.next,
-                validator: (value) {
-                  if (value == null || value.isEmpty || value.length < 4) {
-                    return "Please Enter Zip code";
-                  }
-                  return null;
-                },
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontFamily: "Rubik",
-                  fontWeight: FontWeight.w400,
-                ),
-                textAlignVertical: TextAlignVertical.bottom,
-                maxLines: 1,
-                decoration: InputDecoration(
-                  hintText: "XXXXXX",
-                  fillColor: CustomColors.white,
-                  focusColor: CustomColors.white,
-                  hoverColor: CustomColors.white,
-                  hintStyle: TextStyle(
-                    color: CustomColors.paymentHint,
-                    fontFamily: "Poppins",
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
-                    borderRadius: BorderRadius.circular(4.0),
-                  ),
-                ),
-              ),
-            ),
+            // Container(
+            //   alignment: Alignment.topLeft,
+            //   child: Text(
+            //     "ZIP CODE",
+            //     style: TextStyle(
+            //       color: CustomColors.primaryColor,
+            //       fontFamily: "Rubik",
+            //       fontSize: 14,
+            //       fontWeight: FontWeight.w400,
+            //     ),
+            //   ),
+            // ),
+            // const SizedBox(height: 5),
+            // Container(
+            //   decoration: BoxDecoration(
+            //     borderRadius: const BorderRadius.only(
+            //       topLeft: Radius.circular(6),
+            //       bottomLeft: Radius.circular(6),
+            //       bottomRight: Radius.circular(6),
+            //       topRight: Radius.circular(6),
+            //     ),
+            //     color: CustomColors.white,
+            //   ),
+            //   alignment: Alignment.center,
+            //   width: MediaQuery.of(context).size.width,
+            //   // height: 40,
+            //   child: TextFormField(
+            //     controller: zipCodeController,
+            //     textInputAction: TextInputAction.next,
+            //     validator: (value) {
+            //       if (value == null || value.isEmpty || value.length < 4) {
+            //         return "Please Enter Zip code";
+            //       }
+            //       return null;
+            //     },
+            //     style: const TextStyle(
+            //       fontSize: 14,
+            //       fontFamily: "Rubik",
+            //       fontWeight: FontWeight.w400,
+            //     ),
+            //     textAlignVertical: TextAlignVertical.bottom,
+            //     maxLines: 1,
+            //     decoration: InputDecoration(
+            //       hintText: "XXXXXX",
+            //       fillColor: CustomColors.white,
+            //       focusColor: CustomColors.white,
+            //       hoverColor: CustomColors.white,
+            //       hintStyle: TextStyle(
+            //         color: CustomColors.paymentHint,
+            //         fontFamily: "Poppins",
+            //         fontSize: 14,
+            //         fontWeight: FontWeight.w400,
+            //       ),
+            //       filled: true,
+            //       border: OutlineInputBorder(
+            //         borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+            //         borderRadius: BorderRadius.circular(4),
+            //       ),
+            //       focusedBorder: OutlineInputBorder(
+            //         borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+            //         borderRadius: BorderRadius.circular(4.0),
+            //       ),
+            //       enabledBorder: OutlineInputBorder(
+            //         borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
+            //         borderRadius: BorderRadius.circular(4.0),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             // const SizedBox(height: 25),
             CheckboxListTile(
               value: saveFrom,
+              activeColor: ServiceRecieverColor.primaryColor,
               onChanged: (value) {
                 setState(() {
                   saveFrom = !saveFrom;
@@ -1251,7 +1146,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
               title: Text(
                 "Save For Future Use",
                 style: TextStyle(
-                  color: CustomColors.primaryColor,
+                  color: ServiceRecieverColor.primaryColor,
                   fontFamily: "Rubik",
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
@@ -1260,7 +1155,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
               controlAffinity: ListTileControlAffinity.leading,
               contentPadding: EdgeInsets.zero,
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -1284,7 +1179,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                 ),
               ],
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 10),
 
             // BTN
             GestureDetector(
@@ -1339,15 +1234,8 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
               child: Container(
                 height: 60,
                 decoration: BoxDecoration(
+                  color: ServiceRecieverColor.redButton,
                   borderRadius: BorderRadius.circular(10),
-                  gradient: LinearGradient(
-                    begin: Alignment.center,
-                    end: Alignment.center,
-                    colors: [
-                      const Color(0xff90EAB4).withOpacity(0.1),
-                      const Color(0xff6BD294).withOpacity(0.8),
-                    ],
-                  ),
                 ),
                 child: Center(
                   child: sendReq

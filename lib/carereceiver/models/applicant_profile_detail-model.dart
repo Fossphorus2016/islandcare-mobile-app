@@ -1,7 +1,6 @@
 // ignore_for_file: file_names
 
 import 'dart:convert';
-
 import 'package:island_app/models/service_model.dart';
 
 ApplicantDetailProfileModel applicantDetailProfileModelFromJson(String str) => ApplicantDetailProfileModel.fromJson(json.decode(str));
@@ -10,25 +9,33 @@ String applicantDetailProfileModelToJson(ApplicantDetailProfileModel data) => js
 
 class ApplicantDetailProfileModel {
   int? isHired;
-  List<Datum>? data;
+  Datum? data;
+  int? percentage;
+  bool? isVerified;
   String? jobTitle;
 
   ApplicantDetailProfileModel({
     this.isHired,
     this.data,
     this.jobTitle,
+    this.isVerified,
+    this.percentage,
   });
 
   factory ApplicantDetailProfileModel.fromJson(Map<String, dynamic> json) => ApplicantDetailProfileModel(
         isHired: json["is_hired"],
-        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+        data: json["data"] == null ? null : Datum.fromJson(json["data"]),
         jobTitle: json["job_title"],
+        percentage: json["percentage"],
+        isVerified: json['isVerified'] == 1,
       );
 
   Map<String, dynamic> toJson() => {
         "is_hired": isHired,
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null ? null : Datum().toJson(),
         "job_title": jobTitle,
+        "percentage": percentage,
+        "isVerified": isVerified,
       };
 }
 
@@ -51,6 +58,7 @@ class Datum {
   Userdetailprovider? userdetailprovider;
   List<Education>? educations;
   Userdetail? userdetail;
+  Map? avgRating;
 
   Datum({
     this.id,
@@ -71,6 +79,7 @@ class Datum {
     this.userdetailprovider,
     this.educations,
     this.userdetail,
+    this.avgRating,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -92,6 +101,7 @@ class Datum {
         userdetailprovider: json["userdetailprovider"] == null ? null : Userdetailprovider.fromJson(json["userdetailprovider"]),
         educations: json["educations"] == null ? [] : List<Education>.from(json["educations"]!.map((x) => Education.fromJson(x))),
         userdetail: json["userdetail"] == null ? null : Userdetail.fromJson(json["userdetail"]),
+        avgRating: json["avg_rating"].isEmpty ? null : json["avg_rating"][0],
       );
 
   Map<String, dynamic> toJson() => {
@@ -113,6 +123,7 @@ class Datum {
         "userdetailprovider": userdetailprovider?.toJson(),
         "educations": educations == null ? [] : List<dynamic>.from(educations!.map((x) => x.toJson())),
         "userdetail": userdetail?.toJson(),
+        "avgRating": avgRating,
       };
 }
 
@@ -298,7 +309,7 @@ class Rating {
   int? ratingBy;
   String? createdAt;
   String? updatedAt;
-
+  ReceiverRating? receiverRating;
   Rating({
     this.id,
     this.providerId,
@@ -308,6 +319,7 @@ class Rating {
     this.ratingBy,
     this.createdAt,
     this.updatedAt,
+    this.receiverRating,
   });
 
   factory Rating.fromJson(Map<String, dynamic> json) => Rating(
@@ -319,6 +331,7 @@ class Rating {
         ratingBy: json["rating_by"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
+        receiverRating: json["receiver_rating"] == null ? null : ReceiverRating.fromJson(json["receiver_rating"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -330,6 +343,7 @@ class Rating {
         "rating_by": ratingBy,
         "created_at": createdAt,
         "updated_at": updatedAt,
+        "receiver_rating": receiverRating?.toJson(),
       };
 }
 
@@ -457,46 +471,6 @@ class Userdetail {
       };
 }
 
-// class Service {
-//   int? id;
-//   String? name;
-//   String? image;
-//   String? description;
-//   dynamic deletedAt;
-//   String? createdAt;
-//   String? updatedAt;
-
-//   Service({
-//     this.id,
-//     this.name,
-//     this.image,
-//     this.description,
-//     this.deletedAt,
-//     this.createdAt,
-//     this.updatedAt,
-//   });
-
-//   factory Service.fromJson(Map<String, dynamic> json) => Service(
-//         id: json["id"],
-//         name: json["name"],
-//         image: json["image"],
-//         description: json["description"],
-//         deletedAt: json["deleted_at"],
-//         createdAt: json["created_at"],
-//         updatedAt: json["updated_at"],
-//       );
-
-//   Map<String, dynamic> toJson() => {
-//         "id": id,
-//         "name": name,
-//         "image": image,
-//         "description": description,
-//         "deleted_at": deletedAt,
-//         "created_at": createdAt,
-//         "updated_at": updatedAt,
-//       };
-// }
-
 class Userdetailprovider {
   int? id;
   int? userId;
@@ -504,7 +478,7 @@ class Userdetailprovider {
   int? experience;
   String? educations;
   String? keywords;
-  dynamic badge;
+  List? badge;
   String? hourlyRate;
   String? createdAt;
   String? updatedAt;
@@ -529,7 +503,8 @@ class Userdetailprovider {
         experience: json["experience"],
         educations: json["educations"],
         keywords: json["keywords"],
-        badge: json["badge"],
+        // ignore: prefer_null_aware_operators
+        badge: json["badge"] == null ? null : json["badge"].toString().split(','),
         hourlyRate: json["hourly_rate"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],

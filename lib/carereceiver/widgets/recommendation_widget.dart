@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/utils.dart';
 
 class RecommendationReceiverWidget extends StatelessWidget {
   final String? imgPath;
@@ -188,7 +189,7 @@ class RecommendationReceiverWidget extends StatelessWidget {
                   height: 43,
                   width: 110,
                   decoration: BoxDecoration(
-                    color: CustomColors.primaryColor,
+                    color: ServiceRecieverColor.redButton,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Center(

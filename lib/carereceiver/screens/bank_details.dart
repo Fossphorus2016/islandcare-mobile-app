@@ -24,7 +24,8 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
 
   BankDetailsModel? futureBankDetails;
   List bankDetails = [];
-  FocusNode focus = FocusNode();
+  List<BankDetail>? filteredList = [];
+
   fetchBankDetailsModel() async {
     var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
@@ -43,7 +44,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
       futureBankDetails = BankDetailsModel.fromJson(response.data);
       setState(() {
         bankDetails = bankdetails;
-        // print(json['bank_details']);
         if (futureBankDetails != null && futureBankDetails!.bankDetails != null) {
           filteredList = futureBankDetails!.bankDetails;
         } else {
@@ -199,39 +199,17 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
     {"name": "CLARIEN", "value": "CLARIEN"},
     {"name": "BNTB", "value": "BNTB"},
     {"name": "HSBC", "value": "HSBC"},
-  ]; //edited line
+  ];
   var selectedNames;
-  // var now = DateTime.now();
-  // DateTime today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-  // getUserToken() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var userToken = await preferences.getString(
-  //     'userToken',
-  //   );
-
-  //   return userToken.toString();
-  // }
-
+  BankDetail? selectedBank;
   TextEditingController textController = TextEditingController();
+  FocusNode focus = FocusNode();
   @override
   void initState() {
     super.initState();
     fetchBankDetailsModel();
-
-    textController.addListener(() {
-      // setState(() {
-      //   if (textController.text.isEmpty) {
-      //     filteredList = bankDetails;
-      //   } else {
-      //     filteredList = bankDetails.where((element) => element.toString().toLowerCase().contains(textController.text.toLowerCase())).toList();
-      //   }
-      // });
-    });
   }
 
-  List<BankDetail>? filteredList = [];
-
-  BankDetail? selectedBank;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -393,9 +371,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                 ),
                                               ),
                                             ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
+                                            const SizedBox(height: 10),
                                             Container(
                                               decoration: BoxDecoration(
                                                 borderRadius: const BorderRadius.only(
@@ -448,9 +424,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                 ),
                                               ),
                                             ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
+                                            const SizedBox(height: 10),
                                             Container(
                                               decoration: BoxDecoration(
                                                 borderRadius: const BorderRadius.only(
@@ -500,9 +474,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                               ),
                                             ),
 
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
+                                            const SizedBox(height: 20),
                                             // OTP
                                             GestureDetector(
                                               onTap: () {
@@ -532,7 +504,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                 width: MediaQuery.of(context).size.width,
                                                 height: 54,
                                                 decoration: BoxDecoration(
-                                                  color: CustomColors.primaryColor,
+                                                  color: ServiceRecieverColor.redButton,
                                                   borderRadius: BorderRadius.circular(10),
                                                 ),
                                                 child: Center(
@@ -549,9 +521,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                 ),
                                               ),
                                             ),
-                                            const SizedBox(
-                                              height: 30,
-                                            ),
+                                            const SizedBox(height: 30),
                                           ],
                                         ),
                                       ),
@@ -569,7 +539,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                     width: 140,
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: CustomColors.primaryColor,
+                      color: ServiceRecieverColor.redButton,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Center(
@@ -582,80 +552,13 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                 ),
                 const SizedBox(height: 10),
                 // Listing
-                // Container(
-                //   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                //   decoration: BoxDecoration(
-                //     color: CustomColors.blackLight,
-                //     border: Border(
-                //       bottom: BorderSide(
-                //         color: CustomColors.borderLight,
-                //         width: 0.1,
-                //       ),
-                //     ),
-                //   ),
-                //   child: Row(
-                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       Text(
-                //         "Bank Name",
-                //         style: TextStyle(
-                //           color: CustomColors.black,
-                //           fontSize: 12,
-                //           fontFamily: "Poppins",
-                //           fontWeight: FontWeight.w600,
-                //         ),
-                //       ),
-                //       Text(
-                //         "Account Title",
-                //         style: TextStyle(
-                //           color: CustomColors.black,
-                //           fontSize: 12,
-                //           fontFamily: "Poppins",
-                //           fontWeight: FontWeight.w600,
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
                 if (filteredList != null) ...[
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    height: FocusScope.of(context).hasFocus ? 250 : 80,
+                    height: FocusScope.of(context).hasFocus ? MediaQuery.of(context).size.height : 80,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        // Row(
-                        //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //   children: [
-                        //     Text(
-                        //       widget.title,
-                        //       style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-                        //     ),
-                        //     IconButton(
-                        //       icon: const Icon(Icons.close),
-                        //       onPressed: () {
-                        //         FocusScope.of(context).unfocus();
-                        //         Navigator.pop(context);
-                        //       },
-                        //     ),
-                        //     /*Align(
-                        //                                 alignment: Alignment.centerRight,
-                        //                                 child: TextButton(
-                        //                                     onPressed: () {
-                        //                                       FocusScope.of(context).unfocus();
-                        //                                       Navigator.pop(context);
-                        //                                     },
-                        //                                     child: Text(
-                        //                                       'Close',
-                        //                                       style: widget.titleStyle != null
-                        //                                           ? widget.titleStyle
-                        //                                           : TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                        //                                     )),
-                        //                               )*/
-                        //   ],
-                        // ),
-                        // const SizedBox(height: 5),
                         TextField(
                           focusNode: focus,
                           autofocus: true,
@@ -673,6 +576,25 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                             ),
                           ),
                           style: const TextStyle(fontSize: 14),
+                          onChanged: (value) {
+                            setState(() {
+                              if (textController.text.isEmpty) {
+                                filteredList = futureBankDetails!.bankDetails;
+                              } else {
+                                filteredList = futureBankDetails!.bankDetails!.where((element) {
+                                  if (element.nameOfBank.toString().toLowerCase().contains(textController.text.toLowerCase())) {
+                                    return true;
+                                  } else if (element.nameOnAccount.toString().toLowerCase().contains(textController.text.toLowerCase())) {
+                                    return true;
+                                  } else if (element.accountNumber.toString().toLowerCase().contains(textController.text.toLowerCase())) {
+                                    return true;
+                                  } else {
+                                    return false;
+                                  }
+                                }).toList();
+                              }
+                            });
+                          },
                           controller: textController,
                         ),
                         const SizedBox(height: 15),
@@ -742,29 +664,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                       ],
                     ),
                   ),
-                  //  ListView.builder(
-                  //   physics: const NeverScrollableScrollPhysics(),
-                  //   shrinkWrap: true,
-                  //   itemCount: snapshot.data!.bankDetails!.length,
-                  //   itemBuilder: (BuildContext context, int index) {
-                  //     return BankDetailPanel(
-                  //       bankName: snapshot.data!.bankDetails![index].nameOfBank.toString(),
-                  //       accountTitle: snapshot.data!.bankDetails![index].nameOnAccount.toString(),
-                  //       accountNumber: snapshot.data!.bankDetails![index].accountNumber.toString(),
-                  //       defaulBank: snapshot.data?.bankDetails![index].status == 1 ? true : false,
-                  //       status: snapshot.data!.bankDetails![index].status == 0 ? "Pending" : "Approved",
-                  //       deleteBank: () => deleteBank(snapshot.data?.bankDetails![index].id),
-                  //       setDefaultBank: () => selectBank(snapshot.data!.bankDetails![index].id),
-                  //     );
-                  //   },
-                  // );
-                  //     } else {
-                  //       return const Center(
-                  //         child: CircularProgressIndicator(),
-                  //       );
-                  //     }
-                  //   },
-                  // ),
                   if (selectedBank != null && !FocusScope.of(context).hasFocus) ...[
                     Row(
                       children: [

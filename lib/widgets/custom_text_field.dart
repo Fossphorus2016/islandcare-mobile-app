@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/utils.dart';
 
 class CustomTextFieldWidget extends StatelessWidget {
   Widget? prefIcon;
@@ -63,15 +64,15 @@ class CustomTextFieldWidget extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Color(0xff677294),
+          borderSide: BorderSide(
+            color: ServiceRecieverColor.primaryColor,
             width: 0.5,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Color(0xff677294),
+          borderSide: BorderSide(
+            color: ServiceRecieverColor.primaryColor,
             width: 0.5,
           ),
         ),
@@ -84,8 +85,8 @@ class CustomTextFieldWidget extends StatelessWidget {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(
-            color: Color(0xff677294),
+          borderSide: BorderSide(
+            color: ServiceRecieverColor.primaryColor,
             width: 0.5,
           ),
         ),

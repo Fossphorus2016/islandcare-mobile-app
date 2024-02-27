@@ -2,23 +2,31 @@ import 'dart:convert';
 
 import 'package:island_app/models/service_model.dart';
 
-ServiceReceiverDashboardDetailModel serviceReceiverDashboardDetailModelFromJson(String str) => ServiceReceiverDashboardDetailModel.fromJson(json.decode(str));
+ServiceReceiverDashboardDetailModel serviceReceiverDashboardDetailModelFromJson(String str) =>
+    ServiceReceiverDashboardDetailModel.fromJson(json.decode(str));
 
 String serviceReceiverDashboardDetailModelToJson(ServiceReceiverDashboardDetailModel data) => json.encode(data.toJson());
 
 class ServiceReceiverDashboardDetailModel {
   ServiceReceiverDashboardDetailModel({
     this.data,
+    this.isVerified,
+    this.percentage,
   });
-
-  List<Datum>? data;
+  int? percentage;
+  bool? isVerified;
+  Datum? data;
 
   factory ServiceReceiverDashboardDetailModel.fromJson(Map<String, dynamic> json) => ServiceReceiverDashboardDetailModel(
-        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+        data: json["data"] == null ? null : Datum.fromJson(json["data"]),
+        percentage: json["percentage"] ?? 0,
+        isVerified: json['isVerified'] == 1,
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data == null ? null : Datum().toJson(),
+        "percentage": percentage,
+        "isVerified": isVerified,
       };
 }
 
@@ -42,6 +50,7 @@ class Datum {
     this.educations,
     this.userdetail,
     this.ratings,
+    this.avgRating,
   });
 
   int? id;
@@ -62,6 +71,7 @@ class Datum {
   List<Education>? educations;
   Userdetail? userdetail;
   List<Rating>? ratings;
+  Map? avgRating;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
         id: json["id"],
@@ -82,6 +92,7 @@ class Datum {
         educations: json["educations"] == null ? [] : List<Education>.from(json["educations"]!.map((x) => Education.fromJson(x))),
         userdetail: json["userdetail"] == null ? null : Userdetail.fromJson(json["userdetail"]),
         ratings: json["ratings"] == null ? [] : List<Rating>.from(json["ratings"]!.map((x) => Rating.fromJson(x))),
+        avgRating: json["avg_rating"] == null ? null : json["avg_rating"][0],
       );
 
   Map<String, dynamic> toJson() => {
@@ -103,6 +114,7 @@ class Datum {
         "educations": educations == null ? [] : List<dynamic>.from(educations!.map((x) => x.toJson())),
         "userdetail": userdetail?.toJson(),
         "ratings": ratings == null ? [] : List<dynamic>.from(ratings!.map((x) => x.toJson())),
+        "avgRating": avgRating,
       };
 }
 
@@ -123,8 +135,8 @@ class Education {
   String? name;
   int? userId;
   String? major;
-  DateTime? to;
-  DateTime? from;
+  String? to;
+  String? from;
   int? current;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -134,8 +146,8 @@ class Education {
         name: json["name"],
         userId: json["user_id"],
         major: json["major"],
-        to: json["to"].isEmpty ? null : DateTime.parse(json["to"]),
-        from: json["from"] == null ? null : DateTime.parse(json["from"]),
+        to: json["to"],
+        from: json["from"],
         current: json["current"],
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
@@ -146,8 +158,8 @@ class Education {
         "name": name,
         "user_id": userId,
         "major": major,
-        "to": "${to!.year.toString().padLeft(4, '0')}-${to!.month.toString().padLeft(2, '0')}-${to!.day.toString().padLeft(2, '0')}",
-        "from": "${from!.year.toString().padLeft(4, '0')}-${from!.month.toString().padLeft(2, '0')}-${from!.day.toString().padLeft(2, '0')}",
+        "to": to,
+        "from": from,
         "current": current,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
@@ -518,7 +530,7 @@ class Userdetailprovider {
   int? experience;
   String? educations;
   String? keywords;
-  dynamic badge;
+  List? badge;
   String? hourlyRate;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -530,7 +542,7 @@ class Userdetailprovider {
         experience: json["experience"],
         educations: json["educations"],
         keywords: json["keywords"],
-        badge: json["badge"],
+        badge: json["badge"] == null ? null : json["badge"].toString().split(','),
         hourlyRate: json["hourly_rate"],
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),

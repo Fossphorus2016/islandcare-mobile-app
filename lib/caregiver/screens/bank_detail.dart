@@ -19,8 +19,8 @@ class BankDetails extends StatefulWidget {
 }
 
 class _BankDetailsState extends State<BankDetails> {
-  List? allCards = [];
-  List showItem = [];
+  // List? allCards = [];
+  // List showItem = [];
 
   BankDetailsModel? futureBankDetails;
   List bankDetails = [];
@@ -582,6 +582,25 @@ class _BankDetailsState extends State<BankDetails> {
                           ),
                           style: const TextStyle(fontSize: 14),
                           controller: textController,
+                          onChanged: (value) {
+                            setState(() {
+                              if (textController.text.isEmpty) {
+                                filteredList = futureBankDetails!.bankDetails;
+                              } else {
+                                filteredList = futureBankDetails!.bankDetails!.where((element) {
+                                  if (element.nameOfBank.toString().toLowerCase().contains(textController.text.toLowerCase())) {
+                                    return true;
+                                  } else if (element.nameOnAccount.toString().toLowerCase().contains(textController.text.toLowerCase())) {
+                                    return true;
+                                  } else if (element.accountNumber.toString().toLowerCase().contains(textController.text.toLowerCase())) {
+                                    return true;
+                                  } else {
+                                    return false;
+                                  }
+                                }).toList();
+                              }
+                            });
+                          },
                         ),
                         const SizedBox(height: 15),
                         if (FocusScope.of(context).hasFocus) ...[

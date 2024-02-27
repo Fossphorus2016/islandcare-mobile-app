@@ -119,3 +119,17 @@ class ServiceGiverColor {
   static Color backGroundColor = Colors.grey;
   static Color activeRatingStar = Colors.orange;
 }
+
+class ServiceRecieverColor {
+  static Color primaryColor = const Color(0xFF0eb682);
+
+  static Color black = const Color(0xFF181c33);
+  static Color activeDrawerTile = const Color(0xFFed1c24);
+  static Color white = Colors.white;
+  static Color green = const Color(0xFF0eb682);
+  static Color redButton = const Color(0xFFf1416c);
+  static Color redButtonLigth = const Color.fromARGB(150, 241, 65, 108);
+  static Color grey = const Color.fromARGB(1000, 228, 230, 239);
+  static Color backGroundColor = Colors.grey;
+  static Color activeRatingStar = Colors.orange;
+}

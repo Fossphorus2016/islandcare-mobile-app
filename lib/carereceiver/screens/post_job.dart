@@ -79,7 +79,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                   padding: const EdgeInsets.only(left: 4.0),
                   child: Icon(
                     Icons.arrow_back_ios,
-                    color: CustomColors.primaryColor,
+                    color: ServiceRecieverColor.primaryColor,
                     size: 18,
                   ),
                 ),
@@ -142,7 +142,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                 margin: const EdgeInsets.all(4),
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
-                                  color: selectedJob == index ? CustomColors.primaryColor : CustomColors.white,
+                                  color: selectedJob == index ? ServiceRecieverColor.primaryColor : CustomColors.white,
                                   borderRadius: BorderRadius.circular(9),
                                   boxShadow: const [
                                     BoxShadow(
@@ -177,7 +177,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: "Poppins",
-                                        color: selectedJob == index ? CustomColors.white : CustomColors.primaryColor,
+                                        color: selectedJob == index ? CustomColors.white : ServiceRecieverColor.primaryColor,
                                       ),
                                     ),
                                   ],
