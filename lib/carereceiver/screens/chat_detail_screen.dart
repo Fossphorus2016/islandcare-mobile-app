@@ -78,11 +78,13 @@ class ChatDetailPageState extends State<ChatDetailPage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(70),
                     child: Center(
-                      child: chatProvider.activeChat['receiver']['avatar'] != null
+                      child: chatProvider.activeChat['receiver']['avatar'] !=
+                              null
                           ? Image(
                               height: 60,
                               width: 60,
-                              image: NetworkImage("${AppUrl.webStorageUrl}/${chatProvider.activeChat['receiver']['avatar']}"),
+                              image: NetworkImage(
+                                  "${AppUrl.webStorageUrl}/${chatProvider.activeChat['receiver']['avatar']}"),
                             )
                           : const Image(
                               height: 60,
@@ -129,8 +131,10 @@ class ChatDetailPageState extends State<ChatDetailPage> {
               child: Column(
                 children: [
                   if (chatProvider.activeChat['chat_messages'] != null) ...[
-                    for (final message in chatProvider.activeChat['chat_messages']) ...[
-                      if (message['sender_id'] == chatProvider.activeChat['sender_id']) ...[
+                    for (final message
+                        in chatProvider.activeChat['chat_messages']) ...[
+                      if (message['sender_id'] ==
+                          chatProvider.activeChat['sender_id']) ...[
                         senderMassage(message),
                         const SizedBox(height: 20),
                       ] else ...[
@@ -147,7 +151,8 @@ class ChatDetailPageState extends State<ChatDetailPage> {
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              padding: const EdgeInsets.only(left: 8, bottom: 3, top: 3, right: 8),
+              padding:
+                  const EdgeInsets.only(left: 8, bottom: 3, top: 3, right: 8),
               height: 60,
               width: double.infinity,
               color: Colors.white,
@@ -175,8 +180,15 @@ class ChatDetailPageState extends State<ChatDetailPage> {
                       alignment: Alignment.center,
                       width: MediaQuery.of(context).size.width,
                       height: 60,
-                      child: TextFormField(
+                      child: TextField(
                         controller: messageController,
+                        onChanged: (value) {
+                          if (value.trim().isNotEmpty) {
+                            chatProvider.setButtonValidation(true);
+                          } else {
+                            chatProvider.setButtonValidation(false);
+                          }
+                        },
                         textAlignVertical: TextAlignVertical.bottom,
                         maxLines: 1,
                         style: const TextStyle(
@@ -194,11 +206,13 @@ class ChatDetailPageState extends State<ChatDetailPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                            borderSide: BorderSide(
+                                color: CustomColors.white, width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                            borderSide: BorderSide(
+                                color: CustomColors.white, width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
@@ -208,34 +222,24 @@ class ChatDetailPageState extends State<ChatDetailPage> {
                   const SizedBox(
                     width: 2,
                   ),
-                  SizedBox(
-                    width: 75,
-                    height: 48,
-                    child: FloatingActionButton(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      onPressed: !chatProvider.sendMessageReq
-                          ? () {
-                              if (messageController.text.isEmpty) {
-                                customErrorSnackBar(context, "please write a message");
-                                return;
-                              }
-                              Provider.of<ChatProvider>(context, listen: false).sendMessage(messageController.text);
-                              messageController.clear();
+                  IconButton(
+                    onPressed: chatProvider.sendMessageReq
+                        ? () {
+                            if (messageController.text.isEmpty) {
+                              customErrorSnackBar(
+                                  context, "please write a message");
+                              return;
                             }
+                            Provider.of<ChatProvider>(context, listen: false)
+                                .sendMessage(messageController.text);
+                            messageController.clear();
+                          }
+                        : null,
+                    icon: Icon(
+                      Icons.send_outlined,
+                      color: chatProvider.sendMessageReq
+                          ? ServiceGiverColor.redButton
                           : null,
-                      backgroundColor: !chatProvider.sendMessageReq ? CustomColors.primaryColor : Colors.grey.shade300,
-                      elevation: 0,
-                      child: Text(
-                        "Send",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Rubik",
-                          color: CustomColors.white,
-                        ),
-                      ),
                     ),
                   ),
                 ],
@@ -282,7 +286,8 @@ class ChatDetailPageState extends State<ChatDetailPage> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()),
+                    DateFormat.jm().format(
+                        DateTime.parse(message['created_at']).toLocal()),
                     style: TextStyle(
                       fontSize: 13,
                       fontFamily: "Rubik",
@@ -356,7 +361,8 @@ class ChatDetailPageState extends State<ChatDetailPage> {
               ),
               const SizedBox(height: 05),
               Text(
-                DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()),
+                DateFormat.jm()
+                    .format(DateTime.parse(message['created_at']).toLocal()),
                 style: TextStyle(
                   fontSize: 13,
                   fontFamily: "Rubik",

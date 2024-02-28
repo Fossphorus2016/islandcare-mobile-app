@@ -103,11 +103,19 @@ class _MessagesScreenState extends State<MessagesScreen> {
                           itemBuilder: (context, index) {
                             return ConversationList(
                               roomId: provider.chatList[index]["roomId"],
-                              name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].firstName}",
-                              messageText: provider.chatList[index]['lastMessage'],
-                              imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
-                              time: provider.chatList[index]['lastMessageTime'].toString(),
-                              isMessageRead: provider.chatList[index]['lastMessagesCount'] == 0 ? false : true,
+                              name:
+                                  "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].firstName}",
+                              messageText: provider.chatList[index]
+                                  ['lastMessage'],
+                              imageUrl:
+                                  "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
+                              time: provider.chatList[index]['lastMessageTime']
+                                  .toString(),
+                              isMessageRead: provider.chatList[index]
+                                          ['lastMessagesCount'] ==
+                                      0
+                                  ? false
+                                  : true,
                             );
                           },
                         );
@@ -173,8 +181,10 @@ class ChatProvider extends ChangeNotifier {
       chatList = List.generate(
         resp.data['chat_room'].length,
         (index) {
-          var getlastmessage = resp.data['chat_room'][index]['chat_messages'].last;
-          var lastmessagetime = DateFormat.jm().format(DateTime.parse(getlastmessage['updated_at']).toLocal());
+          var getlastmessage =
+              resp.data['chat_room'][index]['chat_messages'].last;
+          var lastmessagetime = DateFormat.jm()
+              .format(DateTime.parse(getlastmessage['updated_at']).toLocal());
           return {
             "roomId": resp.data['chat_room'][index]['id'],
             "userDate": ChatroomUser.fromJson(
@@ -198,7 +208,8 @@ class ChatProvider extends ChangeNotifier {
   setActiveChat(id, Map? receiver) async {
     if (id == "new") {
       if (chatList.isNotEmpty) {
-        var isExits = allChatRooms.where((element) => element['receiver_id'] == receiver!['id']);
+        var isExits = allChatRooms
+            .where((element) => element['receiver_id'] == receiver!['id']);
         if (isExits.isNotEmpty) {
           activeChat = isExits.first;
         } else {
@@ -211,7 +222,8 @@ class ChatProvider extends ChangeNotifier {
       notifyListeners();
       getChats();
     } else {
-      var getChatRoom = allChatRooms.firstWhere((element) => element["id"] == id);
+      var getChatRoom =
+          allChatRooms.firstWhere((element) => element["id"] == id);
       activeChat = getChatRoom;
       notifyListeners();
     }
@@ -249,6 +261,11 @@ class ChatProvider extends ChangeNotifier {
       getChats();
       notifyListeners();
     }
+  }
+
+  setButtonValidation(bool value) {
+    sendMessageReq = value;
+    notifyListeners();
   }
 
   updateStatus() async {

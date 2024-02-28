@@ -150,7 +150,8 @@ class _ManageCardsState extends State<ManageCards> {
       'card_expiration_year': selectedYear.toString(),
       'cvv': cvvController.text.toString(),
     };
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false)
+        .getUserToken();
     try {
       final response = await Dio().post(
         CareReceiverURl.serviceReceiverAddCreditCards,
@@ -174,7 +175,8 @@ class _ManageCardsState extends State<ManageCards> {
             "Card Added Successfully",
           );
         }
-        Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
+        Provider.of<CardProvider>(context, listen: false)
+            .fetchManageCardsModel();
       }
       Navigator.pop(context);
     } on DioError catch (e) {
@@ -267,14 +269,20 @@ class _ManageCardsState extends State<ManageCards> {
                       ),
                       builder: (BuildContext context) {
                         return StatefulBuilder(
-                          builder: (BuildContext context, StateSetter setState) {
+                          builder:
+                              (BuildContext context, StateSetter setState) {
                             return SingleChildScrollView(
                               child: Padding(
-                                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom),
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -287,7 +295,8 @@ class _ManageCardsState extends State<ManageCards> {
                                           height: 5,
                                           decoration: BoxDecoration(
                                             color: const Color(0xffC4C4C4),
-                                            borderRadius: BorderRadius.circular(6),
+                                            borderRadius:
+                                                BorderRadius.circular(6),
                                           ),
                                         ),
                                       ),
@@ -313,20 +322,25 @@ class _ManageCardsState extends State<ManageCards> {
                                       Form(
                                         key: cardKey,
                                         child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
                                             Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: const BorderRadius.only(
+                                                borderRadius:
+                                                    const BorderRadius.only(
                                                   topLeft: Radius.circular(6),
-                                                  bottomLeft: Radius.circular(6),
-                                                  bottomRight: Radius.circular(6),
+                                                  bottomLeft:
+                                                      Radius.circular(6),
+                                                  bottomRight:
+                                                      Radius.circular(6),
                                                   topRight: Radius.circular(6),
                                                 ),
                                                 color: CustomColors.white,
                                                 boxShadow: const [
                                                   BoxShadow(
-                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                    color: Color.fromARGB(
+                                                        13, 0, 0, 0),
                                                     blurRadius: 4.0,
                                                     spreadRadius: 2.0,
                                                     offset: Offset(2.0, 2.0),
@@ -334,38 +348,60 @@ class _ManageCardsState extends State<ManageCards> {
                                                 ],
                                               ),
                                               alignment: Alignment.center,
-                                              width: MediaQuery.of(context).size.width,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                               height: 50,
                                               child: TextFormField(
-                                                controller: nameOncardController,
+                                                controller:
+                                                    nameOncardController,
                                                 style: const TextStyle(
                                                   fontSize: 16,
                                                   fontFamily: "Rubik",
                                                   fontWeight: FontWeight.w400,
                                                 ),
-                                                textAlignVertical: TextAlignVertical.bottom,
+                                                textAlignVertical:
+                                                    TextAlignVertical.bottom,
                                                 maxLines: 1,
                                                 decoration: InputDecoration(
                                                   suffixIcon: Icon(
                                                     Icons.person,
                                                     size: 17,
-                                                    color: CustomColors.primaryColor,
+                                                    color: CustomColors
+                                                        .primaryColor,
                                                   ),
-                                                  hintText: "Enter Name On Card",
+                                                  hintText:
+                                                      "Enter Name On Card",
                                                   fillColor: CustomColors.white,
-                                                  focusColor: CustomColors.white,
-                                                  hoverColor: CustomColors.white,
+                                                  focusColor:
+                                                      CustomColors.white,
+                                                  hoverColor:
+                                                      CustomColors.white,
                                                   filled: true,
                                                   border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(4),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
                                                   ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            CustomColors.white,
+                                                        width: 2.0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.0),
                                                   ),
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            CustomColors.white,
+                                                        width: 2.0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.0),
                                                   ),
                                                 ),
                                               ),
@@ -375,16 +411,20 @@ class _ManageCardsState extends State<ManageCards> {
                                             ),
                                             Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: const BorderRadius.only(
+                                                borderRadius:
+                                                    const BorderRadius.only(
                                                   topLeft: Radius.circular(6),
-                                                  bottomLeft: Radius.circular(6),
-                                                  bottomRight: Radius.circular(6),
+                                                  bottomLeft:
+                                                      Radius.circular(6),
+                                                  bottomRight:
+                                                      Radius.circular(6),
                                                   topRight: Radius.circular(6),
                                                 ),
                                                 color: CustomColors.white,
                                                 boxShadow: const [
                                                   BoxShadow(
-                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                    color: Color.fromARGB(
+                                                        13, 0, 0, 0),
                                                     blurRadius: 4.0,
                                                     spreadRadius: 2.0,
                                                     offset: Offset(2.0, 2.0),
@@ -392,39 +432,62 @@ class _ManageCardsState extends State<ManageCards> {
                                                 ],
                                               ),
                                               alignment: Alignment.center,
-                                              width: MediaQuery.of(context).size.width,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                               height: 50,
                                               child: TextFormField(
-                                                keyboardType: TextInputType.number,
-                                                controller: cardNumberController,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                controller:
+                                                    cardNumberController,
                                                 style: const TextStyle(
                                                   fontSize: 16,
                                                   fontFamily: "Rubik",
                                                   fontWeight: FontWeight.w400,
                                                 ),
-                                                textAlignVertical: TextAlignVertical.bottom,
+                                                textAlignVertical:
+                                                    TextAlignVertical.bottom,
                                                 maxLines: 1,
                                                 decoration: InputDecoration(
                                                   suffixIcon: Icon(
                                                     Icons.credit_card,
                                                     size: 17,
-                                                    color: CustomColors.primaryColor,
+                                                    color: CustomColors
+                                                        .primaryColor,
                                                   ),
-                                                  hintText: "16 Digit Card Number",
+                                                  hintText:
+                                                      "16 Digit Card Number",
                                                   fillColor: CustomColors.white,
-                                                  focusColor: CustomColors.white,
-                                                  hoverColor: CustomColors.white,
+                                                  focusColor:
+                                                      CustomColors.white,
+                                                  hoverColor:
+                                                      CustomColors.white,
                                                   filled: true,
                                                   border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(4),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
                                                   ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            CustomColors.white,
+                                                        width: 2.0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.0),
                                                   ),
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            CustomColors.white,
+                                                        width: 2.0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.0),
                                                   ),
                                                 ),
                                               ),
@@ -433,60 +496,98 @@ class _ManageCardsState extends State<ManageCards> {
                                               height: 10,
                                             ),
                                             SizedBox(
-                                              width: MediaQuery.of(context).size.width,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                               child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   SizedBox(
                                                     height: 50,
-                                                    width: MediaQuery.of(context).size.width * .4,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            .4,
                                                     child: Center(
                                                       child: DecoratedBox(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: const BorderRadius.only(
-                                                            topLeft: Radius.circular(6),
-                                                            bottomLeft: Radius.circular(6),
-                                                            bottomRight: Radius.circular(6),
-                                                            topRight: Radius.circular(6),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    6),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    6),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    6),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    6),
                                                           ),
-                                                          color: CustomColors.white,
+                                                          color: CustomColors
+                                                              .white,
                                                           boxShadow: const [
                                                             BoxShadow(
-                                                              color: Color.fromARGB(13, 0, 0, 0),
+                                                              color: Color
+                                                                  .fromARGB(13,
+                                                                      0, 0, 0),
                                                               blurRadius: 4.0,
                                                               spreadRadius: 2.0,
-                                                              offset: Offset(2.0, 2.0),
+                                                              offset: Offset(
+                                                                  2.0, 2.0),
                                                             ),
                                                           ],
                                                         ),
                                                         child: Padding(
-                                                          padding: const EdgeInsets.symmetric(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
                                                             horizontal: 10,
                                                             vertical: 4,
                                                           ),
-                                                          child: DropdownButtonHideUnderline(
-                                                            child: DropdownButton(
+                                                          child:
+                                                              DropdownButtonHideUnderline(
+                                                            child:
+                                                                DropdownButton(
                                                               hint: const Text(
                                                                 "Expiration Month",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   fontSize: 16,
-                                                                  fontFamily: "Rubik",
-                                                                  fontWeight: FontWeight.w400,
+                                                                  fontFamily:
+                                                                      "Rubik",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
                                                                 ),
                                                               ),
                                                               isExpanded: true,
-                                                              items: month!.map((item) {
+                                                              items: month!
+                                                                  .map((item) {
                                                                 return DropdownMenuItem(
-                                                                  value: item['id'].toString(),
-                                                                  child: Text(item['name']),
+                                                                  value: item[
+                                                                          'id']
+                                                                      .toString(),
+                                                                  child: Text(item[
+                                                                      'name']),
                                                                 );
                                                               }).toList(),
-                                                              onChanged: (newVal) {
+                                                              onChanged:
+                                                                  (newVal) {
                                                                 setState(() {
-                                                                  selectedMonth = newVal;
+                                                                  selectedMonth =
+                                                                      newVal;
                                                                 });
                                                               },
-                                                              value: selectedMonth,
+                                                              value:
+                                                                  selectedMonth,
                                                             ),
                                                           ),
                                                         ),
@@ -497,55 +598,89 @@ class _ManageCardsState extends State<ManageCards> {
                                                     width: 10,
                                                   ),
                                                   SizedBox(
-                                                    width: MediaQuery.of(context).size.width * .4,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            .4,
                                                     height: 50,
                                                     child: Center(
                                                       child: DecoratedBox(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: const BorderRadius.only(
-                                                            topLeft: Radius.circular(6),
-                                                            bottomLeft: Radius.circular(6),
-                                                            bottomRight: Radius.circular(6),
-                                                            topRight: Radius.circular(6),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .only(
+                                                            topLeft:
+                                                                Radius.circular(
+                                                                    6),
+                                                            bottomLeft:
+                                                                Radius.circular(
+                                                                    6),
+                                                            bottomRight:
+                                                                Radius.circular(
+                                                                    6),
+                                                            topRight:
+                                                                Radius.circular(
+                                                                    6),
                                                           ),
-                                                          color: CustomColors.white,
+                                                          color: CustomColors
+                                                              .white,
                                                           boxShadow: const [
                                                             BoxShadow(
-                                                              color: Color.fromARGB(13, 0, 0, 0),
+                                                              color: Color
+                                                                  .fromARGB(13,
+                                                                      0, 0, 0),
                                                               blurRadius: 4.0,
                                                               spreadRadius: 2.0,
-                                                              offset: Offset(2.0, 2.0),
+                                                              offset: Offset(
+                                                                  2.0, 2.0),
                                                             ),
                                                           ],
                                                         ),
                                                         child: Padding(
-                                                          padding: const EdgeInsets.symmetric(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
                                                             horizontal: 10,
                                                             vertical: 4,
                                                           ),
-                                                          child: DropdownButtonHideUnderline(
-                                                            child: DropdownButton(
+                                                          child:
+                                                              DropdownButtonHideUnderline(
+                                                            child:
+                                                                DropdownButton(
                                                               hint: const Text(
                                                                 "Expiration Year",
-                                                                style: TextStyle(
+                                                                style:
+                                                                    TextStyle(
                                                                   fontSize: 16,
-                                                                  fontFamily: "Rubik",
-                                                                  fontWeight: FontWeight.w400,
+                                                                  fontFamily:
+                                                                      "Rubik",
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400,
                                                                 ),
                                                               ),
                                                               isExpanded: true,
-                                                              items: year!.map((item) {
+                                                              items: year!
+                                                                  .map((item) {
                                                                 return DropdownMenuItem(
-                                                                  value: item['id'].toString(),
-                                                                  child: Text(item['name']),
+                                                                  value: item[
+                                                                          'id']
+                                                                      .toString(),
+                                                                  child: Text(item[
+                                                                      'name']),
                                                                 );
                                                               }).toList(),
-                                                              onChanged: (newVal) {
+                                                              onChanged:
+                                                                  (newVal) {
                                                                 setState(() {
-                                                                  selectedYear = newVal;
+                                                                  selectedYear =
+                                                                      newVal;
                                                                 });
                                                               },
-                                                              value: selectedYear,
+                                                              value:
+                                                                  selectedYear,
                                                             ),
                                                           ),
                                                         ),
@@ -560,16 +695,20 @@ class _ManageCardsState extends State<ManageCards> {
                                             ),
                                             Container(
                                               decoration: BoxDecoration(
-                                                borderRadius: const BorderRadius.only(
+                                                borderRadius:
+                                                    const BorderRadius.only(
                                                   topLeft: Radius.circular(6),
-                                                  bottomLeft: Radius.circular(6),
-                                                  bottomRight: Radius.circular(6),
+                                                  bottomLeft:
+                                                      Radius.circular(6),
+                                                  bottomRight:
+                                                      Radius.circular(6),
                                                   topRight: Radius.circular(6),
                                                 ),
                                                 color: CustomColors.white,
                                                 boxShadow: const [
                                                   BoxShadow(
-                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                    color: Color.fromARGB(
+                                                        13, 0, 0, 0),
                                                     blurRadius: 4.0,
                                                     spreadRadius: 2.0,
                                                     offset: Offset(2.0, 2.0),
@@ -577,34 +716,54 @@ class _ManageCardsState extends State<ManageCards> {
                                                 ],
                                               ),
                                               alignment: Alignment.center,
-                                              width: MediaQuery.of(context).size.width,
+                                              width: MediaQuery.of(context)
+                                                  .size
+                                                  .width,
                                               height: 50,
                                               child: TextFormField(
-                                                keyboardType: TextInputType.number,
+                                                keyboardType:
+                                                    TextInputType.number,
                                                 controller: cvvController,
                                                 style: const TextStyle(
                                                   fontSize: 16,
                                                   fontFamily: "Rubik",
                                                   fontWeight: FontWeight.w400,
                                                 ),
-                                                textAlignVertical: TextAlignVertical.bottom,
+                                                textAlignVertical:
+                                                    TextAlignVertical.bottom,
                                                 maxLines: 1,
                                                 decoration: InputDecoration(
                                                   hintText: "CVV/CVC",
                                                   fillColor: CustomColors.white,
-                                                  focusColor: CustomColors.white,
-                                                  hoverColor: CustomColors.white,
+                                                  focusColor:
+                                                      CustomColors.white,
+                                                  hoverColor:
+                                                      CustomColors.white,
                                                   filled: true,
                                                   border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(4),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
                                                   ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            CustomColors.white,
+                                                        width: 2.0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.0),
                                                   ),
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                    borderSide: BorderSide(
+                                                        color:
+                                                            CustomColors.white,
+                                                        width: 2.0),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4.0),
                                                   ),
                                                 ),
                                               ),
@@ -616,43 +775,53 @@ class _ManageCardsState extends State<ManageCards> {
                                             // OTP
                                             GestureDetector(
                                               onTap: () {
-                                                if (nameOncardController.text.isEmpty) {
+                                                if (nameOncardController
+                                                    .text.isEmpty) {
                                                   customErrorSnackBar(
                                                     context,
                                                     "Please Enter Name",
                                                   );
-                                                } else if (cardNumberController.text.isEmpty) {
+                                                } else if (cardNumberController
+                                                    .text.isEmpty) {
                                                   customErrorSnackBar(
                                                     context,
                                                     "Please Enter Card Number",
                                                   );
-                                                } else if (selectedMonth == null) {
+                                                } else if (selectedMonth ==
+                                                    null) {
                                                   customErrorSnackBar(
                                                     context,
                                                     "Please Select Month",
                                                   );
-                                                } else if (selectedYear == null) {
+                                                } else if (selectedYear ==
+                                                    null) {
                                                   customErrorSnackBar(
                                                     context,
                                                     "Please Select Year",
                                                   );
-                                                } else if (cvvController.text.isEmpty) {
+                                                } else if (cvvController
+                                                    .text.isEmpty) {
                                                   customErrorSnackBar(
                                                     context,
                                                     "Please Enter CVV",
                                                   );
                                                 } else {
-                                                  if (cardKey.currentState!.validate()) {
+                                                  if (cardKey.currentState!
+                                                      .validate()) {
                                                     postAddCard();
                                                   }
                                                 }
                                               },
                                               child: Container(
-                                                width: MediaQuery.of(context).size.width,
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
                                                 height: 54,
                                                 decoration: BoxDecoration(
-                                                  color: CustomColors.primaryColor,
-                                                  borderRadius: BorderRadius.circular(10),
+                                                  color:
+                                                      CustomColors.primaryColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
                                                 ),
                                                 child: Center(
                                                   child: Text(
@@ -660,8 +829,10 @@ class _ManageCardsState extends State<ManageCards> {
                                                     style: TextStyle(
                                                       color: CustomColors.white,
                                                       fontFamily: "Rubik",
-                                                      fontStyle: FontStyle.normal,
-                                                      fontWeight: FontWeight.w500,
+                                                      fontStyle:
+                                                          FontStyle.normal,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                       fontSize: 18,
                                                     ),
                                                   ),
@@ -688,7 +859,7 @@ class _ManageCardsState extends State<ManageCards> {
                     width: 140,
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: CustomColors.primaryColor,
+                      color: ServiceRecieverColor.redButton,
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Center(
@@ -926,7 +1097,9 @@ class _ManageCardsState extends State<ManageCards> {
                 // if (selectCard != null) ...[
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: FocusScope.of(context).hasFocus ? MediaQuery.of(context).size.height : 80,
+                  height: FocusScope.of(context).hasFocus
+                      ? MediaQuery.of(context).size.height
+                      : 80,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -949,7 +1122,8 @@ class _ManageCardsState extends State<ManageCards> {
                         style: const TextStyle(fontSize: 14),
                         controller: textController,
                         onChanged: (value) {
-                          Provider.of<CardProvider>(context, listen: false).setfilterList(value);
+                          Provider.of<CardProvider>(context, listen: false)
+                              .setfilterList(value);
                         },
                       ),
                       const SizedBox(height: 15),
@@ -976,7 +1150,8 @@ class _ManageCardsState extends State<ManageCards> {
                           ),
                         ),
                         Expanded(
-                          child: Consumer<CardProvider>(builder: (context, provider, _) {
+                          child: Consumer<CardProvider>(
+                              builder: (context, provider, _) {
                             return ListView.builder(
                               itemCount: provider.filteredList!.length,
                               cacheExtent: 50,
@@ -984,25 +1159,32 @@ class _ManageCardsState extends State<ManageCards> {
                                 return InkWell(
                                   onTap: () {
                                     FocusScope.of(context).unfocus();
-                                    provider.setSelectedCard(provider.filteredList![index]);
+                                    provider.setSelectedCard(
+                                        provider.filteredList![index]);
                                   },
                                   child: Container(
                                     // color: Colors.red,
-                                    padding: const EdgeInsets.symmetric(vertical: 10),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10),
                                     decoration: const BoxDecoration(
                                       border: Border(
                                         bottom: BorderSide(color: Colors.grey),
                                       ),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          provider.filteredList![index].nameOnCard.toString(),
+                                          provider
+                                              .filteredList![index].nameOnCard
+                                              .toString(),
                                           style: const TextStyle(fontSize: 14),
                                         ),
                                         Text(
-                                          provider.filteredList![index].cardNumber.toString(),
+                                          provider
+                                              .filteredList![index].cardNumber
+                                              .toString(),
                                           style: const TextStyle(fontSize: 14),
                                         ),
                                       ],
@@ -1102,7 +1284,8 @@ class CardProvider extends ChangeNotifier {
       ),
     );
     if (response.statusCode == 200) {
-      allCards = List<CreditCard>.from(response.data["credit-cards"]!.map((x) => CreditCard.fromJson(x)));
+      allCards = List<CreditCard>.from(
+          response.data["credit-cards"]!.map((x) => CreditCard.fromJson(x)));
       filteredList = allCards;
       notifyListeners();
       return {"status": true, "message": "Cards is loaded successfully"};
@@ -1117,9 +1300,15 @@ class CardProvider extends ChangeNotifier {
       notifyListeners();
     } else {
       filteredList = allCards!.where((element) {
-        if (element.cardNumber.toString().toLowerCase().contains(value.toLowerCase())) {
+        if (element.cardNumber
+            .toString()
+            .toLowerCase()
+            .contains(value.toLowerCase())) {
           return true;
-        } else if (element.nameOnCard.toString().toLowerCase().contains(value.toLowerCase())) {
+        } else if (element.nameOnCard
+            .toString()
+            .toLowerCase()
+            .contains(value.toLowerCase())) {
           return true;
         } else {
           return false;

@@ -73,7 +73,9 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       token = userToken;
     });
-    print("token == $token");
+    if (kDebugMode) {
+      print("token == $token");
+    }
     return userToken.toString();
   }
 
@@ -105,7 +107,8 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'APP',
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
+        appBarTheme:
+            const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
       ),
       onGenerateRoute: RouteGenerator.generateRoutes,
       initialRoute: '/',
@@ -140,7 +143,8 @@ class NavigationService extends NavigatorObserver {
   }
 
   dynamic pushReplacement(String route, {dynamic arguments}) {
-    return navigatorKey.currentState?.pushReplacementNamed(route, arguments: arguments);
+    return navigatorKey.currentState
+        ?.pushReplacementNamed(route, arguments: arguments);
   }
 
   dynamic popUntils(bool Function(Route<dynamic>) route, {dynamic arguments}) {

@@ -29,7 +29,8 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
   TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    ServiceProviderChat chatProvider = Provider.of<ServiceProviderChat>(context);
+    ServiceProviderChat chatProvider =
+        Provider.of<ServiceProviderChat>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -82,7 +83,8 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                         ? Image(
                             height: 60,
                             width: 60,
-                            image: NetworkImage("${AppUrl.webStorageUrl}/${chatProvider.activeChat['sender']['avatar']}"),
+                            image: NetworkImage(
+                                "${AppUrl.webStorageUrl}/${chatProvider.activeChat['sender']['avatar']}"),
                           )
                         : const Image(
                             height: 60,
@@ -125,8 +127,10 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
               reverse: true,
               child: Column(
                 children: [
-                  for (final message in chatProvider.activeChat['chat_messages']) ...[
-                    if (message['sender_id'] == chatProvider.activeChat['receiver_id']) ...[
+                  for (final message
+                      in chatProvider.activeChat['chat_messages']) ...[
+                    if (message['sender_id'] ==
+                        chatProvider.activeChat['receiver_id']) ...[
                       senderMassage(message),
                       const SizedBox(height: 20),
                     ] else ...[
@@ -143,7 +147,8 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
           Align(
             alignment: Alignment.bottomLeft,
             child: Container(
-              padding: const EdgeInsets.only(left: 8, bottom: 3, top: 3, right: 8),
+              padding:
+                  const EdgeInsets.only(left: 8, bottom: 3, top: 3, right: 8),
               height: 60,
               width: double.infinity,
               color: Colors.white,
@@ -197,11 +202,13 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                            borderSide: BorderSide(
+                                color: CustomColors.white, width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                            borderSide: BorderSide(
+                                color: CustomColors.white, width: 2.0),
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                         ),
@@ -215,27 +222,22 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                     onPressed: chatProvider.sendMessageReq
                         ? () {
                             if (messageController.text.isEmpty) {
-                              customErrorSnackBar(context, "please write a message");
+                              customErrorSnackBar(
+                                  context, "please write a message");
                               return;
                             }
-                            Provider.of<ServiceProviderChat>(context, listen: false).sendMessage(messageController.text);
+                            Provider.of<ServiceProviderChat>(context,
+                                    listen: false)
+                                .sendMessage(messageController.text);
                             messageController.clear();
                           }
                         : null,
                     icon: Icon(
                       Icons.send_outlined,
-                      color: chatProvider.sendMessageReq ? ServiceGiverColor.redButton : null,
+                      color: chatProvider.sendMessageReq
+                          ? ServiceGiverColor.redButton
+                          : null,
                     ),
-                    // backgroundColor: chatProvider.sendMessageReq ? CustomColors.primaryColor : Colors.grey.shade300,
-                    // child: Text(
-                    //   "Send",
-                    //   style: TextStyle(
-                    //     fontSize: 14,
-                    //     fontWeight: FontWeight.w400,
-                    //     fontFamily: "Rubik",
-                    //     color: CustomColors.white,
-                    //   ),
-                    // ),
                   ),
                 ],
               ),
@@ -281,7 +283,8 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()),
+                    DateFormat.jm().format(
+                        DateTime.parse(message['created_at']).toLocal()),
                     style: TextStyle(
                       fontSize: 13,
                       fontFamily: "Rubik",
@@ -355,7 +358,8 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
               ),
               const SizedBox(height: 05),
               Text(
-                DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()),
+                DateFormat.jm()
+                    .format(DateTime.parse(message['created_at']).toLocal()),
                 style: const TextStyle(
                   fontSize: 13,
                   fontFamily: "Rubik",

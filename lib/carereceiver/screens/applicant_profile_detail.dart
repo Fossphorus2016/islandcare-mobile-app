@@ -3,7 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:external_path/external_path.dart';
+// import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,7 +12,7 @@ import 'package:island_app/providers/chat_provider.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-import 'package:permission_handler/permission_handler.dart';
+// import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_breakpoints.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,7 +44,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
   // var fetchData;
 
   fetchApplicantProfileDetailModel() async {
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false)
+        .getUserToken();
 
     final response = await Dio().get(
       "${CareReceiverURl.serviceReceiverApplicantDetails}/${widget.jobTitle}/${widget.profileId}/${widget.jobId}",
@@ -73,9 +74,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
       //   // ratings = average;
       // });
       setState(() {
-        // id = id;
-        // isHiredd = hired;
-        futureapplicantProfileDetail = ApplicantDetailProfileModel.fromJson(response.data);
+        futureapplicantProfileDetail =
+            ApplicantDetailProfileModel.fromJson(response.data);
       });
     } else {
       throw Exception(
@@ -85,7 +85,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
   }
 
   acceptApplicant() async {
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false)
+        .getUserToken();
     var formData = FormData.fromMap(
       {
         "_method": "put",
@@ -126,7 +127,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
   }
 
   declineApplicant() async {
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false)
+        .getUserToken();
     var formData = FormData.fromMap(
       {
         "_method": "put",
@@ -165,68 +167,69 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
     }
   }
 
-  bool downloading = false;
-  String downloadProgress = '';
-  String downloadPdfPath = '';
-  var hostPath;
+  // bool downloading = false;
+  // String downloadProgress = '';
+  // String downloadPdfPath = '';
+  // var hostPath;
 
-  Future<bool> getStoragePermission() async {
-    return await Permission.storage.request().isGranted;
-  }
+  // Future<bool> getStoragePermission() async {
+  //   return await Permission.storage.request().isGranted;
+  // }
 
-  Future<String> getDownloadFolderPath() async {
-    return await ExternalPath.getExternalStoragePublicDirectory(
-      ExternalPath.DIRECTORY_DOWNLOADS,
-    );
-  }
+  // Future<String> getDownloadFolderPath() async {
+  //   return await ExternalPath.getExternalStoragePublicDirectory(
+  //     ExternalPath.DIRECTORY_DOWNLOADS,
+  //   );
+  // }
 
-  Future downloadFile(String downloadDirectory, String fileUrl) async {
-    Dio dio = Dio();
+  // Future downloadFile(String downloadDirectory, String fileUrl) async {
+  //   Dio dio = Dio();
 
-    var filname = fileUrl.split('.');
-    String savename = '${filname.first}${DateTime.now()}.${filname.last}';
-    var downloadingPdfPath = '$downloadDirectory/$savename';
-    try {
-      var fileRes = await dio.download(
-        "${AppUrl.webStorageUrl}/$fileUrl",
-        downloadingPdfPath,
-        onReceiveProgress: (rec, total) {
-          setState(() {
-            downloading = true;
-            downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
-          });
-        },
-      );
-      if (fileRes.statusCode == 200) {
-        customSuccesSnackBar(context, "file is downloaded successfully");
-      }
-    } catch (e) {
-      customErrorSnackBar(context, "something went wrong please try again later");
-    }
-    await Future.delayed(const Duration(seconds: 3));
+  //   var filname = fileUrl.split('.');
+  //   String savename = '${filname.first}${DateTime.now()}.${filname.last}';
+  //   var downloadingPdfPath = '$downloadDirectory/$savename';
+  //   try {
+  //     var fileRes = await dio.download(
+  //       "${AppUrl.webStorageUrl}/$fileUrl",
+  //       downloadingPdfPath,
+  //       onReceiveProgress: (rec, total) {
+  //         setState(() {
+  //           downloading = true;
+  //           downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
+  //         });
+  //       },
+  //     );
+  //     if (fileRes.statusCode == 200) {
+  //       customSuccesSnackBar(context, "file is downloaded successfully");
+  //     }
+  //   } catch (e) {
+  //     customErrorSnackBar(
+  //         context, "something went wrong please try again later");
+  //   }
+  //   await Future.delayed(const Duration(seconds: 3));
 
-    return downloadingPdfPath;
-  }
+  //   return downloadingPdfPath;
+  // }
 
-  // Download by user click
-  Future<void> doDownloadFile(fileUrl) async {
-    if (await getStoragePermission()) {
-      String downloadDirectory = await getDownloadFolderPath();
-      await downloadFile(downloadDirectory, fileUrl).then(
-        (value) {
-          displayPDF(value);
-        },
-      );
-    }
-  }
+  // // Download by user click
+  // Future<void> doDownloadFile(fileUrl) async {
+  //   if (await getStoragePermission()) {
+  //     String downloadDirectory = await getDownloadFolderPath();
+  //     await downloadFile(downloadDirectory, fileUrl).then(
+  //       (value) {
+  //         displayPDF(value);
+  //       },
+  //     );
+  //   }
+  // }
 
-  void displayPDF(String downloadDirectory) {
-    setState(() {
-      downloading = false;
-      downloadProgress = "COMPLETED";
-      downloadPdfPath = downloadDirectory;
-    });
-  }
+  // void displayPDF(String downloadDirectory) {
+  //   setState(() {
+  //     downloading = false;
+  //     downloadProgress = "COMPLETED";
+  //     downloadPdfPath = downloadDirectory;
+  //   });
+  // }
 
   // getUserToken() async {
   //   SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -357,7 +360,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                     Container(
                       height: 260,
                       width: MediaQuery.of(context).size.width,
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 20),
                       color: ServiceGiverColor.black,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -374,22 +378,28 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                     width: 130,
                                     height: 110,
                                     alignment: Alignment.center,
-                                    imageUrl: "${AppUrl.webStorageUrl}/${futureapplicantProfileDetail!.data!.avatar.toString()}",
+                                    imageUrl:
+                                        "${AppUrl.webStorageUrl}/${futureapplicantProfileDetail!.data!.avatar.toString()}",
                                   ),
                                 ),
                                 const SizedBox(width: 10),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      if (futureapplicantProfileDetail!.isVerified == true) ...[
+                                      if (futureapplicantProfileDetail!
+                                              .isVerified ==
+                                          true) ...[
                                         Align(
                                           alignment: Alignment.topRight,
                                           child: Container(
                                             width: 30,
                                             height: 30,
-                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(05)),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(05)),
                                             child: const Icon(
                                               Icons.verified_outlined,
                                               color: Colors.blue,
@@ -400,11 +410,17 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       ],
                                       Text(
                                         "${futureapplicantProfileDetail!.data!.firstName.toString()} ${futureapplicantProfileDetail!.data!.lastName.toString()}",
-                                        style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w700,
+                                            color: CustomColors.white),
                                       ),
                                       const SizedBox(width: 10),
                                       Text(
-                                        futureapplicantProfileDetail!.data!.email.toString(),
+                                        futureapplicantProfileDetail!
+                                            .data!.email
+                                            .toString(),
                                         style: TextStyle(
                                           fontSize: 12,
                                           fontFamily: "Rubik",
@@ -413,14 +429,24 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                         ),
                                       ),
                                       const SizedBox(width: 10),
-                                      if (futureapplicantProfileDetail!.data!.avgRating != null) ...[
+                                      if (futureapplicantProfileDetail!
+                                              .data!.avgRating !=
+                                          null) ...[
                                         RatingBar(
                                           ignoreGestures: true,
                                           itemCount: 5,
                                           itemSize: 20,
-                                          initialRating: futureapplicantProfileDetail!.data!.avgRating!['rating'] == null
-                                              ? 0.0
-                                              : double.parse(futureapplicantProfileDetail!.data!.avgRating!['rating'].toString()),
+                                          initialRating:
+                                              futureapplicantProfileDetail!
+                                                              .data!.avgRating![
+                                                          'rating'] ==
+                                                      null
+                                                  ? 0.0
+                                                  : double.parse(
+                                                      futureapplicantProfileDetail!
+                                                          .data!
+                                                          .avgRating!['rating']
+                                                          .toString()),
                                           minRating: 0,
                                           ratingWidget: RatingWidget(
                                             full: const Icon(
@@ -456,20 +482,26 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                 const SizedBox(width: 05),
                                 Expanded(
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 7, horizontal: 4),
                                     child: Flex(
                                       direction: Axis.horizontal,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         const Icon(
                                           Icons.location_on_outlined,
                                           size: 18,
                                           color: Colors.white,
                                         ),
-                                        if (futureapplicantProfileDetail!.data!.userdetail!.address != null) ...[
+                                        if (futureapplicantProfileDetail!
+                                                .data!.userdetail!.address !=
+                                            null) ...[
                                           Flexible(
                                             child: Text(
-                                              futureapplicantProfileDetail!.data!.userdetail!.address.toString(),
+                                              futureapplicantProfileDetail!
+                                                  .data!.userdetail!.address
+                                                  .toString(),
                                               maxLines: 6,
                                               overflow: TextOverflow.visible,
                                               style: const TextStyle(
@@ -506,11 +538,13 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
                                             "Profile Completion",
@@ -536,10 +570,17 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       LinearProgressIndicator(
                                         minHeight: 08,
                                         borderRadius: BorderRadius.circular(08),
-                                        value: futureapplicantProfileDetail!.percentage != null
-                                            ? double.parse(futureapplicantProfileDetail!.percentage.toString())
+                                        value: futureapplicantProfileDetail!
+                                                    .percentage !=
+                                                null
+                                            ? double.parse(
+                                                futureapplicantProfileDetail!
+                                                    .percentage
+                                                    .toString())
                                             : 00,
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                                Colors.pink.shade400),
                                       ),
                                     ],
                                   ),
@@ -552,24 +593,34 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                     ),
                     const SizedBox(height: 10),
                     // Bages
-                    if (futureapplicantProfileDetail!.data!.userdetailprovider!.badge != null) ...[
+                    if (futureapplicantProfileDetail!
+                            .data!.userdetailprovider!.badge !=
+                        null) ...[
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 18),
                         child: Container(
                           width: double.infinity,
                           padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(15)),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(15)),
                           child: Wrap(
                             spacing: 05,
                             runSpacing: 05,
                             crossAxisAlignment: WrapCrossAlignment.center,
                             alignment: WrapAlignment.center,
-                            children: List.generate(futureapplicantProfileDetail!.data!.userdetailprovider!.badge!.length, (index) {
+                            children: List.generate(
+                                futureapplicantProfileDetail!
+                                    .data!
+                                    .userdetailprovider!
+                                    .badge!
+                                    .length, (index) {
                               return ClipRRect(
                                 borderRadius: BorderRadius.circular(500),
                                 child: CachedNetworkImage(
                                   height: 50,
-                                  imageUrl: "${AppUrl.webStorageUrl}/${futureapplicantProfileDetail!.data!.userdetailprovider!.badge![index]}",
+                                  imageUrl:
+                                      "${AppUrl.webStorageUrl}/${futureapplicantProfileDetail!.data!.userdetailprovider!.badge![index]}",
                                 ),
                               );
                             }),
@@ -596,7 +647,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           const SizedBox(height: 10),
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: CustomColors.white,
@@ -636,7 +688,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           // Gender
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: CustomColors.white,
@@ -662,11 +715,22 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                     const SizedBox(
                                       height: 8,
                                     ),
-                                    futureapplicantProfileDetail!.data!.userdetail!.gender.toString() != "null"
+                                    futureapplicantProfileDetail!
+                                                .data!.userdetail!.gender
+                                                .toString() !=
+                                            "null"
                                         ? Text(
-                                            (futureapplicantProfileDetail!.data!.userdetail!.gender.toString() == "1")
+                                            (futureapplicantProfileDetail!.data!
+                                                        .userdetail!.gender
+                                                        .toString() ==
+                                                    "1")
                                                 ? "Male"
-                                                : (futureapplicantProfileDetail!.data!.userdetail!.gender.toString() == "2")
+                                                : (futureapplicantProfileDetail!
+                                                            .data!
+                                                            .userdetail!
+                                                            .gender
+                                                            .toString() ==
+                                                        "2")
                                                     ? "Female"
                                                     : "Not Available",
                                             style: TextStyle(
@@ -693,7 +757,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           // Parish
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: CustomColors.white,
@@ -720,11 +785,22 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       height: 8,
                                     ),
                                     Text(
-                                      futureapplicantProfileDetail!.data!.userdetail!.area.toString() == "0"
+                                      futureapplicantProfileDetail!
+                                                  .data!.userdetail!.area
+                                                  .toString() ==
+                                              "0"
                                           ? "East"
-                                          : futureapplicantProfileDetail!.data!.userdetail!.area.toString() == "1"
+                                          : futureapplicantProfileDetail!
+                                                      .data!.userdetail!.area
+                                                      .toString() ==
+                                                  "1"
                                               ? "Central"
-                                              : futureapplicantProfileDetail!.data!.userdetail!.area.toString() == "2"
+                                              : futureapplicantProfileDetail!
+                                                          .data!
+                                                          .userdetail!
+                                                          .area
+                                                          .toString() ==
+                                                      "2"
                                                   ? "West"
                                                   : "Not Available",
                                       style: TextStyle(
@@ -741,7 +817,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           // Services
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: CustomColors.white,
@@ -768,9 +845,14 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       height: 8,
                                     ),
                                     Text(
-                                      futureapplicantProfileDetail!.data!.userdetail!.service!.name.toString() == "null"
+                                      futureapplicantProfileDetail!.data!
+                                                  .userdetail!.service!.name
+                                                  .toString() ==
+                                              "null"
                                           ? "Not Available"
-                                          : futureapplicantProfileDetail!.data!.userdetail!.service!.name.toString(),
+                                          : futureapplicantProfileDetail!
+                                              .data!.userdetail!.service!.name
+                                              .toString(),
                                       style: TextStyle(
                                         color: CustomColors.hintText,
                                         fontSize: 16,
@@ -785,7 +867,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           //  Experience
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: CustomColors.white,
@@ -797,7 +880,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
@@ -811,10 +895,15 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       ),
                                       const SizedBox(height: 8),
                                       Text(
-                                        futureapplicantProfileDetail!.data!.userdetailprovider!.experience.toString(),
+                                        futureapplicantProfileDetail!.data!
+                                            .userdetailprovider!.experience
+                                            .toString(),
                                         softWrap: true,
-                                        style:
-                                            TextStyle(color: CustomColors.hintText, fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w200),
+                                        style: TextStyle(
+                                            color: CustomColors.hintText,
+                                            fontSize: 16,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w200),
                                       ),
                                     ],
                                   ),
@@ -824,7 +913,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           // Hourly
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: CustomColors.white,
@@ -836,7 +926,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
@@ -849,7 +940,12 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                         ),
                                       ),
                                       const SizedBox(height: 8),
-                                      futureapplicantProfileDetail!.data!.userdetailprovider!.hourlyRate.toString() != "null"
+                                      futureapplicantProfileDetail!
+                                                  .data!
+                                                  .userdetailprovider!
+                                                  .hourlyRate
+                                                  .toString() !=
+                                              "null"
                                           ? Text(
                                               "\$ ${futureapplicantProfileDetail!.data!.userdetailprovider!.hourlyRate.toString()}",
                                               softWrap: true,
@@ -878,7 +974,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           // Additional Service
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: CustomColors.white,
@@ -890,7 +987,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
@@ -905,7 +1003,10 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       const SizedBox(
                                         height: 8,
                                       ),
-                                      futureapplicantProfileDetail!.data!.userdetailprovider!.keywords.toString() == "null"
+                                      futureapplicantProfileDetail!.data!
+                                                  .userdetailprovider!.keywords
+                                                  .toString() ==
+                                              "null"
                                           ? Text(
                                               "Not Available",
                                               softWrap: true,
@@ -917,9 +1018,18 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                               ),
                                             )
                                           : Text(
-                                              futureapplicantProfileDetail!.data!.userdetailprovider!.keywords.toString() == "null"
+                                              futureapplicantProfileDetail!
+                                                          .data!
+                                                          .userdetailprovider!
+                                                          .keywords
+                                                          .toString() ==
+                                                      "null"
                                                   ? "Required"
-                                                  : futureapplicantProfileDetail!.data!.userdetailprovider!.keywords.toString(),
+                                                  : futureapplicantProfileDetail!
+                                                      .data!
+                                                      .userdetailprovider!
+                                                      .keywords
+                                                      .toString(),
                                               softWrap: true,
                                               style: TextStyle(
                                                 color: CustomColors.hintText,
@@ -936,7 +1046,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           // Education
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: CustomColors.white,
@@ -948,7 +1059,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
@@ -963,7 +1075,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       const SizedBox(
                                         height: 8,
                                       ),
-                                      if (futureapplicantProfileDetail!.data!.educations!.isEmpty) ...[
+                                      if (futureapplicantProfileDetail!
+                                          .data!.educations!.isEmpty) ...[
                                         Text(
                                           "Not Available",
                                           softWrap: true,
@@ -978,28 +1091,37 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       ListView.builder(
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        itemCount: futureapplicantProfileDetail!.data!.educations!.length,
-                                        itemBuilder: (BuildContext context, int index) {
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: futureapplicantProfileDetail!
+                                            .data!.educations!.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
                                           return Container(
-                                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-                                            margin: const EdgeInsets.symmetric(vertical: 5),
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 10, horizontal: 5),
+                                            margin: const EdgeInsets.symmetric(
+                                                vertical: 5),
                                             decoration: BoxDecoration(
                                               border: Border.all(
                                                 color: CustomColors.paraColor,
                                                 width: 0.5,
                                               ),
-                                              borderRadius: BorderRadius.circular(10),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
                                             child: Column(
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               children: [
                                                 Text(
                                                   "Institue Name: ${futureapplicantProfileDetail!.data!.educations![index].name}",
                                                   softWrap: true,
                                                   style: TextStyle(
-                                                    color: CustomColors.hintText,
+                                                    color:
+                                                        CustomColors.hintText,
                                                     fontSize: 14,
                                                     fontFamily: "Rubik",
                                                     fontWeight: FontWeight.w200,
@@ -1012,7 +1134,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                                   "Degree/Certification: ${futureapplicantProfileDetail!.data!.educations![index].major}",
                                                   softWrap: true,
                                                   style: TextStyle(
-                                                    color: CustomColors.hintText,
+                                                    color:
+                                                        CustomColors.hintText,
                                                     fontSize: 12,
                                                     fontFamily: "Rubik",
                                                     fontWeight: FontWeight.w200,
@@ -1023,33 +1146,46 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                                   "From: ${futureapplicantProfileDetail!.data!.educations![index].from}",
                                                   softWrap: true,
                                                   style: TextStyle(
-                                                    color: CustomColors.hintText,
+                                                    color:
+                                                        CustomColors.hintText,
                                                     fontSize: 12,
                                                     fontFamily: "Rubik",
                                                     fontWeight: FontWeight.w200,
                                                   ),
                                                 ),
-                                                futureapplicantProfileDetail!.data!.educations![index].to == ""
+                                                futureapplicantProfileDetail!
+                                                            .data!
+                                                            .educations![index]
+                                                            .to ==
+                                                        ""
                                                     ? Text(
                                                         "Time Period: Currently Studying",
                                                         softWrap: true,
                                                         style: TextStyle(
                                                           height: 2,
-                                                          color: CustomColors.hintText,
+                                                          color: CustomColors
+                                                              .hintText,
                                                           fontSize: 12,
                                                           fontFamily: "Rubik",
-                                                          fontWeight: FontWeight.w200,
+                                                          fontWeight:
+                                                              FontWeight.w200,
                                                         ),
                                                       )
                                                     : Text(
-                                                        futureapplicantProfileDetail!.data!.educations![index].to.toString(),
+                                                        futureapplicantProfileDetail!
+                                                            .data!
+                                                            .educations![index]
+                                                            .to
+                                                            .toString(),
                                                         softWrap: true,
                                                         style: TextStyle(
                                                           height: 0,
-                                                          color: CustomColors.hintText,
+                                                          color: CustomColors
+                                                              .hintText,
                                                           fontSize: 12,
                                                           fontFamily: "Rubik",
-                                                          fontWeight: FontWeight.w200,
+                                                          fontWeight:
+                                                              FontWeight.w200,
                                                         ),
                                                       ),
                                               ],
@@ -1065,7 +1201,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           // User Information
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: CustomColors.white,
@@ -1077,7 +1214,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
@@ -1092,7 +1230,10 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       const SizedBox(
                                         height: 8,
                                       ),
-                                      futureapplicantProfileDetail!.data!.userdetail!.userInfo.toString() == "null"
+                                      futureapplicantProfileDetail!
+                                                  .data!.userdetail!.userInfo
+                                                  .toString() ==
+                                              "null"
                                           ? Text(
                                               "Not Available",
                                               softWrap: true,
@@ -1104,9 +1245,18 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                               ),
                                             )
                                           : Text(
-                                              futureapplicantProfileDetail!.data!.userdetail!.userInfo.toString() == "null"
+                                              futureapplicantProfileDetail!
+                                                          .data!
+                                                          .userdetail!
+                                                          .userInfo
+                                                          .toString() ==
+                                                      "null"
                                                   ? "Required"
-                                                  : futureapplicantProfileDetail!.data!.userdetail!.userInfo.toString(),
+                                                  : futureapplicantProfileDetail!
+                                                      .data!
+                                                      .userdetail!
+                                                      .userInfo
+                                                      .toString(),
                                               softWrap: true,
                                               style: TextStyle(
                                                 color: CustomColors.hintText,
@@ -1123,7 +1273,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           // Availability
                           Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 17, vertical: 10),
                             margin: const EdgeInsets.only(bottom: 15),
                             decoration: BoxDecoration(
                               color: CustomColors.white,
@@ -1135,7 +1286,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                               children: [
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
@@ -1150,7 +1302,12 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       const SizedBox(
                                         height: 8,
                                       ),
-                                      futureapplicantProfileDetail!.data!.userdetailprovider!.availability.toString() == "null"
+                                      futureapplicantProfileDetail!
+                                                  .data!
+                                                  .userdetailprovider!
+                                                  .availability
+                                                  .toString() ==
+                                              "null"
                                           ? Text(
                                               "Not Available",
                                               softWrap: true,
@@ -1162,9 +1319,18 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                               ),
                                             )
                                           : Text(
-                                              futureapplicantProfileDetail!.data!.userdetailprovider!.availability.toString() == "null"
+                                              futureapplicantProfileDetail!
+                                                          .data!
+                                                          .userdetailprovider!
+                                                          .availability
+                                                          .toString() ==
+                                                      "null"
                                                   ? "Required"
-                                                  : futureapplicantProfileDetail!.data!.userdetailprovider!.availability.toString(),
+                                                  : futureapplicantProfileDetail!
+                                                      .data!
+                                                      .userdetailprovider!
+                                                      .availability
+                                                      .toString(),
                                               softWrap: true,
                                               style: TextStyle(
                                                 color: CustomColors.hintText,
@@ -1190,7 +1356,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           ),
                           const SizedBox(height: 20),
                           Container(
-                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 15),
                             decoration: BoxDecoration(
                               color: ServiceGiverColor.black,
                               border: Border(
@@ -1213,7 +1380,10 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                if (ResponsiveBreakpoints.of(context)
+                                        .isTablet ||
+                                    ResponsiveBreakpoints.of(context)
+                                        .isDesktop) ...[
                                   Text(
                                     "Rating",
                                     style: TextStyle(
@@ -1236,26 +1406,35 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                               ],
                             ),
                           ),
-                          if (futureapplicantProfileDetail!.data!.ratings != null && futureapplicantProfileDetail!.data!.ratings!.isNotEmpty) ...[
+                          if (futureapplicantProfileDetail!.data!.ratings !=
+                                  null &&
+                              futureapplicantProfileDetail!
+                                  .data!.ratings!.isNotEmpty) ...[
                             ListView.builder(
-                              itemCount: futureapplicantProfileDetail!.data!.ratings!.length,
+                              itemCount: futureapplicantProfileDetail!
+                                  .data!.ratings!.length,
                               shrinkWrap: true,
                               padding: const EdgeInsets.only(top: 16),
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return Container(
                                   height: 60,
-                                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 08),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 08),
                                   margin: const EdgeInsets.only(bottom: 10),
                                   decoration: BoxDecoration(
-                                    border: Border.all(color: ServiceGiverColor.black),
+                                    border: Border.all(
+                                        color: ServiceGiverColor.black),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
-                                      if (ResponsiveBreakpoints.of(context).isMobile) ...[
+                                      if (ResponsiveBreakpoints.of(context)
+                                          .isMobile) ...[
                                         Expanded(
                                           child: Text(
                                             '${futureapplicantProfileDetail!.data!.ratings![index].receiverRating!.firstName} ${futureapplicantProfileDetail!.data!.ratings![index].receiverRating!.lastName}',
@@ -1270,16 +1449,23 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ],
-                                      if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                      if (ResponsiveBreakpoints.of(context)
+                                              .isTablet ||
+                                          ResponsiveBreakpoints.of(context)
+                                              .isDesktop) ...[
                                         RatingBar.builder(
-                                          initialRating: futureapplicantProfileDetail!.data!.ratings![index].rating!.toDouble(),
+                                          initialRating:
+                                              futureapplicantProfileDetail!
+                                                  .data!.ratings![index].rating!
+                                                  .toDouble(),
                                           minRating: 1,
                                           direction: Axis.horizontal,
                                           allowHalfRating: true,
                                           ignoreGestures: false,
                                           itemSize: 15,
                                           itemCount: 5,
-                                          itemBuilder: (context, _) => const Icon(
+                                          itemBuilder: (context, _) =>
+                                              const Icon(
                                             Icons.star,
                                             color: Colors.amber,
                                           ),
@@ -1299,30 +1485,47 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   RatingBar.builder(
-                                                    initialRating: futureapplicantProfileDetail!.data!.ratings![index].rating!.toDouble(),
+                                                    initialRating:
+                                                        futureapplicantProfileDetail!
+                                                            .data!
+                                                            .ratings![index]
+                                                            .rating!
+                                                            .toDouble(),
                                                     minRating: 1,
                                                     direction: Axis.horizontal,
                                                     allowHalfRating: true,
                                                     ignoreGestures: false,
                                                     itemSize: 24,
                                                     itemCount: 5,
-                                                    itemBuilder: (context, _) => const Icon(
+                                                    itemBuilder: (context, _) =>
+                                                        const Icon(
                                                       Icons.star,
                                                       color: Colors.amber,
                                                     ),
                                                     onRatingUpdate: (rating) {},
                                                   ),
                                                   Text(
-                                                    futureapplicantProfileDetail!.data!.ratings![index].comment.toString() == "null"
+                                                    futureapplicantProfileDetail!
+                                                                .data!
+                                                                .ratings![index]
+                                                                .comment
+                                                                .toString() ==
+                                                            "null"
                                                         ? "Not Available"
-                                                        : futureapplicantProfileDetail!.data!.ratings![index].comment.toString(),
+                                                        : futureapplicantProfileDetail!
+                                                            .data!
+                                                            .ratings![index]
+                                                            .comment
+                                                            .toString(),
                                                     maxLines: 20,
                                                     softWrap: true,
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w400,
-                                                      color: CustomColors.primaryText,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: CustomColors
+                                                          .primaryText,
                                                     ),
                                                   ),
                                                 ],
@@ -1353,72 +1556,97 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  acceptApplicant();
-                                  setState(() {
-                                    isHiredd = 1;
-                                  });
-                                },
-                                child: Container(
-                                  height: 40,
-                                  width: MediaQuery.of(context).size.width * .4,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6),
-                                    color: futureapplicantProfileDetail!.isHired == 0
-                                        ? ServiceRecieverColor.redButtonLigth
-                                        : ServiceRecieverColor.redButton,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "Accept Applicant",
-                                      style: TextStyle(
-                                        color: CustomColors.white,
-                                        fontFamily: "Rubik",
-                                        fontWeight: FontWeight.w500,
+                          if (futureapplicantProfileDetail!.isHired == 0) ...[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    acceptApplicant();
+                                    setState(() {
+                                      isHiredd = 1;
+                                    });
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width:
+                                        MediaQuery.of(context).size.width * .4,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: ServiceRecieverColor.redButton,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Accept Applicant",
+                                        style: TextStyle(
+                                          color: CustomColors.white,
+                                          fontFamily: "Rubik",
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  declineApplicant();
-                                  setState(() {
-                                    isHiredd = 1;
-                                  });
-                                },
-                                child: Container(
-                                  height: 40,
-                                  width: MediaQuery.of(context).size.width * .4,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(6),
-                                    color: CustomColors.loginBorder,
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "Decline Applicant",
-                                      style: TextStyle(
-                                        color: CustomColors.white,
-                                        fontFamily: "Rubik",
-                                        fontWeight: FontWeight.w500,
+                                GestureDetector(
+                                  onTap: () {
+                                    declineApplicant();
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width:
+                                        MediaQuery.of(context).size.width * .4,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: CustomColors.loginBorder,
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        "Decline Applicant",
+                                        style: TextStyle(
+                                          color: CustomColors.white,
+                                          fontFamily: "Rubik",
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ),
+                              ],
+                            ),
+                          ] else ...[
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                height: 40,
+                                width: MediaQuery.of(context).size.width,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: ServiceRecieverColor.redButtonLigth,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    "Already Hired",
+                                    style: TextStyle(
+                                      color: CustomColors.white,
+                                      fontFamily: "Rubik",
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
+                            ),
+                          ],
+                          const SizedBox(height: 10),
                           GestureDetector(
                             onTap: () async {
-                              await Provider.of<ChatProvider>(context, listen: false).fetchMessages();
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatDetailPage()));
+                              await Provider.of<ChatProvider>(context,
+                                      listen: false)
+                                  .fetchMessages();
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const ChatDetailPage()));
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width,
