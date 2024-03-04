@@ -319,11 +319,13 @@ class _JobApplicantsState extends State<JobApplicants> {
                                             ),
                                           ),
                                           onPressed: () {
+                                            Navigator.pop(context);
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => JobPaymentsScreen(
                                                   jobId: jobData.id.toString(),
+                                                  jobName: jobData.jobTitle.toString(),
                                                   amount: totalamount.toString(),
                                                 ),
                                               ),

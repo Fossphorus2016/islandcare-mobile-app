@@ -115,9 +115,7 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                 // Package Card Basic
 
                 for (int i = 0; i < allpackages.length; i++) ...[
-                  if (userSubsDetail != null &&
-                      userSubsDetail.subscriptionId.toString() == allpackages[i]['id'].toString() &&
-                      userSubsDetail.isActive == 1) ...[
+                  if (userSubsDetail != null && userSubsDetail.subscriptionId.toString() == allpackages[i]['id'].toString() && userSubsDetail.isActive == 1) ...[
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       decoration: BoxDecoration(
@@ -126,14 +124,8 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                             end: Alignment.center,
                             colors: [const Color(0xff90EAB4).withOpacity(0.1), const Color(0xff6BD294).withOpacity(0.8)],
                           ),
-                          boxShadow: const [
-                            BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))
-                          ],
-                          borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(10),
-                              bottomRight: Radius.circular(10),
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10))),
+                          boxShadow: const [BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))],
+                          borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                       width: MediaQuery.of(context).size.width > 320 ? 320 : MediaQuery.of(context).size.width,
                       height: 170,
                       child: Column(
@@ -292,14 +284,8 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                               end: Alignment.center,
                               colors: [const Color(0xff90EAB4).withOpacity(0.1), const Color(0xff6BD294).withOpacity(0.8)],
                             ),
-                            boxShadow: const [
-                              BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))
-                            ],
-                            borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10),
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10))),
+                            boxShadow: const [BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))],
+                            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                         width: MediaQuery.of(context).size.width * .90,
                         height: 165,
                         child: Column(
@@ -424,41 +410,103 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
               children: [
                 if (allCards != null) ...[
                   for (int j = 0; j < allCards.length; j++) ...[
-                    RadioListTile(
-                      groupValue: selectedCard,
-                      activeColor: ServiceRecieverColor.primaryColor.withOpacity(0.8),
-                      value: allCards[j],
-                      onChanged: (value) {
+                    // RadioListTile(
+                    //   groupValue: selectedCard,
+                    //   activeColor: ServiceRecieverColor.primaryColor.withOpacity(0.8),
+                    //   value: allCards[j],
+                    //   onChanged: (value) {
+                    //     setState(() {
+                    //       newCard = false;
+                    //       selectedCard = value;
+                    //     });
+                    //     // Provider.of<SubscriptionProvider>(context, listen: false).setSelectCard(value);
+                    //   },
+                    //   title: Text(
+                    //     "Select Card: ${allCards[j].cardNumber}",
+                    //     style: const TextStyle(color: Colors.black),
+                    //   ),
+                    // ),
+                    InkWell(
+                      onTap: () {
                         setState(() {
                           newCard = false;
-                          selectedCard = value;
+                          selectedCard = allCards[j];
                         });
-                        // Provider.of<SubscriptionProvider>(context, listen: false).setSelectCard(value);
                       },
-                      title: Text(
-                        "Select Card: ${allCards[j].cardNumber}",
-                        style: const TextStyle(color: Colors.black),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: selectedCard != null && selectedCard!.id == allCards[j].id ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
+                              width: 0.5,
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Card Name: ${allCards[j].nameOnCard}",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                              Text(
+                                "Card Number: ${allCards[j].cardNumber}",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    if (selectedCard != null && selectedCard!.id == allCards[j].id) ...[
-                      cardFormWidget(context),
-                    ],
+                  ],
+                  if (selectedCard != null) ...[
+                    cardFormWidget(context),
                   ],
                 ],
-                ListTile(
-                  title: const Text("Add New Card"),
-                  contentPadding: const EdgeInsets.only(left: 25),
-                  selected: newCard,
+                InkWell(
                   onTap: () {
                     setState(() {
-                      selectedCard = null;
                       newCard = true;
+                      selectedCard = null;
                     });
                   },
-                  leading: Icon(
-                    newCard ? Icons.radio_button_checked_outlined : Icons.radio_button_off_outlined,
-                    size: 22,
-                    color: newCard ? ServiceRecieverColor.primaryColor.withOpacity(0.8) : Colors.grey.shade600,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 60,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: ServiceRecieverColor.redButton,
+                          width: 0.5,
+                        ),
+                      ),
+                      child: const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Add New Card",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 if (newCard) ...[
@@ -1064,77 +1112,6 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
               ),
             ),
             const SizedBox(height: 10),
-            // Card ZIP CODE
-            // Container(
-            //   alignment: Alignment.topLeft,
-            //   child: Text(
-            //     "ZIP CODE",
-            //     style: TextStyle(
-            //       color: CustomColors.primaryColor,
-            //       fontFamily: "Rubik",
-            //       fontSize: 14,
-            //       fontWeight: FontWeight.w400,
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(height: 5),
-            // Container(
-            //   decoration: BoxDecoration(
-            //     borderRadius: const BorderRadius.only(
-            //       topLeft: Radius.circular(6),
-            //       bottomLeft: Radius.circular(6),
-            //       bottomRight: Radius.circular(6),
-            //       topRight: Radius.circular(6),
-            //     ),
-            //     color: CustomColors.white,
-            //   ),
-            //   alignment: Alignment.center,
-            //   width: MediaQuery.of(context).size.width,
-            //   // height: 40,
-            //   child: TextFormField(
-            //     controller: zipCodeController,
-            //     textInputAction: TextInputAction.next,
-            //     validator: (value) {
-            //       if (value == null || value.isEmpty || value.length < 4) {
-            //         return "Please Enter Zip code";
-            //       }
-            //       return null;
-            //     },
-            //     style: const TextStyle(
-            //       fontSize: 14,
-            //       fontFamily: "Rubik",
-            //       fontWeight: FontWeight.w400,
-            //     ),
-            //     textAlignVertical: TextAlignVertical.bottom,
-            //     maxLines: 1,
-            //     decoration: InputDecoration(
-            //       hintText: "XXXXXX",
-            //       fillColor: CustomColors.white,
-            //       focusColor: CustomColors.white,
-            //       hoverColor: CustomColors.white,
-            //       hintStyle: TextStyle(
-            //         color: CustomColors.paymentHint,
-            //         fontFamily: "Poppins",
-            //         fontSize: 14,
-            //         fontWeight: FontWeight.w400,
-            //       ),
-            //       filled: true,
-            //       border: OutlineInputBorder(
-            //         borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
-            //         borderRadius: BorderRadius.circular(4),
-            //       ),
-            //       focusedBorder: OutlineInputBorder(
-            //         borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
-            //         borderRadius: BorderRadius.circular(4.0),
-            //       ),
-            //       enabledBorder: OutlineInputBorder(
-            //         borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.7),
-            //         borderRadius: BorderRadius.circular(4.0),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // const SizedBox(height: 25),
             CheckboxListTile(
               value: saveFrom,
               activeColor: ServiceRecieverColor.primaryColor,

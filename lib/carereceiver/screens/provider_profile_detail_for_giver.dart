@@ -133,7 +133,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
 
   @override
   Widget build(BuildContext context) {
-    print("${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}");
     return Scaffold(
       backgroundColor: CustomColors.loginBg,
       appBar: AppBar(
@@ -258,9 +257,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                             ignoreGestures: true,
                                             itemCount: 5,
                                             itemSize: 20,
-                                            initialRating: futureReceiverDashboardDetail!.data!.avgRating!['rating'] == null
-                                                ? 0.0
-                                                : double.parse(futureReceiverDashboardDetail!.data!.avgRating!['rating'].toString()),
+                                            initialRating: futureReceiverDashboardDetail!.data!.avgRating!['rating'] == null ? 0.0 : double.parse(futureReceiverDashboardDetail!.data!.avgRating!['rating'].toString()),
                                             minRating: 0,
                                             ratingWidget: RatingWidget(
                                               full: const Icon(
@@ -376,9 +373,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         LinearProgressIndicator(
                                           minHeight: 08,
                                           borderRadius: BorderRadius.circular(08),
-                                          value: futureReceiverDashboardDetail!.percentage != null
-                                              ? double.parse(futureReceiverDashboardDetail!.percentage.toString())
-                                              : 00,
+                                          value: futureReceiverDashboardDetail!.percentage != null ? double.parse(futureReceiverDashboardDetail!.percentage.toString()) : 00,
                                           color: Colors.white,
                                           valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
                                         ),
@@ -609,9 +604,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         height: 8,
                                       ),
                                       Text(
-                                        futureReceiverDashboardDetail!.data!.userdetail!.service!.name.toString() == "null"
-                                            ? "Not Available"
-                                            : futureReceiverDashboardDetail!.data!.userdetail!.service!.name.toString(),
+                                        futureReceiverDashboardDetail!.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : futureReceiverDashboardDetail!.data!.userdetail!.service!.name.toString(),
                                         style: TextStyle(
                                           color: CustomColors.hintText,
                                           fontSize: 16,
@@ -654,8 +647,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         Text(
                                           futureReceiverDashboardDetail!.data!.userdetailprovider!.experience.toString(),
                                           softWrap: true,
-                                          style:
-                                              TextStyle(color: CustomColors.hintText, fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w200),
+                                          style: TextStyle(color: CustomColors.hintText, fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w200),
                                         ),
                                       ],
                                     ),
@@ -758,9 +750,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                 ),
                                               )
                                             : Text(
-                                                futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords.toString() == "null"
-                                                    ? "Required"
-                                                    : futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords.toString(),
+                                                futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords.toString(),
                                                 softWrap: true,
                                                 style: TextStyle(
                                                   color: CustomColors.hintText,
@@ -956,9 +946,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                 ),
                                               )
                                             : Text(
-                                                futureReceiverDashboardDetail!.data!.userdetail!.userInfo.toString() == "null"
-                                                    ? "Required"
-                                                    : futureReceiverDashboardDetail!.data!.userdetail!.userInfo.toString(),
+                                                futureReceiverDashboardDetail!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : futureReceiverDashboardDetail!.data!.userdetail!.userInfo.toString(),
                                                 softWrap: true,
                                                 style: TextStyle(
                                                   color: CustomColors.hintText,
@@ -1014,9 +1002,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                 ),
                                               )
                                             : Text(
-                                                futureReceiverDashboardDetail!.data!.userdetailprovider!.availability.toString() == "null"
-                                                    ? "Required"
-                                                    : futureReceiverDashboardDetail!.data!.userdetailprovider!.availability.toString(),
+                                                futureReceiverDashboardDetail!.data!.userdetailprovider!.availability.toString() == "null" ? "Required" : futureReceiverDashboardDetail!.data!.userdetailprovider!.availability.toString(),
                                                 softWrap: true,
                                                 style: TextStyle(
                                                   color: CustomColors.hintText,
@@ -1143,9 +1129,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                             showDialog(
                                               context: context,
                                               builder: (context) => AlertDialog(
-                                                title: Center(
-                                                    child: Text(
-                                                        '${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}')),
+                                                title: Center(child: Text('${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}')),
                                                 alignment: Alignment.center,
                                                 content: Column(
                                                   mainAxisSize: MainAxisSize.min,
@@ -1165,9 +1149,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                       onRatingUpdate: (rating) {},
                                                     ),
                                                     Text(
-                                                      futureReceiverDashboardDetail!.data!.ratings![index].comment.toString() == "null"
-                                                          ? "Not Available"
-                                                          : futureReceiverDashboardDetail!.data!.ratings![index].comment.toString(),
+                                                      futureReceiverDashboardDetail!.data!.ratings![index].comment.toString() == "null" ? "Not Available" : futureReceiverDashboardDetail!.data!.ratings![index].comment.toString(),
                                                       maxLines: 20,
                                                       softWrap: true,
                                                       style: TextStyle(

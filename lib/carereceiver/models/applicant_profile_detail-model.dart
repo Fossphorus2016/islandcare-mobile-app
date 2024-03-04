@@ -1,13 +1,11 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, prefer_null_aware_operators
 
 import 'dart:convert';
 import 'package:island_app/models/service_model.dart';
 
-ApplicantDetailProfileModel applicantDetailProfileModelFromJson(String str) =>
-    ApplicantDetailProfileModel.fromJson(json.decode(str));
+ApplicantDetailProfileModel applicantDetailProfileModelFromJson(String str) => ApplicantDetailProfileModel.fromJson(json.decode(str));
 
-String applicantDetailProfileModelToJson(ApplicantDetailProfileModel data) =>
-    json.encode(data.toJson());
+String applicantDetailProfileModelToJson(ApplicantDetailProfileModel data) => json.encode(data.toJson());
 
 class ApplicantDetailProfileModel {
   int? isHired;
@@ -24,8 +22,7 @@ class ApplicantDetailProfileModel {
     this.percentage,
   });
 
-  factory ApplicantDetailProfileModel.fromJson(Map<String, dynamic> json) =>
-      ApplicantDetailProfileModel(
+  factory ApplicantDetailProfileModel.fromJson(Map<String, dynamic> json) => ApplicantDetailProfileModel(
         isHired: json["application_status"],
         data: json["data"] == null ? null : Datum.fromJson(json["data"]),
         jobTitle: json["job_title"],
@@ -99,23 +96,11 @@ class Datum {
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
         deletedAt: json["deleted_at"],
-        ratings: json["ratings"] == null
-            ? []
-            : List<Rating>.from(
-                json["ratings"]!.map((x) => Rating.fromJson(x))),
-        providerverification: json["providerverification"] == null
-            ? null
-            : Providerverification.fromJson(json["providerverification"]),
-        userdetailprovider: json["userdetailprovider"] == null
-            ? null
-            : Userdetailprovider.fromJson(json["userdetailprovider"]),
-        educations: json["educations"] == null
-            ? []
-            : List<Education>.from(
-                json["educations"]!.map((x) => Education.fromJson(x))),
-        userdetail: json["userdetail"] == null
-            ? null
-            : Userdetail.fromJson(json["userdetail"]),
+        ratings: json["ratings"] == null ? [] : List<Rating>.from(json["ratings"]!.map((x) => Rating.fromJson(x))),
+        providerverification: json["providerverification"] == null ? null : Providerverification.fromJson(json["providerverification"]),
+        userdetailprovider: json["userdetailprovider"] == null ? null : Userdetailprovider.fromJson(json["userdetailprovider"]),
+        educations: json["educations"] == null ? [] : List<Education>.from(json["educations"]!.map((x) => Education.fromJson(x))),
+        userdetail: json["userdetail"] == null ? null : Userdetail.fromJson(json["userdetail"]),
         avgRating: json["avg_rating"].isEmpty ? null : json["avg_rating"][0],
       );
 
@@ -133,14 +118,10 @@ class Datum {
         "created_at": createdAt,
         "updated_at": updatedAt,
         "deleted_at": deletedAt,
-        "ratings": ratings == null
-            ? []
-            : List<dynamic>.from(ratings!.map((x) => x.toJson())),
+        "ratings": ratings == null ? [] : List<dynamic>.from(ratings!.map((x) => x.toJson())),
         "providerverification": providerverification?.toJson(),
         "userdetailprovider": userdetailprovider?.toJson(),
-        "educations": educations == null
-            ? []
-            : List<dynamic>.from(educations!.map((x) => x.toJson())),
+        "educations": educations == null ? [] : List<dynamic>.from(educations!.map((x) => x.toJson())),
         "userdetail": userdetail?.toJson(),
         "avgRating": avgRating,
       };
@@ -260,36 +241,25 @@ class Providerverification {
   String? createdAt;
   String? updatedAt;
 
-  factory Providerverification.fromJson(Map<String, dynamic> json) =>
-      Providerverification(
+  factory Providerverification.fromJson(Map<String, dynamic> json) => Providerverification(
         id: json["id"],
         userId: json["user_id"],
         validDriverLicense: json["valid_driver_license"],
         validDriverLicenseVerify: json["valid_driver_license_verify"],
         scarsAwarenessCertification: json["scars_awareness_certification"],
-        scarsAwarenessCertificationVerify:
-            json["scars_awareness_certification_verify"],
-        redCrossBabysittingCertification:
-            json["red_cross_babysitting_certification"],
-        redCrossBabysittingCertificationVerify:
-            json["red_cross_babysitting_certification_verify"],
+        scarsAwarenessCertificationVerify: json["scars_awareness_certification_verify"],
+        redCrossBabysittingCertification: json["red_cross_babysitting_certification"],
+        redCrossBabysittingCertificationVerify: json["red_cross_babysitting_certification_verify"],
         cprFirstAidCertification: json["cpr_first_aid_certification"],
-        cprFirstAidCertificationVerify:
-            json["cpr_first_aid_certification_verify"],
-        animalCareProviderCertification:
-            json["animal_care_provider_certification"],
-        animalCareProviderCertificationVerify:
-            json["animal_care_provider_certification_verify"],
-        chaildAndFamilyServicesAndAbuse:
-            json["chaild_and_family_services_and_abuse"],
-        chaildAndFamilyServicesAndAbuseVerify:
-            json["chaild_and_family_services_and_abuse_verify"],
+        cprFirstAidCertificationVerify: json["cpr_first_aid_certification_verify"],
+        animalCareProviderCertification: json["animal_care_provider_certification"],
+        animalCareProviderCertificationVerify: json["animal_care_provider_certification_verify"],
+        chaildAndFamilyServicesAndAbuse: json["chaild_and_family_services_and_abuse"],
+        chaildAndFamilyServicesAndAbuseVerify: json["chaild_and_family_services_and_abuse_verify"],
         animailFirstAid: json["animail_first_aid"],
         animailFirstAidVerify: json["animail_first_aid_verify"],
-        governmentRegisteredCareProvider:
-            json["government_registered_care_provider"],
-        governmentRegisteredCareProviderVerify:
-            json["government_registered_care_provider_verify"],
+        governmentRegisteredCareProvider: json["government_registered_care_provider"],
+        governmentRegisteredCareProviderVerify: json["government_registered_care_provider_verify"],
         policeBackgroundCheck: json["police_background_check"],
         policeBackgroundCheckVerify: json["police_background_check_verify"],
         // enhancedCriminal: json["enhanced_criminal"],
@@ -310,24 +280,19 @@ class Providerverification {
         "valid_driver_license": validDriverLicense,
         "valid_driver_license_verify": validDriverLicenseVerify,
         "scars_awareness_certification": scarsAwarenessCertification,
-        "scars_awareness_certification_verify":
-            scarsAwarenessCertificationVerify,
+        "scars_awareness_certification_verify": scarsAwarenessCertificationVerify,
         "red_cross_babysitting_certification": redCrossBabysittingCertification,
-        "red_cross_babysitting_certification_verify":
-            redCrossBabysittingCertificationVerify,
+        "red_cross_babysitting_certification_verify": redCrossBabysittingCertificationVerify,
         "cpr_first_aid_certification": cprFirstAidCertification,
         "cpr_first_aid_certification_verify": cprFirstAidCertificationVerify,
         "animal_care_provider_certification": animalCareProviderCertification,
-        "animal_care_provider_certification_verify":
-            animalCareProviderCertificationVerify,
+        "animal_care_provider_certification_verify": animalCareProviderCertificationVerify,
         "chaild_and_family_services_and_abuse": chaildAndFamilyServicesAndAbuse,
-        "chaild_and_family_services_and_abuse_verify":
-            chaildAndFamilyServicesAndAbuseVerify,
+        "chaild_and_family_services_and_abuse_verify": chaildAndFamilyServicesAndAbuseVerify,
         "animail_first_aid": animailFirstAid,
         "animail_first_aid_verify": animailFirstAidVerify,
         "government_registered_care_provider": governmentRegisteredCareProvider,
-        "government_registered_care_provider_verify":
-            governmentRegisteredCareProviderVerify,
+        "government_registered_care_provider_verify": governmentRegisteredCareProviderVerify,
         "police_background_check": policeBackgroundCheck,
         "police_background_check_verify": policeBackgroundCheckVerify,
         "created_at": createdAt,
@@ -366,9 +331,7 @@ class Rating {
         ratingBy: json["rating_by"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-        receiverRating: json["receiver_rating"] == null
-            ? null
-            : ReceiverRating.fromJson(json["receiver_rating"]),
+        receiverRating: json["receiver_rating"] == null ? null : ReceiverRating.fromJson(json["receiver_rating"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -489,8 +452,7 @@ class Userdetail {
         userInfo: json["user_info"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-        service:
-            json["service"] == null ? null : Service.fromJson(json["service"]),
+        service: json["service"] == null ? null : Service.fromJson(json["service"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -534,17 +496,14 @@ class Userdetailprovider {
     this.updatedAt,
   });
 
-  factory Userdetailprovider.fromJson(Map<String, dynamic> json) =>
-      Userdetailprovider(
+  factory Userdetailprovider.fromJson(Map<String, dynamic> json) => Userdetailprovider(
         id: json["id"],
         userId: json["user_id"],
         availability: json["availability"],
         experience: json["experience"],
         educations: json["educations"],
         keywords: json["keywords"],
-        // ignore: prefer_null_aware_operators
-        badge:
-            json["badge"] == null ? null : json["badge"].toString().split(','),
+        badge: json["badge"] == null ? null : json["badge"].toString().split(','),
         hourlyRate: json["hourly_rate"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],

@@ -1,9 +1,10 @@
+// ignore_for_file: prefer_null_aware_operators
+
 import 'dart:convert';
 
 import 'package:island_app/models/service_model.dart';
 
-ServiceReceiverDashboardDetailModel serviceReceiverDashboardDetailModelFromJson(String str) =>
-    ServiceReceiverDashboardDetailModel.fromJson(json.decode(str));
+ServiceReceiverDashboardDetailModel serviceReceiverDashboardDetailModelFromJson(String str) => ServiceReceiverDashboardDetailModel.fromJson(json.decode(str));
 
 String serviceReceiverDashboardDetailModelToJson(ServiceReceiverDashboardDetailModel data) => json.encode(data.toJson());
 

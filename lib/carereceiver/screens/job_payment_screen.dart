@@ -4,9 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:island_app/carereceiver/models/manage_cards_model.dart';
+import 'package:island_app/carereceiver/screens/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
@@ -14,8 +14,9 @@ import 'package:provider/provider.dart';
 
 class JobPaymentsScreen extends StatefulWidget {
   final String jobId;
+  final String jobName;
   final String amount;
-  const JobPaymentsScreen({super.key, required this.jobId, required this.amount});
+  const JobPaymentsScreen({super.key, required this.jobId, required this.jobName, required this.amount});
 
   @override
   State<JobPaymentsScreen> createState() => _JobPaymentsScreenState();
@@ -37,6 +38,8 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // print(RecieverUserProvider.userToken);
+    // print(widget.jobId);
     List<CreditCard>? allCards = context.watch<CardProvider>().allCards;
     return Scaffold(
       appBar: AppBar(
@@ -79,51 +82,93 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
         child: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
-            // height: MediaQuery.of(context).size.height,
             color: Colors.white,
             padding: const EdgeInsets.only(top: 20),
             child: Column(
               children: [
                 if (allCards != null) ...[
                   for (int j = 0; j < allCards.length; j++) ...[
-                    RadioListTile(
-                      groupValue: selectedCard,
-                      activeColor: ServiceRecieverColor.primaryColor.withOpacity(0.8),
-                      value: allCards[j],
-                      onChanged: (value) {
+                    InkWell(
+                      onTap: () {
                         setState(() {
                           newCard = false;
-                          selectedCard = value;
+                          selectedCard = allCards[j];
                         });
-                        // Provider.of<SubscriptionProvider>(context, listen: false).setSelectCard(value);
                       },
-                      title: Text(
-                        "Select Card: ${allCards[j].cardNumber}",
-                        style: const TextStyle(color: Colors.black),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: selectedCard != null && selectedCard!.id == allCards[j].id ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
+                              width: 0.5,
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Card Name: ${allCards[j].nameOnCard}",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                              Text(
+                                "Card Number: ${allCards[j].cardNumber}",
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: const TextStyle(color: Colors.black),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    if (selectedCard != null && selectedCard!.id == allCards[j].id) ...[
-                      cardFormWidget(context),
-                    ],
+                  ],
+                  if (selectedCard != null) ...[
+                    cardFormWidget(context),
                   ],
                 ],
-                ListTile(
-                  title: const Text(
-                    "Add New Card",
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  contentPadding: const EdgeInsets.only(left: 25),
-                  selected: newCard,
+                InkWell(
                   onTap: () {
                     setState(() {
-                      selectedCard = null;
                       newCard = true;
+                      selectedCard = null;
                     });
                   },
-                  leading: Icon(
-                    newCard ? Icons.radio_button_checked_outlined : Icons.radio_button_off_outlined,
-                    size: 22,
-                    color: newCard ? ServiceRecieverColor.primaryColor.withOpacity(0.8) : Colors.grey.shade600,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                    child: Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 60,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: ServiceRecieverColor.redButton,
+                          width: 0.5,
+                        ),
+                      ),
+                      child: const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Add New Card",
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 if (newCard) ...[
@@ -139,8 +184,6 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
 
   bool sendReq = false;
   dynamic cardFormWidget(BuildContext context) {
-    // CreditCard? selectedCard = context.watch<SubscriptionProvider>().cardValue;
-    Map selectedSubscribe = Provider.of<SubscriptionProvider>(context).selectedPackage;
     return selectedCard != null
         ? Column(
             children: [
@@ -283,7 +326,30 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                       ),
                     ),
                     const SizedBox(height: 5),
-
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(6),
+                          bottomLeft: Radius.circular(6),
+                          bottomRight: Radius.circular(6),
+                          topRight: Radius.circular(6),
+                        ),
+                        color: CustomColors.white,
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color.fromARGB(13, 0, 0, 0),
+                            blurRadius: 4.0,
+                            spreadRadius: 2.0,
+                            offset: Offset(2.0, 2.0),
+                          ),
+                        ],
+                      ),
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 10),
+                      width: MediaQuery.of(context).size.width,
+                      height: 40,
+                      child: Text("${selectedCard!.cvv}"),
+                    ),
                     const SizedBox(height: 15),
                     // Total Amount Row
                     Row(
@@ -318,11 +384,11 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                                 sendReq = true;
                               });
                               try {
-                                var token = Provider.of<RecieverUserProvider>(context).getUserToken();
+                                var token = RecieverUserProvider.userToken;
                                 var response = await Dio().post(
-                                  CareReceiverURl.serviceReceiverSubscribePackage,
+                                  "${AppUrl.webBaseURL}/charge-card",
                                   data: {
-                                    "subscription_id": selectedSubscribe['id'],
+                                    "job_id": widget.jobId,
                                     "card_data": selectedCard!.id.toString(),
                                     "save_card": false,
                                     "name_on_card": selectedCard!.nameOnCard.toString(),
@@ -330,6 +396,7 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                                     "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
                                     "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
                                     "cvv": selectedCard!.cvv.toString(),
+                                    "save": false,
                                   },
                                   options: Options(
                                     headers: {
@@ -338,16 +405,23 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                                     },
                                   ),
                                 );
-                                if (response.statusCode == 200 && response.data['success']) {
+                                print(response.data);
+                                if (response.statusCode == 200 && response.data['message'].toString().contains("Amount Funded Successfully")) {
                                   customSuccesSnackBar(context, response.data['message']);
+
                                   Navigator.pop(context);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => JobApplicantsDetail(jobId: widget.jobId, name: widget.jobName),
+                                    ),
+                                  );
                                 } else {
                                   throw response.data['message'];
                                 }
                               } catch (e) {
                                 customErrorSnackBar(context, e.toString());
                               }
-
                               setState(() {
                                 sendReq = false;
                               });
@@ -362,7 +436,7 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                               ),
                               child: Center(
                                 child: Text(
-                                  "Subscribe",
+                                  "Pay Now",
                                   style: TextStyle(
                                     color: CustomColors.white,
                                     fontFamily: "Poppins",
@@ -387,7 +461,6 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
   final RegExp _dateRegex = RegExp(r'^(0[1-9]|1[0-2])-\d{4}$');
   bool saveFrom = false;
   Form newCardForm() {
-    Map selectedSubscribe = Provider.of<SubscriptionProvider>(context).selectedPackage;
     return Form(
       key: newPaymentForm,
       child: Padding(
@@ -757,11 +830,11 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                           sendReq = true;
                         });
                         try {
-                          var token = Provider.of<RecieverUserProvider>(context).getUserToken();
+                          var token = RecieverUserProvider.userToken;
                           var response = await Dio().post(
-                            CareReceiverURl.serviceReceiverSubscribePackage,
+                            "${AppUrl.webBaseURL}/charge-card",
                             data: {
-                              "subscription_id": selectedSubscribe['id'],
+                              "job_id": widget.jobId,
                               "card_data": "card-form",
                               "save_card": saveFrom,
                               "name_on_card": cardHolderNameController.text.toString(),
@@ -777,19 +850,13 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                               },
                             ),
                           );
-                          // print(response);
-                          // print(response.data['message']);
+
                           if (response.statusCode == 200 && response.data['success']) {
-                            Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
-                            Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
-                            Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
-                            customSuccesSnackBar(context, response.data['message']);
                             Navigator.pop(context);
                           } else {
                             throw response.data['message'];
                           }
                         } catch (e) {
-                          // print(e);
                           customErrorSnackBar(context, e.toString());
                         }
                         setState(() {
@@ -809,7 +876,7 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                           color: Colors.white,
                         )
                       : Text(
-                          "Subscribe",
+                          "Pay Now",
                           style: TextStyle(
                             color: CustomColors.white,
                             fontFamily: "Poppins",
