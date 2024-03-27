@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/utils.dart';
 
 class JobApplicantsWidget extends StatelessWidget {
   final String? name;
@@ -19,6 +21,7 @@ class JobApplicantsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+      width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
@@ -29,15 +32,17 @@ class JobApplicantsWidget extends StatelessWidget {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * .3,
-                child: Text(
+          Expanded(
+            flex: 6,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
                   name.toString(),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: CustomColors.primaryText,
                     fontFamily: "Poppins",
@@ -45,10 +50,7 @@ class JobApplicantsWidget extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * .3,
-                child: Text(
+                Text(
                   jobType.toString(),
                   style: TextStyle(
                     color: CustomColors.hintText,
@@ -57,40 +59,40 @@ class JobApplicantsWidget extends StatelessWidget {
                     fontSize: 12,
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-          SizedBox(
-            width: MediaQuery.of(context).size.width * .3,
-            child: Text(count.toString()),
-          ),
-          Row(
-            children: [
-              GestureDetector(
-                onTap: onTap,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  height: 24,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2),
-                    color: CustomColors.blackLight,
-                  ),
-                  child: Center(
-                    child: Text(
-                      ">",
-                      style: TextStyle(
-                        color: CustomColors.black,
-                        fontSize: 12,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w500,
+          Expanded(
+            flex: 4,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Text(count.toString()),
+                ),
+                GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    height: 24,
+                    width: 24,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(05),
+                      color: ServiceRecieverColor.redButton,
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.arrow_forward_outlined,
+                        color: Colors.white,
+                        size: 16,
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 10),
-            ],
-          )
+              ],
+            ),
+          ),
         ],
       ),
     );

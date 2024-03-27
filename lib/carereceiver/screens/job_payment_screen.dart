@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:island_app/carereceiver/models/manage_cards_model.dart';
+import 'package:island_app/carereceiver/screens/job_applicant.dart';
 import 'package:island_app/carereceiver/screens/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -152,7 +153,7 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: ServiceRecieverColor.redButton,
+                          color: newCard == true ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
                           width: 0.5,
                         ),
                       ),
@@ -386,7 +387,7 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                               try {
                                 var token = RecieverUserProvider.userToken;
                                 var response = await Dio().post(
-                                  "${AppUrl.webBaseURL}/charge-card",
+                                  "${AppUrl.webBaseURL}/api/charge-card",
                                   data: {
                                     "job_id": widget.jobId,
                                     "card_data": selectedCard!.id.toString(),
@@ -396,7 +397,6 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                                     "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
                                     "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
                                     "cvv": selectedCard!.cvv.toString(),
-                                    "save": false,
                                   },
                                   options: Options(
                                     headers: {
@@ -405,10 +405,12 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                                     },
                                   ),
                                 );
-                                print(response.data);
-                                if (response.statusCode == 200 && response.data['message'].toString().contains("Amount Funded Successfully")) {
+                                setState(() {
+                                  sendReq = false;
+                                });
+                                if (response.statusCode == 200 && response.data['status'] == true) {
                                   customSuccesSnackBar(context, response.data['message']);
-
+                                  Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
                                   Navigator.pop(context);
                                   Navigator.push(
                                     context,
@@ -417,14 +419,15 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                                     ),
                                   );
                                 } else {
-                                  throw response.data['message'];
+                                  if (response.data['error'].toString().contains("Job Already Funded")) {
+                                    customSuccesSnackBar(context, "Job Already Funded");
+                                  } else if (response.data['error'] != null) {
+                                    throw response.data['error']['original'][0];
+                                  }
                                 }
                               } catch (e) {
                                 customErrorSnackBar(context, e.toString());
                               }
-                              setState(() {
-                                sendReq = false;
-                              });
                             }
                           : null,
                       child: !sendReq
@@ -832,7 +835,7 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                         try {
                           var token = RecieverUserProvider.userToken;
                           var response = await Dio().post(
-                            "${AppUrl.webBaseURL}/charge-card",
+                            "${AppUrl.webBaseURL}/api/charge-card",
                             data: {
                               "job_id": widget.jobId,
                               "card_data": "card-form",
@@ -851,10 +854,22 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                             ),
                           );
 
-                          if (response.statusCode == 200 && response.data['success']) {
+                          if (response.statusCode == 200 && response.data['status'] == true) {
+                            customSuccesSnackBar(context, response.data['message']);
+                            Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
                             Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => JobApplicantsDetail(jobId: widget.jobId, name: widget.jobName),
+                              ),
+                            );
                           } else {
-                            throw response.data['message'];
+                            if (response.data['error'].toString().contains("Job Already Funded")) {
+                              customSuccesSnackBar(context, "Job Already Funded");
+                            } else if (response.data['error'] != null) {
+                              throw response.data['error']['original'][0];
+                            }
                           }
                         } catch (e) {
                           customErrorSnackBar(context, e.toString());

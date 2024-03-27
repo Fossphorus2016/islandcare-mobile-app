@@ -552,7 +552,7 @@ class _JobApplicantProfileWidgetState extends State<JobApplicantProfileWidget> {
               const SizedBox(height: 10),
               GestureDetector(
                 onTap: () {
-                  Provider.of<ChatProvider>(context, listen: false).setActiveChat("new", widget.dataMap);
+                  Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat("new", widget.dataMap);
                   Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatDetailPage()));
                 },
                 child: Container(

@@ -23,7 +23,7 @@ class _ConversationListState extends State<ConversationList> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Provider.of<ChatProvider>(context, listen: false).setActiveChat(widget.roomId, null);
+        Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat(widget.roomId, null);
 
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return const ChatDetailPage();

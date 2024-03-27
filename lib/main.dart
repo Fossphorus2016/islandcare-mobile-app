@@ -6,18 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
-import 'package:island_app/caregiver/widgets/bottombar.dart';
+import 'package:island_app/carereceiver/screens/job_applicant.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
-import 'package:island_app/carereceiver/screens/payment_package_screen.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/screens/notification.dart';
-import 'package:island_app/carereceiver/widgets/bottom_bar.dart';
 import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/screens/login_screen.dart';
-import 'package:island_app/screens/signup_main_screen.dart';
-import 'package:island_app/screens/splash_screen.dart';
+import 'package:island_app/utils/navigation_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -28,28 +24,29 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => RecieverUserProvider()),
-        ChangeNotifierProvider(create: (context) => ChatProvider()),
-        ChangeNotifierProvider(
-          create: (context) => NotificationProvider(),
-          child: const NotificationScreen(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ServiceProviderChat(),
-          child: const ProviderMessagesScreen(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => SubscriptionProvider(),
-          child: const PaymentPackageScreen(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => CardProvider(),
-          child: const ManageCards(),
-        ),
         ChangeNotifierProvider(
           create: (context) => ServiceGiverProvider(),
         ),
         ChangeNotifierProvider(
+          create: (context) => NotificationProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => RecieverChatProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ServiceProviderChat(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SubscriptionProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CardProvider(),
+        ),
+        ChangeNotifierProvider(
           create: (context) => BottomNavigationProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => JobApplicantsProvider(),
         ),
       ],
       child: const MyApp(),
@@ -107,8 +104,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: 'APP',
       theme: ThemeData(
-        appBarTheme:
-            const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
+        appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
       ),
       onGenerateRoute: RouteGenerator.generateRoutes,
       initialRoute: '/',
@@ -124,66 +120,5 @@ class _MyAppState extends State<MyApp> {
         ],
       ),
     );
-  }
-}
-
-class NavigationService extends NavigatorObserver {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  static final NavigationService _instance = NavigationService._internal();
-  NavigationService._internal();
-
-  factory NavigationService() => _instance;
-
-  List history = [];
-
-  dynamic push(String route, {dynamic arguments}) {
-    history.add(route);
-
-    return navigatorKey.currentState?.pushNamed(route, arguments: arguments);
-  }
-
-  dynamic pushReplacement(String route, {dynamic arguments}) {
-    return navigatorKey.currentState
-        ?.pushReplacementNamed(route, arguments: arguments);
-  }
-
-  dynamic popUntils(bool Function(Route<dynamic>) route, {dynamic arguments}) {
-    return navigatorKey.currentState?.popUntil(route);
-  }
-
-  dynamic pushNamedAndRemoveUntil(String route) {
-    return navigatorKey.currentState?.pushNamedAndRemoveUntil(
-      route,
-      ModalRoute.withName('/'),
-    );
-  }
-
-  dynamic pop() {
-    return navigatorKey.currentState?.pop();
-  }
-}
-
-class RouteGenerator {
-  static Route<dynamic> generateRoutes(RouteSettings settings) {
-    // final Map? args = settings.arguments as Map?;
-    switch (settings.name) {
-      case '/':
-        return MaterialPageRoute(builder: (context) => const SplashScreen());
-
-      case '/sign-up':
-        return MaterialPageRoute(builder: (context) => SignupScreen());
-
-      case '/login':
-        return MaterialPageRoute(builder: (context) => const LoginScreen());
-
-      case '/bottom-bar':
-        return MaterialPageRoute(builder: (context) => const BottomBar());
-
-      case '/bottom-bar-giver':
-        return MaterialPageRoute(builder: (context) => const BottomBarGiver());
-
-      default:
-        return MaterialPageRoute(builder: (context) => const SplashScreen());
-    }
   }
 }

@@ -38,7 +38,7 @@ class BottomBarState extends State<BottomBar> {
 
     //
     await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(4);
-    await Provider.of<ChatProvider>(context, listen: false).connectChatChannel(4);
+    await Provider.of<RecieverChatProvider>(context, listen: false).connectChatChannel(4);
     await Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
 
     var resp = await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
