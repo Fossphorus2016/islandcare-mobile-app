@@ -181,7 +181,7 @@ class ServiceProviderChat extends ChangeNotifier {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
     await prefs.reload();
     var userToken = prefs.getString('userToken');
-    var resp = await Dio().get(
+    var resp = await Dio().post(
       ChatUrl.serviceProviderChat,
       options: Options(
         headers: {
