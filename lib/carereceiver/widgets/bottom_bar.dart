@@ -50,9 +50,7 @@ class BottomBarState extends State<BottomBar> {
   @override
   void initState() {
     pages = [
-      HomeScreen(
-        passedToken: widget.data.toString(),
-      ),
+      const HomeScreen(),
       const WishlistScreen(),
       const MessagesScreen(),
       const ProfileReceiverScreen(),
@@ -135,6 +133,7 @@ class BottomBarState extends State<BottomBar> {
                   ),
                   label: '',
                 ),
+                // chat
                 BottomNavigationBarItem(
                   icon: Container(
                     height: 50,
@@ -150,6 +149,7 @@ class BottomBarState extends State<BottomBar> {
                   ),
                   label: '',
                 ),
+                // profile
                 BottomNavigationBarItem(
                   icon: Container(
                     height: 50,

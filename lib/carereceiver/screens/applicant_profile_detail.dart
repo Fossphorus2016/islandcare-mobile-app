@@ -3,20 +3,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
-// import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
-import 'package:island_app/providers/chat_provider.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
-// import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_breakpoints.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/models/applicant_profile_detail-model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 
@@ -47,7 +43,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
   fetchApplicantProfileDetailModel() async {
     try {
       var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-
+      //
       final response = await Dio().get(
         "${CareReceiverURl.serviceReceiverApplicantDetails}/${widget.jobTitle}/${widget.profileId}/${widget.jobId}",
         options: Options(
@@ -166,97 +162,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
     }
   }
 
-  // bool downloading = false;
-  // String downloadProgress = '';
-  // String downloadPdfPath = '';
-  // var hostPath;
-
-  // Future<bool> getStoragePermission() async {
-  //   return await Permission.storage.request().isGranted;
-  // }
-
-  // Future<String> getDownloadFolderPath() async {
-  //   return await ExternalPath.getExternalStoragePublicDirectory(
-  //     ExternalPath.DIRECTORY_DOWNLOADS,
-  //   );
-  // }
-
-  // Future downloadFile(String downloadDirectory, String fileUrl) async {
-  //   Dio dio = Dio();
-
-  //   var filname = fileUrl.split('.');
-  //   String savename = '${filname.first}${DateTime.now()}.${filname.last}';
-  //   var downloadingPdfPath = '$downloadDirectory/$savename';
-  //   try {
-  //     var fileRes = await dio.download(
-  //       "${AppUrl.webStorageUrl}/$fileUrl",
-  //       downloadingPdfPath,
-  //       onReceiveProgress: (rec, total) {
-  //         setState(() {
-  //           downloading = true;
-  //           downloadProgress = "${((rec / total) * 100).toStringAsFixed(0)}%";
-  //         });
-  //       },
-  //     );
-  //     if (fileRes.statusCode == 200) {
-  //       customSuccesSnackBar(context, "file is downloaded successfully");
-  //     }
-  //   } catch (e) {
-  //     customErrorSnackBar(
-  //         context, "something went wrong please try again later");
-  //   }
-  //   await Future.delayed(const Duration(seconds: 3));
-
-  //   return downloadingPdfPath;
-  // }
-
-  // // Download by user click
-  // Future<void> doDownloadFile(fileUrl) async {
-  //   if (await getStoragePermission()) {
-  //     String downloadDirectory = await getDownloadFolderPath();
-  //     await downloadFile(downloadDirectory, fileUrl).then(
-  //       (value) {
-  //         displayPDF(value);
-  //       },
-  //     );
-  //   }
-  // }
-
-  // void displayPDF(String downloadDirectory) {
-  //   setState(() {
-  //     downloading = false;
-  //     downloadProgress = "COMPLETED";
-  //     downloadPdfPath = downloadDirectory;
-  //   });
-  // }
-
-  // getUserToken() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var userToken = preferences.getString(
-  //     'userToken',
-  //   );
-  //   // if (kDebugMode) {
-  //   //   print(userToken);
-  //   // }
-  //   return userToken.toString();
-  // }
-
-  // var isCompletedProfile;
-  // getCompletedProfile() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var completedProfile = preferences.getString(
-  //     'isProfileCompleted',
-  //   );
-  //   setState(() {
-  //     isCompletedProfile = completedProfile;
-  //   });
-
-  //   return isCompletedProfile.toString();
-  // }
-
   @override
   void initState() {
-    // getCompletedProfile();
     super.initState();
     fetchApplicantProfileDetailModel();
   }
@@ -383,7 +290,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                 Expanded(
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       if (futureapplicantProfileDetail!.isVerified == true) ...[
                                         Align(
@@ -405,16 +312,16 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                         style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
                                       ),
                                       const SizedBox(width: 10),
-                                      Text(
-                                        futureapplicantProfileDetail!.data!.email.toString(),
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w400,
-                                          color: CustomColors.white,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 10),
+                                      // Text(
+                                      //   futureapplicantProfileDetail!.data!.email.toString(),
+                                      //   style: TextStyle(
+                                      //     fontSize: 12,
+                                      //     fontFamily: "Rubik",
+                                      //     fontWeight: FontWeight.w400,
+                                      //     color: CustomColors.white,
+                                      //   ),
+                                      // ),
+                                      // const SizedBox(width: 10),
                                       if (futureapplicantProfileDetail!.data!.avgRating != null) ...[
                                         RatingBar(
                                           ignoreGestures: true,
@@ -536,7 +443,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                       LinearProgressIndicator(
                                         minHeight: 08,
                                         borderRadius: BorderRadius.circular(08),
-                                        value: futureapplicantProfileDetail!.percentage != null ? double.parse(futureapplicantProfileDetail!.percentage.toString()) : 00,
+                                        value: futureapplicantProfileDetail!.percentage != null ? (futureapplicantProfileDetail!.percentage! / 100) : 00,
                                         valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
                                       ),
                                     ],
@@ -1168,43 +1075,53 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                               ],
                             ),
                           ),
-                          // Background Verified
-                          const SizedBox(height: 30),
-                          const Text(
-                            "Reviews",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 20),
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                            decoration: BoxDecoration(
-                              color: ServiceGiverColor.black,
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: CustomColors.borderLight,
-                                  width: 0.1,
-                                ),
+                          if (futureapplicantProfileDetail!.data!.ratings != null && futureapplicantProfileDetail!.data!.ratings!.isNotEmpty) ...[
+                            const SizedBox(height: 30),
+                            const Text(
+                              "Reviews",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Name",
-                                  style: TextStyle(
-                                    color: CustomColors.white,
-                                    fontSize: 12,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w600,
+                            const SizedBox(height: 20),
+                            Container(
+                              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                              decoration: BoxDecoration(
+                                color: ServiceGiverColor.black,
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: CustomColors.borderLight,
+                                    width: 0.1,
                                   ),
                                 ),
-                                if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
                                   Text(
-                                    "Rating",
+                                    "Name",
+                                    style: TextStyle(
+                                      color: CustomColors.white,
+                                      fontSize: 12,
+                                      fontFamily: "Poppins",
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                    Text(
+                                      "Rating",
+                                      style: TextStyle(
+                                        color: CustomColors.white,
+                                        fontSize: 12,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                  Text(
+                                    "Comment",
                                     style: TextStyle(
                                       color: CustomColors.white,
                                       fontSize: 12,
@@ -1213,19 +1130,8 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                     ),
                                   ),
                                 ],
-                                Text(
-                                  "Comment",
-                                  style: TextStyle(
-                                    color: CustomColors.white,
-                                    fontSize: 12,
-                                    fontFamily: "Poppins",
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                          if (futureapplicantProfileDetail!.data!.ratings != null && futureapplicantProfileDetail!.data!.ratings!.isNotEmpty) ...[
                             ListView.builder(
                               itemCount: futureapplicantProfileDetail!.data!.ratings!.length,
                               shrinkWrap: true,
@@ -1325,11 +1231,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                 );
                               },
                             ),
-                          ] else ...[
-                            const Center(
-                              child: Text("No Review Yet!"),
-                            )
-                          ],
+                          ]
                         ],
                       ),
                     ),
@@ -1419,13 +1321,21 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           const SizedBox(height: 10),
                           GestureDetector(
                             onTap: () async {
-                              await Provider.of<RecieverChatProvider>(context, listen: false).getSingleChat(futureapplicantProfileDetail!.data!.id.toString());
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ChatDetailPage(),
+                              var resp = await Dio().post(
+                                "${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}",
+                                options: Options(
+                                  headers: {
+                                    'Authorization': 'Bearer ${RecieverUserProvider.userToken}',
+                                    'Accept': 'application/json',
+                                  },
                                 ),
                               );
+                              // print("${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}");
+                              if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+                                Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat(resp.data['chat_room']);
+                              }
+                              // await Provider.of<RecieverChatProvider>(context, listen: false).getSingleChat(futureapplicantProfileDetail!.data!.id.toString());
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatDetailPage()));
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width,

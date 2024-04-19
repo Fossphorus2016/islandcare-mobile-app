@@ -2,6 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/res/app_url.dart';
@@ -48,6 +49,7 @@ class _PostScheduleState extends State<PostSchedule> {
   final TextEditingController dobController = TextEditingController();
   final TextEditingController otherFieldController = TextEditingController();
   final TextEditingController gradeLevelController = TextEditingController();
+  final TextEditingController additionalInfoController = TextEditingController();
 
   int? selectedIndex;
   int? otherField = 0;
@@ -329,6 +331,7 @@ class _PostScheduleState extends State<PostSchedule> {
       'hourly_rate': hourlyController.text.toString(),
       'senior_name': seniorNameController.text.toString(),
       'dob': dobController.text.toString(),
+      'additional_info': additionalInfoController.text.toString(),
       'date[]': dateMapList,
       'medical_condition': medicalConditionController.text.toString(),
       'bathing': bathing,
@@ -385,6 +388,7 @@ class _PostScheduleState extends State<PostSchedule> {
         'hourly_rate': hourlyController.text.toString(),
         'pet_type': petTypeValue.toString(),
         'number_of_pets': numberOfPetValue.toString(),
+        'additional_info': additionalInfoController.text.toString(),
         'pet_breed': petBreedController.text.toString(),
         'size_of_pet': sizeOfPetValue.toString(),
         'temperament': temperamentValue.toString(),
@@ -441,6 +445,7 @@ class _PostScheduleState extends State<PostSchedule> {
         "date[]": dateMapList,
         "start_time[]": startTimeMapList,
         "duration[]": durationMapList,
+        'additional_info': additionalInfoController.text.toString(),
       },
     );
 
@@ -486,7 +491,7 @@ class _PostScheduleState extends State<PostSchedule> {
         "duration[]": durationMapList,
         "name[]": childnameMapList,
         "age[]": childageMapList,
-        "grade[]": gradeLevelMapList,
+        // "grade[]": gradeLevelMapList,
       },
     );
 
@@ -538,6 +543,7 @@ class _PostScheduleState extends State<PostSchedule> {
         "name[]": childnameMapList,
         "age[]": childageMapList,
         "grade[]": gradeLevelMapList,
+        'additional_info': additionalInfoController.text.toString(),
       },
     );
 
@@ -607,12 +613,14 @@ class _PostScheduleState extends State<PostSchedule> {
     dobController.dispose();
     otherFieldController.dispose();
     gradeLevelController.dispose();
+    additionalInfoController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           centerTitle: true,
           elevation: 0,
@@ -651,15 +659,15 @@ class _PostScheduleState extends State<PostSchedule> {
           ),
           title: Text(
             (widget.serviceId == "1")
-                ? "Senior Care"
+                ? "Senior Care Job Post"
                 : (widget.serviceId == "2")
-                    ? "Pet Care"
+                    ? "Pet Care Job Post"
                     : (widget.serviceId == "3")
-                        ? "House Keeping"
+                        ? "House Keeping Job Post"
                         : (widget.serviceId == "4")
-                            ? "School Support"
+                            ? "School Support Job Post"
                             : (widget.serviceId == "5")
-                                ? "Child Care"
+                                ? "Child Care Job Post"
                                 : "Screen Not Found",
             style: TextStyle(
               fontSize: 19,
@@ -675,6 +683,197 @@ class _PostScheduleState extends State<PostSchedule> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
+                //Job Title
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: const Text(
+                    "Job Title",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      // color: ServiceRecieverColor.primaryColor,
+                      fontFamily: "Rubik",
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 45,
+                  child: TextFormField(
+                    controller: jobTitleController,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontFamily: "Rubik",
+                      fontWeight: FontWeight.w600,
+                    ),
+                    textAlignVertical: TextAlignVertical.center,
+                    maxLines: 1,
+                    decoration: inputdecoration("Job Title"),
+                  ),
+                ),
+                //Parish
+                const SizedBox(height: 20),
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: const Text(
+                    "Job Location",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      // color: ServiceRecieverColor.primaryColor,
+                      fontFamily: "Rubik",
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 45,
+                  child: TextFormField(
+                    controller: addressController,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontFamily: "Rubik",
+                      fontWeight: FontWeight.w600,
+                      // color: ServiceRecieverColor.primaryColor,
+                    ),
+                    textAlignVertical: TextAlignVertical.center,
+                    maxLines: 1,
+                    decoration: inputdecoration("Job Location"),
+                  ),
+                ),
+                //Location
+                const SizedBox(height: 20),
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: const Text(
+                    "Job Area",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      // color: ServiceRecieverColor.primaryColor,
+                      fontFamily: "Rubik",
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 45,
+                  child: Center(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        border: Border.all(color: Colors.grey, width: 0.5),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            hint: const Text(
+                              "Select Area",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: "Rubik",
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            isExpanded: true,
+                            items: data!.map((item) {
+                              return DropdownMenuItem(
+                                value: item['id'].toString(),
+                                child: Text(item['name']),
+                              );
+                            }).toList(),
+                            onChanged: (newVal) {
+                              setState(() {
+                                selectedLocation = newVal;
+                              });
+                              if (selectedLocation == "1") {
+                                locationValue = "east";
+                              } else if (selectedLocation == "2") {
+                                locationValue = "west";
+                              } else if (selectedLocation == "3") {
+                                locationValue = "central";
+                              }
+                            },
+                            value: selectedLocation,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                // Hourly Rate
+                const SizedBox(height: 20),
+                Container(
+                  alignment: Alignment.topLeft,
+                  child: const Text(
+                    "Hourly Rate",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      // color: ServiceRecieverColor.primaryColor,
+                      fontFamily: "Rubik",
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  height: 45,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(left: 10),
+                  clipBehavior: Clip.hardEdge,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey, width: 0.5),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Flex(
+                    direction: Axis.horizontal,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    verticalDirection: VerticalDirection.up,
+                    children: [
+                      const Text(
+                        "\$ ",
+                        style: TextStyle(
+                          // color: Colors.grey,
+                          fontSize: 16,
+                        ),
+                      ),
+                      Flexible(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          controller: hourlyController,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontFamily: "Rubik",
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlignVertical: TextAlignVertical.center,
+                          maxLines: 1,
+                          decoration: const InputDecoration(
+                            hintText: "Please add Hourly Rate",
+                            hintStyle: TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Rubik",
+                              fontWeight: FontWeight.w600,
+                              // color: Colors.grey,
+                            ),
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
                 // Switch View,
                 if (widget.serviceId == "1") ...[
                   // service id 1
@@ -692,11 +891,6 @@ class _PostScheduleState extends State<PostSchedule> {
                   // Service Id 5
                   ServiceChildCare(context),
                 ],
-                // Column(
-                //   children: [
-
-                //   ],
-                // ),
               ],
             ),
           ),
@@ -705,196 +899,315 @@ class _PostScheduleState extends State<PostSchedule> {
     );
   }
 
-  Widget ServiceChildCare(BuildContext context) {
+  Widget addDaysColumn(context) {
     return Column(
       children: [
-        const SizedBox(height: 10),
-        //Job Title
+        // Add Days
         Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Title",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
+          padding: const EdgeInsets.all(12),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
             ),
+            boxShadow: [
+              BoxShadow(
+                color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+                blurRadius: 3,
+                spreadRadius: 5,
+              )
+            ],
+            color: Color.fromRGBO(255, 255, 255, 1),
           ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            controller: jobTitleController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            decoration: inputdecoration("Name"),
-          ),
-        ),
-        //Parish
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Location",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            controller: addressController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            decoration: inputdecoration("Job Location"),
-          ),
-        ),
-        //Location
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Area",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: Center(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                "Add Days",
+                style: TextStyle(
+                  fontFamily: "Rubik",
+                  fontSize: 18,
+                  color: CustomColors.primaryText,
+                  fontWeight: FontWeight.w600,
                 ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    hint: const Text(
-                      "Select Area",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: "Rubik",
-                        fontWeight: FontWeight.w400,
+              ),
+              // Start Date
+              Container(
+                height: 50,
+                margin: const EdgeInsets.only(bottom: 15, top: 15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: CustomTextFieldWidget(
+                  borderColor: CustomColors.white,
+                  obsecure: false,
+                  keyboardType: TextInputType.number,
+                  controller: startDateController,
+                  hintText: "Date",
+                  onChanged: (value) {
+                    setState(() {
+                      getfromPickedDate = value;
+                    });
+                  },
+                  onTap: () async {
+                    _fromDate(context);
+                  },
+                ),
+              ),
+              //Timer
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 50,
+                child: TextButton(
+                  style: ButtonStyle(
+                    alignment: Alignment.centerLeft,
+                    padding: MaterialStateProperty.resolveWith(
+                      (states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    ),
+                    shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: const BorderSide(color: Colors.grey, width: 0.5),
                       ),
                     ),
-                    isExpanded: true,
-                    items: data!.map((item) {
-                      return DropdownMenuItem(
-                        value: item['id'].toString(),
-                        child: Text(item['name']),
-                      );
-                    }).toList(),
-                    onChanged: (newVal) {
-                      setState(() {
-                        selectedLocation = newVal;
-                      });
-                      if (selectedLocation == "1") {
-                        locationValue = "east";
-                      } else if (selectedLocation == "2") {
-                        locationValue = "west";
-                      } else if (selectedLocation == "3") {
-                        locationValue = "central";
-                      }
-                    },
-                    value: selectedLocation,
+                  ),
+                  child: Text(
+                    selectedTime != null ? '$selectedTime' : 'Start Time',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: "Rubik",
+                      fontWeight: FontWeight.w400,
+                      color: CustomColors.primaryText,
+                    ),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      displayTimeDialog();
+                    });
+                  },
+                ),
+              ),
+              // Duration
+              Container(
+                height: 50,
+                margin: const EdgeInsets.only(bottom: 15, top: 15),
+                child: Center(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey, width: 0.5),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          hint: const Text(
+                            "Duration",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: "Rubik",
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          isExpanded: true,
+                          items: hours!.map((item) {
+                            return DropdownMenuItem(
+                              value: item['id'].toString(),
+                              child: Text(item['name']),
+                            );
+                          }).toList(),
+                          onChanged: (newVal) {
+                            setState(() {
+                              selectedHours = newVal;
+                            });
+                          },
+                          value: selectedHours,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-        ),
-        // Hourly Rate
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Hourly Rate",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          height: 45,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(left: 10),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Flex(
-            direction: Axis.horizontal,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            verticalDirection: VerticalDirection.up,
-            children: [
-              Text(
-                "\$ ",
-                style: TextStyle(color: ServiceRecieverColor.primaryColor),
-              ),
-              Flexible(
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: hourlyController,
-                  textAlignVertical: TextAlignVertical.top,
-                  maxLines: 1,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontFamily: "Rubik",
-                    fontWeight: FontWeight.w600,
-                  ),
-                  decoration: InputDecoration(
-                    hintText: "Please enter hourly rate",
-                    hintStyle: TextStyle(
-                      fontSize: 12,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w600,
-                      color: ServiceRecieverColor.primaryColor,
+              // AddBtn
+              GestureDetector(
+                onTap: () {
+                  String startDate = startDateController.text.trim();
+                  String time = selectedTime.toString();
+
+                  setState(() {
+                    dateMapList.add(startDate);
+                    startTimeMapList.add(time);
+                    durationMapList.add(selectedHours);
+                    seniorCareDays.add(
+                      {
+                        "starting_date": startDate,
+                        "starting_time": time,
+                        "duration": selectedHours,
+                      },
+                    );
+                  });
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  margin: const EdgeInsets.only(top: 20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.center,
+                      end: Alignment.center,
+                      colors: [
+                        ServiceRecieverColor.redButton.withOpacity(0.1),
+                        ServiceRecieverColor.redButton.withOpacity(0.8),
+                      ],
                     ),
-                    contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-                    border: InputBorder.none,
+                    color: ServiceRecieverColor.redButton,
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromARGB(13, 0, 0, 0),
+                        blurRadius: 4.0,
+                        spreadRadius: 2.0,
+                      ),
+                    ],
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Add More Days",
+                      style: TextStyle(
+                        color: CustomColors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Rubik",
+                      ),
+                    ),
                   ),
                 ),
               ),
             ],
           ),
         ),
+        const SizedBox(height: 10),
+        // Show Days
+        const SizedBox(height: 10),
+        ListView.builder(
+            shrinkWrap: true,
+            scrollDirection: Axis.vertical,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: seniorCareDays.length,
+            itemBuilder: (context, index) {
+              return SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 95,
+                child: Stack(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            spreadRadius: 01,
+                            blurRadius: 05,
+                          ),
+                        ],
+                      ),
+                      height: 85,
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              const Text("Date: "),
+                              Expanded(
+                                child: Text(
+                                  seniorCareDays[index]['starting_date'].toString(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text("Time: "),
+                              Expanded(
+                                child: Text("${seniorCareDays[index]['starting_time']}"),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              const Text("Duration: "),
+                              Expanded(
+                                child: Text("${seniorCareDays[index]['duration']} hours"),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      top: 00,
+                      right: 0,
+                      child: GestureDetector(
+                        onTap: (() {
+                          setState(() {
+                            seniorCareDays.removeAt(index);
+                            startTimeMapList.removeAt(index);
+                            dateMapList.removeAt(index);
+                            durationMapList.removeAt(index);
+                          });
+                        }),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(100),
+                              bottomLeft: Radius.circular(100),
+                              bottomRight: Radius.circular(100),
+                              topRight: Radius.circular(100),
+                            ),
+                            color: CustomColors.white,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromARGB(13, 0, 0, 0),
+                                blurRadius: 4.0,
+                                spreadRadius: 2.0,
+                                offset: Offset(2.0, 2.0),
+                              ),
+                            ],
+                          ),
+                          // alignment: Alignment.center,
+                          width: 30,
+                          height: 30,
+                          child: const Icon(
+                            Icons.close,
+                            size: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+        const SizedBox(height: 10),
+      ],
+    );
+  }
 
+  Widget ServiceChildCare(BuildContext context) {
+    return Column(
+      children: [
         const SizedBox(height: 20),
         // Add Children
         Container(
@@ -1151,322 +1464,16 @@ class _PostScheduleState extends State<PostSchedule> {
               );
             }),
         const SizedBox(height: 20),
-        // Add Days
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                // offset: Offset(0, 4),
-                blurRadius: 3,
-                spreadRadius: 5,
-              )
-            ],
-            color: Color.fromRGBO(255, 255, 255, 1),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                "Add Days",
-                style: TextStyle(
-                  fontFamily: "Rubik",
-                  fontSize: 18,
-                  color: CustomColors.primaryText,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              // Start Date
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(bottom: 15, top: 15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: CustomTextFieldWidget(
-                  borderColor: ServiceRecieverColor.primaryColor,
-                  obsecure: false,
-                  keyboardType: TextInputType.number,
-                  controller: startDateController,
-                  hintText: "Start Date",
-                  onChanged: (value) {
-                    setState(() {
-                      getfromPickedDate = value;
-                    });
-                  },
-                  onTap: () async {
-                    _fromDate(context);
-                  },
-                ),
-              ),
-              //Timer
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.centerLeft,
-                    padding: MaterialStateProperty.resolveWith(
-                      (states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    ),
-                    shape: MaterialStateProperty.resolveWith(
-                      (states) => RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                      ),
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(
-                      () {
-                        displayTimeDialog();
-                      },
-                    );
-                  },
-                  child: Text(
-                    selectedTime != null ? '$selectedTime' : 'Select Time',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w400,
-                      color: CustomColors.primaryText,
-                    ),
-                  ),
-                ),
-              ),
-
-              // Duration
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(bottom: 15, top: 15),
-                child: Center(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(
-                        color: ServiceRecieverColor.primaryColor,
-                        width: 0.5,
-                      ),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          hint: Text(
-                            "Duration in hours",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "Rubik",
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.primaryText,
-                            ),
-                          ),
-                          isExpanded: true,
-                          items: hours!.map((item) {
-                            return DropdownMenuItem(
-                              value: item['id'].toString(),
-                              child: Text(item['name']),
-                            );
-                          }).toList(),
-                          onChanged: (newVal) {
-                            setState(() {
-                              selectedHours = newVal;
-                            });
-                          },
-                          value: selectedHours,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              // AddBtn
-              GestureDetector(
-                onTap: () {
-                  String startDate = startDateController.text.trim();
-                  String time = selectedTime.toString();
-
-                  setState(() {
-                    dateMapList.add(startDate);
-                    startTimeMapList.add(time);
-                    durationMapList.add(selectedHours);
-                    seniorCareDays.add(
-                      {
-                        "starting_date": startDate,
-                        "starting_time": time,
-                        "duration": selectedHours,
-                      },
-                    );
-                  });
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.center,
-                      end: Alignment.center,
-                      colors: [
-                        ServiceRecieverColor.redButton.withOpacity(0.1),
-                        ServiceRecieverColor.redButton.withOpacity(0.8),
-                      ],
-                    ),
-                    color: ServiceRecieverColor.redButton,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(13, 0, 0, 0),
-                        blurRadius: 4.0,
-                        spreadRadius: 2.0,
-                        offset: Offset(2.0, 2.0),
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Add More Days",
-                      style: TextStyle(
-                        color: CustomColors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Rubik",
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // Show Days
-        const SizedBox(height: 10),
-        ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: seniorCareDays.length,
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 95,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            spreadRadius: 01,
-                            blurRadius: 05,
-                          ),
-                        ],
-                      ),
-                      height: 85,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              const Text("Date: "),
-                              Expanded(
-                                child: Text(
-                                  seniorCareDays[index]['starting_date'].toString(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Time: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['starting_time']}"),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Duration: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['duration']} hours"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 00,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            seniorCareDays.removeAt(index);
-                            startTimeMapList.removeAt(index);
-                            dateMapList.removeAt(index);
-                            durationMapList.removeAt(index);
-                          });
-                        }),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(100),
-                              bottomLeft: Radius.circular(100),
-                              bottomRight: Radius.circular(100),
-                              topRight: Radius.circular(100),
-                            ),
-                            color: CustomColors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color.fromARGB(13, 0, 0, 0),
-                                blurRadius: 4.0,
-                                spreadRadius: 2.0,
-                                offset: Offset(2.0, 2.0),
-                              ),
-                            ],
-                          ),
-                          width: 30,
-                          height: 30,
-                          child: const Icon(
-                            Icons.close,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+        addDaysColumn(context),
         // Interest For Child
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Interest For Child",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -1491,11 +1498,11 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Cost Range Of Camp",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -1518,6 +1525,7 @@ class _PostScheduleState extends State<PostSchedule> {
           ),
         ),
         // btn
+        const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0),
           child: GestureDetector(
@@ -1534,19 +1542,23 @@ class _PostScheduleState extends State<PostSchedule> {
                 customErrorSnackBar(context, "Child Initials is Required");
               } else if (childrenAgeController.text.isEmpty) {
                 customErrorSnackBar(context, "Child Age is Required");
-              } else if (gradeLevelController.text.isEmpty) {
-                customErrorSnackBar(context, "Grade Level is Required");
-              } else if (startDateController.text.isEmpty) {
+              }
+              //  else if (gradeLevelController.text.isEmpty) {
+              //   customErrorSnackBar(context, "Grade Level is Required");
+              // }
+              else if (startDateController.text.isEmpty) {
                 customErrorSnackBar(context, "Start Date is Required");
               } else if (selectedTime == null) {
                 customErrorSnackBar(context, "Time is Required");
               } else if (selectedHours == null) {
                 customErrorSnackBar(context, "Duration is Required");
-              } else if (learningStyleController.text.isEmpty) {
-                customErrorSnackBar(context, "Learning Style is Required");
-              } else if (learningChallengeController.text.isEmpty) {
-                customErrorSnackBar(context, "Learning Challenge is Required");
-              } else {
+              }
+              //  else if (learningStyleController.text.isEmpty) {
+              //   customErrorSnackBar(context, "Learning Style is Required");
+              // } else if (learningChallengeController.text.isEmpty) {
+              //   customErrorSnackBar(context, "Learning Challenge is Required");
+              // }
+              else {
                 customSuccesSnackBar(context, "Job Created Successfully");
                 PostChildCare();
               }
@@ -1577,7 +1589,7 @@ class _PostScheduleState extends State<PostSchedule> {
               ),
               child: Center(
                 child: Text(
-                  "Save",
+                  "Submit",
                   style: TextStyle(
                     color: CustomColors.white,
                     fontSize: 22,
@@ -1596,254 +1608,196 @@ class _PostScheduleState extends State<PostSchedule> {
   Widget ServiceSchoolSupport(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 30),
-        //Job Title
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Titlessss",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            controller: jobTitleController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            decoration: inputdecoration("Name"),
-          ),
-        ),
-        //Parish
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Location",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            controller: addressController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            decoration: inputdecoration("Job Location"),
-          ),
-        ),
-        //Location
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Area",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: Center(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    hint: Text(
-                      "Select Area",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: "Rubik",
-                        fontWeight: FontWeight.w600,
-                        color: ServiceRecieverColor.primaryColor,
-                      ),
-                    ),
-                    isExpanded: true,
-                    items: data!.map((item) {
-                      return DropdownMenuItem(
-                        value: item['id'].toString(),
-                        child: Text(item['name']),
-                      );
-                    }).toList(),
-                    onChanged: (newVal) {
-                      setState(() {
-                        selectedLocation = newVal;
-                      });
-                      if (selectedLocation == "1") {
-                        locationValue = "east";
-                      } else if (selectedLocation == "2") {
-                        locationValue = "west";
-                      } else if (selectedLocation == "3") {
-                        locationValue = "central";
-                      }
-                    },
-                    value: selectedLocation,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        // Hourly Rate
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Hourly Rate",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          height: 45,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(left: 10),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Flex(
-            direction: Axis.horizontal,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            verticalDirection: VerticalDirection.up,
-            children: [
-              Text(
-                "\$ ",
-                style: TextStyle(
-                  color: ServiceRecieverColor.primaryColor,
-                  fontSize: 16,
-                ),
-              ),
-              Flexible(
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: hourlyController,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontFamily: "Rubik",
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlignVertical: TextAlignVertical.center,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    hintText: "Please enter hourly rate",
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w600,
-                      color: ServiceRecieverColor.primaryColor,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
-        // Learning Style
+        // const SizedBox(height: 30),
+        // //Job Title
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Title",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: TextFormField(
+        //     controller: jobTitleController,
+        //     style: const TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: "Rubik",
+        //       fontWeight: FontWeight.w600,
+        //       // color: ServiceRecieverColor.primaryColor,
+        //     ),
+        //     textAlignVertical: TextAlignVertical.center,
+        //     maxLines: 1,
+        //     decoration: inputdecoration("Job Title"),
+        //   ),
+        // ),
+        // //Parish
         // const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Learning Style",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            keyboardType: TextInputType.name,
-            controller: learningStyleController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-            ),
-            decoration: inputdecoration("Learning Style"),
-          ),
-        ),
-        // Child challenge
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Learning Challenge",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 100,
-          child: TextFormField(
-            keyboardType: TextInputType.name,
-            controller: learningChallengeController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-            ),
-            maxLines: 5,
-            decoration: inputdecoration("Learning Challenge"),
-          ),
-        ),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Location",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: TextFormField(
+        //     controller: addressController,
+        //     style: const TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: "Rubik",
+        //       fontWeight: FontWeight.w600,
+        //       // color: ServiceRecieverColor.primaryColor,
+        //     ),
+        //     textAlignVertical: TextAlignVertical.center,
+        //     maxLines: 1,
+        //     decoration: inputdecoration("Job Location"),
+        //   ),
+        // ),
+        // //Location
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Area",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: Center(
+        //     child: DecoratedBox(
+        //       decoration: BoxDecoration(
+        //         color: Colors.white,
+        //         border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //         borderRadius: BorderRadius.circular(12),
+        //       ),
+        //       child: Padding(
+        //         padding: const EdgeInsets.symmetric(
+        //           horizontal: 10,
+        //           vertical: 4,
+        //         ),
+        //         child: DropdownButtonHideUnderline(
+        //           child: DropdownButton(
+        //             hint: Text(
+        //               "Select Area",
+        //               style: TextStyle(
+        //                 fontSize: 12,
+        //                 fontFamily: "Rubik",
+        //                 fontWeight: FontWeight.w600,
+        //                 color: ServiceRecieverColor.primaryColor,
+        //               ),
+        //             ),
+        //             isExpanded: true,
+        //             items: data!.map((item) {
+        //               return DropdownMenuItem(
+        //                 value: item['id'].toString(),
+        //                 child: Text(item['name']),
+        //               );
+        //             }).toList(),
+        //             onChanged: (newVal) {
+        //               setState(() {
+        //                 selectedLocation = newVal;
+        //               });
+        //               if (selectedLocation == "1") {
+        //                 locationValue = "east";
+        //               } else if (selectedLocation == "2") {
+        //                 locationValue = "west";
+        //               } else if (selectedLocation == "3") {
+        //                 locationValue = "central";
+        //               }
+        //             },
+        //             value: selectedLocation,
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // // Hourly Rate
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Hourly Rate",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // Container(
+        //   height: 45,
+        //   width: MediaQuery.of(context).size.width,
+        //   padding: const EdgeInsets.only(left: 10),
+        //   clipBehavior: Clip.hardEdge,
+        //   decoration: BoxDecoration(
+        //     color: Colors.white,
+        //     border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //     borderRadius: BorderRadius.circular(12),
+        //   ),
+        //   child: Flex(
+        //     direction: Axis.horizontal,
+        //     crossAxisAlignment: CrossAxisAlignment.center,
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     verticalDirection: VerticalDirection.up,
+        //     children: [
+        //       Text(
+        //         "\$ ",
+        //         style: TextStyle(
+        //           color: ServiceRecieverColor.primaryColor,
+        //           fontSize: 16,
+        //         ),
+        //       ),
+        //       Flexible(
+        //         child: TextFormField(
+        //           keyboardType: TextInputType.number,
+        //           controller: hourlyController,
+        //           style: const TextStyle(
+        //             fontSize: 12,
+        //             fontFamily: "Rubik",
+        //             fontWeight: FontWeight.w600,
+        //           ),
+        //           textAlignVertical: TextAlignVertical.center,
+        //           maxLines: 1,
+        //           decoration: InputDecoration(
+        //             hintText: "Hourly rate",
+        //             hintStyle: TextStyle(
+        //               fontSize: 14,
+        //               fontFamily: "Rubik",
+        //               fontWeight: FontWeight.w600,
+        //               color: ServiceRecieverColor.primaryColor,
+        //             ),
+        //             border: InputBorder.none,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         const SizedBox(height: 20),
         // Add Children
         Container(
@@ -2098,314 +2052,313 @@ class _PostScheduleState extends State<PostSchedule> {
             }),
         const SizedBox(height: 20),
         // Add Days
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                spreadRadius: 5,
-                blurRadius: 3,
-              )
-            ],
-            color: Color.fromRGBO(255, 255, 255, 1),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                "Add Days",
-                style: TextStyle(
-                  fontFamily: "Rubik",
-                  fontSize: 18,
-                  color: CustomColors.primaryText,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              // Start Date
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(bottom: 15, top: 15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: CustomTextFieldWidget(
-                  borderColor: CustomColors.white,
-                  obsecure: false,
-                  keyboardType: TextInputType.number,
-                  controller: startDateController,
-                  hintText: "Start Date",
-                  onChanged: (value) {
-                    setState(() {
-                      getfromPickedDate = value;
-                    });
-                  },
-                  onTap: () async {
-                    _fromDate(context);
-                  },
-                ),
-              ),
-              //Timer
-
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.centerLeft,
-                    padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-                    shape: MaterialStateProperty.resolveWith(
-                      (states) => RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    selectedTime != null ? '$selectedTime' : 'Select Time',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w400,
-                      color: CustomColors.primaryText,
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(
-                      () {
-                        displayTimeDialog();
-                      },
-                    );
-                  },
-                ),
-              ),
-              // Duration
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(bottom: 15, top: 15),
-                child: Center(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          hint: Text(
-                            "Duration in hours",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "Rubik",
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.primaryText,
-                            ),
-                          ),
-                          isExpanded: true,
-                          items: hours!.map((item) {
-                            return DropdownMenuItem(
-                              value: item['id'].toString(),
-                              child: Text(item['name']),
-                            );
-                          }).toList(),
-                          onChanged: (newVal) {
-                            setState(() {
-                              selectedHours = newVal;
-                            });
-                          },
-                          value: selectedHours,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              // AddBtn
-              GestureDetector(
-                onTap: () {
-                  String startDate = startDateController.text.trim();
-                  String time = selectedTime.toString();
-                  setState(() {
-                    dateMapList.add(startDate);
-                    startTimeMapList.add(time);
-                    durationMapList.add(selectedHours);
-                    seniorCareDays.add(
-                      {
-                        "starting_date": startDate,
-                        "starting_time": time,
-                        "duration": selectedHours,
-                      },
-                    );
-                  });
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.center,
-                      end: Alignment.center,
-                      colors: [
-                        ServiceRecieverColor.redButton.withOpacity(0.1),
-                        ServiceRecieverColor.redButton.withOpacity(0.8),
-                      ],
-                    ),
-                    color: ServiceRecieverColor.redButton,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(13, 0, 0, 0),
-                        blurRadius: 4.0,
-                        spreadRadius: 2.0,
-                        offset: Offset(2.0, 2.0),
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Add More Days",
-                      style: TextStyle(
-                        color: CustomColors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Rubik",
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // Show Days
-        const SizedBox(height: 20),
-        ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: seniorCareDays.length,
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 95,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            spreadRadius: 01,
-                            blurRadius: 05,
-                          ),
-                        ],
-                      ),
-                      height: 85,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              const Text("Date: "),
-                              Expanded(
-                                child: Text(
-                                  seniorCareDays[index]['starting_date'].toString(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Time: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['starting_time']}"),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Duration: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['duration']} hours"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 00,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            seniorCareDays.removeAt(index);
-                            startTimeMapList.removeAt(index);
-                            dateMapList.removeAt(index);
-                            durationMapList.removeAt(index);
-                          });
-                        }),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(100),
-                              bottomLeft: Radius.circular(100),
-                              bottomRight: Radius.circular(100),
-                              topRight: Radius.circular(100),
-                            ),
-                            color: CustomColors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color.fromARGB(13, 0, 0, 0),
-                                blurRadius: 4.0,
-                                spreadRadius: 2.0,
-                                offset: Offset(2.0, 2.0),
-                              ),
-                            ],
-                          ),
-                          // alignment: Alignment.center,
-                          width: 30,
-                          height: 30,
-                          child: const Icon(
-                            Icons.close,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+        addDaysColumn(context),
+        // Container(
+        //   padding: const EdgeInsets.all(12),
+        //   decoration: const BoxDecoration(
+        //     borderRadius: BorderRadius.only(
+        //       topLeft: Radius.circular(20),
+        //       topRight: Radius.circular(20),
+        //       bottomLeft: Radius.circular(20),
+        //       bottomRight: Radius.circular(20),
+        //     ),
+        //     boxShadow: [
+        //       BoxShadow(
+        //         color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+        //         spreadRadius: 5,
+        //         blurRadius: 3,
+        //       )
+        //     ],
+        //     color: Color.fromRGBO(255, 255, 255, 1),
+        //   ),
+        //   child: Column(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: <Widget>[
+        //       Text(
+        //         "Add Days",
+        //         style: TextStyle(
+        //           fontFamily: "Rubik",
+        //           fontSize: 18,
+        //           color: CustomColors.primaryText,
+        //           fontWeight: FontWeight.w600,
+        //         ),
+        //       ),
+        //       // Start Date
+        //       Container(
+        //         height: 50,
+        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
+        //         decoration: BoxDecoration(
+        //           color: Colors.white,
+        //           borderRadius: BorderRadius.circular(12),
+        //         ),
+        //         child: CustomTextFieldWidget(
+        //           borderColor: CustomColors.white,
+        //           obsecure: false,
+        //           keyboardType: TextInputType.number,
+        //           controller: startDateController,
+        //           hintText: "Start Date",
+        //           onChanged: (value) {
+        //             setState(() {
+        //               getfromPickedDate = value;
+        //             });
+        //           },
+        //           onTap: () async {
+        //             _fromDate(context);
+        //           },
+        //         ),
+        //       ),
+        //       //Timer
+        //       SizedBox(
+        //         width: MediaQuery.of(context).size.width,
+        //         height: 50,
+        //         child: TextButton(
+        //           style: ButtonStyle(
+        //             alignment: Alignment.centerLeft,
+        //             padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+        //             shape: MaterialStateProperty.resolveWith(
+        //               (states) => RoundedRectangleBorder(
+        //                 borderRadius: BorderRadius.circular(12),
+        //                 side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //               ),
+        //             ),
+        //           ),
+        //           child: Text(
+        //             selectedTime != null ? '$selectedTime' : 'Select Time',
+        //             textAlign: TextAlign.left,
+        //             style: TextStyle(
+        //               fontSize: 16,
+        //               fontFamily: "Rubik",
+        //               fontWeight: FontWeight.w400,
+        //               color: CustomColors.primaryText,
+        //             ),
+        //           ),
+        //           onPressed: () {
+        //             setState(
+        //               () {
+        //                 displayTimeDialog();
+        //               },
+        //             );
+        //           },
+        //         ),
+        //       ),
+        //       // Duration
+        //       Container(
+        //         height: 50,
+        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
+        //         child: Center(
+        //           child: DecoratedBox(
+        //             decoration: BoxDecoration(
+        //               border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //               borderRadius: BorderRadius.circular(12),
+        //             ),
+        //             child: Padding(
+        //               padding: const EdgeInsets.symmetric(
+        //                 horizontal: 10,
+        //                 vertical: 4,
+        //               ),
+        //               child: DropdownButtonHideUnderline(
+        //                 child: DropdownButton(
+        //                   hint: Text(
+        //                     "Duration in hours",
+        //                     style: TextStyle(
+        //                       fontSize: 12,
+        //                       fontFamily: "Rubik",
+        //                       fontWeight: FontWeight.w600,
+        //                       color: CustomColors.primaryText,
+        //                     ),
+        //                   ),
+        //                   isExpanded: true,
+        //                   items: hours!.map((item) {
+        //                     return DropdownMenuItem(
+        //                       value: item['id'].toString(),
+        //                       child: Text(item['name']),
+        //                     );
+        //                   }).toList(),
+        //                   onChanged: (newVal) {
+        //                     setState(() {
+        //                       selectedHours = newVal;
+        //                     });
+        //                   },
+        //                   value: selectedHours,
+        //                 ),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //       // AddBtn
+        //       GestureDetector(
+        //         onTap: () {
+        //           String startDate = startDateController.text.trim();
+        //           String time = selectedTime.toString();
+        //           setState(() {
+        //             dateMapList.add(startDate);
+        //             startTimeMapList.add(time);
+        //             durationMapList.add(selectedHours);
+        //             seniorCareDays.add(
+        //               {
+        //                 "starting_date": startDate,
+        //                 "starting_time": time,
+        //                 "duration": selectedHours,
+        //               },
+        //             );
+        //           });
+        //         },
+        //         child: Container(
+        //           width: MediaQuery.of(context).size.width,
+        //           height: 50,
+        //           margin: const EdgeInsets.only(top: 20),
+        //           decoration: BoxDecoration(
+        //             gradient: LinearGradient(
+        //               begin: Alignment.center,
+        //               end: Alignment.center,
+        //               colors: [
+        //                 ServiceRecieverColor.redButton.withOpacity(0.1),
+        //                 ServiceRecieverColor.redButton.withOpacity(0.8),
+        //               ],
+        //             ),
+        //             color: ServiceRecieverColor.redButton,
+        //             boxShadow: const [
+        //               BoxShadow(
+        //                 color: Color.fromARGB(13, 0, 0, 0),
+        //                 blurRadius: 4.0,
+        //                 spreadRadius: 2.0,
+        //                 offset: Offset(2.0, 2.0),
+        //               ),
+        //             ],
+        //             borderRadius: BorderRadius.circular(6),
+        //           ),
+        //           child: Center(
+        //             child: Text(
+        //               "Add More Days",
+        //               style: TextStyle(
+        //                 color: CustomColors.white,
+        //                 fontSize: 16,
+        //                 fontWeight: FontWeight.w600,
+        //                 fontFamily: "Rubik",
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // // Show Days
+        // const SizedBox(height: 20),
+        // ListView.builder(
+        //     shrinkWrap: true,
+        //     scrollDirection: Axis.vertical,
+        //     physics: const NeverScrollableScrollPhysics(),
+        //     itemCount: seniorCareDays.length,
+        //     itemBuilder: (context, index) {
+        //       return SizedBox(
+        //         width: MediaQuery.of(context).size.width,
+        //         height: 95,
+        //         child: Stack(
+        //           children: [
+        //             Container(
+        //               padding: const EdgeInsets.symmetric(
+        //                 horizontal: 10,
+        //                 vertical: 10,
+        //               ),
+        //               decoration: BoxDecoration(
+        //                 color: Colors.white,
+        //                 borderRadius: BorderRadius.circular(12),
+        //                 boxShadow: [
+        //                   BoxShadow(
+        //                     color: Colors.grey.shade300,
+        //                     spreadRadius: 01,
+        //                     blurRadius: 05,
+        //                   ),
+        //                 ],
+        //               ),
+        //               height: 85,
+        //               width: MediaQuery.of(context).size.width,
+        //               child: Column(
+        //                 children: [
+        //                   Row(
+        //                     children: [
+        //                       const Text("Date: "),
+        //                       Expanded(
+        //                         child: Text(
+        //                           seniorCareDays[index]['starting_date'].toString(),
+        //                         ),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   Row(
+        //                     children: [
+        //                       const Text("Time: "),
+        //                       Expanded(
+        //                         child: Text("${seniorCareDays[index]['starting_time']}"),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   Row(
+        //                     children: [
+        //                       const Text("Duration: "),
+        //                       Expanded(
+        //                         child: Text("${seniorCareDays[index]['duration']} hours"),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //             Positioned(
+        //               top: 00,
+        //               right: 0,
+        //               child: GestureDetector(
+        //                 onTap: (() {
+        //                   setState(() {
+        //                     seniorCareDays.removeAt(index);
+        //                     startTimeMapList.removeAt(index);
+        //                     dateMapList.removeAt(index);
+        //                     durationMapList.removeAt(index);
+        //                   });
+        //                 }),
+        //                 child: Container(
+        //                   decoration: BoxDecoration(
+        //                     borderRadius: const BorderRadius.only(
+        //                       topLeft: Radius.circular(100),
+        //                       bottomLeft: Radius.circular(100),
+        //                       bottomRight: Radius.circular(100),
+        //                       topRight: Radius.circular(100),
+        //                     ),
+        //                     color: CustomColors.white,
+        //                     boxShadow: const [
+        //                       BoxShadow(
+        //                         color: Color.fromARGB(13, 0, 0, 0),
+        //                         blurRadius: 4.0,
+        //                         spreadRadius: 2.0,
+        //                         offset: Offset(2.0, 2.0),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   // alignment: Alignment.center,
+        //                   width: 30,
+        //                   height: 30,
+        //                   child: const Icon(
+        //                     Icons.close,
+        //                     size: 16,
+        //                   ),
+        //                 ),
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       );
+        //     }),
         //Need Assistance
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Need Assistance",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2537,10 +2490,10 @@ class _PostScheduleState extends State<PostSchedule> {
           SizedBox(
             height: 45,
             child: TextFormField(
+              controller: otherFieldController,
               onChanged: (value) {
                 other = value;
               },
-              controller: otherFieldController,
               style: const TextStyle(
                 fontSize: 12,
                 fontFamily: "Rubik",
@@ -2549,40 +2502,97 @@ class _PostScheduleState extends State<PostSchedule> {
               ),
               textAlignVertical: TextAlignVertical.center,
               maxLines: 1,
-              decoration: InputDecoration(
-                hintText: "Please enter detail here",
-                hintStyle: TextStyle(
-                  fontSize: 12,
-                  fontFamily: "Rubik",
-                  fontWeight: FontWeight.w600,
-                  color: ServiceRecieverColor.primaryColor,
-                ),
-                fillColor: CustomColors.white,
-                focusColor: CustomColors.white,
-                hoverColor: CustomColors.white,
-                filled: true,
-                contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(2),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustomColors.borderLight,
-                    width: 0.5,
-                  ),
-                  borderRadius: BorderRadius.circular(2.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: CustomColors.borderLight,
-                    width: 0.5,
-                  ),
-                  borderRadius: BorderRadius.circular(2.0),
-                ),
-              ),
+              decoration: inputdecoration("Please enter details here"),
             ),
-          )
+          ),
         ],
+        const SizedBox(height: 20),
+        // Learning Style
+        // const SizedBox(height: 20),
+        Container(
+          alignment: Alignment.topLeft,
+          child: const Text(
+            "Learning Style",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              // color: ServiceRecieverColor.primaryColor,
+              fontFamily: "Rubik",
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 45,
+          child: TextFormField(
+            keyboardType: TextInputType.name,
+            controller: learningStyleController,
+            style: const TextStyle(
+              fontSize: 12,
+              fontFamily: "Rubik",
+              fontWeight: FontWeight.w600,
+            ),
+            decoration: inputdecoration("Learning Style"),
+          ),
+        ),
+        // Child challenge
+        const SizedBox(height: 20),
+        Container(
+          alignment: Alignment.topLeft,
+          child: const Text(
+            "Learning Challenge",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              // color: ServiceRecieverColor.primaryColor,
+              fontFamily: "Rubik",
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 100,
+          child: TextFormField(
+            keyboardType: TextInputType.name,
+            controller: learningChallengeController,
+            style: const TextStyle(
+              fontSize: 12,
+              fontFamily: "Rubik",
+              fontWeight: FontWeight.w600,
+            ),
+            maxLines: 5,
+            decoration: inputdecoration("Learning Challenge"),
+          ),
+        ),
+        const SizedBox(height: 20),
+        //Additional Info (optional)
+        Container(
+          alignment: Alignment.topLeft,
+          child: const Text(
+            "Additional Info (optional)",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              // color: ServiceRecieverColor.primaryColor,
+              fontFamily: "Rubik",
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 120,
+          child: TextFormField(
+            controller: additionalInfoController,
+            style: const TextStyle(
+              fontSize: 12,
+              fontFamily: "Rubik",
+              fontWeight: FontWeight.w600,
+            ),
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 5,
+            decoration: inputdecoration("Additional Info (optional)"),
+          ),
+        ),
         // btn
         const SizedBox(height: 20),
         Padding(
@@ -2642,7 +2652,7 @@ class _PostScheduleState extends State<PostSchedule> {
               ),
               child: Center(
                 child: Text(
-                  "Save",
+                  "Submit",
                   style: TextStyle(
                     color: CustomColors.white,
                     fontSize: 22,
@@ -2663,203 +2673,202 @@ class _PostScheduleState extends State<PostSchedule> {
       children: [
         const SizedBox(height: 10),
         //Job Title
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Title",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            controller: jobTitleController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            decoration: inputdecoration("Name"),
-          ),
-        ),
-        //Parish
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Location",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            controller: addressController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            decoration: inputdecoration("Job Location"),
-          ),
-        ),
-        //Location
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Area",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: Center(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    hint: Text(
-                      "Select Area",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: "Rubik",
-                        fontWeight: FontWeight.w600,
-                        color: ServiceRecieverColor.primaryColor,
-                      ),
-                    ),
-                    isExpanded: true,
-                    items: data!.map((item) {
-                      return DropdownMenuItem(
-                        value: item['id'].toString(),
-                        child: Text(item['name']),
-                      );
-                    }).toList(),
-                    onChanged: (newVal) {
-                      setState(() {
-                        selectedLocation = newVal;
-                      });
-                      if (selectedLocation == "1") {
-                        locationValue = "east";
-                      } else if (selectedLocation == "2") {
-                        locationValue = "west";
-                      } else if (selectedLocation == "3") {
-                        locationValue = "central";
-                      }
-                    },
-                    value: selectedLocation,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        // Hourly Rate
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Hourly Rate",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          height: 45,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(left: 10),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Flex(
-            direction: Axis.horizontal,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            verticalDirection: VerticalDirection.up,
-            children: [
-              Text(
-                "\$ ",
-                style: TextStyle(
-                  color: ServiceRecieverColor.primaryColor,
-                  fontSize: 16,
-                ),
-              ),
-              Flexible(
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: hourlyController,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontFamily: "Rubik",
-                    fontWeight: FontWeight.w600,
-                    // color: ServiceRecieverColor.primaryColor,
-                  ),
-                  textAlignVertical: TextAlignVertical.bottom,
-                  decoration: InputDecoration(
-                    hintText: "10",
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w600,
-                      color: ServiceRecieverColor.primaryColor,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Title",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: TextFormField(
+        //     controller: jobTitleController,
+        //     style: const TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: "Rubik",
+        //       fontWeight: FontWeight.w600,
+        //       // color: ServiceRecieverColor.primaryColor,
+        //     ),
+        //     textAlignVertical: TextAlignVertical.center,
+        //     maxLines: 1,
+        //     decoration: inputdecoration("Job Title"),
+        //   ),
+        // ),
+        // //Parish
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Location",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: TextFormField(
+        //     controller: addressController,
+        //     style: const TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: "Rubik",
+        //       fontWeight: FontWeight.w600,
+        //       // color: ServiceRecieverColor.primaryColor,
+        //     ),
+        //     textAlignVertical: TextAlignVertical.center,
+        //     maxLines: 1,
+        //     decoration: inputdecoration("Job Location"),
+        //   ),
+        // ),
+        // //Location
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Area",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: Center(
+        //     child: DecoratedBox(
+        //       decoration: BoxDecoration(
+        //         color: Colors.transparent,
+        //         border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //         borderRadius: BorderRadius.circular(12),
+        //       ),
+        //       child: Padding(
+        //         padding: const EdgeInsets.symmetric(
+        //           horizontal: 10,
+        //           vertical: 4,
+        //         ),
+        //         child: DropdownButtonHideUnderline(
+        //           child: DropdownButton(
+        //             hint: Text(
+        //               "Select Area",
+        //               style: TextStyle(
+        //                 fontSize: 12,
+        //                 fontFamily: "Rubik",
+        //                 fontWeight: FontWeight.w600,
+        //                 color: ServiceRecieverColor.primaryColor,
+        //               ),
+        //             ),
+        //             isExpanded: true,
+        //             items: data!.map((item) {
+        //               return DropdownMenuItem(
+        //                 value: item['id'].toString(),
+        //                 child: Text(item['name']),
+        //               );
+        //             }).toList(),
+        //             onChanged: (newVal) {
+        //               setState(() {
+        //                 selectedLocation = newVal;
+        //               });
+        //               if (selectedLocation == "1") {
+        //                 locationValue = "east";
+        //               } else if (selectedLocation == "2") {
+        //                 locationValue = "west";
+        //               } else if (selectedLocation == "3") {
+        //                 locationValue = "central";
+        //               }
+        //             },
+        //             value: selectedLocation,
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // // Hourly Rate
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Hourly Rate",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // Container(
+        //   height: 45,
+        //   width: MediaQuery.of(context).size.width,
+        //   padding: const EdgeInsets.only(left: 10),
+        //   clipBehavior: Clip.hardEdge,
+        //   decoration: BoxDecoration(
+        //     color: Colors.white,
+        //     border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //     borderRadius: BorderRadius.circular(12),
+        //   ),
+        //   child: Flex(
+        //     direction: Axis.horizontal,
+        //     crossAxisAlignment: CrossAxisAlignment.center,
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     verticalDirection: VerticalDirection.up,
+        //     children: [
+        //       Text(
+        //         "\$ ",
+        //         style: TextStyle(
+        //           color: ServiceRecieverColor.primaryColor,
+        //           fontSize: 16,
+        //         ),
+        //       ),
+        //       Flexible(
+        //         child: TextFormField(
+        //           keyboardType: TextInputType.number,
+        //           controller: hourlyController,
+        //           style: const TextStyle(
+        //             fontSize: 12,
+        //             fontFamily: "Rubik",
+        //             fontWeight: FontWeight.w600,
+        //           ),
+        //           textAlignVertical: TextAlignVertical.bottom,
+        //           decoration: InputDecoration(
+        //             hintText: "Hourly rate",
+        //             hintStyle: TextStyle(
+        //               fontSize: 14,
+        //               fontFamily: "Rubik",
+        //               fontWeight: FontWeight.w600,
+        //               color: ServiceRecieverColor.primaryColor,
+        //             ),
+        //             border: InputBorder.none,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         // Cleaning type
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Cleaning Type",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2880,7 +2889,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedCleaning == 0 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedCleaning == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -2889,9 +2898,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedCleaning == 0 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedCleaning == 0 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedCleaning == 0 ? Colors.white : Colors.black,
                   ),
                 ),
               ),
@@ -2909,7 +2918,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedCleaning == 1 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedCleaning == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -2918,9 +2927,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedCleaning == 1 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedCleaning == 1 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedCleaning == 1 ? Colors.white : Colors.black,
                   ),
                 ),
               ),
@@ -2929,312 +2938,313 @@ class _PostScheduleState extends State<PostSchedule> {
         ),
         // Add Days
         const SizedBox(height: 20),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                blurRadius: 3,
-                spreadRadius: 5,
-              )
-            ],
-            color: Color.fromRGBO(255, 255, 255, 1),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                "Add Days",
-                style: TextStyle(
-                  fontFamily: "Rubik",
-                  fontSize: 18,
-                  color: CustomColors.primaryText,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              // Start Date
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(bottom: 15, top: 15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: CustomTextFieldWidget(
-                  borderColor: CustomColors.white,
-                  obsecure: false,
-                  keyboardType: TextInputType.number,
-                  controller: startDateController,
-                  hintText: "Start Date",
-                  onChanged: (value) {
-                    setState(() {
-                      getfromPickedDate = value;
-                    });
-                  },
-                  onTap: () async {
-                    _fromDate(context);
-                  },
-                ),
-              ),
-              //Timer
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.centerLeft,
-                    padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-                    shape: MaterialStateProperty.resolveWith(
-                      (states) => RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    selectedTime != null ? '$selectedTime' : 'Select Time',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w400,
-                      color: CustomColors.primaryText,
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(
-                      () {
-                        displayTimeDialog();
-                      },
-                    );
-                  },
-                ),
-              ),
-              // Duration
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(bottom: 15, top: 15),
-                child: Center(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          hint: Text(
-                            "Duration in hours",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "Rubik",
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.primaryText,
-                            ),
-                          ),
-                          isExpanded: true,
-                          items: hours!.map((item) {
-                            return DropdownMenuItem(
-                              value: item['id'].toString(),
-                              child: Text(item['name']),
-                            );
-                          }).toList(),
-                          onChanged: (newVal) {
-                            setState(() {
-                              selectedHours = newVal;
-                            });
-                          },
-                          value: selectedHours,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // AddBtn
-              GestureDetector(
-                onTap: () {
-                  String startDate = startDateController.text.trim();
-                  String time = selectedTime.toString();
-                  setState(() {
-                    dateMapList.add(startDate);
-                    startTimeMapList.add(time);
-                    durationMapList.add(selectedHours);
-                    seniorCareDays.add(
-                      {
-                        "starting_date": startDate,
-                        "starting_time": time,
-                        "duration": selectedHours,
-                      },
-                    );
-                  });
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.center,
-                      end: Alignment.center,
-                      colors: [
-                        ServiceRecieverColor.redButton.withOpacity(0.1),
-                        ServiceRecieverColor.redButton.withOpacity(0.8),
-                      ],
-                    ),
-                    color: ServiceRecieverColor.redButton,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(13, 0, 0, 0),
-                        blurRadius: 4.0,
-                        spreadRadius: 2.0,
-                        offset: Offset(2.0, 2.0),
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Add More Days",
-                      style: TextStyle(
-                        color: CustomColors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Rubik",
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        // Show Days
-        const SizedBox(height: 20),
-        ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: seniorCareDays.length,
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 95,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            spreadRadius: 01,
-                            blurRadius: 05,
-                          ),
-                        ],
-                      ),
-                      height: 85,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              const Text("Date: "),
-                              Expanded(
-                                child: Text(
-                                  seniorCareDays[index]['starting_date'].toString(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Time: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['starting_time']}"),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Duration: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['duration']} hours"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 00,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            seniorCareDays.removeAt(index);
-                            startTimeMapList.removeAt(index);
-                            dateMapList.removeAt(index);
-                            durationMapList.removeAt(index);
-                          });
-                        }),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(100),
-                              bottomLeft: Radius.circular(100),
-                              bottomRight: Radius.circular(100),
-                              topRight: Radius.circular(100),
-                            ),
-                            color: CustomColors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color.fromARGB(13, 0, 0, 0),
-                                blurRadius: 4.0,
-                                spreadRadius: 2.0,
-                                offset: Offset(2.0, 2.0),
-                              ),
-                            ],
-                          ),
-                          // alignment: Alignment.center,
-                          width: 30,
-                          height: 30,
-                          child: const Icon(
-                            Icons.close,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+        addDaysColumn(context),
+        // Container(
+        //   padding: const EdgeInsets.all(12),
+        //   decoration: const BoxDecoration(
+        //     borderRadius: BorderRadius.only(
+        //       topLeft: Radius.circular(20),
+        //       topRight: Radius.circular(20),
+        //       bottomLeft: Radius.circular(20),
+        //       bottomRight: Radius.circular(20),
+        //     ),
+        //     boxShadow: [
+        //       BoxShadow(
+        //         color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+        //         blurRadius: 3,
+        //         spreadRadius: 5,
+        //       )
+        //     ],
+        //     color: Color.fromRGBO(255, 255, 255, 1),
+        //   ),
+        //   child: Column(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: <Widget>[
+        //       const Text(
+        //         "Add Days",
+        //         style: TextStyle(
+        //           fontFamily: "Rubik",
+        //           fontSize: 18,
+        //           // color: CustomColors.primaryText,
+        //           fontWeight: FontWeight.w600,
+        //         ),
+        //       ),
+        //       // Start Date
+        //       Container(
+        //         height: 50,
+        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
+        //         decoration: BoxDecoration(
+        //           color: Colors.white,
+        //           borderRadius: BorderRadius.circular(12),
+        //         ),
+        //         child: CustomTextFieldWidget(
+        //           borderColor: CustomColors.white,
+        //           obsecure: false,
+        //           keyboardType: TextInputType.number,
+        //           controller: startDateController,
+        //           hintText: "Date",
+        //           onChanged: (value) {
+        //             setState(() {
+        //               getfromPickedDate = value;
+        //             });
+        //           },
+        //           onTap: () async {
+        //             _fromDate(context);
+        //           },
+        //         ),
+        //       ),
+        //       //Timer
+        //       SizedBox(
+        //         width: MediaQuery.of(context).size.width,
+        //         height: 50,
+        //         child: TextButton(
+        //           style: ButtonStyle(
+        //             alignment: Alignment.centerLeft,
+        //             padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+        //             shape: MaterialStateProperty.resolveWith(
+        //               (states) => RoundedRectangleBorder(
+        //                 borderRadius: BorderRadius.circular(12),
+        //                 side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //               ),
+        //             ),
+        //           ),
+        //           child: Text(
+        //             selectedTime != null ? '$selectedTime' : 'Start Time',
+        //             textAlign: TextAlign.left,
+        //             style: TextStyle(
+        //               fontSize: 16,
+        //               fontFamily: "Rubik",
+        //               fontWeight: FontWeight.w400,
+        //               color: CustomColors.primaryText,
+        //             ),
+        //           ),
+        //           onPressed: () {
+        //             setState(
+        //               () {
+        //                 displayTimeDialog();
+        //               },
+        //             );
+        //           },
+        //         ),
+        //       ),
+        //       // Duration
+        //       Container(
+        //         height: 50,
+        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
+        //         child: Center(
+        //           child: DecoratedBox(
+        //             decoration: BoxDecoration(
+        //               border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //               borderRadius: BorderRadius.circular(12),
+        //             ),
+        //             child: Padding(
+        //               padding: const EdgeInsets.symmetric(
+        //                 horizontal: 10,
+        //                 vertical: 4,
+        //               ),
+        //               child: DropdownButtonHideUnderline(
+        //                 child: DropdownButton(
+        //                   hint: Text(
+        //                     "Duration",
+        //                     style: TextStyle(
+        //                       fontSize: 12,
+        //                       fontFamily: "Rubik",
+        //                       fontWeight: FontWeight.w600,
+        //                       color: CustomColors.primaryText,
+        //                     ),
+        //                   ),
+        //                   isExpanded: true,
+        //                   items: hours!.map((item) {
+        //                     return DropdownMenuItem(
+        //                       value: item['id'].toString(),
+        //                       child: Text(item['name']),
+        //                     );
+        //                   }).toList(),
+        //                   onChanged: (newVal) {
+        //                     setState(() {
+        //                       selectedHours = newVal;
+        //                     });
+        //                   },
+        //                   value: selectedHours,
+        //                 ),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //       // AddBtn
+        //       GestureDetector(
+        //         onTap: () {
+        //           String startDate = startDateController.text.trim();
+        //           String time = selectedTime.toString();
+        //           setState(() {
+        //             dateMapList.add(startDate);
+        //             startTimeMapList.add(time);
+        //             durationMapList.add(selectedHours);
+        //             seniorCareDays.add(
+        //               {
+        //                 "starting_date": startDate,
+        //                 "starting_time": time,
+        //                 "duration": selectedHours,
+        //               },
+        //             );
+        //           });
+        //         },
+        //         child: Container(
+        //           width: MediaQuery.of(context).size.width,
+        //           height: 50,
+        //           margin: const EdgeInsets.only(top: 20),
+        //           decoration: BoxDecoration(
+        //             gradient: LinearGradient(
+        //               begin: Alignment.center,
+        //               end: Alignment.center,
+        //               colors: [
+        //                 ServiceRecieverColor.redButton.withOpacity(0.1),
+        //                 ServiceRecieverColor.redButton.withOpacity(0.8),
+        //               ],
+        //             ),
+        //             color: ServiceRecieverColor.redButton,
+        //             boxShadow: const [
+        //               BoxShadow(
+        //                 color: Color.fromARGB(13, 0, 0, 0),
+        //                 blurRadius: 4.0,
+        //                 spreadRadius: 2.0,
+        //                 offset: Offset(2.0, 2.0),
+        //               ),
+        //             ],
+        //             borderRadius: BorderRadius.circular(6),
+        //           ),
+        //           child: Center(
+        //             child: Text(
+        //               "Add More Days",
+        //               style: TextStyle(
+        //                 color: CustomColors.white,
+        //                 fontSize: 16,
+        //                 fontWeight: FontWeight.w600,
+        //                 fontFamily: "Rubik",
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // // Show Days
+        // const SizedBox(height: 20),
+        // ListView.builder(
+        //     shrinkWrap: true,
+        //     scrollDirection: Axis.vertical,
+        //     physics: const NeverScrollableScrollPhysics(),
+        //     itemCount: seniorCareDays.length,
+        //     itemBuilder: (context, index) {
+        //       return SizedBox(
+        //         width: MediaQuery.of(context).size.width,
+        //         height: 95,
+        //         child: Stack(
+        //           children: [
+        //             Container(
+        //               padding: const EdgeInsets.symmetric(
+        //                 horizontal: 10,
+        //                 vertical: 10,
+        //               ),
+        //               decoration: BoxDecoration(
+        //                 color: Colors.white,
+        //                 borderRadius: BorderRadius.circular(12),
+        //                 boxShadow: [
+        //                   BoxShadow(
+        //                     color: Colors.grey.shade300,
+        //                     spreadRadius: 01,
+        //                     blurRadius: 05,
+        //                   ),
+        //                 ],
+        //               ),
+        //               height: 85,
+        //               width: MediaQuery.of(context).size.width,
+        //               child: Column(
+        //                 children: [
+        //                   Row(
+        //                     children: [
+        //                       const Text("Date: "),
+        //                       Expanded(
+        //                         child: Text(
+        //                           seniorCareDays[index]['starting_date'].toString(),
+        //                         ),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   Row(
+        //                     children: [
+        //                       const Text("Time: "),
+        //                       Expanded(
+        //                         child: Text("${seniorCareDays[index]['starting_time']}"),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   Row(
+        //                     children: [
+        //                       const Text("Duration: "),
+        //                       Expanded(
+        //                         child: Text("${seniorCareDays[index]['duration']} hours"),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //             Positioned(
+        //               top: 00,
+        //               right: 0,
+        //               child: GestureDetector(
+        //                 onTap: (() {
+        //                   setState(() {
+        //                     seniorCareDays.removeAt(index);
+        //                     startTimeMapList.removeAt(index);
+        //                     dateMapList.removeAt(index);
+        //                     durationMapList.removeAt(index);
+        //                   });
+        //                 }),
+        //                 child: Container(
+        //                   decoration: BoxDecoration(
+        //                     borderRadius: const BorderRadius.only(
+        //                       topLeft: Radius.circular(100),
+        //                       bottomLeft: Radius.circular(100),
+        //                       bottomRight: Radius.circular(100),
+        //                       topRight: Radius.circular(100),
+        //                     ),
+        //                     color: CustomColors.white,
+        //                     boxShadow: const [
+        //                       BoxShadow(
+        //                         color: Color.fromARGB(13, 0, 0, 0),
+        //                         blurRadius: 4.0,
+        //                         spreadRadius: 2.0,
+        //                         offset: Offset(2.0, 2.0),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   // alignment: Alignment.center,
+        //                   width: 30,
+        //                   height: 30,
+        //                   child: const Icon(
+        //                     Icons.close,
+        //                     size: 16,
+        //                   ),
+        //                 ),
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       );
+        //     }),
         // Size of House/Apartment
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Size of House/Apartment",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3255,7 +3265,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedBedroom == 0 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedBedroom == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -3264,9 +3274,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedBedroom == 0 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedBedroom == 0 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedBedroom == 0 ? Colors.white : Colors.black,
                   ),
                 ),
               ),
@@ -3284,7 +3294,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedBedroom == 1 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedBedroom == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -3293,9 +3303,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedBedroom == 1 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedBedroom == 1 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedBedroom == 1 ? CustomColors.white : Colors.black,
                   ),
                 ),
               ),
@@ -3316,7 +3326,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedBedroom == 2 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedBedroom == 2 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -3325,9 +3335,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedBedroom == 2 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedBedroom == 2 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedBedroom == 2 ? CustomColors.white : Colors.black,
                   ),
                 ),
               ),
@@ -3345,7 +3355,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedBedroom == 3 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedBedroom == 3 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -3355,9 +3365,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedBedroom == 3 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedBedroom == 3 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedBedroom == 3 ? CustomColors.white : Colors.black,
                   ),
                 ),
               ),
@@ -3379,7 +3389,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedBathroom == 0 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedBathroom == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -3388,9 +3398,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedBathroom == 0 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedBathroom == 0 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedBathroom == 0 ? CustomColors.white : Colors.black,
                   ),
                 ),
               ),
@@ -3408,7 +3418,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedBathroom == 1 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedBathroom == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -3417,9 +3427,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedBathroom == 1 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedBathroom == 1 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedBathroom == 1 ? CustomColors.white : Colors.black,
                   ),
                 ),
               ),
@@ -3440,7 +3450,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedBathroom == 2 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedBathroom == 2 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -3449,9 +3459,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedBathroom == 2 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedBathroom == 2 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedBathroom == 2 ? CustomColors.white : Colors.black,
                   ),
                 ),
               ),
@@ -3469,7 +3479,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedBathroom == 3 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedBathroom == 3 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -3479,9 +3489,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedBathroom == 3 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedBathroom == 3 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedBathroom == 3 ? CustomColors.white : Colors.black,
                   ),
                 ),
               ),
@@ -3492,11 +3502,11 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Other",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3598,6 +3608,36 @@ class _PostScheduleState extends State<PostSchedule> {
             ),
           ),
         ],
+
+        //Additional Info (optional)
+        const SizedBox(height: 20),
+        Container(
+          alignment: Alignment.topLeft,
+          child: const Text(
+            "Additional Info (optional)",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              // color: ServiceRecieverColor.primaryColor,
+              fontFamily: "Rubik",
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 120,
+          child: TextFormField(
+            controller: additionalInfoController,
+            style: const TextStyle(
+              fontSize: 12,
+              fontFamily: "Rubik",
+              fontWeight: FontWeight.w600,
+            ),
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 5,
+            decoration: inputdecoration("Additional Info (optional)"),
+          ),
+        ),
         const SizedBox(height: 20),
         // btn
         Padding(
@@ -3655,7 +3695,7 @@ class _PostScheduleState extends State<PostSchedule> {
               ),
               child: Center(
                 child: Text(
-                  "Save",
+                  "Submit",
                   style: TextStyle(
                     color: CustomColors.white,
                     fontSize: 22,
@@ -3676,503 +3716,504 @@ class _PostScheduleState extends State<PostSchedule> {
       children: [
         const SizedBox(height: 10),
         //Job Title
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Title",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            controller: jobTitleController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            decoration: inputdecoration("Name"),
-          ),
-        ),
-        //Parish
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Location",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            controller: addressController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            decoration: inputdecoration("Job Location"),
-          ),
-        ),
-        //Location
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Area",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: Center(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    hint: Text(
-                      "Select Area",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: "Rubik",
-                        fontWeight: FontWeight.w600,
-                        color: ServiceRecieverColor.primaryColor,
-                      ),
-                    ),
-                    isExpanded: true,
-                    items: data!.map((item) {
-                      return DropdownMenuItem(
-                        value: item['id'].toString(),
-                        child: Text(item['name']),
-                      );
-                    }).toList(),
-                    onChanged: (newVal) {
-                      setState(() {
-                        selectedLocation = newVal;
-                      });
-                      if (selectedLocation == "1") {
-                        locationValue = "east";
-                      } else if (selectedLocation == "2") {
-                        locationValue = "west";
-                      } else if (selectedLocation == "3") {
-                        locationValue = "central";
-                      }
-                    },
-                    value: selectedLocation,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        // Hourly Rate
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Hourly Rate",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          height: 45,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(left: 10),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Flex(
-            direction: Axis.horizontal,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            verticalDirection: VerticalDirection.up,
-            children: [
-              Text(
-                "\$ ",
-                style: TextStyle(
-                  color: ServiceRecieverColor.primaryColor,
-                  fontSize: 16,
-                ),
-              ),
-              Flexible(
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: hourlyController,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontFamily: "Rubik",
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlignVertical: TextAlignVertical.top,
-                  decoration: InputDecoration(
-                    hintText: "10",
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w600,
-                      color: ServiceRecieverColor.primaryColor,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Title",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: TextFormField(
+        //     controller: jobTitleController,
+        //     style: const TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: "Rubik",
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //     textAlignVertical: TextAlignVertical.center,
+        //     maxLines: 1,
+        //     decoration: inputdecoration("Job Title"),
+        //   ),
+        // ),
+        // //Parish
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Location",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: TextFormField(
+        //     controller: addressController,
+        //     style: const TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: "Rubik",
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //     textAlignVertical: TextAlignVertical.center,
+        //     maxLines: 1,
+        //     decoration: inputdecoration("Job Location"),
+        //   ),
+        // ),
+        // //Location
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Area",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: Center(
+        //     child: DecoratedBox(
+        //       decoration: BoxDecoration(
+        //         color: Colors.transparent,
+        //         border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //         borderRadius: BorderRadius.circular(12),
+        //       ),
+        //       child: Padding(
+        //         padding: const EdgeInsets.symmetric(
+        //           horizontal: 10,
+        //           vertical: 4,
+        //         ),
+        //         child: DropdownButtonHideUnderline(
+        //           child: DropdownButton(
+        //             hint: Text(
+        //               "Select Area",
+        //               style: TextStyle(
+        //                 fontSize: 12,
+        //                 fontFamily: "Rubik",
+        //                 fontWeight: FontWeight.w600,
+        //                 color: ServiceRecieverColor.primaryColor,
+        //               ),
+        //             ),
+        //             isExpanded: true,
+        //             items: data!.map((item) {
+        //               return DropdownMenuItem(
+        //                 value: item['id'].toString(),
+        //                 child: Text(item['name']),
+        //               );
+        //             }).toList(),
+        //             onChanged: (newVal) {
+        //               setState(() {
+        //                 selectedLocation = newVal;
+        //               });
+        //               if (selectedLocation == "1") {
+        //                 locationValue = "east";
+        //               } else if (selectedLocation == "2") {
+        //                 locationValue = "west";
+        //               } else if (selectedLocation == "3") {
+        //                 locationValue = "central";
+        //               }
+        //             },
+        //             value: selectedLocation,
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // // Hourly Rate
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Hourly Rate",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // Container(
+        //   height: 45,
+        //   width: MediaQuery.of(context).size.width,
+        //   padding: const EdgeInsets.only(left: 10),
+        //   clipBehavior: Clip.hardEdge,
+        //   decoration: BoxDecoration(
+        //     color: Colors.white,
+        //     border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //     borderRadius: BorderRadius.circular(12),
+        //   ),
+        //   child: Flex(
+        //     direction: Axis.horizontal,
+        //     crossAxisAlignment: CrossAxisAlignment.center,
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     verticalDirection: VerticalDirection.up,
+        //     children: [
+        //       Text(
+        //         "\$ ",
+        //         style: TextStyle(
+        //           color: ServiceRecieverColor.primaryColor,
+        //           fontSize: 16,
+        //         ),
+        //       ),
+        //       Flexible(
+        //         child: TextFormField(
+        //           keyboardType: TextInputType.number,
+        //           controller: hourlyController,
+        //           style: const TextStyle(
+        //             fontSize: 12,
+        //             fontFamily: "Rubik",
+        //             fontWeight: FontWeight.w600,
+        //           ),
+        //           textAlignVertical: TextAlignVertical.center,
+        //           maxLines: 1,
+        //           decoration: InputDecoration(
+        //             hintText: "Please add Hourly Rate",
+        //             hintStyle: TextStyle(
+        //               fontSize: 14,
+        //               fontFamily: "Rubik",
+        //               fontWeight: FontWeight.w600,
+        //               color: ServiceRecieverColor.primaryColor,
+        //             ),
+        //             border: InputBorder.none,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         // Add Days
         const SizedBox(height: 20),
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                spreadRadius: 5,
-                blurRadius: 3,
-              )
-            ],
-            color: Color.fromRGBO(255, 255, 255, 1),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                "Add Days",
-                style: TextStyle(
-                  fontFamily: "Rubik",
-                  fontSize: 18,
-                  color: CustomColors.primaryText,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              const SizedBox(height: 10),
-              // Start Date
-              Container(
-                height: 50,
-                // margin: const EdgeInsets.only(bottom: 15, top: 15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: CustomTextFieldWidget(
-                  borderColor: CustomColors.white,
-                  obsecure: false,
-                  keyboardType: TextInputType.number,
-                  controller: startDateController,
-                  hintText: "Start Date",
-                  onChanged: (value) {
-                    setState(() {
-                      getfromPickedDate = value;
-                    });
-                  },
-                  onTap: () async {
-                    _fromDate(context);
-                  },
-                ),
-              ),
-              //Timer
-              const SizedBox(height: 10),
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.centerLeft,
-                    padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-                    shape: MaterialStateProperty.resolveWith(
-                      (states) => RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    selectedTime != null ? '$selectedTime' : 'Select Time',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w400,
-                      color: CustomColors.primaryText,
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(
-                      () {
-                        displayTimeDialog();
-                      },
-                    );
-                  },
-                ),
-              ),
-              // Duration
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(bottom: 0, top: 15),
-                child: Center(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      // color: CustomColors.myJobDetail,
-                      border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          hint: Text(
-                            "Duration in hours",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "Rubik",
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.primaryText,
-                            ),
-                          ),
-                          isExpanded: true,
-                          items: hours!.map((item) {
-                            return DropdownMenuItem(
-                              value: item['id'].toString(),
-                              child: Text(item['name']),
-                            );
-                          }).toList(),
-                          onChanged: (newVal) {
-                            setState(() {
-                              selectedHours = newVal;
-                            });
-                          },
-                          value: selectedHours,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // AddBtn
-              GestureDetector(
-                onTap: () {
-                  String startDate = startDateController.text.trim();
-                  String time = selectedTime.toString();
-
-                  setState(() {
-                    dateMapList.add(startDate);
-                    startTimeMapList.add(time);
-                    durationMapList.add(selectedHours);
-                    seniorCareDays.add(
-                      {
-                        "starting_date": startDate,
-                        "starting_time": time,
-                        "duration": selectedHours,
-                      },
-                    );
-                  });
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.center,
-                      end: Alignment.center,
-                      colors: [
-                        ServiceRecieverColor.redButton.withOpacity(0.1),
-                        ServiceRecieverColor.redButton.withOpacity(0.8),
-                      ],
-                    ),
-                    color: ServiceRecieverColor.redButton,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(13, 0, 0, 0),
-                        blurRadius: 4.0,
-                        spreadRadius: 2.0,
-                        offset: Offset(2.0, 2.0),
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Add More Days",
-                      style: TextStyle(
-                        color: CustomColors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Rubik",
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 20),
-        // Show Days
-        ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: seniorCareDays.length,
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 95,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            spreadRadius: 01,
-                            blurRadius: 05,
-                          ),
-                        ],
-                      ),
-                      height: 85,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              const Text("Date: "),
-                              Expanded(
-                                child: Text(
-                                  seniorCareDays[index]['starting_date'].toString(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Time: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['starting_time']}"),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Duration: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['duration']} hours"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 00,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            seniorCareDays.removeAt(index);
-                            startTimeMapList.removeAt(index);
-                            dateMapList.removeAt(index);
-                            durationMapList.removeAt(index);
-                          });
-                        }),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(100),
-                              bottomLeft: Radius.circular(100),
-                              bottomRight: Radius.circular(100),
-                              topRight: Radius.circular(100),
-                            ),
-                            color: CustomColors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color.fromARGB(13, 0, 0, 0),
-                                blurRadius: 4.0,
-                                spreadRadius: 2.0,
-                                offset: Offset(2.0, 2.0),
-                              ),
-                            ],
-                          ),
-                          // alignment: Alignment.center,
-                          width: 30,
-                          height: 30,
-                          child: const Icon(
-                            Icons.close,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
+        addDaysColumn(context),
+        // Container(
+        //   padding: const EdgeInsets.all(12),
+        //   decoration: const BoxDecoration(
+        //     borderRadius: BorderRadius.only(
+        //       topLeft: Radius.circular(20),
+        //       topRight: Radius.circular(20),
+        //       bottomLeft: Radius.circular(20),
+        //       bottomRight: Radius.circular(20),
+        //     ),
+        //     boxShadow: [
+        //       BoxShadow(
+        //         color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+        //         spreadRadius: 5,
+        //         blurRadius: 3,
+        //       )
+        //     ],
+        //     color: Color.fromRGBO(255, 255, 255, 1),
+        //   ),
+        //   child: Column(
+        //     mainAxisSize: MainAxisSize.min,
+        //     children: <Widget>[
+        //       Text(
+        //         "Add Days",
+        //         style: TextStyle(
+        //           fontFamily: "Rubik",
+        //           fontSize: 18,
+        //           color: CustomColors.primaryText,
+        //           fontWeight: FontWeight.w600,
+        //         ),
+        //       ),
+        //       const SizedBox(height: 10),
+        //       // Start Date
+        //       Container(
+        //         height: 50,
+        //         // margin: const EdgeInsets.only(bottom: 15, top: 15),
+        //         decoration: BoxDecoration(
+        //           color: Colors.white,
+        //           borderRadius: BorderRadius.circular(12),
+        //         ),
+        //         child: CustomTextFieldWidget(
+        //           borderColor: CustomColors.white,
+        //           obsecure: false,
+        //           keyboardType: TextInputType.number,
+        //           controller: startDateController,
+        //           hintText: "Date",
+        //           onChanged: (value) {
+        //             setState(() {
+        //               getfromPickedDate = value;
+        //             });
+        //           },
+        //           onTap: () async {
+        //             _fromDate(context);
+        //           },
+        //         ),
+        //       ),
+        //       //Timer
+        //       const SizedBox(height: 10),
+        //       SizedBox(
+        //         width: MediaQuery.of(context).size.width,
+        //         height: 50,
+        //         child: TextButton(
+        //           style: ButtonStyle(
+        //             alignment: Alignment.centerLeft,
+        //             padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+        //             shape: MaterialStateProperty.resolveWith(
+        //               (states) => RoundedRectangleBorder(
+        //                 borderRadius: BorderRadius.circular(12),
+        //                 side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //               ),
+        //             ),
+        //           ),
+        //           child: Text(
+        //             selectedTime != null ? '$selectedTime' : 'Start Time',
+        //             textAlign: TextAlign.left,
+        //             style: TextStyle(
+        //               fontSize: 16,
+        //               fontFamily: "Rubik",
+        //               fontWeight: FontWeight.w400,
+        //               color: CustomColors.primaryText,
+        //             ),
+        //           ),
+        //           onPressed: () {
+        //             setState(
+        //               () {
+        //                 displayTimeDialog();
+        //               },
+        //             );
+        //           },
+        //         ),
+        //       ),
+        //       // Duration
+        //       Container(
+        //         height: 50,
+        //         margin: const EdgeInsets.only(bottom: 0, top: 15),
+        //         child: Center(
+        //           child: DecoratedBox(
+        //             decoration: BoxDecoration(
+        //               // color: CustomColors.myJobDetail,
+        //               border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //               borderRadius: BorderRadius.circular(12),
+        //             ),
+        //             child: Padding(
+        //               padding: const EdgeInsets.symmetric(
+        //                 horizontal: 10,
+        //                 vertical: 4,
+        //               ),
+        //               child: DropdownButtonHideUnderline(
+        //                 child: DropdownButton(
+        //                   hint: Text(
+        //                     "Duration",
+        //                     style: TextStyle(
+        //                       fontSize: 12,
+        //                       fontFamily: "Rubik",
+        //                       fontWeight: FontWeight.w600,
+        //                       color: CustomColors.primaryText,
+        //                     ),
+        //                   ),
+        //                   isExpanded: true,
+        //                   items: hours!.map((item) {
+        //                     return DropdownMenuItem(
+        //                       value: item['id'].toString(),
+        //                       child: Text(item['name']),
+        //                     );
+        //                   }).toList(),
+        //                   onChanged: (newVal) {
+        //                     setState(() {
+        //                       selectedHours = newVal;
+        //                     });
+        //                   },
+        //                   value: selectedHours,
+        //                 ),
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //       // AddBtn
+        //       GestureDetector(
+        //         onTap: () {
+        //           String startDate = startDateController.text.trim();
+        //           String time = selectedTime.toString();
+        //           setState(() {
+        //             dateMapList.add(startDate);
+        //             startTimeMapList.add(time);
+        //             durationMapList.add(selectedHours);
+        //             seniorCareDays.add(
+        //               {
+        //                 "starting_date": startDate,
+        //                 "starting_time": time,
+        //                 "duration": selectedHours,
+        //               },
+        //             );
+        //           });
+        //         },
+        //         child: Container(
+        //           width: MediaQuery.of(context).size.width,
+        //           height: 50,
+        //           margin: const EdgeInsets.only(top: 20),
+        //           decoration: BoxDecoration(
+        //             gradient: LinearGradient(
+        //               begin: Alignment.center,
+        //               end: Alignment.center,
+        //               colors: [
+        //                 ServiceRecieverColor.redButton.withOpacity(0.1),
+        //                 ServiceRecieverColor.redButton.withOpacity(0.8),
+        //               ],
+        //             ),
+        //             color: ServiceRecieverColor.redButton,
+        //             boxShadow: const [
+        //               BoxShadow(
+        //                 color: Color.fromARGB(13, 0, 0, 0),
+        //                 blurRadius: 4.0,
+        //                 spreadRadius: 2.0,
+        //                 offset: Offset(2.0, 2.0),
+        //               ),
+        //             ],
+        //             borderRadius: BorderRadius.circular(6),
+        //           ),
+        //           child: Center(
+        //             child: Text(
+        //               "Add More Days",
+        //               style: TextStyle(
+        //                 color: CustomColors.white,
+        //                 fontSize: 16,
+        //                 fontWeight: FontWeight.w600,
+        //                 fontFamily: "Rubik",
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // const SizedBox(height: 20),
+        // // Show Days
+        // ListView.builder(
+        //     shrinkWrap: true,
+        //     scrollDirection: Axis.vertical,
+        //     physics: const NeverScrollableScrollPhysics(),
+        //     itemCount: seniorCareDays.length,
+        //     itemBuilder: (context, index) {
+        //       return SizedBox(
+        //         width: MediaQuery.of(context).size.width,
+        //         height: 95,
+        //         child: Stack(
+        //           children: [
+        //             Container(
+        //               padding: const EdgeInsets.symmetric(
+        //                 horizontal: 10,
+        //                 vertical: 10,
+        //               ),
+        //               decoration: BoxDecoration(
+        //                 color: Colors.white,
+        //                 borderRadius: BorderRadius.circular(12),
+        //                 boxShadow: [
+        //                   BoxShadow(
+        //                     color: Colors.grey.shade300,
+        //                     spreadRadius: 01,
+        //                     blurRadius: 05,
+        //                   ),
+        //                 ],
+        //               ),
+        //               height: 85,
+        //               width: MediaQuery.of(context).size.width,
+        //               child: Column(
+        //                 children: [
+        //                   Row(
+        //                     children: [
+        //                       const Text("Date: "),
+        //                       Expanded(
+        //                         child: Text(
+        //                           seniorCareDays[index]['starting_date'].toString(),
+        //                         ),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   Row(
+        //                     children: [
+        //                       const Text("Time: "),
+        //                       Expanded(
+        //                         child: Text("${seniorCareDays[index]['starting_time']}"),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   Row(
+        //                     children: [
+        //                       const Text("Duration: "),
+        //                       Expanded(
+        //                         child: Text("${seniorCareDays[index]['duration']} hours"),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //             Positioned(
+        //               top: 00,
+        //               right: 0,
+        //               child: GestureDetector(
+        //                 onTap: (() {
+        //                   setState(() {
+        //                     seniorCareDays.removeAt(index);
+        //                     startTimeMapList.removeAt(index);
+        //                     dateMapList.removeAt(index);
+        //                     durationMapList.removeAt(index);
+        //                   });
+        //                 }),
+        //                 child: Container(
+        //                   decoration: BoxDecoration(
+        //                     borderRadius: const BorderRadius.only(
+        //                       topLeft: Radius.circular(100),
+        //                       bottomLeft: Radius.circular(100),
+        //                       bottomRight: Radius.circular(100),
+        //                       topRight: Radius.circular(100),
+        //                     ),
+        //                     color: CustomColors.white,
+        //                     boxShadow: const [
+        //                       BoxShadow(
+        //                         color: Color.fromARGB(13, 0, 0, 0),
+        //                         blurRadius: 4.0,
+        //                         spreadRadius: 2.0,
+        //                         offset: Offset(2.0, 2.0),
+        //                       ),
+        //                     ],
+        //                   ),
+        //                   // alignment: Alignment.center,
+        //                   width: 30,
+        //                   height: 30,
+        //                   child: const Icon(
+        //                     Icons.close,
+        //                     size: 16,
+        //                   ),
+        //                 ),
+        //               ),
+        //             ),
+        //           ],
+        //         ),
+        //       );
+        //     }),
         // Pet type
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Pet Type",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4215,7 +4256,7 @@ class _PostScheduleState extends State<PostSchedule> {
               child: Container(
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
-                  color: selectedIndex == index ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                  color: selectedIndex == index ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   border: Border.all(
                     width: .5,
                     color: const Color.fromRGBO(103, 114, 148, 0.1),
@@ -4228,9 +4269,9 @@ class _PostScheduleState extends State<PostSchedule> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: selectedIndex == index ? FontWeight.w600 : FontWeight.w400,
                       fontFamily: "Rubik",
-                      color: selectedIndex == index ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                      color: selectedIndex == index ? CustomColors.white : Colors.black,
                     ),
                   ),
                 ),
@@ -4250,13 +4291,12 @@ class _PostScheduleState extends State<PostSchedule> {
                 fontSize: 12,
                 fontFamily: "Rubik",
                 fontWeight: FontWeight.w600,
-                // color: ServiceRecieverColor.primaryColor,
               ),
               onChanged: (value) {
                 petTypeValue = value;
               },
               textAlignVertical: TextAlignVertical.center,
-              decoration: inputdecoration("Abc.."),
+              decoration: inputdecoration("Please enter details here"),
             ),
           ),
         ],
@@ -4264,11 +4304,11 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Number of Pets",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4302,7 +4342,7 @@ class _PostScheduleState extends State<PostSchedule> {
               child: Container(
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
-                  color: selectedNumberIndex == index ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                  color: selectedNumberIndex == index ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   border: Border.all(
                     width: .5,
                     color: const Color.fromRGBO(103, 114, 148, 0.1),
@@ -4315,9 +4355,9 @@ class _PostScheduleState extends State<PostSchedule> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: selectedNumberIndex == index ? FontWeight.w600 : FontWeight.w400,
                       fontFamily: "Rubik",
-                      color: selectedNumberIndex == index ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                      color: selectedNumberIndex == index ? CustomColors.white : Colors.black,
                     ),
                   ),
                 ),
@@ -4329,11 +4369,11 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Pet Breed",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4358,11 +4398,11 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Size Of Pet",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4396,7 +4436,7 @@ class _PostScheduleState extends State<PostSchedule> {
               child: Container(
                 margin: const EdgeInsets.only(right: 10),
                 decoration: BoxDecoration(
-                  color: selectedSize == index ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                  color: selectedSize == index ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   border: Border.all(
                     width: .5,
                     color: const Color.fromRGBO(103, 114, 148, 0.1),
@@ -4409,9 +4449,9 @@ class _PostScheduleState extends State<PostSchedule> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: selectedSize == index ? FontWeight.w600 : FontWeight.w400,
                       fontFamily: "Rubik",
-                      color: selectedSize == index ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                      color: selectedSize == index ? CustomColors.white : Colors.black,
                     ),
                   ),
                 ),
@@ -4423,11 +4463,11 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Temperament",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4449,7 +4489,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedTemperament == 0 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedTemperament == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -4458,9 +4498,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedTemperament == 0 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedTemperament == 0 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedTemperament == 0 ? CustomColors.white : Colors.black,
                   ),
                 ),
               ),
@@ -4479,7 +4519,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
-                    (states) => selectedTemperament == 1 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                    (states) => selectedTemperament == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
                 ),
                 child: Text(
@@ -4488,9 +4528,9 @@ class _PostScheduleState extends State<PostSchedule> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: selectedTemperament == 1 ? FontWeight.w600 : FontWeight.w400,
                     fontFamily: "Rubik",
-                    color: selectedTemperament == 1 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                    color: selectedTemperament == 1 ? CustomColors.white : Colors.black,
                   ),
                 ),
               ),
@@ -4514,7 +4554,7 @@ class _PostScheduleState extends State<PostSchedule> {
                   style: ButtonStyle(
                     shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     backgroundColor: MaterialStateProperty.resolveWith(
-                      (states) => selectedGuarded == 0 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                      (states) => selectedGuarded == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                     ),
                   ),
                   child: Text(
@@ -4523,9 +4563,9 @@ class _PostScheduleState extends State<PostSchedule> {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: selectedGuarded == 0 ? FontWeight.w600 : FontWeight.w400,
                       fontFamily: "Rubik",
-                      color: selectedGuarded == 0 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                      color: selectedGuarded == 0 ? CustomColors.white : Colors.black,
                     ),
                   ),
                 ),
@@ -4543,7 +4583,7 @@ class _PostScheduleState extends State<PostSchedule> {
                   style: ButtonStyle(
                     shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     backgroundColor: MaterialStateProperty.resolveWith(
-                      (states) => selectedGuarded == 1 ? ServiceRecieverColor.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                      (states) => selectedGuarded == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                     ),
                   ),
                   child: Text(
@@ -4552,9 +4592,9 @@ class _PostScheduleState extends State<PostSchedule> {
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: selectedGuarded == 1 ? FontWeight.w600 : FontWeight.w400,
                       fontFamily: "Rubik",
-                      color: selectedGuarded == 1 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                      color: selectedGuarded == 1 ? CustomColors.white : Colors.black,
                     ),
                   ),
                 ),
@@ -4566,11 +4606,11 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Need Assistance",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4721,6 +4761,35 @@ class _PostScheduleState extends State<PostSchedule> {
             });
           },
         ),
+        //Additional Info (optional)
+        const SizedBox(height: 20),
+        Container(
+          alignment: Alignment.topLeft,
+          child: const Text(
+            "Additional Info (optional)",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              // color: ServiceRecieverColor.primaryColor,
+              fontFamily: "Rubik",
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 120,
+          child: TextFormField(
+            controller: additionalInfoController,
+            style: const TextStyle(
+              fontSize: 12,
+              fontFamily: "Rubik",
+              fontWeight: FontWeight.w600,
+            ),
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 5,
+            decoration: inputdecoration("Additional Info (optional)"),
+          ),
+        ),
         // btn
         const SizedBox(height: 20),
         Padding(
@@ -4780,7 +4849,7 @@ class _PostScheduleState extends State<PostSchedule> {
               ),
               child: Center(
                 child: Text(
-                  "Save",
+                  "Submit",
                   style: TextStyle(
                     color: CustomColors.white,
                     fontSize: 22,
@@ -4799,204 +4868,204 @@ class _PostScheduleState extends State<PostSchedule> {
   Widget ServiceSeniorCare(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 30),
+        // const SizedBox(height: 30),
         //Job Title
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Title",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            controller: jobTitleController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            decoration: inputdecoration("Name"),
-          ),
-        ),
-        //Parish
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Location",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            controller: addressController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            maxLines: 1,
-            decoration: inputdecoration("Job Location"),
-          ),
-        ),
-        //Location
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Job Area",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: Center(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.transparent,
-                border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 4,
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    hint: Text(
-                      "Select Area",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: "Rubik",
-                        fontWeight: FontWeight.w600,
-                        color: ServiceRecieverColor.primaryColor,
-                      ),
-                    ),
-                    isExpanded: true,
-                    items: data!.map((item) {
-                      return DropdownMenuItem(
-                        value: item['id'].toString(),
-                        child: Text(item['name']),
-                      );
-                    }).toList(),
-                    onChanged: (newVal) {
-                      setState(() {
-                        selectedLocation = newVal;
-                      });
-                      if (selectedLocation == "1") {
-                        locationValue = "east";
-                      } else if (selectedLocation == "2") {
-                        locationValue = "west";
-                      } else if (selectedLocation == "3") {
-                        locationValue = "central";
-                      }
-                    },
-                    value: selectedLocation,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        // Hourly Rate
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: Text(
-            "Hourly Rate",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          height: 45,
-          width: MediaQuery.of(context).size.width,
-          padding: const EdgeInsets.only(left: 10),
-          clipBehavior: Clip.hardEdge,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Flex(
-            direction: Axis.horizontal,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            verticalDirection: VerticalDirection.up,
-            children: [
-              Text(
-                "\$ ",
-                style: TextStyle(
-                  color: ServiceRecieverColor.primaryColor,
-                  fontSize: 16,
-                ),
-              ),
-              Flexible(
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: hourlyController,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontFamily: "Rubik",
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlignVertical: TextAlignVertical.center,
-                  maxLines: 1,
-                  decoration: InputDecoration(
-                    hintText: "Please add Hourly Rate",
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w600,
-                      color: ServiceRecieverColor.primaryColor,
-                    ),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Title",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: TextFormField(
+        //     controller: jobTitleController,
+        //     style: const TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: "Rubik",
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //     textAlignVertical: TextAlignVertical.center,
+        //     maxLines: 1,
+        //     decoration: inputdecoration("Job Title"),
+        //   ),
+        // ),
+        // //Parish
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Location",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: TextFormField(
+        //     controller: addressController,
+        //     style: const TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: "Rubik",
+        //       fontWeight: FontWeight.w600,
+        //       // color: ServiceRecieverColor.primaryColor,
+        //     ),
+        //     textAlignVertical: TextAlignVertical.center,
+        //     maxLines: 1,
+        //     decoration: inputdecoration("Job Location"),
+        //   ),
+        // ),
+        // //Location
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Job Area",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: Center(
+        //     child: DecoratedBox(
+        //       decoration: BoxDecoration(
+        //         color: Colors.transparent,
+        //         border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //         borderRadius: BorderRadius.circular(12),
+        //       ),
+        //       child: Padding(
+        //         padding: const EdgeInsets.symmetric(
+        //           horizontal: 10,
+        //           vertical: 4,
+        //         ),
+        //         child: DropdownButtonHideUnderline(
+        //           child: DropdownButton(
+        //             hint: Text(
+        //               "Select Area",
+        //               style: TextStyle(
+        //                 fontSize: 12,
+        //                 fontFamily: "Rubik",
+        //                 fontWeight: FontWeight.w600,
+        //                 color: ServiceRecieverColor.primaryColor,
+        //               ),
+        //             ),
+        //             isExpanded: true,
+        //             items: data!.map((item) {
+        //               return DropdownMenuItem(
+        //                 value: item['id'].toString(),
+        //                 child: Text(item['name']),
+        //               );
+        //             }).toList(),
+        //             onChanged: (newVal) {
+        //               setState(() {
+        //                 selectedLocation = newVal;
+        //               });
+        //               if (selectedLocation == "1") {
+        //                 locationValue = "east";
+        //               } else if (selectedLocation == "2") {
+        //                 locationValue = "west";
+        //               } else if (selectedLocation == "3") {
+        //                 locationValue = "central";
+        //               }
+        //             },
+        //             value: selectedLocation,
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
+        // // Hourly Rate
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: Text(
+        //     "Hourly Rate",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       color: ServiceRecieverColor.primaryColor,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // Container(
+        //   height: 45,
+        //   width: MediaQuery.of(context).size.width,
+        //   padding: const EdgeInsets.only(left: 10),
+        //   clipBehavior: Clip.hardEdge,
+        //   decoration: BoxDecoration(
+        //     color: Colors.white,
+        //     border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
+        //     borderRadius: BorderRadius.circular(12),
+        //   ),
+        //   child: Flex(
+        //     direction: Axis.horizontal,
+        //     crossAxisAlignment: CrossAxisAlignment.center,
+        //     mainAxisAlignment: MainAxisAlignment.center,
+        //     verticalDirection: VerticalDirection.up,
+        //     children: [
+        //       Text(
+        //         "\$ ",
+        //         style: TextStyle(
+        //           color: ServiceRecieverColor.primaryColor,
+        //           fontSize: 16,
+        //         ),
+        //       ),
+        //       Flexible(
+        //         child: TextFormField(
+        //           keyboardType: TextInputType.number,
+        //           controller: hourlyController,
+        //           style: const TextStyle(
+        //             fontSize: 12,
+        //             fontFamily: "Rubik",
+        //             fontWeight: FontWeight.w600,
+        //           ),
+        //           textAlignVertical: TextAlignVertical.center,
+        //           maxLines: 1,
+        //           decoration: InputDecoration(
+        //             hintText: "Please add Hourly Rate",
+        //             hintStyle: TextStyle(
+        //               fontSize: 14,
+        //               fontFamily: "Rubik",
+        //               fontWeight: FontWeight.w600,
+        //               color: ServiceRecieverColor.primaryColor,
+        //             ),
+        //             border: InputBorder.none,
+        //           ),
+        //         ),
+        //       ),
+        //     ],
+        //   ),
+        // ),
         //Senior Name
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
-            "Senior Name",
+          child: const Text(
+            "Senior Initials",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -5022,23 +5091,22 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Date Of Birth",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
           ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         SizedBox(
           height: 45,
           child: TextFormField(
             controller: dobController,
+            readOnly: true,
             onChanged: (value) {
               setState(() {
                 getfromPickedDate = value;
@@ -5062,11 +5130,11 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Medical Condition (optional)",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -5085,349 +5153,19 @@ class _PostScheduleState extends State<PostSchedule> {
             textAlignVertical: TextAlignVertical.center,
             maxLines: 5,
             decoration: inputdecoration("Medical Condition (optional)"),
-            // InputDecoration(
-            //   hintText: "Medical Condition (optional)",
-            //   hintStyle: TextStyle(
-            //     fontSize: 12,
-            //     fontFamily: "Rubik",
-            //     fontWeight: FontWeight.w600,
-            //     color: ServiceRecieverColor.primaryColor,
-            //   ),
-            //   fillColor: CustomColors.white,
-            //   focusColor: CustomColors.white,
-            //   hoverColor: CustomColors.white,
-            //   filled: true,
-            //   contentPadding: const EdgeInsets.fromLTRB(6, 4, 12, 4),
-            //   border: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(2),
-            //   ),
-            //   focusedBorder: OutlineInputBorder(
-            //     borderSide: BorderSide(
-            //       color: CustomColors.borderLight,
-            //       width: 0.5,
-            //     ),
-            //     borderRadius: BorderRadius.circular(2.0),
-            //   ),
-            //   enabledBorder: OutlineInputBorder(
-            //     borderSide: BorderSide(
-            //       color: CustomColors.borderLight,
-            //       width: 0.5,
-            //     ),
-            //     borderRadius: BorderRadius.circular(2.0),
-            //   ),
-            // ),
           ),
         ),
         // Add Days
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                blurRadius: 3,
-                spreadRadius: 5,
-              )
-            ],
-            color: Color.fromRGBO(255, 255, 255, 1),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                "Add Days",
-                style: TextStyle(
-                  fontFamily: "Rubik",
-                  fontSize: 18,
-                  color: CustomColors.primaryText,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              // Start Date
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(bottom: 15, top: 15),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: CustomTextFieldWidget(
-                  borderColor: CustomColors.white,
-                  obsecure: false,
-                  keyboardType: TextInputType.number,
-                  controller: startDateController,
-                  hintText: "Start Date",
-                  onChanged: (value) {
-                    setState(() {
-                      getfromPickedDate = value;
-                    });
-                  },
-                  onTap: () async {
-                    _fromDate(context);
-                  },
-                ),
-              ),
-              //Timer
-              SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 50,
-                child: TextButton(
-                  style: ButtonStyle(
-                    alignment: Alignment.centerLeft,
-                    padding: MaterialStateProperty.resolveWith(
-                      (states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    ),
-                    shape: MaterialStateProperty.resolveWith(
-                      (states) => RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                      ),
-                    ),
-                  ),
-                  child: Text(
-                    selectedTime != null ? '$selectedTime' : 'Select Time',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w400,
-                      color: CustomColors.primaryText,
-                    ),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      displayTimeDialog();
-                    });
-                  },
-                ),
-              ),
-              // Duration
-              Container(
-                height: 50,
-                margin: const EdgeInsets.only(bottom: 15, top: 15),
-                child: Center(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      // color: CustomColors.myJobDetail,
-                      border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          hint: Text(
-                            "Duration in hours",
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: "Rubik",
-                              fontWeight: FontWeight.w600,
-                              color: CustomColors.primaryText,
-                            ),
-                          ),
-                          isExpanded: true,
-                          items: hours!.map((item) {
-                            return DropdownMenuItem(
-                              value: item['id'].toString(),
-                              child: Text(item['name']),
-                            );
-                          }).toList(),
-                          onChanged: (newVal) {
-                            setState(() {
-                              selectedHours = newVal;
-                            });
-                          },
-                          value: selectedHours,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // AddBtn
-              GestureDetector(
-                onTap: () {
-                  String startDate = startDateController.text.trim();
-                  String time = selectedTime.toString();
-
-                  setState(() {
-                    dateMapList.add(startDate);
-                    startTimeMapList.add(time);
-                    durationMapList.add(selectedHours);
-                    seniorCareDays.add(
-                      {
-                        "starting_date": startDate,
-                        "starting_time": time,
-                        "duration": selectedHours,
-                      },
-                    );
-                  });
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  margin: const EdgeInsets.only(top: 20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.center,
-                      end: Alignment.center,
-                      colors: [
-                        ServiceRecieverColor.redButton.withOpacity(0.1),
-                        ServiceRecieverColor.redButton.withOpacity(0.8),
-                      ],
-                    ),
-                    color: ServiceRecieverColor.redButton,
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(13, 0, 0, 0),
-                        blurRadius: 4.0,
-                        spreadRadius: 2.0,
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Add More Days",
-                      style: TextStyle(
-                        color: CustomColors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Rubik",
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-        // Show Days
-        const SizedBox(height: 10),
-        ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: seniorCareDays.length,
-            itemBuilder: (context, index) {
-              return SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: 95,
-                child: Stack(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            spreadRadius: 01,
-                            blurRadius: 05,
-                          ),
-                        ],
-                      ),
-                      height: 85,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              const Text("Date: "),
-                              Expanded(
-                                child: Text(
-                                  seniorCareDays[index]['starting_date'].toString(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Time: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['starting_time']}"),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Duration: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['duration']} hours"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned(
-                      top: 00,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: (() {
-                          setState(() {
-                            seniorCareDays.removeAt(index);
-                            startTimeMapList.removeAt(index);
-                            dateMapList.removeAt(index);
-                            durationMapList.removeAt(index);
-                          });
-                        }),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(100),
-                              bottomLeft: Radius.circular(100),
-                              bottomRight: Radius.circular(100),
-                              topRight: Radius.circular(100),
-                            ),
-                            color: CustomColors.white,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color.fromARGB(13, 0, 0, 0),
-                                blurRadius: 4.0,
-                                spreadRadius: 2.0,
-                                offset: Offset(2.0, 2.0),
-                              ),
-                            ],
-                          ),
-                          // alignment: Alignment.center,
-                          width: 30,
-                          height: 30,
-                          child: const Icon(
-                            Icons.close,
-                            size: 16,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }),
-        const SizedBox(height: 10),
+        const SizedBox(height: 10), addDaysColumn(context), const SizedBox(height: 10),
         // Require Assistance with
         const SizedBox(height: 30),
         Container(
           alignment: Alignment.topLeft,
-          child: Text(
+          child: const Text(
             "Requires Assistance With",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              color: ServiceRecieverColor.primaryColor,
+              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -5714,6 +5452,35 @@ class _PostScheduleState extends State<PostSchedule> {
             });
           },
         ),
+        //Additional Info (optional)
+        const SizedBox(height: 20),
+        Container(
+          alignment: Alignment.topLeft,
+          child: const Text(
+            "Additional Info (optional)",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              // color: ServiceRecieverColor.primaryColor,
+              fontFamily: "Rubik",
+              fontSize: 14,
+            ),
+          ),
+        ),
+        const SizedBox(height: 10),
+        SizedBox(
+          height: 120,
+          child: TextFormField(
+            controller: additionalInfoController,
+            style: const TextStyle(
+              fontSize: 12,
+              fontFamily: "Rubik",
+              fontWeight: FontWeight.w600,
+            ),
+            textAlignVertical: TextAlignVertical.center,
+            maxLines: 5,
+            decoration: inputdecoration("Additional Info (optional)"),
+          ),
+        ),
         const SizedBox(height: 20),
         // btn
         Padding(
@@ -5765,7 +5532,7 @@ class _PostScheduleState extends State<PostSchedule> {
               ),
               child: Center(
                 child: Text(
-                  "Save",
+                  "Submit",
                   style: TextStyle(
                     color: CustomColors.white,
                     fontSize: 22,
@@ -5784,11 +5551,11 @@ class _PostScheduleState extends State<PostSchedule> {
   InputDecoration inputdecoration(hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: TextStyle(
+      hintStyle: const TextStyle(
         fontSize: 12,
         fontFamily: "Rubik",
         fontWeight: FontWeight.w600,
-        color: ServiceRecieverColor.primaryColor,
+        // color: ServiceRecieverColor.primaryColor,
       ),
       fillColor: CustomColors.white,
       focusColor: CustomColors.white,
@@ -5797,21 +5564,21 @@ class _PostScheduleState extends State<PostSchedule> {
       contentPadding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: ServiceRecieverColor.primaryColor,
+        borderSide: const BorderSide(
+          color: Colors.grey,
           width: 0.5,
         ),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ServiceRecieverColor.primaryColor,
+        borderSide: const BorderSide(
+          color: Colors.grey,
           width: 0.5,
         ),
         borderRadius: BorderRadius.circular(12),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(
-          color: ServiceRecieverColor.primaryColor,
+        borderSide: const BorderSide(
+          color: Colors.grey,
           width: 0.5,
         ),
         borderRadius: BorderRadius.circular(12),

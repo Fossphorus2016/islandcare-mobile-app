@@ -220,7 +220,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.start,
                                       children: [
                                         if (futureReceiverDashboardDetail!.isVerified == true) ...[
                                           Align(
@@ -242,15 +242,15 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                           style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
                                         ),
                                         const SizedBox(width: 10),
-                                        Text(
-                                          futureReceiverDashboardDetail!.data!.email.toString(),
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontFamily: "Rubik",
-                                            fontWeight: FontWeight.w400,
-                                            color: CustomColors.white,
-                                          ),
-                                        ),
+                                        // Text(
+                                        //   futureReceiverDashboardDetail!.data!.email.toString(),
+                                        //   style: TextStyle(
+                                        //     fontSize: 12,
+                                        //     fontFamily: "Rubik",
+                                        //     fontWeight: FontWeight.w400,
+                                        //     color: CustomColors.white,
+                                        //   ),
+                                        // ),
                                         const SizedBox(width: 10),
                                         if (futureReceiverDashboardDetail!.data!.avgRating != null) ...[
                                           RatingBar(
@@ -373,9 +373,9 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         LinearProgressIndicator(
                                           minHeight: 08,
                                           borderRadius: BorderRadius.circular(08),
-                                          value: futureReceiverDashboardDetail!.percentage != null ? double.parse(futureReceiverDashboardDetail!.percentage.toString()) : 00,
-                                          color: Colors.white,
+                                          value: futureReceiverDashboardDetail!.percentage != null ? (futureReceiverDashboardDetail!.percentage! / 100) : 00,
                                           valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
+                                          // color: Colors.white,
                                         ),
                                       ],
                                     ),
@@ -1018,42 +1018,53 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                               ),
                             ),
                             // Background Verified
-                            const SizedBox(height: 30),
-                            const Text(
-                              "Reviews",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Container(
-                              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                              decoration: BoxDecoration(
-                                color: ServiceGiverColor.black,
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: CustomColors.borderLight,
-                                    width: 0.1,
-                                  ),
+                            if (futureReceiverDashboardDetail!.data!.ratings != null && futureReceiverDashboardDetail!.data!.ratings!.isNotEmpty) ...[
+                              const SizedBox(height: 30),
+                              const Text(
+                                "Reviews",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Name",
-                                    style: TextStyle(
-                                      color: CustomColors.white,
-                                      fontSize: 12,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w600,
+                              const SizedBox(height: 20),
+                              Container(
+                                padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                decoration: BoxDecoration(
+                                  color: ServiceGiverColor.black,
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: CustomColors.borderLight,
+                                      width: 0.1,
                                     ),
                                   ),
-                                  if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Text(
-                                      "Rating",
+                                      "Name",
+                                      style: TextStyle(
+                                        color: CustomColors.white,
+                                        fontSize: 12,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                      Text(
+                                        "Rating",
+                                        style: TextStyle(
+                                          color: CustomColors.white,
+                                          fontSize: 12,
+                                          fontFamily: "Poppins",
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                    Text(
+                                      "Comment",
                                       style: TextStyle(
                                         color: CustomColors.white,
                                         fontSize: 12,
@@ -1062,19 +1073,8 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                       ),
                                     ),
                                   ],
-                                  Text(
-                                    "Comment",
-                                    style: TextStyle(
-                                      color: CustomColors.white,
-                                      fontSize: 12,
-                                      fontFamily: "Poppins",
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
-                            if (futureReceiverDashboardDetail!.data!.ratings != null && futureReceiverDashboardDetail!.data!.ratings!.isNotEmpty) ...[
                               ListView.builder(
                                 itemCount: futureReceiverDashboardDetail!.data!.ratings!.length,
                                 shrinkWrap: true,
@@ -1174,11 +1174,12 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                   );
                                 },
                               ),
-                            ] else ...[
-                              const Center(
-                                child: Text("No Review Yet!"),
-                              )
-                            ],
+                            ]
+                            // else ...[
+                            //   const Center(
+                            //     child: Text("No Review Yet!"),
+                            //   )
+                            // ],
                           ],
                         ),
                       ),

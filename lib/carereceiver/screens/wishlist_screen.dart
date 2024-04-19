@@ -185,53 +185,53 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: foundProviders.length,
                               itemBuilder: (BuildContext context, int index) {
-                                return foundProviders[index]['data'] == 0
-                                    ? Container()
-                                    : RecommendationReceiverWidget(
-                                        imgPath: "${AppUrl.webStorageUrl}" '/' + foundProviders[index]['users']['avatar'].toString(),
-                                        title: "${foundProviders[index]['users']['first_name']} ${foundProviders[index]['users']['last_name']}",
-                                        experience: foundProviders[index]['userdetailproviders']['experience'] == null ? "0" : foundProviders[index]['userdetailproviders']['experience'].toString(),
-                                        hourly: foundProviders[index]['userdetailproviders']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailproviders']['hourly_rate'].toString(),
-                                        price: foundProviders[index]['userdetailproviders']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailproviders']['hourly_rate'].toString(),
-                                        dob: isAdult(foundProviders[index]['userdetails']['dob'] != null ? "${foundProviders[index]['userdetails']['dob']}" : "00-00-0000"),
-                                        isRatingShow: false,
-                                        isFavouriteIcon: GestureDetector(
-                                          onTap: () {
-                                            setState(() {});
-                                            if (favouriteList.contains(foundProviders[index]['users']['id'].toString())) {
-                                              setState(() {
-                                                favouriteList.remove(foundProviders[index]['users']['id'].toString());
-                                                foundProviders.remove(foundProviders[index].toString());
-                                              });
-                                            } else {
-                                              favouriteList.add(foundProviders[index]['users']['id'].toString());
-                                              setState(() {});
-                                            }
-                                            providerId = foundProviders[index]['users']['id'];
-                                            favourited("https://islandcare.bm/api/service-receiver-add-to-favourite?favourite_id=${foundProviders[index]['users']['id'].toString()}");
-                                            setState(() {});
-                                          },
-                                          child: favouriteList.contains(foundProviders[index]['users']['id'].toString())
-                                              ? Icon(
-                                                  Icons.favorite_outline,
-                                                  color: CustomColors.darkGreyRecommended,
-                                                  size: 24,
-                                                )
-                                              : Icon(
-                                                  Icons.favorite,
-                                                  color: CustomColors.red,
-                                                  size: 24,
-                                                ),
-                                        ),
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ProviderProfileDetailForReceiver(id: snapshot.data!.data![index].users!.id.toString()),
-                                            ),
-                                          );
-                                        },
-                                      );
+                                // print(foundProviders[index]);
+                                return foundProviders[index]['data'] == 0 ? Container() : Container();
+                                // : RecommendationReceiverWidget(
+                                //     imgPath: "${AppUrl.webStorageUrl}" '/' + foundProviders[index]['users']['avatar'].toString(),
+                                //     title: "${foundProviders[index]['users']['first_name']} ${foundProviders[index]['users']['last_name']}",
+                                //     experience: foundProviders[index]['userdetailproviders']['experience'] == null ? "0" : foundProviders[index]['userdetailproviders']['experience'].toString(),
+                                //     hourly: foundProviders[index]['userdetailproviders']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailproviders']['hourly_rate'].toString(),
+                                //     price: foundProviders[index]['userdetailproviders']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailproviders']['hourly_rate'].toString(),
+                                //     dob: isAdult(foundProviders[index]['userdetails']['dob'] != null ? "${foundProviders[index]['userdetails']['dob']}" : "00-00-0000"),
+                                //     isRatingShow: false,
+                                //     isFavouriteIcon: GestureDetector(
+                                //       onTap: () {
+                                //         setState(() {});
+                                //         if (favouriteList.contains(foundProviders[index]['users']['id'].toString())) {
+                                //           setState(() {
+                                //             favouriteList.remove(foundProviders[index]['users']['id'].toString());
+                                //             foundProviders.remove(foundProviders[index].toString());
+                                //           });
+                                //         } else {
+                                //           favouriteList.add(foundProviders[index]['users']['id'].toString());
+                                //           setState(() {});
+                                //         }
+                                //         providerId = foundProviders[index]['users']['id'];
+                                //         favourited("https://islandcare.bm/api/service-receiver-add-to-favourite?favourite_id=${foundProviders[index]['users']['id'].toString()}");
+                                //         setState(() {});
+                                //       },
+                                //       child: favouriteList.contains(foundProviders[index]['users']['id'].toString())
+                                //           ? Icon(
+                                //               Icons.favorite_outline,
+                                //               color: CustomColors.darkGreyRecommended,
+                                //               size: 24,
+                                //             )
+                                //           : Icon(
+                                //               Icons.favorite,
+                                //               color: CustomColors.red,
+                                //               size: 24,
+                                //             ),
+                                //     ),
+                                //     onTap: () {
+                                //       Navigator.push(
+                                //         context,
+                                //         MaterialPageRoute(
+                                //           builder: (context) => ProviderProfileDetailForReceiver(id: snapshot.data!.data![index].users!.id.toString()),
+                                //         ),
+                                //       );
+                                //     },
+                                //   );
                               },
                             );
                           } else {

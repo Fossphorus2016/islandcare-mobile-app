@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:island_app/models/service_model.dart';
+
 ServiceReceiverJobApplicantModel serviceReceiverJobApplicantModelFromJson(String str) => ServiceReceiverJobApplicantModel.fromJson(json.decode(str));
 
 String serviceReceiverJobApplicantModelToJson(ServiceReceiverJobApplicantModel data) => json.encode(data.toJson());
@@ -49,6 +51,7 @@ class Datum {
     this.id,
     this.jobTitle,
     this.serviceId,
+    this.service,
     this.hourlyRate,
     this.address,
     this.location,
@@ -69,6 +72,7 @@ class Datum {
   int? id;
   String? jobTitle;
   int? serviceId;
+  Service? service;
   int? hourlyRate;
   String? address;
   String? location;
@@ -89,6 +93,7 @@ class Datum {
         id: json["id"],
         jobTitle: json["job_title"],
         serviceId: json["service_id"],
+        service: json['service'] != null ? Service.fromJson(json['service']) : null,
         hourlyRate: json["hourly_rate"],
         address: json["address"],
         location: json["location"],
@@ -110,6 +115,7 @@ class Datum {
         "id": id,
         "job_title": jobTitle,
         "service_id": serviceId,
+        "service": service,
         "hourly_rate": hourlyRate,
         "address": address,
         "location": location,

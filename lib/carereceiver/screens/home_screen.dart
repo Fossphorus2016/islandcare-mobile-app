@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
+import 'package:island_app/carereceiver/utils/home_pagination.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/res/app_url.dart';
 import 'package:island_app/utils/utils.dart';
+import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
@@ -24,10 +26,8 @@ import 'package:island_app/carereceiver/widgets/recommendation_widget.dart';
 String? token1;
 
 class HomeScreen extends StatefulWidget {
-  final String? passedToken;
   const HomeScreen({
     Key? key,
-    this.passedToken,
   }) : super(key: key);
 
   @override
@@ -105,12 +105,67 @@ class _HomeScreenState extends State<HomeScreen> {
   String? findArea;
   String? findRate;
   String? serviceId = '';
-  late Future<ServiceReceiverDashboardModel>? futureReceiverDashboard;
+  // late Future<ServiceReceiverDashboardModel>? futureReceiverDashboard;
 
-  Future<ServiceReceiverDashboardModel> fetchReceiverDashboardModel() async {
-    var token = await getUserToken();
+  // Future<ServiceReceiverDashboardModel> fetchReceiverDashboardModel() async {
+  //   // print("object");
+  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+  //   final response = await Dio().get(
+  //     '${CareReceiverURl.serviceReceiverDashboard}?service=${findSelected ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
+  //     options: Options(headers: {
+  //       'Authorization': 'Bearer $token',
+  //       'Accept': 'application/json',
+  //       "Connection": "Keep-Alive",
+  //     }),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     var json = response.data as Map;
+  //     var listOfProviders = json['data'] as List;
+  //     var listOfFavourites = json['favourites'] as List;
+  //     setState(() {
+  //       providerList = listOfProviders;
+  //       favouriteList = listOfFavourites;
+  //       foundProviders = listOfProviders;
+  //     });
+
+  //     return ServiceReceiverDashboardModel.fromJson(response.data);
+  //   } else {
+  //     throw Exception(
+  //       'Failed to load Service Provider Dashboard',
+  //     );
+  //   }
+  // }
+
+  // Future<ServiceReceiverDashboardModel> fetchFindedReceiverDashboardModel() async {
+  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+  //   final response = await Dio().get(
+  //     '${CareReceiverURl.serviceReceiverDashboard}?service=${findSelected ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
+  //     options: Options(headers: {
+  //       'Authorization': 'Bearer ${token ?? widget.passedToken}',
+  //       'Accept': 'application/json',
+  //     }),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     var json = response.data as Map;
+  //     var listOfProviders = json['data'] as List;
+  //     var listOfFavourites = json['favourites'] as List;
+  //     setState(() {
+  //       findProviders = listOfProviders.reversed.toList();
+  //     });
+  //     return ServiceReceiverDashboardModel.fromJson(response.data);
+  //   } else {
+  //     throw Exception(
+  //       'Failed to load Service Provider Dashboard',
+  //     );
+  //   }
+  // }
+
+  // Favourite API
+  fetchReceiverDashboardModel() async {
+    // print("object");
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
-      CareReceiverURl.serviceReceiverDashboard,
+      '${CareReceiverURl.serviceReceiverDashboard}?service=${findSelected ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
       options: Options(headers: {
         'Authorization': 'Bearer $token',
         'Accept': 'application/json',
@@ -127,45 +182,19 @@ class _HomeScreenState extends State<HomeScreen> {
         foundProviders = listOfProviders;
       });
 
-      return ServiceReceiverDashboardModel.fromJson(response.data);
+      var data = ServiceReceiverDashboardModel.fromJson(response.data);
+      Provider.of<HomePaginationProvider>(context, listen: false).setPaginationList(data.data);
     } else {
       throw Exception(
         'Failed to load Service Provider Dashboard',
       );
     }
   }
-
-  Future<ServiceReceiverDashboardModel> fetchFindedReceiverDashboardModel() async {
-    var token = await getUserToken();
-    final response = await Dio().get(
-      '${CareReceiverURl.serviceReceiverDashboard}?service=${findSelected ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
-      options: Options(headers: {
-        'Authorization': 'Bearer ${token ?? widget.passedToken}',
-        'Accept': 'application/json',
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      var json = response.data as Map;
-      var listOfProviders = json['data'] as List;
-      var listOfFavourites = json['favourites'] as List;
-      setState(() {
-        findProviders = listOfProviders;
-      });
-
-      return ServiceReceiverDashboardModel.fromJson(response.data);
-    } else {
-      throw Exception(
-        'Failed to load Service Provider Dashboard',
-      );
-    }
-  }
-
-  // Favourite API
 
   var providerId;
   Future<Response> favourited(url) async {
     var url = '${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=$providerId';
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     var response = await Dio().post(
       url,
       options: Options(
@@ -189,23 +218,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return response;
   }
 
-  var token;
-  Future getUserToken() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = prefs.getString('userToken');
-    setState(() {
-      token = userToken;
-    });
-    return userToken.toString();
-  }
-
   var userPic;
   getUserAvatar() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userAvatar = preferences.getString(
-      'userAvatar',
-    );
+    var userAvatar = preferences.getString('userAvatar');
     setState(() {
       userPic = userAvatar;
     });
@@ -218,21 +234,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    getUserToken();
-
     getUserAvatar();
     super.initState();
-    futureReceiverDashboard = fetchReceiverDashboardModel();
-    // fetchProfile = fetchProfileReceiverModel();
+    fetchReceiverDashboardModel();
+    // futureReceiverDashboard = fetchReceiverDashboardModel();
   }
 
   @override
   void dispose() {
-    Timer(const Duration(seconds: 2), () {
-      setState(() {
-        foundProviders = providerList;
-      });
-    }).cancel();
+    // Timer(const Duration(seconds: 2), () {
+    //   setState(() {
+    //     foundProviders = providerList;
+    //   });
+    // }).cancel();
 
     super.dispose();
   }
@@ -260,868 +274,991 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: CustomColors.loginBg,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: ServiceRecieverColor.primaryColor,
-          actions: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationScreen(),
-                  ),
-                );
-              },
-              child: const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Badge(
-                  child: Icon(
-                    Icons.message,
-                    size: 30,
+    return Consumer<HomePaginationProvider>(
+      builder: (context, provider, child) {
+        return SafeArea(
+          child: Scaffold(
+            backgroundColor: CustomColors.loginBg,
+            appBar: AppBar(
+              elevation: 0,
+              backgroundColor: ServiceRecieverColor.primaryColor,
+              actions: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationScreen(),
+                      ),
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Badge(
+                      child: Icon(
+                        Icons.message,
+                        size: 30,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            FutureBuilder<ProfileReceiverModel?>(
-              future: context.watch<RecieverUserProvider>().userProfile,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  // print(snapshot.data!.data!.userSubscriptionDetail!.periodType);
-                  return InkWell(
-                    onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(3),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xffFFFFFF),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromARGB(15, 0, 0, 0),
-                              blurRadius: 4,
-                              spreadRadius: 4,
-                              offset: Offset(2, 2), // Shadow position
+                FutureBuilder<ProfileReceiverModel?>(
+                  future: context.watch<RecieverUserProvider>().userProfile,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      // print(snapshot.data!.data!.userSubscriptionDetail!.periodType);
+                      return InkWell(
+                        onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(3),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xffFFFFFF),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color.fromARGB(15, 0, 0, 0),
+                                  blurRadius: 4,
+                                  spreadRadius: 4,
+                                  offset: Offset(2, 2), // Shadow position
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                        child: CircleAvatar(
-                          radius: 20,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(40),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: CachedNetworkImage(
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.cover,
-                                imageUrl: "${AppUrl.localStorageUrl}/${snapshot.data!.data!.avatar}",
-                                placeholder: (context, url) => const CircularProgressIndicator(),
-                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                            child: CircleAvatar(
+                              radius: 20,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(40),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: CachedNetworkImage(
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                    imageUrl: "${AppUrl.localStorageUrl}/${snapshot.data!.data!.avatar}",
+                                    placeholder: (context, url) => const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                } else {
-                  return Shimmer.fromColors(
-                    baseColor: ServiceRecieverColor.primaryColor,
-                    highlightColor: const Color.fromARGB(255, 95, 95, 95),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xffFFFFFF),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromARGB(15, 0, 0, 0),
-                              blurRadius: 4,
-                              spreadRadius: 4,
-                              offset: Offset(2, 2), // Shadow position
+                      );
+                    } else {
+                      return Shimmer.fromColors(
+                        baseColor: ServiceRecieverColor.primaryColor,
+                        highlightColor: const Color.fromARGB(255, 95, 95, 95),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xffFFFFFF),
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color.fromARGB(15, 0, 0, 0),
+                                  blurRadius: 4,
+                                  spreadRadius: 4,
+                                  offset: Offset(2, 2), // Shadow position
+                                ),
+                              ],
                             ),
-                          ],
+                            child: CircleAvatar(
+                              radius: 20,
+                              backgroundColor: CustomColors.paraColor,
+                            ),
+                          ),
                         ),
-                        child: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: CustomColors.paraColor,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-              },
+                      );
+                    }
+                  },
+                ),
+              ],
             ),
-          ],
-        ),
-        drawer: Drawer(
-          backgroundColor: ServiceRecieverColor.primaryColor,
-          child: const DrawerWidget(),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              // Overlay Search bar
-              Stack(
+            drawer: Drawer(
+              backgroundColor: ServiceRecieverColor.primaryColor,
+              child: const DrawerWidget(type: "home"),
+            ),
+            body: SizedBox(
+              height: MediaQuery.of(context).size.height - // total height
+                  kToolbarHeight - // top AppBar height
+                  MediaQuery.of(context).padding.top - // top padding
+                  kBottomNavigationBarHeight -
+                  10,
+              child: Column(
                 children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                    ),
-                    alignment: Alignment.centerRight,
-                    width: MediaQuery.of(context).size.width,
-                    height: 100,
-                    child: const RotatedBox(
-                      quarterTurns: 1,
-                      child: Text(
-                        'Container 1',
-                        style: TextStyle(fontSize: 18.0, color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: -25,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                        color: ServiceRecieverColor.primaryColor,
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(12),
-                          bottomRight: Radius.circular(12),
-                        ),
-                      ),
-                      alignment: Alignment.centerLeft,
-                      width: MediaQuery.of(context).size.width,
-                      height: 100,
-                      child: Text(
-                        "Find Your Caregiver",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Rubik",
-                          color: CustomColors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 5,
-                    right: 20,
-                    left: 20,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(6),
-                          bottomLeft: Radius.circular(6),
-                          bottomRight: Radius.circular(6),
-                          topRight: Radius.circular(6),
-                        ),
-                        color: CustomColors.white,
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color.fromARGB(13, 0, 0, 0),
-                            blurRadius: 4.0,
-                            spreadRadius: 2.0,
-                            offset: Offset(2.0, 2.0),
-                          ),
-                        ],
-                      ),
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      height: 50,
-                      child: TextFormField(
-                        readOnly: true,
-                        onTap: () {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            backgroundColor: Colors.white,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(30.0),
-                                topRight: Radius.circular(30.0),
-                              ),
-                            ),
-                            builder: (BuildContext context) {
-                              return StatefulBuilder(
-                                builder: (BuildContext context, StateSetter setState) {
-                                  return SingleChildScrollView(
-                                    child: Padding(
-                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const SizedBox(
-                                              height: 20,
-                                            ),
-                                            Center(
-                                              child: Container(
-                                                width: 130,
-                                                height: 5,
-                                                decoration: BoxDecoration(
-                                                  color: const Color(0xffC4C4C4),
-                                                  borderRadius: BorderRadius.circular(6),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Column(
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                Center(
-                                                  child: Text(
-                                                    "Apply Filter",
-                                                    style: TextStyle(
-                                                      fontSize: 18,
-                                                      color: CustomColors.primaryText,
-                                                      fontFamily: "Poppins",
-                                                      fontWeight: FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 40,
-                                                ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius: const BorderRadius.only(
-                                                      topLeft: Radius.circular(6),
-                                                      bottomLeft: Radius.circular(6),
-                                                      bottomRight: Radius.circular(6),
-                                                      topRight: Radius.circular(6),
-                                                    ),
-                                                    color: CustomColors.white,
-                                                    boxShadow: const [
-                                                      BoxShadow(
-                                                        color: Color.fromARGB(13, 0, 0, 0),
-                                                        blurRadius: 4.0,
-                                                        spreadRadius: 2.0,
-                                                        offset: Offset(2.0, 2.0),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  alignment: Alignment.center,
-                                                  width: MediaQuery.of(context).size.width,
-                                                  height: 50,
-                                                  child: TextFormField(
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontFamily: "Rubik",
-                                                      fontWeight: FontWeight.w400,
-                                                    ),
-                                                    textAlignVertical: TextAlignVertical.bottom,
-                                                    maxLines: 1,
-                                                    onChanged: (value) {
-                                                      setState(
-                                                        () {
-                                                          serviceId = value;
-                                                        },
-                                                      );
-                                                      serviceId = value;
-                                                    },
-                                                    decoration: InputDecoration(
-                                                      prefixIcon: Icon(
-                                                        Icons.search,
-                                                        size: 17,
-                                                        color: CustomColors.hintText,
-                                                      ),
-                                                      hintText: "Search...",
-                                                      fillColor: CustomColors.white,
-                                                      focusColor: CustomColors.white,
-                                                      hoverColor: CustomColors.white,
-                                                      filled: true,
-                                                      border: OutlineInputBorder(
-                                                        borderRadius: BorderRadius.circular(4),
-                                                      ),
-                                                      focusedBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                        borderRadius: BorderRadius.circular(4.0),
-                                                      ),
-                                                      enabledBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                        borderRadius: BorderRadius.circular(4.0),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Center(
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        "Find",
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          fontFamily: "Rubik",
-                                                          fontWeight: FontWeight.w600,
-                                                          color: CustomColors.primaryText,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      DecoratedBox(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: const BorderRadius.only(
-                                                            topLeft: Radius.circular(6),
-                                                            bottomLeft: Radius.circular(6),
-                                                            bottomRight: Radius.circular(6),
-                                                            topRight: Radius.circular(6),
-                                                          ),
-                                                          color: CustomColors.white,
-                                                          boxShadow: const [
-                                                            BoxShadow(
-                                                              color: Color.fromARGB(13, 0, 0, 0),
-                                                              blurRadius: 4.0,
-                                                              spreadRadius: 2.0,
-                                                              offset: Offset(2.0, 2.0),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.symmetric(
-                                                            horizontal: 7,
-                                                            vertical: 1,
-                                                          ),
-                                                          child: DropdownButtonHideUnderline(
-                                                            child: DropdownButton(
-                                                              hint: const Text("Find"),
-                                                              isExpanded: true,
-                                                              items: data!.map((item) {
-                                                                return DropdownMenuItem(
-                                                                  value: item['id'].toString(),
-                                                                  child: Text(item['name']),
-                                                                );
-                                                              }).toList(),
-                                                              onChanged: (newVal) {
-                                                                setState(() {
-                                                                  findSelected = newVal;
-                                                                });
-                                                              },
-                                                              value: findSelected,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Center(
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        "Area",
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          fontFamily: "Rubik",
-                                                          fontWeight: FontWeight.w600,
-                                                          color: CustomColors.primaryText,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      DecoratedBox(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: const BorderRadius.only(
-                                                            topLeft: Radius.circular(6),
-                                                            bottomLeft: Radius.circular(6),
-                                                            bottomRight: Radius.circular(6),
-                                                            topRight: Radius.circular(6),
-                                                          ),
-                                                          color: CustomColors.white,
-                                                          boxShadow: const [
-                                                            BoxShadow(
-                                                              color: Color.fromARGB(13, 0, 0, 0),
-                                                              blurRadius: 4.0,
-                                                              spreadRadius: 2.0,
-                                                              offset: Offset(2.0, 2.0),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.symmetric(
-                                                            horizontal: 7,
-                                                            vertical: 1,
-                                                          ),
-                                                          child: DropdownButtonHideUnderline(
-                                                            child: DropdownButton(
-                                                              hint: const Text("Select Area"),
-                                                              isExpanded: true,
-                                                              items: area!.map((item) {
-                                                                return DropdownMenuItem(
-                                                                  value: item['id'].toString(),
-                                                                  child: Text(item['name']),
-                                                                );
-                                                              }).toList(),
-                                                              onChanged: (newVal) {
-                                                                setState(() {
-                                                                  findArea = newVal;
-                                                                });
-                                                              },
-                                                              value: findArea,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Center(
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        "Rate",
-                                                        style: TextStyle(
-                                                          fontSize: 15,
-                                                          fontFamily: "Rubik",
-                                                          fontWeight: FontWeight.w600,
-                                                          color: CustomColors.primaryText,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5,
-                                                      ),
-                                                      DecoratedBox(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: const BorderRadius.only(
-                                                            topLeft: Radius.circular(6),
-                                                            bottomLeft: Radius.circular(6),
-                                                            bottomRight: Radius.circular(6),
-                                                            topRight: Radius.circular(6),
-                                                          ),
-                                                          color: CustomColors.white,
-                                                          boxShadow: const [
-                                                            BoxShadow(
-                                                              color: Color.fromARGB(13, 0, 0, 0),
-                                                              blurRadius: 4.0,
-                                                              spreadRadius: 2.0,
-                                                              offset: Offset(2.0, 2.0),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.symmetric(
-                                                            horizontal: 7,
-                                                            vertical: 1,
-                                                          ),
-                                                          child: DropdownButtonHideUnderline(
-                                                            child: DropdownButton(
-                                                              hint: const Text("Select Rate"),
-                                                              isExpanded: true,
-                                                              items: rate!.map((item) {
-                                                                return DropdownMenuItem(
-                                                                  value: item['id'].toString(),
-                                                                  child: Text(item['name']),
-                                                                );
-                                                              }).toList(),
-                                                              onChanged: (newVal) {
-                                                                setState(() {
-                                                                  findRate = newVal;
-                                                                });
-                                                              },
-                                                              value: findRate,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                // OTP
-                                                const SizedBox(
-                                                  height: 20,
-                                                ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    fetchFindedReceiverDashboardModel();
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Container(
-                                                    width: MediaQuery.of(context).size.width,
-                                                    height: 54,
-                                                    decoration: BoxDecoration(
-                                                      color: ServiceRecieverColor.primaryColor,
-                                                      borderRadius: BorderRadius.circular(10),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        "Search",
-                                                        style: TextStyle(
-                                                          color: CustomColors.white,
-                                                          fontFamily: "Rubik",
-                                                          fontStyle: FontStyle.normal,
-                                                          fontWeight: FontWeight.w500,
-                                                          fontSize: 18,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 30,
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        fetchReceiverDashboardModel();
+                      },
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: SizedBox(
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    decoration: const BoxDecoration(color: Colors.transparent),
+                                    alignment: Alignment.centerRight,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 100,
+                                    child: const RotatedBox(
+                                      quarterTurns: 1,
+                                      child: Text(
+                                        'Container 1',
+                                        style: TextStyle(fontSize: 18.0, color: Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: -25,
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                                      decoration: BoxDecoration(
+                                        color: ServiceRecieverColor.primaryColor,
+                                        borderRadius: const BorderRadius.only(
+                                          bottomLeft: Radius.circular(12),
+                                          bottomRight: Radius.circular(12),
+                                        ),
+                                      ),
+                                      alignment: Alignment.centerLeft,
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 100,
+                                      child: Text(
+                                        "Find Your Caregiver",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          fontFamily: "Rubik",
+                                          color: CustomColors.white,
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Rubik",
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlignVertical: TextAlignVertical.bottom,
-                        maxLines: 1,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.search,
-                            size: 17,
-                            color: CustomColors.hintText,
+                                  ),
+                                  Positioned(
+                                    bottom: 5,
+                                    right: 20,
+                                    left: 20,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(6),
+                                          bottomLeft: Radius.circular(6),
+                                          bottomRight: Radius.circular(6),
+                                          topRight: Radius.circular(6),
+                                        ),
+                                        color: CustomColors.white,
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Color.fromARGB(13, 0, 0, 0),
+                                            blurRadius: 4.0,
+                                            spreadRadius: 2.0,
+                                            offset: Offset(2.0, 2.0),
+                                          ),
+                                        ],
+                                      ),
+                                      alignment: Alignment.center,
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 50,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextFormField(
+                                              readOnly: true,
+                                              onTap: () {
+                                                showModalBottomSheet(
+                                                  isScrollControlled: true,
+                                                  shape: const RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
+                                                  ),
+                                                  context: context,
+                                                  backgroundColor: Colors.white,
+                                                  builder: (BuildContext context) {
+                                                    return StatefulBuilder(
+                                                      builder: (BuildContext context, StateSetter setState) {
+                                                        return SingleChildScrollView(
+                                                          child: Padding(
+                                                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                            child: Container(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 25),
+                                                              child: Column(
+                                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                children: [
+                                                                  const SizedBox(height: 20),
+                                                                  Center(
+                                                                    child: Container(
+                                                                      width: 130,
+                                                                      height: 5,
+                                                                      decoration: BoxDecoration(
+                                                                        color: const Color(0xffC4C4C4),
+                                                                        borderRadius: BorderRadius.circular(6),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(height: 10),
+                                                                  Column(
+                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                    children: [
+                                                                      Center(
+                                                                        child: Text(
+                                                                          "Apply Filter",
+                                                                          style: TextStyle(
+                                                                            fontSize: 18,
+                                                                            color: CustomColors.primaryText,
+                                                                            fontFamily: "Poppins",
+                                                                            fontWeight: FontWeight.w600,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 40),
+                                                                      Container(
+                                                                        decoration: BoxDecoration(
+                                                                          borderRadius: const BorderRadius.only(
+                                                                            topLeft: Radius.circular(6),
+                                                                            bottomLeft: Radius.circular(6),
+                                                                            bottomRight: Radius.circular(6),
+                                                                            topRight: Radius.circular(6),
+                                                                          ),
+                                                                          color: CustomColors.white,
+                                                                          boxShadow: const [
+                                                                            BoxShadow(
+                                                                              color: Color.fromARGB(13, 0, 0, 0),
+                                                                              blurRadius: 4.0,
+                                                                              spreadRadius: 2.0,
+                                                                              offset: Offset(2.0, 2.0),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                        alignment: Alignment.center,
+                                                                        width: MediaQuery.of(context).size.width,
+                                                                        height: 50,
+                                                                        child: TextFormField(
+                                                                          style: const TextStyle(
+                                                                            fontSize: 16,
+                                                                            fontFamily: "Rubik",
+                                                                            fontWeight: FontWeight.w400,
+                                                                          ),
+                                                                          textAlignVertical: TextAlignVertical.bottom,
+                                                                          maxLines: 1,
+                                                                          onChanged: (value) {
+                                                                            setState(
+                                                                              () {
+                                                                                serviceId = value;
+                                                                              },
+                                                                            );
+                                                                            serviceId = value;
+                                                                          },
+                                                                          decoration: InputDecoration(
+                                                                            prefixIcon: Icon(
+                                                                              Icons.search,
+                                                                              size: 17,
+                                                                              color: CustomColors.hintText,
+                                                                            ),
+                                                                            hintText: "Search...",
+                                                                            fillColor: CustomColors.white,
+                                                                            focusColor: CustomColors.white,
+                                                                            hoverColor: CustomColors.white,
+                                                                            filled: true,
+                                                                            border: OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.circular(4),
+                                                                            ),
+                                                                            focusedBorder: OutlineInputBorder(
+                                                                              borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                                              borderRadius: BorderRadius.circular(4.0),
+                                                                            ),
+                                                                            enabledBorder: OutlineInputBorder(
+                                                                              borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                                              borderRadius: BorderRadius.circular(4.0),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 20),
+                                                                      Center(
+                                                                        child: Column(
+                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Text(
+                                                                              "Find",
+                                                                              style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                fontFamily: "Rubik",
+                                                                                fontWeight: FontWeight.w600,
+                                                                                color: CustomColors.primaryText,
+                                                                              ),
+                                                                            ),
+                                                                            const SizedBox(height: 5),
+                                                                            DecoratedBox(
+                                                                              decoration: BoxDecoration(
+                                                                                borderRadius: const BorderRadius.only(
+                                                                                  topLeft: Radius.circular(6),
+                                                                                  bottomLeft: Radius.circular(6),
+                                                                                  bottomRight: Radius.circular(6),
+                                                                                  topRight: Radius.circular(6),
+                                                                                ),
+                                                                                color: CustomColors.white,
+                                                                                boxShadow: const [
+                                                                                  BoxShadow(
+                                                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                                                    blurRadius: 4.0,
+                                                                                    spreadRadius: 2.0,
+                                                                                    offset: Offset(2.0, 2.0),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.symmetric(
+                                                                                  horizontal: 7,
+                                                                                  vertical: 1,
+                                                                                ),
+                                                                                child: DropdownButtonHideUnderline(
+                                                                                  child: DropdownButton(
+                                                                                    hint: const Text("Find"),
+                                                                                    isExpanded: true,
+                                                                                    items: data!.map((item) {
+                                                                                      return DropdownMenuItem(
+                                                                                        value: item['id'].toString(),
+                                                                                        child: Text(item['name']),
+                                                                                      );
+                                                                                    }).toList(),
+                                                                                    onChanged: (newVal) {
+                                                                                      setState(() {
+                                                                                        findSelected = newVal;
+                                                                                      });
+                                                                                    },
+                                                                                    value: findSelected,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 20),
+                                                                      Center(
+                                                                        child: Column(
+                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Text(
+                                                                              "Area",
+                                                                              style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                fontFamily: "Rubik",
+                                                                                fontWeight: FontWeight.w600,
+                                                                                color: CustomColors.primaryText,
+                                                                              ),
+                                                                            ),
+                                                                            const SizedBox(height: 5),
+                                                                            DecoratedBox(
+                                                                              decoration: BoxDecoration(
+                                                                                borderRadius: const BorderRadius.only(
+                                                                                  topLeft: Radius.circular(6),
+                                                                                  bottomLeft: Radius.circular(6),
+                                                                                  bottomRight: Radius.circular(6),
+                                                                                  topRight: Radius.circular(6),
+                                                                                ),
+                                                                                color: CustomColors.white,
+                                                                                boxShadow: const [
+                                                                                  BoxShadow(
+                                                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                                                    blurRadius: 4.0,
+                                                                                    spreadRadius: 2.0,
+                                                                                    offset: Offset(2.0, 2.0),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.symmetric(
+                                                                                  horizontal: 7,
+                                                                                  vertical: 1,
+                                                                                ),
+                                                                                child: DropdownButtonHideUnderline(
+                                                                                  child: DropdownButton(
+                                                                                    hint: const Text("Select Area"),
+                                                                                    isExpanded: true,
+                                                                                    items: area!.map((item) {
+                                                                                      return DropdownMenuItem(
+                                                                                        value: item['id'].toString(),
+                                                                                        child: Text(item['name']),
+                                                                                      );
+                                                                                    }).toList(),
+                                                                                    onChanged: (newVal) {
+                                                                                      setState(() {
+                                                                                        findArea = newVal;
+                                                                                      });
+                                                                                    },
+                                                                                    value: findArea,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 20),
+                                                                      Center(
+                                                                        child: Column(
+                                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                                          children: [
+                                                                            Text(
+                                                                              "Rate",
+                                                                              style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                fontFamily: "Rubik",
+                                                                                fontWeight: FontWeight.w600,
+                                                                                color: CustomColors.primaryText,
+                                                                              ),
+                                                                            ),
+                                                                            const SizedBox(height: 5),
+                                                                            DecoratedBox(
+                                                                              decoration: BoxDecoration(
+                                                                                borderRadius: const BorderRadius.only(
+                                                                                  topLeft: Radius.circular(6),
+                                                                                  bottomLeft: Radius.circular(6),
+                                                                                  bottomRight: Radius.circular(6),
+                                                                                  topRight: Radius.circular(6),
+                                                                                ),
+                                                                                color: CustomColors.white,
+                                                                                boxShadow: const [
+                                                                                  BoxShadow(
+                                                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                                                    blurRadius: 4.0,
+                                                                                    spreadRadius: 2.0,
+                                                                                    offset: Offset(2.0, 2.0),
+                                                                                  ),
+                                                                                ],
+                                                                              ),
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.symmetric(
+                                                                                  horizontal: 7,
+                                                                                  vertical: 1,
+                                                                                ),
+                                                                                child: DropdownButtonHideUnderline(
+                                                                                  child: DropdownButton(
+                                                                                    hint: const Text("Select Rate"),
+                                                                                    isExpanded: true,
+                                                                                    items: rate!.map((item) {
+                                                                                      return DropdownMenuItem(
+                                                                                        value: item['id'].toString(),
+                                                                                        child: Text(item['name']),
+                                                                                      );
+                                                                                    }).toList(),
+                                                                                    onChanged: (newVal) {
+                                                                                      setState(() {
+                                                                                        findRate = newVal;
+                                                                                      });
+                                                                                    },
+                                                                                    value: findRate,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                      // OTP
+                                                                      const SizedBox(height: 20),
+                                                                      GestureDetector(
+                                                                        onTap: () {
+                                                                          fetchReceiverDashboardModel();
+                                                                          Navigator.pop(context);
+                                                                        },
+                                                                        child: Container(
+                                                                          width: MediaQuery.of(context).size.width,
+                                                                          height: 54,
+                                                                          decoration: BoxDecoration(
+                                                                            color: ServiceRecieverColor.primaryColor,
+                                                                            borderRadius: BorderRadius.circular(10),
+                                                                          ),
+                                                                          child: Center(
+                                                                            child: Text(
+                                                                              "Search",
+                                                                              style: TextStyle(
+                                                                                color: CustomColors.white,
+                                                                                fontFamily: "Rubik",
+                                                                                fontStyle: FontStyle.normal,
+                                                                                fontWeight: FontWeight.w500,
+                                                                                fontSize: 18,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      const SizedBox(height: 30),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              maxLines: 1,
+                                              textAlignVertical: TextAlignVertical.bottom,
+                                              style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
+                                              decoration: InputDecoration(
+                                                prefixIcon: Icon(
+                                                  Icons.search,
+                                                  size: 17,
+                                                  color: CustomColors.hintText,
+                                                ),
+                                                hintText: "Search...",
+                                                fillColor: CustomColors.white,
+                                                focusColor: CustomColors.white,
+                                                hoverColor: CustomColors.white,
+                                                filled: true,
+                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+                                                focusedBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                  borderRadius: BorderRadius.circular(4.0),
+                                                ),
+                                                enabledBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                  borderRadius: BorderRadius.circular(4.0),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          TextButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                findSelected = null;
+                                                serviceId = null;
+                                                findArea = null;
+                                                findRate = null;
+                                              });
+                                              fetchReceiverDashboardModel();
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.white),
+                                              shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                                            ),
+                                            child: const Text(
+                                              "Reset",
+                                              style: TextStyle(color: Colors.red),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          hintText: "Search...",
-                          fillColor: CustomColors.white,
-                          focusColor: CustomColors.white,
-                          hoverColor: CustomColors.white,
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                              child: Column(
+                                children: [
+                                  ListView.builder(
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.vertical,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemCount: provider.filterDataList.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      var item = provider.filterDataList[index];
+                                      // print(item);
+                                      // return Container();
+                                      return RecommendationReceiverWidget(
+                                        imgPath: "${AppUrl.webStorageUrl}" '/' + item.avatar.toString(),
+                                        title: "${item.firstName} ${item.lastName}",
+                                        experience: item.userdetailprovider.experience == null ? "0" : item.userdetailprovider.experience.toString(),
+                                        hourly: item.userdetailprovider.hourlyRate.toString() == "null" ? "0" : item.userdetailprovider.hourlyRate.toString(),
+                                        price: item.userdetailprovider.hourlyRate.toString() == "null" ? "0" : item.userdetailprovider.hourlyRate.toString(),
+                                        dob: isAdult(item.userdetail.dob != null ? "${item.userdetail.dob}" : "00-00-0000").toString(),
+                                        ratingCount: double.parse("${item.avgRating!.isEmpty ? "0.0" : item.avgRating![0].rating}"),
+                                        isFavouriteIcon: GestureDetector(
+                                          onTap: () {
+                                            // setState(() {});
+                                            // if (favouriteList.contains(item.id)) {
+                                            //   favouriteList.remove(foundProviders[index]['id']);
+                                            //   setState(() {});
+                                            // } else {
+                                            //   favouriteList.add(foundProviders[index]['id']);
+                                            //   setState(() {});
+                                            // }
+                                            // providerId = foundProviders[index]['id'];
+                                            // favourited("${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=${foundProviders[index]['id'].toString()}");
+                                          },
+                                          child: favouriteList.contains(item.id)
+                                              ? Icon(
+                                                  Icons.favorite,
+                                                  color: CustomColors.red,
+                                                  size: 24,
+                                                )
+                                              : Icon(
+                                                  Icons.favorite_outline,
+                                                  color: CustomColors.darkGreyRecommended,
+                                                  size: 24,
+                                                ),
+                                        ),
+                                        onTap: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ProviderProfileDetailForReceiver(
+                                                id: item.id.toString(),
+                                                rating: double.parse("${item.avgRating!.isEmpty ? "0.0" : item.avgRating![0].rating}"),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                        ),
+                        ],
                       ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    child: CustomPagination(
+                      nextPage: (provider.currentPageIndex) < provider.totalRowsCount
+                          ? () {
+                              provider.handlePageChange(provider.currentPageIndex + 1);
+                            }
+                          : null,
+                      previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
+                      gotoPage: provider.handlePageChange,
+                      gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
+                      gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount ? () => provider.handlePageChange(provider.totalRowsCount) : null,
+                      currentPageIndex: provider.currentPageIndex,
+                      totalRowsCount: provider.totalRowsCount,
                     ),
                   ),
                 ],
               ),
-              // Jobss
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 17),
-                child: Column(
-                  children: [
-                    findProviders.isEmpty
-                        ? FutureBuilder<ServiceReceiverDashboardModel>(
-                            future: futureReceiverDashboard,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: foundProviders.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return RecommendationReceiverWidget(
-                                      imgPath: "${AppUrl.webStorageUrl}" '/' + foundProviders[index]['avatar'].toString(),
-                                      title: "${foundProviders[index]['first_name']} ${foundProviders[index]['last_name']}",
-                                      experience: foundProviders[index]['userdetailprovider']['experience'] == null ? "0" : foundProviders[index]['userdetailprovider']['experience'].toString(),
-                                      hourly: foundProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailprovider']['hourly_rate'].toString(),
-                                      price: foundProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailprovider']['hourly_rate'].toString(),
-                                      dob: isAdult(foundProviders[index]['userdetail']['dob'] != null ? "${foundProviders[index]['userdetail']['dob']}" : "00-00-0000").toString(),
-                                      ratingCount: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
-                                      isFavouriteIcon: GestureDetector(
-                                        onTap: () {
-                                          setState(() {});
-                                          if (favouriteList.contains(foundProviders[index]['id'])) {
-                                            favouriteList.remove(foundProviders[index]['id']);
-                                            setState(() {});
-                                          } else {
-                                            favouriteList.add(foundProviders[index]['id']);
-                                            setState(() {});
-                                          }
-                                          providerId = foundProviders[index]['id'];
-                                          favourited("${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=${foundProviders[index]['id'].toString()}");
-                                        },
-                                        child: favouriteList.contains(foundProviders[index]['id'])
-                                            ? Icon(
-                                                Icons.favorite,
-                                                color: CustomColors.red,
-                                                size: 24,
-                                              )
-                                            : Icon(
-                                                Icons.favorite_outline,
-                                                color: CustomColors.darkGreyRecommended,
-                                                size: 24,
-                                              ),
-                                      ),
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ProviderProfileDetailForReceiver(
-                                              id: snapshot.data!.data![index].id.toString(),
-                                              rating: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                );
-                              } else if (snapshot.hasError) {
-                                return Text(
-                                  snapshot.error.toString(),
-                                );
-                              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                                return Shimmer.fromColors(
-                                  baseColor: CustomColors.white,
-                                  highlightColor: CustomColors.primaryLight,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 200,
-                                        width: MediaQuery.of(context).size.width,
-                                        margin: const EdgeInsets.symmetric(
-                                          vertical: 10,
-                                        ),
-                                        padding: const EdgeInsets.all(20),
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20),
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                                              offset: Offset(0, 4),
-                                              blurRadius: 45,
-                                            )
-                                          ],
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                        ),
-                                        child: const Text("data"),
-                                      ),
-                                      Container(
-                                        height: 200,
-                                        width: MediaQuery.of(context).size.width,
-                                        margin: const EdgeInsets.symmetric(
-                                          vertical: 10,
-                                        ),
-                                        padding: const EdgeInsets.all(20),
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20),
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                                              offset: Offset(0, 4),
-                                              blurRadius: 45,
-                                            )
-                                          ],
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                        ),
-                                        child: const Text("data"),
-                                      ),
-                                      Container(
-                                        height: 200,
-                                        width: MediaQuery.of(context).size.width,
-                                        margin: const EdgeInsets.symmetric(
-                                          vertical: 10,
-                                        ),
-                                        padding: const EdgeInsets.all(20),
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20),
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                                              offset: Offset(0, 4),
-                                              blurRadius: 45,
-                                            )
-                                          ],
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                        ),
-                                        child: const Text("data"),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              } else if (snapshot.connectionState == ConnectionState.none) {
-                                return const Text("Cannot Establish Connection with server..");
-                              } else {
-                                return Shimmer.fromColors(
-                                  baseColor: CustomColors.white,
-                                  highlightColor: CustomColors.primaryLight,
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 200,
-                                        width: MediaQuery.of(context).size.width,
-                                        margin: const EdgeInsets.symmetric(
-                                          vertical: 10,
-                                        ),
-                                        padding: const EdgeInsets.all(20),
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20),
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                                              offset: Offset(0, 4),
-                                              blurRadius: 45,
-                                            )
-                                          ],
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                        ),
-                                        child: const Text("data"),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                          )
-                        : FutureBuilder<ServiceReceiverDashboardModel>(
-                            future: futureReceiverDashboard,
-                            builder: (context, snapshot) {
-                              if (snapshot.hasData) {
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.vertical,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: findProviders.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return RecommendationReceiverWidget(
-                                      imgPath: findProviders[index]['avatar'] == null ? "${AppUrl.webStorageUrl}" '/' + findProviders[index]['avatar'].toString() : "https://fastly.picsum.photos/id/553/200/300.jpg?hmac=-A3VLW_dBmwUaXOe7bHhCt-lnmROrPFyTLslwNHVH1A",
-                                      title: "${findProviders[index]['first_name']} ${findProviders[index]['last_name']}",
-                                      experience: findProviders[index]['userdetailprovider']['experience'] == null ? "0" : findProviders[index]['userdetailprovider']['experience'].toString(),
-                                      hourly: findProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : findProviders[index]['userdetailprovider']['hourly_rate'].toString(),
-                                      price: findProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : findProviders[index]['userdetailprovider']['hourly_rate'].toString(),
-                                      dob: isAdult(findProviders[index]['userdetail']['dob'] != null ? "${findProviders[index]['userdetail']['dob']}" : "00-00-0000").toString(),
-                                      ratingCount: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
-                                      isFavouriteIcon: GestureDetector(
-                                        onTap: () {
-                                          setState(() {});
-                                          if (favouriteList.contains(findProviders[index]['id'])) {
-                                            favouriteList.remove(findProviders[index]['id']);
-                                            setState(() {});
-                                          } else {
-                                            favouriteList.add(findProviders[index]['id']);
-                                            setState(() {});
-                                          }
-                                          providerId = findProviders[index]['id'];
-                                          favourited("${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=${findProviders[index]['id'].toString()}");
-                                        },
-                                        child: favouriteList.contains(findProviders[index]['id'])
-                                            ? Icon(
-                                                Icons.favorite,
-                                                color: CustomColors.red,
-                                                size: 24,
-                                              )
-                                            : Icon(
-                                                Icons.favorite_outline,
-                                                color: CustomColors.darkGreyRecommended,
-                                                size: 24,
-                                              ),
-                                      ),
-                                      onTap: () {},
-                                    );
-                                  },
-                                );
-                              } else if (snapshot.hasError) {
-                                return Text(
-                                  snapshot.error.toString(),
-                                );
-                              } else if (snapshot.connectionState == ConnectionState.waiting) {
-                                return const Text("Waiting...");
-                              } else if (snapshot.connectionState == ConnectionState.none) {
-                                return const Text("Cannot Establish Connection with server..");
-                              } else {
-                                return Shimmer.fromColors(
-                                  baseColor: CustomColors.white,
-                                  highlightColor: const Color.fromARGB(255, 95, 95, 95),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: 200,
-                                        width: MediaQuery.of(context).size.width,
-                                        margin: const EdgeInsets.symmetric(
-                                          vertical: 10,
-                                        ),
-                                        padding: const EdgeInsets.all(20),
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(20),
-                                            topRight: Radius.circular(20),
-                                            bottomLeft: Radius.circular(20),
-                                            bottomRight: Radius.circular(20),
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                                              offset: Offset(0, 4),
-                                              blurRadius: 45,
-                                            )
-                                          ],
-                                          color: Color.fromRGBO(255, 255, 255, 1),
-                                        ),
-                                        child: const Text("data"),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                          )
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-            ],
+            ),
+            //  RefreshIndicator(
+            //   onRefresh: () async {
+            //     fetchReceiverDashboardModel();
+            //   },
+            //   child: SingleChildScrollView(
+            //     child: Column(
+            //       children: [
+            //         // Overlay Search bar
+            //         // Jobss
+            //         Container(
+            //           padding: const EdgeInsets.symmetric(horizontal: 17),
+            //           child: const Column(
+            //             children: [
+            //               // findProviders.isEmpty ?
+            // FutureBuilder<ServiceReceiverDashboardModel>(
+            //   future: futureReceiverDashboard,
+            //   builder: (context, snapshot) {
+            //     if (snapshot.hasData) {
+            //       return ListView.builder(
+            //         shrinkWrap: true,
+            //         scrollDirection: Axis.vertical,
+            //         physics: const NeverScrollableScrollPhysics(),
+            //         itemCount: foundProviders.length,
+            //         itemBuilder: (BuildContext context, int index) {
+            //           return RecommendationReceiverWidget(
+            //             imgPath: "${AppUrl.webStorageUrl}" '/' + foundProviders[index]['avatar'].toString(),
+            //             title: "${foundProviders[index]['first_name']} ${foundProviders[index]['last_name']}",
+            //             experience: foundProviders[index]['userdetailprovider']['experience'] == null ? "0" : foundProviders[index]['userdetailprovider']['experience'].toString(),
+            //             hourly: foundProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailprovider']['hourly_rate'].toString(),
+            //             price: foundProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailprovider']['hourly_rate'].toString(),
+            //             dob: isAdult(foundProviders[index]['userdetail']['dob'] != null ? "${foundProviders[index]['userdetail']['dob']}" : "00-00-0000").toString(),
+            //             ratingCount: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
+            //             isFavouriteIcon: GestureDetector(
+            //               onTap: () {
+            //                 setState(() {});
+            //                 if (favouriteList.contains(foundProviders[index]['id'])) {
+            //                   favouriteList.remove(foundProviders[index]['id']);
+            //                   setState(() {});
+            //                 } else {
+            //                   favouriteList.add(foundProviders[index]['id']);
+            //                   setState(() {});
+            //                 }
+            //                 providerId = foundProviders[index]['id'];
+            //                 favourited("${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=${foundProviders[index]['id'].toString()}");
+            //               },
+            //               child: favouriteList.contains(foundProviders[index]['id'])
+            //                   ? Icon(
+            //                       Icons.favorite,
+            //                       color: CustomColors.red,
+            //                       size: 24,
+            //                     )
+            //                   : Icon(
+            //                       Icons.favorite_outline,
+            //                       color: CustomColors.darkGreyRecommended,
+            //                       size: 24,
+            //                     ),
+            //             ),
+            //             onTap: () {
+            //               Navigator.push(
+            //                 context,
+            //                 MaterialPageRoute(
+            //                   builder: (context) => ProviderProfileDetailForReceiver(
+            //                     id: snapshot.data!.data![index].id.toString(),
+            //                     rating: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
+            //                   ),
+            //                 ),
+            //               );
+            //             },
+            //           );
+            //         },
+            //       );
+            //     } else if (snapshot.hasError) {
+            //       return Text(
+            //         snapshot.error.toString(),
+            //       );
+            //     } else if (snapshot.connectionState == ConnectionState.waiting) {
+            //       return Shimmer.fromColors(
+            //         baseColor: CustomColors.white,
+            //         highlightColor: CustomColors.primaryLight,
+            //         child: Column(
+            //           children: [
+            //             Container(
+            //               height: 200,
+            //               width: MediaQuery.of(context).size.width,
+            //               margin: const EdgeInsets.symmetric(
+            //                 vertical: 10,
+            //               ),
+            //               padding: const EdgeInsets.all(20),
+            //               decoration: const BoxDecoration(
+            //                 borderRadius: BorderRadius.only(
+            //                   topLeft: Radius.circular(20),
+            //                   topRight: Radius.circular(20),
+            //                   bottomLeft: Radius.circular(20),
+            //                   bottomRight: Radius.circular(20),
+            //                 ),
+            //                 boxShadow: [
+            //                   BoxShadow(
+            //                     color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+            //                     offset: Offset(0, 4),
+            //                     blurRadius: 45,
+            //                   )
+            //                 ],
+            //                 color: Color.fromRGBO(255, 255, 255, 1),
+            //               ),
+            //               child: const Text("data"),
+            //             ),
+            //             Container(
+            //               height: 200,
+            //               width: MediaQuery.of(context).size.width,
+            //               margin: const EdgeInsets.symmetric(
+            //                 vertical: 10,
+            //               ),
+            //               padding: const EdgeInsets.all(20),
+            //               decoration: const BoxDecoration(
+            //                 borderRadius: BorderRadius.only(
+            //                   topLeft: Radius.circular(20),
+            //                   topRight: Radius.circular(20),
+            //                   bottomLeft: Radius.circular(20),
+            //                   bottomRight: Radius.circular(20),
+            //                 ),
+            //                 boxShadow: [
+            //                   BoxShadow(
+            //                     color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+            //                     offset: Offset(0, 4),
+            //                     blurRadius: 45,
+            //                   )
+            //                 ],
+            //                 color: Color.fromRGBO(255, 255, 255, 1),
+            //               ),
+            //               child: const Text("data"),
+            //             ),
+            //             Container(
+            //               height: 200,
+            //               width: MediaQuery.of(context).size.width,
+            //               margin: const EdgeInsets.symmetric(
+            //                 vertical: 10,
+            //               ),
+            //               padding: const EdgeInsets.all(20),
+            //               decoration: const BoxDecoration(
+            //                 borderRadius: BorderRadius.only(
+            //                   topLeft: Radius.circular(20),
+            //                   topRight: Radius.circular(20),
+            //                   bottomLeft: Radius.circular(20),
+            //                   bottomRight: Radius.circular(20),
+            //                 ),
+            //                 boxShadow: [
+            //                   BoxShadow(
+            //                     color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+            //                     offset: Offset(0, 4),
+            //                     blurRadius: 45,
+            //                   )
+            //                 ],
+            //                 color: Color.fromRGBO(255, 255, 255, 1),
+            //               ),
+            //               child: const Text("data"),
+            //             ),
+            //           ],
+            //         ),
+            //       );
+            //     } else if (snapshot.connectionState == ConnectionState.none) {
+            //       return const Text("Cannot Establish Connection with server..");
+            //     } else {
+            //       return Shimmer.fromColors(
+            //         baseColor: CustomColors.white,
+            //         highlightColor: CustomColors.primaryLight,
+            //         child: Column(
+            //           children: [
+            //             Container(
+            //               height: 200,
+            //               width: MediaQuery.of(context).size.width,
+            //               margin: const EdgeInsets.symmetric(
+            //                 vertical: 10,
+            //               ),
+            //               padding: const EdgeInsets.all(20),
+            //               decoration: const BoxDecoration(
+            //                 borderRadius: BorderRadius.only(
+            //                   topLeft: Radius.circular(20),
+            //                   topRight: Radius.circular(20),
+            //                   bottomLeft: Radius.circular(20),
+            //                   bottomRight: Radius.circular(20),
+            //                 ),
+            //                 boxShadow: [
+            //                   BoxShadow(
+            //                     color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+            //                     offset: Offset(0, 4),
+            //                     blurRadius: 45,
+            //                   )
+            //                 ],
+            //                 color: Color.fromRGBO(255, 255, 255, 1),
+            //               ),
+            //               child: const Text("data"),
+            //             ),
+            //           ],
+            //         ),
+            //       );
+            //     }
+            //   },
+            // )
+            //               // : FutureBuilder<ServiceReceiverDashboardModel>(
+            //               //     future: futureReceiverDashboard,
+            //               //     builder: (context, snapshot) {
+            //               //       if (snapshot.hasData) {
+            //               //         return ListView.builder(
+            //               //           shrinkWrap: true,
+            //               //           scrollDirection: Axis.vertical,
+            //               //           physics: const NeverScrollableScrollPhysics(),
+            //               //           itemCount: findProviders.length,
+            //               //           itemBuilder: (BuildContext context, int index) {
+            //               //             return RecommendationReceiverWidget(
+            //               //               imgPath: findProviders[index]['avatar'] == null ? "${AppUrl.webStorageUrl}" '/' + findProviders[index]['avatar'].toString() : "https://fastly.picsum.photos/id/553/200/300.jpg?hmac=-A3VLW_dBmwUaXOe7bHhCt-lnmROrPFyTLslwNHVH1A",
+            //               //               title: "${findProviders[index]['first_name']} ${findProviders[index]['last_name']}",
+            //               //               experience: findProviders[index]['userdetailprovider']['experience'] == null ? "0" : findProviders[index]['userdetailprovider']['experience'].toString(),
+            //               //               hourly: findProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : findProviders[index]['userdetailprovider']['hourly_rate'].toString(),
+            //               //               price: findProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : findProviders[index]['userdetailprovider']['hourly_rate'].toString(),
+            //               //               dob: isAdult(findProviders[index]['userdetail']['dob'] != null ? "${findProviders[index]['userdetail']['dob']}" : "00-00-0000").toString(),
+            //               //               ratingCount: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
+            //               //               isFavouriteIcon: GestureDetector(
+            //               //                 onTap: () {
+            //               //                   setState(() {});
+            //               //                   if (favouriteList.contains(findProviders[index]['id'])) {
+            //               //                     favouriteList.remove(findProviders[index]['id']);
+            //               //                     setState(() {});
+            //               //                   } else {
+            //               //                     favouriteList.add(findProviders[index]['id']);
+            //               //                     setState(() {});
+            //               //                   }
+            //               //                   providerId = findProviders[index]['id'];
+            //               //                   favourited("${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=${findProviders[index]['id'].toString()}");
+            //               //                 },
+            //               //                 child: favouriteList.contains(findProviders[index]['id'])
+            //               //                     ? Icon(
+            //               //                         Icons.favorite,
+            //               //                         color: CustomColors.red,
+            //               //                         size: 24,
+            //               //                       )
+            //               //                     : Icon(
+            //               //                         Icons.favorite_outline,
+            //               //                         color: CustomColors.darkGreyRecommended,
+            //               //                         size: 24,
+            //               //                       ),
+            //               //               ),
+            //               //               onTap: () {},
+            //               //             );
+            //               //           },
+            //               //         );
+            //               //       } else if (snapshot.hasError) {
+            //               //         return Text(
+            //               //           snapshot.error.toString(),
+            //               //         );
+            //               //       } else if (snapshot.connectionState == ConnectionState.waiting) {
+            //               //         return const Text("Waiting...");
+            //               //       } else if (snapshot.connectionState == ConnectionState.none) {
+            //               //         return const Text("Cannot Establish Connection with server..");
+            //               //       } else {
+            //               //         return Shimmer.fromColors(
+            //               //           baseColor: CustomColors.white,
+            //               //           highlightColor: const Color.fromARGB(255, 95, 95, 95),
+            //               //           child: Column(
+            //               //             children: [
+            //               //               Container(
+            //               //                 height: 200,
+            //               //                 width: MediaQuery.of(context).size.width,
+            //               //                 margin: const EdgeInsets.symmetric(
+            //               //                   vertical: 10,
+            //               //                 ),
+            //               //                 padding: const EdgeInsets.all(20),
+            //               //                 decoration: const BoxDecoration(
+            //               //                   borderRadius: BorderRadius.only(
+            //               //                     topLeft: Radius.circular(20),
+            //               //                     topRight: Radius.circular(20),
+            //               //                     bottomLeft: Radius.circular(20),
+            //               //                     bottomRight: Radius.circular(20),
+            //               //                   ),
+            //               //                   boxShadow: [
+            //               //                     BoxShadow(
+            //               //                       color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+            //               //                       offset: Offset(0, 4),
+            //               //                       blurRadius: 45,
+            //               //                     )
+            //               //                   ],
+            //               //                   color: Color.fromRGBO(255, 255, 255, 1),
+            //               //                 ),
+            //               //                 child: const Text("data"),
+            //               //               ),
+            //               //             ],
+            //               //           ),
+            //               //         );
+            //               //       }
+            //               //     },
+            //               //   )
+            //             ],
+            //           ),
+            //         ),
+            //         SizedBox(
+            //           width: MediaQuery.of(context).size.width,
+            //           child: CustomPagination(
+            //             nextPage: (provider.currentPageIndex) < provider.totalRowsCount
+            //                 ? () {
+            //                     provider.handlePageChange(provider.currentPageIndex + 1);
+            //                   }
+            //                 : null,
+            //             previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
+            //             gotoPage: provider.handlePageChange,
+            //             gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
+            //             gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount ? () => provider.handlePageChange(provider.totalRowsCount) : null,
+            //             currentPageIndex: provider.currentPageIndex,
+            //             totalRowsCount: provider.totalRowsCount,
+            //           ),
+            //         ),
+            //         const SizedBox(height: 20),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

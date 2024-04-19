@@ -437,46 +437,8 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           ],
                         ),
                       ),
-                      // Date Of Birth
-                      InkWell(
-                        onTap: () {
-                          _selectDate(context);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          margin: const EdgeInsets.only(bottom: 15),
-                          width: MediaQuery.of(context).size.width,
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                            color: CustomColors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Date Of Birth",
-                                style: TextStyle(
-                                  color: CustomColors.primaryColor,
-                                  fontSize: 12,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                dobController.text.isEmpty ? "Date Of Birth" : dobController.text.toString(),
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 15,
-                                  fontFamily: "Rubik",
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      // Services
+
+                      // User Address
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                         margin: const EdgeInsets.only(bottom: 15),
@@ -489,7 +451,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Services",
+                              "Home Address",
                               style: TextStyle(
                                 color: CustomColors.primaryColor,
                                 fontSize: 12,
@@ -497,36 +459,46 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Center(
-                              child: DecoratedBox(
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  border: Border.all(color: const Color.fromARGB(255, 255, 255, 255), width: 0.5),
+                            TextFormField(
+                              controller: addressController,
+                              keyboardType: TextInputType.name,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontFamily: "Rubik",
+                                fontWeight: FontWeight.w400,
+                              ),
+                              textAlignVertical: TextAlignVertical.bottom,
+                              maxLines: 1,
+                              validator: (value) {
+                                if (value != null || value!.isEmpty) {
+                                  return "please add Address";
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                hintText: "User Address",
+                                fillColor: CustomColors.white,
+                                focusColor: CustomColors.white,
+                                hoverColor: CustomColors.white,
+                                filled: true,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(0),
+                                ),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                  borderRadius: BorderRadius.circular(0.0),
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                  borderRadius: BorderRadius.circular(0.0),
+                                ),
+                                errorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 10,
-                                    vertical: 4,
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton(
-                                      hint: const Text("Services You Provide"),
-                                      isExpanded: true,
-                                      items: data!.map((item) {
-                                        return DropdownMenuItem(
-                                          value: item['id'].toString(),
-                                          child: Text(item['name']),
-                                        );
-                                      }).toList(),
-                                      onChanged: (newVal) {
-                                        setState(() {
-                                          selectedService = newVal;
-                                        });
-                                      },
-                                      value: selectedService,
-                                    ),
-                                  ),
+                                focusedErrorBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                             ),
@@ -546,7 +518,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Phone Number",
+                              "Contact Number",
                               style: TextStyle(
                                 color: CustomColors.primaryColor,
                                 fontSize: 12,
@@ -604,73 +576,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           ],
                         ),
                       ),
-                      // User Address
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                          color: CustomColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "User Address",
-                              style: TextStyle(
-                                color: CustomColors.primaryColor,
-                                fontSize: 12,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            TextFormField(
-                              controller: addressController,
-                              keyboardType: TextInputType.name,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w400,
-                              ),
-                              textAlignVertical: TextAlignVertical.bottom,
-                              maxLines: 1,
-                              validator: (value) {
-                                if (value != null || value!.isEmpty) {
-                                  return "please add Address";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                hintText: "User Address",
-                                fillColor: CustomColors.white,
-                                focusColor: CustomColors.white,
-                                hoverColor: CustomColors.white,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                       // Zip Code
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -684,7 +589,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Zip Code",
+                              "Postal Code",
                               style: TextStyle(
                                 color: CustomColors.primaryColor,
                                 fontSize: 12,
@@ -737,6 +642,114 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           ],
                         ),
                       ),
+                      // Date Of Birth
+                      InkWell(
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          width: MediaQuery.of(context).size.width,
+                          alignment: Alignment.centerLeft,
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Date Of Birth",
+                                style: TextStyle(
+                                  color: CustomColors.primaryColor,
+                                  fontSize: 12,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                dobController.text.isEmpty ? "Date Of Birth" : dobController.text.toString(),
+                                style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 15,
+                                  fontFamily: "Rubik",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // Services
+                      // Container(
+                      //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                      //   margin: const EdgeInsets.only(bottom: 15),
+                      //   decoration: BoxDecoration(
+                      //     color: CustomColors.white,
+                      //     borderRadius: BorderRadius.circular(12),
+                      //   ),
+                      //   child: Column(
+                      //     crossAxisAlignment: CrossAxisAlignment.start,
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     children: [
+                      //       Text(
+                      //         "Services",
+                      //         style: TextStyle(
+                      //           color: CustomColors.primaryColor,
+                      //           fontSize: 12,
+                      //           fontFamily: "Rubik",
+                      //           fontWeight: FontWeight.w600,
+                      //         ),
+                      //       ),
+                      //       Center(
+                      //         child: DecoratedBox(
+                      //           decoration: BoxDecoration(
+                      //             color: Colors.transparent,
+                      //             border: Border.all(color: const Color.fromARGB(255, 255, 255, 255), width: 0.5),
+                      //             borderRadius: BorderRadius.circular(12),
+                      //           ),
+                      //           child: Padding(
+                      //             padding: const EdgeInsets.symmetric(
+                      //               horizontal: 10,
+                      //               vertical: 4,
+                      //             ),
+                      //             child: DropdownButtonHideUnderline(
+                      //               child: DropdownButton(
+                      //                 hint: const Text("Services You Provide"),
+                      //                 isExpanded: true,
+                      //                 items: data!.map((item) {
+                      //                   return DropdownMenuItem(
+                      //                     value: item['id'].toString(),
+                      //                     child: Text(item['name']),
+                      //                   );
+                      //                 }).toList(),
+                      //                 onChanged: (newVal) {
+                      //                   setState(() {
+                      //                     selectedService = newVal;
+                      //                   });
+                      //                 },
+                      //                 value: selectedService,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+
+                      const SizedBox(height: 10),
+                      const Text(
+                        "Bio",
+                        style: TextStyle(
+                          // color: CustomColors.primaryColor,
+                          fontSize: 16,
+                          fontFamily: "Rubik",
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
                       // User Information
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -750,7 +763,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "User Info",
+                              "User Information",
                               style: TextStyle(
                                 color: CustomColors.primaryColor,
                                 fontSize: 12,

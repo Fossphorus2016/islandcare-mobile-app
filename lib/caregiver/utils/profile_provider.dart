@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_null_aware_operators
 
+import 'dart:math';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
@@ -86,6 +88,7 @@ class ServiceGiverProvider extends ChangeNotifier {
       notifyListeners();
       if (response.statusCode == 200) {
         serviceJobs = ServiceProviderDashboardModel.fromJson(response.data);
+        setPaginationList(serviceJobs!.jobs);
         notifyListeners();
       } else {
         throw Exception(
@@ -136,11 +139,91 @@ class ServiceGiverProvider extends ChangeNotifier {
     // Navigator.pop(context);
     if (response.statusCode == 200) {
       serviceJobs = ServiceProviderDashboardModel.fromJson(response.data);
+      setPaginationList(serviceJobs!.jobs);
       notifyListeners();
     } else {
       throw Exception(
         'Failed to load Service Jobs Dashboard',
       );
     }
+  }
+
+  // pagination start here
+
+  List filterDataList = [];
+  int currentPageIndex = 0;
+  int rowsPerPage = 10;
+  int startIndex = 0;
+  int endIndex = 0;
+  int totalRowsCount = 0;
+
+  setPaginationList(List? data) async {
+    try {
+      // if (data != null && data.isNotEmpty) {
+      // hiredCandidates = data;
+      startIndex = currentPageIndex * rowsPerPage;
+      endIndex = min(startIndex + rowsPerPage, data!.length);
+
+      filterDataList = data.sublist(startIndex, endIndex).toList();
+      totalRowsCount = (data.length / 10).floor();
+      notifyListeners();
+      // }
+    } catch (error) {
+      //
+    }
+  }
+
+  setFilter(String searchText) {
+    var filterData = serviceJobs!.jobs!.where((element) {
+      if (element.jobTitle.toString().toLowerCase().contains(searchText.toLowerCase()) || element.address.toString().toLowerCase().contains(searchText.toLowerCase())) {
+        return true;
+      } else {
+        return false;
+      }
+    }).toList();
+
+    setPaginationList(filterData);
+
+    notifyListeners();
+  }
+
+  clearFilter() {
+    setPaginationList(serviceJobs!.jobs);
+    notifyListeners();
+  }
+
+  setFilterByTime(DateTime startTime, DateTime endTime) {
+    var filterData = serviceJobs!.jobs!.where((element) {
+      var docTime = element.updatedAt;
+      if (startTime.isBefore(DateTime.parse(docTime!)) && endTime.isAfter(DateTime.parse(docTime))) {
+        return true;
+      } else {
+        return false;
+      }
+    }).toList();
+    setPaginationList(filterData);
+    notifyListeners();
+  }
+
+  // Generate List per page
+  getCurrentPageData() {
+    startIndex = currentPageIndex * rowsPerPage;
+    endIndex = min(startIndex + rowsPerPage, serviceJobs!.jobs!.length);
+    filterDataList = serviceJobs!.jobs!.sublist(startIndex, endIndex).toList();
+    notifyListeners();
+  }
+
+  // handle page change function
+  void handlePageChange(int pageIndex) {
+    currentPageIndex = pageIndex;
+    getCurrentPageData();
+    notifyListeners();
+  }
+
+  // handle row change function
+  void handleRowsPerPageChange(int rowsperPage) {
+    rowsPerPage = rowsperPage;
+    getCurrentPageData();
+    notifyListeners();
   }
 }

@@ -4,12 +4,17 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:island_app/caregiver/screens/my_jobs_screen.dart';
+import 'package:island_app/caregiver/screens/provider_reviews_given_screen.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
+import 'package:island_app/carereceiver/screens/hired_candidates_screen.dart';
 import 'package:island_app/carereceiver/screens/job_applicant.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
+import 'package:island_app/carereceiver/screens/receiver_reviews_given_screen.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
+import 'package:island_app/carereceiver/utils/home_pagination.dart';
 import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/providers/user_provider.dart';
@@ -24,30 +29,19 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => RecieverUserProvider()),
-        ChangeNotifierProvider(
-          create: (context) => ServiceGiverProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => NotificationProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => RecieverChatProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => ServiceProviderChat(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => SubscriptionProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => CardProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => BottomNavigationProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => JobApplicantsProvider(),
-        ),
+        ChangeNotifierProvider(create: (context) => ServiceGiverProvider()),
+        ChangeNotifierProvider(create: (context) => GiverMyJobsProvider()),
+        ChangeNotifierProvider(create: (context) => GiverReviewsProvider()),
+        ChangeNotifierProvider(create: (context) => NotificationProvider()),
+        ChangeNotifierProvider(create: (context) => RecieverChatProvider()),
+        ChangeNotifierProvider(create: (context) => ServiceProviderChat()),
+        ChangeNotifierProvider(create: (context) => SubscriptionProvider()),
+        ChangeNotifierProvider(create: (context) => CardProvider()),
+        ChangeNotifierProvider(create: (context) => BottomNavigationProvider()),
+        ChangeNotifierProvider(create: (context) => ReceiverReviewsProvider()),
+        ChangeNotifierProvider(create: (context) => JobApplicantsProvider()),
+        ChangeNotifierProvider(create: (context) => HomePaginationProvider()),
+        ChangeNotifierProvider(create: (context) => HiredCandidatesProvider()),
       ],
       child: const MyApp(),
     ),
@@ -102,7 +96,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'APP',
+      title: 'Island Care',
       theme: ThemeData(
         appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
       ),

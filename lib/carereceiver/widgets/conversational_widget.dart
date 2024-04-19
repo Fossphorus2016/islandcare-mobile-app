@@ -7,13 +7,13 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 class ConversationList extends StatefulWidget {
-  int roomId;
+  dynamic chat;
   String? name;
   String? messageText;
   String? imageUrl;
   String? time;
   bool? isMessageRead;
-  ConversationList({super.key, required this.roomId, @required this.name, @required this.messageText, @required this.imageUrl, @required this.time, this.isMessageRead});
+  ConversationList({super.key, required this.chat, @required this.name, @required this.messageText, @required this.imageUrl, @required this.time, this.isMessageRead});
   @override
   _ConversationListState createState() => _ConversationListState();
 }
@@ -23,7 +23,7 @@ class _ConversationListState extends State<ConversationList> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat(widget.roomId, null);
+        Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat(widget.chat);
 
         Navigator.push(context, MaterialPageRoute(builder: (context) {
           return const ChatDetailPage();

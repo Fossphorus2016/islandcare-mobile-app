@@ -107,7 +107,7 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
                               color: selectedCard != null && selectedCard!.id == allCards[j].id ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
-                              width: 0.5,
+                              width: selectedCard != null && selectedCard!.id == allCards[j].id ? 2 : 0.5,
                             ),
                           ),
                           child: Column(

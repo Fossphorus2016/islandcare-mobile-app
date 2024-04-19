@@ -91,7 +91,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             return ConversationList(
-                              roomId: provider.chatList[index]["roomId"],
+                              chat: provider.chatList[index]['chat'],
                               name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].firstName}",
                               messageText: provider.chatList[index]['lastMessage'],
                               imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
@@ -148,8 +148,8 @@ class RecieverChatProvider extends ChangeNotifier {
     SharedPreferences? prefs = await SharedPreferences.getInstance();
     await prefs.reload();
     var userToken = prefs.getString('userToken');
-    var resp = await Dio().get(
-      ChatUrl.serviceReceiverChat,
+    var resp = await Dio().post(
+      ChatUrl.serviceReceiverAllChats,
       options: Options(
         headers: {
           'Authorization': 'Bearer $userToken',
@@ -158,90 +158,95 @@ class RecieverChatProvider extends ChangeNotifier {
       ),
     );
     if (resp.statusCode == 200 && resp.data['flag'] == 1) {
-      allChatRooms = resp.data['chat_room'];
+      allChatRooms = resp.data['chats'];
       chatList = List.generate(
-        resp.data['chat_room'].length,
+        resp.data['chats'].length,
         (index) {
-          var getlastmessage = resp.data['chat_room'][index]['chat_messages'].last;
-          var lastmessagetime = DateFormat.jm().format(DateTime.parse(getlastmessage['updated_at']).toLocal());
+          var getlastmessage;
+          var lastmessagetime;
+          if (resp.data['chats'][index]['chat_messages'] != null && resp.data['chats'][index]['chat_messages'].length > 0) {
+            getlastmessage = resp.data['chats'][index]['chat_messages'].last;
+            lastmessagetime = getlastmessage['created_at'] != null ? DateFormat.jm().format(DateTime.parse(getlastmessage['created_at']).toLocal()) : DateTime.now();
+          }
           return {
-            "roomId": resp.data['chat_room'][index]['id'],
-            "userDate": ChatroomUser.fromJson(
-              resp.data['chat_room'][index]['receiver'],
-            ),
-            "lastMessage": getlastmessage['message'],
-            "lastMessagesCount": resp.data['chat_room'][index]["status"],
+            "roomId": resp.data['chats'][index]['id'],
+            "chat": resp.data['chats'][index],
+            "userDate": ChatroomUser.fromJson(resp.data['chats'][index]['receiver']),
+            "lastMessage": getlastmessage != null ? getlastmessage['message'] : null,
+            "lastMessagesCount": resp.data['chats'][index]["status"],
             "lastMessageTime": lastmessagetime,
           };
         },
       );
       if (activeChat.isNotEmpty) {
-        setActiveChat(activeChat['id'], null);
+        setActiveChat(activeChat);
       }
     }
     notifyListeners();
   }
 
-  getSingleChat(id) async {
-    var userToken = RecieverUserProvider.userToken;
-    print(RecieverUserProvider.userToken);
-    var resp = await Dio().get(
-      "${ChatUrl.serviceReceiverChat}/$id",
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $userToken',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (resp.statusCode == 200 && resp.data['flag'] == 1) {
-      print(resp.data);
-      // allChatRooms = resp.data['chat_room'];
-      // chatList = List.generate(
-      //   resp.data['chat_room'].length,
-      //   (index) {
-      //     var getlastmessage = resp.data['chat_room'][index]['chat_messages'].last;
-      //     var lastmessagetime = DateFormat.jm().format(DateTime.parse(getlastmessage['updated_at']).toLocal());
-      //     return {
-      //       "roomId": resp.data['chat_room'][index]['id'],
-      //       "userDate": ChatroomUser.fromJson(
-      //         resp.data['chat_room'][index]['receiver'],
-      //       ),
-      //       "lastMessage": getlastmessage['message'],
-      //       "lastMessagesCount": resp.data['chat_room'][index]["status"],
-      //       "lastMessageTime": lastmessagetime,
-      //     };
-      //   },
-      // );
-      // if (activeChat.isNotEmpty) {
-      //   setActiveChat(activeChat['id'], null);
-      // }
-    }
-    notifyListeners();
-  }
+  // getSingleChat(id) async {
+  //   var userToken = RecieverUserProvider.userToken;
+  //   // print(RecieverUserProvider.userToken);
+  //   var resp = await Dio().post(
+  //     "${ChatUrl.serviceReceiverChat}?provider_id=$id",
+  //     options: Options(
+  //       headers: {
+  //         'Authorization': 'Bearer $userToken',
+  //         'Accept': 'application/json',
+  //       },
+  //     ),
+  //   );
+  //   if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+  //     print(resp.data);
+  //     var chatRoom = resp.data['chat_room'];
+  //     // chatList = List.generate(
+  //     //   resp.data['chat_room'].length,
+  //     //   (index) {
+  //     //     var getlastmessage = resp.data['chat_room'][index]['chat_messages'].last;
+  //     //     var lastmessagetime = DateFormat.jm().format(DateTime.parse(getlastmessage['updated_at']).toLocal());
+  //     //     return {
+  //     //       "roomId": resp.data['chat_room'][index]['id'],
+  //     //       "userDate": ChatroomUser.fromJson(
+  //     //         resp.data['chat_room'][index]['receiver'],
+  //     //       ),
+  //     //       "lastMessage": getlastmessage['message'],
+  //     //       "lastMessagesCount": resp.data['chat_room'][index]["status"],
+  //     //       "lastMessageTime": lastmessagetime,
+  //     //     };
+  //     //   },
+  //     // );
+  //     // if (activeChat.isNotEmpty) {
+  //     //   setActiveChat(activeChat['id'], null);
+  //     // }
+  //   }
+  //   notifyListeners();
+  // }
 
   List activeChatMessages = [];
   Map activeChat = {};
-  setActiveChat(id, Map? receiver) async {
-    if (id == "new") {
-      if (chatList.isNotEmpty) {
-        var isExits = allChatRooms.where((element) => element['receiver_id'] == receiver!['id']);
-        if (isExits.isNotEmpty) {
-          activeChat = isExits.first;
-        } else {
-          activeChat = {"receiver": receiver!, "receiver_id": receiver['id']};
-        }
-        notifyListeners();
-      } else {
-        activeChat = {"receiver": receiver!, "receiver_id": receiver['id']};
-      }
-      notifyListeners();
-      getChats();
-    } else {
-      var getChatRoom = allChatRooms.firstWhere((element) => element["id"] == id);
-      activeChat = getChatRoom;
-      notifyListeners();
-    }
+  setActiveChat(Map chat) async {
+    // if (id == "new") {
+    //   if (chatList.isNotEmpty) {
+    //     var isExits = allChatRooms.where((element) => element['receiver_id'] == receiver!['id']);
+    //     if (isExits.isNotEmpty) {
+    //       activeChat = isExits.first;
+    //     } else {
+    //       activeChat = {"receiver": receiver!, "receiver_id": receiver['id']};
+    //     }
+    //     notifyListeners();
+    //   } else {
+    //     activeChat = {"receiver": chat['receiver']!, "receiver_id": receiver['id']};
+    //   }
+    //   notifyListeners();
+    //   getChats();
+    // } else {
+    // var getChatRoom = allChatRooms.firstWhere((element) => element["id"] == id);
+    activeChat = chat;
+    // print("get chat $getChatRoom");
+    // print("set active chat $activeChat");
+    notifyListeners();
+    // }
   }
 
   disposeActiveChat() {
@@ -271,7 +276,7 @@ class RecieverChatProvider extends ChangeNotifier {
       ),
     );
     if (resp.statusCode == 200) {
-      activeChat = resp.data['chat_room'][0];
+      activeChat = resp.data['chat_room'];
       sendMessageReq = false;
       getChats();
       notifyListeners();

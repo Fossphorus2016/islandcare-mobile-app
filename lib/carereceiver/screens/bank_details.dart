@@ -707,9 +707,10 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          selectedBank!.status == 0 ? "Pending" : "Approved",
+                          selectedBank!.status == 0 ? "Pending Approval" : "Approved",
                           style: TextStyle(
                             color: selectedBank!.status == 1 ? Colors.green : null,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
@@ -723,13 +724,25 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(width: 10),
-                        Text(selectedBank!.status == 1 ? "true" : "false"),
+                        if (selectedBank!.status == 1) ...[
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5.0),
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(05),
+                            ),
+                            child: const Text(
+                              "Default Bank",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
                       ],
                     ),
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        if (selectedBank!.selected == 0) ...[
+                        if (selectedBank!.selected == 0 && selectedBank!.status == 1) ...[
                           TextButton(
                             onPressed: () {
                               selectBank(selectedBank!.id);

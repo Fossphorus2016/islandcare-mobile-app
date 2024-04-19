@@ -59,7 +59,7 @@ class CareReceiverURl {
   static String serviceReceiverJobBoardDetail = "${AppUrl.webBaseURL}/api/service-receiver-job-board-detail";
   static String serviceReceiverJobBoard = "${AppUrl.webBaseURL}/api/service-receiver-job-board";
   static String serviceReceiverProviderDetail = "${AppUrl.webBaseURL}/api/service-receiver-provider-detail";
-  static String serviceReceiverAdd = "${AppUrl.webBaseURL}/api/service-receiver-rating";
+  static String serviceReceiverRating = "${AppUrl.webBaseURL}/api/service-receiver-rating";
 
   static String serviceReceiverUnSubscribe = "${AppUrl.webBaseURL}/api/service-receiver-unsubscribe";
   static String serviceSubscribe = "${AppUrl.webBaseURL}/api/subscription-package";
@@ -67,6 +67,7 @@ class CareReceiverURl {
 }
 
 class ChatUrl {
+  static String serviceReceiverAllChats = "${AppUrl.webBaseURL}/api/service-receiver-chats";
   static String serviceReceiverChat = "${AppUrl.webBaseURL}/api/service-receiver-chat";
   static String serviceReceiverSendMessage = "${AppUrl.webBaseURL}/api/service-receiver-send-message";
   static String serviceReceiverChatMessageStatus = "${AppUrl.webBaseURL}/api/service-receiver-message-status";

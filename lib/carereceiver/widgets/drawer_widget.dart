@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/carereceiver/screens/bank_details.dart';
 import 'package:island_app/carereceiver/screens/hired_candidates_screen.dart';
@@ -24,9 +25,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({
-    Key? key,
-  }) : super(key: key);
-
+    super.key,
+    required this.type,
+  });
+  final String type;
   @override
   State<DrawerWidget> createState() => _DrawerWidgetState();
 }
@@ -172,197 +174,155 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.zero,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  FutureBuilder<ProfileReceiverModel?>(
-                    future: context.watch<RecieverUserProvider>().userProfile,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return InkWell(
-                          onTap: () {
-                            Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(3);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 25, bottom: 60),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  radius: 40,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(40),
+    return Consumer2<RecieverUserProvider, BottomNavigationProvider>(builder: (context, recieverProvider, bottomProvider, __) {
+      return ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    FutureBuilder<ProfileReceiverModel?>(
+                      future: recieverProvider.userProfile,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return InkWell(
+                            onTap: () {
+                              // Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(3);
+                              bottomProvider.updatePage(3);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 25, bottom: 60),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    radius: 40,
                                     child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: CachedNetworkImage(
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                        imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
-                                        placeholder: (context, url) => const CircularProgressIndicator(),
-                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      borderRadius: BorderRadius.circular(40),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(100),
+                                        child: CachedNetworkImage(
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                          imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
+                                          placeholder: (context, url) => const CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      child: Text(
-                                        "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: "Rubik",
-                                          color: CustomColors.white,
+                                  const SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        child: Text(
+                                          "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Rubik",
+                                            color: CustomColors.white,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    SizedBox(
-                                      child: Text(
-                                        snapshot.data!.data!.phone.toString(),
-                                        style: TextStyle(
-                                          color: CustomColors.white,
-                                          fontFamily: "Rubik",
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
+                                      const SizedBox(height: 10),
+                                      SizedBox(
+                                        child: Text(
+                                          snapshot.data!.data!.phone.toString(),
+                                          style: TextStyle(
+                                            color: CustomColors.white,
+                                            fontFamily: "Rubik",
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      } else {
-                        return Shimmer.fromColors(
-                          baseColor: CustomColors.primaryColor,
-                          highlightColor: const Color.fromARGB(255, 95, 95, 95),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 25, bottom: 60),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  backgroundColor: CustomColors.paraColor,
-                                  radius: 40,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(40),
+                          );
+                        } else {
+                          return Shimmer.fromColors(
+                            baseColor: CustomColors.primaryColor,
+                            highlightColor: const Color.fromARGB(255, 95, 95, 95),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 25, bottom: 60),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    backgroundColor: CustomColors.paraColor,
+                                    radius: 40,
                                     child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
+                                      borderRadius: BorderRadius.circular(40),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(100),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      width: 130,
-                                      color: CustomColors.paraColor,
-                                      child: Text(
-                                        "",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: "Rubik",
-                                          color: CustomColors.white,
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Container(
+                                        width: 130,
+                                        color: CustomColors.paraColor,
+                                        child: Text(
+                                          "",
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Rubik",
+                                            color: CustomColors.white,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Container(
-                                      width: 80,
-                                      color: CustomColors.paraColor,
-                                      child: Text(
-                                        " ",
-                                        style: TextStyle(
-                                          color: CustomColors.white,
-                                          fontFamily: "Rubik",
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
+                                      const SizedBox(
+                                        height: 10,
+                                      ),
+                                      Container(
+                                        width: 80,
+                                        color: CustomColors.paraColor,
+                                        child: Text(
+                                          " ",
+                                          style: TextStyle(
+                                            color: CustomColors.white,
+                                            fontFamily: "Rubik",
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: ListTile(
-                      hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                      selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                      focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                      leading: SizedBox(
-                        child: Image.asset("assets/images/icons/homeIcon.png"),
-                      ),
-                      title: Text(
-                        'Dashboard',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                          color: CustomColors.white,
-                          fontFamily: "Rubik",
-                        ),
-                      ),
-                      trailing: Icon(
-                        Icons.arrow_forward_ios,
-                        color: CustomColors.white,
-                        size: 16,
-                      ),
-                      onTap: () {
-                        Navigator.pop(context);
+                          );
+                        }
                       },
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PostJobScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
+                    Container(
                       padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
                       child: ListTile(
                         hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                         selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                         focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
                         leading: SizedBox(
-                          child: Image.asset("assets/images/icons/jobPost.png"),
+                          child: Image.asset("assets/images/icons/homeIcon.png"),
                         ),
                         title: Text(
-                          'Jobs Post',
+                          'Dashboard',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -376,516 +336,611 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           size: 16,
                         ),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PostJobScreen(),
-                            ),
-                          );
+                          if (widget.type == "home") {
+                            Navigator.pop(context);
+                          } else {
+                            bottomProvider.updatePage(0);
+                          }
                         },
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: ListTile(
-                        hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        leading: SizedBox(
-                          child: Image.asset("assets/images/icons/bookings.png"),
-                        ),
-                        title: Text(
-                          'Job Applicants',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: CustomColors.white,
-                            fontFamily: "Rubik",
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PostJobScreen(),
                           ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
                         ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: CustomColors.white,
-                          size: 16,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const JobApplicants(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const HiredCandidatesScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: ListTile(
-                        hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        leading: SizedBox(
-                          child: Image.asset("assets/images/icons/jobBoard.png"),
-                        ),
-                        title: Text(
-                          'Hired Candidates',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: CustomColors.white,
-                            fontFamily: "Rubik",
+                        child: ListTile(
+                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          leading: const SvgPicture(
+                            SvgAssetLoader("assets/images/icons/jobPost.svg"),
+                            height: 20,
                           ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: CustomColors.white,
-                          size: 16,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HiredCandidatesScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PaymentPackageScreen(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: ListTile(
-                        hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        leading: SizedBox(
-                          child: Image.asset("assets/images/icons/payments.png"),
-                        ),
-                        title: Text(
-                          'Payment Center',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: CustomColors.white,
-                            fontFamily: "Rubik",
-                          ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: CustomColors.white,
-                          size: 16,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PaymentPackageScreen(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ManageCards(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: ListTile(
-                        hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        leading: SizedBox(
-                          child: Icon(
-                            Icons.card_membership,
-                            color: CustomColors.white,
-                          ),
-                        ),
-                        title: Text(
-                          'Manage Cards',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: CustomColors.white,
-                            fontFamily: "Rubik",
-                          ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: CustomColors.white,
-                          size: 16,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ManageCards(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ReceiverBankDetails(),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: ListTile(
-                        hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        leading: SizedBox(
-                          child: Icon(
-                            Icons.card_membership,
-                            color: CustomColors.white,
-                          ),
-                        ),
-                        title: Text(
-                          'Bank Details',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: CustomColors.white,
-                            fontFamily: "Rubik",
-                          ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: CustomColors.white,
-                          size: 16,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ReceiverBankDetails(),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
-                    child: ListTile(
-                        hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
-                        title: Text('Change Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomColors.white, fontFamily: "Rubik")),
-                        trailing: Icon(Icons.arrow_forward_ios, color: CustomColors.white, size: 16),
-                        onTap: () {
-                          showModalBottomSheet(
-                            isScrollControlled: true,
-                            context: context,
-                            backgroundColor: Colors.white,
-                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
-                            builder: (BuildContext context) {
-                              return StatefulBuilder(
-                                builder: (BuildContext context, StateSetter setState) {
-                                  return const ChangePasswordWidget();
-                                  // SingleChildScrollView(
-                                  //   child: Padding(
-                                  //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                  //     child: Container(
-                                  //       padding: const EdgeInsets.symmetric(horizontal: 25),
-                                  //       child: Column(
-                                  //         crossAxisAlignment: CrossAxisAlignment.start,
-                                  //         mainAxisAlignment: MainAxisAlignment.center,
-                                  //         mainAxisSize: MainAxisSize.min,
-                                  //         children: [
-                                  //           const SizedBox(height: 20),
-                                  //           Center(
-                                  //             child: Container(
-                                  //               width: 130,
-                                  //               height: 5,
-                                  //               decoration: BoxDecoration(
-                                  //                 color: const Color(0xffC4C4C4),
-                                  //                 borderRadius: BorderRadius.circular(6),
-                                  //               ),
-                                  //             ),
-                                  //           ),
-                                  //           const SizedBox(height: 40),
-                                  //           Center(
-                                  //             child: Text(
-                                  //               "Change Password",
-                                  //               textAlign: TextAlign.center,
-                                  //               style: TextStyle(
-                                  //                 color: CustomColors.black,
-                                  //                 fontFamily: "Rubik",
-                                  //                 fontStyle: FontStyle.normal,
-                                  //                 fontSize: 24,
-                                  //                 fontWeight: FontWeight.w600,
-                                  //               ),
-                                  //             ),
-                                  //           ),
-                                  //           const SizedBox(height: 10),
-                                  //           Center(
-                                  //             child: Text(
-                                  //               "Set the new password for your account so you can login and access all the features.",
-                                  //               textAlign: TextAlign.center,
-                                  //               style: TextStyle(
-                                  //                 color: CustomColors.primaryText,
-                                  //                 fontFamily: "Rubik",
-                                  //                 fontStyle: FontStyle.normal,
-                                  //                 fontSize: 14,
-                                  //                 fontWeight: FontWeight.w400,
-                                  //               ),
-                                  //             ),
-                                  //           ),
-                                  //           const SizedBox(height: 40),
-                                  //           Form(
-                                  //             key: changePassKey,
-                                  //             child: Column(
-                                  //               mainAxisAlignment: MainAxisAlignment.center,
-                                  //               children: [
-                                  //                 CustomTextFieldWidget(
-                                  //                   borderColor: CustomColors.loginBorder,
-                                  //                   textStyle: TextStyle(
-                                  //                     fontSize: 15,
-                                  //                     color: CustomColors.hintText,
-                                  //                     fontFamily: "Calibri",
-                                  //                     fontWeight: FontWeight.w400,
-                                  //                   ),
-                                  //                   hintText: "Old Password",
-                                  //                   controller: oldPasswordController,
-                                  //                   obsecure: !_showPassword1,
-                                  //                   sufIcon: GestureDetector(
-                                  //                     onTap: () {
-                                  //                       setState(
-                                  //                         () {
-                                  //                           _togglevisibility1();
-                                  //                         },
-                                  //                       );
-                                  //                     },
-                                  //                     child: Padding(
-                                  //                       padding: const EdgeInsets.only(left: 8.0),
-                                  //                       child: Icon(
-                                  //                         _showPassword1 ? Icons.visibility : Icons.visibility_off,
-                                  //                         size: 20,
-                                  //                         color: CustomColors.hintText,
-                                  //                       ),
-                                  //                     ),
-                                  //                   ),
-                                  //                 ),
-                                  //                 const SizedBox(height: 10),
-                                  //                 CustomTextFieldWidget(
-                                  //                   borderColor: CustomColors.loginBorder,
-                                  //                   textStyle: TextStyle(
-                                  //                     fontSize: 15,
-                                  //                     color: CustomColors.hintText,
-                                  //                     fontFamily: "Calibri",
-                                  //                     fontWeight: FontWeight.w400,
-                                  //                   ),
-                                  //                   hintText: "New Password",
-                                  //                   controller: passwordController,
-                                  //                   obsecure: !_showPassword2,
-                                  //                   sufIcon: GestureDetector(
-                                  //                     onTap: () {
-                                  //                       setState(
-                                  //                         () {},
-                                  //                       );
-                                  //                       _togglevisibility2();
-                                  //                     },
-                                  //                     child: Padding(
-                                  //                       padding: const EdgeInsets.only(left: 8.0),
-                                  //                       child: Icon(
-                                  //                         _showPassword2 ? Icons.visibility : Icons.visibility_off,
-                                  //                         size: 20,
-                                  //                         color: CustomColors.hintText,
-                                  //                       ),
-                                  //                     ),
-                                  //                   ),
-                                  //                 ),
-                                  //                 const SizedBox(height: 10),
-                                  //                 CustomTextFieldWidget(
-                                  //                   borderColor: CustomColors.loginBorder,
-                                  //                   textStyle: TextStyle(
-                                  //                     fontSize: 15,
-                                  //                     color: CustomColors.hintText,
-                                  //                     fontFamily: "Calibri",
-                                  //                     fontWeight: FontWeight.w400,
-                                  //                   ),
-                                  //                   hintText: "Re-enter Password",
-                                  //                   controller: cpasswordController,
-                                  //                   obsecure: !_showPassword3,
-                                  //                   sufIcon: GestureDetector(
-                                  //                     onTap: () {
-                                  //                       setState(
-                                  //                         () {},
-                                  //                       );
-                                  //                       _togglevisibility3();
-                                  //                     },
-                                  //                     child: Padding(
-                                  //                       padding: const EdgeInsets.only(left: 8.0),
-                                  //                       child: Icon(
-                                  //                         _showPassword3 ? Icons.visibility : Icons.visibility_off,
-                                  //                         size: 20,
-                                  //                         color: CustomColors.hintText,
-                                  //                       ),
-                                  //                     ),
-                                  //                   ),
-                                  //                 ),
-                                  //                 const SizedBox(height: 20),
-                                  //                 // OTP
-                                  //                 GestureDetector(
-                                  //                   onTap: () {
-                                  //                     if (oldPasswordController.text.isEmpty) {
-                                  //                       Navigator.pop(context);
-                                  //                       customErrorSnackBar(
-                                  //                         context,
-                                  //                         "Please Enter Old Password",
-                                  //                       );
-                                  //                     } else if (passwordController.text.isEmpty) {
-                                  //                       Navigator.pop(context);
-                                  //                       customErrorSnackBar(
-                                  //                         context,
-                                  //                         "Please Enter Password",
-                                  //                       );
-                                  //                     } else if (passwordController.text.length < 7) {
-                                  //                       Navigator.pop(context);
-                                  //                       customErrorSnackBar(
-                                  //                         context,
-                                  //                         "Please Enter 3 digit Password",
-                                  //                       );
-                                  //                     } else if (passwordController == cpasswordController) {
-                                  //                       Navigator.pop(context);
-                                  //                       customErrorSnackBar(
-                                  //                         context,
-                                  //                         "New Password Not Match",
-                                  //                       );
-                                  //                     } else {
-                                  //                       if (changePassKey.currentState!.validate()) {
-                                  //                         chnagePassword();
-                                  //                         Navigator.pop(context);
-                                  //                       }
-                                  //                     }
-                                  //                   },
-                                  //                   child: Container(
-                                  //                     width: MediaQuery.of(context).size.width,
-                                  //                     height: 54,
-                                  //                     decoration: BoxDecoration(
-                                  //                       color: CustomColors.primaryColor,
-                                  //                       borderRadius: BorderRadius.circular(10),
-                                  //                     ),
-                                  //                     child: Center(
-                                  //                       child: Text(
-                                  //                         "Continue",
-                                  //                         style: TextStyle(
-                                  //                           color: CustomColors.white,
-                                  //                           fontFamily: "Rubik",
-                                  //                           fontStyle: FontStyle.normal,
-                                  //                           fontWeight: FontWeight.w500,
-                                  //                           fontSize: 18,
-                                  //                         ),
-                                  //                       ),
-                                  //                     ),
-                                  //                   ),
-                                  //                 ),
-                                  //                 const SizedBox(height: 30),
-                                  //               ],
-                                  //             ),
-                                  //           ),
-                                  //         ],
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // );
-                                },
-                              );
-                            },
-                          );
-                        }),
-                  )
-                ],
-              ),
-              GestureDetector(
-                onTap: () {
-                  _showLogoutDialog();
-                },
-                child: SizedBox(
-                  height: 150,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ListTile(
-                        onTap: () {
-                          _showLogoutDialog();
-                        },
-                        leading: Image.asset("assets/images/icons/logout.png"),
-                        title: Padding(
-                          padding: const EdgeInsets.only(bottom: 5),
-                          child: Text(
-                            'Logout',
+                          title: Text(
+                            'Post a Job',
                             style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                               color: CustomColors.white,
                               fontFamily: "Rubik",
                             ),
                           ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: CustomColors.white,
+                            size: 16,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PostJobScreen(),
+                              ),
+                            );
+                          },
                         ),
                       ),
-                    ],
+                    ),
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: ListTile(
+                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          leading: const SvgPicture(
+                            SvgAssetLoader("assets/images/icons/bookings.svg"),
+                            height: 20,
+                          ),
+                          // leading: SizedBox(
+                          //   child: Image.asset("assets/images/icons/bookings.png"),
+                          // ),
+                          title: Text(
+                            'Job Applicants',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: CustomColors.white,
+                              fontFamily: "Rubik",
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: CustomColors.white,
+                            size: 16,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const JobApplicants(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HiredCandidatesScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: ListTile(
+                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          leading: const SvgPicture(
+                            SvgAssetLoader("assets/images/icons/hired-candidate.svg"),
+                            height: 20,
+                          ),
+                          // leading: SizedBox(
+                          //   child: Image.asset("assets/images/icons/jobBoard.png"),
+                          // ),
+                          title: Text(
+                            'Hired Candidates',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: CustomColors.white,
+                              fontFamily: "Rubik",
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: CustomColors.white,
+                            size: 16,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HiredCandidatesScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PaymentPackageScreen(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: ListTile(
+                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          leading: SizedBox(
+                            child: Image.asset("assets/images/icons/payments.png"),
+                          ),
+                          title: Text(
+                            'Payment Center',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: CustomColors.white,
+                              fontFamily: "Rubik",
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: CustomColors.white,
+                            size: 16,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PaymentPackageScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder: (context) => const PaymentPackageScreen(),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Container(
+                    //     padding: const EdgeInsets.symmetric(vertical: 6),
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(6),
+                    //     ),
+                    //     child: ListTile(
+                    //       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                    //       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                    //       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                    //       leading: const SvgPicture(
+                    //   SvgAssetLoader("assets/images/icons/review.svg"),
+                    //   height: 20,
+                    // ),
+                    //       title: Text(
+                    //         'Reviews Given',
+                    //         style: TextStyle(
+                    //           fontSize: 16,
+                    //           fontWeight: FontWeight.w500,
+                    //           color: CustomColors.white,
+                    //           fontFamily: "Rubik",
+                    //         ),
+                    //       ),
+                    //       trailing: Icon(
+                    //         Icons.arrow_forward_ios,
+                    //         color: CustomColors.white,
+                    //         size: 16,
+                    //       ),
+                    //       onTap: () {
+                    //         Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //             builder: (context) => const ReceiverReviewsScreen(),
+                    //           ),
+                    //         );
+                    //       },
+                    //     ),
+                    //   ),
+                    // ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ManageCards(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
+                        child: ListTile(
+                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          leading: const SvgPicture(
+                            SvgAssetLoader("assets/images/icons/manage-card.svg"),
+                            height: 20,
+                          ),
+                          title: Text(
+                            'Manage Cards',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: CustomColors.white,
+                              fontFamily: "Rubik",
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: CustomColors.white,
+                            size: 16,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ManageCards(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ReceiverBankDetails(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                        ),
+                        child: ListTile(
+                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          leading: const SvgPicture(
+                            SvgAssetLoader("assets/images/icons/bank-detail.svg"),
+                            height: 20,
+                          ),
+                          title: Text(
+                            'Bank Details',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                              color: CustomColors.white,
+                              fontFamily: "Rubik",
+                            ),
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: CustomColors.white,
+                            size: 16,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ReceiverBankDetails(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 6),
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
+                      child: ListTile(
+                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
+                          title: Text('Change Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomColors.white, fontFamily: "Rubik")),
+                          trailing: Icon(Icons.arrow_forward_ios, color: CustomColors.white, size: 16),
+                          onTap: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+                              builder: (BuildContext context) {
+                                return StatefulBuilder(
+                                  builder: (BuildContext context, StateSetter setState) {
+                                    return const ChangePasswordWidget();
+                                    // SingleChildScrollView(
+                                    //   child: Padding(
+                                    //     padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                    //     child: Container(
+                                    //       padding: const EdgeInsets.symmetric(horizontal: 25),
+                                    //       child: Column(
+                                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                                    //         mainAxisAlignment: MainAxisAlignment.center,
+                                    //         mainAxisSize: MainAxisSize.min,
+                                    //         children: [
+                                    //           const SizedBox(height: 20),
+                                    //           Center(
+                                    //             child: Container(
+                                    //               width: 130,
+                                    //               height: 5,
+                                    //               decoration: BoxDecoration(
+                                    //                 color: const Color(0xffC4C4C4),
+                                    //                 borderRadius: BorderRadius.circular(6),
+                                    //               ),
+                                    //             ),
+                                    //           ),
+                                    //           const SizedBox(height: 40),
+                                    //           Center(
+                                    //             child: Text(
+                                    //               "Change Password",
+                                    //               textAlign: TextAlign.center,
+                                    //               style: TextStyle(
+                                    //                 color: CustomColors.black,
+                                    //                 fontFamily: "Rubik",
+                                    //                 fontStyle: FontStyle.normal,
+                                    //                 fontSize: 24,
+                                    //                 fontWeight: FontWeight.w600,
+                                    //               ),
+                                    //             ),
+                                    //           ),
+                                    //           const SizedBox(height: 10),
+                                    //           Center(
+                                    //             child: Text(
+                                    //               "Set the new password for your account so you can login and access all the features.",
+                                    //               textAlign: TextAlign.center,
+                                    //               style: TextStyle(
+                                    //                 color: CustomColors.primaryText,
+                                    //                 fontFamily: "Rubik",
+                                    //                 fontStyle: FontStyle.normal,
+                                    //                 fontSize: 14,
+                                    //                 fontWeight: FontWeight.w400,
+                                    //               ),
+                                    //             ),
+                                    //           ),
+                                    //           const SizedBox(height: 40),
+                                    //           Form(
+                                    //             key: changePassKey,
+                                    //             child: Column(
+                                    //               mainAxisAlignment: MainAxisAlignment.center,
+                                    //               children: [
+                                    //                 CustomTextFieldWidget(
+                                    //                   borderColor: CustomColors.loginBorder,
+                                    //                   textStyle: TextStyle(
+                                    //                     fontSize: 15,
+                                    //                     color: CustomColors.hintText,
+                                    //                     fontFamily: "Calibri",
+                                    //                     fontWeight: FontWeight.w400,
+                                    //                   ),
+                                    //                   hintText: "Old Password",
+                                    //                   controller: oldPasswordController,
+                                    //                   obsecure: !_showPassword1,
+                                    //                   sufIcon: GestureDetector(
+                                    //                     onTap: () {
+                                    //                       setState(
+                                    //                         () {
+                                    //                           _togglevisibility1();
+                                    //                         },
+                                    //                       );
+                                    //                     },
+                                    //                     child: Padding(
+                                    //                       padding: const EdgeInsets.only(left: 8.0),
+                                    //                       child: Icon(
+                                    //                         _showPassword1 ? Icons.visibility : Icons.visibility_off,
+                                    //                         size: 20,
+                                    //                         color: CustomColors.hintText,
+                                    //                       ),
+                                    //                     ),
+                                    //                   ),
+                                    //                 ),
+                                    //                 const SizedBox(height: 10),
+                                    //                 CustomTextFieldWidget(
+                                    //                   borderColor: CustomColors.loginBorder,
+                                    //                   textStyle: TextStyle(
+                                    //                     fontSize: 15,
+                                    //                     color: CustomColors.hintText,
+                                    //                     fontFamily: "Calibri",
+                                    //                     fontWeight: FontWeight.w400,
+                                    //                   ),
+                                    //                   hintText: "New Password",
+                                    //                   controller: passwordController,
+                                    //                   obsecure: !_showPassword2,
+                                    //                   sufIcon: GestureDetector(
+                                    //                     onTap: () {
+                                    //                       setState(
+                                    //                         () {},
+                                    //                       );
+                                    //                       _togglevisibility2();
+                                    //                     },
+                                    //                     child: Padding(
+                                    //                       padding: const EdgeInsets.only(left: 8.0),
+                                    //                       child: Icon(
+                                    //                         _showPassword2 ? Icons.visibility : Icons.visibility_off,
+                                    //                         size: 20,
+                                    //                         color: CustomColors.hintText,
+                                    //                       ),
+                                    //                     ),
+                                    //                   ),
+                                    //                 ),
+                                    //                 const SizedBox(height: 10),
+                                    //                 CustomTextFieldWidget(
+                                    //                   borderColor: CustomColors.loginBorder,
+                                    //                   textStyle: TextStyle(
+                                    //                     fontSize: 15,
+                                    //                     color: CustomColors.hintText,
+                                    //                     fontFamily: "Calibri",
+                                    //                     fontWeight: FontWeight.w400,
+                                    //                   ),
+                                    //                   hintText: "Re-enter Password",
+                                    //                   controller: cpasswordController,
+                                    //                   obsecure: !_showPassword3,
+                                    //                   sufIcon: GestureDetector(
+                                    //                     onTap: () {
+                                    //                       setState(
+                                    //                         () {},
+                                    //                       );
+                                    //                       _togglevisibility3();
+                                    //                     },
+                                    //                     child: Padding(
+                                    //                       padding: const EdgeInsets.only(left: 8.0),
+                                    //                       child: Icon(
+                                    //                         _showPassword3 ? Icons.visibility : Icons.visibility_off,
+                                    //                         size: 20,
+                                    //                         color: CustomColors.hintText,
+                                    //                       ),
+                                    //                     ),
+                                    //                   ),
+                                    //                 ),
+                                    //                 const SizedBox(height: 20),
+                                    //                 // OTP
+                                    //                 GestureDetector(
+                                    //                   onTap: () {
+                                    //                     if (oldPasswordController.text.isEmpty) {
+                                    //                       Navigator.pop(context);
+                                    //                       customErrorSnackBar(
+                                    //                         context,
+                                    //                         "Please Enter Old Password",
+                                    //                       );
+                                    //                     } else if (passwordController.text.isEmpty) {
+                                    //                       Navigator.pop(context);
+                                    //                       customErrorSnackBar(
+                                    //                         context,
+                                    //                         "Please Enter Password",
+                                    //                       );
+                                    //                     } else if (passwordController.text.length < 7) {
+                                    //                       Navigator.pop(context);
+                                    //                       customErrorSnackBar(
+                                    //                         context,
+                                    //                         "Please Enter 3 digit Password",
+                                    //                       );
+                                    //                     } else if (passwordController == cpasswordController) {
+                                    //                       Navigator.pop(context);
+                                    //                       customErrorSnackBar(
+                                    //                         context,
+                                    //                         "New Password Not Match",
+                                    //                       );
+                                    //                     } else {
+                                    //                       if (changePassKey.currentState!.validate()) {
+                                    //                         chnagePassword();
+                                    //                         Navigator.pop(context);
+                                    //                       }
+                                    //                     }
+                                    //                   },
+                                    //                   child: Container(
+                                    //                     width: MediaQuery.of(context).size.width,
+                                    //                     height: 54,
+                                    //                     decoration: BoxDecoration(
+                                    //                       color: CustomColors.primaryColor,
+                                    //                       borderRadius: BorderRadius.circular(10),
+                                    //                     ),
+                                    //                     child: Center(
+                                    //                       child: Text(
+                                    //                         "Continue",
+                                    //                         style: TextStyle(
+                                    //                           color: CustomColors.white,
+                                    //                           fontFamily: "Rubik",
+                                    //                           fontStyle: FontStyle.normal,
+                                    //                           fontWeight: FontWeight.w500,
+                                    //                           fontSize: 18,
+                                    //                         ),
+                                    //                       ),
+                                    //                     ),
+                                    //                   ),
+                                    //                 ),
+                                    //                 const SizedBox(height: 30),
+                                    //               ],
+                                    //             ),
+                                    //           ),
+                                    //         ],
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                    // );
+                                  },
+                                );
+                              },
+                            );
+                          }),
+                    )
+                  ],
+                ),
+                GestureDetector(
+                  onTap: () {
+                    _showLogoutDialog();
+                  },
+                  child: SizedBox(
+                    height: 150,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ListTile(
+                          onTap: () {
+                            _showLogoutDialog();
+                          },
+                          leading: Image.asset("assets/images/icons/logout.png"),
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              'Logout',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 }
 

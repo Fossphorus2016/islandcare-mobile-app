@@ -70,7 +70,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
         ),
         drawer: Drawer(
           backgroundColor: CustomColors.primaryColor,
-          child: const DrawerWidget(),
+          child: const DrawerWidget(type: "profile"),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -475,10 +475,10 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Name",
+                                  "Full Name",
                                   style: TextStyle(
                                     color: CustomColors.primaryColor,
-                                    fontSize: 10,
+                                    fontSize: 14,
                                     fontFamily: "Rubik",
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -495,248 +495,273 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                 ),
                               ],
                             ),
-                            const Column(),
                           ],
                         ),
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                          color: CustomColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Gender",
-                                  style: TextStyle(
-                                    color: CustomColors.primaryColor,
-                                    fontSize: 10,
-                                    fontFamily: "Rubik",
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                      if (userProfile.data!.email != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Email ID",
+                                style: TextStyle(
+                                  color: CustomColors.primaryColor,
+                                  fontSize: 14,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w600,
                                 ),
-                                const SizedBox(height: 8),
-                                userProfile.data!.userdetail!.gender.toString() != "null"
-                                    ? Text(
-                                        (userProfile.data!.userdetail!.gender.toString() == "1")
-                                            ? "Male"
-                                            : (userProfile.data!.userdetail!.gender.toString() == "2")
-                                                ? "Female"
-                                                : "Not Available",
-                                        style: TextStyle(
-                                          color: CustomColors.hintText,
-                                          fontSize: 16,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w200,
-                                        ),
-                                      )
-                                    : Text(
-                                        (userProfile.data!.userdetail!.gender.toString() == "1")
-                                            ? "Male"
-                                            : (userProfile.data!.userdetail!.gender.toString() == "2")
-                                                ? "Female"
-                                                : "Not Available",
-                                        style: TextStyle(
-                                          color: CustomColors.hintText,
-                                          fontSize: 16,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w200,
-                                        ),
-                                      ),
-                              ],
-                            ),
-                            const Column(),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                          color: CustomColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Date Of Birth",
-                                  style: TextStyle(
-                                    color: CustomColors.primaryColor,
-                                    fontSize: 10,
-                                    fontFamily: "Rubik",
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  userProfile.data!.userdetail!.dob.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.dob.toString(),
-                                  style: TextStyle(
-                                    color: CustomColors.hintText,
-                                    fontSize: 16,
-                                    fontFamily: "Rubik",
-                                    fontWeight: FontWeight.w200,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                          color: CustomColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Service",
-                                  style: TextStyle(
-                                    color: CustomColors.primaryColor,
-                                    fontSize: 10,
-                                    fontFamily: "Rubik",
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  userProfile.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.service!.name.toString(),
-                                  style: TextStyle(
-                                    color: CustomColors.hintText,
-                                    fontSize: 16,
-                                    fontFamily: "Rubik",
-                                    fontWeight: FontWeight.w200,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                          color: CustomColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Zip Code",
-                                  style: TextStyle(
-                                    color: CustomColors.primaryColor,
-                                    fontSize: 10,
-                                    fontFamily: "Rubik",
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                userProfile.data!.userdetail!.zip.toString() == "null"
-                                    ? Text(
-                                        userProfile.data!.userdetail!.zip.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.zip.toString(),
-                                        style: TextStyle(
-                                          color: CustomColors.hintText,
-                                          fontSize: 16,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w200,
-                                        ),
-                                      )
-                                    : Text(
-                                        userProfile.data!.userdetail!.zip.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.zip.toString(),
-                                        style: TextStyle(
-                                          color: CustomColors.hintText,
-                                          fontSize: 16,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w200,
-                                        ),
-                                      ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
-                        decoration: BoxDecoration(
-                          color: CustomColors.white,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "User Info",
-                                    style: TextStyle(
-                                      color: CustomColors.primaryColor,
-                                      fontSize: 10,
-                                      fontFamily: "Rubik",
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  userProfile.data!.userdetail!.userInfo.toString() == "null"
-                                      ? Text(
-                                          userProfile.data!.userdetail!.userInfo.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.userInfo.toString(),
-                                          softWrap: true,
-                                          style: TextStyle(
-                                            color: CustomColors.hintText,
-                                            fontSize: 16,
-                                            fontFamily: "Rubik",
-                                            fontWeight: FontWeight.w200,
-                                          ),
-                                        )
-                                      : Text(
-                                          userProfile.data!.userdetail!.userInfo.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.userInfo.toString(),
-                                          softWrap: true,
-                                          style: TextStyle(
-                                            color: CustomColors.hintText,
-                                            fontSize: 16,
-                                            fontFamily: "Rubik",
-                                            fontWeight: FontWeight.w200,
-                                          ),
-                                        ),
-                                ],
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 8),
+                              Text(
+                                userProfile.data!.email.toString(),
+                                style: TextStyle(
+                                  color: CustomColors.hintText,
+                                  fontSize: 16,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              )
+                            ],
+                          ),
                         ),
-                      ),
+                      ],
+                      if (userProfile.data!.phone != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Contact Number",
+                                style: TextStyle(
+                                  color: CustomColors.primaryColor,
+                                  fontSize: 14,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                userProfile.data!.phone.toString(),
+                                style: TextStyle(
+                                  color: CustomColors.hintText,
+                                  fontSize: 16,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (userProfile.data!.userdetail!.zip != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Postal Code",
+                                style: TextStyle(
+                                  color: CustomColors.primaryColor,
+                                  fontSize: 14,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                userProfile.data!.userdetail!.zip.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.zip.toString(),
+                                style: TextStyle(
+                                  color: CustomColors.hintText,
+                                  fontSize: 16,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (userProfile.data!.userdetail!.gender != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Gender",
+                                style: TextStyle(
+                                  color: CustomColors.primaryColor,
+                                  fontSize: 14,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                (userProfile.data!.userdetail!.gender.toString() == "1")
+                                    ? "Male"
+                                    : (userProfile.data!.userdetail!.gender.toString() == "2")
+                                        ? "Female"
+                                        : "Not Available",
+                                style: TextStyle(
+                                  color: CustomColors.hintText,
+                                  fontSize: 16,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (userProfile.data!.userdetail!.dob != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Date Of Birth",
+                                style: TextStyle(
+                                  color: CustomColors.primaryColor,
+                                  fontSize: 14,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                userProfile.data!.userdetail!.dob.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.dob.toString(),
+                                style: TextStyle(
+                                  color: CustomColors.hintText,
+                                  fontSize: 16,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (userProfile.data!.userdetail!.dob != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Looking For",
+                                style: TextStyle(
+                                  color: CustomColors.primaryColor,
+                                  fontSize: 14,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                userProfile.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.service!.name.toString(),
+                                style: TextStyle(
+                                  color: CustomColors.hintText,
+                                  fontSize: 16,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w200,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                      if (userProfile.data!.userdetail!.userInfo != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Bio",
+                                      style: TextStyle(
+                                        color: CustomColors.primaryColor,
+                                        fontSize: 14,
+                                        fontFamily: "Rubik",
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      userProfile.data!.userdetail!.userInfo.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.userInfo.toString(),
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: CustomColors.hintText,
+                                        fontSize: 16,
+                                        fontFamily: "Rubik",
+                                        fontWeight: FontWeight.w200,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
