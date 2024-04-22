@@ -8,7 +8,7 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/bottom_bar.dart';
 import 'package:island_app/models/login_model.dart';
 import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/splash_screen.dart';
 import 'package:island_app/screens/verify_email.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
@@ -322,8 +322,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                           await pref.setString('userId', userId.toString());
                                           await pref.setString('userName', "$name $last");
 
-                                          Navigator.pushAndRemoveUntil(context,
-                                              MaterialPageRoute(builder: (context) => BottomBar(data: data['token'].toString())), (route) => false);
+                                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomBar(data: data['token'].toString())), (route) => false);
                                         } else {
                                           SharedPreferences pref = await SharedPreferences.getInstance();
                                           await pref.setString('userRole', data["user"]["role"].toString());

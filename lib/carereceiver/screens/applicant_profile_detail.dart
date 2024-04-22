@@ -9,7 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_breakpoints.dart';

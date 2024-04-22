@@ -3,7 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RecieverUserProvider extends ChangeNotifier {

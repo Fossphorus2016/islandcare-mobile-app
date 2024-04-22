@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/bank_details_models.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 // import 'package:island_app/widgets/bank_detail_panel.dart';

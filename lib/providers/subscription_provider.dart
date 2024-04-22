@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/manage_cards_model.dart';
 import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 
 class SubscriptionProvider extends ChangeNotifier {
   List allPackages = [];

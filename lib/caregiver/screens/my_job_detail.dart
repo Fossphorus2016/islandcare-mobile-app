@@ -6,7 +6,7 @@ import 'package:island_app/carereceiver/models/child_care_model.dart';
 import 'package:island_app/carereceiver/models/house_keeping_model.dart';
 import 'package:island_app/carereceiver/models/pet_care_model.dart';
 import 'package:island_app/carereceiver/models/school_support_model.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 import 'package:island_app/widgets/job_info_container.dart';

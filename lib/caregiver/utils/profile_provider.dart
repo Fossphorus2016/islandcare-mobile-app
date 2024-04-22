@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/models/service_provider_dashboard_model.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ServiceGiverProvider extends ChangeNotifier {

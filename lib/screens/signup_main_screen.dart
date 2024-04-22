@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/models/register_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/verify_email.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';

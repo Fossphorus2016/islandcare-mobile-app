@@ -7,7 +7,7 @@ import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model
 import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
@@ -342,74 +342,46 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                     AssistanceContainer(
                       dd: [
                         if (snapshot.data!.jobDetail![index].seniorCare!.bathing.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.bathing.toString() == "1"
-                              ? "bathing"
-                              : snapshot.data!.jobDetail![index].seniorCare!.bathing.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.bathing.toString() == "1" ? "bathing" : snapshot.data!.jobDetail![index].seniorCare!.bathing.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.dressing.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.dressing.toString() == "1"
-                              ? "dressing"
-                              : snapshot.data!.jobDetail![index].seniorCare!.dressing.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.dressing.toString() == "1" ? "dressing" : snapshot.data!.jobDetail![index].seniorCare!.dressing.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.feeding.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.feeding.toString() == "1"
-                              ? "feeding"
-                              : snapshot.data!.jobDetail![index].seniorCare!.feeding.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.feeding.toString() == "1" ? "feeding" : snapshot.data!.jobDetail![index].seniorCare!.feeding.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.mealPreparation.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.mealPreparation.toString() == "1"
-                              ? "mealPreparation"
-                              : snapshot.data!.jobDetail![index].seniorCare!.mealPreparation.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.mealPreparation.toString() == "1" ? "mealPreparation" : snapshot.data!.jobDetail![index].seniorCare!.mealPreparation.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.groceryShopping.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.groceryShopping.toString() == "1"
-                              ? "groceryShopping"
-                              : snapshot.data!.jobDetail![index].seniorCare!.groceryShopping.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.groceryShopping.toString() == "1" ? "groceryShopping" : snapshot.data!.jobDetail![index].seniorCare!.groceryShopping.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.walking.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.walking.toString() == "1"
-                              ? "walking"
-                              : snapshot.data!.jobDetail![index].seniorCare!.walking.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.walking.toString() == "1" ? "walking" : snapshot.data!.jobDetail![index].seniorCare!.walking.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.bedTransfer.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.bedTransfer.toString() == "1"
-                              ? "bedTransfer"
-                              : snapshot.data!.jobDetail![index].seniorCare!.bedTransfer.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.bedTransfer.toString() == "1" ? "bedTransfer" : snapshot.data!.jobDetail![index].seniorCare!.bedTransfer.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.lightCleaning.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.lightCleaning.toString() == "1"
-                              ? "lightCleaning"
-                              : snapshot.data!.jobDetail![index].seniorCare!.lightCleaning.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.lightCleaning.toString() == "1" ? "lightCleaning" : snapshot.data!.jobDetail![index].seniorCare!.lightCleaning.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.companionship.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.companionship.toString() == "1"
-                              ? "companionship"
-                              : snapshot.data!.jobDetail![index].seniorCare!.companionship.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.companionship.toString() == "1" ? "companionship" : snapshot.data!.jobDetail![index].seniorCare!.companionship.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.medicationAdministration.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.medicationAdministration.toString() == "1"
-                              ? "medicationAdministration"
-                              : snapshot.data!.jobDetail![index].seniorCare!.medicationAdministration.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.medicationAdministration.toString() == "1" ? "medicationAdministration" : snapshot.data!.jobDetail![index].seniorCare!.medicationAdministration.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.dressingWoundCare.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.dressingWoundCare.toString() == "1"
-                              ? "dressingWoundCare"
-                              : snapshot.data!.jobDetail![index].seniorCare!.dressingWoundCare.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.dressingWoundCare.toString() == "1" ? "dressingWoundCare" : snapshot.data!.jobDetail![index].seniorCare!.dressingWoundCare.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.bloodPressureMonetoring.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.bloodPressureMonetoring.toString() == "1"
-                              ? "bloodPressureMonetoring"
-                              : snapshot.data!.jobDetail![index].seniorCare!.bloodPressureMonetoring.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.bloodPressureMonetoring.toString() == "1" ? "bloodPressureMonetoring" : snapshot.data!.jobDetail![index].seniorCare!.bloodPressureMonetoring.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.bloodSugarMonetoring.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.bloodSugarMonetoring.toString() == "1"
-                              ? "bloodSugarMonetoring"
-                              : snapshot.data!.jobDetail![index].seniorCare!.bloodSugarMonetoring.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.bloodSugarMonetoring.toString() == "1" ? "bloodSugarMonetoring" : snapshot.data!.jobDetail![index].seniorCare!.bloodSugarMonetoring.toString(),
                         ],
                         if (snapshot.data!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming.toString() == "1") ...[
-                          snapshot.data!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming.toString() == "1"
-                              ? "groomingHairAndNailTrimming"
-                              : snapshot.data!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming.toString(),
+                          snapshot.data!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming.toString() == "1" ? "groomingHairAndNailTrimming" : snapshot.data!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming.toString(),
                         ],
                       ],
                     ),
@@ -683,9 +655,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                         if (snapshot.data!.jobDetail![index].learning!.assistanceInEnglish == 1) ...["English"],
                         if (snapshot.data!.jobDetail![index].learning!.assistanceInMath == 1) ...["Math"],
                         if (snapshot.data!.jobDetail![index].learning!.assistanceInScience == 1) ...["Science"],
-                        if (snapshot.data!.jobDetail![index].learning!.assistanceInOther != null) ...[
-                          snapshot.data!.jobDetail![index].learning!.assistanceInOther.toString()
-                        ],
+                        if (snapshot.data!.jobDetail![index].learning!.assistanceInOther != null) ...[snapshot.data!.jobDetail![index].learning!.assistanceInOther.toString()],
                       ],
                     ),
                   ],
@@ -877,9 +847,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                         const SizedBox(height: 10),
                         JobDetailTile(
                           name: "Other",
-                          title: snapshot.data!.jobDetail![index].houseKeeping!.other.toString() == "null"
-                              ? ""
-                              : snapshot.data!.jobDetail![index].houseKeeping!.other.toString(),
+                          title: snapshot.data!.jobDetail![index].houseKeeping!.other.toString() == "null" ? "" : snapshot.data!.jobDetail![index].houseKeeping!.other.toString(),
                         ),
                         const SizedBox(height: 10),
                         JobDetailTile(
@@ -970,34 +938,22 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                   AssistanceContainer(
                     dd: [
                       if (snapshot.data!.jobDetail![index].petCare!.walking.toString() == "1") ...[
-                        snapshot.data!.jobDetail![index].petCare!.walking.toString() == "1"
-                            ? "Walking"
-                            : snapshot.data!.jobDetail![index].petCare!.walking.toString(),
+                        snapshot.data!.jobDetail![index].petCare!.walking.toString() == "1" ? "Walking" : snapshot.data!.jobDetail![index].petCare!.walking.toString(),
                       ],
                       if (snapshot.data!.jobDetail![index].petCare!.daycare.toString() == "1") ...[
-                        snapshot.data!.jobDetail![index].petCare!.daycare.toString() == "1"
-                            ? "Day Care"
-                            : snapshot.data!.jobDetail![index].petCare!.daycare.toString(),
+                        snapshot.data!.jobDetail![index].petCare!.daycare.toString() == "1" ? "Day Care" : snapshot.data!.jobDetail![index].petCare!.daycare.toString(),
                       ],
                       if (snapshot.data!.jobDetail![index].petCare!.feeding.toString() == "1") ...[
-                        snapshot.data!.jobDetail![index].petCare!.feeding.toString() == "1"
-                            ? "Feeding"
-                            : snapshot.data!.jobDetail![index].petCare!.feeding.toString(),
+                        snapshot.data!.jobDetail![index].petCare!.feeding.toString() == "1" ? "Feeding" : snapshot.data!.jobDetail![index].petCare!.feeding.toString(),
                       ],
                       if (snapshot.data!.jobDetail![index].petCare!.socialization.toString() == "1") ...[
-                        snapshot.data!.jobDetail![index].petCare!.socialization.toString() == "1"
-                            ? "Socialization"
-                            : snapshot.data!.jobDetail![index].petCare!.socialization.toString(),
+                        snapshot.data!.jobDetail![index].petCare!.socialization.toString() == "1" ? "Socialization" : snapshot.data!.jobDetail![index].petCare!.socialization.toString(),
                       ],
                       if (snapshot.data!.jobDetail![index].petCare!.grooming.toString() == "1") ...[
-                        snapshot.data!.jobDetail![index].petCare!.grooming.toString() == "1"
-                            ? "Grooming"
-                            : snapshot.data!.jobDetail![index].petCare!.grooming.toString(),
+                        snapshot.data!.jobDetail![index].petCare!.grooming.toString() == "1" ? "Grooming" : snapshot.data!.jobDetail![index].petCare!.grooming.toString(),
                       ],
                       if (snapshot.data!.jobDetail![index].petCare!.boarding.toString() == "1") ...[
-                        snapshot.data!.jobDetail![index].petCare!.boarding.toString() == "1"
-                            ? "Boarding"
-                            : snapshot.data!.jobDetail![index].petCare!.boarding.toString(),
+                        snapshot.data!.jobDetail![index].petCare!.boarding.toString() == "1" ? "Boarding" : snapshot.data!.jobDetail![index].petCare!.boarding.toString(),
                       ],
                     ],
                   ),

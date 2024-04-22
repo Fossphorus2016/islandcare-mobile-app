@@ -9,7 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/document_download_list.dart';
 // import 'package:island_app/widgets/profile_container_field.dart';

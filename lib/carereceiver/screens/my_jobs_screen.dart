@@ -7,7 +7,7 @@ import 'package:island_app/carereceiver/models/service_rec_job_board_model.dart'
 import 'package:island_app/carereceiver/screens/my_job_detail.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_cart_widget.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

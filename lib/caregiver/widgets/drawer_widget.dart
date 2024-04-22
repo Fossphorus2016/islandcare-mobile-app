@@ -11,7 +11,7 @@ import 'package:island_app/caregiver/utils/profile_provider.dart';
 // import 'package:island_app/carereceiver/screens/account_settings.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';

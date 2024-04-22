@@ -14,7 +14,7 @@ import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
 import 'package:island_app/caregiver/widgets/giver_app_bar.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/document_download_list.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -233,8 +233,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                 "${userProfile.data!.firstName.toString()} ${userProfile.data!.lastName.toString()}",
                                                 maxLines: 2,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
+                                                style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
                                               ),
                                               const SizedBox(width: 10),
                                               Text(
@@ -252,9 +251,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                   ignoreGestures: true,
                                                   itemCount: 5,
                                                   itemSize: 20,
-                                                  initialRating: userProfile.data!.avgRating!['rating'] == null
-                                                      ? 0.0
-                                                      : double.parse(userProfile.data!.avgRating!['rating'].toString()),
+                                                  initialRating: userProfile.data!.avgRating!['rating'] == null ? 0.0 : double.parse(userProfile.data!.avgRating!['rating'].toString()),
                                                   minRating: 0,
                                                   ratingWidget: RatingWidget(
                                                     full: const Icon(
@@ -393,9 +390,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               LinearProgressIndicator(
                                                 minHeight: 08,
                                                 borderRadius: BorderRadius.circular(08),
-                                                value: Provider.of<ServiceGiverProvider>(context).profilePerentage != null
-                                                    ? double.parse(Provider.of<ServiceGiverProvider>(context).profilePerentage) / 100
-                                                    : 00,
+                                                value: Provider.of<ServiceGiverProvider>(context).profilePerentage != null ? double.parse(Provider.of<ServiceGiverProvider>(context).profilePerentage) / 100 : 00,
                                                 valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
                                               ),
                                             ],
@@ -627,9 +622,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                             ),
                                             if (userProfile.data!.userdetail!.service != null) ...[
                                               Text(
-                                                userProfile.data!.userdetail!.service!.name.toString() == "null"
-                                                    ? "Not Available"
-                                                    : userProfile.data!.userdetail!.service!.name.toString(),
+                                                userProfile.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : userProfile.data!.userdetail!.service!.name.toString(),
                                                 style: TextStyle(
                                                   color: CustomColors.hintText,
                                                   fontSize: 16,
@@ -673,8 +666,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               Text(
                                                 userProfile.data!.userdetailprovider!.experience.toString(),
                                                 softWrap: true,
-                                                style: TextStyle(
-                                                    color: CustomColors.hintText, fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w200),
+                                                style: TextStyle(color: CustomColors.hintText, fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w200),
                                               ),
                                             ],
                                           ),
@@ -816,9 +808,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                     ),
                                                   )
                                                 : Text(
-                                                    userProfile.data!.userdetail!.zip.toString() == "null"
-                                                        ? "Required"
-                                                        : userProfile.data!.userdetail!.zip.toString(),
+                                                    userProfile.data!.userdetail!.zip.toString() == "null" ? "Required" : userProfile.data!.userdetail!.zip.toString(),
                                                     style: TextStyle(
                                                       color: CustomColors.hintText,
                                                       fontSize: 16,
@@ -872,9 +862,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       ),
                                                     )
                                                   : Text(
-                                                      userProfile.data!.userdetailprovider!.keywords.toString() == "null"
-                                                          ? "Required"
-                                                          : userProfile.data!.userdetailprovider!.keywords.toString(),
+                                                      userProfile.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.keywords.toString(),
                                                       softWrap: true,
                                                       style: TextStyle(
                                                         color: CustomColors.hintText,
@@ -1061,9 +1049,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       ),
                                                     )
                                                   : Text(
-                                                      userProfile.data!.userdetail!.userInfo.toString() == "null"
-                                                          ? "Required"
-                                                          : userProfile.data!.userdetail!.userInfo.toString(),
+                                                      userProfile.data!.userdetail!.userInfo.toString() == "null" ? "Required" : userProfile.data!.userdetail!.userInfo.toString(),
                                                       softWrap: true,
                                                       style: TextStyle(
                                                         color: CustomColors.hintText,
@@ -1119,9 +1105,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                       ),
                                                     )
                                                   : Text(
-                                                      userProfile.data!.userdetailprovider!.availability.toString() == "null"
-                                                          ? "Required"
-                                                          : userProfile.data!.userdetailprovider!.availability.toString(),
+                                                      userProfile.data!.userdetailprovider!.availability.toString() == "null" ? "Required" : userProfile.data!.userdetailprovider!.availability.toString(),
                                                       softWrap: true,
                                                       style: TextStyle(
                                                         color: CustomColors.hintText,

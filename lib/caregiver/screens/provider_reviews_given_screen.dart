@@ -8,7 +8,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/caregiver/models/provider_reviews_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:provider/provider.dart';

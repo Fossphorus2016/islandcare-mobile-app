@@ -12,7 +12,7 @@ import 'package:island_app/carereceiver/screens/job_payment_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_applicants_widget.dart';
 import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:provider/provider.dart';

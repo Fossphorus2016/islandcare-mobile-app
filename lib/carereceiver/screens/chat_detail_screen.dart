@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 

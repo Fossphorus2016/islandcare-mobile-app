@@ -2,7 +2,7 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 

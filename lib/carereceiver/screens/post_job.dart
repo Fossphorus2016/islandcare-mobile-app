@@ -8,7 +8,7 @@ import 'package:island_app/carereceiver/screens/post_schedule.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/service_model.dart';
 import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 

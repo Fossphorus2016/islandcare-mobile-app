@@ -9,7 +9,7 @@ import 'package:island_app/carereceiver/screens/provider_profile_detail_for_give
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/recommendation_widget.dart';
 import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/res/app_url.dart';
+import 'package:island_app/utils/app_url.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class WishlistScreen extends StatefulWidget {
