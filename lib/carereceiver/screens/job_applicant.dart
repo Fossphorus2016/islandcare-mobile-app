@@ -7,19 +7,19 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/job_applicant_model.dart';
-import 'package:island_app/carereceiver/screens/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/screens/job_payment_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_applicants_widget.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:provider/provider.dart';
 
 class JobApplicants extends StatefulWidget {
-  const JobApplicants({super.key});
-
+  const JobApplicants({super.key, this.jobId});
+  final String? jobId;
   @override
   State<JobApplicants> createState() => JobApplicantsState();
 }
@@ -97,7 +97,11 @@ class JobApplicantsState extends State<JobApplicants> {
   @override
   void initState() {
     super.initState();
-    Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
+    if (widget.jobId != null) {
+      Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModelCheckById(context, widget.jobId);
+    } else {
+      Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
+    }
   }
 
   final jobrefreshKey = GlobalKey();
@@ -105,12 +109,6 @@ class JobApplicantsState extends State<JobApplicants> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Consumer<JobApplicantsProvider>(builder: (context, provider, index) {
-        // if (provider.isLoading) {
-        //   return CircularProgressIndicator(
-        //     color: ServiceRecieverColor.primaryColor,
-        //   );
-        // }
-
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -532,7 +530,6 @@ class JobApplicantsState extends State<JobApplicants> {
                                       ListView.builder(
                                         itemCount: provider.filterDataList.length,
                                         shrinkWrap: true,
-                                        padding: const EdgeInsets.only(top: 16),
                                         physics: const NeverScrollableScrollPhysics(),
                                         cacheExtent: 10,
                                         itemBuilder: (context, index) {
@@ -542,116 +539,7 @@ class JobApplicantsState extends State<JobApplicants> {
                                             jobType: jobData.service.name.toString(),
                                             count: provider.futureJobApplicantModel!.applicationCounts![index].count.toString(),
                                             onTap: () {
-                                              if (jobData.isFunded == 1) {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => JobApplicantsDetail(
-                                                      name: jobData.jobTitle.toString(),
-                                                      jobId: jobData.id.toString(),
-                                                    ),
-                                                  ),
-                                                );
-                                              } else if (provider.futureJobApplicantModel!.applicationCounts![index].count != null && provider.futureJobApplicantModel!.applicationCounts![index].count! < 1) {
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) => const AlertDialog(
-                                                    content: Text(
-                                                      "No applications available for this job.",
-                                                      style: TextStyle(
-                                                        fontWeight: FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                );
-                                              } else {
-                                                var percentage = 7.5;
-                                                var amonut = double.parse(jobData.totalAmount.toString());
-                                                var totalamount = ((amonut / 100 * percentage) + amonut);
-                                                showDialog(
-                                                  context: context,
-                                                  builder: (context) => AlertDialog(
-                                                    content: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                                      children: [
-                                                        Text(
-                                                          "Total Applications Available : ${provider.futureJobApplicantModel!.applicationCounts![index].count.toString()}",
-                                                          style: const TextStyle(
-                                                            fontWeight: FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                        const SizedBox(height: 10),
-                                                        Text(
-                                                          "Fund The Job Amount \$${jobData.totalAmount}  With Service Charges of 7.5%",
-                                                          textAlign: TextAlign.center,
-                                                          style: const TextStyle(
-                                                            fontWeight: FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                        const SizedBox(height: 10),
-                                                        Text(
-                                                          "Total Amount To Be Paid \$$totalamount  To View Applicant",
-                                                          textAlign: TextAlign.center,
-                                                          style: const TextStyle(
-                                                            fontWeight: FontWeight.w600,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    actions: [
-                                                      TextButton(
-                                                        style: ButtonStyle(
-                                                          shape: MaterialStateProperty.resolveWith(
-                                                            (states) => RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(08),
-                                                            ),
-                                                          ),
-                                                          backgroundColor: MaterialStateProperty.resolveWith(
-                                                            (states) => ServiceRecieverColor.primaryColor,
-                                                          ),
-                                                        ),
-                                                        onPressed: () {
-                                                          Navigator.pop(context);
-                                                          Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                              builder: (context) => JobPaymentsScreen(
-                                                                jobId: jobData.id.toString(),
-                                                                jobName: jobData.jobTitle.toString(),
-                                                                amount: totalamount.toString(),
-                                                              ),
-                                                            ),
-                                                          );
-                                                        },
-                                                        child: const Text(
-                                                          "Payment Now",
-                                                          style: TextStyle(color: Colors.white),
-                                                        ),
-                                                      ),
-                                                      TextButton(
-                                                        style: ButtonStyle(
-                                                          shape: MaterialStateProperty.resolveWith(
-                                                            (states) => RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.circular(08),
-                                                            ),
-                                                          ),
-                                                          backgroundColor: MaterialStateProperty.resolveWith(
-                                                            (states) => ServiceRecieverColor.redButtonLigth,
-                                                          ),
-                                                        ),
-                                                        onPressed: () {
-                                                          Navigator.pop(context);
-                                                        },
-                                                        child: const Text(
-                                                          "Close",
-                                                          style: TextStyle(color: Colors.white),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                );
-                                              }
+                                              provider.checkApplicationDetail(context, jobData, provider.futureJobApplicantModel!.applicationCounts![index].count);
                                             },
                                           );
                                         },
@@ -940,9 +828,139 @@ class JobApplicantsProvider extends ChangeNotifier {
     }
   }
 
-  // Pagination List
+  // check job is funded
+  checkApplicationDetail(BuildContext context, data, count) {
+    if (data.isFunded == 1) {
+      navigationService.push('/service-reciever-job-applicant-detail', arguments: {
+        'name': data.jobTitle.toString(),
+        'id': data.id.toString(),
+      });
 
-  // List dataList = [];
+      // provider.futureJobApplicantModel!.applicationCounts![index].count && provider.futureJobApplicantModel!.applicationCounts![index].count!
+    } else if (count != null && count < 1) {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          content: Text(
+            "No applications available for this job.",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+      );
+    } else {
+      var percentage = 7.5;
+      var amonut = double.parse(data.totalAmount.toString());
+      var totalamount = ((amonut / 100 * percentage) + amonut);
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // provider.futureJobApplicantModel!.applicationCounts![index].
+              Text(
+                "Total Applications Available : ${count.toString()}",
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Fund The Job Amount \$${data.totalAmount}  With Service Charges of 7.5%",
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                "Total Amount To Be Paid \$$totalamount  To View Applicant",
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.resolveWith(
+                  (states) => RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(08),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.resolveWith(
+                  (states) => ServiceRecieverColor.primaryColor,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => JobPaymentsScreen(
+                      jobId: data.id.toString(),
+                      jobName: data.jobTitle.toString(),
+                      amount: totalamount.toString(),
+                    ),
+                  ),
+                );
+              },
+              child: const Text(
+                "Payment Now",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            TextButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.resolveWith(
+                  (states) => RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(08),
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.resolveWith(
+                  (states) => ServiceRecieverColor.redButtonLigth,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text(
+                "Close",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  //  fetchJobApplicantModel and check job by id and call checkApplicationDetail function
+
+  fetchJobApplicantModelCheckById(BuildContext context, id) async {
+    isLoading = true;
+
+    await fetchJobApplicantModel();
+    isLoading = false;
+    notifyListeners();
+    if (futureJobApplicantModel != null && futureJobApplicantModel!.data!.isNotEmpty) {
+      var getIndex = futureJobApplicantModel!.data!.indexWhere((element) => element.id.toString() == id);
+      var applicationCount = futureJobApplicantModel!.applicationCounts![getIndex];
+      var getSingleJob = futureJobApplicantModel!.data!.firstWhere((element) => element.id.toString() == id);
+      // print(getSingleJob);
+      // ignore: unnecessary_null_comparison
+      if (getSingleJob != null) {
+        checkApplicationDetail(context, getSingleJob, applicationCount.count);
+      }
+    }
+  }
+
+  // Pagination List
   List filterDataList = [];
   int currentPageIndex = 0;
   int rowsPerPage = 10;

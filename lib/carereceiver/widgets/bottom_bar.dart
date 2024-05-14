@@ -35,8 +35,6 @@ class BottomBarState extends State<BottomBar> {
   callUserData() async {
     await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     await Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
-
-    //
     await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(4);
     await Provider.of<RecieverChatProvider>(context, listen: false).connectChatChannel(4);
     await Provider.of<SubscriptionProvider>(context, listen: false).getPackages();

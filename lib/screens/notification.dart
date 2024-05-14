@@ -5,8 +5,10 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'dart:core';
@@ -33,6 +35,42 @@ class _NotificationScreenState extends State<NotificationScreen> {
     @override
     void dispose() {
       super.dispose();
+    }
+
+    gotoScreen(String? type, String? actionId) {
+      print(type);
+      if (type != null && actionId != null) {
+        switch (type) {
+          case "job-apply":
+            navigationService.push('/service-reciever-job-applicant', arguments: {"id": actionId});
+            break;
+          case "admin-approved":
+            break;
+          case "job-approved":
+            break;
+          case "job-reject":
+            break;
+          case "job-completed":
+            break;
+          case "review-given":
+            break;
+          case "receiver-job-create":
+            break;
+          case "receiver-subscription":
+            break;
+          case "receiver-chat":
+            Provider.of<RecieverChatProvider>(context, listen: false).getSingleChat(context, actionId);
+            break;
+          case "admin-chat":
+            break;
+          case "provider-chat":
+            break;
+          case "job-applied":
+            break;
+
+          default:
+        }
+      }
     }
 
     return SafeArea(
@@ -157,9 +195,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         return ListView.builder(
                           itemCount: provider.allNotifications.length,
                           itemBuilder: (context, index) {
-                            if (provider.allNotifications[index]['is_read'] == 0) {
-                              return Padding(
-                                padding: const EdgeInsets.all(5.0),
+                            // if (provider.allNotifications[index]['is_read'] == 0) {
+                            // print(provider.allNotifications[index]);
+                            return Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: InkWell(
+                                onTap: () {
+                                  // print(provider.allNotifications[index]);
+                                  gotoScreen(provider.allNotifications[index]['type'], provider.allNotifications[index]['action_id']);
+                                },
                                 child: Container(
                                   height: 70,
                                   padding: const EdgeInsets.all(5.0),
@@ -215,9 +259,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     ],
                                   ),
                                 ),
-                              );
-                            }
-                            return null;
+                              ),
+                            );
+                            // }
+                            // return null;
                           },
                         );
                       },

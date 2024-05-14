@@ -15,7 +15,7 @@ import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:island_app/carereceiver/models/service_receiver_dashboard_model.dart';
 import 'package:island_app/carereceiver/screens/provider_profile_detail_for_giver.dart';
@@ -127,7 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
   //       favouriteList = listOfFavourites;
   //       foundProviders = listOfProviders;
   //     });
-
   //     return ServiceReceiverDashboardModel.fromJson(response.data);
   //   } else {
   //     throw Exception(
@@ -218,15 +217,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return response;
   }
 
-  var userPic;
-  getUserAvatar() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userAvatar = preferences.getString('userAvatar');
-    setState(() {
-      userPic = userAvatar;
-    });
-    return userPic.toString();
-  }
+  // var userPic;
+  // getUserAvatar() async {
+  //   SharedPreferences preferences = await SharedPreferences.getInstance();
+  //   var userAvatar = preferences.getString('userAvatar');
+  //   setState(() {
+  //     userPic = userAvatar;
+  //   });
+  //   return userPic.toString();
+  // }
 
   // Search bar
   List foundProviders = [];
@@ -234,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    getUserAvatar();
+    // getUserAvatar();
     super.initState();
     fetchReceiverDashboardModel();
     // futureReceiverDashboard = fetchReceiverDashboardModel();
@@ -274,8 +273,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomePaginationProvider>(
-      builder: (context, provider, child) {
+    return Consumer3<HomePaginationProvider, RecieverUserProvider, BottomNavigationProvider>(
+      builder: (context, provider, recieverUserProvider, bottomNavigationProvider, child) {
         return SafeArea(
           child: Scaffold(
             backgroundColor: CustomColors.loginBg,
@@ -303,12 +302,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 FutureBuilder<ProfileReceiverModel?>(
-                  future: context.watch<RecieverUserProvider>().userProfile,
+                  future: recieverUserProvider.userProfile,
                   builder: (context, snapshot) {
+                    // print("${AppUrl.localStorageUrl}/${snapshot.data}");
+
                     if (snapshot.hasData) {
                       // print(snapshot.data!.data!.userSubscriptionDetail!.periodType);
                       return InkWell(
-                        onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(3),
+                        onTap: () => bottomNavigationProvider.updatePage(3),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(

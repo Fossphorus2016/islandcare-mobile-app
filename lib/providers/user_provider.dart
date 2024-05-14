@@ -21,9 +21,7 @@ class RecieverUserProvider extends ChangeNotifier {
 
   getUserId() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString(
-      'userId',
-    );
+    var userId = preferences.getString('userId');
     return userId.toString();
   }
 
@@ -32,13 +30,13 @@ class RecieverUserProvider extends ChangeNotifier {
   // fetchPRofile
   ProfileReceiverModel? _userProfile;
   fetchProfileReceiverModel() async {
-    await getUserToken();
+    var token = await getUserToken();
     try {
       final response = await Dio().get(
         CareReceiverURl.serviceReceiverProfile,
         options: Options(
           headers: {
-            'Authorization': 'Bearer $userToken',
+            'Authorization': 'Bearer $token',
             'Accept': 'application/json',
           },
         ),

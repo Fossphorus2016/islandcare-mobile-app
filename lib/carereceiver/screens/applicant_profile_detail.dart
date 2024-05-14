@@ -18,7 +18,7 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 
 class ApplicantProfileDetail extends StatefulWidget {
   final String jobTitle;
-  final String jobId;
+  final String? jobId;
   final String profileId;
   const ApplicantProfileDetail({
     Key? key,

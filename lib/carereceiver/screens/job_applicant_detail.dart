@@ -1,24 +1,22 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:dio/dio.dart';
-// import 'package:flutter/foundation.dart';s
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/screens/applicant_profile_detail.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
-// import 'package:island_app/providers/user_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_applicants_widget.dart';
 import 'package:island_app/utils/utils.dart';
 
 class JobApplicantsDetail extends StatefulWidget {
   final String name;
-  final String jobId;
+  final String? jobId;
   const JobApplicantsDetail({
     Key? key,
     required this.name,
-    required this.jobId,
+    this.jobId,
   }) : super(key: key);
 
   @override
@@ -27,10 +25,15 @@ class JobApplicantsDetail extends StatefulWidget {
 
 class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
   List? allJobs = [];
+  bool isLoading = true;
   // Get all jobs
-  late Future<JobApplicantDetailModel> futureJobApplicantModel;
-  Future<JobApplicantDetailModel> fetchJobApplicantModel() async {
-    var token = await getUserToken();
+  late JobApplicantDetailModel futureJobApplicantModel;
+  fetchJobApplicantModel() async {
+    if (widget.jobId == null || widget.jobId == "null" || widget.name == "null") {
+      customErrorSnackBar(context, "No user found");
+      return;
+    }
+    var token = RecieverUserProvider.userToken;
     final response = await Dio().get(
       '${CareReceiverURl.serviceReceiverApplicantionApplicants}/${widget.name}/${widget.jobId}',
       options: Options(headers: {
@@ -40,7 +43,7 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
     );
     // print(response.data);
     if (response.statusCode == 200) {
-      return JobApplicantDetailModel.fromJson(response.data);
+      futureJobApplicantModel = JobApplicantDetailModel.fromJson(response.data);
     } else {
       throw Exception(
         customErrorSnackBar(
@@ -51,28 +54,14 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
     }
   }
 
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-    // if (kDebugMode) {
-    //   print(userToken);
-    // }
-    return userToken.toString();
-  }
-
   @override
   void initState() {
-    getUserToken();
     super.initState();
-    futureJobApplicantModel = fetchJobApplicantModel();
+    fetchJobApplicantModel();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print(RecieverUserProvider.userToken);
-    // print("${CareReceiverURl.serviceReceiverApplicantionApplicants}/${widget.name}/${widget.jobId}");
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -121,113 +110,113 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                // Listing
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                  decoration: BoxDecoration(
-                    color: CustomColors.blackLight,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: CustomColors.borderLight,
-                        width: 0.1,
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: isLoading
+              ? Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: ServiceRecieverColor.green,
+                  ),
+                )
+              : Column(
+                  children: [
+                    const SizedBox(height: 20),
+                    // Listing
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                      decoration: BoxDecoration(
+                        color: CustomColors.blackLight,
+                        border: Border(
+                          bottom: BorderSide(
+                            color: CustomColors.borderLight,
+                            width: 0.1,
+                          ),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Name",
+                            style: TextStyle(
+                              color: CustomColors.black,
+                              fontSize: 12,
+                              fontFamily: "Poppins",
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            "Date of birth",
+                            style: TextStyle(
+                              color: CustomColors.black,
+                              fontSize: 12,
+                              fontFamily: "Poppins",
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Text(
+                            "Details",
+                            style: TextStyle(
+                              color: CustomColors.black,
+                              fontSize: 12,
+                              fontFamily: "Poppins",
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Name",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        "Date of birth",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      Text(
-                        "Details",
-                        style: TextStyle(
-                          color: CustomColors.black,
-                          fontSize: 12,
-                          fontFamily: "Poppins",
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                FutureBuilder<JobApplicantDetailModel>(
-                  future: futureJobApplicantModel,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return snapshot.data!.data!.isEmpty
-                          ? Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 40,
-                              margin: const EdgeInsets.symmetric(vertical: 15),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: CustomColors.red,
-                                  width: 1,
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text("Data does not exist"),
-                              ),
-                            )
-                          : ListView.builder(
-                              itemCount: snapshot.data!.data!.length,
-                              shrinkWrap: true,
-                              padding: const EdgeInsets.only(top: 16),
-                              physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return JobApplicantsWidget(
-                                  name: "${snapshot.data!.data![index].firstName} ${snapshot.data!.data![index].lastName}",
-                                  jobType: snapshot.data!.data![index].userdetail!.gender.toString() == '1' ? "Male" : "Female",
-                                  count: '',
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ApplicantProfileDetail(
-                                          jobTitle: widget.name,
-                                          jobId: widget.jobId,
-                                          profileId: snapshot.data!.data![index].id.toString(),
-                                        ),
-                                      ),
-                                    );
-                                  },
+
+                    if (futureJobApplicantModel.data != null) ...[
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: futureJobApplicantModel.data!.length,
+                          shrinkWrap: true,
+                          padding: const EdgeInsets.only(top: 16),
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            var item = futureJobApplicantModel.data![index];
+                            return JobApplicantsWidget(
+                              name: "${item.firstName} ${item.lastName}",
+                              jobType: item.userdetail!.gender.toString() == '1' ? "Male" : "Female",
+                              count: '',
+                              onTap: () {
+                                // add null check in applicant profile
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ApplicantProfileDetail(
+                                      jobTitle: widget.name,
+                                      jobId: widget.jobId!,
+                                      profileId: item.id.toString(),
+                                    ),
+                                  ),
                                 );
                               },
                             );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
+                          },
+                        ),
+                      ),
+                    ] else ...[
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 40,
+                        margin: const EdgeInsets.symmetric(vertical: 15),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(
+                            color: CustomColors.red,
+                            width: 1,
+                          ),
+                        ),
+                        child: const Center(
+                          child: Text("Data does not exist"),
+                        ),
+                      )
+                    ],
+                  ],
                 ),
-              ],
-            ),
-          ),
         ),
       ),
     );

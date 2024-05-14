@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/conversational_widget.dart';
 import 'package:island_app/models/chatroom_model.dart';
@@ -129,7 +130,11 @@ class RecieverChatProvider extends ChangeNotifier {
 
   onEvent(event) {
     log("onEventxsxsxsXS: ${event.toString()}");
-    getChats();
+    if (activeChat.isNotEmpty) {
+      getSingleChatAndSetActive(activeChat['id']);
+    } else {
+      getChats();
+    }
   }
 
   onSubscriptionSucceeded(dynamic data) {
@@ -178,50 +183,60 @@ class RecieverChatProvider extends ChangeNotifier {
           };
         },
       );
-      if (activeChat.isNotEmpty) {
-        setActiveChat(activeChat);
+      // print(activeChat.isNotEmpty);
+      // if (activeChat.isNotEmpty) {
+      //   var getChatRoom = allChatRooms.firstWhere((element) => element["id"] == activeChat['id']);
+      //   setActiveChat(getChatRoom);
+      // }
+    }
+    notifyListeners();
+  }
+
+  getSingleChatAndSetActive(id) async {
+    var userToken = RecieverUserProvider.userToken;
+    var resp = await Dio().post(
+      "${AppUrl.webBaseURL}/api/get-chat",
+      data: {"chatId": id},
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+      var chatRoom = resp.data['chat'];
+      if (chatRoom != null) {
+        activeChat = chatRoom;
       }
     }
     notifyListeners();
   }
 
-  // getSingleChat(id) async {
-  //   var userToken = RecieverUserProvider.userToken;
-  //   // print(RecieverUserProvider.userToken);
-  //   var resp = await Dio().post(
-  //     "${ChatUrl.serviceReceiverChat}?provider_id=$id",
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $userToken',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
-  //     print(resp.data);
-  //     var chatRoom = resp.data['chat_room'];
-  //     // chatList = List.generate(
-  //     //   resp.data['chat_room'].length,
-  //     //   (index) {
-  //     //     var getlastmessage = resp.data['chat_room'][index]['chat_messages'].last;
-  //     //     var lastmessagetime = DateFormat.jm().format(DateTime.parse(getlastmessage['updated_at']).toLocal());
-  //     //     return {
-  //     //       "roomId": resp.data['chat_room'][index]['id'],
-  //     //       "userDate": ChatroomUser.fromJson(
-  //     //         resp.data['chat_room'][index]['receiver'],
-  //     //       ),
-  //     //       "lastMessage": getlastmessage['message'],
-  //     //       "lastMessagesCount": resp.data['chat_room'][index]["status"],
-  //     //       "lastMessageTime": lastmessagetime,
-  //     //     };
-  //     //   },
-  //     // );
-  //     // if (activeChat.isNotEmpty) {
-  //     //   setActiveChat(activeChat['id'], null);
-  //     // }
-  //   }
-  //   notifyListeners();
-  // }
+  getSingleChat(BuildContext context, id) async {
+    var userToken = RecieverUserProvider.userToken;
+    // print(RecieverUserProvider.userToken);
+    // print(id);
+    var resp = await Dio().post(
+      "${AppUrl.webBaseURL}/api/get-chat",
+      data: {"chatId": id},
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+      var chatRoom = resp.data['chat'];
+      if (chatRoom != null) {
+        setActiveChat(chatRoom);
+        // ignore: use_build_context_synchronously
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatDetailPage()));
+      }
+    }
+    // notifyListeners();
+  }
 
   List activeChatMessages = [];
   Map activeChat = {};

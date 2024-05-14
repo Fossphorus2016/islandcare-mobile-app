@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/widgets/bottombar.dart';
 import 'package:island_app/carereceiver/screens/bank_details.dart';
 import 'package:island_app/carereceiver/screens/hired_candidates_screen.dart';
+import 'package:island_app/carereceiver/screens/job_applicant.dart';
+import 'package:island_app/carereceiver/screens/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/screens/post_job.dart';
 import 'package:island_app/carereceiver/screens/post_schedule.dart';
 import 'package:island_app/carereceiver/widgets/bottom_bar.dart';
@@ -78,6 +80,19 @@ class RouteGenerator {
       case '/service-reciever-hire-candidates':
         return MaterialPageRoute(
           builder: (context) => const HiredCandidatesScreen(),
+        );
+      case '/service-reciever-job-applicant':
+        return MaterialPageRoute(
+          builder: (context) => JobApplicants(
+            jobId: args!['id'].toString(),
+          ),
+        );
+      case '/service-reciever-job-applicant-detail':
+        return MaterialPageRoute(
+          builder: (context) => JobApplicantsDetail(
+            jobId: args!['id'].toString(),
+            name: args['name'],
+          ),
         );
       default:
         return MaterialPageRoute(builder: (context) => const SplashScreen());
