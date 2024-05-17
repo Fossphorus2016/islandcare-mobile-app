@@ -4,6 +4,7 @@ import 'package:island_app/carereceiver/screens/bank_details.dart';
 import 'package:island_app/carereceiver/screens/hired_candidates_screen.dart';
 import 'package:island_app/carereceiver/screens/job_applicant.dart';
 import 'package:island_app/carereceiver/screens/job_applicant_detail.dart';
+import 'package:island_app/carereceiver/screens/job_detail.dart';
 import 'package:island_app/carereceiver/screens/post_job.dart';
 import 'package:island_app/carereceiver/screens/post_schedule.dart';
 import 'package:island_app/carereceiver/widgets/bottom_bar.dart';
@@ -92,6 +93,13 @@ class RouteGenerator {
           builder: (context) => JobApplicantsDetail(
             jobId: args!['id'].toString(),
             name: args['name'],
+          ),
+        );
+      case '/service-reciever-job-detail':
+        return MaterialPageRoute(
+          builder: (context) => ReceiverJobDetail(
+            serviceId: args!['serviceId'].toString(),
+            jobData: args['jobData'],
           ),
         );
       default:

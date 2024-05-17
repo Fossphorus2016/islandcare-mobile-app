@@ -4,9 +4,11 @@ import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/utils.dart';
@@ -24,6 +26,7 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     @override
@@ -37,14 +40,50 @@ class _NotificationScreenState extends State<NotificationScreen> {
       super.dispose();
     }
 
+    getReceiverJobData(id) async {
+      setState(() {
+        isLoading = false;
+      });
+      var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+      final response = await Dio().get(
+        '${CareReceiverURl.serviceReceiverJobBoardDetail}/$id',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        var data = response.data['job'][0];
+        navigationService.push('/service-reciever-job-detail', arguments: {
+          "serviceId": data['service_id'].toString(),
+          "jobData": data,
+        });
+      } else {
+        throw Exception(
+          'Failed to load Service Provider Dashboard',
+        );
+      }
+    }
+
     gotoScreen(String? type, String? actionId) {
-      print(type);
+      if (kDebugMode) {
+        print(type);
+      }
       if (type != null && actionId != null) {
+        setState(() {
+          isLoading = true;
+        });
         switch (type) {
           case "job-apply":
+            setState(() {
+              isLoading = false;
+            });
             navigationService.push('/service-reciever-job-applicant', arguments: {"id": actionId});
             break;
           case "admin-approved":
+            getReceiverJobData(actionId);
             break;
           case "job-approved":
             break;
@@ -59,6 +98,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
           case "receiver-subscription":
             break;
           case "receiver-chat":
+            setState(() {
+              isLoading = false;
+            });
             Provider.of<RecieverChatProvider>(context, listen: false).getSingleChat(context, actionId);
             break;
           case "admin-chat":
@@ -180,98 +222,102 @@ class _NotificationScreenState extends State<NotificationScreen> {
           ],
         ),
         body: SafeArea(
-          child: RefreshIndicator(
-            onRefresh: () async {
-              Provider.of<NotificationProvider>(context, listen: false).getNotifications();
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: Consumer<NotificationProvider>(
-                      builder: (context, provider, child) {
-                        return ListView.builder(
-                          itemCount: provider.allNotifications.length,
-                          itemBuilder: (context, index) {
-                            // if (provider.allNotifications[index]['is_read'] == 0) {
-                            // print(provider.allNotifications[index]);
-                            return Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: InkWell(
-                                onTap: () {
+          child: isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : RefreshIndicator(
+                  onRefresh: () async {
+                    Provider.of<NotificationProvider>(context, listen: false).getNotifications();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        Expanded(
+                          child: Consumer<NotificationProvider>(
+                            builder: (context, provider, child) {
+                              return ListView.builder(
+                                itemCount: provider.allNotifications.length,
+                                itemBuilder: (context, index) {
+                                  // if (provider.allNotifications[index]['is_read'] == 0) {
                                   // print(provider.allNotifications[index]);
-                                  gotoScreen(provider.allNotifications[index]['type'], provider.allNotifications[index]['action_id']);
-                                },
-                                child: Container(
-                                  height: 70,
-                                  padding: const EdgeInsets.all(5.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    border: Border.all(
-                                      width: 1,
-                                      color: Colors.grey.shade200,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      SizedBox(
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(50),
-                                          child: provider.allNotifications[index]['users']['avatar'] == null
-                                              ? Container(
-                                                  width: 50,
-                                                  height: 50,
-                                                  color: CustomColors.primaryColor,
-                                                  child: Center(
-                                                    child: Text(
-                                                      "${provider.allNotifications[index]['users']['first_name'][0].toString().toUpperCase()} ${provider.allNotifications[index]['users']['last_name'][0].toString().toUpperCase()}",
-                                                      style: const TextStyle(
-                                                        fontSize: 20,
-                                                        color: Colors.white,
+                                  return Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        // print(provider.allNotifications[index]);
+                                        gotoScreen(provider.allNotifications[index]['type'], provider.allNotifications[index]['action_id']);
+                                      },
+                                      child: Container(
+                                        height: 70,
+                                        padding: const EdgeInsets.all(5.0),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          border: Border.all(
+                                            width: 1,
+                                            color: Colors.grey.shade200,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            SizedBox(
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(50),
+                                                child: provider.allNotifications[index]['users']['avatar'] == null
+                                                    ? Container(
+                                                        width: 50,
+                                                        height: 50,
+                                                        color: CustomColors.primaryColor,
+                                                        child: Center(
+                                                          child: Text(
+                                                            "${provider.allNotifications[index]['users']['first_name'][0].toString().toUpperCase()} ${provider.allNotifications[index]['users']['last_name'][0].toString().toUpperCase()}",
+                                                            style: const TextStyle(
+                                                              fontSize: 20,
+                                                              color: Colors.white,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : CachedNetworkImage(
+                                                        height: 50,
+                                                        width: 50,
+                                                        fit: BoxFit.cover,
+                                                        alignment: Alignment.topCenter,
+                                                        imageUrl: "${AppUrl.webStorageUrl}/${provider.allNotifications[index]['users']['avatar']}",
+                                                        placeholder: (context, url) => const CircularProgressIndicator(),
+                                                        errorWidget: (context, url, error) => const Icon(Icons.error),
                                                       ),
-                                                    ),
-                                                  ),
-                                                )
-                                              : CachedNetworkImage(
-                                                  height: 50,
-                                                  width: 50,
-                                                  fit: BoxFit.cover,
-                                                  alignment: Alignment.topCenter,
-                                                  imageUrl: "${AppUrl.webStorageUrl}/${provider.allNotifications[index]['users']['avatar']}",
-                                                  placeholder: (context, url) => const CircularProgressIndicator(),
-                                                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 05),
+                                            Expanded(
+                                              child: Text(
+                                                provider.allNotifications[index]['message'].toString(),
+                                                maxLines: 3,
+                                                overflow: TextOverflow.clip,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      const SizedBox(width: 05),
-                                      Expanded(
-                                        child: Text(
-                                          provider.allNotifications[index]['message'].toString(),
-                                          maxLines: 3,
-                                          overflow: TextOverflow.clip,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                            // }
-                            // return null;
-                          },
-                        );
-                      },
+                                    ),
+                                  );
+                                  // }
+                                  // return null;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
+                ),
         ),
       ),
     );
