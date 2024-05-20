@@ -650,7 +650,7 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
                 const SizedBox(height: 10),
                 JobDetailTile(
                   name: "Cost Range For Camp",
-                  title: futureChildCareDetailDashboard!.jobDetail![index].schoolCamp!.costRange.toString(),
+                  title: "\$ ${futureChildCareDetailDashboard!.jobDetail![index].schoolCamp!.costRange.toString()}",
                 ),
                 const SizedBox(height: 10),
               ],

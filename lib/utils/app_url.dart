@@ -51,7 +51,7 @@ class CareReceiverURl {
   static String serviceReceiverSeniorCareJobCreater = "${AppUrl.webBaseURL}/api/service-receiver-seniorcare-job-create";
   static String serviceReceiverPetCareJobCreater = "${AppUrl.webBaseURL}/api/service-receiver-petcare-job-create";
   static String serviceReceiverHouseKeepingJobCreater = "${AppUrl.webBaseURL}/api/service-receiver-housekeeping-job-create";
-  static String serviceReceiverLearningJobCreater = "${AppUrl.webBaseURL}/api/service-receiver-learning-job-create";
+  static String serviceReceiverLearningJobCreater = "${AppUrl.webBaseURL}/api/service-receiver-child-care-job-create";
   static String serviceReceiverSchoolCampJobCreater = "${AppUrl.webBaseURL}/api/service-receiver-schoolcamp-job-create";
 
   static String serviceReceiverAddCreditCards = "${AppUrl.webBaseURL}/api/service-receiver-add-credit-cards";

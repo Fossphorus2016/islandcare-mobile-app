@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:island_app/models/child_info_model.dart';
 import 'package:island_app/models/learning_model.dart';
 import 'package:island_app/models/schedule_model.dart';
 import 'package:island_app/models/service_model.dart';
@@ -129,46 +130,6 @@ class Job {
         "schedule": schedule == null ? [] : List<dynamic>.from(schedule!.map((x) => x.toJson())),
         "learning": learning?.toJson(),
         "additionalInfo": additionalInfo,
-      };
-}
-
-class Childinfo {
-  Childinfo({
-    this.id,
-    this.jobId,
-    this.name,
-    this.age,
-    this.grade,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  int? id;
-  int? jobId;
-  String? name;
-  String? age;
-  dynamic grade;
-  String? createdAt;
-  String? updatedAt;
-
-  factory Childinfo.fromJson(Map<String, dynamic> json) => Childinfo(
-        id: json["id"],
-        jobId: json["job_id"],
-        name: json["name"],
-        age: json["age"],
-        grade: json["grade"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "job_id": jobId,
-        "name": name,
-        "age": age,
-        "grade": grade,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
       };
 }
 

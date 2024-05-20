@@ -115,7 +115,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     '3',
   ];
   List days = [];
-  List childInfo = [];
+  // List childInfo = [];
   List seniorCareDays = [];
 
   List children = [];
@@ -356,7 +356,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       'duration[]': durationMapList,
     });
     Dio dio = Dio();
-    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await dio.post(
@@ -409,7 +409,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     );
 
     Dio dio = Dio();
-    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await dio.post(
@@ -454,7 +454,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     );
 
     Dio dio = Dio();
-    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await dio.post(
@@ -484,6 +484,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     // var token = await getUserToken();
     var formData = FormData.fromMap(
       {
+        'job_id': widget.jobData['id'],
         'job_title': jobTitleController.text.toString(),
         'address': addressController.text.toString(),
         'location': locationValue.toString(),
@@ -500,7 +501,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     );
 
     Dio dio = Dio();
-    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await dio.post(
@@ -511,15 +512,12 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             validateStatus: (status) => true,
             headers: {
               "Accept": "application/json",
-              // "Authorization": "Bearer $token",
+              "Authorization": "Bearer ${RecieverUserProvider.userToken}",
             },
           ),
         );
       } catch (e) {
-        customErrorSnackBar(
-          context,
-          e.toString(),
-        );
+        customErrorSnackBar(context, e.toString());
       }
     } else {
       customErrorSnackBar(context, "Please Subscribe Package First");
@@ -552,7 +550,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     );
 
     Dio dio = Dio();
-    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await dio.post(
@@ -599,6 +597,77 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       addressController.text = futureSeniorCareDetail!.job![0].address.toString();
       hourlyController.text = futureSeniorCareDetail!.job![0].hourlyRate.toString();
       selectedLocation = futureSeniorCareDetail!.job![0].location.toString().toLowerCase();
+      for (var item in futureSeniorCareDetail!.job![0].schedule!) {
+        dateMapList.add(item.startingDate);
+        startTimeMapList.add(item.startingTime);
+        durationMapList.add(item.duration);
+        seniorCareDays.add({
+          "starting_date": item.startingDate,
+          "starting_time": item.startingTime,
+          "duration": item.duration,
+        });
+      }
+      seniorNameController.text = futureSeniorCareDetail!.job![0].seniorCare!.seniorName.toString();
+      dobController.text = futureSeniorCareDetail!.job![0].seniorCare!.dob.toString();
+      medicalConditionController.text = futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition.toString();
+
+      if (futureSeniorCareDetail!.job![0].seniorCare!.bathing == 1) {
+        isChecked = true;
+        bathing = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.dressing == 1) {
+        isChecked2 = true;
+        dressing = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.feeding == 1) {
+        isChecked3 = true;
+        feeding = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.mealPreparation == 1) {
+        isChecked4 = true;
+        meal_preparation = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.groceryShopping == 1) {
+        isChecked5 = true;
+        grocery_shopping = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.walking == 1) {
+        isChecked6 = true;
+        walking = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.bedTransfer == 1) {
+        isChecked7 = true;
+        bed_transfer = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.lightCleaning == 1) {
+        isChecked8 = true;
+        light_cleaning = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.companionship == 1) {
+        isChecked9 = true;
+        companionship = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.medicationAdministration == 1) {
+        isChecked10 = true;
+        medication_administration = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.dressingWoundCare == 1) {
+        isChecked11 = true;
+        dressing_wound_care = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.bloodPressureMonetoring == 1) {
+        isChecked12 = true;
+        blood_pressure_monetoring = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.bloodSugarMonetoring == 1) {
+        isChecked13 = true;
+        blood_sugar_monetoring = "1";
+      }
+      if (futureSeniorCareDetail!.job![0].seniorCare!.groomingHairAndNailTrimming == 1) {
+        isChecked14 = true;
+        grooming_hair_and_nail_trimming = "1";
+      }
+      additionalInfoController.text = futureSeniorCareDetail!.job![0].additionalInfo.toString();
     } else if (widget.serviceId == "2") {
       // service id 2;
       // servicePetCare(context);
@@ -612,6 +681,96 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       addressController.text = futurePetCareDetailDashboard!.job![0].address.toString();
       hourlyController.text = futurePetCareDetailDashboard!.job![0].hourlyRate.toString();
       selectedLocation = futurePetCareDetailDashboard!.job![0].location.toString().toLowerCase();
+      for (var item in futurePetCareDetailDashboard!.job![0].schedule!) {
+        dateMapList.add(item.startingDate);
+        startTimeMapList.add(item.startingTime);
+        durationMapList.add(item.duration);
+        seniorCareDays.add(
+          {
+            "starting_date": item.startingDate,
+            "starting_time": item.startingTime,
+            "duration": item.duration,
+          },
+        );
+      }
+      petTypeValue = futurePetCareDetailDashboard!.job![0].petCare!.petType;
+      if (futurePetCareDetailDashboard!.job![0].petCare!.petType == "Dog") {
+        selectedIndex = 0;
+        petTypeValue = "Dog";
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.petType == "Cat") {
+        selectedIndex = 1;
+        petTypeValue = "Cat";
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.petType == "Fish") {
+        selectedIndex = 2;
+        petTypeValue = "Fish";
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.petType == "Small Rodents") {
+        selectedIndex = 3;
+        petTypeValue = "Small Rodents";
+      } else {
+        selectedIndex = 4;
+        otherField = 1;
+        otherFieldController.text = futurePetCareDetailDashboard!.job![0].petCare!.petType.toString();
+      }
+      if (futurePetCareDetailDashboard!.job![0].petCare!.numberOfPets == 1) {
+        selectedNumberIndex = 0;
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.numberOfPets == 2) {
+        selectedNumberIndex = 1;
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.numberOfPets == 3) {
+        selectedNumberIndex = 2;
+      }
+
+      petBreedController.text = futurePetCareDetailDashboard!.job![0].petCare!.petBreed.toString();
+      if (futurePetCareDetailDashboard!.job![0].petCare!.sizeOfPet == "small") {
+        selectedSize = 0;
+        sizeOfPetValue = "Small";
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.sizeOfPet == "medium") {
+        selectedSize = 1;
+        sizeOfPetValue = "Medium";
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.sizeOfPet == "large") {
+        selectedSize = 2;
+        sizeOfPetValue = "Large";
+      }
+
+      if (futurePetCareDetailDashboard!.job![0].petCare!.temperament == "friendly") {
+        selectedTemperament = 0;
+        otherGuarded = 0;
+        temperamentValue = "Friendly/Socialized";
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.temperament == "guarded with people") {
+        otherGuarded = 1;
+        selectedTemperament = 1;
+        selectedGuarded = 0;
+        temperamentValue = "With People";
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.temperament == "guarded with other animals") {
+        otherGuarded = 1;
+        selectedTemperament = 1;
+        selectedGuarded = 1;
+        temperamentValue = "With Other Animals";
+      }
+      if (futurePetCareDetailDashboard!.job![0].petCare!.walking == 1) {
+        isChecked = true;
+        walking = "1";
+      }
+      if (futurePetCareDetailDashboard!.job![0].petCare!.daycare == 1) {
+        isChecked2 = true;
+        dayCare = "1";
+      }
+      if (futurePetCareDetailDashboard!.job![0].petCare!.feeding == 1) {
+        isChecked3 = true;
+        feeding = "1";
+      }
+      if (futurePetCareDetailDashboard!.job![0].petCare!.socialization == 1) {
+        isChecked4 = true;
+        socialization = "1";
+      }
+      if (futurePetCareDetailDashboard!.job![0].petCare!.grooming == 1) {
+        isChecked5 = true;
+        grooming_hair_and_nail_trimming = "1";
+      }
+      if (futurePetCareDetailDashboard!.job![0].petCare!.boarding == 1) {
+        isChecked6 = true;
+        boarding = "1";
+      }
+      additionalInfoController.text = futurePetCareDetailDashboard!.job![0].additionalInfo.toString();
     } else if (widget.serviceId == "3") {
       // service id 3
       // serviceHouseKeeping(context);
@@ -625,6 +784,71 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       addressController.text = futureHouseKeepingDetailDashboard!.job![0].address.toString();
       hourlyController.text = futureHouseKeepingDetailDashboard!.job![0].hourlyRate.toString();
       selectedLocation = futureHouseKeepingDetailDashboard!.job![0].location.toString().toLowerCase();
+
+      // selectedCleaning = futureHouseKeepingDetailDashboard!.job![0].houseKeeping.cleaningType;
+      if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.cleaningType! == "Light Cleaning") {
+        selectedCleaning = 0;
+        cleaningTypeValue = "Light Cleaning";
+      } else {
+        selectedCleaning = 1;
+        cleaningTypeValue = "Deep Cleaning";
+      }
+      for (var item in futureHouseKeepingDetailDashboard!.job![0].schedule!) {
+        dateMapList.add(item.startingDate);
+        startTimeMapList.add(item.startingTime);
+        durationMapList.add(item.duration);
+        seniorCareDays.add(
+          {
+            "starting_date": item.startingDate,
+            "starting_time": item.startingTime,
+            "duration": item.duration,
+          },
+        );
+      }
+      if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.numberOfBedrooms == 1) {
+        selectedBedroom = 0;
+        bedroomValue = "1";
+      } else if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.numberOfBedrooms == 2) {
+        selectedBedroom = 1;
+        bedroomValue = "2";
+      } else if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.numberOfBedrooms == 3) {
+        selectedBedroom = 2;
+        bedroomValue = "3";
+      } else if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.numberOfBedrooms == 4) {
+        selectedBedroom = 3;
+        bedroomValue = "4";
+      }
+
+      if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.numberOfBathrooms == 1) {
+        selectedBathroom = 0;
+        bathroomValue = "1";
+      } else if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.numberOfBathrooms == 2) {
+        selectedBathroom = 1;
+        bathroomValue = "2";
+      } else if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.numberOfBathrooms == 3) {
+        selectedBathroom = 2;
+        bathroomValue = "3";
+      } else if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.numberOfBathrooms == 4) {
+        selectedBathroom = 3;
+        bathroomValue = "4";
+      }
+      if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.laundry == 1) {
+        isChecked = true;
+        laundry = "1";
+        // futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.
+      }
+      if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.ironing == 1) {
+        isChecked2 = true;
+        ironing = "1";
+        // futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.
+      }
+      if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.other != null) {
+        isChecked3 = true;
+        other = "1";
+        otherFieldController.text = futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.other.toString();
+        // futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.
+      }
+      additionalInfoController.text = futureHouseKeepingDetailDashboard!.job![0].additionalInfo.toString();
     } else if (widget.serviceId == "4") {
       // Service Id 4
       // serviceSchoolSupport(context);
@@ -649,6 +873,31 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       addressController.text = futureChildCareDetailDashboard!.job![0].address.toString();
       hourlyController.text = futureChildCareDetailDashboard!.job![0].hourlyRate.toString();
       selectedLocation = futureChildCareDetailDashboard!.job![0].location.toString().toLowerCase();
+
+      for (var item in futureChildCareDetailDashboard!.job![0].childinfo!) {
+        childnameMapList.add(item.name.toString());
+        childageMapList.add(item.age.toString());
+        children.add(
+          {
+            "name": item.name.toString(),
+            "age": item.age.toString(),
+          },
+        );
+      }
+      for (var item in futureChildCareDetailDashboard!.job![0].schedule!) {
+        dateMapList.add(item.startingDate);
+        startTimeMapList.add(item.startingTime);
+        durationMapList.add(item.duration);
+        seniorCareDays.add(
+          {
+            "starting_date": item.startingDate,
+            "starting_time": item.startingTime,
+            "duration": item.duration,
+          },
+        );
+      }
+      interestForChildController.text = futureChildCareDetailDashboard!.job![0].schoolCamp!.interestForChild.toString();
+      costRangeOfCampController.text = futureChildCareDetailDashboard!.job![0].schoolCamp!.costRange.toString();
     }
   }
 
@@ -682,7 +931,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
 
   @override
   Widget build(BuildContext context) {
-    print(selectedLocation);
+    print(futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -1162,60 +1411,64 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             itemBuilder: (context, index) {
               return SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: 95,
+                height: 100,
                 child: Stack(
                   children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            spreadRadius: 01,
-                            blurRadius: 05,
-                          ),
-                        ],
-                      ),
-                      height: 85,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              const Text("Date: "),
-                              Expanded(
-                                child: Text(
-                                  seniorCareDays[index]['starting_date'].toString(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade300,
+                              spreadRadius: 01,
+                              blurRadius: 05,
+                              blurStyle: BlurStyle.outer,
+                            ),
+                          ],
+                        ),
+                        height: 85,
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                const Text("Date: "),
+                                Expanded(
+                                  child: Text(
+                                    seniorCareDays[index]['starting_date'].toString(),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Time: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['starting_time']}"),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              const Text("Duration: "),
-                              Expanded(
-                                child: Text("${seniorCareDays[index]['duration']} hours"),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Text("Time: "),
+                                Expanded(
+                                  child: Text("${seniorCareDays[index]['starting_time']}"),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                const Text("Duration: "),
+                                Expanded(
+                                  child: Text("${seniorCareDays[index]['duration']} hours"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Positioned(
-                      top: 00,
+                      top: -10,
                       right: 0,
                       child: GestureDetector(
                         onTap: (() {
@@ -1318,7 +1571,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                     maxLines: 1,
                     decoration: inputdecoration("Child Initials")),
               ),
-              // Children Name
+              // Children Age
               Container(
                 height: 50,
                 margin: const EdgeInsets.only(bottom: 15, top: 15),
@@ -1394,45 +1647,54 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
           ),
         ),
         // Show Children
+        // if (futureChildCareDetailDashboard!.job![0].childinfo != null) ...[
+        const SizedBox(height: 20),
         ListView.builder(
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: children.length,
             itemBuilder: (context, index) {
+              // Childinfo childinfo = futureChildCareDetailDashboard!.job![0].childinfo![index];
               return Stack(
                 children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                    ),
-                    alignment: Alignment.centerRight,
-                    width: MediaQuery.of(context).size.width,
-                    height: 100,
-                    child: const RotatedBox(
-                      quarterTurns: 1,
-                      child: Text(
-                        'Container 1',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 25,
-                    right: 10,
-                    left: 3,
-                    bottom: 5,
+                  // Container(
+                  //   decoration: const BoxDecoration(
+                  //     color: Colors.transparent,
+                  //   ),
+                  //   alignment: Alignment.centerRight,
+                  //   width: MediaQuery.of(context).size.width,
+                  //   height: 100,
+                  //   child: const RotatedBox(
+                  //     quarterTurns: 1,
+                  //     child: Text(
+                  //       'Container 1',
+                  //       style: TextStyle(
+                  //         fontSize: 18.0,
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       decoration: BoxDecoration(
-                        color: CustomColors.white,
+                        // color: Colors.grey,
                         borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade300,
+                            spreadRadius: 3,
+                            blurStyle: BlurStyle.outer,
+                            blurRadius: 5,
+                          ),
+                        ],
                       ),
-                      alignment: Alignment.centerLeft,
+                      // alignment: Alignment.centerLeft,
                       width: MediaQuery.of(context).size.width,
+                      height: 80,
                       child: Row(
                         children: [
                           SizedBox(
@@ -1480,7 +1742,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                     ),
                   ),
                   Positioned(
-                    top: 10,
+                    top: -10,
                     right: -2,
                     child: GestureDetector(
                       onTap: (() {
@@ -1491,15 +1753,15 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                         });
                       }),
                       child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(100),
                             bottomLeft: Radius.circular(100),
                             bottomRight: Radius.circular(100),
                             topRight: Radius.circular(100),
                           ),
-                          color: CustomColors.white,
-                          boxShadow: const [
+                          color: Colors.white,
+                          boxShadow: [
                             BoxShadow(
                               color: Color.fromARGB(13, 0, 0, 0),
                               blurRadius: 4.0,
@@ -1521,6 +1783,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                 ],
               );
             }),
+        // ],
+
         const SizedBox(height: 20),
         addDaysColumn(context),
         // Interest For Child
@@ -1596,28 +1860,15 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                 customErrorSnackBar(context, "Job Area is Required");
               } else if (hourlyController.text.isEmpty) {
                 customErrorSnackBar(context, "Hourly Rate is Required");
-              } else if (childrenController.text.isEmpty) {
+              } else if (children.isEmpty) {
                 customErrorSnackBar(context, "Child Initials is Required");
-              } else if (childrenAgeController.text.isEmpty) {
-                customErrorSnackBar(context, "Child Age is Required");
-              }
-              //  else if (gradeLevelController.text.isEmpty) {
-              //   customErrorSnackBar(context, "Grade Level is Required");
-              // }
-              else if (startDateController.text.isEmpty) {
-                customErrorSnackBar(context, "Start Date is Required");
-              } else if (selectedTime == null) {
-                customErrorSnackBar(context, "Time is Required");
-              } else if (selectedHours == null) {
-                customErrorSnackBar(context, "Duration is Required");
-              }
-              //  else if (learningStyleController.text.isEmpty) {
-              //   customErrorSnackBar(context, "Learning Style is Required");
-              // } else if (learningChallengeController.text.isEmpty) {
-              //   customErrorSnackBar(context, "Learning Challenge is Required");
-              // }
-              else {
-                customSuccesSnackBar(context, "Job Created Successfully");
+              } else if (seniorCareDays.isEmpty) {
+                customErrorSnackBar(context, "Please Enter Add Days");
+              } else if (interestForChildController.text.isEmpty) {
+                customErrorSnackBar(context, "Interest for Child is Required");
+              } else if (costRangeOfCampController.text.isEmpty) {
+                customErrorSnackBar(context, "Cost Range of Camp is Required");
+              } else {
                 PostChildCare();
               }
             },
@@ -4862,12 +5113,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                 customErrorSnackBar(context, "Job Area is Required");
               } else if (hourlyController.text.isEmpty) {
                 customErrorSnackBar(context, "Hourly Rate is Required");
-              } else if (startDateController.text.isEmpty) {
-                customErrorSnackBar(context, "Start Date is Required");
-              } else if (selectedTime == null) {
-                customErrorSnackBar(context, "Time is Required");
-              } else if (selectedHours == null) {
-                customErrorSnackBar(context, "Duration is Required");
+              } else if (seniorCareDays.isEmpty) {
+                customErrorSnackBar(context, "Please Enter Add Days");
               } else if (petTypeValue == null) {
                 customErrorSnackBar(context, "Pet Type is Required");
               } else if (numberOfPetValue == null) {
@@ -4877,7 +5124,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
               } else if (temperamentValue == null) {
                 customErrorSnackBar(context, "Temprament is Required");
               } else {
-                customSuccesSnackBar(context, "Job Created Successfully");
                 PostPetCare();
               }
             },
@@ -4926,195 +5172,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
   Widget ServiceSeniorCare(BuildContext context) {
     return Column(
       children: [
-        // const SizedBox(height: 30),
-        //Job Title
-        // Container(
-        //   alignment: Alignment.topLeft,
-        //   child: Text(
-        //     "Job Title",
-        //     style: TextStyle(
-        //       fontWeight: FontWeight.w600,
-        //       color: ServiceRecieverColor.primaryColor,
-        //       fontFamily: "Rubik",
-        //       fontSize: 14,
-        //     ),
-        //   ),
-        // ),
-        // const SizedBox(height: 10),
-        // SizedBox(
-        //   height: 45,
-        //   child: TextFormField(
-        //     controller: jobTitleController,
-        //     style: const TextStyle(
-        //       fontSize: 12,
-        //       fontFamily: "Rubik",
-        //       fontWeight: FontWeight.w600,
-        //     ),
-        //     textAlignVertical: TextAlignVertical.center,
-        //     maxLines: 1,
-        //     decoration: inputdecoration("Job Title"),
-        //   ),
-        // ),
-        // //Parish
-        // const SizedBox(height: 20),
-        // Container(
-        //   alignment: Alignment.topLeft,
-        //   child: Text(
-        //     "Job Location",
-        //     style: TextStyle(
-        //       fontWeight: FontWeight.w600,
-        //       color: ServiceRecieverColor.primaryColor,
-        //       fontFamily: "Rubik",
-        //       fontSize: 14,
-        //     ),
-        //   ),
-        // ),
-        // const SizedBox(height: 10),
-        // SizedBox(
-        //   height: 45,
-        //   child: TextFormField(
-        //     controller: addressController,
-        //     style: const TextStyle(
-        //       fontSize: 12,
-        //       fontFamily: "Rubik",
-        //       fontWeight: FontWeight.w600,
-        //       // color: ServiceRecieverColor.primaryColor,
-        //     ),
-        //     textAlignVertical: TextAlignVertical.center,
-        //     maxLines: 1,
-        //     decoration: inputdecoration("Job Location"),
-        //   ),
-        // ),
-        // //Location
-        // const SizedBox(height: 20),
-        // Container(
-        //   alignment: Alignment.topLeft,
-        //   child: Text(
-        //     "Job Area",
-        //     style: TextStyle(
-        //       fontWeight: FontWeight.w600,
-        //       color: ServiceRecieverColor.primaryColor,
-        //       fontFamily: "Rubik",
-        //       fontSize: 14,
-        //     ),
-        //   ),
-        // ),
-        // const SizedBox(height: 10),
-        // SizedBox(
-        //   height: 45,
-        //   child: Center(
-        //     child: DecoratedBox(
-        //       decoration: BoxDecoration(
-        //         color: Colors.transparent,
-        //         border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //         borderRadius: BorderRadius.circular(12),
-        //       ),
-        //       child: Padding(
-        //         padding: const EdgeInsets.symmetric(
-        //           horizontal: 10,
-        //           vertical: 4,
-        //         ),
-        //         child: DropdownButtonHideUnderline(
-        //           child: DropdownButton(
-        //             hint: Text(
-        //               "Select Area",
-        //               style: TextStyle(
-        //                 fontSize: 12,
-        //                 fontFamily: "Rubik",
-        //                 fontWeight: FontWeight.w600,
-        //                 color: ServiceRecieverColor.primaryColor,
-        //               ),
-        //             ),
-        //             isExpanded: true,
-        //             items: data!.map((item) {
-        //               return DropdownMenuItem(
-        //                 value: item['id'].toString(),
-        //                 child: Text(item['name']),
-        //               );
-        //             }).toList(),
-        //             onChanged: (newVal) {
-        //               setState(() {
-        //                 selectedLocation = newVal;
-        //               });
-        //               if (selectedLocation == "1") {
-        //                 locationValue = "east";
-        //               } else if (selectedLocation == "2") {
-        //                 locationValue = "west";
-        //               } else if (selectedLocation == "3") {
-        //                 locationValue = "central";
-        //               }
-        //             },
-        //             value: selectedLocation,
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        // // Hourly Rate
-        // const SizedBox(height: 20),
-        // Container(
-        //   alignment: Alignment.topLeft,
-        //   child: Text(
-        //     "Hourly Rate",
-        //     style: TextStyle(
-        //       fontWeight: FontWeight.w600,
-        //       color: ServiceRecieverColor.primaryColor,
-        //       fontFamily: "Rubik",
-        //       fontSize: 14,
-        //     ),
-        //   ),
-        // ),
-        // const SizedBox(height: 10),
-        // Container(
-        //   height: 45,
-        //   width: MediaQuery.of(context).size.width,
-        //   padding: const EdgeInsets.only(left: 10),
-        //   clipBehavior: Clip.hardEdge,
-        //   decoration: BoxDecoration(
-        //     color: Colors.white,
-        //     border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //     borderRadius: BorderRadius.circular(12),
-        //   ),
-        //   child: Flex(
-        //     direction: Axis.horizontal,
-        //     crossAxisAlignment: CrossAxisAlignment.center,
-        //     mainAxisAlignment: MainAxisAlignment.center,
-        //     verticalDirection: VerticalDirection.up,
-        //     children: [
-        //       Text(
-        //         "\$ ",
-        //         style: TextStyle(
-        //           color: ServiceRecieverColor.primaryColor,
-        //           fontSize: 16,
-        //         ),
-        //       ),
-        //       Flexible(
-        //         child: TextFormField(
-        //           keyboardType: TextInputType.number,
-        //           controller: hourlyController,
-        //           style: const TextStyle(
-        //             fontSize: 12,
-        //             fontFamily: "Rubik",
-        //             fontWeight: FontWeight.w600,
-        //           ),
-        //           textAlignVertical: TextAlignVertical.center,
-        //           maxLines: 1,
-        //           decoration: InputDecoration(
-        //             hintText: "Please add Hourly Rate",
-        //             hintStyle: TextStyle(
-        //               fontSize: 14,
-        //               fontFamily: "Rubik",
-        //               fontWeight: FontWeight.w600,
-        //               color: ServiceRecieverColor.primaryColor,
-        //             ),
-        //             border: InputBorder.none,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
         //Senior Name
         const SizedBox(height: 20),
         Container(

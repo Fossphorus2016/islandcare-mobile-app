@@ -99,9 +99,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Island Care',
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white)),
-      ),
+      theme: ThemeData(appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white))),
       onGenerateRoute: RouteGenerator.generateRoutes,
       initialRoute: '/',
       navigatorKey: NavigationService().navigatorKey,
