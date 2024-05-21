@@ -571,82 +571,82 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                   //     ],
                   //   ),
                   // ),
-                  if (snapshot.data!.jobDetail![index].schoolCamp != null) ...[
-                    JobDetailTile(
-                      name: "Interest for Child",
-                      title: snapshot.data!.jobDetail![index].schoolCamp!.interestForChild.toString(),
-                    ),
-                    // Row(
-                    //   crossAxisAlignment: CrossAxisAlignment.center,
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     SizedBox(
-                    //       width: MediaQuery.of(context).size.width * .4,
-                    //       child: Text(
-                    //         "Interest for Child",
-                    //         style: TextStyle(
-                    //           fontSize: 14,
-                    //           fontFamily: "Poppins",
-                    //           fontWeight: FontWeight.w500,
-                    //           color: CustomColors.primaryTextLight,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     if (snapshot.data!.jobDetail![index].schoolCamp != null) ...[
-                    //       SizedBox(
-                    //         width: MediaQuery.of(context).size.width * .5,
-                    //         child: Text(
-                    //           snapshot.data!.jobDetail![index].schoolCamp!.interestForChild.toString(),
-                    //           style: TextStyle(
-                    //             fontSize: 14,
-                    //             fontFamily: "Poppins",
-                    //             fontWeight: FontWeight.w600,
-                    //             color: CustomColors.primaryTextLight,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ]
-                    //   ],
-                    // ),
-                    const SizedBox(height: 10),
-                    JobDetailTile(
-                      name: "Cost Range For Camp",
-                      title: snapshot.data!.jobDetail![index].schoolCamp!.costRange.toString(),
-                    ),
-                    // Row(
-                    //   crossAxisAlignment: CrossAxisAlignment.center,
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     SizedBox(
-                    //       width: MediaQuery.of(context).size.width * .4,
-                    //       child: Text(
-                    //         "Cost Range For Camp",
-                    //         style: TextStyle(
-                    //           fontSize: 14,
-                    //           fontFamily: "Poppins",
-                    //           fontWeight: FontWeight.w500,
-                    //           color: CustomColors.primaryTextLight,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //     if (snapshot.data!.jobDetail![index].schoolCamp != null) ...[
-                    //       SizedBox(
-                    //         width: MediaQuery.of(context).size.width * .5,
-                    //         child: Text(
-                    //           snapshot.data!.jobDetail![index].schoolCamp!.costRange.toString(),
-                    //           style: TextStyle(
-                    //             fontSize: 14,
-                    //             fontFamily: "Poppins",
-                    //             fontWeight: FontWeight.w600,
-                    //             color: CustomColors.primaryTextLight,
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ],
-                    // ),
-                    const SizedBox(height: 10),
-                  ],
+                  // if (snapshot.data!.jobDetail![index].schoolCamp != null) ...[
+                  //   JobDetailTile(
+                  //     name: "Interest for Child",
+                  //     title: snapshot.data!.jobDetail![index].schoolCamp!.interestForChild.toString(),
+                  //   ),
+                  //   // Row(
+                  //   //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   //   children: [
+                  //   //     SizedBox(
+                  //   //       width: MediaQuery.of(context).size.width * .4,
+                  //   //       child: Text(
+                  //   //         "Interest for Child",
+                  //   //         style: TextStyle(
+                  //   //           fontSize: 14,
+                  //   //           fontFamily: "Poppins",
+                  //   //           fontWeight: FontWeight.w500,
+                  //   //           color: CustomColors.primaryTextLight,
+                  //   //         ),
+                  //   //       ),
+                  //   //     ),
+                  //   //     if (snapshot.data!.jobDetail![index].schoolCamp != null) ...[
+                  //   //       SizedBox(
+                  //   //         width: MediaQuery.of(context).size.width * .5,
+                  //   //         child: Text(
+                  //   //           snapshot.data!.jobDetail![index].schoolCamp!.interestForChild.toString(),
+                  //   //           style: TextStyle(
+                  //   //             fontSize: 14,
+                  //   //             fontFamily: "Poppins",
+                  //   //             fontWeight: FontWeight.w600,
+                  //   //             color: CustomColors.primaryTextLight,
+                  //   //           ),
+                  //   //         ),
+                  //   //       ),
+                  //   //     ]
+                  //   //   ],
+                  //   // ),
+                  //   const SizedBox(height: 10),
+                  //   JobDetailTile(
+                  //     name: "Cost Range For Camp",
+                  //     title: snapshot.data!.jobDetail![index].schoolCamp!.costRange.toString(),
+                  //   ),
+                  //   // Row(
+                  //   //   crossAxisAlignment: CrossAxisAlignment.center,
+                  //   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   //   children: [
+                  //   //     SizedBox(
+                  //   //       width: MediaQuery.of(context).size.width * .4,
+                  //   //       child: Text(
+                  //   //         "Cost Range For Camp",
+                  //   //         style: TextStyle(
+                  //   //           fontSize: 14,
+                  //   //           fontFamily: "Poppins",
+                  //   //           fontWeight: FontWeight.w500,
+                  //   //           color: CustomColors.primaryTextLight,
+                  //   //         ),
+                  //   //       ),
+                  //   //     ),
+                  //   //     if (snapshot.data!.jobDetail![index].schoolCamp != null) ...[
+                  //   //       SizedBox(
+                  //   //         width: MediaQuery.of(context).size.width * .5,
+                  //   //         child: Text(
+                  //   //           snapshot.data!.jobDetail![index].schoolCamp!.costRange.toString(),
+                  //   //           style: TextStyle(
+                  //   //             fontSize: 14,
+                  //   //             fontFamily: "Poppins",
+                  //   //             fontWeight: FontWeight.w600,
+                  //   //             color: CustomColors.primaryTextLight,
+                  //   //           ),
+                  //   //         ),
+                  //   //       ),
+                  //   //     ],
+                  //   //   ],
+                  //   // ),
+                  //   const SizedBox(height: 10),
+                  // ],
                   if (snapshot.data!.jobDetail![index].learning != null) ...[
                     const SizedBox(height: 10),
                     AssistanceContainer(

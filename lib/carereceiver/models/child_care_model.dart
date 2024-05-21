@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
 import 'package:island_app/models/child_info_model.dart';
-import 'package:island_app/models/learning_model.dart';
 import 'package:island_app/models/schedule_model.dart';
+import 'package:island_app/models/school_camp_model.dart';
 import 'package:island_app/models/service_model.dart';
 
 ChildCareDetailModel childCareDetailModelFromJson(String str) => ChildCareDetailModel.fromJson(json.decode(str));
@@ -47,7 +46,6 @@ class Job {
     this.fundsTransferedToProvider,
     this.totalDuration,
     this.childinfo,
-    this.learning,
     this.service,
     this.schedule,
     // this.learning,
@@ -74,7 +72,7 @@ class Job {
   int? fundsTransferedToProvider;
   String? totalDuration;
   List<Childinfo>? childinfo;
-  Learning? learning;
+
   Service? service;
   List<Schedule>? schedule;
   // Learning? learning;
@@ -101,7 +99,6 @@ class Job {
         fundsTransferedToProvider: json["funds_transfered_to_provider"],
         totalDuration: json["total_duration"],
         childinfo: json["childinfo"] == null ? [] : List<Childinfo>.from(json["childinfo"]!.map((x) => Childinfo.fromJson(x))),
-        learning: json["learning"] == null ? null : Learning.fromJson(json["learning"]),
         service: json["service"] == null ? null : Service.fromJson(json["service"]),
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
         schoolCamp: json["school_camp"] == null ? null : SchoolCamp.fromJson(json["school_camp"]),
@@ -128,7 +125,6 @@ class Job {
         "funds_transfered_to_provider": fundsTransferedToProvider,
         "total_duration": totalDuration,
         "childinfo": childinfo == null ? [] : List<dynamic>.from(childinfo!.map((x) => x.toJson())),
-        "learning": learning?.toJson(),
         "service": service?.toJson(),
         "schedule": schedule == null ? [] : List<dynamic>.from(schedule!.map((x) => x.toJson())),
         "school_camp": schoolCamp?.toJson(),

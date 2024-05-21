@@ -52,7 +52,6 @@ class JobDetail {
     this.service,
     this.schedule,
     this.childinfo,
-    this.schoolCamp,
     this.learning,
     this.additionalInfo,
   });
@@ -78,7 +77,7 @@ class JobDetail {
   Service? service;
   List<Schedule>? schedule;
   List<Childinfo>? childinfo;
-  SchoolCamp? schoolCamp;
+
   Learning? learning;
   String? additionalInfo;
 
@@ -104,7 +103,6 @@ class JobDetail {
         service: json["service"] == null ? null : Service.fromJson(json["service"]),
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
         childinfo: json["childinfo"] == null ? [] : List<Childinfo>.from(json["childinfo"]!.map((x) => Childinfo.fromJson(x))),
-        schoolCamp: json["school_camp"] == null ? null : SchoolCamp.fromJson(json["school_camp"]),
         learning: json["learning"] == null ? null : Learning.fromJson(json["learning"]),
         additionalInfo: json['additional_info'],
       );
@@ -131,44 +129,7 @@ class JobDetail {
         "service": service?.toJson(),
         "schedule": schedule == null ? [] : List<dynamic>.from(schedule!.map((x) => x.toJson())),
         "childinfo": childinfo == null ? [] : List<dynamic>.from(childinfo!.map((x) => x.toJson())),
-        "school_camp": schoolCamp?.toJson(),
         "learning": learning?.toJson(),
         "additionalInfo": additionalInfo,
-      };
-}
-
-class SchoolCamp {
-  SchoolCamp({
-    this.id,
-    this.jobId,
-    this.interestForChild,
-    this.costRange,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  int? id;
-  int? jobId;
-  String? interestForChild;
-  String? costRange;
-  String? createdAt;
-  String? updatedAt;
-
-  factory SchoolCamp.fromJson(Map<String, dynamic> json) => SchoolCamp(
-        id: json["id"],
-        jobId: json["job_id"],
-        interestForChild: json["interest_for_child"],
-        costRange: json["cost_range"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "job_id": jobId,
-        "interest_for_child": interestForChild,
-        "cost_range": costRange,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
       };
 }

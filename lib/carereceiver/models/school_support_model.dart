@@ -46,7 +46,6 @@ class Job {
     this.fundsTransferedToProvider,
     this.totalDuration,
     this.childinfo,
-    this.schoolCamp,
     this.service,
     this.schedule,
     this.learning,
@@ -72,7 +71,6 @@ class Job {
   int? fundsTransferedToProvider;
   String? totalDuration;
   List<Childinfo>? childinfo;
-  SchoolCamp? schoolCamp;
   Service? service;
   List<Schedule>? schedule;
   Learning? learning;
@@ -98,7 +96,6 @@ class Job {
         fundsTransferedToProvider: json["funds_transfered_to_provider"],
         totalDuration: json["total_duration"],
         childinfo: json["childinfo"] == null ? [] : List<Childinfo>.from(json["childinfo"]!.map((x) => Childinfo.fromJson(x))),
-        schoolCamp: json["school_camp"] == null ? null : SchoolCamp.fromJson(json["school_camp"]),
         service: json["service"] == null ? null : Service.fromJson(json["service"]),
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
         learning: json["learning"] == null ? null : Learning.fromJson(json["learning"]),
@@ -125,46 +122,9 @@ class Job {
         "funds_transfered_to_provider": fundsTransferedToProvider,
         "total_duration": totalDuration,
         "childinfo": childinfo == null ? [] : List<dynamic>.from(childinfo!.map((x) => x.toJson())),
-        "school_camp": schoolCamp?.toJson(),
         "service": service?.toJson(),
         "schedule": schedule == null ? [] : List<dynamic>.from(schedule!.map((x) => x.toJson())),
         "learning": learning?.toJson(),
         "additionalInfo": additionalInfo,
-      };
-}
-
-class SchoolCamp {
-  SchoolCamp({
-    this.id,
-    this.jobId,
-    this.interestForChild,
-    this.costRange,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  int? id;
-  int? jobId;
-  String? interestForChild;
-  String? costRange;
-  String? createdAt;
-  String? updatedAt;
-
-  factory SchoolCamp.fromJson(Map<String, dynamic> json) => SchoolCamp(
-        id: json["id"],
-        jobId: json["job_id"],
-        interestForChild: json["interest_for_child"],
-        costRange: json["cost_range"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "job_id": jobId,
-        "interest_for_child": interestForChild,
-        "cost_range": costRange,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
       };
 }

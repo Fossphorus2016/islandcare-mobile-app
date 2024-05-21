@@ -523,18 +523,18 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
                 ),
                 const SizedBox(height: 10),
               ],
-              if (futureSchoolSupportDetailDashboard!.jobDetail![index].schoolCamp != null) ...[
-                JobDetailTile(
-                  name: "Interest for Child",
-                  title: futureSchoolSupportDetailDashboard!.jobDetail![index].schoolCamp!.interestForChild.toString(),
-                ),
-                const SizedBox(height: 10),
-                JobDetailTile(
-                  name: "Cost Range For Camp",
-                  title: futureSchoolSupportDetailDashboard!.jobDetail![index].schoolCamp!.costRange.toString(),
-                ),
-                const SizedBox(height: 10),
-              ],
+              // if (futureSchoolSupportDetailDashboard!.jobDetail![index].schoolCamp != null) ...[
+              //   JobDetailTile(
+              //     name: "Interest for Child",
+              //     title: futureSchoolSupportDetailDashboard!.jobDetail![index].schoolCamp!.interestForChild.toString(),
+              //   ),
+              //   const SizedBox(height: 10),
+              //   JobDetailTile(
+              //     name: "Cost Range For Camp",
+              //     title: futureSchoolSupportDetailDashboard!.jobDetail![index].schoolCamp!.costRange.toString(),
+              //   ),
+              //   const SizedBox(height: 10),
+              // ],
               if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning != null) ...[
                 const SizedBox(height: 10),
                 AssistanceContainer(

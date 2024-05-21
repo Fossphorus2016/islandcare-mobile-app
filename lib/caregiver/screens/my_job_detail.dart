@@ -784,18 +784,18 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                     ),
                     const SizedBox(height: 10),
                   ],
-                  if (snapshot.data!.job![index].schoolCamp != null) ...[
-                    const SizedBox(height: 10),
-                    JobDetailTile(
-                      name: "Interest for Child",
-                      title: snapshot.data!.job![index].schoolCamp!.interestForChild.toString(),
-                    ),
-                    const SizedBox(height: 10),
-                    JobDetailTile(
-                      name: "Cost Range For Camp",
-                      title: "\$${snapshot.data!.job![index].schoolCamp!.costRange.toString()}",
-                    ),
-                  ],
+                  // if (snapshot.data!.job![index].schoolCamp != null) ...[
+                  //   const SizedBox(height: 10),
+                  //   JobDetailTile(
+                  //     name: "Interest for Child",
+                  //     title: snapshot.data!.job![index].schoolCamp!.interestForChild.toString(),
+                  //   ),
+                  //   const SizedBox(height: 10),
+                  //   JobDetailTile(
+                  //     name: "Cost Range For Camp",
+                  //     title: "\$${snapshot.data!.job![index].schoolCamp!.costRange.toString()}",
+                  //   ),
+                  // ],
                   const SizedBox(height: 10),
                   if (snapshot.data!.job![index].learning != null) ...[
                     AssistanceContainer(

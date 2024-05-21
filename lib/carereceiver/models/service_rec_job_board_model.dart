@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:island_app/models/learning_model.dart';
 import 'package:island_app/models/schedule_model.dart';
+import 'package:island_app/models/school_camp_model.dart';
 import 'package:island_app/models/service_model.dart';
 
 ServiceReceiverJobBoardModel serviceReceiverJobBoardModelFromJson(String str) => ServiceReceiverJobBoardModel.fromJson(json.decode(str));
@@ -399,42 +400,6 @@ class PetCare {
 //         "updated_at": updatedAt,
 //       };
 // }
-
-class SchoolCamp {
-  SchoolCamp({
-    this.id,
-    this.jobId,
-    this.interestForChild,
-    this.costRange,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  int? id;
-  int? jobId;
-  String? interestForChild;
-  String? costRange;
-  String? createdAt;
-  String? updatedAt;
-
-  factory SchoolCamp.fromJson(Map<String, dynamic> json) => SchoolCamp(
-        id: json["id"],
-        jobId: json["job_id"],
-        interestForChild: json["interest_for_child"],
-        costRange: json["cost_range"],
-        createdAt: json["created_at"],
-        updatedAt: json["updated_at"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "job_id": jobId,
-        "interest_for_child": interestForChild,
-        "cost_range": costRange,
-        "created_at": createdAt,
-        "updated_at": updatedAt,
-      };
-}
 
 class SeniorCare {
   SeniorCare({
