@@ -373,6 +373,7 @@ class Userdetailprovider {
     this.keywords,
     this.badge,
     this.hourlyRate,
+    this.additionalServices,
     this.createdAt,
     this.updatedAt,
   });
@@ -385,6 +386,7 @@ class Userdetailprovider {
   String? keywords;
   dynamic badge;
   String? hourlyRate;
+  List? additionalServices;
   String? createdAt;
   String? updatedAt;
 
@@ -397,6 +399,7 @@ class Userdetailprovider {
         keywords: json["keywords"],
         badge: json["badge"],
         hourlyRate: json["hourly_rate"],
+        additionalServices: json["additional_services"] == null && json["additional_services"].toString().isEmpty ? [] : json["additional_services"].split(','),
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
       );
@@ -410,6 +413,7 @@ class Userdetailprovider {
         "keywords": keywords,
         "badge": badge,
         "hourly_rate": hourlyRate,
+        "additional_services": additionalServices,
         "created_at": createdAt,
         "updated_at": updatedAt,
       };

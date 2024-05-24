@@ -26,6 +26,8 @@ class CustomTextFieldWidget extends StatelessWidget {
   void Function(String)? onChanged;
   String? Function(String?)? validation;
   List<TextInputFormatter>? inputFormatters;
+  bool? readOnly = false;
+
   CustomTextFieldWidget({
     Key? key,
     this.prefIcon,
@@ -44,6 +46,7 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.onTap,
     this.validation,
     this.inputFormatters,
+    this.readOnly,
   }) : super(key: key);
 
   @override
@@ -54,6 +57,7 @@ class CustomTextFieldWidget extends StatelessWidget {
       controller: controller,
       textInputAction: TextInputAction.next,
       inputFormatters: inputFormatters,
+      readOnly: readOnly == true ? true : false,
       decoration: InputDecoration(
         fillColor: Colors.white,
         prefixIcon: prefIcon,

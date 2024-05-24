@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/screens/my_jobs_screen.dart';
+import 'package:island_app/caregiver/screens/profile_edit.dart';
 import 'package:island_app/caregiver/screens/provider_reviews_given_screen.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
@@ -25,14 +26,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 /*
-
-    Senior Care Service Id 1 
-    Pet Care Service Id 2
-    House Keeping Service Id 3
-    School Support Service Id 4
-    Child Care Service Id 5
-
- */
+  Senior Care Service Id 1 
+  Pet Care Service Id 2
+  House Keeping Service Id 3
+  School Support Service Id 4
+  Child Care Service Id 5
+*/
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,6 +40,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => RecieverUserProvider()),
         ChangeNotifierProvider(create: (context) => ServiceGiverProvider()),
+        ChangeNotifierProvider(create: (context) => GiverProfileEidtProvider()),
         ChangeNotifierProvider(create: (context) => GiverMyJobsProvider()),
         ChangeNotifierProvider(create: (context) => GiverReviewsProvider()),
         ChangeNotifierProvider(create: (context) => NotificationProvider()),

@@ -2,7 +2,6 @@
 
 import 'dart:io';
 import 'package:dio/dio.dart';
-// import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,10 +11,7 @@ import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/document_download_list.dart';
-// import 'package:island_app/widgets/profile_container_field.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
@@ -24,6 +20,7 @@ class ProfileGiverPendingEdit extends StatefulWidget {
   final String? name;
   final String? email;
   final String? avatar;
+  final String? serviceName;
   final String? gender;
   final String? phoneNumber;
   final String? dob;
@@ -31,7 +28,7 @@ class ProfileGiverPendingEdit extends StatefulWidget {
   final String? hourlyRate;
   final String? userAddress;
   final String? zipCode;
-  final String? additionalService;
+  final List? additionalService;
   final String? availability;
   final String? userInfo;
 
@@ -50,13 +47,13 @@ class ProfileGiverPendingEdit extends StatefulWidget {
     this.additionalService,
     this.availability,
     this.userInfo,
+    this.serviceName,
   }) : super(key: key);
   @override
   State<ProfileGiverPendingEdit> createState() => _ProfileGiverPendingEditState();
 }
 
 class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
-  var _isSelectedGender = "1";
   final TextEditingController dobController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController zipController = TextEditingController();
@@ -66,7 +63,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   final TextEditingController experienceController = TextEditingController();
   final TextEditingController hourlyController = TextEditingController();
   final TextEditingController availabilityController = TextEditingController();
-  final TextEditingController keywordController = TextEditingController();
+  // final TextEditingController keywordController = TextEditingController();
   final TextEditingController instituteController = TextEditingController();
   final TextEditingController majorController = TextEditingController();
   final TextEditingController fromController = TextEditingController();
@@ -75,10 +72,8 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   void initState() {
     super.initState();
     // this.getSWData();
-    fetchProfileEdit = fetchProfileGiverModelEdit();
-    if (widget.gender != "null" || widget.gender != null) {
-      _isSelectedGender = widget.gender!;
-    }
+    // fetchProfileEdit = fetchProfileGiverModelEdit();
+    // Provider.of<GiverProfileEidtProvider>(context).initData(data);
     if (widget.phoneNumber != null) {
       phoneController.text = widget.phoneNumber!;
     }
@@ -97,319 +92,20 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     if (widget.zipCode != null) {
       zipController.text = widget.zipCode!;
     }
-    if (widget.additionalService != null) {
-      keywordController.text = widget.additionalService!;
-    }
+
     if (widget.availability != null) {
       availabilityController.text = widget.availability!;
     }
     if (widget.userInfo != null) {
       userInfoController.text = widget.userInfo!;
     }
-  }
-
-  var isPeriodSeleted = "0";
-  void _toggleradio() {
-    if (isPeriodSeleted == "0") {
-      setState(() {
-        isPeriodSeleted = "1";
-      });
-    } else {
-      {
-        setState(() {
-          isPeriodSeleted = "0";
-        });
-      }
+    if (widget.additionalService != null) {
+      Provider.of<GiverProfileEidtProvider>(context, listen: false).setSelectedAdditionalServiceInit(widget.additionalService);
+    }
+    if (widget.gender != "null" || widget.gender != null) {
+      Provider.of<GiverProfileEidtProvider>(context, listen: false).setSelectedGenderinit(widget.gender);
     }
   }
-
-  List<Map<String, String>> education = [];
-  var arr1 = [];
-  List instituteMapList = [];
-  List majorMapList = [];
-  List startDateMapList = [];
-  List endDateMapList = [];
-  List currentMapList = [];
-  var stringListData = [];
-  FilePickerResult? enhanceResult;
-  // DatePicker
-  var getPickedDate;
-  var gettoPickedDate;
-  var getfromPickedDate;
-  bool _isDateSelectable(DateTime date) {
-    // Disable dates before today
-    return date.isBefore(DateTime.now());
-  }
-
-  DateTime? selectedDate = DateTime.now();
-  var myFormat = DateFormat('d-MM-yyyy');
-  _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate!,
-      firstDate: DateTime(1975),
-      lastDate: DateTime.now(),
-      selectableDayPredicate: _isDateSelectable,
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.teal,
-              // : ,
-              backgroundColor: ServiceGiverColor.black,
-              accentColor: const Color(0xff55CE86),
-            ),
-            dialogBackgroundColor: Colors.white,
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      dobController.text = DateFormat('yyyy-MM-dd').format(picked);
-      picked == dobController;
-      setState(() {
-        getPickedDate = dobController.text;
-      });
-    }
-  }
-
-  _fromDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate!,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2050),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.teal,
-              // primaryColorDark: ServiceGiverColor.black,
-              accentColor: const Color(0xff55CE86),
-            ),
-            dialogBackgroundColor: Colors.white,
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      fromController.text = DateFormat('yyyy-MM-dd').format(picked);
-
-      picked == fromController;
-      setState(() {
-        getfromPickedDate = fromController.text;
-      });
-    }
-  }
-
-  _toDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate!,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2050),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.teal,
-              // primaryColorDark: ServiceGiverColor.black,
-              accentColor: const Color(0xff55CE86),
-            ),
-            dialogBackgroundColor: Colors.white,
-          ),
-          child: child!,
-        );
-      },
-    );
-    if (picked != null) {
-      toController.text = DateFormat('yyyy-MM-dd').format(picked);
-      picked == toController;
-      setState(() {
-        gettoPickedDate = toController.text;
-      });
-    }
-  }
-
-  List educationApiList = [];
-  late Future<ProfileGiverModel> fetchProfileEdit;
-  Future<ProfileGiverModel> fetchProfileGiverModelEdit() async {
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-    final response = await Dio().get(
-      CareGiverUrl.serviceProviderProfile,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      setState(() {
-        educationApiList = response.data['data']["educations"];
-        selectedArea = response.data['data']["userdetail"]['area'] != null ? response.data['data']["userdetail"]['area'].toString() : 'select';
-      });
-      for (int i = 0; i < educationApiList.length; i++) {
-        instituteMapList.add(educationApiList[i]['name']);
-        majorMapList.add(educationApiList[i]['major']);
-        startDateMapList.add(educationApiList[i]['from']);
-        endDateMapList.add(educationApiList[i]['to']);
-        currentMapList.add(educationApiList[i]['current']);
-      }
-      return ProfileGiverModel.fromJson(response.data);
-    } else {
-      throw Exception(
-        customErrorSnackBar(
-          context,
-          'Failed to load Profile Model',
-        ),
-      );
-    }
-  }
-
-  // Image Picking
-  ProgressDialog? pr;
-  void showProgress(context) async {
-    pr ??= ProgressDialog(context);
-    await pr!.show();
-  }
-
-  void hideProgress() async {
-    if (pr != null && pr!.isShowing()) {
-      await pr!.hide();
-    }
-  }
-
-  File? image;
-  File? imageFileDio;
-
-  bool showSpinner = false;
-  var myimg;
-
-  Future getImageDio() async {
-    FilePickerResult? pickedFileDio = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['png', 'jpg', 'jpeg'],
-    );
-
-    if (pickedFileDio != null) {
-      if (checkImageFileTypes(context, pickedFileDio.files.single.extension)) {
-        setState(() {
-          imageFileDio = File(pickedFileDio.files.single.path ?? "");
-        });
-      }
-    } else {
-      customErrorSnackBar(context, "No file select");
-    }
-  }
-
-  var lists = {
-    "valid_driver_license": "",
-    "scars_awareness_certification": "",
-    "red_cross_babysitting_certification": "",
-    "cpr_first_aid_certification": "",
-    "animal_care_provider_certification": "",
-    "chaild_and_family_services_and_abuse": "",
-    "animail_first_aid": "",
-    "government_registered_care_provider": "",
-    "police_background_check": "",
-  };
-
-  uploadDocument(String documentType) async {
-    try {
-      FilePickerResult? file = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['pdf', 'docx', 'doc'],
-        allowMultiple: false,
-      );
-      if (file != null) {
-        setState(() {
-          lists[documentType] = file.files.single.path.toString();
-        });
-        // print(lists);
-      }
-    } catch (error) {
-      customErrorSnackBar(context, error.toString());
-    }
-  }
-
-  var error;
-  uploadImageDio() async {
-    var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-
-    var formData = FormData.fromMap(
-      {
-        '_method': 'PUT',
-        'id': usersId,
-        'user_info': userInfoController.text.toString(),
-        'phone': phoneController.text.toString(),
-        'address': addressController.text.toString(),
-        'gender': _isSelectedGender,
-        'dob': dobController.text.toString(),
-        'area': selectedArea,
-        'zip': zipController.text.toString(),
-        'experience': experienceController.text.toString(),
-        'hourly_rate': hourlyController.text.toString(),
-        'availability': availabilityController.text.toString(),
-        'service': keywordController.text.toString(),
-        "avatar": imageFileDio == null ? null : await MultipartFile.fromFile(imageFileDio!.path),
-        "institute_name[]": instituteMapList,
-        "start_date[]": startDateMapList,
-        "end_date[]": endDateMapList,
-        "current[]": currentMapList,
-        "major[]": majorMapList,
-        "valid_driver_license": lists['valid_driver_license'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['valid_driver_license'].toString()),
-        "scars_awareness_certification": lists['scars_awareness_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['scars_awareness_certification'].toString()),
-        "red_cross_babysitting_certification": lists['red_cross_babysitting_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['red_cross_babysitting_certification'].toString()),
-        "cpr_first_aid_certification": lists['cpr_first_aid_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['cpr_first_aid_certification'].toString()),
-        "animal_care_provider_certification": lists['animal_care_provider_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animal_care_provider_certification'].toString()),
-        "chaild_and_family_services_and_abuse": lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['chaild_and_family_services_and_abuse'].toString()),
-        "animail_first_aid": lists['animail_first_aid'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animail_first_aid'].toString()),
-        "government_registered_care_provider": lists['government_registered_care_provider'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['government_registered_care_provider'].toString()),
-        "police_background_check": lists['police_background_check'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['police_background_check'].toString()),
-      },
-    );
-    // print(formData.fields);
-    Dio dio = Dio();
-    try {
-      var response = await dio.post('https://islandcare.bm/api/service-provider-profile/update', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
-      setState(() {
-        sendRequest = false;
-      });
-      // print(response.data);
-      if (response.statusCode == 200) {
-        Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
-        customSuccesSnackBar(
-          context,
-          "Profile Updated Successfully.",
-        );
-      } else {
-        // print(response.data);
-        setState(() {
-          error = response.data;
-        });
-        customErrorSnackBar(
-          context,
-          "Something went wrong please try agan later.",
-        );
-      }
-    } catch (e) {
-      // print(e);
-      customErrorSnackBar(context, e.toString());
-    }
-  }
-
-  var areaList = [
-    {"name": "Select Area", "value": "select"},
-    {"name": "East", "value": "0"},
-    {"name": "Central", "value": "1"},
-    {"name": "West", "value": "2"},
-  ];
-
-  var selectedArea = "select";
 
   @override
   void dispose() {
@@ -423,28 +119,21 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     experienceController.dispose();
     hourlyController.dispose();
     availabilityController.dispose();
-    keywordController.dispose();
+    // keywordController.dispose();
     instituteController.dispose();
     majorController.dispose();
     fromController.dispose();
     toController.dispose();
   }
 
-  int selectedIndex = -1;
-  bool sendRequest = false;
   final updateFormKey = GlobalKey<FormState>();
-  bool phoneError = false;
-  bool yearOfExpError = false;
-  bool hourlyRateError = false;
-  bool userAddressError = false;
-  bool zipcodeError = false;
-  bool additionalServiceError = false;
-  bool avaibilityError = false;
-  bool aboutMeError = false;
+
+  TextEditingController additionalServiceSearchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Consumer<GiverProfileEidtProvider>(
+      builder: (context, giverProfileEditProvider, child) => Scaffold(
         backgroundColor: CustomColors.loginBg,
         appBar: AppBar(
           elevation: 0,
@@ -459,21 +148,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
               fontFamily: "Rubik",
             ),
           ),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationScreen(),
-                  ),
-                );
-              },
-              child: const Padding(
-                padding: EdgeInsets.all(12.0),
-              ),
-            )
-          ],
         ),
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
@@ -502,9 +176,9 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         // Upload Image
                         GestureDetector(
                           onTap: () {
-                            getImageDio();
+                            giverProfileEditProvider.getImageDio(context);
                           },
-                          child: imageFileDio == null
+                          child: giverProfileEditProvider.imageFileDio == null
                               ? Center(
                                   child: Container(
                                     alignment: Alignment.center,
@@ -541,7 +215,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(100),
                                     child: Image.file(
-                                      imageFileDio!,
+                                      giverProfileEditProvider.imageFileDio!,
                                       width: 100,
                                       height: 100,
                                       fit: BoxFit.fitWidth,
@@ -576,6 +250,37 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           ),
                         ),
                         const SizedBox(height: 15),
+                        // Service Provided
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Service Provided",
+                                style: TextStyle(
+                                  color: ServiceGiverColor.black,
+                                  fontSize: 12,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Text(widget.serviceName.toString()),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 15),
                         // Gender
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -604,15 +309,13 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () {
-                                        setState(() {
-                                          _isSelectedGender = "1";
-                                        });
+                                        giverProfileEditProvider.setSelectedGender("1");
                                       },
                                       child: Container(
                                         height: 50.45,
                                         padding: const EdgeInsets.all(4),
                                         decoration: BoxDecoration(
-                                          color: _isSelectedGender == "1" ? ServiceGiverColor.black : CustomColors.white,
+                                          color: giverProfileEditProvider.isSelectedGender == "1" ? ServiceGiverColor.black : CustomColors.white,
                                           borderRadius: BorderRadius.circular(8),
                                           boxShadow: const [
                                             BoxShadow(
@@ -626,15 +329,13 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         child: TextButton(
                                           style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                                           onPressed: () {
-                                            setState(() {
-                                              _isSelectedGender = "1";
-                                            });
+                                            giverProfileEditProvider.setSelectedGender("1");
                                           },
                                           child: Text(
                                             "Male",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                              color: _isSelectedGender == "1" ? CustomColors.white : CustomColors.primaryText,
+                                              color: giverProfileEditProvider.isSelectedGender == "1" ? CustomColors.white : CustomColors.primaryText,
                                               fontFamily: "Rubik",
                                               fontSize: 12,
                                               fontWeight: FontWeight.w300,
@@ -648,15 +349,13 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   Expanded(
                                     child: GestureDetector(
                                       onTap: () {
-                                        setState(() {
-                                          _isSelectedGender = "2";
-                                        });
+                                        giverProfileEditProvider.setSelectedGender("2");
                                       },
                                       child: Container(
                                         height: 50.45,
                                         padding: const EdgeInsets.all(4),
                                         decoration: BoxDecoration(
-                                          color: _isSelectedGender == "2" ? ServiceGiverColor.black : CustomColors.white,
+                                          color: giverProfileEditProvider.isSelectedGender == "2" ? ServiceGiverColor.black : CustomColors.white,
                                           borderRadius: BorderRadius.circular(8),
                                           boxShadow: const [
                                             BoxShadow(
@@ -670,15 +369,13 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         child: TextButton(
                                           style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
                                           onPressed: () {
-                                            setState(() {
-                                              _isSelectedGender = "2";
-                                            });
+                                            giverProfileEditProvider.setSelectedGender("2");
                                           },
                                           child: Text(
                                             "Female",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
-                                              color: _isSelectedGender == "2" ? CustomColors.white : CustomColors.primaryText,
+                                              color: giverProfileEditProvider.isSelectedGender == "2" ? CustomColors.white : CustomColors.primaryText,
                                               fontFamily: "Rubik",
                                               fontSize: 12,
                                               fontWeight: FontWeight.w300,
@@ -694,7 +391,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           ),
                         ),
                         // Phone Number
-
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                           decoration: BoxDecoration(
@@ -717,7 +413,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               // const SizedBox(height: 05),
                               Container(
                                 padding: const EdgeInsets.only(left: 12),
-                                decoration: phoneError
+                                decoration: giverProfileEditProvider.phoneError
                                     ? BoxDecoration(
                                         border: Border.all(color: Colors.red),
                                         borderRadius: BorderRadius.circular(12),
@@ -742,14 +438,13 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                       ),
                                       validator: (value) {
                                         if (value == null || value.toString().length < 10) {
-                                          setState(() {
-                                            phoneError = true;
-                                          });
+                                          giverProfileEditProvider.setPhoneError(true);
+
                                           return "Please enter a valid phone number";
                                         }
-                                        setState(() {
-                                          phoneError = false;
-                                        });
+
+                                        giverProfileEditProvider.setPhoneError(false);
+
                                         return null;
                                       },
                                     ),
@@ -763,7 +458,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         // DOB
                         InkWell(
                           onTap: () {
-                            _selectDate(context);
+                            giverProfileEditProvider.selectDate(context);
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -786,7 +481,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  dobController.text.isEmpty ? "Date Of Birth" : dobController.text.toString(),
+                                  giverProfileEditProvider.getPickedDate.isEmpty ? "Date Of Birth" : giverProfileEditProvider.getPickedDate.toString(),
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 15,
@@ -797,57 +492,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             ),
                           ),
                         ),
-                        // Area
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          margin: const EdgeInsets.only(bottom: 15),
-                          decoration: BoxDecoration(color: CustomColors.white, borderRadius: BorderRadius.circular(12)),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Area",
-                                      style: TextStyle(
-                                        color: ServiceGiverColor.black,
-                                        fontSize: 12,
-                                        fontFamily: "Rubik",
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    DropdownButton(
-                                      value: selectedArea,
-                                      underline: Container(),
-                                      isExpanded: true,
-                                      items: areaList
-                                          .map(
-                                            (e) => DropdownMenuItem(
-                                              value: e["value"],
-                                              child: Text(e["name"].toString()),
-                                            ),
-                                          )
-                                          .toList(),
-                                      onChanged: (value) {
-                                        // print(value.runtimeType);
-                                        setState(() {
-                                          selectedArea = value!;
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
                         // Experrience
-
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                           decoration: BoxDecoration(
@@ -869,7 +514,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               ),
                               Container(
                                 padding: const EdgeInsets.only(left: 12),
-                                decoration: yearOfExpError
+                                decoration: giverProfileEditProvider.yearOfExpError
                                     ? BoxDecoration(
                                         border: Border.all(color: Colors.red),
                                         borderRadius: BorderRadius.circular(12),
@@ -894,14 +539,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          setState(() {
-                                            yearOfExpError = true;
-                                          });
+                                          giverProfileEditProvider.setYearOfExpError(true);
+
                                           return "Please enter your experience";
                                         }
-                                        setState(() {
-                                          yearOfExpError = false;
-                                        });
+                                        giverProfileEditProvider.setYearOfExpError(false);
+
                                         return null;
                                       },
                                     ),
@@ -934,7 +577,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               ),
                               Container(
                                 padding: const EdgeInsets.only(left: 12),
-                                decoration: hourlyRateError
+                                decoration: giverProfileEditProvider.hourlyRateError
                                     ? BoxDecoration(
                                         border: Border.all(color: Colors.red),
                                         borderRadius: BorderRadius.circular(12),
@@ -955,14 +598,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      setState(() {
-                                        hourlyRateError = true;
-                                      });
+                                      giverProfileEditProvider.setHourlyRateError(true);
                                       return "Please enter your hourly rate";
                                     }
-                                    setState(() {
-                                      hourlyRateError = false;
-                                    });
+                                    giverProfileEditProvider.setHourlyRateError(false);
                                     return null;
                                   },
                                 ),
@@ -971,7 +610,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           ),
                         ),
                         const SizedBox(height: 15),
-                        // User Address
+                        // Address
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                           margin: const EdgeInsets.only(bottom: 15),
@@ -984,7 +623,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "User Address",
+                                "Address",
                                 style: TextStyle(
                                   color: ServiceGiverColor.black,
                                   fontSize: 12,
@@ -995,7 +634,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               const SizedBox(height: 05),
                               Container(
                                 padding: const EdgeInsets.only(left: 12),
-                                decoration: userAddressError
+                                decoration: giverProfileEditProvider.userAddressError
                                     ? BoxDecoration(
                                         border: Border.all(color: Colors.red),
                                         borderRadius: BorderRadius.circular(12),
@@ -1013,20 +652,18 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         fontWeight: FontWeight.w400,
                                       ),
                                       decoration: const InputDecoration(
-                                        hintText: "User Address",
+                                        hintText: "Address",
                                         contentPadding: EdgeInsets.zero,
                                         border: InputBorder.none,
                                       ),
                                       validator: (value) {
                                         if (value == null || value.isEmpty) {
-                                          setState(() {
-                                            userAddressError = true;
-                                          });
+                                          giverProfileEditProvider.setUserAddressError(true);
+
                                           return "Please enter your permanent address";
                                         }
-                                        setState(() {
-                                          userAddressError = false;
-                                        });
+                                        giverProfileEditProvider.setUserAddressError(false);
+
                                         return null;
                                       },
                                     ),
@@ -1037,6 +674,53 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           ),
                         ),
                         const SizedBox(height: 15),
+                        // Area
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          margin: const EdgeInsets.only(bottom: 15),
+                          decoration: BoxDecoration(color: CustomColors.white, borderRadius: BorderRadius.circular(12)),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Area",
+                                      style: TextStyle(
+                                        color: ServiceGiverColor.black,
+                                        fontSize: 12,
+                                        fontFamily: "Rubik",
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    DropdownButton(
+                                      value: giverProfileEditProvider.selectedArea,
+                                      underline: Container(),
+                                      isExpanded: true,
+                                      items: giverProfileEditProvider.areaList
+                                          .map(
+                                            (e) => DropdownMenuItem(
+                                              value: e["value"],
+                                              child: Text(e["name"].toString()),
+                                            ),
+                                          )
+                                          .toList(),
+                                      onChanged: (value) {
+                                        // print(value.runtimeType);
+                                        giverProfileEditProvider.setSelectedArea(value.toString());
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                         // Zip Code
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -1049,7 +733,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Zip Code",
+                                "Postal Code",
                                 style: TextStyle(
                                   color: ServiceGiverColor.black,
                                   fontSize: 12,
@@ -1059,7 +743,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               ),
                               Container(
                                 padding: const EdgeInsets.only(left: 12),
-                                decoration: zipcodeError
+                                decoration: giverProfileEditProvider.zipcodeError
                                     ? BoxDecoration(
                                         border: Border.all(color: Colors.red),
                                         borderRadius: BorderRadius.circular(12),
@@ -1077,14 +761,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      setState(() {
-                                        zipcodeError = true;
-                                      });
-                                      return "Please enter zip/postal code";
+                                      giverProfileEditProvider.setZipcodeError(true);
+                                      return "Please enter postal code";
                                     }
-                                    setState(() {
-                                      zipcodeError = false;
-                                    });
+                                    giverProfileEditProvider.setZipcodeError(false);
                                     return null;
                                   },
                                 ),
@@ -1093,7 +773,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           ),
                         ),
                         const SizedBox(height: 15),
-                        // AdditionalService
+                        // AdditionalService Make MultiSelected
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                           decoration: BoxDecoration(
@@ -1104,59 +784,172 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Additional Services",
-                                style: TextStyle(
-                                  color: ServiceGiverColor.black,
-                                  fontSize: 12,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 12),
-                                decoration: additionalServiceError
-                                    ? BoxDecoration(
-                                        border: Border.all(color: Colors.red),
-                                        borderRadius: BorderRadius.circular(12),
-                                      )
-                                    : null,
-                                child: TextFormField(
-                                  controller: keywordController,
-                                  keyboardType: TextInputType.multiline,
-                                  textInputAction: TextInputAction.next,
-                                  maxLines: 4,
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.zero,
-                                    constraints: BoxConstraints(maxHeight: 50, minHeight: 50),
-                                    hintText: "Additional Services",
-                                    border: InputBorder.none,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Additional Services",
+                                    style: TextStyle(
+                                      color: ServiceGiverColor.black,
+                                      fontSize: 12,
+                                      fontFamily: "Rubik",
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                  // validator: (value) {
-                                  //   if (value == null || value.isEmpty) {
-                                  //     setState(() {
-                                  //       additionalServiceError = true;
-                                  //     });
-                                  //     return "error in validator";
-                                  //   }
-                                  //   setState(() {
-                                  //     additionalServiceError = false;
-                                  //   });
-                                  //   return null;
-                                  // },
-                                ),
+                                  InkWell(
+                                    onTap: () {
+                                      showModalBottomSheet(
+                                        context: context,
+                                        isDismissible: true,
+                                        isScrollControlled: true,
+                                        builder: (context) => StatefulBuilder(
+                                          builder: (BuildContext context, StateSetter setState) {
+                                            return Container(
+                                              color: Colors.white,
+                                              width: MediaQuery.of(context).size.width,
+                                              child: Column(
+                                                children: [
+                                                  Center(
+                                                    child: Container(
+                                                      height: 05,
+                                                      width: 100,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey.shade200,
+                                                        borderRadius: BorderRadius.circular(20),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(height: 50),
+                                                  Padding(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                                                    child: TextField(
+                                                      controller: additionalServiceSearchController,
+                                                      textAlignVertical: TextAlignVertical.center,
+                                                      textInputAction: TextInputAction.send,
+                                                      onEditingComplete: () {
+                                                        if (additionalServiceSearchController.text.isNotEmpty && !giverProfileEditProvider.selectedAdditionalService.any((element) => element == additionalServiceSearchController.text)) {
+                                                          giverProfileEditProvider.setSelectedAdditionalService(additionalServiceSearchController.text);
+                                                          setState(() {});
+                                                          additionalServiceSearchController.clear();
+                                                        }
+                                                      },
+                                                      decoration: InputDecoration(
+                                                        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                                                        border: const OutlineInputBorder(),
+                                                        suffixIconConstraints: const BoxConstraints(
+                                                          minWidth: 40,
+                                                          minHeight: 30,
+                                                        ),
+                                                        suffixIcon: InkWell(
+                                                          onTap: () {
+                                                            if (additionalServiceSearchController.text.isNotEmpty && !giverProfileEditProvider.selectedAdditionalService.any((element) => element == additionalServiceSearchController.text)) {
+                                                              giverProfileEditProvider.setSelectedAdditionalService(additionalServiceSearchController.text);
+                                                              setState(() {});
+                                                              additionalServiceSearchController.clear();
+                                                            }
+                                                          },
+                                                          child: const Icon(Icons.done, size: 24),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Wrap(
+                                                    spacing: 8.0,
+                                                    runSpacing: 0.0,
+                                                    children: List.generate(giverProfileEditProvider.selectedAdditionalService.length, (index) {
+                                                      var item = giverProfileEditProvider.selectedAdditionalService[index];
+                                                      return InputChip(
+                                                        backgroundColor: Colors.grey.shade200,
+                                                        deleteIconColor: Colors.black,
+                                                        side: BorderSide.none,
+                                                        label: Text(
+                                                          item,
+                                                          style: const TextStyle(color: Colors.black),
+                                                        ),
+                                                        deleteIcon: const Icon(
+                                                          Icons.close,
+                                                          size: 14,
+                                                        ),
+                                                        onDeleted: () {
+                                                          giverProfileEditProvider.removeSelectedAdditionalService(item);
+                                                          setState(() {});
+                                                        },
+                                                      );
+                                                    }),
+                                                  ),
+                                                  Expanded(
+                                                    child: ListView(
+                                                      children: giverProfileEditProvider.listSuggestedType.map<Widget>((e) {
+                                                        if (giverProfileEditProvider.selectedAdditionalService.any((element) => element.toString().toLowerCase().contains(e.toLowerCase()))) {
+                                                          return Container();
+                                                        }
+                                                        return CheckboxListTile(
+                                                          value: false,
+                                                          title: Text(e),
+                                                          onChanged: (value) {
+                                                            if (value == true) {
+                                                              var val = e;
+                                                              giverProfileEditProvider.setSelectedAdditionalService(val);
+                                                              setState(() {});
+                                                            }
+                                                          },
+                                                        );
+                                                      }).toList(),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: 30,
+                                      height: 30,
+                                      decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(05)),
+                                      child: const Icon(
+                                        Icons.edit,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Wrap(
+                                spacing: 8.0,
+                                runSpacing: 0.0,
+                                children: List.generate(giverProfileEditProvider.selectedAdditionalService.length, (index) {
+                                  var item = giverProfileEditProvider.selectedAdditionalService[index];
+                                  return Chip(
+                                    backgroundColor: Colors.grey.shade200,
+                                    deleteIconColor: Colors.black,
+                                    side: BorderSide.none,
+                                    label: Text(
+                                      item,
+                                      style: const TextStyle(color: Colors.black),
+                                    ),
+                                    deleteIcon: const Icon(
+                                      Icons.close,
+                                      size: 14,
+                                    ),
+                                    onDeleted: () {
+                                      // print("on delete call");
+                                      giverProfileEditProvider.removeSelectedAdditionalService(item);
+                                    },
+                                  );
+                                }),
                               ),
                             ],
                           ),
                         ),
-
                         const SizedBox(height: 15),
                         // Education
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Education",
+                              "Education/Qualification",
                               style: TextStyle(
                                 color: CustomColors.primaryText,
                                 fontSize: 16,
@@ -1203,151 +996,213 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                     ),
                                                   ),
                                                   // Institute Name
-                                                  Container(
-                                                    height: 50,
-                                                    margin: const EdgeInsets.only(bottom: 15, top: 15),
-                                                    decoration: BoxDecoration(
-                                                      color: CustomColors.white,
-                                                      borderRadius: BorderRadius.circular(12),
-                                                    ),
-                                                    child: TextFormField(
-                                                      controller: instituteController,
-                                                      keyboardType: TextInputType.name,
-                                                      textInputAction: TextInputAction.next,
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontFamily: "Rubik",
-                                                        fontWeight: FontWeight.w400,
-                                                      ),
-                                                      textAlignVertical: TextAlignVertical.bottom,
-                                                      maxLines: 1,
-                                                      decoration: InputDecoration(
-                                                        hintText: "Institute Name",
-                                                        // fillColor: ServiceGiverColor.black,
-                                                        focusColor: CustomColors.white,
-                                                        hoverColor: CustomColors.white,
-                                                        // filled: true,
-                                                        border: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        focusedBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                          borderRadius: BorderRadius.circular(10.0),
-                                                        ),
-                                                        enabledBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                          borderRadius: BorderRadius.circular(10.0),
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        "Institute Name",
+                                                        style: TextStyle(
+                                                          color: ServiceGiverColor.black,
+                                                          fontSize: 12,
+                                                          fontFamily: "Rubik",
+                                                          fontWeight: FontWeight.w600,
                                                         ),
                                                       ),
-                                                    ),
+                                                      const SizedBox(height: 10),
+                                                      Container(
+                                                        height: 50,
+                                                        // margin: const EdgeInsets.only(bottom: 15, top: 15),
+                                                        decoration: BoxDecoration(
+                                                          color: CustomColors.white,
+                                                          borderRadius: BorderRadius.circular(12),
+                                                        ),
+                                                        child: TextFormField(
+                                                          controller: instituteController,
+                                                          keyboardType: TextInputType.name,
+                                                          textInputAction: TextInputAction.next,
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontFamily: "Rubik",
+                                                            fontWeight: FontWeight.w400,
+                                                          ),
+                                                          textAlignVertical: TextAlignVertical.bottom,
+                                                          maxLines: 1,
+                                                          decoration: InputDecoration(
+                                                            hintText: "Institute Name",
+                                                            focusColor: CustomColors.white,
+                                                            hoverColor: CustomColors.white,
+                                                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                              borderRadius: BorderRadius.circular(10.0),
+                                                            ),
+                                                            enabledBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                              borderRadius: BorderRadius.circular(10.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
+
                                                   // Major
-                                                  Container(
-                                                    height: 50,
-                                                    decoration: BoxDecoration(
-                                                      color: CustomColors.white,
-                                                      borderRadius: BorderRadius.circular(12),
-                                                    ),
-                                                    child: TextFormField(
-                                                      controller: majorController,
-                                                      keyboardType: TextInputType.name,
-                                                      textInputAction: TextInputAction.next,
-                                                      style: const TextStyle(
-                                                        fontSize: 16,
-                                                        fontFamily: "Rubik",
-                                                        fontWeight: FontWeight.w400,
-                                                      ),
-                                                      textAlignVertical: TextAlignVertical.bottom,
-                                                      maxLines: 1,
-                                                      decoration: InputDecoration(
-                                                        hintText: "Major",
-                                                        // fillColor: CustomColors.myJobDetail,
-                                                        focusColor: CustomColors.white,
-                                                        hoverColor: CustomColors.white,
-                                                        // filled: true,
-                                                        border: OutlineInputBorder(
-                                                          borderRadius: BorderRadius.circular(10),
-                                                        ),
-                                                        focusedBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                          borderRadius: BorderRadius.circular(10.0),
-                                                        ),
-                                                        enabledBorder: OutlineInputBorder(
-                                                          borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                          borderRadius: BorderRadius.circular(10.0),
+                                                  const SizedBox(height: 20),
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        "Degree/Certification",
+                                                        style: TextStyle(
+                                                          color: ServiceGiverColor.black,
+                                                          fontSize: 12,
+                                                          fontFamily: "Rubik",
+                                                          fontWeight: FontWeight.w600,
                                                         ),
                                                       ),
-                                                    ),
+                                                      const SizedBox(height: 10),
+                                                      Container(
+                                                        height: 50,
+                                                        decoration: BoxDecoration(
+                                                          color: CustomColors.white,
+                                                          borderRadius: BorderRadius.circular(12),
+                                                        ),
+                                                        child: TextFormField(
+                                                          controller: majorController,
+                                                          keyboardType: TextInputType.name,
+                                                          textInputAction: TextInputAction.next,
+                                                          style: const TextStyle(
+                                                            fontSize: 16,
+                                                            fontFamily: "Rubik",
+                                                            fontWeight: FontWeight.w400,
+                                                          ),
+                                                          textAlignVertical: TextAlignVertical.bottom,
+                                                          maxLines: 1,
+                                                          decoration: InputDecoration(
+                                                            hintText: "Major",
+                                                            focusColor: CustomColors.white,
+                                                            hoverColor: CustomColors.white,
+                                                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                                                            focusedBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                              borderRadius: BorderRadius.circular(10.0),
+                                                            ),
+                                                            enabledBorder: OutlineInputBorder(
+                                                              borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                              borderRadius: BorderRadius.circular(10.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
+
                                                   // Time period
-                                                  const SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  TextButton.icon(
-                                                    style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
-                                                    onPressed: () {
-                                                      _toggleradio();
-                                                      setState(() {});
-                                                    },
-                                                    icon: CircleAvatar(
-                                                      backgroundColor: const Color.fromARGB(181, 171, 171, 171),
-                                                      radius: 8,
-                                                      child: CircleAvatar(
-                                                        radius: 4,
-                                                        backgroundColor: isPeriodSeleted == "1" ? CustomColors.primaryText : const Color.fromARGB(181, 171, 171, 171),
+                                                  const SizedBox(height: 20),
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        "Time Period",
+                                                        style: TextStyle(
+                                                          color: ServiceGiverColor.black,
+                                                          fontSize: 12,
+                                                          fontFamily: "Rubik",
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
                                                       ),
-                                                    ),
-                                                    label: Text(
-                                                      "Currently Studying?",
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: CustomColors.primaryText,
-                                                        fontFamily: "Rubik",
-                                                        fontStyle: FontStyle.normal,
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.w400,
+                                                      const SizedBox(height: 10),
+                                                      Row(
+                                                        children: [
+                                                          Checkbox.adaptive(
+                                                            value: giverProfileEditProvider.isPeriodSeleted == "0" ? false : true,
+                                                            onChanged: (value) {
+                                                              // if (value == true) {
+                                                              giverProfileEditProvider.toggleradio(value);
+                                                              toController.text = '';
+                                                              setState(() {});
+                                                              // }
+                                                            },
+                                                          ),
+                                                          // const SizedBox(width: 10),
+                                                          const Text("Currently Studying")
+                                                        ],
                                                       ),
-                                                    ),
+                                                    ],
                                                   ),
                                                   // From Date
-                                                  Container(
-                                                    // height: 50,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius: BorderRadius.circular(12),
-                                                    ),
-                                                    child: CustomTextFieldWidget(
-                                                      borderColor: CustomColors.white,
-                                                      obsecure: false,
-                                                      keyboardType: TextInputType.number,
-                                                      controller: fromController,
-                                                      hintText: "From",
-                                                      onTap: () async {
-                                                        _fromDate(context);
-                                                      },
-                                                    ),
+                                                  const SizedBox(height: 20),
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        "From",
+                                                        style: TextStyle(
+                                                          color: ServiceGiverColor.black,
+                                                          fontSize: 12,
+                                                          fontFamily: "Rubik",
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 10),
+                                                      Container(
+                                                        // height: 50,
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius: BorderRadius.circular(12),
+                                                        ),
+                                                        child: CustomTextFieldWidget(
+                                                          borderColor: CustomColors.white,
+                                                          obsecure: false,
+                                                          keyboardType: TextInputType.number,
+                                                          controller: fromController,
+                                                          readOnly: true,
+                                                          hintText: "Pick a date",
+                                                          onTap: () async {
+                                                            giverProfileEditProvider.eduFromDate(context, fromController);
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
+
                                                   // To Date
-                                                  const SizedBox(
-                                                    height: 15,
-                                                  ),
-                                                  Container(
-                                                    // height: 50,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius: BorderRadius.circular(12),
+                                                  if (giverProfileEditProvider.isPeriodSeleted == "0") ...[
+                                                    const SizedBox(height: 20),
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          "To",
+                                                          style: TextStyle(
+                                                            color: ServiceGiverColor.black,
+                                                            fontSize: 12,
+                                                            fontFamily: "Rubik",
+                                                            fontWeight: FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(height: 10),
+                                                        Container(
+                                                          // height: 50,
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.white,
+                                                            borderRadius: BorderRadius.circular(12),
+                                                          ),
+                                                          child: CustomTextFieldWidget(
+                                                            borderColor: CustomColors.white,
+                                                            obsecure: false,
+                                                            readOnly: true,
+                                                            keyboardType: TextInputType.number,
+                                                            controller: toController,
+                                                            hintText: "Pick a date",
+                                                            onTap: () async {
+                                                              giverProfileEditProvider.eduToDate(context, toController);
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    child: CustomTextFieldWidget(
-                                                      borderColor: CustomColors.white,
-                                                      obsecure: false,
-                                                      keyboardType: TextInputType.number,
-                                                      controller: toController,
-                                                      hintText: "To",
-                                                      onTap: () async {
-                                                        _toDate(context);
-                                                      },
-                                                    ),
-                                                  ),
+                                                  ],
                                                   // AddBtn
                                                   GestureDetector(
                                                     onTap: () async {
@@ -1357,36 +1212,36 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                         String from = fromController.text.toString();
                                                         String to = toController.text.toString();
 
-                                                        if (institute.isNotEmpty && major.isNotEmpty) {
+                                                        if (institute.isNotEmpty && major.isNotEmpty && from.isNotEmpty) {
+                                                          if (giverProfileEditProvider.isPeriodSeleted == "0" && to.isEmpty) {
+                                                            return;
+                                                          }
                                                           instituteController.text = '';
                                                           majorController.text = '';
                                                           fromController.text = '';
                                                           toController.text = '';
-                                                          instituteMapList.add(institute);
-                                                          majorMapList.add(major);
-                                                          startDateMapList.add(from);
-                                                          endDateMapList.add(to);
-                                                          currentMapList.add(isPeriodSeleted);
-                                                          setState(() {
-                                                            educationApiList.add(
-                                                              {
-                                                                "name": institute.toString(),
-                                                                "major": major.toString(),
-                                                                "from": from.toString(),
-                                                                "current": isPeriodSeleted.toString(),
-                                                                "to": to.toString(),
-                                                              },
-                                                            );
-                                                          });
+                                                          giverProfileEditProvider.instituteMapList.add(institute);
+                                                          giverProfileEditProvider.majorMapList.add(major);
+                                                          giverProfileEditProvider.startDateMapList.add(from);
+                                                          giverProfileEditProvider.endDateMapList.add(to);
+                                                          giverProfileEditProvider.currentMapList.add(giverProfileEditProvider.isPeriodSeleted);
+                                                          giverProfileEditProvider.educationApiList.add(
+                                                            {
+                                                              "name": institute.toString(),
+                                                              "major": major.toString(),
+                                                              "from": from.toString(),
+                                                              "current": giverProfileEditProvider.isPeriodSeleted.toString(),
+                                                              "to": to.toString(),
+                                                            },
+                                                          );
+                                                          giverProfileEditProvider.toggleradio(false);
+                                                          instituteController.text = '';
+                                                          majorController.text = '';
+                                                          fromController.text = '';
+                                                          toController.text = '';
 
-                                                          setState(() {
-                                                            instituteController.text = '';
-                                                            majorController.text = '';
-                                                            fromController.text = '';
-                                                            toController.text = '';
-                                                          });
-                                                          SharedPreferences pref = await SharedPreferences.getInstance();
-                                                          var data = await pref.setString('ListData', education.toString());
+                                                          // SharedPreferences pref = await SharedPreferences.getInstance();
+                                                          // var data = await pref.setString('ListData', giverProfileEditProvider.education.toString());
 
                                                           Navigator.pop(context, true);
                                                         }
@@ -1462,10 +1317,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           ],
                         ),
                         const SizedBox(height: 10),
-                        if (educationApiList.isNotEmpty) ...[
+                        if (giverProfileEditProvider.educationApiList.isNotEmpty) ...[
                           Column(
                             children: [
-                              for (var i = 0; i < educationApiList.length; i++) ...[
+                              for (var i = 0; i < giverProfileEditProvider.educationApiList.length; i++) ...[
                                 SizedBox(
                                   height: 100,
                                   width: MediaQuery.of(context).size.width,
@@ -1491,7 +1346,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                   const Text("Institute Name: "),
                                                   Expanded(
                                                     child: Text(
-                                                      "${educationApiList[i]['name']}",
+                                                      "${giverProfileEditProvider.educationApiList[i]['name']}",
                                                       maxLines: 2,
                                                       overflow: TextOverflow.fade,
                                                     ),
@@ -1503,7 +1358,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                   const Text("Major: "),
                                                   Expanded(
                                                     child: Text(
-                                                      "${educationApiList[i]['major']}",
+                                                      "${giverProfileEditProvider.educationApiList[i]['major']}",
                                                       maxLines: 2,
                                                       overflow: TextOverflow.fade,
                                                     ),
@@ -1515,7 +1370,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                   const Text("From: "),
                                                   Expanded(
                                                     child: Text(
-                                                      "${educationApiList[i]['from']}",
+                                                      "${giverProfileEditProvider.educationApiList[i]['from']}",
                                                       maxLines: 2,
                                                       overflow: TextOverflow.fade,
                                                     ),
@@ -1531,15 +1386,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         right: 05,
                                         child: GestureDetector(
                                           onTap: () {
-                                            //
-                                            setState(() {
-                                              educationApiList.removeAt(i);
-                                              instituteMapList.removeAt(i);
-                                              majorMapList.removeAt(i);
-                                              startDateMapList.removeAt(i);
-                                              endDateMapList.removeAt(i);
-                                              currentMapList.removeAt(i);
-                                            });
+                                            giverProfileEditProvider.educationApiList.removeAt(i);
+                                            giverProfileEditProvider.instituteMapList.removeAt(i);
+                                            giverProfileEditProvider.majorMapList.removeAt(i);
+                                            giverProfileEditProvider.startDateMapList.removeAt(i);
+                                            giverProfileEditProvider.endDateMapList.removeAt(i);
+                                            giverProfileEditProvider.currentMapList.removeAt(i);
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -1586,6 +1438,64 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        const SizedBox(height: 15),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                          decoration: BoxDecoration(
+                            color: CustomColors.white,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          width: double.infinity,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "About Me",
+                                style: TextStyle(
+                                  color: ServiceGiverColor.black,
+                                  fontSize: 12,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(left: 12),
+                                decoration: giverProfileEditProvider.aboutMeError
+                                    ? BoxDecoration(
+                                        border: Border.all(color: Colors.red),
+                                        borderRadius: BorderRadius.circular(12),
+                                      )
+                                    : null,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    TextFormField(
+                                      controller: userInfoController,
+                                      keyboardType: TextInputType.multiline,
+                                      textInputAction: TextInputAction.next,
+                                      maxLines: 2,
+                                      decoration: const InputDecoration(
+                                        contentPadding: EdgeInsets.zero,
+                                        hintText: "About Me",
+                                        border: InputBorder.none,
+                                      ),
+                                      validator: (value) {
+                                        if (value == null || value.isEmpty) {
+                                          giverProfileEditProvider.setAboutMeError(true);
+
+                                          return "Please provide information about yourself";
+                                        }
+                                        giverProfileEditProvider.setAboutMeError(false);
+                                        return null;
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 15),
                         // Availability
                         // Container(
                         //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
@@ -1675,7 +1585,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               ),
                               Container(
                                 padding: const EdgeInsets.only(left: 12),
-                                decoration: avaibilityError
+                                decoration: giverProfileEditProvider.avaibilityError
                                     ? BoxDecoration(
                                         border: Border.all(color: Colors.red),
                                         borderRadius: BorderRadius.circular(12),
@@ -1693,14 +1603,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   ),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      setState(() {
-                                        avaibilityError = true;
-                                      });
+                                      giverProfileEditProvider.setAvaibilityError(true);
                                       return "Please provide availability information";
                                     }
-                                    setState(() {
-                                      avaibilityError = false;
-                                    });
+                                    giverProfileEditProvider.setAvaibilityError(false);
                                     return null;
                                   },
                                 ),
@@ -1708,7 +1614,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             ],
                           ),
                         ),
-
                         const SizedBox(height: 15),
                         // User Info
                         // Container(
@@ -1779,80 +1684,65 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         //   ),
                         // ),
 
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          decoration: BoxDecoration(
-                            color: CustomColors.white,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          width: double.infinity,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "About Me",
-                                style: TextStyle(
-                                  color: ServiceGiverColor.black,
-                                  fontSize: 12,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.only(left: 12),
-                                decoration: aboutMeError
-                                    ? BoxDecoration(
-                                        border: Border.all(color: Colors.red),
-                                        borderRadius: BorderRadius.circular(12),
-                                      )
-                                    : null,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextFormField(
-                                      controller: userInfoController,
-                                      keyboardType: TextInputType.multiline,
-                                      textInputAction: TextInputAction.next,
-                                      maxLines: 2,
-                                      decoration: const InputDecoration(
-                                        contentPadding: EdgeInsets.zero,
-                                        hintText: "About Me",
-                                        border: InputBorder.none,
-                                      ),
-                                      validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          setState(() {
-                                            aboutMeError = true;
-                                          });
-                                          return "Please provide information about yourself";
-                                        }
-                                        setState(() {
-                                          aboutMeError = false;
-                                        });
-                                        return null;
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        // file type 1
+                        // Work Reference (1 Area)
                         UploadBasicDocumentList(
                           onTap: () {
-                            uploadDocument("valid_driver_license");
+                            giverProfileEditProvider.uploadDocument(context, "valid_driver_license");
                           },
-                          title: "Valid Driver's License",
-                          fileSelectText: lists['valid_driver_license'].toString().isEmpty ? "Select File" : "Change File",
+                          title: "Work Reference (1 Area)",
+                          fileSelectText: giverProfileEditProvider.lists['valid_driver_license'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (error != null && error['errors'] != null && error['errors']!['valid_driver_license'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['valid_driver_license'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              error['errors']['valid_driver_license'].toString(),
+                              giverProfileEditProvider.error['errors']['valid_driver_license'].toString(),
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 09,
+                              ),
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 10),
+                        // Resume
+                        UploadBasicDocumentList(
+                          onTap: () {
+                            giverProfileEditProvider.uploadDocument(context, "scars_awareness_certification");
+                          },
+                          title: "Resume",
+                          fileSelectText: giverProfileEditProvider.lists['scars_awareness_certification'].toString().isEmpty ? "Select File" : "Change File",
+                        ),
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['scars_awareness_certification'] != null) ...[
+                          const SizedBox(height: 05),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              giverProfileEditProvider.error['errors']['scars_awareness_certification'].toString(),
+                              style: const TextStyle(
+                                color: Colors.red,
+                                fontSize: 09,
+                              ),
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 10),
+
+                        // file type 1
+                        UploadBasicDocumentList(
+                          onTap: () {
+                            giverProfileEditProvider.uploadDocument(context, "valid_driver_license");
+                          },
+                          title: "Valid Driver's License",
+                          fileSelectText: giverProfileEditProvider.lists['valid_driver_license'].toString().isEmpty ? "Select File" : "Change File",
+                        ),
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['valid_driver_license'] != null) ...[
+                          const SizedBox(height: 05),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              giverProfileEditProvider.error['errors']['valid_driver_license'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1864,17 +1754,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         // file type 2
                         UploadBasicDocumentList(
                           onTap: () {
-                            uploadDocument("scars_awareness_certification");
+                            giverProfileEditProvider.uploadDocument(context, "scars_awareness_certification");
                           },
                           title: "Scars Awareness Certification",
-                          fileSelectText: lists['scars_awareness_certification'].toString().isEmpty ? "Select File" : "Change File",
+                          fileSelectText: giverProfileEditProvider.lists['scars_awareness_certification'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (error != null && error['errors'] != null && error['errors']!['scars_awareness_certification'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['scars_awareness_certification'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              error['errors']['scars_awareness_certification'].toString(),
+                              giverProfileEditProvider.error['errors']['scars_awareness_certification'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1886,17 +1776,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         // file type 8
                         UploadBasicDocumentList(
                           onTap: () {
-                            uploadDocument("police_background_check");
+                            giverProfileEditProvider.uploadDocument(context, "police_background_check");
                           },
                           title: "Police Background Check",
-                          fileSelectText: lists['police_background_check'].toString().isEmpty ? "Select File" : "Change File",
+                          fileSelectText: giverProfileEditProvider.lists['police_background_check'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (error != null && error['errors'] != null && error['errors']!['police_background_check'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['police_background_check'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              error['errors']['police_background_check'].toString(),
+                              giverProfileEditProvider.error['errors']['police_background_check'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1908,17 +1798,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         // file type 3a
                         UploadBasicDocumentList(
                           onTap: () {
-                            uploadDocument("cpr_first_aid_certification");
+                            giverProfileEditProvider.uploadDocument(context, "cpr_first_aid_certification");
                           },
                           title: "CPR/First Aid Certificate",
-                          fileSelectText: lists['cpr_first_aid_certification'].toString().isEmpty ? "Select File" : "Change File",
+                          fileSelectText: giverProfileEditProvider.lists['cpr_first_aid_certification'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (error != null && error['errors'] != null && error['errors']!['cpr_first_aid_certification'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['cpr_first_aid_certification'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              error['errors']['cpr_first_aid_certification'].toString(),
+                              giverProfileEditProvider.error['errors']['cpr_first_aid_certification'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1930,17 +1820,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         // file type 7
                         UploadBasicDocumentList(
                           onTap: () {
-                            uploadDocument("government_registered_care_provider");
+                            giverProfileEditProvider.uploadDocument(context, "government_registered_care_provider");
                           },
                           title: "Government Registered Care Provider",
-                          fileSelectText: lists['government_registered_care_provider'].toString().isEmpty ? "Select File" : "Change File",
+                          fileSelectText: giverProfileEditProvider.lists['government_registered_care_provider'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (error != null && error['errors'] != null && error['errors']!['government_registered_care_provider'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['government_registered_care_provider'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              error['errors']['government_registered_care_provider'].toString(),
+                              giverProfileEditProvider.error['errors']['government_registered_care_provider'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1952,17 +1842,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         const SizedBox(height: 10),
                         UploadBasicDocumentList(
                           onTap: () {
-                            uploadDocument("animal_care_provider_certification");
+                            giverProfileEditProvider.uploadDocument(context, "animal_care_provider_certification");
                           },
                           title: "Animal Care Provider Certificate",
-                          fileSelectText: lists['animal_care_provider_certification'].toString().isEmpty ? "Select File" : "Change File",
+                          fileSelectText: giverProfileEditProvider.lists['animal_care_provider_certification'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (error != null && error['errors'] != null && error['errors']!['animal_care_provider_certification'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['animal_care_provider_certification'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 5.0),
                             child: Text(
-                              error['errors']['animal_care_provider_certification'].toString(),
+                              giverProfileEditProvider.error['errors']['animal_care_provider_certification'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1974,17 +1864,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         const SizedBox(height: 10),
                         UploadBasicDocumentList(
                           onTap: () {
-                            uploadDocument("animail_first_aid");
+                            giverProfileEditProvider.uploadDocument(context, "animail_first_aid");
                           },
                           title: "Animal First Aid",
-                          fileSelectText: lists['animail_first_aid'].toString().isEmpty ? "Select File" : "Change File",
+                          fileSelectText: giverProfileEditProvider.lists['animail_first_aid'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (error != null && error['errors'] != null && error['errors']!['animail_first_aid'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['animail_first_aid'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              error['errors']['animail_first_aid'][0].toString(),
+                              giverProfileEditProvider.error['errors']['animail_first_aid'][0].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1996,17 +1886,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         const SizedBox(height: 10),
                         UploadBasicDocumentList(
                           onTap: () {
-                            uploadDocument("red_cross_babysitting_certification");
+                            giverProfileEditProvider.uploadDocument(context, "red_cross_babysitting_certification");
                           },
                           title: "Red Cross Babysitting Certification",
-                          fileSelectText: lists['red_cross_babysitting_certification'].toString().isEmpty ? "Select File" : "Change File",
+                          fileSelectText: giverProfileEditProvider.lists['red_cross_babysitting_certification'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (error != null && error['errors'] != null && error['errors']!['red_cross_babysitting_certification'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['red_cross_babysitting_certification'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              error['errors']['red_cross_babysitting_certification'][0].toString(),
+                              giverProfileEditProvider.error['errors']['red_cross_babysitting_certification'][0].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -2018,17 +1908,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         const SizedBox(height: 10),
                         UploadBasicDocumentList(
                           onTap: () {
-                            uploadDocument("chaild_and_family_services_and_abuse");
+                            giverProfileEditProvider.uploadDocument(context, "chaild_and_family_services_and_abuse");
                           },
                           title: "Dept Child and Family Services Child Abuse Check",
-                          fileSelectText: lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? "Select File" : "Change File",
+                          fileSelectText: giverProfileEditProvider.lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (error != null && error['errors'] != null && error['errors']!['chaild_and_family_services_and_abuse'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['chaild_and_family_services_and_abuse'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              error['errors']['chaild_and_family_services_and_abuse'][0].toString(),
+                              giverProfileEditProvider.error['errors']['chaild_and_family_services_and_abuse'][0].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -2043,36 +1933,37 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           child: GestureDetector(
                             onTap: () async {
                               updateFormKey.currentState!.validate();
-                              if (_isSelectedGender == null) {
+                              if (giverProfileEditProvider.isSelectedGender == null) {
                                 customErrorSnackBar(context, "Please Select Gender");
                               } else if (phoneController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Enter Phone Number");
                               } else if (dobController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Select Date Of Birth");
-                              } else if (selectedArea == "select") {
+                              } else if (giverProfileEditProvider.selectedArea == "select") {
                                 customErrorSnackBar(context, "Please Select Area");
                               } else if (experienceController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Enter Years of Experience");
                               } else if (hourlyController.text.isEmpty) {
-                                customErrorSnackBar(context, "Please Enter User Hourly Rate");
+                                customErrorSnackBar(context, "Please Enter Hourly Rate");
                               } else if (addressController.text.isEmpty) {
-                                customErrorSnackBar(context, "Please Enter User Address");
+                                customErrorSnackBar(context, "Please Enter Address");
                               } else if (zipController.text.isEmpty) {
-                                customErrorSnackBar(context, "Please Enter Zip Code");
-                              } else if (keywordController.text.isEmpty) {
-                                customErrorSnackBar(context, "Please Enter User Keyword");
-                              } else if (availabilityController.text.isEmpty) {
+                                customErrorSnackBar(context, "Please Enter Postal Code");
+                              }
+                              // else if (keywordController.text.isEmpty) {
+                              //   customErrorSnackBar(context, "Please Enter User Keyword");
+                              // }
+                              else if (availabilityController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Enter User Availability");
                               } else if (userInfoController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Enter User Info");
-                              } else if (instituteMapList.isEmpty) {
+                              } else if (giverProfileEditProvider.instituteMapList.isEmpty) {
                                 customErrorSnackBar(context, "Please Enter education");
                               } else {
                                 if (updateFormKey.currentState!.validate()) {
-                                  setState(() {
-                                    sendRequest = true;
-                                  });
-                                  uploadImageDio();
+                                  giverProfileEditProvider.setSendRequest(true);
+
+                                  giverProfileEditProvider.uploadImageDio(context, userInfoController.text, phoneController.text, addressController.text, dobController.text, zipController.text, experienceController.text, hourlyController.text, availabilityController.text);
                                 }
                               }
                             },
@@ -2093,7 +1984,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Center(
-                                child: sendRequest
+                                child: giverProfileEditProvider.sendRequest
                                     ? const CircularProgressIndicator(
                                         color: Colors.white,
                                       )
@@ -2123,124 +2014,517 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   }
 
   Widget getEducation(int index) {
-    return Stack(
-      children: [
-        Container(
-          decoration: const BoxDecoration(
-            color: Colors.transparent,
-          ),
-          alignment: Alignment.centerRight,
-          width: MediaQuery.of(context).size.width,
-          height: 100,
-          child: const RotatedBox(
-            quarterTurns: 1,
-            child: Text(
-              'Container 1',
-              style: TextStyle(fontSize: 18.0, color: Colors.white),
+    return Consumer<GiverProfileEidtProvider>(
+      builder: (context, giverProfileEditProvider, child) => Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
             ),
-          ),
-        ),
-        Positioned(
-          top: 25,
-          right: 10,
-          left: 3,
-          bottom: 5,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 5),
-            decoration: BoxDecoration(color: CustomColors.white, borderRadius: BorderRadius.circular(10)),
-            alignment: Alignment.centerLeft,
+            alignment: Alignment.centerRight,
             width: MediaQuery.of(context).size.width,
             height: 100,
-          ),
-        ),
-        Positioned(
-          top: 10,
-          right: -2,
-          child: GestureDetector(
-            onTap: (() {
-              setState(() {
-                education.removeAt(index);
-                instituteMapList.removeAt(index);
-                majorMapList.removeAt(index);
-                startDateMapList.removeAt(index);
-                endDateMapList.removeAt(index);
-                currentMapList.removeAt(index);
-              });
-            }),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(100),
-                  bottomLeft: Radius.circular(100),
-                  bottomRight: Radius.circular(100),
-                  topRight: Radius.circular(100),
-                ),
-                color: CustomColors.white,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(13, 0, 0, 0),
-                    blurRadius: 4.0,
-                    spreadRadius: 2.0,
-                    offset: Offset(2.0, 2.0),
-                  ),
-                ],
-              ),
-              alignment: Alignment.center,
-              width: 30,
-              height: 30,
-              child: const Icon(
-                Icons.close,
-                size: 16,
+            child: const RotatedBox(
+              quarterTurns: 1,
+              child: Text(
+                'Container 1',
+                style: TextStyle(fontSize: 18.0, color: Colors.white),
               ),
             ),
           ),
-        ),
-      ],
+          Positioned(
+            top: 25,
+            right: 10,
+            left: 3,
+            bottom: 5,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              decoration: BoxDecoration(color: CustomColors.white, borderRadius: BorderRadius.circular(10)),
+              alignment: Alignment.centerLeft,
+              width: MediaQuery.of(context).size.width,
+              height: 100,
+            ),
+          ),
+          Positioned(
+            top: 10,
+            right: -2,
+            child: GestureDetector(
+              onTap: (() {
+                giverProfileEditProvider.education.removeAt(index);
+                giverProfileEditProvider.instituteMapList.removeAt(index);
+                giverProfileEditProvider.majorMapList.removeAt(index);
+                giverProfileEditProvider.startDateMapList.removeAt(index);
+                giverProfileEditProvider.endDateMapList.removeAt(index);
+                giverProfileEditProvider.currentMapList.removeAt(index);
+              }),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(100),
+                    bottomLeft: Radius.circular(100),
+                    bottomRight: Radius.circular(100),
+                    topRight: Radius.circular(100),
+                  ),
+                  color: CustomColors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(13, 0, 0, 0),
+                      blurRadius: 4.0,
+                      spreadRadius: 2.0,
+                      offset: Offset(2.0, 2.0),
+                    ),
+                  ],
+                ),
+                alignment: Alignment.center,
+                width: 30,
+                height: 30,
+                child: const Icon(
+                  Icons.close,
+                  size: 16,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget getRow(int index) {
-    return Card(
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: index % 2 == 0 ? Colors.deepPurpleAccent : Colors.purple,
-          foregroundColor: Colors.white,
-          child: Text(
-            education[index]["institute_name[]"].toString(),
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-        ),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              education[index]["institute_name[]"].toString(),
+    return Consumer<GiverProfileEidtProvider>(
+      builder: (context, giverProfileEditProvider, child) => Card(
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: index % 2 == 0 ? Colors.deepPurpleAccent : Colors.purple,
+            foregroundColor: Colors.white,
+            child: Text(
+              giverProfileEditProvider.education[index]["institute_name[]"].toString(),
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            Text(education[index]["major[]"].toString()),
-          ],
-        ),
-        trailing: SizedBox(
-          width: 70,
-          child: Row(
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              InkWell(
-                  onTap: (() {
-                    //
-                    setState(() {
-                      education.removeAt(index);
-                      instituteMapList.removeAt(index);
-                      majorMapList.removeAt(index);
-                      startDateMapList.removeAt(index);
-                      endDateMapList.removeAt(index);
-                      currentMapList.removeAt(index);
-                    });
-                  }),
-                  child: const Icon(Icons.delete)),
+              Text(
+                giverProfileEditProvider.education[index]["institute_name[]"].toString(),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              Text(giverProfileEditProvider.education[index]["major[]"].toString()),
             ],
+          ),
+          trailing: SizedBox(
+            width: 70,
+            child: Row(
+              children: [
+                InkWell(
+                    onTap: (() {
+                      giverProfileEditProvider.education.removeAt(index);
+                      giverProfileEditProvider.instituteMapList.removeAt(index);
+                      giverProfileEditProvider.majorMapList.removeAt(index);
+                      giverProfileEditProvider.startDateMapList.removeAt(index);
+                      giverProfileEditProvider.endDateMapList.removeAt(index);
+                      giverProfileEditProvider.currentMapList.removeAt(index);
+                    }),
+                    child: const Icon(Icons.delete)),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+}
+
+class GiverProfileEidtProvider extends ChangeNotifier {
+  var isSelectedGender = "1";
+  setSelectedGenderinit(value) {
+    isSelectedGender = value;
+  }
+
+  setSelectedGender(value) {
+    isSelectedGender = value;
+    notifyListeners();
+  }
+
+  List<String> listSuggestedType = [
+    "Senior Care",
+    "Pet Care",
+    "House Keeping",
+    "School Support",
+    "Child Care",
+  ];
+
+  List selectedAdditionalService = [];
+
+  setSelectedAdditionalServiceInit(value) {
+    selectedAdditionalService.addAll(value);
+  }
+
+  setSelectedAdditionalService(value) {
+    selectedAdditionalService.add(value);
+    notifyListeners();
+  }
+
+  removeSelectedAdditionalService(value) {
+    selectedAdditionalService.remove(value);
+    notifyListeners();
+  }
+
+  int selectedIndex = -1;
+  bool sendRequest = false;
+  setSendRequest(value) {
+    sendRequest = value;
+    notifyListeners();
+  }
+
+  bool phoneError = false;
+  setPhoneError(value) {
+    phoneError = value;
+    notifyListeners();
+  }
+
+  bool yearOfExpError = false;
+  setYearOfExpError(value) {
+    yearOfExpError = value;
+    notifyListeners();
+  }
+
+  bool hourlyRateError = false;
+  setHourlyRateError(value) {
+    hourlyRateError = value;
+    notifyListeners();
+  }
+
+  bool userAddressError = false;
+  setUserAddressError(value) {
+    userAddressError = value;
+    notifyListeners();
+  }
+
+  bool zipcodeError = false;
+  setZipcodeError(value) {
+    zipcodeError = value;
+    notifyListeners();
+  }
+
+  bool additionalServiceError = false;
+  bool avaibilityError = false;
+  setAvaibilityError(value) {
+    avaibilityError = value;
+    notifyListeners();
+  }
+
+  bool aboutMeError = false;
+  setAboutMeError(value) {
+    aboutMeError = value;
+    notifyListeners();
+  }
+
+  var isPeriodSeleted = "0";
+  void toggleradio(value) {
+    if (value == true) {
+      isPeriodSeleted = "1";
+    } else {
+      isPeriodSeleted = "0";
+    }
+    notifyListeners();
+  }
+
+  List<Map<String, String>> education = [];
+  var arr1 = [];
+  List instituteMapList = [];
+  List majorMapList = [];
+  List startDateMapList = [];
+  List endDateMapList = [];
+  List currentMapList = [];
+  var stringListData = [];
+  FilePickerResult? enhanceResult;
+  // DatePicker
+
+  var gettoPickedDate;
+  var getfromPickedDate;
+  bool _isDateSelectable(DateTime date) {
+    // Disable dates before today
+    return date.isBefore(DateTime.now());
+  }
+
+  DateTime? selectedDate = DateTime.now();
+  var myFormat = DateFormat('d-MM-yyyy');
+  String getPickedDate = '';
+  selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate!,
+      firstDate: DateTime(1975),
+      lastDate: DateTime.now(),
+      selectableDayPredicate: _isDateSelectable,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.teal,
+              // : ,
+              backgroundColor: ServiceGiverColor.black,
+              accentColor: const Color(0xff55CE86),
+            ),
+            dialogBackgroundColor: Colors.white,
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      // text = DateFormat('yyyy-MM-dd').format(picked);
+
+      // picked == dobController;
+
+      getPickedDate = DateFormat('yyyy-MM-dd').format(picked);
+      notifyListeners();
+    }
+  }
+
+  eduFromDate(BuildContext context, fromController) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      firstDate: DateTime(1990),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.teal,
+              // primaryColorDark: ServiceGiverColor.black,
+              accentColor: const Color(0xff55CE86),
+            ),
+            dialogBackgroundColor: Colors.white,
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      fromController.text = DateFormat('yyyy-MM-dd').format(picked);
+
+      picked == fromController;
+
+      getfromPickedDate = fromController.text;
+      notifyListeners();
+    }
+  }
+
+  eduToDate(BuildContext context, controller) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      firstDate: DateTime(1990),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.teal,
+              // primaryColorDark: ServiceGiverColor.black,
+              accentColor: const Color(0xff55CE86),
+            ),
+            dialogBackgroundColor: Colors.white,
+          ),
+          child: child!,
+        );
+      },
+    );
+    if (picked != null) {
+      controller.text = DateFormat('yyyy-MM-dd').format(picked);
+      picked == controller;
+
+      gettoPickedDate = controller.text;
+      notifyListeners();
+    }
+  }
+
+  List educationApiList = [];
+  late Future<ProfileGiverModel> fetchProfileEdit;
+  Future<ProfileGiverModel> fetchProfileGiverModelEdit(BuildContext context) async {
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    final response = await Dio().get(
+      CareGiverUrl.serviceProviderProfile,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      educationApiList = response.data['data']["educations"];
+      selectedArea = response.data['data']["userdetail"]['area'] != null ? response.data['data']["userdetail"]['area'].toString() : 'select';
+
+      for (int i = 0; i < educationApiList.length; i++) {
+        instituteMapList.add(educationApiList[i]['name']);
+        majorMapList.add(educationApiList[i]['major']);
+        startDateMapList.add(educationApiList[i]['from']);
+        endDateMapList.add(educationApiList[i]['to']);
+        currentMapList.add(educationApiList[i]['current']);
+      }
+      notifyListeners();
+      return ProfileGiverModel.fromJson(response.data);
+    } else {
+      throw Exception(
+        customErrorSnackBar(
+          context,
+          'Failed to load Profile Model',
+        ),
+      );
+    }
+  }
+
+  // Image Picking
+  ProgressDialog? pr;
+  void showProgress(context) async {
+    pr ??= ProgressDialog(context);
+    await pr!.show();
+    notifyListeners();
+  }
+
+  void hideProgress() async {
+    if (pr != null && pr!.isShowing()) {
+      await pr!.hide();
+      notifyListeners();
+    }
+  }
+
+  File? image;
+  File? imageFileDio;
+
+  bool showSpinner = false;
+  var myimg;
+
+  Future getImageDio(BuildContext context) async {
+    FilePickerResult? pickedFileDio = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['png', 'jpg', 'jpeg'],
+    );
+
+    if (pickedFileDio != null) {
+      if (checkImageFileTypes(context, pickedFileDio.files.single.extension)) {
+        imageFileDio = File(pickedFileDio.files.single.path ?? "");
+        notifyListeners();
+      }
+    } else {
+      customErrorSnackBar(context, "No file select");
+    }
+  }
+
+  var lists = {
+    "valid_driver_license": "",
+    "scars_awareness_certification": "",
+    "red_cross_babysitting_certification": "",
+    "cpr_first_aid_certification": "",
+    "animal_care_provider_certification": "",
+    "chaild_and_family_services_and_abuse": "",
+    "animail_first_aid": "",
+    "government_registered_care_provider": "",
+    "police_background_check": "",
+  };
+
+  uploadDocument(BuildContext context, String documentType) async {
+    try {
+      FilePickerResult? file = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['pdf', 'docx', 'doc'],
+        allowMultiple: false,
+      );
+      if (file != null) {
+        lists[documentType] = file.files.single.path.toString();
+        notifyListeners();
+      }
+    } catch (error) {
+      customErrorSnackBar(context, error.toString());
+    }
+  }
+
+  var error;
+  uploadImageDio(
+    BuildContext context,
+    userInfoText,
+    phoneText,
+    addressText,
+    dobText,
+    zipText,
+    experienceText,
+    hourlyText,
+    availabilityText,
+  ) async {
+    var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+
+    var formData = FormData.fromMap(
+      {
+        '_method': 'PUT',
+        'id': usersId,
+        'user_info': userInfoText.toString(),
+        'phone': phoneText.toString(),
+        'address': addressText.toString(),
+        'gender': isSelectedGender,
+        'dob': dobText.toString(),
+        'area': selectedArea,
+        'zip': zipText.toString(),
+        'experience': experienceText.toString(),
+        'hourly_rate': hourlyText.toString(),
+        'availability': availabilityText.toString(),
+        // 'service': keywordText.toString(),
+        "avatar": imageFileDio == null ? null : await MultipartFile.fromFile(imageFileDio!.path),
+        "institute_name[]": instituteMapList,
+        "start_date[]": startDateMapList,
+        "end_date[]": endDateMapList,
+        "current[]": currentMapList,
+        "major[]": majorMapList,
+        "valid_driver_license": lists['valid_driver_license'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['valid_driver_license'].toString()),
+        "scars_awareness_certification": lists['scars_awareness_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['scars_awareness_certification'].toString()),
+        "red_cross_babysitting_certification": lists['red_cross_babysitting_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['red_cross_babysitting_certification'].toString()),
+        "cpr_first_aid_certification": lists['cpr_first_aid_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['cpr_first_aid_certification'].toString()),
+        "animal_care_provider_certification": lists['animal_care_provider_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animal_care_provider_certification'].toString()),
+        "chaild_and_family_services_and_abuse": lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['chaild_and_family_services_and_abuse'].toString()),
+        "animail_first_aid": lists['animail_first_aid'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animail_first_aid'].toString()),
+        "government_registered_care_provider": lists['government_registered_care_provider'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['government_registered_care_provider'].toString()),
+        "police_background_check": lists['police_background_check'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['police_background_check'].toString()),
+      },
+    );
+    // print(formData.fields);
+    Dio dio = Dio();
+    try {
+      var response = await dio.post('https://islandcare.bm/api/service-provider-profile/update', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
+
+      sendRequest = false;
+      notifyListeners();
+      if (response.statusCode == 200) {
+        Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
+        customSuccesSnackBar(
+          context,
+          "Profile Updated Successfully.",
+        );
+      } else {
+        error = response.data;
+        notifyListeners();
+        customErrorSnackBar(
+          context,
+          "Something went wrong please try agan later.",
+        );
+      }
+    } catch (e) {
+      // print(e);
+      customErrorSnackBar(context, e.toString());
+    }
+  }
+
+  final List areaList = [
+    {"name": "Select Area", "value": "select"},
+    {"name": "East", "value": "0"},
+    {"name": "Central", "value": "1"},
+    {"name": "West", "value": "2"},
+  ];
+
+  var selectedArea = "select";
+  setSelectedArea(value) {
+    selectedArea = value;
+    notifyListeners();
   }
 }
