@@ -107,6 +107,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Consumer<ServiceGiverProvider>(builder: (context, giverProvider, __) {
+        // print(giverProvider.fetchProfile!.data!.userdetailprovider!.additionalServices);
         return Scaffold(
           backgroundColor: CustomColors.loginBg,
           appBar: PreferredSize(
@@ -211,6 +212,18 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                                 availability: giverProvider.fetchProfile!.data!.userdetailprovider!.availability,
                                                                 userInfo: giverProvider.fetchProfile!.data!.userdetail!.userInfo,
                                                                 serviceName: giverProvider.fetchProfile!.data!.userdetail!.service!.name,
+                                                                area: giverProvider.fetchProfile!.data!.userdetail!.area,
+                                                                educations: giverProvider.fetchProfile!.data!.educations!
+                                                                    .map((e) => {
+                                                                          "name": e.name.toString(),
+                                                                          "major": e.major.toString(),
+                                                                          "from": e.from.toString(),
+                                                                          "current": e.current.toString(),
+                                                                          "to": e.to.toString(),
+                                                                        })
+                                                                    .toList(),
+                                                                workReference: giverProvider.fetchProfile!.data!.userdetailprovider!.workReference,
+                                                                resume: giverProvider.fetchProfile!.data!.userdetailprovider!.resume,
                                                               ),
                                                             ),
                                                           );
@@ -1206,7 +1219,152 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                         }
                                       },
                                     ),
-
+                                    // Work Refrence file
+                                    const SizedBox(height: 10),
+                                    GestureDetector(
+                                      // onTap: onTap,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                        height: 50,
+                                        width: MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          color: CustomColors.white,
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Icon(
+                                              Icons.picture_as_pdf_rounded,
+                                              color: CustomColors.red,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Expanded(
+                                              child: Text(
+                                                downloading ? "Work Reference $downloadProgress" : "Work Reference",
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
+                                              ),
+                                            ),
+                                            DottedBorder(
+                                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                              radius: const Radius.circular(4),
+                                              borderType: BorderType.RRect,
+                                              color: CustomColors.primaryColor,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.picture_as_pdf_rounded,
+                                                    color: CustomColors.red,
+                                                    size: 16,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  if (giverProvider.fetchProfile!.data!.userdetailprovider!.workReference != null && giverProvider.fetchProfile!.data!.userdetailprovider!.workReference!.isNotEmpty) ...[
+                                                    Text(
+                                                      "File Available",
+                                                      maxLines: 1,
+                                                      textAlign: TextAlign.center,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        color: CustomColors.primaryText,
+                                                      ),
+                                                    ),
+                                                  ] else ...[
+                                                    Text(
+                                                      "File Not Available",
+                                                      maxLines: 1,
+                                                      textAlign: TextAlign.center,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        color: CustomColors.primaryText,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    // Resume file
+                                    const SizedBox(height: 10),
+                                    GestureDetector(
+                                      // onTap: onTap,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                                        height: 50,
+                                        width: MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          color: CustomColors.white,
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Icon(
+                                              Icons.picture_as_pdf_rounded,
+                                              color: CustomColors.red,
+                                            ),
+                                            const SizedBox(width: 5),
+                                            Expanded(
+                                              child: Text(
+                                                downloading ? "Resume $downloadProgress" : "Resume",
+                                                maxLines: 2,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(fontSize: 10, color: CustomColors.primaryText),
+                                              ),
+                                            ),
+                                            DottedBorder(
+                                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                                              radius: const Radius.circular(4),
+                                              borderType: BorderType.RRect,
+                                              color: CustomColors.primaryColor,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.picture_as_pdf_rounded,
+                                                    color: CustomColors.red,
+                                                    size: 16,
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  if (giverProvider.fetchProfile!.data!.userdetailprovider!.resume != null && giverProvider.fetchProfile!.data!.userdetailprovider!.resume!.isNotEmpty) ...[
+                                                    Text(
+                                                      "File Available",
+                                                      maxLines: 1,
+                                                      textAlign: TextAlign.center,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        color: CustomColors.primaryText,
+                                                      ),
+                                                    ),
+                                                  ] else ...[
+                                                    Text(
+                                                      "File Not Available",
+                                                      maxLines: 1,
+                                                      textAlign: TextAlign.center,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      style: TextStyle(
+                                                        fontSize: 11,
+                                                        color: CustomColors.primaryText,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                     // file type 1
                                     if (giverProvider.fetchProfile!.data!.providerverification!.validDriverLicense != null) ...[
                                       const SizedBox(height: 10),

@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, unused_local_variable, unnecessary_null_comparison, prefer_typing_uninitialized_variables, unrelated_type_equality_checks
 
+import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
@@ -27,10 +28,16 @@ class ProfileGiverPendingEdit extends StatefulWidget {
   final int? yoe;
   final String? hourlyRate;
   final String? userAddress;
+  final String? area;
+
   final String? zipCode;
   final List? additionalService;
+  final List? educations;
+
   final String? availability;
   final String? userInfo;
+  final String? workReference;
+  final String? resume;
 
   const ProfileGiverPendingEdit({
     Key? key,
@@ -43,11 +50,15 @@ class ProfileGiverPendingEdit extends StatefulWidget {
     this.yoe,
     this.hourlyRate,
     this.userAddress,
+    this.area,
     this.zipCode,
     this.additionalService,
-    this.availability,
     this.userInfo,
+    this.availability,
+    this.educations,
     this.serviceName,
+    this.workReference,
+    this.resume,
   }) : super(key: key);
   @override
   State<ProfileGiverPendingEdit> createState() => _ProfileGiverPendingEditState();
@@ -63,7 +74,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   final TextEditingController experienceController = TextEditingController();
   final TextEditingController hourlyController = TextEditingController();
   final TextEditingController availabilityController = TextEditingController();
-  // final TextEditingController keywordController = TextEditingController();
   final TextEditingController instituteController = TextEditingController();
   final TextEditingController majorController = TextEditingController();
   final TextEditingController fromController = TextEditingController();
@@ -71,9 +81,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   @override
   void initState() {
     super.initState();
-    // this.getSWData();
-    // fetchProfileEdit = fetchProfileGiverModelEdit();
-    // Provider.of<GiverProfileEidtProvider>(context).initData(data);
+
     if (widget.phoneNumber != null) {
       phoneController.text = widget.phoneNumber!;
     }
@@ -99,12 +107,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     if (widget.userInfo != null) {
       userInfoController.text = widget.userInfo!;
     }
-    if (widget.additionalService != null) {
-      Provider.of<GiverProfileEidtProvider>(context, listen: false).setSelectedAdditionalServiceInit(widget.additionalService);
-    }
-    if (widget.gender != "null" || widget.gender != null) {
-      Provider.of<GiverProfileEidtProvider>(context, listen: false).setSelectedGenderinit(widget.gender);
-    }
+    Provider.of<GiverProfileEidtProvider>(context, listen: false).initValueSet(widget.gender, widget.area, widget.additionalService, widget.educations);
   }
 
   @override
@@ -481,7 +484,11 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  giverProfileEditProvider.getPickedDate.isEmpty ? "Date Of Birth" : giverProfileEditProvider.getPickedDate.toString(),
+                                  giverProfileEditProvider.getPickedDate.isEmpty
+                                      ? dobController.text.isEmpty
+                                          ? "Date Of Birth"
+                                          : dobController.text
+                                      : giverProfileEditProvider.getPickedDate.toString(),
                                   style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 15,
@@ -1322,7 +1329,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             children: [
                               for (var i = 0; i < giverProfileEditProvider.educationApiList.length; i++) ...[
                                 SizedBox(
-                                  height: 100,
+                                  height: 120,
                                   width: MediaQuery.of(context).size.width,
                                   child: Stack(
                                     children: [
@@ -1330,7 +1337,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                         top: 10,
                                         child: Container(
                                           width: MediaQuery.of(context).size.width - 40,
-                                          height: 90,
+                                          // height: 100,
                                           padding: const EdgeInsets.symmetric(
                                             horizontal: 10,
                                             vertical: 10,
@@ -1377,10 +1384,31 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                   ),
                                                 ],
                                               ),
+                                              // if (giverProfileEditProvider.educationApiList[i]['to'] != null && giverProfileEditProvider.educationApiList[i]['current'].isNotEmpty) ...[
+                                              Row(
+                                                children: [
+                                                  const Text("to: "),
+                                                  Expanded(
+                                                    child: giverProfileEditProvider.educationApiList[i]['current'] == "1"
+                                                        ? const Text(
+                                                            "Currently Studying",
+                                                            maxLines: 2,
+                                                            overflow: TextOverflow.fade,
+                                                          )
+                                                        : Text(
+                                                            "${giverProfileEditProvider.educationApiList[i]['to']}",
+                                                            maxLines: 2,
+                                                            overflow: TextOverflow.fade,
+                                                          ),
+                                                  ),
+                                                ],
+                                              ),
+                                              // ]
                                             ],
                                           ),
                                         ),
                                       ),
+                                      // remove icon
                                       Positioned(
                                         top: 0,
                                         right: 05,
@@ -1687,17 +1715,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         // Work Reference (1 Area)
                         UploadBasicDocumentList(
                           onTap: () {
-                            giverProfileEditProvider.uploadDocument(context, "valid_driver_license");
+                            giverProfileEditProvider.uploadDocument(context, "work_reference");
                           },
                           title: "Work Reference (1 Area)",
-                          fileSelectText: giverProfileEditProvider.lists['valid_driver_license'].toString().isEmpty ? "Select File" : "Change File",
+                          fileSelectText: giverProfileEditProvider.lists['work_reference'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['valid_driver_license'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['work_reference'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['valid_driver_license'].toString(),
+                              giverProfileEditProvider.error['errors']['work_reference'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1709,17 +1737,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         // Resume
                         UploadBasicDocumentList(
                           onTap: () {
-                            giverProfileEditProvider.uploadDocument(context, "scars_awareness_certification");
+                            giverProfileEditProvider.uploadDocument(context, "resume");
                           },
                           title: "Resume",
-                          fileSelectText: giverProfileEditProvider.lists['scars_awareness_certification'].toString().isEmpty ? "Select File" : "Change File",
+                          fileSelectText: giverProfileEditProvider.lists['resume'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['scars_awareness_certification'] != null) ...[
+                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['resume'] != null) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['scars_awareness_certification'].toString(),
+                              giverProfileEditProvider.error['errors']['resume'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1737,12 +1765,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           title: "Valid Driver's License",
                           fileSelectText: giverProfileEditProvider.lists['valid_driver_license'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['valid_driver_license'] != null) ...[
+                        if (giverProfileEditProvider.validationErrors['valid_driver_license']!['status'] == true) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['valid_driver_license'].toString(),
+                              giverProfileEditProvider.validationErrors['valid_driver_license']!['error'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1759,12 +1787,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           title: "Scars Awareness Certification",
                           fileSelectText: giverProfileEditProvider.lists['scars_awareness_certification'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['scars_awareness_certification'] != null) ...[
+                        if (giverProfileEditProvider.validationErrors['scars_awareness_certification']!['status'] == true) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['scars_awareness_certification'].toString(),
+                              giverProfileEditProvider.validationErrors['scars_awareness_certification']!['error'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1781,12 +1809,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           title: "Police Background Check",
                           fileSelectText: giverProfileEditProvider.lists['police_background_check'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['police_background_check'] != null) ...[
+                        if (giverProfileEditProvider.validationErrors['police_background_check']!['status'] == true) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['police_background_check'].toString(),
+                              giverProfileEditProvider.validationErrors['police_background_check']!['error'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1803,12 +1831,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           title: "CPR/First Aid Certificate",
                           fileSelectText: giverProfileEditProvider.lists['cpr_first_aid_certification'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['cpr_first_aid_certification'] != null) ...[
+                        if (giverProfileEditProvider.validationErrors['cpr_first_aid_certification']!['status'] == true) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['cpr_first_aid_certification'].toString(),
+                              giverProfileEditProvider.validationErrors['cpr_first_aid_certification']!['error'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1825,12 +1853,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           title: "Government Registered Care Provider",
                           fileSelectText: giverProfileEditProvider.lists['government_registered_care_provider'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['government_registered_care_provider'] != null) ...[
+                        if (giverProfileEditProvider.validationErrors['government_registered_care_provider']!['status'] == true) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['government_registered_care_provider'].toString(),
+                              giverProfileEditProvider.validationErrors['government_registered_care_provider']!['error'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1847,12 +1875,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           title: "Animal Care Provider Certificate",
                           fileSelectText: giverProfileEditProvider.lists['animal_care_provider_certification'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['animal_care_provider_certification'] != null) ...[
+                        if (giverProfileEditProvider.validationErrors['animal_care_provider_certification']!['status'] == true) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 5.0),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['animal_care_provider_certification'].toString(),
+                              giverProfileEditProvider.validationErrors['animal_care_provider_certification']!['error'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1869,12 +1897,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           title: "Animal First Aid",
                           fileSelectText: giverProfileEditProvider.lists['animail_first_aid'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['animail_first_aid'] != null) ...[
+                        if (giverProfileEditProvider.validationErrors['animail_first_aid']!['status'] == true) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['animail_first_aid'][0].toString(),
+                              giverProfileEditProvider.validationErrors['animail_first_aid']!['error'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1891,12 +1919,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           title: "Red Cross Babysitting Certification",
                           fileSelectText: giverProfileEditProvider.lists['red_cross_babysitting_certification'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['red_cross_babysitting_certification'] != null) ...[
+                        if (giverProfileEditProvider.validationErrors['red_cross_babysitting_certification']!['status'] == true) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['red_cross_babysitting_certification'][0].toString(),
+                              giverProfileEditProvider.validationErrors['red_cross_babysitting_certification']!['error'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1913,12 +1941,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           title: "Dept Child and Family Services Child Abuse Check",
                           fileSelectText: giverProfileEditProvider.lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? "Select File" : "Change File",
                         ),
-                        if (giverProfileEditProvider.error != null && giverProfileEditProvider.error['errors'] != null && giverProfileEditProvider.error['errors']!['chaild_and_family_services_and_abuse'] != null) ...[
+                        if (giverProfileEditProvider.validationErrors['chaild_and_family_services_and_abuse']!['status'] == true) ...[
                           const SizedBox(height: 05),
                           Padding(
                             padding: const EdgeInsets.only(left: 10),
                             child: Text(
-                              giverProfileEditProvider.error['errors']['chaild_and_family_services_and_abuse'][0].toString(),
+                              giverProfileEditProvider.validationErrors['chaild_and_family_services_and_abuse']!['error'].toString(),
                               style: const TextStyle(
                                 color: Colors.red,
                                 fontSize: 09,
@@ -1935,35 +1963,58 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               updateFormKey.currentState!.validate();
                               if (giverProfileEditProvider.isSelectedGender == null) {
                                 customErrorSnackBar(context, "Please Select Gender");
-                              } else if (phoneController.text.isEmpty) {
-                                customErrorSnackBar(context, "Please Enter Phone Number");
                               } else if (dobController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Select Date Of Birth");
-                              } else if (giverProfileEditProvider.selectedArea == "select") {
-                                customErrorSnackBar(context, "Please Select Area");
+                              } else if (phoneController.text.isEmpty) {
+                                customErrorSnackBar(context, "Please Enter Phone Number");
                               } else if (experienceController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Enter Years of Experience");
                               } else if (hourlyController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Enter Hourly Rate");
                               } else if (addressController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Enter Address");
+                              } else if (giverProfileEditProvider.selectedArea == "select") {
+                                customErrorSnackBar(context, "Please Select Area");
                               } else if (zipController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Enter Postal Code");
-                              }
-                              // else if (keywordController.text.isEmpty) {
-                              //   customErrorSnackBar(context, "Please Enter User Keyword");
-                              // }
-                              else if (availabilityController.text.isEmpty) {
-                                customErrorSnackBar(context, "Please Enter User Availability");
+                              } else if (giverProfileEditProvider.selectedAdditionalService.isEmpty) {
+                                customErrorSnackBar(context, "Please Select Additional Services");
+                              } else if (giverProfileEditProvider.educationApiList.isEmpty) {
+                                customErrorSnackBar(context, "Please Enter education");
                               } else if (userInfoController.text.isEmpty) {
                                 customErrorSnackBar(context, "Please Enter User Info");
-                              } else if (giverProfileEditProvider.instituteMapList.isEmpty) {
-                                customErrorSnackBar(context, "Please Enter education");
+                              } else if (availabilityController.text.isEmpty) {
+                                customErrorSnackBar(context, "Please Enter User Availability");
+                              } else if (widget.workReference == null && giverProfileEditProvider.lists['work_reference']!.isEmpty) {
+                                customErrorSnackBar(context, "Work Refrence is Required");
+                              } else if (widget.resume == null && giverProfileEditProvider.lists['resume']!.isEmpty) {
+                                customErrorSnackBar(context, "Resume is Required");
                               } else {
-                                if (updateFormKey.currentState!.validate()) {
-                                  giverProfileEditProvider.setSendRequest(true);
+                                List<String> missingDocuments = [];
+                                giverProfileEditProvider.setValidateErrorToDefault();
+                                // print(giverProfileEditProvider.validationErrorsObj);
+                                giverProfileEditProvider.removeRequireDocumentDuplicate();
+                                for (String documentKey in giverProfileEditProvider.requireDocument) {
+                                  if (!giverProfileEditProvider.isDocumentAvailable(documentKey)) {
+                                    missingDocuments.add(documentKey);
+                                  }
+                                }
+                                if (missingDocuments.isNotEmpty) {
+                                  // Show errors for missing documents
+                                  for (String missingDocument in missingDocuments) {
+                                    print("missing doc $missingDocument");
+                                    giverProfileEditProvider.setValidateError(missingDocument);
+                                  }
+                                  print(giverProfileEditProvider.validationErrors);
+                                } else {
+                                  // All required documents are available
+                                  // You can proceed with your logic here
+                                  // print("All required documents are available");
+                                  if (updateFormKey.currentState!.validate()) {
+                                    giverProfileEditProvider.setSendRequest(true);
 
-                                  giverProfileEditProvider.uploadImageDio(context, userInfoController.text, phoneController.text, addressController.text, dobController.text, zipController.text, experienceController.text, hourlyController.text, availabilityController.text);
+                                    giverProfileEditProvider.uploadImageDio(context, userInfoController.text, phoneController.text, addressController.text, dobController.text, zipController.text, experienceController.text, hourlyController.text, availabilityController.text);
+                                  }
                                 }
                               }
                             },
@@ -1984,19 +2035,15 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Center(
-                                child: giverProfileEditProvider.sendRequest
-                                    ? const CircularProgressIndicator(
-                                        color: Colors.white,
-                                      )
-                                    : Text(
-                                        "Save",
-                                        style: TextStyle(
-                                          color: CustomColors.white,
-                                          fontSize: 22,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: "Rubik",
-                                        ),
-                                      ),
+                                child: Text(
+                                  "Save",
+                                  style: TextStyle(
+                                    color: CustomColors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: "Rubik",
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -2136,11 +2183,38 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
 }
 
 class GiverProfileEidtProvider extends ChangeNotifier {
-  var isSelectedGender = "1";
-  setSelectedGenderinit(value) {
-    isSelectedGender = value;
+  initValueSet(genderValue, areaValue, additionalServiceValue, educationValue) {
+    if (genderValue != "null" && genderValue != null) {
+      isSelectedGender = genderValue;
+    }
+    if (areaValue != "null" && areaValue != null) {
+      selectedArea = areaValue;
+    }
+    if (additionalServiceValue != null && additionalServiceValue.isNotEmpty) {
+      selectedAdditionalService.addAll(additionalServiceValue);
+      selectedAdditionalService = selectedAdditionalService.toSet().toList();
+      setRequireDocumentInit();
+    }
+    if (educationValue != null && educationValue.isNotEmpty) {
+      for (var i = 0; i < educationValue.length; i++) {
+        var item = educationValue[i];
+        instituteMapList.add(educationValue[i]['name']);
+        majorMapList.add(educationValue[i]['major']);
+        startDateMapList.add(educationValue[i]['from']);
+        endDateMapList.add(educationValue[i]['to']);
+        currentMapList.add(educationValue[i]['current']);
+        educationApiList.add(educationValue[i]);
+      }
+      instituteMapList = instituteMapList.toSet().toList();
+      majorMapList = majorMapList.toSet().toList();
+      startDateMapList = startDateMapList.toSet().toList();
+      endDateMapList = endDateMapList.toSet().toList();
+      currentMapList = currentMapList.toSet().toList();
+      educationApiList = educationApiList.toSet().toList();
+    }
   }
 
+  var isSelectedGender = "1";
   setSelectedGender(value) {
     isSelectedGender = value;
     notifyListeners();
@@ -2156,17 +2230,15 @@ class GiverProfileEidtProvider extends ChangeNotifier {
 
   List selectedAdditionalService = [];
 
-  setSelectedAdditionalServiceInit(value) {
-    selectedAdditionalService.addAll(value);
-  }
-
   setSelectedAdditionalService(value) {
     selectedAdditionalService.add(value);
+    setRequireDocument(value);
     notifyListeners();
   }
 
   removeSelectedAdditionalService(value) {
     selectedAdditionalService.remove(value);
+    removeRequireDocument(value);
     notifyListeners();
   }
 
@@ -2414,6 +2486,8 @@ class GiverProfileEidtProvider extends ChangeNotifier {
   }
 
   var lists = {
+    'work_reference': "",
+    'resume': "",
     "valid_driver_license": "",
     "scars_awareness_certification": "",
     "red_cross_babysitting_certification": "",
@@ -2430,11 +2504,13 @@ class GiverProfileEidtProvider extends ChangeNotifier {
       FilePickerResult? file = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'docx', 'doc'],
-        allowMultiple: false,
       );
-      if (file != null) {
+      if (file != null && file.files[0].extension == "pdf" || file!.files[0].extension == "doc" || file.files[0].extension == "docx") {
         lists[documentType] = file.files.single.path.toString();
+        // print(lists[documentType]);
         notifyListeners();
+      } else {
+        customErrorSnackBar(context, "Only DOC and PDF file allowed");
       }
     } catch (error) {
       customErrorSnackBar(context, error.toString());
@@ -2455,44 +2531,44 @@ class GiverProfileEidtProvider extends ChangeNotifier {
   ) async {
     var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-
-    var formData = FormData.fromMap(
-      {
-        '_method': 'PUT',
-        'id': usersId,
-        'user_info': userInfoText.toString(),
-        'phone': phoneText.toString(),
-        'address': addressText.toString(),
-        'gender': isSelectedGender,
-        'dob': dobText.toString(),
-        'area': selectedArea,
-        'zip': zipText.toString(),
-        'experience': experienceText.toString(),
-        'hourly_rate': hourlyText.toString(),
-        'availability': availabilityText.toString(),
-        // 'service': keywordText.toString(),
-        "avatar": imageFileDio == null ? null : await MultipartFile.fromFile(imageFileDio!.path),
-        "institute_name[]": instituteMapList,
-        "start_date[]": startDateMapList,
-        "end_date[]": endDateMapList,
-        "current[]": currentMapList,
-        "major[]": majorMapList,
-        "valid_driver_license": lists['valid_driver_license'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['valid_driver_license'].toString()),
-        "scars_awareness_certification": lists['scars_awareness_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['scars_awareness_certification'].toString()),
-        "red_cross_babysitting_certification": lists['red_cross_babysitting_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['red_cross_babysitting_certification'].toString()),
-        "cpr_first_aid_certification": lists['cpr_first_aid_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['cpr_first_aid_certification'].toString()),
-        "animal_care_provider_certification": lists['animal_care_provider_certification'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animal_care_provider_certification'].toString()),
-        "chaild_and_family_services_and_abuse": lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['chaild_and_family_services_and_abuse'].toString()),
-        "animail_first_aid": lists['animail_first_aid'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['animail_first_aid'].toString()),
-        "government_registered_care_provider": lists['government_registered_care_provider'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['government_registered_care_provider'].toString()),
-        "police_background_check": lists['police_background_check'].toString().isEmpty ? null : await MultipartFile.fromFile(lists['police_background_check'].toString()),
-      },
-    );
+    // print(jsonEncode(List<dynamic>.from(selectedAdditionalService.map((x) => {"value": x}))));
+    var formData = FormData.fromMap({
+      '_method': 'PUT',
+      'id': usersId,
+      'user_info': userInfoText.toString(),
+      'phone': phoneText.toString(),
+      'address': addressText.toString(),
+      'gender': isSelectedGender,
+      'dob': dobText.toString(),
+      'area': selectedArea,
+      'zip': zipText.toString(),
+      'experience': experienceText.toString(),
+      'hourly_rate': hourlyText.toString(),
+      'availability': availabilityText.toString(),
+      'additional_service': selectedAdditionalService.toString(),
+      'service': jsonEncode(List<dynamic>.from(selectedAdditionalService.map((x) => {"value": x}))),
+      "avatar": imageFileDio == null ? '' : await MultipartFile.fromFile(imageFileDio!.path),
+      "institute_name[]": instituteMapList,
+      "start_date[]": startDateMapList,
+      "end_date[]": endDateMapList,
+      "current[]": currentMapList,
+      "major[]": majorMapList,
+      "work_reference": lists['work_reference'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['work_reference'].toString()),
+      "resume": lists['resume'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['resume'].toString()),
+      "valid_driver_license": lists['valid_driver_license'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['valid_driver_license'].toString()),
+      "scars_awareness_certification": lists['scars_awareness_certification'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['scars_awareness_certification'].toString()),
+      "red_cross_babysitting_certification": lists['red_cross_babysitting_certification'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['red_cross_babysitting_certification'].toString()),
+      "cpr_first_aid_certification": lists['cpr_first_aid_certification'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['cpr_first_aid_certification'].toString()),
+      "animal_care_provider_certification": lists['animal_care_provider_certification'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['animal_care_provider_certification'].toString()),
+      "chaild_and_family_services_and_abuse": lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['chaild_and_family_services_and_abuse'].toString()),
+      "animail_first_aid": lists['animail_first_aid'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['animail_first_aid'].toString()),
+      "government_registered_care_provider": lists['government_registered_care_provider'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['government_registered_care_provider'].toString()),
+      "police_background_check": lists['police_background_check'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['police_background_check'].toString()),
+    });
     // print(formData.fields);
     Dio dio = Dio();
     try {
       var response = await dio.post('https://islandcare.bm/api/service-provider-profile/update', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
-
       sendRequest = false;
       notifyListeners();
       if (response.statusCode == 200) {
@@ -2525,6 +2601,124 @@ class GiverProfileEidtProvider extends ChangeNotifier {
   var selectedArea = "select";
   setSelectedArea(value) {
     selectedArea = value;
+    notifyListeners();
+  }
+
+  List requireDocument = [];
+
+  List<String>? getExtraDocumentRequire(String serviceName) {
+    if (serviceName.contains('Senior Care')) {
+      return [
+        'cpr_first_aid_certification',
+        'government_registered_care_provider',
+      ];
+    } else if (serviceName.contains('Pet Care')) {
+      return [
+        'animal_care_provider_certification',
+        'animail_first_aid',
+      ];
+    } else if (serviceName.contains('House Keeping')) {
+      return null;
+    } else if (serviceName.contains('School Support')) {
+      return [
+        'red_cross_babysitting_certification',
+        'cpr_first_aid_certification',
+        'chaild_and_family_services_and_abuse',
+        'government_registered_care_provider',
+      ];
+    } else if (serviceName.contains('Child Care')) {
+      return [
+        'red_cross_babysitting_certification',
+        'cpr_first_aid_certification',
+        'chaild_and_family_services_and_abuse',
+        'government_registered_care_provider',
+      ];
+    } else {
+      return null;
+    }
+  }
+
+  setRequireDocument(value) {
+    var getdocrequire = getExtraDocumentRequire(value);
+    if (getdocrequire != null) {
+      requireDocument.addAll(getdocrequire);
+    }
+    notifyListeners();
+  }
+
+  removeRequireDocumentDuplicate() {
+    requireDocument = requireDocument.toSet().toList();
+
+    notifyListeners();
+  }
+
+  removeRequireDocument(value) {
+    var getdocrequire = getExtraDocumentRequire(value);
+    if (getdocrequire != null) {
+      for (var i = 0; i < getdocrequire.length; i++) {
+        requireDocument.remove(getdocrequire[i]);
+      }
+    }
+    notifyListeners();
+  }
+
+  setRequireDocumentInit() {
+    for (int i = 0; i < selectedAdditionalService.length; i++) {
+      var getdocrequire = getExtraDocumentRequire(selectedAdditionalService[i]);
+      if (getdocrequire != null) {
+        requireDocument.addAll(getdocrequire);
+      }
+    }
+  }
+
+  bool isDocumentAvailable(String documentKey) {
+    print(documentKey);
+    return lists[documentKey]?.isNotEmpty ?? false;
+  }
+
+  List<String> missingDocuments = [];
+
+  // var validationErrorsObj = {
+  //   "valid_driver_license": {"status": false, "error": "Valid Driver License is Required."},
+  //   "scars_awareness_certification": {"status": false, "error": "Scars Awareness Certification is Required."},
+  //   "red_cross_babysitting_certification": {"status": false, "error": "Red Cross Babysitting Certification is Required."},
+  //   "cpr_first_aid_certification": {"status": false, "error": "CPR First Aid Certification is Required."},
+  //   "animal_care_provider_certification": {"status": false, "error": "Animal Care Provider Certification is Required."},
+  //   "chaild_and_family_services_and_abuse": {"status": false, "error": "Chaild And Family Services and Abuse is Required."},
+  //   "animail_first_aid": {"status": false, "error": "Animail First Aid is Required."},
+  //   "government_registered_care_provider": {"status": false, "error": "Government Registered Care Provider is Required."},
+  //   "police_background_check": {"status": false, "error": "Police Background Check is Required."},
+  // };
+
+  var validationErrors = {
+    "valid_driver_license": {"status": false, "error": "Valid Driver License is Required."},
+    "scars_awareness_certification": {"status": false, "error": "Scars Awareness Certification is Required."},
+    "red_cross_babysitting_certification": {"status": false, "error": "Red Cross Babysitting Certification is Required."},
+    "cpr_first_aid_certification": {"status": false, "error": "CPR First Aid Certification is Required."},
+    "animal_care_provider_certification": {"status": false, "error": "Animal Care Provider Certification is Required."},
+    "chaild_and_family_services_and_abuse": {"status": false, "error": "Chaild And Family Services and Abuse is Required."},
+    "animail_first_aid": {"status": false, "error": "Animail First Aid is Required."},
+    "government_registered_care_provider": {"status": false, "error": "Government Registered Care Provider is Required."},
+    "police_background_check": {"status": false, "error": "Police Background Check is Required."},
+  };
+
+  setValidateErrorToDefault() {
+    validationErrors = {
+      "valid_driver_license": {"status": false, "error": "Valid Driver License is Required."},
+      "scars_awareness_certification": {"status": false, "error": "Scars Awareness Certification is Required."},
+      "red_cross_babysitting_certification": {"status": false, "error": "Red Cross Babysitting Certification is Required."},
+      "cpr_first_aid_certification": {"status": false, "error": "CPR First Aid Certification is Required."},
+      "animal_care_provider_certification": {"status": false, "error": "Animal Care Provider Certification is Required."},
+      "chaild_and_family_services_and_abuse": {"status": false, "error": "Chaild And Family Services and Abuse is Required."},
+      "animail_first_aid": {"status": false, "error": "Animail First Aid is Required."},
+      "government_registered_care_provider": {"status": false, "error": "Government Registered Care Provider is Required."},
+      "police_background_check": {"status": false, "error": "Police Background Check is Required."},
+    };
+    notifyListeners();
+  }
+
+  setValidateError(missingDocument) {
+    validationErrors[missingDocument]!['status'] = true;
     notifyListeners();
   }
 }
