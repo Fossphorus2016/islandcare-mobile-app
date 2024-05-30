@@ -107,7 +107,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Consumer<ServiceGiverProvider>(builder: (context, giverProvider, __) {
-        // print(giverProvider.fetchProfile!.data!.userdetailprovider!.additionalServices);
         return Scaffold(
           backgroundColor: CustomColors.loginBg,
           appBar: PreferredSize(
@@ -224,6 +223,15 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                                     .toList(),
                                                                 workReference: giverProvider.fetchProfile!.data!.userdetailprovider!.workReference,
                                                                 resume: giverProvider.fetchProfile!.data!.userdetailprovider!.resume,
+                                                                validDriverLicenseVerify: giverProvider.fetchProfile!.data!.providerverification!.validDriverLicenseVerify == 1,
+                                                                scarsAwarenessCertificationVerify: giverProvider.fetchProfile!.data!.providerverification!.scarsAwarenessCertificationVerify == 1,
+                                                                policeBackgroundCheckVerify: giverProvider.fetchProfile!.data!.providerverification!.policeBackgroundCheckVerify == 1,
+                                                                cprFirstAidCertificationVerify: giverProvider.fetchProfile!.data!.providerverification!.cprFirstAidCertificationVerify == 1,
+                                                                governmentRegisteredCareProviderVerify: giverProvider.fetchProfile!.data!.providerverification!.governmentRegisteredCareProviderVerify == 1,
+                                                                animalCareProviderCertificationVerify: giverProvider.fetchProfile!.data!.providerverification!.animalCareProviderCertificationVerify == 1,
+                                                                animailFirstAidVerify: giverProvider.fetchProfile!.data!.providerverification!.animailFirstAidVerify == 1,
+                                                                redCrossBabysittingCertificationVerify: giverProvider.fetchProfile!.data!.providerverification!.redCrossBabysittingCertificationVerify == 1,
+                                                                chaildAndFamilyServicesAndAbuseVerify: giverProvider.fetchProfile!.data!.providerverification!.chaildAndFamilyServicesAndAbuseVerify == 1,
                                                               ),
                                                             ),
                                                           );
@@ -1012,7 +1020,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                                   ),
                                                                 )
                                                               : Text(
-                                                                  "",
+                                                                  "To: ${giverProvider.fetchProfile!.data!.educations![index].to}",
                                                                   softWrap: true,
                                                                   style: TextStyle(
                                                                     height: 0,

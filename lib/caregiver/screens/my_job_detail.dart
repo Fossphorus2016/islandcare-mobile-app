@@ -2,6 +2,12 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+// import 'package:island_app/caregiver/models/child_care_detail-dashbaord_model.dart';
+// import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model.dart';
+// import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart';
+// import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
+// import 'package:island_app/caregiver/models/senior_care_detail_dashboard_model.dart';
+import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/models/child_care_model.dart';
 import 'package:island_app/carereceiver/models/house_keeping_model.dart';
 import 'package:island_app/carereceiver/models/pet_care_model.dart';
@@ -11,7 +17,7 @@ import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 import 'package:island_app/widgets/job_info_container.dart';
 import 'package:island_app/widgets/job_schedule_container.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:island_app/carereceiver/models/senior_care_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/utils.dart';
@@ -31,13 +37,134 @@ class ServiceProviderJobsDetail extends StatefulWidget {
 
 class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
   // Get Detail jobs
-  late Future<SeniorCareDetailModel> futureSeniorCareDetail;
-  late Future<PetCareDetailModel> futurePetCareDetail;
-  late Future<HouseKeepingDetailModel> futureHouseKeepingDetail;
-  late Future<ChildCareDetailModel> futureChildCareDetail;
-  late Future<SchoolSupportDetailModel> futureSchoolSupportDetail;
-  Future<SeniorCareDetailModel> fetchSeniorCareDetailModel() async {
-    var token = await getUserToken();
+  // late Future<SeniorCareDetailModel> futureSeniorCareDetail;
+  // late Future<PetCareDetailModel> futurePetCareDetail;
+  // late Future<HouseKeepingDetailModel> futureHouseKeepingDetail;
+  // late Future<ChildCareDetailModel> futureChildCareDetail;
+  // late Future<SchoolSupportDetailModel> futureSchoolSupportDetail;
+  // Future<SeniorCareDetailModel> fetchSeniorCareDetailModel() async {
+  //   var token = await getUserToken();
+  //   final response = await Dio().get(
+  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
+  //     options: Options(
+  //       headers: {
+  //         'Authorization': 'Bearer $token',
+  //         'Accept': 'application/json',
+  //       },
+  //     ),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     return SeniorCareDetailModel.fromJson(response.data);
+  //   } else {
+  //     throw Exception(
+  //       customErrorSnackBar(
+  //         context,
+  //         'Failed to load Services Model',
+  //       ),
+  //     );
+  //   }
+  // }
+
+  // Future<PetCareDetailModel> fetchPetCareDetailModel() async {
+  //   var token = await getUserToken();
+  //   final response = await Dio().get(
+  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
+  //     options: Options(
+  //       headers: {
+  //         'Authorization': 'Bearer $token',
+  //         'Accept': 'application/json',
+  //       },
+  //     ),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     return PetCareDetailModel.fromJson(response.data);
+  //   } else {
+  //     throw Exception(
+  //       customErrorSnackBar(
+  //         context,
+  //         'Failed to load Services Model',
+  //       ),
+  //     );
+  //   }
+  // }
+
+  // Future<HouseKeepingDetailModel> fetchHouseKeepingDetailModel() async {
+  //   var token = await getUserToken();
+  //   final response = await Dio().get(
+  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
+  //     options: Options(
+  //       headers: {
+  //         'Authorization': 'Bearer $token',
+  //         'Accept': 'application/json',
+  //       },
+  //     ),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     return HouseKeepingDetailModel.fromJson(response.data);
+  //   } else {
+  //     throw Exception(
+  //       customErrorSnackBar(
+  //         context,
+  //         'Failed to load Services Model',
+  //       ),
+  //     );
+  //   }
+  // }
+
+  // Future<ChildCareDetailModel> fetchChildCareDetailModel() async {
+  //   var token = await getUserToken();
+  //   final response = await Dio().get(
+  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
+  //     options: Options(
+  //       headers: {
+  //         'Authorization': 'Bearer $token',
+  //         'Accept': 'application/json',
+  //       },
+  //     ),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     return ChildCareDetailModel.fromJson(response.data);
+  //   } else {
+  //     throw Exception(
+  //       customErrorSnackBar(
+  //         context,
+  //         'Failed to load Services Model',
+  //       ),
+  //     );
+  //   }
+  // }
+
+  // Future<SchoolSupportDetailModel> fetchSchoolSupportDetailModel() async {
+  //   var token = await getUserToken();
+  //   final response = await Dio().get(
+  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
+  //     options: Options(
+  //       headers: {
+  //         'Authorization': 'Bearer $token',
+  //         'Accept': 'application/json',
+  //       },
+  //     ),
+  //   );
+  //   if (response.statusCode == 200) {
+  //     return SchoolSupportDetailModel.fromJson(response.data);
+  //   } else {
+  //     throw Exception(
+  //       customErrorSnackBar(
+  //         context,
+  //         'Failed to load Services Model',
+  //       ),
+  //     );
+  //   }
+  // }
+  SeniorCareDetailModel? futureSeniorCareDetailDashboard;
+  SchoolSupportDetailModel? futureSchoolSupportDetailDashboard;
+  ChildCareDetailModel? futureChildCareDetailDashboard;
+  HouseKeepingDetailModel? futureHouseKeepingDetailDashboard;
+  PetCareDetailModel? futurePetCareDetailDashboard;
+  String serviceName = '';
+  bool? noDataFound;
+  fetchJobDetail() async {
+    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     final response = await Dio().get(
       '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
       options: Options(
@@ -48,126 +175,36 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
       ),
     );
     if (response.statusCode == 200) {
-      return SeniorCareDetailModel.fromJson(response.data);
+      // print(response.data['job_detail'][0]['service']);
+      if (response.data['job_detail'] != null) {
+        serviceName = response.data['job_detail'][0]['service']['name'];
+        if (serviceName.toLowerCase() == "senior care") {
+          futureSeniorCareDetailDashboard = SeniorCareDetailModel.fromJson(response.data);
+        } else if (serviceName.toLowerCase() == "pet care") {
+          futurePetCareDetailDashboard = PetCareDetailModel.fromJson(response.data);
+        } else if (serviceName.toLowerCase() == "house keeping") {
+          futureHouseKeepingDetailDashboard = HouseKeepingDetailModel.fromJson(response.data);
+        } else if (serviceName.toLowerCase() == "school support") {
+          futureSchoolSupportDetailDashboard = SchoolSupportDetailModel.fromJson(response.data);
+        } else if (serviceName.toLowerCase() == "child care") {
+          futureChildCareDetailDashboard = ChildCareDetailModel.fromJson(response.data);
+        } else {
+          noDataFound = true;
+        }
+        setState(() {});
+      }
+      // return PetCareDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
-        customErrorSnackBar(
-          context,
-          'Failed to load Services Model',
-        ),
+        'Failed to load Service Provider Dashboard',
       );
     }
-  }
-
-  Future<PetCareDetailModel> fetchPetCareDetailModel() async {
-    var token = await getUserToken();
-    final response = await Dio().get(
-      '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      return PetCareDetailModel.fromJson(response.data);
-    } else {
-      throw Exception(
-        customErrorSnackBar(
-          context,
-          'Failed to load Services Model',
-        ),
-      );
-    }
-  }
-
-  Future<HouseKeepingDetailModel> fetchHouseKeepingDetailModel() async {
-    var token = await getUserToken();
-    final response = await Dio().get(
-      '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      return HouseKeepingDetailModel.fromJson(response.data);
-    } else {
-      throw Exception(
-        customErrorSnackBar(
-          context,
-          'Failed to load Services Model',
-        ),
-      );
-    }
-  }
-
-  Future<ChildCareDetailModel> fetchChildCareDetailModel() async {
-    var token = await getUserToken();
-    final response = await Dio().get(
-      '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      return ChildCareDetailModel.fromJson(response.data);
-    } else {
-      throw Exception(
-        customErrorSnackBar(
-          context,
-          'Failed to load Services Model',
-        ),
-      );
-    }
-  }
-
-  Future<SchoolSupportDetailModel> fetchSchoolSupportDetailModel() async {
-    var token = await getUserToken();
-    final response = await Dio().get(
-      '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    if (response.statusCode == 200) {
-      return SchoolSupportDetailModel.fromJson(response.data);
-    } else {
-      throw Exception(
-        customErrorSnackBar(
-          context,
-          'Failed to load Services Model',
-        ),
-      );
-    }
-  }
-
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-    return userToken.toString();
   }
 
   @override
   void initState() {
-    getUserToken();
     super.initState();
-    futureSeniorCareDetail = fetchSeniorCareDetailModel();
-    futurePetCareDetail = fetchPetCareDetailModel();
-    futureHouseKeepingDetail = fetchHouseKeepingDetailModel();
-    futureChildCareDetail = fetchChildCareDetailModel();
-    futureSchoolSupportDetail = fetchSchoolSupportDetailModel();
+    fetchJobDetail();
   }
 
   @override
@@ -224,21 +261,26 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              if (widget.service == "Senior Care") ...[
-                // service
+              if (noDataFound == true) ...[
+                const Text("NO Data Found"),
+              ] else if (serviceName.toLowerCase() == "senior care") ...[
+                // service id 1
                 seniorCare(context),
-              ] else if (widget.service == "Pet Care") ...[
+              ] else if (serviceName.toLowerCase() == "pet care") ...[
                 // service id 2
                 petCare(context),
-              ] else if (widget.service == "House Keeping") ...[
+              ] else if (serviceName.toLowerCase() == "house keeping") ...[
                 // service id 3
                 houseKeeping(context),
-              ] else if (widget.service == "Child Care") ...[
+              ] else if (serviceName.toLowerCase() == "school support") ...[
                 // Service Id 4
-                childCare(context),
-              ] else if (widget.service == "School Support") ...[
-                // Service Id 5
                 schoolSupport(context),
+              ] else if (serviceName.toLowerCase() == "child care") ...[
+                // Service Id 5
+                childCare(context),
+              ] else ...[
+                const SizedBox(height: 50),
+                Center(child: CircularProgressIndicator(color: ServiceRecieverColor.primaryColor))
               ],
             ],
           ),
@@ -248,602 +290,616 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
   }
 
   Widget seniorCare(BuildContext context) {
-    return FutureBuilder<SeniorCareDetailModel>(
-      future: futureSeniorCareDetail,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data!.job!.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(20),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Job Information",
-                    style: TextStyle(
-                      fontFamily: "Poppins",
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Job Title",
-                    title: snapshot.data!.job![index].jobTitle.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Job Address",
-                    title: snapshot.data!.job![index].address.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Job Area",
-                    title: snapshot.data!.job![index].location.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Hourly Rate",
-                    title: snapshot.data!.job![index].hourlyRate.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Senior Initials",
-                    title: snapshot.data!.job![index].seniorCare!.seniorName.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Date Of Birth",
-                    title: snapshot.data!.job![index].seniorCare!.dob.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Medical Condition",
-                    title: snapshot.data!.job![index].seniorCare!.medicalCondition != null ? "Not Available" : snapshot.data!.job![index].seniorCare!.medicalCondition.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  AssistanceContainer(
-                    dd: [
-                      if (snapshot.data!.job![index].seniorCare!.bathing.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.bathing.toString() == "1" ? "bathing" : snapshot.data!.job![index].seniorCare!.bathing.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.dressing.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.dressing.toString() == "1" ? "dressing" : snapshot.data!.job![index].seniorCare!.dressing.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.feeding.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.feeding.toString() == "1" ? "feeding" : snapshot.data!.job![index].seniorCare!.feeding.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.mealPreparation.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.mealPreparation.toString() == "1" ? "mealPreparation" : snapshot.data!.job![index].seniorCare!.mealPreparation.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.groceryShopping.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.groceryShopping.toString() == "1" ? "groceryShopping" : snapshot.data!.job![index].seniorCare!.groceryShopping.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.walking.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.walking.toString() == "1" ? "walking" : snapshot.data!.job![index].seniorCare!.walking.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.bedTransfer.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.bedTransfer.toString() == "1" ? "bedTransfer" : snapshot.data!.job![index].seniorCare!.bedTransfer.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.lightCleaning.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.lightCleaning.toString() == "1" ? "lightCleaning" : snapshot.data!.job![index].seniorCare!.lightCleaning.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.companionship.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.companionship.toString() == "1" ? "companionship" : snapshot.data!.job![index].seniorCare!.companionship.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.medicationAdministration.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.medicationAdministration.toString() == "1" ? "medicationAdministration" : snapshot.data!.job![index].seniorCare!.medicationAdministration.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.dressingWoundCare.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.dressingWoundCare.toString() == "1" ? "dressingWoundCare" : snapshot.data!.job![index].seniorCare!.dressingWoundCare.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.bloodPressureMonetoring.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.bloodPressureMonetoring.toString() == "1" ? "bloodPressureMonetoring" : snapshot.data!.job![index].seniorCare!.bloodPressureMonetoring.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.bloodSugarMonetoring.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.bloodSugarMonetoring.toString() == "1" ? "bloodSugarMonetoring" : snapshot.data!.job![index].seniorCare!.bloodSugarMonetoring.toString(),
-                      ],
-                      if (snapshot.data!.job![index].seniorCare!.groomingHairAndNailTrimming.toString() == "1") ...[
-                        snapshot.data!.job![index].seniorCare!.groomingHairAndNailTrimming.toString() == "1" ? "groomingHairAndNailTrimming" : snapshot.data!.job![index].seniorCare!.groomingHairAndNailTrimming.toString(),
-                      ],
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  JobScheduleContainer(data: snapshot.data!.job![index].schedule),
+    // return FutureBuilder<SeniorCareDetailModel>(
+    //   future: futureSeniorCareDetail,
+    //   builder: (context, snapshot) {
+    //     if (snapshot.hasData) {
+    return ListView.builder(
+      itemCount: futureSeniorCareDetailDashboard!.job!.length,
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(20),
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        var job = futureSeniorCareDetailDashboard!.job![index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Job Information",
+              style: TextStyle(
+                fontFamily: "Poppins",
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Job Title",
+              title: job.jobTitle.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Job Address",
+              title: job.address.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Job Area",
+              title: job.location.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Hourly Rate",
+              title: job.hourlyRate.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Senior Initials",
+              title: job.seniorCare!.seniorName.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Date Of Birth",
+              title: job.seniorCare!.dob.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Medical Condition",
+              title: job.seniorCare!.medicalCondition != null ? "Not Available" : job.seniorCare!.medicalCondition.toString(),
+            ),
+            const SizedBox(height: 10),
+            AssistanceContainer(
+              dd: [
+                if (job.seniorCare!.bathing.toString() == "1") ...[
+                  job.seniorCare!.bathing.toString() == "1" ? "bathing" : job.seniorCare!.bathing.toString(),
                 ],
-              );
-            },
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
+                if (job.seniorCare!.dressing.toString() == "1") ...[
+                  job.seniorCare!.dressing.toString() == "1" ? "dressing" : job.seniorCare!.dressing.toString(),
+                ],
+                if (job.seniorCare!.feeding.toString() == "1") ...[
+                  job.seniorCare!.feeding.toString() == "1" ? "feeding" : job.seniorCare!.feeding.toString(),
+                ],
+                if (job.seniorCare!.mealPreparation.toString() == "1") ...[
+                  job.seniorCare!.mealPreparation.toString() == "1" ? "mealPreparation" : job.seniorCare!.mealPreparation.toString(),
+                ],
+                if (job.seniorCare!.groceryShopping.toString() == "1") ...[
+                  job.seniorCare!.groceryShopping.toString() == "1" ? "groceryShopping" : job.seniorCare!.groceryShopping.toString(),
+                ],
+                if (job.seniorCare!.walking.toString() == "1") ...[
+                  job.seniorCare!.walking.toString() == "1" ? "walking" : job.seniorCare!.walking.toString(),
+                ],
+                if (job.seniorCare!.bedTransfer.toString() == "1") ...[
+                  job.seniorCare!.bedTransfer.toString() == "1" ? "bedTransfer" : job.seniorCare!.bedTransfer.toString(),
+                ],
+                if (job.seniorCare!.lightCleaning.toString() == "1") ...[
+                  job.seniorCare!.lightCleaning.toString() == "1" ? "lightCleaning" : job.seniorCare!.lightCleaning.toString(),
+                ],
+                if (job.seniorCare!.companionship.toString() == "1") ...[
+                  job.seniorCare!.companionship.toString() == "1" ? "companionship" : job.seniorCare!.companionship.toString(),
+                ],
+                if (job.seniorCare!.medicationAdministration.toString() == "1") ...[
+                  job.seniorCare!.medicationAdministration.toString() == "1" ? "medicationAdministration" : job.seniorCare!.medicationAdministration.toString(),
+                ],
+                if (job.seniorCare!.dressingWoundCare.toString() == "1") ...[
+                  job.seniorCare!.dressingWoundCare.toString() == "1" ? "dressingWoundCare" : job.seniorCare!.dressingWoundCare.toString(),
+                ],
+                if (job.seniorCare!.bloodPressureMonetoring.toString() == "1") ...[
+                  job.seniorCare!.bloodPressureMonetoring.toString() == "1" ? "bloodPressureMonetoring" : job.seniorCare!.bloodPressureMonetoring.toString(),
+                ],
+                if (job.seniorCare!.bloodSugarMonetoring.toString() == "1") ...[
+                  job.seniorCare!.bloodSugarMonetoring.toString() == "1" ? "bloodSugarMonetoring" : job.seniorCare!.bloodSugarMonetoring.toString(),
+                ],
+                if (job.seniorCare!.groomingHairAndNailTrimming.toString() == "1") ...[
+                  job.seniorCare!.groomingHairAndNailTrimming.toString() == "1" ? "groomingHairAndNailTrimming" : job.seniorCare!.groomingHairAndNailTrimming.toString(),
+                ],
+              ],
+            ),
+            const SizedBox(height: 10),
+            if (job.schedule!.isNotEmpty) ...[
+              JobScheduleContainer(
+                data: job.schedule,
+              ),
+            ],
+          ],
+        );
       },
     );
+    //     } else {
+    //       return const Center(child: CircularProgressIndicator());
+    //     }
+    //   },
+    // );
   }
 
   Widget petCare(BuildContext context) {
-    return FutureBuilder<PetCareDetailModel>(
-      future: futurePetCareDetail,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data!.job!.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(20),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Column(
+    // return FutureBuilder<PetCareDetailModel>(
+    //   future: futurePetCareDetail,
+    //   builder: (context, snapshot) {
+    //     if (snapshot.hasData) {
+    return ListView.builder(
+      itemCount: futurePetCareDetailDashboard!.job!.length,
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(20),
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        var job = futurePetCareDetailDashboard!.job![index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            JobInfoContainer(
+              title: job.jobTitle.toString(),
+              address: job.address.toString(),
+              location: job.location.toString(),
+              hourlyRate: job.hourlyRate.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Pet Type",
+              title: job.petCare!.petType.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Number of Pets",
+              title: job.petCare!.numberOfPets.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Pet Breed",
+              title: job.petCare!.petBreed.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Temperament",
+              title: job.petCare!.temperament.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Additional Info",
+              title: job.additionalInfo ?? "",
+            ),
+            const SizedBox(height: 10),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: CustomColors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  JobInfoContainer(
-                    title: snapshot.data!.job![index].jobTitle.toString(),
-                    address: snapshot.data!.job![index].address.toString(),
-                    location: snapshot.data!.job![index].location.toString(),
-                    hourlyRate: snapshot.data!.job![index].hourlyRate.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Pet Type",
-                    title: snapshot.data!.job![index].petCare!.petType.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Number of Pets",
-                    title: snapshot.data!.job![index].petCare!.numberOfPets.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Pet Breed",
-                    title: snapshot.data!.job![index].petCare!.petBreed.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Temperament",
-                    title: snapshot.data!.job![index].petCare!.temperament.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Additional Info",
-                    title: snapshot.data!.job![index].additionalInfo ?? "",
-                  ),
-                  const SizedBox(height: 10),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: CustomColors.white,
-                      borderRadius: BorderRadius.circular(12),
+                    alignment: Alignment.topLeft,
+                    // width: 150,
+                    child: const Text(
+                      "Requires Assistance ",
+                      style: TextStyle(
+                        // color: CustomColors.primaryColor,
+                        fontFamily: "Poppins",
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          // width: 150,
-                          child: const Text(
-                            "Requires Assistance ",
-                            style: TextStyle(
-                              // color: CustomColors.primaryColor,
-                              fontFamily: "Poppins",
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Row(
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Wrap(
+                          runSpacing: 5.0,
+                          spacing: 5.0,
                           children: [
-                            Expanded(
-                              child: Wrap(
-                                runSpacing: 5.0,
-                                spacing: 5.0,
-                                children: [
-                                  if (snapshot.data!.job![index].petCare!.walking.toString() == "1") ...[
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
-                                      child: Text(
-                                        snapshot.data!.job![index].petCare!.walking.toString() == "1" ? "Walking" : snapshot.data!.job![index].petCare!.walking.toString(),
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500,
-                                          color: CustomColors.primaryTextLight,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  if (snapshot.data!.job![index].petCare!.daycare.toString() == "1") ...[
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
-                                      child: Text(
-                                        snapshot.data!.job![index].petCare!.daycare.toString() == "1" ? "Day Care" : snapshot.data!.job![index].petCare!.daycare.toString(),
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500,
-                                          color: CustomColors.primaryTextLight,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  if (snapshot.data!.job![index].petCare!.feeding.toString() == "1") ...[
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
-                                      child: Text(
-                                        snapshot.data!.job![index].petCare!.feeding.toString() == "1" ? "Feeding" : snapshot.data!.job![index].petCare!.feeding.toString(),
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500,
-                                          color: CustomColors.primaryTextLight,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                  if (snapshot.data!.job![index].petCare!.socialization.toString() == "1") ...[
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
-                                      child: Text(
-                                        snapshot.data!.job![index].petCare!.socialization.toString() == "1" ? "Socialization" : snapshot.data!.job![index].petCare!.socialization.toString(),
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500,
-                                          color: CustomColors.primaryTextLight,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                  if (snapshot.data!.job![index].petCare!.grooming.toString() == "1") ...[
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
-                                      child: Text(
-                                        snapshot.data!.job![index].petCare!.grooming.toString() == "1" ? "Grooming" : snapshot.data!.job![index].petCare!.grooming.toString(),
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500,
-                                          color: CustomColors.primaryTextLight,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                  if (snapshot.data!.job![index].petCare!.boarding.toString() == "1") ...[
-                                    Container(
-                                      margin: const EdgeInsets.symmetric(horizontal: 3),
-                                      padding: const EdgeInsets.all(4),
-                                      decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
-                                      child: Text(
-                                        snapshot.data!.job![index].petCare!.boarding.toString() == "1" ? "Boarding" : snapshot.data!.job![index].petCare!.boarding.toString(),
-                                        style: TextStyle(
-                                          fontSize: 13,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.w500,
-                                          color: CustomColors.primaryTextLight,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ],
+                            if (job.petCare!.walking.toString() == "1") ...[
+                              Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 3),
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                child: Text(
+                                  job.petCare!.walking.toString() == "1" ? "Walking" : job.petCare!.walking.toString(),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w500,
+                                    color: CustomColors.primaryTextLight,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
+                            if (job.petCare!.daycare.toString() == "1") ...[
+                              Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 3),
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                child: Text(
+                                  job.petCare!.daycare.toString() == "1" ? "Day Care" : job.petCare!.daycare.toString(),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w500,
+                                    color: CustomColors.primaryTextLight,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            if (job.petCare!.feeding.toString() == "1") ...[
+                              Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 3),
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                child: Text(
+                                  job.petCare!.feeding.toString() == "1" ? "Feeding" : job.petCare!.feeding.toString(),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w500,
+                                    color: CustomColors.primaryTextLight,
+                                  ),
+                                ),
+                              )
+                            ],
+                            if (job.petCare!.socialization.toString() == "1") ...[
+                              Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 3),
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                child: Text(
+                                  job.petCare!.socialization.toString() == "1" ? "Socialization" : job.petCare!.socialization.toString(),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w500,
+                                    color: CustomColors.primaryTextLight,
+                                  ),
+                                ),
+                              )
+                            ],
+                            if (job.petCare!.grooming.toString() == "1") ...[
+                              Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 3),
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                child: Text(
+                                  job.petCare!.grooming.toString() == "1" ? "Grooming" : job.petCare!.grooming.toString(),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w500,
+                                    color: CustomColors.primaryTextLight,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            if (job.petCare!.boarding.toString() == "1") ...[
+                              Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 3),
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                child: Text(
+                                  job.petCare!.boarding.toString() == "1" ? "Boarding" : job.petCare!.boarding.toString(),
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.w500,
+                                    color: CustomColors.primaryTextLight,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Job Information",
-                    style: TextStyle(
-                      fontFamily: "Poppins",
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Date :",
-                    title: snapshot.data!.job![index].schedule![index].startingDate.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Start Time :",
-                    title: snapshot.data!.job![index].schedule![index].startingTime.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Duration :",
-                    title: "${snapshot.data!.job![index].schedule![index].duration.toString()} hour",
+                      ),
+                    ],
                   ),
                 ],
-              );
-            },
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
+              ),
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              "Job Schedule",
+              style: TextStyle(
+                fontFamily: "Poppins",
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            // const SizedBox(height: 10),
+            // JobDetailTile(
+            //   name: "Date :",
+            //   title: job.schedule![index].startingDate.toString(),
+            // ),
+            // const SizedBox(height: 10),
+            // JobDetailTile(
+            //   name: "Start Time :",
+            //   title: job.schedule![index].startingTime.toString(),
+            // ),
+            // const SizedBox(height: 10),
+            // JobDetailTile(
+            //   name: "Duration :",
+            //   title: "${job.schedule![index].duration.toString()} hour",
+            // ),
+            if (job.schedule!.isNotEmpty) ...[
+              JobScheduleContainer(
+                data: job.schedule,
+              ),
+            ],
+          ],
+        );
       },
     );
+    //     } else {
+    //       return const Center(child: CircularProgressIndicator());
+    //     }
+    //   },
+    // );
   }
 
   Widget houseKeeping(BuildContext context) {
-    return FutureBuilder<HouseKeepingDetailModel>(
-      future: futureHouseKeepingDetail,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data!.job!.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(20),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  JobInfoContainer(
-                    title: snapshot.data!.job![index].jobTitle.toString(),
-                    address: snapshot.data!.job![index].address.toString(),
-                    location: snapshot.data!.job![index].location.toString(),
-                    hourlyRate: snapshot.data!.job![index].hourlyRate.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Cleaning Type",
-                    title: snapshot.data!.job![index].houseKeeping!.cleaningType.toString() == "null" ? "Not Available" : snapshot.data!.job![index].houseKeeping!.cleaningType.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Number of Bedrooms",
-                    title: snapshot.data!.job![index].houseKeeping!.numberOfBedrooms.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Number of Bathrooms",
-                    title: snapshot.data!.job![index].houseKeeping!.numberOfBathrooms.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Laundary",
-                    title: snapshot.data!.job![index].houseKeeping!.laundry.toString() == "1" ? "Yes" : "No",
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Ironing",
-                    title: snapshot.data!.job![index].houseKeeping!.ironing.toString() == "1" ? "Yes" : "No",
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Other",
-                    title: snapshot.data!.job![index].houseKeeping!.other.toString() == "null" ? "Not Available" : snapshot.data!.job![index].houseKeeping!.other.toString(),
-                  ),
-                  const SizedBox(height: 10),
-                  JobDetailTile(
-                    name: "Additional Info",
-                    title: snapshot.data!.job![index].additionalInfo ?? "",
-                  ),
-                  JobScheduleContainer(
-                    data: snapshot.data!.job![index].schedule,
-                  ),
-                ],
-              );
-            },
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
+    // return FutureBuilder<HouseKeepingDetailModel>(
+    //   future: futureHouseKeepingDetail,
+    //   builder: (context, snapshot) {
+    //     if (snapshot.hasData) {
+    return ListView.builder(
+      itemCount: futureHouseKeepingDetailDashboard!.job!.length,
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(20),
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        var job = futureHouseKeepingDetailDashboard!.job![index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            JobInfoContainer(
+              title: job.jobTitle.toString(),
+              address: job.address.toString(),
+              location: job.location.toString(),
+              hourlyRate: job.hourlyRate.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Cleaning Type",
+              title: job.houseKeeping!.cleaningType.toString() == "null" ? "Not Available" : job.houseKeeping!.cleaningType.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Number of Bedrooms",
+              title: job.houseKeeping!.numberOfBedrooms.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Number of Bathrooms",
+              title: job.houseKeeping!.numberOfBathrooms.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Laundary",
+              title: job.houseKeeping!.laundry.toString() == "1" ? "Yes" : "No",
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Ironing",
+              title: job.houseKeeping!.ironing.toString() == "1" ? "Yes" : "No",
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Other",
+              title: job.houseKeeping!.other.toString() == "null" ? "Not Available" : job.houseKeeping!.other.toString(),
+            ),
+            const SizedBox(height: 10),
+            JobDetailTile(
+              name: "Additional Info",
+              title: job.additionalInfo ?? "",
+            ),
+            JobScheduleContainer(
+              data: job.schedule,
+            ),
+          ],
+        );
       },
     );
+    //     } else {
+    //       return const Center(child: CircularProgressIndicator());
+    //     }
+    //   },
+    // );
   }
 
   Widget childCare(BuildContext context) {
-    return FutureBuilder<ChildCareDetailModel>(
-      future: futureChildCareDetail,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data!.job!.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(20),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  JobInfoContainer(
-                    title: snapshot.data!.job![index].jobTitle.toString(),
-                    address: snapshot.data!.job![index].address.toString(),
-                    location: snapshot.data!.job![index].location.toString(),
-                    hourlyRate: "\$${snapshot.data!.job![index].hourlyRate.toString()}/hour",
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Information About Child",
-                    style: TextStyle(
-                      fontFamily: "Poppins",
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  for (var i = 0; i < snapshot.data!.job![index].childinfo!.length; i++) ...[
-                    if (snapshot.data!.job![index].childinfo!.length > 1) ...[
-                      const SizedBox(height: 10),
-                      Text(
-                        "Child ${i + 1}",
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                    JobDetailTile(
-                      name: "Child Initials",
-                      title: snapshot.data!.job![index].childinfo![i].name.toString(),
-                    ),
-                    const SizedBox(height: 10),
-                    JobDetailTile(
-                      name: "Child Age",
-                      title: snapshot.data!.job![index].childinfo![i].age.toString(),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                  if (snapshot.data!.job![index].schoolCamp != null) ...[
-                    JobDetailTile(
-                      name: "Interest for Child",
-                      title: snapshot.data!.job![index].schoolCamp!.interestForChild.toString(),
-                    ),
-                    const SizedBox(height: 10),
-                    JobDetailTile(
-                      name: "Cost Range For Camp",
-                      title: snapshot.data!.job![index].schoolCamp!.costRange.toString(),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                  const SizedBox(height: 10),
-                  const SizedBox(height: 10),
-                  if (snapshot.data!.job![index].schedule!.isNotEmpty) ...[
-                    JobScheduleContainer(
-                      data: snapshot.data!.job![index].schedule,
-                    ),
-                  ],
-                ],
-              );
-            },
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
+    // return FutureBuilder<ChildCareDetailModel>(
+    //   future: futureChildCareDetail,
+    //   builder: (context, snapshot) {
+    //     if (snapshot.hasData) {
+    return ListView.builder(
+      itemCount: futureChildCareDetailDashboard!.job!.length,
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(20),
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        var job = futureChildCareDetailDashboard!.job![index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            JobInfoContainer(
+              title: job.jobTitle.toString(),
+              address: job.address.toString(),
+              location: job.location.toString(),
+              hourlyRate: "\$${job.hourlyRate.toString()}/hour",
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              "Information About Child",
+              style: TextStyle(
+                fontFamily: "Poppins",
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            for (var i = 0; i < job.childinfo!.length; i++) ...[
+              if (job.childinfo!.length > 1) ...[
+                const SizedBox(height: 10),
+                Text(
+                  "Child ${i + 1}",
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 10),
+              ],
+              JobDetailTile(
+                name: "Child Initials",
+                title: job.childinfo![i].name.toString(),
+              ),
+              const SizedBox(height: 10),
+              JobDetailTile(
+                name: "Child Age",
+                title: job.childinfo![i].age.toString(),
+              ),
+              const SizedBox(height: 10),
+            ],
+            if (job.schoolCamp != null) ...[
+              JobDetailTile(
+                name: "Interest for Child",
+                title: job.schoolCamp!.interestForChild.toString(),
+              ),
+              const SizedBox(height: 10),
+              JobDetailTile(
+                name: "Cost Range For Camp",
+                title: job.schoolCamp!.costRange.toString(),
+              ),
+              const SizedBox(height: 10),
+            ],
+            const SizedBox(height: 10),
+            const SizedBox(height: 10),
+            if (job.schedule!.isNotEmpty) ...[
+              JobScheduleContainer(
+                data: job.schedule,
+              ),
+            ],
+          ],
+        );
       },
     );
+    //     } else {
+    //       return const Center(child: CircularProgressIndicator());
+    //     }
+    //   },
+    // );
   }
 
   Widget schoolSupport(BuildContext context) {
-    return FutureBuilder<SchoolSupportDetailModel>(
-      future: futureSchoolSupportDetail,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return ListView.builder(
-            itemCount: snapshot.data!.job!.length,
-            shrinkWrap: true,
-            padding: const EdgeInsets.all(16),
-            physics: const NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  JobInfoContainer(
-                    title: snapshot.data!.job![index].jobTitle.toString(),
-                    address: snapshot.data!.job![index].address.toString(),
-                    location: snapshot.data!.job![index].location.toString(),
-                    hourlyRate: "\$${snapshot.data!.job![index].hourlyRate.toString()}/hour",
-                  ),
-                  const SizedBox(height: 10),
-                  const Text(
-                    "Information About Child",
-                    style: TextStyle(
-                      fontFamily: "Poppins",
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  for (var i = 0; i < snapshot.data!.job![index].childinfo!.length; i++) ...[
-                    if (snapshot.data!.job![index].childinfo!.length > 1) ...[
-                      const SizedBox(height: 10),
-                      Text(
-                        "Child ${i + 1}",
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                    JobDetailTile(
-                      name: "Child Initials",
-                      title: snapshot.data!.job![index].childinfo![i].name.toString(),
-                    ),
-                    const SizedBox(height: 10),
-                    JobDetailTile(
-                      name: "Child Age",
-                      title: snapshot.data!.job![index].childinfo![i].age.toString(),
-                    ),
-                    const SizedBox(height: 10),
-                    JobDetailTile(
-                      name: "Child Grade",
-                      title: snapshot.data!.job![index].childinfo![i].grade.toString(),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                  // if (snapshot.data!.job![index].schoolCamp != null) ...[
-                  //   const SizedBox(height: 10),
-                  //   JobDetailTile(
-                  //     name: "Interest for Child",
-                  //     title: snapshot.data!.job![index].schoolCamp!.interestForChild.toString(),
-                  //   ),
-                  //   const SizedBox(height: 10),
-                  //   JobDetailTile(
-                  //     name: "Cost Range For Camp",
-                  //     title: "\$${snapshot.data!.job![index].schoolCamp!.costRange.toString()}",
-                  //   ),
-                  // ],
-                  const SizedBox(height: 10),
-                  if (snapshot.data!.job![index].learning != null) ...[
-                    AssistanceContainer(
-                      dd: [
-                        if (snapshot.data!.job![index].learning!.assistanceInReading == 1) ...["Reading"],
-                        if (snapshot.data!.job![index].learning!.assistanceInEnglish == 1) ...["English"],
-                        if (snapshot.data!.job![index].learning!.assistanceInMath == 1) ...["Math"],
-                        if (snapshot.data!.job![index].learning!.assistanceInScience == 1) ...["Science"],
-                        if (snapshot.data!.job![index].learning!.assistanceInOther != null) ...[snapshot.data!.job![index].learning!.assistanceInOther.toString()],
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                  if (snapshot.data!.job![index].learning != null && snapshot.data!.job![index].learning!.learningStyle != null) ...[
-                    JobDetailTile(
-                      name: "Learning Style",
-                      title: snapshot.data!.job![index].learning!.learningStyle.toString(),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                  if (snapshot.data!.job![index].learning != null && snapshot.data!.job![index].learning!.learningChallenge != null) ...[
-                    JobDetailTile(
-                      name: "Learning Challenge",
-                      title: snapshot.data!.job![index].learning!.learningChallenge.toString(),
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                  if (snapshot.data!.job![index].additionalInfo != null) ...[
-                    JobDetailTile(
-                      name: "Additional Info",
-                      title: snapshot.data!.job![index].additionalInfo ?? "",
-                    ),
-                    const SizedBox(height: 10),
-                  ],
-                  if (snapshot.data!.job![index].schedule!.isNotEmpty) ...[
-                    JobScheduleContainer(
-                      data: snapshot.data!.job![index].schedule,
-                    ),
-                  ],
+    // return FutureBuilder<SchoolSupportDetailModel>(
+    //   future: futureSchoolSupportDetail,
+    //   builder: (context, snapshot) {
+    //     if (snapshot.hasData) {
+    return ListView.builder(
+      itemCount: futureSchoolSupportDetailDashboard!.job!.length,
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(16),
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        var job = futureSchoolSupportDetailDashboard!.job![index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            JobInfoContainer(
+              title: job.jobTitle.toString(),
+              address: job.address.toString(),
+              location: job.location.toString(),
+              hourlyRate: "\$${job.hourlyRate.toString()}/hour",
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              "Information About Child",
+              style: TextStyle(
+                fontFamily: "Poppins",
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            for (var i = 0; i < job.childinfo!.length; i++) ...[
+              if (job.childinfo!.length > 1) ...[
+                const SizedBox(height: 10),
+                Text(
+                  "Child ${i + 1}",
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 10),
+              ],
+              JobDetailTile(
+                name: "Child Initials",
+                title: job.childinfo![i].name.toString(),
+              ),
+              const SizedBox(height: 10),
+              JobDetailTile(
+                name: "Child Age",
+                title: job.childinfo![i].age.toString(),
+              ),
+              const SizedBox(height: 10),
+              JobDetailTile(
+                name: "Child Grade",
+                title: job.childinfo![i].grade.toString(),
+              ),
+              const SizedBox(height: 10),
+            ],
+            // if (job.schoolCamp != null) ...[
+            //   const SizedBox(height: 10),
+            //   JobDetailTile(
+            //     name: "Interest for Child",
+            //     title: job.schoolCamp!.interestForChild.toString(),
+            //   ),
+            //   const SizedBox(height: 10),
+            //   JobDetailTile(
+            //     name: "Cost Range For Camp",
+            //     title: "\$${job.schoolCamp!.costRange.toString()}",
+            //   ),
+            // ],
+            const SizedBox(height: 10),
+            if (job.learning != null) ...[
+              AssistanceContainer(
+                dd: [
+                  if (job.learning!.assistanceInReading == 1) ...["Reading"],
+                  if (job.learning!.assistanceInEnglish == 1) ...["English"],
+                  if (job.learning!.assistanceInMath == 1) ...["Math"],
+                  if (job.learning!.assistanceInScience == 1) ...["Science"],
+                  if (job.learning!.assistanceInOther != null) ...[job.learning!.assistanceInOther.toString()],
                 ],
-              );
-            },
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
+              ),
+              const SizedBox(height: 10),
+            ],
+            if (job.learning != null && job.learning!.learningStyle != null) ...[
+              JobDetailTile(
+                name: "Learning Style",
+                title: job.learning!.learningStyle.toString(),
+              ),
+              const SizedBox(height: 10),
+            ],
+            if (job.learning != null && job.learning!.learningChallenge != null) ...[
+              JobDetailTile(
+                name: "Learning Challenge",
+                title: job.learning!.learningChallenge.toString(),
+              ),
+              const SizedBox(height: 10),
+            ],
+            if (job.additionalInfo != null) ...[
+              JobDetailTile(
+                name: "Additional Info",
+                title: job.additionalInfo ?? "",
+              ),
+              const SizedBox(height: 10),
+            ],
+            if (job.schedule!.isNotEmpty) ...[
+              JobScheduleContainer(
+                data: job.schedule,
+              ),
+            ],
+          ],
+        );
       },
     );
+    //     } else {
+    //       return const Center(child: CircularProgressIndicator());
+    //     }
+    //   },
+    // );
   }
 }
 

@@ -8,11 +8,11 @@ import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/widgets/giver_app_bar.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:island_app/widgets/profile_complete_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:island_app/caregiver/screens/job_detail.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 
@@ -159,7 +159,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
               ),
             ),
             drawer: const DrawerGiverWidget(),
-            body: dashboardLoading
+            body: dashboardLoading || provider.searchIsLoading
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
@@ -635,11 +635,11 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                               itemCount: provider.filterDataList.length,
                                               itemBuilder: (BuildContext context, int index) {
                                                 var job = provider.filterDataList[index];
-                                                if (provider.searchIsLoading) {
-                                                  return const Center(
-                                                    child: CircularProgressIndicator(),
-                                                  );
-                                                }
+                                                // if (provider.searchIsLoading) {
+                                                //   return const Center(
+                                                //     child: CircularProgressIndicator(),
+                                                //   );
+                                                // }
                                                 return JobCardContainer(
                                                   jobId: job!.id.toString(),
                                                   serviceId: job!.service!.id.toString(),
@@ -802,15 +802,10 @@ class JobCardContainer extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => JobDetailGiver(
-                        id: jobId.toString(),
-                        serviceId: serviceId,
-                      ),
-                    ),
-                  );
+                  navigationService.push('/job-detail-giver', arguments: {
+                    "id": jobId.toString(),
+                    "serviceId": serviceId,
+                  });
                 },
                 child: Container(
                   height: 25,

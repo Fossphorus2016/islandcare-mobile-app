@@ -8,7 +8,6 @@ import 'package:island_app/caregiver/screens/bank_detail.dart';
 import 'package:island_app/caregiver/screens/my_jobs_screen.dart';
 import 'package:island_app/caregiver/screens/provider_reviews_given_screen.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
-// import 'package:island_app/carereceiver/screens/account_settings.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_url.dart';
@@ -490,9 +489,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
                         child: ListTile(
                           hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                           selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
@@ -554,151 +551,154 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
               ),
             ),
           )
-        : Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: FutureBuilder<ProfileGiverModel>(
-                  future: fetchProfile,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return InkWell(
-                        onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(2),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 25, bottom: 60),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              CircleAvatar(
-                                radius: 40,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(40),
+        : Drawer(
+            backgroundColor: ServiceGiverColor.black,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: FutureBuilder<ProfileGiverModel>(
+                    future: fetchProfile,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return InkWell(
+                          onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(2),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 25, bottom: 60),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 40,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: CachedNetworkImage(
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                      imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
-                                      placeholder: (context, url) => const CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: CachedNetworkImage(
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                        imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
+                                        placeholder: (context, url) => const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(
-                                    child: Text(
-                                      "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: "Rubik",
-                                        color: CustomColors.white,
+                                const SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      child: Text(
+                                        "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: "Rubik",
+                                          color: CustomColors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  SizedBox(
-                                    child: Text(
-                                      snapshot.data!.data!.phone.toString(),
-                                      style: TextStyle(
-                                        color: CustomColors.white,
-                                        fontFamily: "Rubik",
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
+                                    const SizedBox(height: 10),
+                                    SizedBox(
+                                      child: Text(
+                                        snapshot.data!.data!.phone.toString(),
+                                        style: TextStyle(
+                                          color: CustomColors.white,
+                                          fontFamily: "Rubik",
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    } else {
-                      return Shimmer.fromColors(
-                        baseColor: CustomColors.primaryColor,
-                        highlightColor: const Color.fromARGB(255, 95, 95, 95),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 25, bottom: 60),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              CircleAvatar(
-                                backgroundColor: CustomColors.paraColor,
-                                radius: 40,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(40),
+                        );
+                      } else {
+                        return Shimmer.fromColors(
+                          baseColor: CustomColors.primaryColor,
+                          highlightColor: const Color.fromARGB(255, 95, 95, 95),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 25, bottom: 60),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  backgroundColor: CustomColors.paraColor,
+                                  radius: 40,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Container(
-                                    width: 130,
-                                    color: CustomColors.paraColor,
-                                    child: Text(
-                                      "",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: "Rubik",
-                                        color: CustomColors.white,
+                                const SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Container(
+                                      width: 130,
+                                      color: CustomColors.paraColor,
+                                      child: Text(
+                                        "",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: "Rubik",
+                                          color: CustomColors.white,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Container(
-                                    width: 80,
-                                    color: CustomColors.paraColor,
-                                    child: Text(
-                                      " ",
-                                      style: TextStyle(
-                                        color: CustomColors.white,
-                                        fontFamily: "Rubik",
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
+                                    const SizedBox(height: 10),
+                                    Container(
+                                      width: 80,
+                                      color: CustomColors.paraColor,
+                                      child: Text(
+                                        " ",
+                                        style: TextStyle(
+                                          color: CustomColors.white,
+                                          fontFamily: "Rubik",
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                  },
+                        );
+                      }
+                    },
+                  ),
                 ),
-              ),
-              Expanded(child: Container()),
-              ListTile(
-                onTap: () {
-                  _showLogoutDialog();
-                },
-                leading: Image.asset("assets/images/icons/logout.png"),
-                title: Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Text(
-                    'Logout',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                      color: CustomColors.white,
-                      fontFamily: "Rubik",
+                Expanded(child: Container()),
+                ListTile(
+                  onTap: () {
+                    _showLogoutDialog();
+                  },
+                  leading: Image.asset("assets/images/icons/logout.png"),
+                  title: Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      'Logout',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600,
+                        color: CustomColors.white,
+                        fontFamily: "Rubik",
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           );
   }
 }

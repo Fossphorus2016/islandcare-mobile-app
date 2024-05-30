@@ -29,211 +29,213 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
   TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    ServiceProviderChat chatProvider = Provider.of<ServiceProviderChat>(context);
+    // ServiceProviderChat chatProvider = Provider.of<ServiceProviderChat>(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: ServiceGiverColor.black,
-        automaticallyImplyLeading: false,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(13.0),
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: CustomColors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(30, 0, 0, 0),
-                    offset: Offset(2, 2),
-                    spreadRadius: 1,
-                    blurRadius: 7,
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 4.0),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: CustomColors.primaryColor,
-                  size: 18,
-                ),
-              ),
-            ),
-          ),
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(70),
-          child: Padding(
-            padding: const EdgeInsets.only(left: 20, bottom: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(70),
-                  child: Center(
-                    child: chatProvider.activeChat['sender']['avatar'] != null
-                        ? Image(
-                            height: 60,
-                            width: 60,
-                            image: NetworkImage("${AppUrl.webStorageUrl}/${chatProvider.activeChat['sender']['avatar']}"),
-                          )
-                        : const Image(
-                            height: 60,
-                            width: 60,
-                            image: AssetImage("assets/images/category.png"),
-                          ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 15,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${chatProvider.activeChat['sender']['first_name']} ${chatProvider.activeChat['sender']['last_name']}",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: CustomColors.white,
-                        fontFamily: "Rubik",
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 12),
+    return Consumer<ServiceProviderChat>(builder: (context, chatProvider, __) {
+      return Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: ServiceGiverColor.black,
+          automaticallyImplyLeading: false,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: CustomColors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(30, 0, 0, 0),
+                      offset: Offset(2, 2),
+                      spreadRadius: 1,
+                      blurRadius: 7,
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              dragStartBehavior: DragStartBehavior.down,
-              reverse: true,
-              child: Column(
-                children: [
-                  for (final message in chatProvider.activeChat['chat_messages']) ...[
-                    if (message['sender_id'] == chatProvider.activeChat['receiver_id']) ...[
-                      senderMassage(message),
-                      const SizedBox(height: 20),
-                    ] else ...[
-                      receiverMessage(message),
-                      const SizedBox(height: 20),
-                    ]
-                  ],
-                ],
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: CustomColors.primaryColor,
+                    size: 18,
+                  ),
+                ),
               ),
             ),
           ),
-
-          // TextField
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Container(
-              padding: const EdgeInsets.only(left: 8, bottom: 3, top: 3, right: 8),
-              height: 60,
-              width: double.infinity,
-              color: Colors.white,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(70),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, bottom: 10),
               child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                          topRight: Radius.circular(10),
-                        ),
-                        color: CustomColors.white,
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Color.fromARGB(0, 0, 0, 0),
-                            blurRadius: 4.0,
-                            spreadRadius: 1.0,
-                            offset: Offset(2.0, 2.0),
-                          ),
-                        ],
-                      ),
-                      alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width,
-                      height: 60,
-                      child: TextField(
-                        controller: messageController,
-                        onChanged: (value) {
-                          if (value.trim().isNotEmpty) {
-                            chatProvider.setButtonValidation(true);
-                          } else {
-                            chatProvider.setButtonValidation(false);
-                          }
-                        },
-                        textAlignVertical: TextAlignVertical.bottom,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontFamily: "Rubik",
-                          fontWeight: FontWeight.w400,
-                        ),
-                        decoration: InputDecoration(
-                          hintText: "Write a message...",
-                          fillColor: CustomColors.blackLight,
-                          focusColor: CustomColors.blackLight,
-                          hoverColor: CustomColors.blackLight,
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                        ),
-                      ),
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(70),
+                    child: Center(
+                      child: chatProvider.activeChat['sender']['avatar'] != null
+                          ? Image(
+                              height: 60,
+                              width: 60,
+                              image: NetworkImage("${AppUrl.webStorageUrl}/${chatProvider.activeChat['sender']['avatar']}"),
+                            )
+                          : const Image(
+                              height: 60,
+                              width: 60,
+                              image: AssetImage("assets/images/category.png"),
+                            ),
                     ),
                   ),
                   const SizedBox(
-                    width: 2,
+                    width: 15,
                   ),
-                  IconButton(
-                    onPressed: chatProvider.sendMessageReq
-                        ? () {
-                            if (messageController.text.isEmpty) {
-                              customErrorSnackBar(context, "please write a message");
-                              return;
-                            }
-                            Provider.of<ServiceProviderChat>(context, listen: false).sendMessage(messageController.text);
-                            messageController.clear();
-                          }
-                        : null,
-                    icon: Icon(
-                      Icons.send_outlined,
-                      color: chatProvider.sendMessageReq ? ServiceGiverColor.redButton : null,
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${chatProvider.activeChat['sender']['first_name']} ${chatProvider.activeChat['sender']['last_name']}",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: CustomColors.white,
+                          fontFamily: "Rubik",
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 12),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
           ),
-        ],
-      ),
-    );
+        ),
+        body: Column(
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                dragStartBehavior: DragStartBehavior.down,
+                reverse: true,
+                child: Column(
+                  children: [
+                    for (final message in chatProvider.activeChat['chat_messages']) ...[
+                      if (message['sender_id'] == chatProvider.activeChat['receiver_id']) ...[
+                        senderMassage(message),
+                        const SizedBox(height: 20),
+                      ] else ...[
+                        receiverMessage(message),
+                        const SizedBox(height: 20),
+                      ]
+                    ],
+                  ],
+                ),
+              ),
+            ),
+
+            // TextField
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Container(
+                padding: const EdgeInsets.only(left: 8, bottom: 3, top: 3, right: 8),
+                height: 60,
+                width: double.infinity,
+                color: Colors.white,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                          ),
+                          color: CustomColors.white,
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color.fromARGB(0, 0, 0, 0),
+                              blurRadius: 4.0,
+                              spreadRadius: 1.0,
+                              offset: Offset(2.0, 2.0),
+                            ),
+                          ],
+                        ),
+                        alignment: Alignment.center,
+                        width: MediaQuery.of(context).size.width,
+                        height: 60,
+                        child: TextField(
+                          controller: messageController,
+                          onChanged: (value) {
+                            if (value.trim().isNotEmpty) {
+                              chatProvider.setButtonValidation(true);
+                            } else {
+                              chatProvider.setButtonValidation(false);
+                            }
+                          },
+                          textAlignVertical: TextAlignVertical.bottom,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Rubik",
+                            fontWeight: FontWeight.w400,
+                          ),
+                          decoration: InputDecoration(
+                            hintText: "Write a message...",
+                            fillColor: CustomColors.blackLight,
+                            focusColor: CustomColors.blackLight,
+                            hoverColor: CustomColors.blackLight,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 2,
+                    ),
+                    IconButton(
+                      onPressed: chatProvider.sendMessageReq
+                          ? () {
+                              if (messageController.text.isEmpty) {
+                                customErrorSnackBar(context, "please write a message");
+                                return;
+                              }
+                              Provider.of<ServiceProviderChat>(context, listen: false).sendMessage(messageController.text);
+                              messageController.clear();
+                            }
+                          : null,
+                      icon: Icon(
+                        Icons.send_outlined,
+                        color: chatProvider.sendMessageReq ? ServiceGiverColor.redButton : null,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    });
   }
 
   senderMassage(message) {
@@ -271,7 +273,7 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()),
+                    DateFormat.jm().format(DateTime.parse(message['updated_at']).toLocal()),
                     style: TextStyle(
                       fontSize: 13,
                       fontFamily: "Rubik",
@@ -345,7 +347,7 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
               ),
               const SizedBox(height: 05),
               Text(
-                DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()),
+                DateFormat.jm().format(DateTime.parse(message['updated_at']).toLocal()),
                 style: const TextStyle(
                   fontSize: 13,
                   fontFamily: "Rubik",

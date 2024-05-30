@@ -71,7 +71,7 @@ class ChatUrl {
   static String serviceReceiverChat = "${AppUrl.webBaseURL}/api/service-receiver-chat";
   static String serviceReceiverSendMessage = "${AppUrl.webBaseURL}/api/service-receiver-send-message";
   static String serviceReceiverChatMessageStatus = "${AppUrl.webBaseURL}/api/service-receiver-message-status";
-  static String serviceProviderChat = "${AppUrl.webBaseURL}/api/service-provider-chat";
+  static String serviceProviderChats = "${AppUrl.webBaseURL}/api/service-provider-chats";
   static String serviceProviderSendMessage = "${AppUrl.webBaseURL}/api/service-provider-send-message";
   static String serviceProviderChatMessageStatus = "${AppUrl.webBaseURL}/api/service-provider-message-status";
 }

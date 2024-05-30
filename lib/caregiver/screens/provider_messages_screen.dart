@@ -5,6 +5,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:island_app/caregiver/screens/chat_provider_detail_screen.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/widgets/provider_conversational_widget.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -23,20 +24,20 @@ class ProviderMessagesScreen extends StatefulWidget {
 }
 
 class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
-  var token;
-  Future getUserToken() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = prefs.getString('userToken');
-    setState(() {
-      token = userToken;
-    });
-    return userToken.toString();
-  }
+  // var token;
+  // Future getUserToken() async {
+  //   SharedPreferences? prefs = await SharedPreferences.getInstance();
+  //   await prefs.reload();
+  //   var userToken = prefs.getString('userToken');
+  //   setState(() {
+  //     token = userToken;
+  //   });
+  //   return userToken.toString();
+  // }
 
   @override
   void initState() {
-    getUserToken();
+    // getUserToken();
     super.initState();
   }
 
@@ -44,106 +45,66 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: Text(
-            "Messages",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w700,
-              fontFamily: "Rubik",
-              color: CustomColors.primaryText,
+    // bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
+    return Consumer2<ServiceProviderChat, ServiceGiverProvider>(builder: (context, providerChat, giverProvider, child) {
+      return SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            title: Text(
+              "Messages",
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                fontFamily: "Rubik",
+                color: CustomColors.primaryText,
+              ),
             ),
           ),
-        ),
-        body: profileStatus
-            ? SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      // CustomExpansionPanelList(
-                      //   expansionCallback: (panelIndex, isExpanded) {
-                      //     setState(() {
-                      //       adminChatExpanded = !adminChatExpanded;
-                      //     });
-                      //   },
-                      //   children: [
-                      //     CustomExpansionPanel(
-                      //       isExpanded: adminChatExpanded,
-                      //       canTapOnHeader: true,
-                      //       headerBuilder: (context, isExpanded) {
-                      //         return const Row(
-                      //           children: [
-                      //             Text(
-                      //               "Admin Chats",
-                      //               style: TextStyle(
-                      //                 color: Colors.black,
-                      //                 fontSize: 18,
-                      //                 fontWeight: FontWeight.w600,
-                      //               ),
-                      //             ),
-                      //           ],
-                      //         );
-                      //       },
-                      //       body: ListView.builder(
-                      //         itemCount: 5,
-                      //         shrinkWrap: true,
-                      //         padding: const EdgeInsets.only(top: 16),
-                      //         physics: const NeverScrollableScrollPhysics(),
-                      //         itemBuilder: (context, index) {
-                      //           return ProviderConversationList(
-                      //             roomId: 2,
-                      //             name: "Dummy Admin Chat $index",
-                      //             messageText: "Dummy Text",
-                      //             imageUrl: "",
-                      //             time: "3:17 PM",
-                      //             isMessageRead: true,
-                      //           );
-                      //         },
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      // const SizedBox(height: 20),
+          body: giverProvider.profileStatus
+              ? RefreshIndicator(
+                  onRefresh: () async {
+                    providerChat.getChats();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 20),
+                        // Messsages
 
-                      // Messsages
-                      Consumer<ServiceProviderChat>(
-                        builder: (context, provider, child) {
-                          if (provider.chatList.isNotEmpty) {
-                            return ListView.builder(
-                              itemCount: provider.chatList.length,
+                        if (providerChat.chatList.isNotEmpty) ...[
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: providerChat.chatList.length,
                               shrinkWrap: true,
                               padding: const EdgeInsets.only(top: 16),
-                              physics: const NeverScrollableScrollPhysics(),
+                              // physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return ProviderConversationList(
-                                  roomId: provider.chatList[index]["roomId"],
-                                  name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].lastName}",
-                                  messageText: provider.chatList[index]['lastMessage'],
-                                  imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
-                                  time: provider.chatList[index]['lastMessageTime'].toString(),
-                                  isMessageRead: provider.chatList[index]['lastMessagesCount'] == 0 ? false : true,
+                                  roomId: providerChat.chatList[index]["roomId"],
+                                  name: "${providerChat.chatList[index]['userDate'].firstName} ${providerChat.chatList[index]['userDate'].lastName}",
+                                  messageText: providerChat.chatList[index]['lastMessage'],
+                                  imageUrl: "${AppUrl.webStorageUrl}/${providerChat.chatList[index]['userDate'].avatar}",
+                                  time: providerChat.chatList[index]['lastMessageTime'].toString(),
+                                  isMessageRead: providerChat.chatList[index]['lastMessagesCount'] == 0 ? false : true,
                                 );
                               },
-                            );
-                          }
-                          return const Center(child: Text("No chat found"));
-                        },
-                      ),
-                    ],
+                            ),
+                          ),
+                        ] else ...[
+                          const Center(child: Text("No chat found")),
+                        ]
+                      ],
+                    ),
                   ),
-                ),
-              )
-            : const ProfileCompletContainer(),
-      ),
-    );
+                )
+              : const ProfileCompletContainer(),
+        ),
+      );
+    });
   }
 }
 
@@ -178,32 +139,33 @@ class ServiceProviderChat extends ChangeNotifier {
   List<Map<String, dynamic>> chatList = [];
   List allChatRooms = [];
   getChats() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = prefs.getString('userToken');
-    var resp = await Dio().post(
-      ChatUrl.serviceProviderChat,
+    // SharedPreferences? prefs = await SharedPreferences.getInstance();
+    // await prefs.reload();
+    // var userToken = prefs.getString('userToken');
+    var resp = await Dio().get(
+      ChatUrl.serviceProviderChats,
       options: Options(
         headers: {
-          'Authorization': 'Bearer $userToken',
+          'Authorization': 'Bearer ${ServiceGiverProvider.userToken}',
           'Accept': 'application/json',
         },
       ),
     );
+    // print(resp.data);
     if (resp.statusCode == 200 && resp.data['flag'] == 1) {
-      allChatRooms = resp.data['chat_room'];
+      allChatRooms = resp.data['chats'];
       chatList = List.generate(
-        resp.data['chat_room'].length,
+        resp.data['chats'].length,
         (index) {
-          var getlastmessage = resp.data['chat_room'][index]['chat_messages'].last;
+          var getlastmessage = resp.data['chats'][index]['chat_messages'].last;
           var lastmessagetime = DateFormat.jm().format(DateTime.parse(getlastmessage['updated_at']).toLocal());
           return {
-            "roomId": resp.data['chat_room'][index]['id'],
+            "roomId": resp.data['chats'][index]['id'],
             "userDate": ChatroomUser.fromJson(
-              resp.data['chat_room'][index]['sender'],
+              resp.data['chats'][index]['sender'],
             ),
             "lastMessage": getlastmessage['message'],
-            "lastMessagesCount": resp.data['chat_room'][index]["status"],
+            "lastMessagesCount": resp.data['chats'][index]["status"],
             "lastMessageTime": lastmessagetime,
           };
         },
@@ -215,6 +177,53 @@ class ServiceProviderChat extends ChangeNotifier {
     notifyListeners();
   }
 
+  getSingleChatAndSetActive(id) async {
+    var userToken = ServiceGiverProvider.userToken;
+    var resp = await Dio().post(
+      "${AppUrl.webBaseURL}/api/get-chat",
+      data: {"chatId": id},
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+      var chatRoom = resp.data['chat'];
+      if (chatRoom != null) {
+        activeChat = chatRoom;
+      }
+    }
+    notifyListeners();
+  }
+
+  getSingleChat(BuildContext context, id) async {
+    var userToken = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    // print(RecieverUserProvider.userToken);
+    print(id);
+    var resp = await Dio().post(
+      "${AppUrl.webBaseURL}/api/get-chat",
+      data: {"chatId": id},
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $userToken',
+          'Accept': 'application/json',
+        },
+      ),
+    );
+    print(resp.data);
+    if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+      var chatRoom = resp.data['chat'];
+      if (chatRoom != null) {
+        setActiveChat(chatRoom['id']);
+        // ignore: use_build_context_synchronously
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const ServiceProviderChatRoom()));
+      }
+    }
+    // notifyListeners();
+  }
+
   Map activeChat = {};
   setActiveChat(id) async {
     var getChatRoom = allChatRooms.firstWhere((element) => element["id"] == id);
@@ -223,15 +232,15 @@ class ServiceProviderChat extends ChangeNotifier {
   }
 
   updateStatus() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = prefs.getString('userToken');
+    // SharedPreferences? prefs = await SharedPreferences.getInstance();
+    // await prefs.reload();
+    // var userToken = prefs.getString('userToken');
     var resp = await Dio().post(
       ChatUrl.serviceProviderChatMessageStatus,
       data: {"id": activeChat['id']},
       options: Options(
         headers: {
-          'Authorization': 'Bearer $userToken',
+          'Authorization': 'Bearer ${ServiceGiverProvider.userToken}',
           'Accept': 'application/json',
         },
       ),

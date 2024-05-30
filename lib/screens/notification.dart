@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
@@ -86,14 +87,32 @@ class _NotificationScreenState extends State<NotificationScreen> {
             getReceiverJobData(actionId);
             break;
           case "job-approved":
+            setState(() {
+              isLoading = false;
+            });
+            navigationService.push('/my-job-detail-giver', arguments: {
+              "id": actionId,
+            });
             break;
           case "job-reject":
+            setState(() {
+              isLoading = false;
+            });
+            navigationService.push('/my-job-detail-giver', arguments: {
+              "id": actionId,
+            });
             break;
           case "job-completed":
             break;
           case "review-given":
             break;
           case "receiver-job-create":
+            setState(() {
+              isLoading = false;
+            });
+            navigationService.push('/job-detail-giver', arguments: {
+              "id": actionId,
+            });
             break;
           case "receiver-subscription":
             break;
@@ -106,10 +125,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
           case "admin-chat":
             break;
           case "provider-chat":
+            setState(() {
+              isLoading = false;
+            });
+            Provider.of<ServiceProviderChat>(context, listen: false).getSingleChat(context, actionId);
             break;
           case "job-applied":
             break;
-
           default:
         }
       }
@@ -241,8 +263,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               return ListView.builder(
                                 itemCount: provider.allNotifications.length,
                                 itemBuilder: (context, index) {
-                                  // if (provider.allNotifications[index]['is_read'] == 0) {
-                                  // print(provider.allNotifications[index]);
                                   return Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: InkWell(
@@ -271,17 +291,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                                 child: provider.allNotifications[index]['users']['avatar'] == null
                                                     ? Container(
                                                         width: 50,
-                                                        height: 50,
-                                                        color: CustomColors.primaryColor,
-                                                        child: Center(
-                                                          child: Text(
-                                                            "${provider.allNotifications[index]['users']['first_name'][0].toString().toUpperCase()} ${provider.allNotifications[index]['users']['last_name'][0].toString().toUpperCase()}",
-                                                            style: const TextStyle(
-                                                              fontSize: 20,
-                                                              color: Colors.white,
-                                                            ),
-                                                          ),
-                                                        ),
+                                                        // height: 50,
+                                                        // color: CustomColors.primaryColor,
+                                                        // child: Center(
+                                                        //   child: Text(
+                                                        //     "${provider.allNotifications[index]['users']['first_name'][0].toString().toUpperCase()} ${provider.allNotifications[index]['users']['last_name'][0].toString().toUpperCase()}",
+                                                        //     style: const TextStyle(
+                                                        //       fontSize: 20,
+                                                        //       color: Colors.white,
+                                                        //     ),
+                                                        //   ),
+                                                        // ),
                                                       )
                                                     : CachedNetworkImage(
                                                         height: 50,
@@ -307,8 +327,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                       ),
                                     ),
                                   );
-                                  // }
-                                  // return null;
                                 },
                               );
                             },

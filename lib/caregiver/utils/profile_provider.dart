@@ -35,11 +35,15 @@ class ServiceGiverProvider extends ChangeNotifier {
     }
   }
 
+  static String userToken = '';
   getUserToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString('userToken');
+    var token = preferences.getString('userToken');
     // print(userToken);
-    return userToken.toString();
+    if (token != null) {
+      userToken = token;
+    }
+    return token.toString();
   }
 
   getUserId() async {

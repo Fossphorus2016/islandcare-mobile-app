@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:island_app/caregiver/screens/job_detail.dart';
+import 'package:island_app/caregiver/screens/my_job_detail.dart';
 import 'package:island_app/caregiver/widgets/bottombar.dart';
 import 'package:island_app/carereceiver/screens/bank_details.dart';
 import 'package:island_app/carereceiver/screens/hired_candidates_screen.dart';
@@ -65,7 +67,19 @@ class RouteGenerator {
 
       case '/bottom-bar-giver':
         return MaterialPageRoute(builder: (context) => const BottomBarGiver());
-
+      case '/job-detail-giver':
+        return MaterialPageRoute(
+          builder: (context) => JobDetailGiver(
+            id: args!['id'].toString(),
+            serviceId: args['serviceId'].toString(),
+          ),
+        );
+      case '/my-job-detail-giver':
+        return MaterialPageRoute(
+          builder: (context) => ServiceProviderJobsDetail(
+            id: args!['id'].toString(),
+          ),
+        );
       case '/service-reciever-bank':
         return MaterialPageRoute(
           builder: (context) => const ReceiverBankDetails(),
