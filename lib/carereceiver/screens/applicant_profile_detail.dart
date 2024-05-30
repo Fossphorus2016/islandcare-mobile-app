@@ -12,7 +12,7 @@ import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_breakpoints.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:island_app/carereceiver/models/applicant_profile_detail-model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 

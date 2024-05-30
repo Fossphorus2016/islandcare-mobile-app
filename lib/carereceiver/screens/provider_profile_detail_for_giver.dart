@@ -13,7 +13,7 @@ import 'package:island_app/utils/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:island_app/carereceiver/models/service_receiver_dashboard_detail_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:responsive_framework/responsive_breakpoints.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class ProviderProfileDetailForReceiver extends StatefulWidget {
   final double? rating;

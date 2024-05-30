@@ -12,7 +12,7 @@ import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_breakpoints.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class ProviderReviewsScreen extends StatefulWidget {
   const ProviderReviewsScreen({super.key});

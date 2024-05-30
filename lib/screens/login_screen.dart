@@ -13,7 +13,7 @@ import 'package:island_app/screens/splash_screen.dart';
 import 'package:island_app/screens/verify_email.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_breakpoints.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/utils/utils.dart';
 
