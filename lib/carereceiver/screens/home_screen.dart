@@ -839,8 +839,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               fetchReceiverDashboardModel();
                                             },
                                             style: ButtonStyle(
-                                              backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.white),
-                                              shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
+                                              backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.white),
+                                              shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
                                             ),
                                             child: const Text(
                                               "Reset",

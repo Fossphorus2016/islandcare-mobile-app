@@ -53,8 +53,8 @@ class _PostJobScreenState extends State<PostJobScreen> {
                   );
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(08))),
-                  backgroundColor: MaterialStateProperty.resolveWith((states) => ServiceRecieverColor.redButton),
+                  shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(08))),
+                  backgroundColor: WidgetStateProperty.resolveWith((states) => ServiceRecieverColor.redButton),
                 ),
                 child: const Row(
                   children: [
@@ -479,10 +479,10 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                                   );
                                                 },
                                                 style: ButtonStyle(
-                                                  shape: MaterialStateProperty.resolveWith(
+                                                  shape: WidgetStateProperty.resolveWith(
                                                     (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)),
                                                   ),
-                                                  backgroundColor: MaterialStateProperty.resolveWith(
+                                                  backgroundColor: WidgetStateProperty.resolveWith(
                                                     (states) => ServiceRecieverColor.redButton,
                                                   ),
                                                 ),

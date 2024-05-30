@@ -507,10 +507,10 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                                   );
                                                 },
                                                 style: ButtonStyle(
-                                                  shape: MaterialStateProperty.resolveWith(
+                                                  shape: WidgetStateProperty.resolveWith(
                                                     (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)),
                                                   ),
-                                                  backgroundColor: MaterialStateProperty.resolveWith(
+                                                  backgroundColor: WidgetStateProperty.resolveWith(
                                                     (states) => ServiceRecieverColor.redButton,
                                                   ),
                                                 ),

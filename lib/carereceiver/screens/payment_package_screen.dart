@@ -216,7 +216,7 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                           }
                                         },
                                         style: ButtonStyle(
-                                          backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.blue),
+                                          backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.blue),
                                         ),
                                         child: const Text(
                                           "Yes, unsubscribe please!",
@@ -229,7 +229,7 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                           Navigator.pop(context);
                                         },
                                         style: ButtonStyle(
-                                          backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.red.shade400),
+                                          backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.red.shade400),
                                         ),
                                         child: const Text(
                                           "No, cancel please!",
@@ -242,11 +242,11 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                               }
                             },
                             style: ButtonStyle(
-                              maximumSize: MaterialStateProperty.resolveWith((states) => const Size(250, 80)),
-                              padding: MaterialStateProperty.resolveWith(
+                              maximumSize: WidgetStateProperty.resolveWith((states) => const Size(250, 80)),
+                              padding: WidgetStateProperty.resolveWith(
                                 (states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                               ),
-                              backgroundColor: MaterialStateProperty.resolveWith(
+                              backgroundColor: WidgetStateProperty.resolveWith(
                                 (states) => Colors.red,
                               ),
                             ),

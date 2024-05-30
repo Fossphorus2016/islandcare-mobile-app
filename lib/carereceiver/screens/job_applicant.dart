@@ -492,10 +492,10 @@ class JobApplicantsState extends State<JobApplicants> {
                                                   );
                                                 },
                                                 style: ButtonStyle(
-                                                  shape: MaterialStateProperty.resolveWith(
+                                                  shape: WidgetStateProperty.resolveWith(
                                                     (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)),
                                                   ),
-                                                  backgroundColor: MaterialStateProperty.resolveWith(
+                                                  backgroundColor: WidgetStateProperty.resolveWith(
                                                     (states) => ServiceRecieverColor.redButton,
                                                   ),
                                                 ),
@@ -888,12 +888,12 @@ class JobApplicantsProvider extends ChangeNotifier {
           actions: [
             TextButton(
               style: ButtonStyle(
-                shape: MaterialStateProperty.resolveWith(
+                shape: WidgetStateProperty.resolveWith(
                   (states) => RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(08),
                   ),
                 ),
-                backgroundColor: MaterialStateProperty.resolveWith(
+                backgroundColor: WidgetStateProperty.resolveWith(
                   (states) => ServiceRecieverColor.primaryColor,
                 ),
               ),
@@ -917,12 +917,12 @@ class JobApplicantsProvider extends ChangeNotifier {
             ),
             TextButton(
               style: ButtonStyle(
-                shape: MaterialStateProperty.resolveWith(
+                shape: WidgetStateProperty.resolveWith(
                   (states) => RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(08),
                   ),
                 ),
-                backgroundColor: MaterialStateProperty.resolveWith(
+                backgroundColor: WidgetStateProperty.resolveWith(
                   (states) => ServiceRecieverColor.redButtonLigth,
                 ),
               ),

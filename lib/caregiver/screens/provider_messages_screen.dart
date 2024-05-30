@@ -201,7 +201,7 @@ class ServiceProviderChat extends ChangeNotifier {
   getSingleChat(BuildContext context, id) async {
     var userToken = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     // print(RecieverUserProvider.userToken);
-    print(id);
+    // print(id);
     var resp = await Dio().post(
       "${AppUrl.webBaseURL}/api/get-chat",
       data: {"chatId": id},
@@ -212,7 +212,7 @@ class ServiceProviderChat extends ChangeNotifier {
         },
       ),
     );
-    print(resp.data);
+    // print(resp.data);
     if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
       var chatRoom = resp.data['chat'];
       if (chatRoom != null) {

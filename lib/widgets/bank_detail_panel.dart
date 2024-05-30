@@ -119,8 +119,8 @@ class _BankDetailPanelState extends State<BankDetailPanel> {
                       TextButton(
                         onPressed: widget.setDefaultBank,
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.green),
-                          shape: MaterialStateProperty.resolveWith(
+                          backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.green),
+                          shape: WidgetStateProperty.resolveWith(
                             (states) => RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
@@ -135,8 +135,8 @@ class _BankDetailPanelState extends State<BankDetailPanel> {
                     TextButton(
                       onPressed: widget.deleteBank,
                       style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.red),
-                        shape: MaterialStateProperty.resolveWith(
+                        backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.red),
+                        shape: WidgetStateProperty.resolveWith(
                           (states) => RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
