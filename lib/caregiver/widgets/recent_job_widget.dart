@@ -7,12 +7,12 @@ class RecentJobWidget extends StatelessWidget {
   final String? rate;
   final String? time;
   const RecentJobWidget({
-    Key? key,
+    super.key,
     this.title,
     this.subTitle,
     this.rate,
     this.time,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

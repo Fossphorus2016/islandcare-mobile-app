@@ -14,10 +14,10 @@ class JobApplicantsDetail extends StatefulWidget {
   final String name;
   final String? jobId;
   const JobApplicantsDetail({
-    Key? key,
+    super.key,
     required this.name,
     this.jobId,
-  }) : super(key: key);
+  });
 
   @override
   State<JobApplicantsDetail> createState() => _JobApplicantsDetailState();

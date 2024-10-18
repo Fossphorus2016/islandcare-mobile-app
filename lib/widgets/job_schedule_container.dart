@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/models/schedule_model.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 
 class JobScheduleContainer extends StatelessWidget {
@@ -33,7 +34,7 @@ class JobScheduleContainer extends StatelessWidget {
             ],
             JobDetailTile(
               name: "Date",
-              title: DateFormat.yMMMMd().format(DateTime.parse(data![i].startingDate.toString()).toLocal()),
+              title: DateFormat.d().format(DateTime.parse(formatDateSlashToDashFromSplit(data![i].startingDate.toString().toLowerCase())).toLocal()),
             ),
             const SizedBox(height: 10),
             JobDetailTile(

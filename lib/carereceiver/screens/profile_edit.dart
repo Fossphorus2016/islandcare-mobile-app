@@ -7,8 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/utils/utils.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
@@ -25,7 +26,7 @@ class ProfileReceiverEdit extends StatefulWidget {
   String? userAddress;
   String? profileImage;
   ProfileReceiverEdit({
-    Key? key,
+    super.key,
     this.name,
     this.male,
     this.dob,
@@ -35,7 +36,7 @@ class ProfileReceiverEdit extends StatefulWidget {
     this.userInfo,
     this.userAddress,
     this.profileImage,
-  }) : super(key: key);
+  });
   @override
   State<ProfileReceiverEdit> createState() => _ProfileReceiverEditState();
 }
@@ -190,19 +191,13 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
   }
 
   getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
+    var userToken = await getToken();
     // print(userToken);
     return userToken.toString();
   }
 
   getUserId() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString(
-      'userId',
-    );
+    var userId = await storageService.readSecureStorage('userId');
     return userId.toString();
   }
 
@@ -892,8 +887,8 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
 
 class ProfileReceiverPendingEdit extends StatefulWidget {
   const ProfileReceiverPendingEdit({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   State<ProfileReceiverPendingEdit> createState() => _ProfileReceiverPendingEditState();
 }
@@ -1053,18 +1048,12 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
   }
 
   getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
+    var userToken = await getToken();
     return userToken.toString();
   }
 
   getUserId() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString(
-      'userId',
-    );
+    var userId = await storageService.readSecureStorage('userId');
     return userId.toString();
   }
 

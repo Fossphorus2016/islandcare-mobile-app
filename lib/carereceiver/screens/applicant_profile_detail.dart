@@ -21,11 +21,11 @@ class ApplicantProfileDetail extends StatefulWidget {
   final String? jobId;
   final String profileId;
   const ApplicantProfileDetail({
-    Key? key,
+    super.key,
     required this.jobTitle,
     required this.jobId,
     required this.profileId,
-  }) : super(key: key);
+  });
 
   @override
   State<ApplicantProfileDetail> createState() => _ApplicantProfileDetailState();

@@ -8,10 +8,10 @@ import 'package:island_app/models/register_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/verify_email.dart';
+import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   bool? isSelectedService = false;
@@ -610,13 +610,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                   ),
                                 );
                               } else if (data["user"]["role"] == 3) {
-                                SharedPreferences pref = await SharedPreferences.getInstance();
-                                await pref.setString('userRole', data["user"]["role"].toString());
-                                await pref.setString('userToken', data["token"].toString());
-                                await pref.setString('userStatus', status.toString());
-                                await pref.setString('userId', userId.toString());
-                                await pref.setString('userAvatar', avatar.toString());
-                                await pref.setString('userName', "$name $last");
+                                await storageService.writeSecureData('userRole', data["user"]["role"].toString());
+                                await storageService.writeSecureData('userToken', data["token"].toString());
+                                await storageService.writeSecureData('userStatus', status.toString());
+                                await storageService.writeSecureData('userId', userId.toString());
+                                await storageService.writeSecureData('userAvatar', avatar.toString());
+                                await storageService.writeSecureData('userName', "$name $last");
                                 // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
                                 Navigator.pushNamedAndRemoveUntil(
                                   context,
@@ -624,13 +623,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                   (route) => false,
                                 );
                               } else if (data["user"]["role"] == 4) {
-                                SharedPreferences pref = await SharedPreferences.getInstance();
-                                await pref.setString('userRole', data["user"]["role"].toString());
-                                await pref.setString('userToken', data["token"].toString());
-                                await pref.setString('userStatus', status.toString());
-                                await pref.setString('userId', userId.toString());
-                                await pref.setString('userAvatar', avatar.toString());
-                                await pref.setString('userName', "$name $last");
+                                await storageService.writeSecureData('userRole', data["user"]["role"].toString());
+                                await storageService.writeSecureData('userToken', data["token"].toString());
+                                await storageService.writeSecureData('userStatus', status.toString());
+                                await storageService.writeSecureData('userId', userId.toString());
+                                await storageService.writeSecureData('userAvatar', avatar.toString());
+                                await storageService.writeSecureData('userName', "$name $last");
                                 // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
                                 Navigator.pushNamedAndRemoveUntil(
                                   context,

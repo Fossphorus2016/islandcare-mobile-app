@@ -12,12 +12,12 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'dart:core';
 
 import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -196,9 +196,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 onSelected: (value) async {
                   if (value == 1) {
                     try {
-                      SharedPreferences? prefs = await SharedPreferences.getInstance();
-                      await prefs.reload();
-                      var userToken = prefs.getString('userToken');
+                      var userToken = await storageService.readSecureStorage('userToken');
 
                       var resp = await Dio().get(
                         "${AppUrl.webBaseURL}/api/mark-notifications-as-read",
@@ -453,9 +451,7 @@ class NotificationProvider extends ChangeNotifier {
 
   getNotifications() async {
     try {
-      SharedPreferences? prefs = await SharedPreferences.getInstance();
-      await prefs.reload();
-      var userToken = prefs.getString('userToken');
+      var userToken = await storageService.readSecureStorage('userToken');
 
       var resp = await Dio().get(
         AppUrl.getNotification,

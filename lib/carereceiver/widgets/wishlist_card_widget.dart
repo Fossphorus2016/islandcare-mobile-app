@@ -3,10 +3,10 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 
 class WishlistCardWidget extends StatelessWidget {
   const WishlistCardWidget({
-    Key? key,
+    super.key,
     required this.fem,
     required this.ffem,
-  }) : super(key: key);
+  });
 
   final double fem;
   final double ffem;

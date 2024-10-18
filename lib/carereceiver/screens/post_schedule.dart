@@ -6,21 +6,21 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/check_tile_container.dart';
 import 'package:island_app/widgets/show_day_container.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 
 class PostSchedule extends StatefulWidget {
   final String? serviceId;
   final String? jobId;
   const PostSchedule({
-    Key? key,
+    super.key,
     this.serviceId,
     this.jobId,
-  }) : super(key: key);
+  });
 
   @override
   State<PostSchedule> createState() => _PostScheduleState();
@@ -321,7 +321,7 @@ class _PostScheduleState extends State<PostSchedule> {
 
   // Post JOB API
   PostSeniorCare() async {
-    var token = await getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap({
       'job_title': jobTitleController.text.toString(),
       'address': addressController.text.toString(),
@@ -380,7 +380,7 @@ class _PostScheduleState extends State<PostSchedule> {
   }
 
   PostPetCare() async {
-    var token = await getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap(
       {
         'job_title': jobTitleController.text.toString(),
@@ -433,7 +433,7 @@ class _PostScheduleState extends State<PostSchedule> {
   }
 
   PostHouseKeeping() async {
-    var token = await getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap(
       {
         'job_title': jobTitleController.text.toString(),
@@ -484,7 +484,7 @@ class _PostScheduleState extends State<PostSchedule> {
   }
 
   PostChildCare() async {
-    var token = await getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap(
       {
         'job_title': jobTitleController.text.toString(),
@@ -533,7 +533,7 @@ class _PostScheduleState extends State<PostSchedule> {
   }
 
   PostSchoolSupport() async {
-    var token = await getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap(
       {
         'job_title': jobTitleController.text.toString(),
@@ -590,17 +590,13 @@ class _PostScheduleState extends State<PostSchedule> {
     }
   }
 
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-    return userToken.toString();
-  }
+  // getToken() async {
+  //   var userToken = await getToken();
+  //   return userToken.toString();
+  // }
 
   @override
   void initState() {
-    getUserToken();
     super.initState();
   }
 

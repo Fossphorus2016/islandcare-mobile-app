@@ -17,9 +17,9 @@ import 'package:provider/provider.dart';
 class BottomBarGiver extends StatefulWidget {
   final String? status;
   const BottomBarGiver({
-    Key? key,
+    super.key,
     this.status,
-  }) : super(key: key);
+  });
 
   @override
   State<BottomBarGiver> createState() => _BottomBarGiverState();

@@ -16,12 +16,12 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
+import 'package:island_app/utils/storage_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({
@@ -99,11 +99,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
               ),
               onPressed: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
                 Provider.of<NotificationProvider>(context, listen: false).unSubscribeChannels(4);
-                prefs.remove('userRole');
-                prefs.remove('userToken');
-                prefs.remove("userStatus");
+                await storageService.deleteSecureStorage('userRole');
+                await storageService.deleteSecureStorage('userToken');
+                await storageService.deleteSecureStorage("userStatus");
                 Provider.of<BottomNavigationProvider>(context, listen: false).page = 0;
                 Navigator.pushNamedAndRemoveUntil(
                   context,
@@ -156,10 +155,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
 
   var avatar;
   getUserAvatar() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userAvatar = preferences.getString(
-      'userAvatar',
-    );
+    var userAvatar = await storageService.readSecureStorage('userAvatar');
     setState(() {
       avatar = userAvatar;
     });

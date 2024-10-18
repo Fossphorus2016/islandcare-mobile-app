@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:island_app/screens/onboard_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:island_app/utils/storage_service.dart';
 import '../carereceiver/utils/colors.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,9 +15,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   Future check() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    var userRole = prefs.getString('userRole');
-    var userToken = prefs.getString('userToken');
+    var userRole = await storageService.readSecureStorage('userRole');
+    var userToken = await storageService.readSecureStorage('userToken');
 
     if (userRole == null && userToken == null) {
       Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const OnBoardScreen()));

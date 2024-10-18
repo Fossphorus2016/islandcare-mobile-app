@@ -26,10 +26,10 @@ class ServiceProviderJobsDetail extends StatefulWidget {
   final String? id;
   final String? service;
   const ServiceProviderJobsDetail({
-    Key? key,
+    super.key,
     this.id,
     this.service,
-  }) : super(key: key);
+  });
 
   @override
   State<ServiceProviderJobsDetail> createState() => _ServiceProviderJobsDetailState();

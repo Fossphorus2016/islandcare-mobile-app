@@ -22,7 +22,7 @@ class RecommendationReceiverWidget extends StatelessWidget {
   final dynamic isRatingShow;
 
   RecommendationReceiverWidget({
-    Key? key,
+    super.key,
     this.imgPath,
     this.title,
     this.experience,
@@ -35,7 +35,7 @@ class RecommendationReceiverWidget extends StatelessWidget {
     this.checkFavourite,
     this.isFavouriteIcon,
     this.isRatingShow = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

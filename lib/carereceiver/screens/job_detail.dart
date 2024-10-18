@@ -20,11 +20,11 @@ class ReceiverJobDetail extends StatefulWidget {
   final dynamic jobData;
   final String? serviceId;
   const ReceiverJobDetail({
-    Key? key,
+    super.key,
     // this.id,
     required this.serviceId,
     this.jobData,
-  }) : super(key: key);
+  });
 
   @override
   State<ReceiverJobDetail> createState() => _ReceiverJobDetailState();

@@ -7,7 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/models/service_provider_dashboard_model.dart';
 import 'package:island_app/utils/app_url.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/storage_service.dart';
 
 class ServiceGiverProvider extends ChangeNotifier {
   // fetchPRofile
@@ -37,8 +38,7 @@ class ServiceGiverProvider extends ChangeNotifier {
 
   static String userToken = '';
   getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var token = preferences.getString('userToken');
+    var token = await getToken();
     // print(userToken);
     if (token != null) {
       userToken = token;
@@ -47,16 +47,13 @@ class ServiceGiverProvider extends ChangeNotifier {
   }
 
   getUserId() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString('userId');
+    var userId = await storageService.readSecureStorage('userId');
     return userId.toString();
   }
 
   String? userName;
   getUserName() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var getUserName = prefs.getString('userName');
+    var getUserName = await storageService.readSecureStorage('userName');
     userName = getUserName;
     notifyListeners();
   }

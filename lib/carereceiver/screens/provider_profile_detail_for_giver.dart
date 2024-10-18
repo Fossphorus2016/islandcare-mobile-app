@@ -19,10 +19,10 @@ class ProviderProfileDetailForReceiver extends StatefulWidget {
   final double? rating;
   final String? id;
   const ProviderProfileDetailForReceiver({
-    Key? key,
+    super.key,
     this.id,
     this.rating,
-  }) : super(key: key);
+  });
 
   @override
   State<ProviderProfileDetailForReceiver> createState() => _ProviderProfileDetailForReceiverState();

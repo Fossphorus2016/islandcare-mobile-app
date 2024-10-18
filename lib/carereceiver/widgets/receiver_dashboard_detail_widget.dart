@@ -28,7 +28,7 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
   final Widget? documentsSection;
 
   const ReceiverDashboardDetailWidget({
-    Key? key,
+    super.key,
     this.imgPath,
     this.title,
     this.services,
@@ -49,7 +49,7 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
     // this.providerComment,
 
     this.documentsSection,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

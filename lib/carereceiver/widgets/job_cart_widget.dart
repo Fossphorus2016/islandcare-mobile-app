@@ -12,12 +12,12 @@ class JobBoardCartWidget extends StatelessWidget {
   VoidCallback? delete;
 
   JobBoardCartWidget({
-    Key? key,
+    super.key,
     this.jobTitle,
     this.jobType,
     this.detail,
     this.delete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

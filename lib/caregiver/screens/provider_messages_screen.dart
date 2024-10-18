@@ -12,9 +12,9 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/chatroom_model.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/widgets/profile_complete_widget.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ProviderMessagesScreen extends StatefulWidget {
   const ProviderMessagesScreen({super.key});
@@ -24,17 +24,6 @@ class ProviderMessagesScreen extends StatefulWidget {
 }
 
 class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
-  // var token;
-  // Future getUserToken() async {
-  //   SharedPreferences? prefs = await SharedPreferences.getInstance();
-  //   await prefs.reload();
-  //   var userToken = prefs.getString('userToken');
-  //   setState(() {
-  //     token = userToken;
-  //   });
-  //   return userToken.toString();
-  // }
-
   @override
   void initState() {
     // getUserToken();
@@ -262,9 +251,7 @@ class ServiceProviderChat extends ChangeNotifier {
   }
 
   sendMessage(value) async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = prefs.getString('userToken');
+    var userToken = await getToken();
     var formData = FormData.fromMap({
       "receiver_id": activeChat['sender_id'],
       "message": value.toString(),

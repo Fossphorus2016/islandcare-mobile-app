@@ -15,7 +15,7 @@ class RecommendationWidget extends StatelessWidget {
   final onTap;
 
   const RecommendationWidget({
-    Key? key,
+    super.key,
     this.imgPath,
     this.title,
     this.subTitle,
@@ -24,7 +24,7 @@ class RecommendationWidget extends StatelessWidget {
     this.isCompleted,
     this.price,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

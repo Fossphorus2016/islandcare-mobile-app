@@ -12,12 +12,12 @@ class ReviewsGivenWidget extends StatelessWidget {
   var email;
 
   ReviewsGivenWidget({
-    Key? key,
+    super.key,
     this.name,
     this.rating,
     this.comment,
     this.email,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

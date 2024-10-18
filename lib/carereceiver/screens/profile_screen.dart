@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/screens/profile_edit.dart';
@@ -14,8 +14,8 @@ import 'package:island_app/carereceiver/widgets/drawer_widget.dart';
 
 class ProfileReceiverScreen extends StatefulWidget {
   const ProfileReceiverScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ProfileReceiverScreen> createState() => _ProfileReceiverScreenState();
@@ -777,8 +777,8 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
 // Service Receiver For Pending
 class ProfileReceiverPendingScreen extends StatefulWidget {
   const ProfileReceiverPendingScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ProfileReceiverPendingScreen> createState() => _ProfileReceiverPendingScreenState();
@@ -808,10 +808,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
   }
 
   userTokenProfile() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
+    var userToken = await getToken();
     // print(userToken);
     return userToken.toString();
   }

@@ -4,13 +4,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/utils/app_url.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:island_app/utils/storage_service.dart';
 
 class RecieverUserProvider extends ChangeNotifier {
   static String userToken = '';
   getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var token = preferences.getString('userToken');
+    var token = await storageService.readSecureStorage('userToken');
     // print(userToken);
     if (token != null) {
       userToken = token;
@@ -20,8 +19,7 @@ class RecieverUserProvider extends ChangeNotifier {
   }
 
   getUserId() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString('userId');
+    var userId = await storageService.readSecureStorage('userId');
     return userId.toString();
   }
 

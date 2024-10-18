@@ -12,17 +12,18 @@ import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
+import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class DrawerGiverWidget extends StatefulWidget {
   const DrawerGiverWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<DrawerGiverWidget> createState() => _DrawerGiverWidgetState();
@@ -86,12 +87,11 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                 ),
               ),
               onPressed: () async {
-                SharedPreferences prefs = await SharedPreferences.getInstance();
                 Provider.of<NotificationProvider>(context, listen: false).unSubscribeChannels(3);
                 Provider.of<BottomNavigationProvider>(context, listen: false).page = 0;
-                prefs.remove('userRole');
-                prefs.remove('userToken');
-                prefs.remove("userStatus");
+                await storageService.deleteSecureStorage('userRole');
+                await storageService.deleteSecureStorage('userToken');
+                await storageService.deleteSecureStorage("userStatus");
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   '/', // Replace with the name of the new route you want to push
@@ -121,7 +121,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
   // fetchPRofile
   late Future<ProfileGiverModel> fetchProfile;
   Future<ProfileGiverModel> fetchProfileGiverModel() async {
-    var token = await getUserToken();
+    var token = await getToken();
     Dio()
         .get(
       CareGiverUrl.serviceProviderProfile,
@@ -156,25 +156,13 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
   }
 
   getUserId() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userId = preferences.getString(
-      'userId',
-    );
+    var userId = await storageService.readSecureStorage('userId');
     return userId.toString();
-  }
-
-  getUserToken() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    var userToken = preferences.getString(
-      'userToken',
-    );
-    return userToken.toString();
   }
 
   @override
   void initState() {
     getUserId();
-    getUserToken();
     super.initState();
     fetchProfile = fetchProfileGiverModel();
   }

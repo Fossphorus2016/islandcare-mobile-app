@@ -21,10 +21,10 @@ class EditPostSchedule extends StatefulWidget {
   final String? serviceId;
   final dynamic jobData;
   const EditPostSchedule({
-    Key? key,
+    super.key,
     this.serviceId,
     this.jobData,
-  }) : super(key: key);
+  });
 
   @override
   State<EditPostSchedule> createState() => _EditPostScheduleState();

@@ -1,5 +1,5 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 
 class AccountSettings extends StatefulWidget {
@@ -205,17 +205,22 @@ class _AccountSettingsState extends State<AccountSettings> {
                   trailing: SizedBox(
                     width: 38,
                     height: 20,
-                    child: FlutterSwitch(
-                      padding: 0.5,
-                      width: 40,
+                    child: CupertinoSwitch(
+                      // padding: 0.5,
+                      // width: 40,
                       activeColor: Colors.red,
-                      borderRadius: 10,
+                      // borderRadius: 10,
                       value: status1,
-                      onToggle: (val) {
+                      onChanged: (value) {
                         setState(() {
-                          status1 = val;
+                          status1 = value;
                         });
                       },
+                      // onToggle: (val) {
+                      //   setState(() {
+                      //     status1 = val;
+                      //   });
+                      // },
                     ),
                   ),
                 ),
@@ -233,13 +238,13 @@ class _AccountSettingsState extends State<AccountSettings> {
                   trailing: SizedBox(
                     width: 38,
                     height: 20,
-                    child: FlutterSwitch(
-                      padding: 0.5,
-                      width: 40,
+                    child: CupertinoSwitch(
+                      // padding: 0.5,
+                      // width: 40,
                       activeColor: Colors.red,
-                      borderRadius: 10,
+                      // borderRadius: 10,
                       value: status2,
-                      onToggle: (val) {
+                      onChanged: (val) {
                         setState(
                           () {
                             status2 = val;

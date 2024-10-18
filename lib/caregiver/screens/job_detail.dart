@@ -22,10 +22,10 @@ class JobDetailGiver extends StatefulWidget {
   final String? id;
   final String? serviceId;
   const JobDetailGiver({
-    Key? key,
+    super.key,
     this.id,
     required this.serviceId,
-  }) : super(key: key);
+  });
 
   @override
   State<JobDetailGiver> createState() => _JobDetailGiverState();

@@ -9,9 +9,9 @@ import 'package:island_app/widgets/progress_dialog.dart';
 class VerifyEmail extends StatefulWidget {
   String? token;
   VerifyEmail({
-    Key? key,
+    super.key,
     required this.token,
-  }) : super(key: key);
+  });
 
   @override
   State<VerifyEmail> createState() => _VerifyEmailState();

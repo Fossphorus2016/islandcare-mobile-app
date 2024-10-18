@@ -13,8 +13,8 @@ import 'package:island_app/models/chatroom_model.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class MessagesScreen extends StatefulWidget {
   const MessagesScreen({super.key});
@@ -150,9 +150,7 @@ class RecieverChatProvider extends ChangeNotifier {
   List<Map<String, dynamic>> chatList = [];
   List allChatRooms = [];
   getChats() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = prefs.getString('userToken');
+    var userToken = await getToken();
     var resp = await Dio().post(
       ChatUrl.serviceReceiverAllChats,
       options: Options(
@@ -271,9 +269,7 @@ class RecieverChatProvider extends ChangeNotifier {
 
   bool sendMessageReq = false;
   sendMessage(value) async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = prefs.getString('userToken');
+    var userToken = await getToken();
     var formData = FormData.fromMap({
       "provider_id": activeChat['receiver_id'],
       "message": value.toString(),
@@ -304,9 +300,7 @@ class RecieverChatProvider extends ChangeNotifier {
   }
 
   updateStatus() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = prefs.getString('userToken');
+    var userToken = await getToken();
     var resp = await Dio().post(
       ChatUrl.serviceReceiverChatMessageStatus,
       data: {"id": activeChat['id']},

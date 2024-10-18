@@ -29,7 +29,7 @@ class CustomTextFieldWidget extends StatelessWidget {
   bool? readOnly = false;
 
   CustomTextFieldWidget({
-    Key? key,
+    super.key,
     this.prefIcon,
     this.sufIcon,
     required this.hintText,
@@ -47,7 +47,7 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.validation,
     this.inputFormatters,
     this.readOnly,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

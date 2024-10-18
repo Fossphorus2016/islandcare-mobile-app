@@ -9,12 +9,12 @@ class JobApplicantsWidget extends StatelessWidget {
   final VoidCallback? onTap;
 
   const JobApplicantsWidget({
-    Key? key,
+    super.key,
     this.name,
     this.jobType,
     this.count,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

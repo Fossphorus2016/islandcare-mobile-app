@@ -10,12 +10,12 @@ class HiredCandidateWidget extends StatelessWidget {
   var isCompleted;
 
   HiredCandidateWidget({
-    Key? key,
+    super.key,
     this.name,
     this.jobType,
     this.markAsComplete,
     this.isCompleted,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

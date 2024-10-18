@@ -18,9 +18,9 @@ class BottomBar extends StatefulWidget {
   final String? data;
   static const String routeName = '/actual-home';
   const BottomBar({
-    Key? key,
+    super.key,
     this.data,
-  }) : super(key: key);
+  });
 
   @override
   State<BottomBar> createState() => BottomBarState();

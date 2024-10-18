@@ -11,12 +11,12 @@ class ReviewsListWidget extends StatelessWidget {
   var reviewRating;
   String? rating;
   ReviewsListWidget({
-    Key? key,
+    super.key,
     this.imgUrl,
     this.providerName,
     this.reviewRating,
     this.rating,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

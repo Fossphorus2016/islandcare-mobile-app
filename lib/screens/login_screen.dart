@@ -11,10 +11,10 @@ import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/splash_screen.dart';
 import 'package:island_app/screens/verify_email.dart';
+import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:island_app/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -303,34 +303,31 @@ class _LoginScreenState extends State<LoginScreen> {
                                           MaterialPageRoute(builder: (context) => VerifyEmail(token: data["token"])),
                                         );
                                       } else if (data["user"]["role"] == 3) {
-                                        SharedPreferences pref = await SharedPreferences.getInstance();
-                                        await pref.setString('userRole', data["user"]["role"].toString());
-                                        await pref.setString('userToken', data["token"].toString());
-                                        await pref.setString('userStatus', status.toString());
-                                        await pref.setString('userId', userId.toString());
-                                        await pref.setString('userAvatar', avatar.toString());
-                                        await pref.setString('userName', "$name $last");
+                                        await storageService.writeSecureData('userRole', data["user"]["role"].toString());
+                                        await storageService.writeSecureData('userToken', data["token"].toString());
+                                        await storageService.writeSecureData('userStatus', status.toString());
+                                        await storageService.writeSecureData('userId', userId.toString());
+                                        await storageService.writeSecureData('userAvatar', avatar.toString());
+                                        await storageService.writeSecureData('userName', "$name $last");
                                         Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
 
                                         Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
                                       } else if (data["user"]["role"] == 4) {
                                         if (data["user"]["status"] == 0) {
-                                          SharedPreferences pref = await SharedPreferences.getInstance();
-                                          await pref.setString('userStatus', status.toString());
-                                          await pref.setString('userToken', data["token"].toString());
-                                          await pref.setString('userAvatar', avatar.toString());
-                                          await pref.setString('userId', userId.toString());
-                                          await pref.setString('userName', "$name $last");
+                                          await storageService.writeSecureData('userStatus', status.toString());
+                                          await storageService.writeSecureData('userToken', data["token"].toString());
+                                          await storageService.writeSecureData('userAvatar', avatar.toString());
+                                          await storageService.writeSecureData('userId', userId.toString());
+                                          await storageService.writeSecureData('userName', "$name $last");
 
                                           Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomBar(data: data['token'].toString())), (route) => false);
                                         } else {
-                                          SharedPreferences pref = await SharedPreferences.getInstance();
-                                          await pref.setString('userRole', data["user"]["role"].toString());
-                                          await pref.setString('userToken', data["token"].toString());
-                                          await pref.setString('userStatus', status.toString());
-                                          await pref.setString('userId', userId.toString());
-                                          await pref.setString('userAvatar', avatar.toString());
-                                          await pref.setString('userName', "$name $last");
+                                          await storageService.writeSecureData('userRole', data["user"]["role"].toString());
+                                          await storageService.writeSecureData('userToken', data["token"].toString());
+                                          await storageService.writeSecureData('userStatus', status.toString());
+                                          await storageService.writeSecureData('userId', userId.toString());
+                                          await storageService.writeSecureData('userAvatar', avatar.toString());
+                                          await storageService.writeSecureData('userName', "$name $last");
                                           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
                                         }
                                         Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();

@@ -49,7 +49,7 @@ class ProfileGiverPendingEdit extends StatefulWidget {
   final bool? chaildAndFamilyServicesAndAbuseVerify;
 
   const ProfileGiverPendingEdit({
-    Key? key,
+    super.key,
     this.name,
     this.email,
     this.avatar,
@@ -77,7 +77,7 @@ class ProfileGiverPendingEdit extends StatefulWidget {
     this.animailFirstAidVerify,
     this.redCrossBabysittingCertificationVerify,
     this.chaildAndFamilyServicesAndAbuseVerify,
-  }) : super(key: key);
+  });
   @override
   State<ProfileGiverPendingEdit> createState() => _ProfileGiverPendingEditState();
 }

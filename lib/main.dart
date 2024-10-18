@@ -20,9 +20,10 @@ import 'package:island_app/carereceiver/utils/home_pagination.dart';
 import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/storage_service.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 /*
@@ -70,9 +71,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var token;
   Future getUserToken() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userToken = await prefs.getString('userToken');
+    var userToken = await getToken();
     setState(() {
       token = userToken;
     });
@@ -84,9 +83,7 @@ class _MyAppState extends State<MyApp> {
 
   var name;
   Future getUserName() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    await prefs.reload();
-    var userName = await prefs.getString('userName');
+    var userName = await storageService.readSecureStorage("userName");
     setState(() {
       name = userName;
     });
