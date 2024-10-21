@@ -5,6 +5,7 @@ import 'package:island_app/caregiver/models/bank_details_models.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'dart:core';
@@ -29,13 +30,7 @@ class _BankDetailsState extends State<BankDetails> {
   final bankKey = GlobalKey<FormState>();
   fetchBankDetailsModel() async {
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-    final response = await Dio().get(
-      CareGiverUrl.serviceProviderBankDetails,
-      options: Options(headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-      }),
-    );
+    final response = await getRequesthandler(url: CareGiverUrl.serviceProviderBankDetails, token: token, data: null);
     if (response.statusCode == 200) {
       var json = response.data as Map;
       var bankdetails = json['bank_details'] as List;
@@ -64,19 +59,12 @@ class _BankDetailsState extends State<BankDetails> {
         "id": bankId,
       },
     );
-    Dio dio = Dio();
+
     try {
-      var response = await dio.post(
-        '${AppUrl.webBaseURL}/api/select-bank',
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
+      var response = await postRequesthandler(
+        url: BankUrl.selectBank,
+        token: token,
+        formData: formData,
       );
       if (response.statusCode == 200 && !response.data['message'].contains("Unable To Select Unverified Banks")) {
         customSuccesSnackBar(context, "Bank Account Selected");
@@ -102,19 +90,12 @@ class _BankDetailsState extends State<BankDetails> {
         "id": bankId,
       },
     );
-    Dio dio = Dio();
+
     try {
-      var response = await dio.post(
-        '${AppUrl.webBaseURL}/api/delete-bank',
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
+      var response = await postRequesthandler(
+        url: BankUrl.deleteBank,
+        token: token,
+        formData: formData,
       );
       if (response.statusCode == 200) {
         customSuccesSnackBar(
@@ -139,22 +120,17 @@ class _BankDetailsState extends State<BankDetails> {
 
   // Add Bank Detail
   postAddBank() async {
-    var requestBody = {
+    var requestBody = FormData.fromMap({
       'name_of_bank': selectedNames.toString(),
       'name_on_account': accountTitleController.text.toString(),
       'account_number': accountNumberController.text.toString(),
-    };
+    });
     try {
       var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-      final response = await Dio().post(
-        CareGiverUrl.addServiceProviderBank,
-        data: requestBody,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-          },
-        ),
+      final response = await postRequesthandler(
+        url: CareGiverUrl.addServiceProviderBank,
+        token: token,
+        formData: requestBody,
       );
       if (response.statusCode == 200) {
         if (response.data['success']) {

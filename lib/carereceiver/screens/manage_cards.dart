@@ -8,6 +8,7 @@ import 'package:island_app/carereceiver/models/manage_cards_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -143,24 +144,19 @@ class _ManageCardsState extends State<ManageCards> {
   String? selectedYear;
 
   postAddCard() async {
-    var requestBody = {
+    var requestBody = FormData.fromMap({
       'name_on_card': nameOncardController.text.toString(),
       'card_number': cardNumberController.text.toString(),
       'card_expiration_month': selectedMonth.toString(),
       'card_expiration_year': selectedYear.toString(),
       'cvv': cvvController.text.toString(),
-    };
+    });
     var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     try {
-      final response = await Dio().post(
-        CareReceiverURl.serviceReceiverAddCreditCards,
-        data: requestBody,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-          },
-        ),
+      final response = await postRequesthandler(
+        url: CareReceiverURl.serviceReceiverAddCreditCards,
+        formData: requestBody,
+        token: token,
       );
       if (response.statusCode == 200) {
         if (response.data['success'] == false) {
@@ -1092,14 +1088,9 @@ class CardProvider extends ChangeNotifier {
   CreditCard? selectedCard;
   fetchManageCardsModel() async {
     var token = await RecieverUserProvider.userToken;
-    final response = await Dio().get(
-      CareReceiverURl.serviceReceiverGetCreditCards,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: CareReceiverURl.serviceReceiverGetCreditCards,
+      token: token,
     );
     if (response.statusCode == 200) {
       allCards = List<CreditCard>.from(response.data["credit-cards"]!.map((x) => CreditCard.fromJson(x)));

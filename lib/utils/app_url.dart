@@ -11,6 +11,11 @@ class AppUrl {
   static String getNotification = "$webBaseURL/api/get-notifications";
 }
 
+class BankUrl {
+  static String selectBank = "${AppUrl.webBaseURL}/api/select-bank";
+  static String deleteBank = "${AppUrl.webBaseURL}/api/delete-bank";
+}
+
 class SessionUrl {
   static String login = "${AppUrl.webBaseURL}/api/login";
   static String register = "${AppUrl.webBaseURL}/api/register";

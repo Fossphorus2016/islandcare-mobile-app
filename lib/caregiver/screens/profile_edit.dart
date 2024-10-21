@@ -452,19 +452,23 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   var myimg;
 
   Future getImageDio(BuildContext context) async {
-    FilePickerResult? pickedFileDio = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['png', 'jpg', 'jpeg'],
-    );
+    try {
+      FilePickerResult? pickedFileDio = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['png', 'jpg', 'jpeg'],
+      );
 
-    if (pickedFileDio != null) {
-      if (checkImageFileTypes(context, pickedFileDio.files.single.extension)) {
-        setState(() {
-          imageFileDio = File(pickedFileDio.files.single.path ?? "");
-        });
+      if (pickedFileDio != null) {
+        if (checkImageFileTypes(context, pickedFileDio.files.single.extension)) {
+          setState(() {
+            imageFileDio = File(pickedFileDio.files.single.path ?? "");
+          });
+        }
+      } else {
+        customErrorSnackBar(context, "No file select");
       }
-    } else {
-      customErrorSnackBar(context, "No file select");
+    } catch (e) {
+      //
     }
   }
 
@@ -542,7 +546,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     setState(() {
       sendRequest = true;
     });
-    Dio dio = Dio();
     // try {
     //   var response = await dio.post('https://islandcare.bm/api/service-provider-profile/update', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
     //   setState(() {

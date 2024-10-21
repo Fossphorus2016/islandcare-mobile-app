@@ -16,6 +16,7 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
@@ -983,16 +984,11 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
     );
     // print('route url ${formData.fields}');
 
-    Dio dio = Dio();
     try {
-      var response = await dio.post(
-        '${AppUrl.webBaseURL}/api/password-update/$userId',
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
-        ),
+      var response = await postRequesthandler(
+        url: '${AppUrl.webBaseURL}/api/password-update/$userId',
+        formData: formData,
+        token: token,
       );
       // print(response.data);
       Navigator.pop(context);

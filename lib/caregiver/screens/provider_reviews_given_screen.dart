@@ -2,13 +2,13 @@
 
 import 'dart:math';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/caregiver/models/provider_reviews_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:provider/provider.dart';
@@ -852,14 +852,9 @@ class GiverReviewsProvider extends ChangeNotifier {
   ProviderReviewsModel? futurereviews;
   fetchReviewsModel(BuildContext context) async {
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-    final response = await Dio().get(
-      CareGiverUrl.serviceProviderProfileReviews,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: CareGiverUrl.serviceProviderProfileReviews,
+      token: token,
     );
     isLoading = false;
     notifyListeners();

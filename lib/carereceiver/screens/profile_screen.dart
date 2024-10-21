@@ -1,10 +1,10 @@
 // import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/screens/notification.dart';
@@ -789,14 +789,9 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
   late Future<ProfileReceiverModel> fetchProfile;
   Future<ProfileReceiverModel> fetchProfileReceiverModel() async {
     var token = await userTokenProfile();
-    final response = await Dio().get(
-      CareReceiverURl.serviceReceiverProfile,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: CareReceiverURl.serviceReceiverProfile,
+      token: token,
     );
     if (response.statusCode == 200) {
       return ProfileReceiverModel.fromJson(response.data);

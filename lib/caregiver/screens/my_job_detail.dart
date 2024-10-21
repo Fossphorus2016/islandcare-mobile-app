@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 // import 'package:island_app/caregiver/models/child_care_detail-dashbaord_model.dart';
 // import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model.dart';
@@ -13,6 +12,7 @@ import 'package:island_app/carereceiver/models/house_keeping_model.dart';
 import 'package:island_app/carereceiver/models/pet_care_model.dart';
 import 'package:island_app/carereceiver/models/school_support_model.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 import 'package:island_app/widgets/job_info_container.dart';
@@ -36,126 +36,6 @@ class ServiceProviderJobsDetail extends StatefulWidget {
 }
 
 class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
-  // Get Detail jobs
-  // late Future<SeniorCareDetailModel> futureSeniorCareDetail;
-  // late Future<PetCareDetailModel> futurePetCareDetail;
-  // late Future<HouseKeepingDetailModel> futureHouseKeepingDetail;
-  // late Future<ChildCareDetailModel> futureChildCareDetail;
-  // late Future<SchoolSupportDetailModel> futureSchoolSupportDetail;
-  // Future<SeniorCareDetailModel> fetchSeniorCareDetailModel() async {
-  //   var token = await getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return SeniorCareDetailModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       customErrorSnackBar(
-  //         context,
-  //         'Failed to load Services Model',
-  //       ),
-  //     );
-  //   }
-  // }
-
-  // Future<PetCareDetailModel> fetchPetCareDetailModel() async {
-  //   var token = await getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return PetCareDetailModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       customErrorSnackBar(
-  //         context,
-  //         'Failed to load Services Model',
-  //       ),
-  //     );
-  //   }
-  // }
-
-  // Future<HouseKeepingDetailModel> fetchHouseKeepingDetailModel() async {
-  //   var token = await getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return HouseKeepingDetailModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       customErrorSnackBar(
-  //         context,
-  //         'Failed to load Services Model',
-  //       ),
-  //     );
-  //   }
-  // }
-
-  // Future<ChildCareDetailModel> fetchChildCareDetailModel() async {
-  //   var token = await getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return ChildCareDetailModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       customErrorSnackBar(
-  //         context,
-  //         'Failed to load Services Model',
-  //       ),
-  //     );
-  //   }
-  // }
-
-  // Future<SchoolSupportDetailModel> fetchSchoolSupportDetailModel() async {
-  //   var token = await getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return SchoolSupportDetailModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       customErrorSnackBar(
-  //         context,
-  //         'Failed to load Services Model',
-  //       ),
-  //     );
-  //   }
-  // }
   SeniorCareDetailModel? futureSeniorCareDetailDashboard;
   SchoolSupportDetailModel? futureSchoolSupportDetailDashboard;
   ChildCareDetailModel? futureChildCareDetailDashboard;
@@ -165,14 +45,9 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
   bool? noDataFound;
   fetchJobDetail() async {
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-    final response = await Dio().get(
-      '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
+      token: token,
     );
     if (response.statusCode == 200) {
       // print(response.data['job_detail'][0]['service']);

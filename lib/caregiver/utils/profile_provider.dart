@@ -8,6 +8,7 @@ import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/models/service_provider_dashboard_model.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 
 class ServiceGiverProvider extends ChangeNotifier {
@@ -22,9 +23,9 @@ class ServiceGiverProvider extends ChangeNotifier {
   fetchProfileGiverModel() async {
     getUserName();
     var token = await getUserToken();
-    final response = await Dio().get(
-      CareGiverUrl.serviceProviderProfile,
-      options: Options(headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'}),
+    final response = await getRequesthandler(
+      url: CareGiverUrl.serviceProviderProfile,
+      token: token,
     );
     if (response.statusCode == 200) {
       fetchProfile = ProfileGiverModel.fromJson(response.data);
@@ -62,9 +63,9 @@ class ServiceGiverProvider extends ChangeNotifier {
   getProfilePercentage() async {
     var token = await getUserToken();
 
-    final response = await Dio().post(
-      CareGiverUrl.serviceProviderProfilePercentage,
-      options: Options(headers: {'Authorization': 'Bearer $token', 'Accept': 'application/json'}),
+    final response = await postRequesthandler(
+      url: CareGiverUrl.serviceProviderProfilePercentage,
+      token: token,
     );
     if (response.statusCode == 200) {
       profilePerentage = response.data['percentage'].toString();
@@ -76,14 +77,9 @@ class ServiceGiverProvider extends ChangeNotifier {
   fetchProviderDashboardModel() async {
     try {
       var token = await getUserToken();
-      final response = await Dio().get(
-        CareGiverUrl.serviceProviderDashboard,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-          },
-        ),
+      final response = await getRequesthandler(
+        url: CareGiverUrl.serviceProviderDashboard,
+        token: token,
       );
       dashboardIsLoading = false;
       notifyListeners();
@@ -117,21 +113,16 @@ class ServiceGiverProvider extends ChangeNotifier {
     if (service != null) {
       serviceId = service;
     }
-    final response = await Dio().post(
-      CareGiverUrl.serviceProviderDashboardSearch,
-      data: {
+    final response = await postRequesthandler(
+      url: CareGiverUrl.serviceProviderDashboardSearch,
+      formData: FormData.fromMap({
         "title": title,
         "serviceType": serviceId,
         "area": area,
         "priceMin": minRate,
         "priceMax": maxRate,
-      },
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+      }),
+      token: token,
     );
     // print(response);
     searchIsLoading = false;

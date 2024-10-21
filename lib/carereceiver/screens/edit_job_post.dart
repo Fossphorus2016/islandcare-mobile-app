@@ -11,6 +11,7 @@ import 'package:island_app/carereceiver/models/school_support_model.dart';
 import 'package:island_app/carereceiver/models/senior_care_model.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/check_tile_container.dart';
@@ -356,21 +357,14 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       'start_time[]': startTimeMapList,
       'duration[]': durationMapList,
     });
-    Dio dio = Dio();
+
     // var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     // if (userSubs!.data!.userSubscriptionDetail != null) {
     try {
-      var response = await dio.post(
-        CareReceiverURl.serviceReceiverSeniorCareJobCreater,
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer ${RecieverUserProvider.userToken}",
-          },
-        ),
+      var response = await postRequesthandler(
+        url: CareReceiverURl.serviceReceiverSeniorCareJobCreater,
+        formData: formData,
+        token: RecieverUserProvider.userToken,
       );
       if (response.statusCode == 200) {
         customSuccesSnackBar(context, "Job Updated Successfully");
@@ -419,21 +413,13 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       },
     );
 
-    Dio dio = Dio();
     // var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     // if (userSubs!.data!.userSubscriptionDetail != null) {
     try {
-      var response = await dio.post(
-        CareReceiverURl.serviceReceiverPetCareJobCreater,
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer ${RecieverUserProvider.userToken}",
-          },
-        ),
+      var response = await postRequesthandler(
+        url: CareReceiverURl.serviceReceiverPetCareJobCreater,
+        formData: formData,
+        token: RecieverUserProvider.userToken,
       );
       setState(() {
         buttonLoading = false;
@@ -474,21 +460,13 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       },
     );
 
-    Dio dio = Dio();
     // var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     // if (userSubs!.data!.userSubscriptionDetail != null) {
     try {
-      var response = await dio.post(
-        CareReceiverURl.serviceReceiverHouseKeepingJobCreater,
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer ${RecieverUserProvider.userToken}",
-          },
-        ),
+      var response = await postRequesthandler(
+        url: CareReceiverURl.serviceReceiverHouseKeepingJobCreater,
+        formData: formData,
+        token: RecieverUserProvider.userToken,
       );
       setState(() {
         buttonLoading = false;
@@ -530,21 +508,13 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       },
     );
 
-    Dio dio = Dio();
     // var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     // if (userSubs!.data!.userSubscriptionDetail != null) {
     try {
-      var response = await dio.post(
-        CareReceiverURl.serviceReceiverLearningJobCreater,
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer ${RecieverUserProvider.userToken}",
-          },
-        ),
+      var response = await postRequesthandler(
+        url: CareReceiverURl.serviceReceiverLearningJobCreater,
+        formData: formData,
+        token: RecieverUserProvider.userToken,
       );
       setState(() {
         buttonLoading = false;
@@ -592,21 +562,13 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       },
     );
 
-    Dio dio = Dio();
     // var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     // if (userSubs!.data!.userSubscriptionDetail != null) {
     try {
-      var response = await dio.post(
-        CareReceiverURl.serviceReceiverSchoolCampJobCreater,
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer ${RecieverUserProvider.userToken}",
-          },
-        ),
+      var response = await postRequesthandler(
+        url: CareReceiverURl.serviceReceiverSchoolCampJobCreater,
+        formData: formData,
+        token: RecieverUserProvider.userToken,
       );
       setState(() {
         buttonLoading = false;

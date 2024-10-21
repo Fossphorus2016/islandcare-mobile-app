@@ -10,6 +10,7 @@ import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -44,14 +45,9 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
     try {
       var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
       //
-      final response = await Dio().get(
-        "${CareReceiverURl.serviceReceiverApplicantDetails}/${widget.jobTitle}/${widget.profileId}/${widget.jobId}",
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-          },
-        ),
+      final response = await getRequesthandler(
+        url: "${CareReceiverURl.serviceReceiverApplicantDetails}/${widget.jobTitle}/${widget.profileId}/${widget.jobId}",
+        token: token,
       );
       // print(response.data);
       if (response.statusCode == 200) {
@@ -88,20 +84,12 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         "_method": "put",
       },
     );
-    Dio dio = Dio();
 
     try {
-      var response = await dio.post(
-        '${CareReceiverURl.serviceReceiverApplicantionApplicantsAccept}/${widget.profileId}/${widget.jobId}',
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
+      var response = await postRequesthandler(
+        url: '${CareReceiverURl.serviceReceiverApplicantionApplicantsAccept}/${widget.profileId}/${widget.jobId}',
+        formData: formData,
+        token: token,
       );
       if (response.statusCode == 200) {
         customSuccesSnackBar(
@@ -129,19 +117,12 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         "_method": "put",
       },
     );
-    Dio dio = Dio();
+
     try {
-      var response = await dio.post(
-        '${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details-reject/${widget.profileId}/${widget.jobId}',
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {
-            "Accept": "application/json",
-            "Authorization": "Bearer $token",
-          },
-        ),
+      var response = await postRequesthandler(
+        url: '${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details-reject/${widget.profileId}/${widget.jobId}',
+        formData: formData,
+        token: token,
       );
       if (response.statusCode == 200) {
         customSuccesSnackBar(
@@ -1321,14 +1302,9 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                           const SizedBox(height: 10),
                           GestureDetector(
                             onTap: () async {
-                              var resp = await Dio().post(
-                                "${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}",
-                                options: Options(
-                                  headers: {
-                                    'Authorization': 'Bearer ${RecieverUserProvider.userToken}',
-                                    'Accept': 'application/json',
-                                  },
-                                ),
+                              var resp = await postRequesthandler(
+                                url: "${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}",
+                                token: RecieverUserProvider.userToken,
                               );
                               // print("${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}");
                               if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {

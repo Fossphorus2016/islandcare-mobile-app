@@ -9,6 +9,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:island_app/carereceiver/models/service_receiver_dashboard_detail_model.dart';
@@ -35,15 +36,9 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
   fetchReceiverDashboardDetailModel() async {
     // try {
     var token = RecieverUserProvider.userToken;
-    final response = await Dio().get(
-      "${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}",
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: "${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}",
+      token: token,
     );
     if (response.statusCode == 200) {
       setState(() {
@@ -78,13 +73,11 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
   }
 
   Future downloadFile(String downloadDirectory, String fileUrl) async {
-    Dio dio = Dio();
-
     var filname = fileUrl.split('.');
     String savename = '${filname.first}${DateTime.now()}.${filname.last}';
     var downloadingPdfPath = '$downloadDirectory/$savename';
     try {
-      var fileRes = await dio.download(
+      var fileRes = await Dio().download(
         "${AppUrl.webStorageUrl}/$fileUrl",
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {

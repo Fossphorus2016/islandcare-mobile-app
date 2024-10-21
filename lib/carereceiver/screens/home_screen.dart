@@ -12,6 +12,7 @@ import 'package:island_app/carereceiver/utils/home_pagination.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:provider/provider.dart';
@@ -163,13 +164,9 @@ class _HomeScreenState extends State<HomeScreen> {
   fetchReceiverDashboardModel() async {
     // print("object");
     var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-    final response = await Dio().get(
-      '${CareReceiverURl.serviceReceiverDashboard}?service=${findSelected ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
-      options: Options(headers: {
-        'Authorization': 'Bearer $token',
-        'Accept': 'application/json',
-        "Connection": "Keep-Alive",
-      }),
+    final response = await getRequesthandler(
+      url: '${CareReceiverURl.serviceReceiverDashboard}?service=${findSelected ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
+      token: token,
     );
     if (response.statusCode == 200) {
       var json = response.data as Map;
@@ -194,14 +191,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<Response> favourited(url) async {
     var url = '${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=$providerId';
     var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-    var response = await Dio().post(
-      url,
-      options: Options(
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-      ),
+    var response = await postRequesthandler(
+      url: url,
+      token: token,
     );
     if (response.statusCode == 200) {
       customSuccesSnackBar(

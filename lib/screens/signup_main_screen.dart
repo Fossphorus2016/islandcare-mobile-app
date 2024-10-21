@@ -8,6 +8,7 @@ import 'package:island_app/models/register_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/verify_email.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
@@ -168,14 +169,9 @@ class _SignupScreenState extends State<SignupScreen> {
     showProgress(context);
     try {
       var formData = FormData.fromMap(model.toJson());
-      final response = await Dio().post(
-        SessionUrl.register,
-        data: formData,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-          },
-        ),
+      final response = await postRequesthandler(
+        url: SessionUrl.register,
+        formData: formData,
       );
       hideProgress();
       return response;

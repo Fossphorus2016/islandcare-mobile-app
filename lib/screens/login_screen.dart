@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously, unused_local_variable, non_constant_identifier_names
 
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,7 @@ import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/splash_screen.dart';
 import 'package:island_app/screens/verify_email.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
@@ -53,13 +53,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<Response> postLogin(LoginModel model) async {
     showProgress(context);
     try {
-      final response = await Dio().post(
-        SessionUrl.login,
-        data: jsonEncode(model.toJson()),
-        options: Options(
-          headers: {"Content-Type": "application/json", "Accept": "application/json"},
-          validateStatus: (status) => true,
-        ),
+      final response = await postRequesthandler(
+        url: SessionUrl.login,
+        formData: FormData.fromMap(model.toJson()),
       );
       hideProgress();
       return response;
@@ -92,20 +88,6 @@ class _LoginScreenState extends State<LoginScreen> {
     const fillColor = Color.fromRGBO(243, 246, 249, 0);
     const borderColor = Color.fromRGBO(23, 171, 144, 0.4);
 
-    // final defaultPinTheme = PinTheme(
-    //   width: 56,
-    //   height: 56,
-    //   textStyle: TextStyle(
-    //     fontSize: 26,
-    //     color: CustomColors.otpText,
-    //     fontStyle: FontStyle.normal,
-    //     fontWeight: FontWeight.w700,
-    //   ),
-    //   decoration: BoxDecoration(
-    //     borderRadius: BorderRadius.circular(12),
-    //     border: Border.all(color: CustomColors.hintText, width: 0.5),
-    //   ),
-    // );
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(

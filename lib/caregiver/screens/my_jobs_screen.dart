@@ -2,12 +2,12 @@
 
 import 'dart:math';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/caregiver/models/service_provider_job_board_model.dart';
 import 'package:island_app/caregiver/screens/my_job_detail.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_cart_widget.dart';
@@ -755,14 +755,9 @@ class GiverMyJobsProvider extends ChangeNotifier {
 
   fetchServiceProviderJobBoardModel(BuildContext context) async {
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-    final response = await Dio().get(
-      CareGiverUrl.serviceProviderAllJob,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: CareGiverUrl.serviceProviderAllJob,
+      token: token,
     );
     isLoading = false;
     notifyListeners();

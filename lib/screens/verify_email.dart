@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 
 class VerifyEmail extends StatefulWidget {
@@ -34,14 +35,9 @@ class _VerifyEmailState extends State<VerifyEmail> {
 
   Future<Response> postEmailVerify() async {
     showProgress(context);
-    final response = await Dio().post(
-      SessionUrl.emailVerification,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer ${widget.token}',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await postRequesthandler(
+      url: SessionUrl.emailVerification,
+      token: widget.token,
     );
 
     hideProgress();

@@ -49,13 +49,11 @@ class _ProfileGiverState extends State<ProfileGiver> {
   }
 
   Future downloadFile(String downloadDirectory, String fileUrl) async {
-    Dio dio = Dio();
-
     var filname = fileUrl.split('.');
     String savename = '${filname.first}${DateTime.now()}.${filname.last}';
     var downloadingPdfPath = '$downloadDirectory/$savename';
     try {
-      var fileRes = await dio.download(
+      var fileRes = await Dio().download(
         "${AppUrl.webStorageUrl}/$fileUrl",
         downloadingPdfPath,
         onReceiveProgress: (rec, total) {

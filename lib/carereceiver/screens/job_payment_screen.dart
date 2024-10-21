@@ -10,6 +10,7 @@ import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -386,9 +387,9 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                               });
                               try {
                                 var token = RecieverUserProvider.userToken;
-                                var response = await Dio().post(
-                                  "${AppUrl.webBaseURL}/api/charge-card",
-                                  data: {
+                                var response = await postRequesthandler(
+                                  url: "${AppUrl.webBaseURL}/api/charge-card",
+                                  formData: FormData.fromMap({
                                     "job_id": widget.jobId,
                                     "card_data": selectedCard!.id.toString(),
                                     "save_card": false,
@@ -397,13 +398,8 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                                     "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
                                     "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
                                     "cvv": selectedCard!.cvv.toString(),
-                                  },
-                                  options: Options(
-                                    headers: {
-                                      'Authorization': 'Bearer $token',
-                                      'Accept': 'application/json',
-                                    },
-                                  ),
+                                  }),
+                                  token: token,
                                 );
                                 setState(() {
                                   sendReq = false;
@@ -834,9 +830,9 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                         });
                         try {
                           var token = RecieverUserProvider.userToken;
-                          var response = await Dio().post(
-                            "${AppUrl.webBaseURL}/api/charge-card",
-                            data: {
+                          var response = await postRequesthandler(
+                            url: "${AppUrl.webBaseURL}/api/charge-card",
+                            formData: FormData.fromMap({
                               "job_id": widget.jobId,
                               "card_data": "card-form",
                               "save_card": saveFrom,
@@ -845,13 +841,8 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                               "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
                               "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
                               "cvv": cardCvvController.text.toString(),
-                            },
-                            options: Options(
-                              headers: {
-                                'Authorization': 'Bearer $token',
-                                'Accept': 'application/json',
-                              },
-                            ),
+                            }),
+                            token: token,
                           );
 
                           if (response.statusCode == 200 && response.data['status'] == true) {

@@ -13,6 +13,7 @@ import 'package:island_app/models/chatroom_model.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/profile_complete_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -131,14 +132,9 @@ class ServiceProviderChat extends ChangeNotifier {
     // SharedPreferences? prefs = await SharedPreferences.getInstance();
     // await prefs.reload();
     // var userToken = prefs.getString('userToken');
-    var resp = await Dio().get(
-      ChatUrl.serviceProviderChats,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer ${ServiceGiverProvider.userToken}',
-          'Accept': 'application/json',
-        },
-      ),
+    var resp = await getRequesthandler(
+      url: ChatUrl.serviceProviderChats,
+      token: ServiceGiverProvider.userToken,
     );
     // print(resp.data);
     if (resp.statusCode == 200 && resp.data['flag'] == 1) {
@@ -168,15 +164,10 @@ class ServiceProviderChat extends ChangeNotifier {
 
   getSingleChatAndSetActive(id) async {
     var userToken = ServiceGiverProvider.userToken;
-    var resp = await Dio().post(
-      "${AppUrl.webBaseURL}/api/get-chat",
-      data: {"chatId": id},
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $userToken',
-          'Accept': 'application/json',
-        },
-      ),
+    var resp = await postRequesthandler(
+      url: "${AppUrl.webBaseURL}/api/get-chat",
+      token: userToken,
+      formData: FormData.fromMap({"chatId": id}),
     );
     if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
       var chatRoom = resp.data['chat'];
@@ -191,15 +182,10 @@ class ServiceProviderChat extends ChangeNotifier {
     var userToken = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     // print(RecieverUserProvider.userToken);
     // print(id);
-    var resp = await Dio().post(
-      "${AppUrl.webBaseURL}/api/get-chat",
-      data: {"chatId": id},
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $userToken',
-          'Accept': 'application/json',
-        },
-      ),
+    var resp = await postRequesthandler(
+      url: "${AppUrl.webBaseURL}/api/get-chat",
+      token: userToken,
+      formData: FormData.fromMap({"chatId": id}),
     );
     // print(resp.data);
     if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
@@ -224,15 +210,10 @@ class ServiceProviderChat extends ChangeNotifier {
     // SharedPreferences? prefs = await SharedPreferences.getInstance();
     // await prefs.reload();
     // var userToken = prefs.getString('userToken');
-    var resp = await Dio().post(
-      ChatUrl.serviceProviderChatMessageStatus,
-      data: {"id": activeChat['id']},
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer ${ServiceGiverProvider.userToken}',
-          'Accept': 'application/json',
-        },
-      ),
+    var resp = await postRequesthandler(
+      url: ChatUrl.serviceProviderChatMessageStatus,
+      formData: FormData.fromMap({"id": activeChat['id']}),
+      token: ServiceGiverProvider.userToken,
     );
     if (resp.statusCode == 200) {
       getChats();
@@ -258,15 +239,10 @@ class ServiceProviderChat extends ChangeNotifier {
     });
     sendMessageReq = true;
     notifyListeners();
-    var resp = await Dio().post(
-      ChatUrl.serviceProviderSendMessage,
-      data: formData,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $userToken',
-          'Accept': 'application/json',
-        },
-      ),
+    var resp = await postRequesthandler(
+      url: ChatUrl.serviceProviderSendMessage,
+      formData: formData,
+      token: userToken,
     );
     if (resp.statusCode == 200) {
       activeChat = resp.data['chat_room'];

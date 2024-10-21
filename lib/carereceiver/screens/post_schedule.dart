@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/check_tile_container.dart';
 import 'package:island_app/widgets/show_day_container.dart';
@@ -349,21 +350,14 @@ class _PostScheduleState extends State<PostSchedule> {
       'start_time[]': startTimeMapList,
       'duration[]': durationMapList,
     });
-    Dio dio = Dio();
+    // Dio dio = Dio();
     var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
-        var response = await dio.post(
-          CareReceiverURl.serviceReceiverSeniorCareJobCreater,
-          data: formData,
-          options: Options(
-            followRedirects: false,
-            validateStatus: (status) => true,
-            headers: {
-              "Accept": "application/json",
-              "Authorization": "Bearer $token",
-            },
-          ),
+        var response = await postRequesthandler(
+          url: CareReceiverURl.serviceReceiverSeniorCareJobCreater,
+          formData: formData,
+          token: token,
         );
         if (response.statusCode == 200) {
           customSuccesSnackBar(context, "Job Created Successfully");
@@ -405,21 +399,13 @@ class _PostScheduleState extends State<PostSchedule> {
       },
     );
 
-    Dio dio = Dio();
     var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
-        var response = await dio.post(
-          CareReceiverURl.serviceReceiverPetCareJobCreater,
-          data: formData,
-          options: Options(
-            followRedirects: false,
-            validateStatus: (status) => true,
-            headers: {
-              "Accept": "application/json",
-              "Authorization": "Bearer $token",
-            },
-          ),
+        var response = await postRequesthandler(
+          url: CareReceiverURl.serviceReceiverPetCareJobCreater,
+          formData: formData,
+          token: token,
         );
         if (response.statusCode == 200) {
           customSuccesSnackBar(context, "Job Created Successfully");
@@ -453,21 +439,13 @@ class _PostScheduleState extends State<PostSchedule> {
       },
     );
 
-    Dio dio = Dio();
     var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
-        var response = await dio.post(
-          CareReceiverURl.serviceReceiverHouseKeepingJobCreater,
-          data: formData,
-          options: Options(
-            followRedirects: false,
-            validateStatus: (status) => true,
-            headers: {
-              "Accept": "application/json",
-              "Authorization": "Bearer $token",
-            },
-          ),
+        var response = await postRequesthandler(
+          url: CareReceiverURl.serviceReceiverHouseKeepingJobCreater,
+          formData: formData,
+          token: token,
         );
         if (response.statusCode == 200) {
           customSuccesSnackBar(context, "Job Created Successfully");
@@ -502,21 +480,13 @@ class _PostScheduleState extends State<PostSchedule> {
       },
     );
 
-    Dio dio = Dio();
     var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
-        var response = await dio.post(
-          CareReceiverURl.serviceReceiverLearningJobCreater,
-          data: formData,
-          options: Options(
-            followRedirects: false,
-            validateStatus: (status) => true,
-            headers: {
-              "Accept": "application/json",
-              "Authorization": "Bearer $token",
-            },
-          ),
+        var response = await postRequesthandler(
+          url: CareReceiverURl.serviceReceiverLearningJobCreater,
+          formData: formData,
+          token: token,
         );
         if (response.statusCode == 200) {
           customSuccesSnackBar(context, "Job Created Successfully");
@@ -560,21 +530,13 @@ class _PostScheduleState extends State<PostSchedule> {
       },
     );
 
-    Dio dio = Dio();
     var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
-        var response = await dio.post(
-          CareReceiverURl.serviceReceiverSchoolCampJobCreater,
-          data: formData,
-          options: Options(
-            followRedirects: false,
-            validateStatus: (status) => true,
-            headers: {
-              "Accept": "application/json",
-              "Authorization": "Bearer $token",
-            },
-          ),
+        var response = await postRequesthandler(
+          url: CareReceiverURl.serviceReceiverSchoolCampJobCreater,
+          formData: formData,
+          token: token,
         );
         if (response.statusCode == 200) {
           customSuccesSnackBar(context, "Job Created Successfully");
@@ -589,11 +551,6 @@ class _PostScheduleState extends State<PostSchedule> {
       customErrorSnackBar(context, "Please Subscribe Package First");
     }
   }
-
-  // getToken() async {
-  //   var userToken = await getToken();
-  //   return userToken.toString();
-  // }
 
   @override
   void initState() {

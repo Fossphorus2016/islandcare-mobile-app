@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -98,7 +99,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
   List? data = []; //edited line
 
   Future<String> getSWData() async {
-    var res = await Dio().get(serviceurl, options: Options(headers: {"Accept": "application/json"}));
+    var res = await getRequesthandler(url: serviceurl);
     Map<String, dynamic> resBody = res.data;
     List<dynamic> serviceData = resBody["services"];
     if (widget.service != null) {
@@ -171,9 +172,12 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
       },
     );
 
-    Dio dio = Dio();
     try {
-      var response = await dio.post('https://islandcare.bm/api/service-receiver-profile/$usersId', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
+      var response = await postRequesthandler(
+        url: 'https://islandcare.bm/api/service-receiver-profile/$usersId',
+        formData: formData,
+        token: token,
+      );
       if (response.statusCode == 200) {
         customSuccesSnackBar(
           context,
@@ -963,10 +967,7 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
   List? data = []; //edited line
 
   Future<String> getSWData() async {
-    var res = await Dio().get(
-      serviceurl,
-      options: Options(headers: {"Accept": "application/json"}),
-    );
+    var res = await getRequesthandler(url: serviceurl);
     Map<String, dynamic> resBody = res.data;
     List<dynamic> serviceData = resBody["services"];
 
@@ -1028,9 +1029,12 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
       },
     );
 
-    Dio dio = Dio();
     try {
-      var response = await dio.post('https://islandcare.bm/api/service-receiver-profile/$usersId', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
+      var response = await postRequesthandler(
+        url: 'https://islandcare.bm/api/service-receiver-profile/$usersId',
+        formData: formData,
+        token: token,
+      );
       if (response.statusCode == 200) {
         customSuccesSnackBar(
           context,

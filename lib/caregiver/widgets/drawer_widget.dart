@@ -13,6 +13,7 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
@@ -122,26 +123,15 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
   late Future<ProfileGiverModel> fetchProfile;
   Future<ProfileGiverModel> fetchProfileGiverModel() async {
     var token = await getToken();
-    Dio()
-        .get(
-      CareGiverUrl.serviceProviderProfile,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      ),
-    )
-        .then((response) {
+    await getRequesthandler(
+      url: CareGiverUrl.serviceProviderProfile,
+      token: token,
+    ).then((response) {
       // print(response.data);
     });
-    final response = await Dio().get(
-      CareGiverUrl.serviceProviderProfile,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: CareGiverUrl.serviceProviderProfile,
+      token: token,
     );
     if (response.statusCode == 200) {
       return ProfileGiverModel.fromJson(response.data);
@@ -731,16 +721,12 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
     var formData = FormData.fromMap(
       {"_method": "PUT", "old_password": oldPasswordController.text.toString(), "password": passwordController.text.toString(), "password_confirmation": cpasswordController.text.toString()},
     );
-    Dio dio = Dio();
+
     try {
-      var response = await dio.post(
-        '${AppUrl.webBaseURL}/api/password-update/$userId',
-        data: formData,
-        options: Options(
-          followRedirects: false,
-          validateStatus: (status) => true,
-          headers: {"Accept": "application/json", "Authorization": "Bearer $token"},
-        ),
+      var response = await postRequesthandler(
+        url: '${AppUrl.webBaseURL}/api/password-update/$userId',
+        formData: formData,
+        token: token,
       );
       // print(response.data);
       Navigator.pop(context);

@@ -2,12 +2,12 @@
 
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/widgets/giver_app_bar.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
@@ -113,12 +113,10 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   late Future<ProfileGiverModel> fetchProfile;
   Future<ProfileGiverModel> fetchProfileGiverModel() async {
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-    final response = await Dio().get(
-      CareGiverUrl.serviceProviderProfile,
-      options: Options(headers: {
-        'Authorization': 'Bearer $token',
-        "Accept": "application/json",
-      }),
+    final response = await getRequesthandler(
+      url: CareGiverUrl.serviceProviderProfile,
+      token: token,
+      data: null,
     );
     if (response.statusCode == 200) {
       return ProfileGiverModel.fromJson(response.data);

@@ -3,7 +3,6 @@
 import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
@@ -11,6 +10,7 @@ import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/utils/utils.dart';
@@ -46,14 +46,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
         isLoading = false;
       });
       var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-      final response = await Dio().get(
-        '${CareReceiverURl.serviceReceiverJobBoardDetail}/$id',
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-          },
-        ),
+      final response = await getRequesthandler(
+        url: '${CareReceiverURl.serviceReceiverJobBoardDetail}/$id',
+        token: token,
       );
       if (response.statusCode == 200) {
         var data = response.data['job'][0];
@@ -198,12 +193,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     try {
                       var userToken = await storageService.readSecureStorage('userToken');
 
-                      var resp = await Dio().get(
-                        "${AppUrl.webBaseURL}/api/mark-notifications-as-read",
-                        options: Options(headers: {
-                          "Authorization": "Bearer $userToken",
-                          "Accept": "application/json",
-                        }),
+                      var resp = await getRequesthandler(
+                        url: "${AppUrl.webBaseURL}/api/mark-notifications-as-read",
+                        token: userToken,
                       );
                       if (resp.statusCode == 200) {
                         Provider.of<NotificationProvider>(context, listen: false).getNotifications();
@@ -453,12 +445,9 @@ class NotificationProvider extends ChangeNotifier {
     try {
       var userToken = await storageService.readSecureStorage('userToken');
 
-      var resp = await Dio().get(
-        AppUrl.getNotification,
-        options: Options(headers: {
-          "Authorization": "Bearer $userToken",
-          "Accept": "application/json",
-        }),
+      var resp = await getRequesthandler(
+        url: AppUrl.getNotification,
+        token: userToken,
       );
       if (resp.statusCode == 200) {
         var data = resp.data;

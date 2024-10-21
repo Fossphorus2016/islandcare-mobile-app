@@ -10,6 +10,7 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/recommendation_widget.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -32,14 +33,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
   late Future<FavouriteGetModel>? futureFavourite;
   Future<FavouriteGetModel> fetchFavourite() async {
     var token = RecieverUserProvider.userToken;
-    final response = await Dio().get(
-      CareReceiverURl.serviceReceiverFavourite,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: CareReceiverURl.serviceReceiverFavourite,
+      token: token,
     );
 
     if (response.statusCode == 200) {
@@ -62,14 +58,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
   Future<Response> favourited(url) async {
     var token = RecieverUserProvider.userToken;
     var url = '${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=$providerId';
-    var response = await Dio().post(
-      url,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    var response = await postRequesthandler(
+      url: url,
+      token: token,
     );
     if (response.statusCode == 200) {
       setState(() {

@@ -10,6 +10,7 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
@@ -727,9 +728,9 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                               });
                               try {
                                 var token = Provider.of<RecieverUserProvider>(context).getUserToken();
-                                var response = await Dio().post(
-                                  CareReceiverURl.serviceReceiverSubscribePackage,
-                                  data: {
+                                var response = await postRequesthandler(
+                                  url: CareReceiverURl.serviceReceiverSubscribePackage,
+                                  formData: FormData.fromMap({
                                     "subscription_id": selectedSubscribe['id'],
                                     "card_data": selectedCard!.id.toString(),
                                     "save_card": false,
@@ -738,13 +739,8 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                                     "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
                                     "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
                                     "cvv": selectedCard!.cvv.toString(),
-                                  },
-                                  options: Options(
-                                    headers: {
-                                      'Authorization': 'Bearer $token',
-                                      'Accept': 'application/json',
-                                    },
-                                  ),
+                                  }),
+                                  token: token,
                                 );
                                 // print(response);
                                 if (response.statusCode == 200 && response.data['success']) {
@@ -1169,9 +1165,9 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                         });
                         try {
                           var token = Provider.of<RecieverUserProvider>(context).getUserToken();
-                          var response = await Dio().post(
-                            CareReceiverURl.serviceReceiverSubscribePackage,
-                            data: {
+                          var response = await postRequesthandler(
+                            url: CareReceiverURl.serviceReceiverSubscribePackage,
+                            formData: FormData.fromMap({
                               "subscription_id": selectedSubscribe['id'],
                               "card_data": "card-form",
                               "save_card": saveFrom,
@@ -1180,13 +1176,8 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                               "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
                               "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
                               "cvv": cardCvvController.text.toString(),
-                            },
-                            options: Options(
-                              headers: {
-                                'Authorization': 'Bearer $token',
-                                'Accept': 'application/json',
-                              },
-                            ),
+                            }),
+                            token: token,
                           );
                           // print(response);
                           // print(response.data['message']);

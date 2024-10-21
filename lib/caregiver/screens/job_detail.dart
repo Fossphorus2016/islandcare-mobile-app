@@ -8,6 +8,7 @@ import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart
 import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
@@ -49,13 +50,9 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
 
   Future<Response> jobApply() async {
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-    final response = await Dio().put(
-      "${CareGiverUrl.serviceProviderJobApply}/${widget.id}",
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-        },
-      ),
+    final response = await putRequesthandler(
+      url: "${CareGiverUrl.serviceProviderJobApply}/${widget.id}",
+      token: token,
     );
     if (response.statusCode == 200) {
       customSuccesSnackBar(
@@ -77,119 +74,13 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   ChildCareDetailDashboardModel? futureChildCareDetailDashboard;
   HouseKeepingDetailDashboardModel? futureHouseKeepingDetailDashboard;
   PetCareDetailDashboardModel? futurePetCareDetailDashboard;
-  // Future<SeniorCareDetailDashboardModel> fetchSeniorCareDetailDashboardModel() async {
-  //   var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return SeniorCareDetailDashboardModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
-  // Future<SchoolSupportDetailDashboardModel> fetchSchoolSupportDetailDashboardModel() async {
-  //   var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-  //   // print(token);
-  //   final response = await Dio().get(
-  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return SchoolSupportDetailDashboardModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
-  // Future<ChildCareDetailDashboardModel> fetchChildCareDetailDashboardModel() async {
-  //   var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return ChildCareDetailDashboardModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
-  // Future<HouseKeepingDetailDashboardModel> fetchHouseKeepingDetailDashboardModel() async {
-  //   var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return HouseKeepingDetailDashboardModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
-  // Future<PetCareDetailDashboardModel> fetchPetCareDetailDashboardModel() async {
-  //   var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return PetCareDetailDashboardModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-  // Future<PetCareDetailDashboardModel>
   String serviceName = '';
   bool? noDataFound;
   fetchJobDetail() async {
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-    final response = await Dio().get(
-      '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
+      token: token,
     );
     if (response.statusCode == 200) {
       // print(response.data['job_detail'][0]['service']);

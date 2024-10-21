@@ -34,7 +34,7 @@ class JobScheduleContainer extends StatelessWidget {
             ],
             JobDetailTile(
               name: "Date",
-              title: DateFormat.d().format(DateTime.parse(formatDateSlashToDashFromSplit(data![i].startingDate.toString().toLowerCase())).toLocal()),
+              title: DateFormat.d().format(DateTime.parse(formatDateWithDashFromString(changeDateFormatFromString(data![i].startingDate.toString().toLowerCase()))).toLocal()),
             ),
             const SizedBox(height: 10),
             JobDetailTile(

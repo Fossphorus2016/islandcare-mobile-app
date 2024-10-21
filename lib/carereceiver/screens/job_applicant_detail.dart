@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/screens/applicant_profile_detail.dart';
@@ -8,6 +7,7 @@ import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_applicants_widget.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 
 class JobApplicantsDetail extends StatefulWidget {
@@ -34,12 +34,9 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
       return;
     }
     var token = RecieverUserProvider.userToken;
-    final response = await Dio().get(
-      '${CareReceiverURl.serviceReceiverApplicantionApplicants}/${widget.name}/${widget.jobId}',
-      options: Options(headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Bearer $token',
-      }),
+    final response = await getRequesthandler(
+      url: '${CareReceiverURl.serviceReceiverApplicantionApplicants}/${widget.name}/${widget.jobId}',
+      token: token,
     );
     // print(response.data);
     if (response.statusCode == 200) {

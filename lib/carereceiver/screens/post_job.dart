@@ -2,7 +2,6 @@
 
 import 'dart:math';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +10,7 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/service_model.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
@@ -703,14 +703,9 @@ class PostedJobsProvider extends ChangeNotifier {
   fetchAllJobs() async {
     try {
       var token = RecieverUserProvider.userToken;
-      final response = await Dio().get(
-        CareReceiverURl.serviceReceiverJobBoard,
-        options: Options(
-          headers: {
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $token',
-          },
-        ),
+      final response = await getRequesthandler(
+        url: CareReceiverURl.serviceReceiverJobBoard,
+        token: token,
       );
       if (response.statusCode == 200) {
         var data = response.data;

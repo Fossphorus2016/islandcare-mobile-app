@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 
 class RecieverUserProvider extends ChangeNotifier {
@@ -30,14 +31,9 @@ class RecieverUserProvider extends ChangeNotifier {
   fetchProfileReceiverModel() async {
     var token = await getUserToken();
     try {
-      final response = await Dio().get(
-        CareReceiverURl.serviceReceiverProfile,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Accept': 'application/json',
-          },
-        ),
+      final response = await getRequesthandler(
+        url: CareReceiverURl.serviceReceiverProfile,
+        token: token,
       );
       if (response.statusCode == 200) {
         // print("data fetched ${response.data}");

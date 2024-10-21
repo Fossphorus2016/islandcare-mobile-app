@@ -2,7 +2,6 @@
 
 import 'dart:math';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -11,6 +10,7 @@ import 'package:island_app/carereceiver/models/hired_candidate_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
@@ -65,14 +65,9 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
   jobCompleted() async {
     var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
     var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-    var response = await Dio().post(
-      url,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    var response = await postRequesthandler(
+      url: url,
+      token: token,
     );
     if (response.statusCode == 200) {
       customSuccesSnackBar(
@@ -672,14 +667,9 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                         onTap: () async {
                                                                           var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
                                                                           var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-                                                                          var response = await Dio().post(
-                                                                            url,
-                                                                            options: Options(
-                                                                              headers: {
-                                                                                'Accept': 'application/json',
-                                                                                'Authorization': 'Bearer $token',
-                                                                              },
-                                                                            ),
+                                                                          var response = await postRequesthandler(
+                                                                            url: url,
+                                                                            token: token,
                                                                           );
 
                                                                           if (response.statusCode == 200) {
@@ -791,14 +781,9 @@ class HiredCandidatesProvider extends ChangeNotifier {
   bool isLoading = true;
   fetchHiredCandidateModel() async {
     var token = await RecieverUserProvider.userToken;
-    final response = await Dio().get(
-      '${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=${DateTime.now()}',
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: '${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=${DateTime.now()}',
+      token: token,
     );
     if (response.statusCode == 200) {
       var json = response.data as Map;
