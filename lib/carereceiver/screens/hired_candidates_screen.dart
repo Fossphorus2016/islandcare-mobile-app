@@ -9,9 +9,10 @@ import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/hired_candidate_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:provider/provider.dart';
@@ -70,10 +71,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
       token: token,
     );
     if (response.statusCode == 200) {
-      customSuccesSnackBar(
-        context,
-        "Added To Favourite",
-      );
+      showSuccessToast("Added To Favourite");
       commentController.clear();
       setState(
         () {

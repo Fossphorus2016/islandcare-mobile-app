@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/screens/applicant_profile_detail.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_applicants_widget.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 
 class JobApplicantsDetail extends StatefulWidget {
   final String name;
@@ -30,7 +31,7 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
   late JobApplicantDetailModel futureJobApplicantModel;
   fetchJobApplicantModel() async {
     if (widget.jobId == null || widget.jobId == "null" || widget.name == "null") {
-      customErrorSnackBar(context, "No user found");
+      showErrorToast("No user found");
       return;
     }
     var token = RecieverUserProvider.userToken;
@@ -42,12 +43,7 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
     if (response.statusCode == 200) {
       futureJobApplicantModel = JobApplicantDetailModel.fromJson(response.data);
     } else {
-      throw Exception(
-        customErrorSnackBar(
-          context,
-          'Failed to load job applicant detail',
-        ),
-      );
+      showErrorToast('Failed to load job applicant detail');
     }
   }
 

@@ -7,8 +7,9 @@ import 'package:intl/intl.dart';
 import 'package:island_app/caregiver/models/service_provider_job_board_model.dart';
 import 'package:island_app/caregiver/screens/my_job_detail.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_cart_widget.dart';
 import 'package:island_app/utils/app_url.dart';
@@ -92,38 +93,10 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
     );
   }
 
-  // List? allJobs = [];
-  // // Get all jobs
-  // late Future<ServiceProviderJobBoardModel> fetchJobBoard;
-
-  // Future<ServiceProviderJobBoardModel> fetchServiceProviderJobBoardModel() async {
-  //   var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     CareGiverUrl.serviceProviderAllJob,
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return ServiceProviderJobBoardModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       customErrorSnackBar(
-  //         context,
-  //         'Failed to load Profile Model',
-  //       ),
-  //     );
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
     Provider.of<GiverMyJobsProvider>(context, listen: false).fetchServiceProviderJobBoardModel(context);
-    // fetchJobBoard = fetchServiceProviderJobBoardModel();
   }
 
   @override
@@ -767,12 +740,7 @@ class GiverMyJobsProvider extends ChangeNotifier {
       setPaginationList(allJobs);
       notifyListeners();
     } else {
-      throw Exception(
-        customErrorSnackBar(
-          context,
-          'Failed to load Profile Model',
-        ),
-      );
+      showErrorToast('Failed to load Profile Model');
     }
   }
 

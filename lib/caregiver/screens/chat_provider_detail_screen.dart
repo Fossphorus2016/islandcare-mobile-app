@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
-import 'package:island_app/utils/utils.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:provider/provider.dart';
 
 class ServiceProviderChatRoom extends StatefulWidget {
@@ -216,7 +217,7 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                       onPressed: chatProvider.sendMessageReq
                           ? () {
                               if (messageController.text.isEmpty) {
-                                customErrorSnackBar(context, "please write a message");
+                                showErrorToast("please write a message");
                                 return;
                               }
                               Provider.of<ServiceProviderChat>(context, listen: false).sendMessage(messageController.text);

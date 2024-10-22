@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:island_app/utils/utils.dart';
+import 'package:island_app/utils/app_colors.dart';
 
 class CustomPagination extends StatelessWidget {
   const CustomPagination({

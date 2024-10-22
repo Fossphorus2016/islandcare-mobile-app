@@ -8,9 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:island_app/carereceiver/models/service_receiver_dashboard_detail_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -54,7 +55,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
       );
     }
     // } catch (error) {
-    //   customErrorSnackBar(context, error.toString());
+    //   showErrorToast( error.toString());
     // }
   }
 
@@ -88,10 +89,10 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
         },
       );
       if (fileRes.statusCode == 200) {
-        customSuccesSnackBar(context, "file is downloaded successfully");
+        showSuccessToast("file is downloaded successfully");
       }
     } catch (e) {
-      customErrorSnackBar(context, "something went wrong please try again later");
+      showErrorToast("something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 

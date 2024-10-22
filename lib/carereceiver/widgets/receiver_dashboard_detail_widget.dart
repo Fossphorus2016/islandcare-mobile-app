@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/review_expansion_list.dart';
 
 class ReceiverDashboardDetailWidget extends StatelessWidget {
@@ -21,9 +21,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
   final String? to;
   final String? zip;
   final String? imgProviderPath;
-  // final String? providerName;
-  // final double? providerRating;
-  // final String? providerComment;
   final List? ratings;
   final Widget? documentsSection;
 
@@ -44,10 +41,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
     this.zip,
     this.imgProviderPath,
     this.ratings,
-    // this.providerName,
-    // this.providerRating,
-    // this.providerComment,
-
     this.documentsSection,
   });
 

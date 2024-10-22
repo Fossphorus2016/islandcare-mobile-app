@@ -5,10 +5,10 @@ import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/internet_service.dart';
 import 'package:island_app/utils/navigation_service.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 ConnectionStatusSingleton connectionStatusSingleton = ConnectionStatusSingleton.getInstance();
-String secretKey = dotenv.env["SECRET_KEY"]!;
+// String secretKey = dotenv.env["SECRET_KEY"]!;
 
 Future<Response> getRequesthandler({required String url, String? token, FormData? data}) async {
   bool isNetConnected = await connectionStatusSingleton.checkConnection();
@@ -65,9 +65,7 @@ Future<Response> getRequesthandler({required String url, String? token, FormData
       return Response(
         statusCode: err.response!.statusCode,
         statusMessage: err.response!.statusMessage,
-        requestOptions: RequestOptions(
-          data: err.response!.data,
-        ),
+        requestOptions: RequestOptions(data: err.response!.data),
       );
     }
   } else {
@@ -120,9 +118,7 @@ Future<Response> postRequesthandler({required String url, String? token, FormDat
       return Response(
         statusCode: err.response!.statusCode,
         statusMessage: err.response!.statusMessage,
-        requestOptions: RequestOptions(
-          data: err.response!.data,
-        ),
+        requestOptions: RequestOptions(data: err.response!.data),
       );
     }
   } else {
@@ -175,9 +171,7 @@ Future<Response> putRequesthandler({required String url, String? token, FormData
       return Response(
         statusCode: err.response!.statusCode,
         statusMessage: err.response!.statusMessage,
-        requestOptions: RequestOptions(
-          data: err.response!.data,
-        ),
+        requestOptions: RequestOptions(data: err.response!.data),
       );
     }
   } else {

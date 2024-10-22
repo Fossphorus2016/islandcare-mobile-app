@@ -9,9 +9,10 @@ import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class PaymentPackageScreen extends StatefulWidget {
@@ -206,14 +207,14 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
 
                                               Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
                                               Navigator.pop(context);
-                                              customSuccesSnackBar(context, resp.data['message'].toString());
+                                              showSuccessToast(resp.data['message'].toString());
                                             } else {
                                               throw "something went wrong please try again later";
                                             }
                                           } catch (e) {
                                             // print(e);
                                             Navigator.pop(context);
-                                            customErrorSnackBar(context, e.toString());
+                                            showErrorToast(e.toString());
                                           }
                                         },
                                         style: ButtonStyle(
@@ -747,14 +748,14 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                                   Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
                                   Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
 
-                                  customSuccesSnackBar(context, response.data['message']);
+                                  showSuccessToast(response.data['message']);
                                   Navigator.pop(context);
                                 } else {
                                   throw response.data['message'];
                                 }
                               } catch (e) {
                                 // print(e);
-                                customErrorSnackBar(context, e.toString());
+                                showErrorToast(e.toString());
                               }
 
                               setState(() {
@@ -1185,14 +1186,14 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                             Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
                             Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
                             Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
-                            customSuccesSnackBar(context, response.data['message']);
+                            showSuccessToast(response.data['message']);
                             Navigator.pop(context);
                           } else {
                             throw response.data['message'];
                           }
                         } catch (e) {
                           // print(e);
-                          customErrorSnackBar(context, e.toString());
+                          showErrorToast(e.toString());
                         }
                         setState(() {
                           sendReq = false;

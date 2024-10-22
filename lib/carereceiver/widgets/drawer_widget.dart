@@ -16,11 +16,11 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 
@@ -993,17 +993,14 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
       // print(response.data);
       Navigator.pop(context);
       if (response.data['success']) {
-        customSuccesSnackBar(context, "Password Updated Successfully");
+        showSuccessToast("Password Updated Successfully");
       } else {
-        customErrorSnackBar(context, response.data['message'].toString());
+        showErrorToast(response.data['message'].toString());
       }
     } catch (e) {
       // print("print in error $e");
       Navigator.pop(context);
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+      showErrorToast(e.toString());
     }
   }
 

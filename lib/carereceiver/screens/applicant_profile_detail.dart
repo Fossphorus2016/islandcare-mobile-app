@@ -9,9 +9,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:island_app/carereceiver/models/applicant_profile_detail-model.dart';
@@ -73,7 +74,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         throw 'Failed to load Applicant Profile Details';
       }
     } catch (e) {
-      customErrorSnackBar(context, "something went wrong please try again later");
+      showErrorToast("something went wrong please try again later");
     }
   }
 
@@ -92,21 +93,12 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         token: token,
       );
       if (response.statusCode == 200) {
-        customSuccesSnackBar(
-          context,
-          "Applicant Hired Successfully",
-        );
+        showSuccessToast("Applicant Hired Successfully");
       } else {
-        customErrorSnackBar(
-          context,
-          "Server Error Occured!",
-        );
+        showErrorToast("Server Error Occured!");
       }
     } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+      showErrorToast(e.toString());
     }
   }
 
@@ -125,21 +117,12 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         token: token,
       );
       if (response.statusCode == 200) {
-        customSuccesSnackBar(
-          context,
-          "Applicant Declined Successfully",
-        );
+        showSuccessToast("Applicant Declined Successfully");
       } else {
-        customErrorSnackBar(
-          context,
-          "Server Error Occured!",
-        );
+        showErrorToast("Server Error Occured!");
       }
     } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+      showErrorToast(e.toString());
     }
   }
 

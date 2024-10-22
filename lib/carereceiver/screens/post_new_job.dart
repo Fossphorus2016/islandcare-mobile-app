@@ -5,9 +5,10 @@ import 'package:island_app/carereceiver/screens/post_schedule.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/service_model.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:provider/provider.dart';
 
 class PostNewJob extends StatefulWidget {
@@ -29,9 +30,8 @@ class _PostNewJobState extends State<PostNewJob> {
       return ServicesModel.fromJson(response.data);
     } else {
       throw Exception(
-        // ignore: use_build_context_synchronously
-        customErrorSnackBar(context, 'Failed to load Job Post'),
-      );
+          // showErrorToast('Failed to load Job Post'),
+          );
     }
   }
 
@@ -130,7 +130,7 @@ class _PostNewJobState extends State<PostNewJob> {
                                   ),
                                 );
                               } else {
-                                customErrorSnackBar(context, "Please subscribe package first");
+                                showErrorToast("Please subscribe package first");
                               }
                             },
                             child: Center(

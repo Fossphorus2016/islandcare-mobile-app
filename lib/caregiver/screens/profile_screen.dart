@@ -14,8 +14,9 @@ import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
 import 'package:island_app/caregiver/widgets/giver_app_bar.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
-import 'package:island_app/utils/utils.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/widgets/document_download_list.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -64,10 +65,10 @@ class _ProfileGiverState extends State<ProfileGiver> {
         },
       );
       if (fileRes.statusCode == 200) {
-        customSuccesSnackBar(context, "file is downloaded successfully");
+        showSuccessToast("file is downloaded successfully");
       }
     } catch (e) {
-      customErrorSnackBar(context, "something went wrong please try again later");
+      showErrorToast("something went wrong please try again later");
     }
     await Future.delayed(const Duration(seconds: 3));
 

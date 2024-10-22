@@ -6,7 +6,8 @@ import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
-import 'package:island_app/utils/utils.dart';
+import 'package:island_app/utils/app_colors.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/carereceiver/screens/home_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
@@ -41,7 +42,7 @@ class BottomBarState extends State<BottomBar> {
 
     var resp = await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
     if (resp['status'] == false) {
-      customErrorSnackBar(context, resp['message']);
+      showErrorToast(resp['message']);
     }
   }
 

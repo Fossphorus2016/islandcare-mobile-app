@@ -10,9 +10,10 @@ import 'package:island_app/carereceiver/models/pet_care_model.dart';
 import 'package:island_app/carereceiver/models/school_support_model.dart';
 import 'package:island_app/carereceiver/models/senior_care_model.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/check_tile_container.dart';
 import 'package:island_app/widgets/show_day_container.dart';
@@ -367,22 +368,19 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         token: RecieverUserProvider.userToken,
       );
       if (response.statusCode == 200) {
-        customSuccesSnackBar(context, "Job Updated Successfully");
+        showSuccessToast("Job Updated Successfully");
       }
       setState(() {
         buttonLoading = false;
       });
     } on DioError catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+      showErrorToast(e.toString());
       setState(() {
         buttonLoading = false;
       });
     }
     // } else {
-    //   customErrorSnackBar(context, "Please Subscribe Package First");
+    //   showErrorToast( "Please Subscribe Package First");
     // }
   }
 
@@ -425,16 +423,16 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         buttonLoading = false;
       });
       if (response.statusCode == 200) {
-        customSuccesSnackBar(context, "Job Updated Successfully");
+        showSuccessToast("Job Updated Successfully");
       }
     } catch (e) {
-      customErrorSnackBar(context, e.toString());
+      showErrorToast(e.toString());
       setState(() {
         buttonLoading = false;
       });
     }
     // } else {
-    //   customErrorSnackBar(context, "Please Subscribe Package First");
+    //   showErrorToast( "Please Subscribe Package First");
     // }
   }
 
@@ -472,19 +470,16 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         buttonLoading = false;
       });
       if (response.statusCode == 200) {
-        customSuccesSnackBar(context, "Job Updated Successfully");
+        showSuccessToast("Job Updated Successfully");
       }
     } catch (e) {
       setState(() {
         buttonLoading = false;
       });
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+      showErrorToast(e.toString());
     }
     // } else {
-    //   customErrorSnackBar(context, "Please Subscribe Package First");
+    //   showErrorToast( "Please Subscribe Package First");
     // }
   }
 
@@ -520,16 +515,16 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         buttonLoading = false;
       });
       if (response.statusCode == 200) {
-        customSuccesSnackBar(context, "Job Updated Successfully");
+        showSuccessToast("Job Updated Successfully");
       }
     } catch (e) {
       setState(() {
         buttonLoading = false;
       });
-      customErrorSnackBar(context, e.toString());
+      showErrorToast(e.toString());
     }
     // } else {
-    //   customErrorSnackBar(context, "Please Subscribe Package First");
+    //   showErrorToast( "Please Subscribe Package First");
     // }
   }
 
@@ -574,19 +569,16 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         buttonLoading = false;
       });
       if (response.statusCode == 200) {
-        customSuccesSnackBar(context, "Job Updated Successfully");
+        showSuccessToast("Job Updated Successfully");
       }
     } catch (e) {
       setState(() {
         buttonLoading = false;
       });
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+      showErrorToast(e.toString());
     }
     // } else {
-    //   customErrorSnackBar(context, "Please Subscribe Package First");
+    //   showErrorToast( "Please Subscribe Package First");
     // }
   }
 
@@ -1428,11 +1420,11 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                     });
                   } else {
                     if (startDateController.text.isEmpty) {
-                      customErrorSnackBar(context, "please select date");
+                      showErrorToast("please select date");
                     } else if (selectedHours == null) {
-                      customErrorSnackBar(context, "please select start time");
+                      showErrorToast("please select start time");
                     } else if (selectedTime == null) {
-                      customErrorSnackBar(context, "please select Duration");
+                      showErrorToast("please select Duration");
                     }
                   }
                 },
@@ -1840,21 +1832,21 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
           child: GestureDetector(
             onTap: () async {
               if (jobTitleController.text.isEmpty) {
-                customErrorSnackBar(context, "Job Title is Required");
+                showErrorToast("Job Title is Required");
               } else if (addressController.text.isEmpty) {
-                customErrorSnackBar(context, "Job Location is Required");
+                showErrorToast("Job Location is Required");
               } else if (selectedLocation == null) {
-                customErrorSnackBar(context, "Job Area is Required");
+                showErrorToast("Job Area is Required");
               } else if (hourlyController.text.isEmpty) {
-                customErrorSnackBar(context, "Hourly Rate is Required");
+                showErrorToast("Hourly Rate is Required");
               } else if (children.isEmpty) {
-                customErrorSnackBar(context, "Child Initials is Required");
+                showErrorToast("Child Initials is Required");
               } else if (seniorCareDays.isEmpty) {
-                customErrorSnackBar(context, "Please Enter Add Days");
+                showErrorToast("Please Enter Add Days");
               } else if (interestForChildController.text.isEmpty) {
-                customErrorSnackBar(context, "Interest for Child is Required");
+                showErrorToast("Interest for Child is Required");
               } else if (costRangeOfCampController.text.isEmpty) {
-                customErrorSnackBar(context, "Cost Range of Camp is Required");
+                showErrorToast("Cost Range of Camp is Required");
               } else {
                 setState(() {
                   buttonLoading = true;
@@ -2711,23 +2703,23 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
           child: GestureDetector(
             onTap: () async {
               if (jobTitleController.text.isEmpty) {
-                customErrorSnackBar(context, "Job Title is Required");
+                showErrorToast("Job Title is Required");
               } else if (addressController.text.isEmpty) {
-                customErrorSnackBar(context, "Job Location is Required");
+                showErrorToast("Job Location is Required");
               } else if (selectedLocation == null) {
-                customErrorSnackBar(context, "Job Area is Required");
+                showErrorToast("Job Area is Required");
               } else if (hourlyController.text.isEmpty) {
-                customErrorSnackBar(context, "Hourly Rate is Required");
+                showErrorToast("Hourly Rate is Required");
               } else if (seniorCareDays.isEmpty) {
-                customErrorSnackBar(context, "Please Enter Add Days");
+                showErrorToast("Please Enter Add Days");
               } else if (children.isEmpty) {
-                customErrorSnackBar(context, "Child Initials is Required");
+                showErrorToast("Child Initials is Required");
               } else if (other == "1" && otherFieldController.text.isEmpty) {
-                customErrorSnackBar(context, "Other is Required");
+                showErrorToast("Other is Required");
               } else if (learningStyleController.text.isEmpty) {
-                customErrorSnackBar(context, "Learning Style is Required");
+                showErrorToast("Learning Style is Required");
               } else if (learningChallengeController.text.isEmpty) {
-                customErrorSnackBar(context, "Learning Challenge is Required");
+                showErrorToast("Learning Challenge is Required");
               } else {
                 setState(() {
                   buttonLoading = true;
@@ -3567,23 +3559,23 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
           child: GestureDetector(
             onTap: () async {
               if (jobTitleController.text.isEmpty) {
-                customErrorSnackBar(context, "Job Title is Required");
+                showErrorToast("Job Title is Required");
               } else if (addressController.text.isEmpty) {
-                customErrorSnackBar(context, "Job Location is Required");
+                showErrorToast("Job Location is Required");
               } else if (selectedLocation == null) {
-                customErrorSnackBar(context, "Job Area is Required");
+                showErrorToast("Job Area is Required");
               } else if (hourlyController.text.isEmpty) {
-                customErrorSnackBar(context, "Hourly Rate is Required");
+                showErrorToast("Hourly Rate is Required");
               } else if (cleaningTypeValue == null) {
-                customErrorSnackBar(context, "Cleaning Type is Required");
+                showErrorToast("Cleaning Type is Required");
               } else if (other == "1" && otherFieldController.text.isEmpty) {
-                customErrorSnackBar(context, "Other is Required");
+                showErrorToast("Other is Required");
               } else if (bedroomValue == null) {
-                customErrorSnackBar(context, "Please Select Bedroom");
+                showErrorToast("Please Select Bedroom");
               } else if (seniorCareDays.isEmpty) {
-                customErrorSnackBar(context, "Please Enter Add Days");
+                showErrorToast("Please Enter Add Days");
               } else if (bathroomValue == null) {
-                customErrorSnackBar(context, "Please Select Bathroom");
+                showErrorToast("Please Select Bathroom");
               } else {
                 setState(() {
                   buttonLoading = true;
@@ -4533,25 +4525,25 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
           child: GestureDetector(
             onTap: () async {
               if (jobTitleController.text.isEmpty) {
-                customErrorSnackBar(context, "Job Title is Required");
+                showErrorToast("Job Title is Required");
               } else if (addressController.text.isEmpty) {
-                customErrorSnackBar(context, "Job Location is Required");
+                showErrorToast("Job Location is Required");
               } else if (selectedLocation == null) {
-                customErrorSnackBar(context, "Job Area is Required");
+                showErrorToast("Job Area is Required");
               } else if (hourlyController.text.isEmpty) {
-                customErrorSnackBar(context, "Hourly Rate is Required");
+                showErrorToast("Hourly Rate is Required");
               } else if (seniorCareDays.isEmpty) {
-                customErrorSnackBar(context, "Please Enter Add Days");
+                showErrorToast("Please Enter Add Days");
               } else if (other == "1" && otherFieldController.text.isEmpty) {
-                customErrorSnackBar(context, "Other is Required");
+                showErrorToast("Other is Required");
               } else if (petTypeValue == null) {
-                customErrorSnackBar(context, "Pet Type is Required");
+                showErrorToast("Pet Type is Required");
               } else if (numberOfPetValue == null) {
-                customErrorSnackBar(context, "Number of pets is Required");
+                showErrorToast("Number of pets is Required");
               } else if (petBreedController.text.isEmpty) {
-                customErrorSnackBar(context, "Pet Breed is Required");
+                showErrorToast("Pet Breed is Required");
               } else if (temperamentValue == null) {
-                customErrorSnackBar(context, "Temprament is Required");
+                showErrorToast("Temprament is Required");
               } else {
                 setState(() {
                   buttonLoading = true;
@@ -5037,19 +5029,19 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
           child: GestureDetector(
             onTap: () async {
               if (jobTitleController.text.isEmpty) {
-                customErrorSnackBar(context, "Job Title is Required");
+                showErrorToast("Job Title is Required");
               } else if (addressController.text.isEmpty) {
-                customErrorSnackBar(context, "Job Location is Required");
+                showErrorToast("Job Location is Required");
               } else if (selectedLocation == null) {
-                customErrorSnackBar(context, "Job Area is Required");
+                showErrorToast("Job Area is Required");
               } else if (hourlyController.text.isEmpty) {
-                customErrorSnackBar(context, "Hourly Rate is Required");
+                showErrorToast("Hourly Rate is Required");
               } else if (seniorNameController.text.isEmpty) {
-                customErrorSnackBar(context, "Senior Name is Required");
+                showErrorToast("Senior Name is Required");
               } else if (dobController.text.isEmpty) {
-                customErrorSnackBar(context, "DOB is Required");
+                showErrorToast("DOB is Required");
               } else if (seniorCareDays.isEmpty) {
-                customErrorSnackBar(context, "Please Enter Add Days");
+                showErrorToast("Please Enter Add Days");
               } else {
                 setState(() {
                   buttonLoading = true;

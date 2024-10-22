@@ -10,10 +10,10 @@ import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/storage_service.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'dart:core';
 
@@ -201,7 +201,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         Provider.of<NotificationProvider>(context, listen: false).getNotifications();
                       }
                     } catch (error) {
-                      customErrorSnackBar(context, "something went wrong please try again later");
+                      showErrorToast("something went wrong please try again later");
                     }
                   } else if (value == 2) {
                     var allNotification = Provider.of<NotificationProvider>(context, listen: false).allNotifications;

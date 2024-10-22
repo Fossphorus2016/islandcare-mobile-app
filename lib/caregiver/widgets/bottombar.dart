@@ -7,12 +7,10 @@ import 'package:island_app/caregiver/screens/profile_screen.dart';
 import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
-// import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/utils/utils.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:provider/provider.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomBarGiver extends StatefulWidget {
   final String? status;

@@ -9,9 +9,10 @@ import 'package:island_app/carereceiver/screens/job_applicant_detail.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class JobPaymentsScreen extends StatefulWidget {
@@ -405,7 +406,7 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                                   sendReq = false;
                                 });
                                 if (response.statusCode == 200 && response.data['status'] == true) {
-                                  customSuccesSnackBar(context, response.data['message']);
+                                  showSuccessToast(response.data['message']);
                                   Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
                                   Navigator.pop(context);
                                   Navigator.push(
@@ -416,13 +417,13 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                                   );
                                 } else {
                                   if (response.data['error'].toString().contains("Job Already Funded")) {
-                                    customSuccesSnackBar(context, "Job Already Funded");
+                                    showSuccessToast("Job Already Funded");
                                   } else if (response.data['error'] != null) {
                                     throw response.data['error']['original'][0];
                                   }
                                 }
                               } catch (e) {
-                                customErrorSnackBar(context, e.toString());
+                                showErrorToast(e.toString());
                               }
                             }
                           : null,
@@ -846,7 +847,7 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                           );
 
                           if (response.statusCode == 200 && response.data['status'] == true) {
-                            customSuccesSnackBar(context, response.data['message']);
+                            showSuccessToast(response.data['message']);
                             Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
                             Navigator.pop(context);
                             Navigator.push(
@@ -857,13 +858,13 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                             );
                           } else {
                             if (response.data['error'].toString().contains("Job Already Funded")) {
-                              customSuccesSnackBar(context, "Job Already Funded");
+                              showSuccessToast("Job Already Funded");
                             } else if (response.data['error'] != null) {
                               throw response.data['error']['original'][0];
                             }
                           }
                         } catch (e) {
-                          customErrorSnackBar(context, e.toString());
+                          showErrorToast(e.toString());
                         }
                         setState(() {
                           sendReq = false;

@@ -10,12 +10,12 @@ import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/splash_screen.dart';
 import 'package:island_app/screens/verify_email.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:island_app/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -150,10 +150,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           controller: emailController,
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return customErrorSnackBar(context, "Please Enter Email");
+                              return "Please Enter Email";
                             }
                             if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
-                              return customErrorSnackBar(context, "Please Enter Email");
+                              return "Please Enter Email";
                             }
                             return null;
                           },
@@ -252,11 +252,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         GestureDetector(
                           onTap: () {
                             if (emailController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter Email");
+                              showErrorToast("Please Enter Email");
                             } else if (passwordController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter Password");
+                              showErrorToast("Please Enter Password");
                             } else if (passwordController.text.length < 3) {
-                              customErrorSnackBar(context, "Please Enter 3 digit Password");
+                              showErrorToast("Please Enter 3 digit Password");
                             } else {
                               if (_signInFormKey.currentState!.validate()) {
                                 var request = LoginModel(
@@ -277,7 +277,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     var last = data["user"]['last_name'];
 
                                     if (status == 3) {
-                                      customErrorSnackBar(context, "User Blocked");
+                                      showErrorToast("User Blocked");
                                     } else {
                                       if (data["user"]["email_verified_at"] == null) {
                                         Navigator.pushReplacement(
@@ -316,7 +316,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       }
                                     }
                                   } else {
-                                    customErrorSnackBar(context, "Bad Credentials");
+                                    showErrorToast("Bad Credentials");
                                   }
                                 });
                               }

@@ -7,9 +7,10 @@ import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model
 import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 import 'package:island_app/widgets/job_info_container.dart';
@@ -55,16 +56,10 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       token: token,
     );
     if (response.statusCode == 200) {
-      customSuccesSnackBar(
-        context,
-        "Job applied successfully",
-      );
+      showSuccessToast("Job applied successfully");
       return response;
     } else {
-      customErrorSnackBar(
-        context,
-        "Server Error",
-      );
+      showErrorToast("Server Error");
     }
     return response;
   }
@@ -203,7 +198,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
         if (isApplied) {
           jobApply();
         } else {
-          customSuccesSnackBar(context, "Already Applied");
+          showSuccessToast("Already Applied");
         }
       },
       child: Container(

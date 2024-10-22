@@ -10,7 +10,6 @@ import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
@@ -149,7 +148,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
         });
       }
     } else {
-      customErrorSnackBar(context, "No file select");
+      showErrorToast("No file select");
     }
   }
 
@@ -179,18 +178,12 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
         token: token,
       );
       if (response.statusCode == 200) {
-        customSuccesSnackBar(
-          context,
-          "Profile Updated Successfully.",
-        );
+        showSuccessToast("Profile Updated Successfully.");
       } else {
-        customErrorSnackBar(
-          context,
-          response.data['message'],
-        );
+        showErrorToast(response.data['message']);
       }
     } catch (e) {
-      customErrorSnackBar(context, "Something went wrong please try agan later.");
+      showErrorToast("Something went wrong please try agan later.");
     }
   }
 
@@ -822,19 +815,19 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                         child: GestureDetector(
                           onTap: () {
                             if (_isSelectedGender == null) {
-                              customErrorSnackBar(context, "Please Select Gender");
+                              showErrorToast("Please Select Gender");
                             } else if (dobController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Select Date Of Birth");
+                              showErrorToast("Please Select Date Of Birth");
                             } else if (selectedService == null) {
-                              customErrorSnackBar(context, "Please Select Services");
+                              showErrorToast("Please Select Services");
                             } else if (phoneController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter Phone Number");
+                              showErrorToast("Please Enter Phone Number");
                             } else if (addressController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter User Address");
+                              showErrorToast("Please Enter User Address");
                             } else if (zipController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter Zip Code");
+                              showErrorToast("Please Enter Zip Code");
                             } else if (userInfoController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter User Info");
+                              showErrorToast("Please Enter User Info");
                             } else {
                               uploadImage();
                             }
@@ -1007,7 +1000,7 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
         });
       }
     } else {
-      customErrorSnackBar(context, "No file select");
+      showErrorToast("No file select");
     }
   }
 
@@ -1036,18 +1029,12 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
         token: token,
       );
       if (response.statusCode == 200) {
-        customSuccesSnackBar(
-          context,
-          "Profile Updated Successfully.",
-        );
+        showSuccessToast("Profile Updated Successfully.");
       } else {
-        customErrorSnackBar(
-          context,
-          "Something went wrong please try agan later.",
-        );
+        showErrorToast("Something went wrong please try agan later.");
       }
     } catch (e) {
-      customErrorSnackBar(context, e.toString());
+      showErrorToast(e.toString());
     }
   }
 
@@ -1651,17 +1638,17 @@ class _ProfileReceiverPendingEditState extends State<ProfileReceiverPendingEdit>
                         child: GestureDetector(
                           onTap: () {
                             if (_isSelectedGender == null) {
-                              customErrorSnackBar(context, "Please Select Gender");
+                              showErrorToast("Please Select Gender");
                             } else if (dobController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Select Date Of Birth");
+                              showErrorToast("Please Select Date Of Birth");
                             } else if (selectedService == null) {
-                              customErrorSnackBar(context, "Please Select Services");
+                              showErrorToast("Please Select Services");
                             } else if (phoneController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter Phone Number");
+                              showErrorToast("Please Enter Phone Number");
                             } else if (zipController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter Zip Code");
+                              showErrorToast("Please Enter Zip Code");
                             } else if (addressController.text.isEmpty) {
-                              customErrorSnackBar(context, "Please Enter User Address");
+                              showErrorToast("Please Enter User Address");
                             } else {
                               uploadImage(image!.path);
                             }

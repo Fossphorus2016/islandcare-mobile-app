@@ -5,9 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/bank_details_models.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 import 'dart:core';
 
@@ -67,22 +68,13 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
         token: token,
       );
       if (response.statusCode == 200 && !response.data['message'].contains("Unable To Select Unverified Banks")) {
-        customSuccesSnackBar(
-          context,
-          "Bank Account Selected",
-        );
+        showSuccessToast("Bank Account Selected");
         fetchBankDetailsModel();
       } else {
-        customErrorSnackBar(
-          context,
-          response.data['message'].toString(),
-        );
+        showErrorToast(response.data['message'].toString());
       }
     } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+      showErrorToast(e.toString());
     }
   }
 
@@ -102,23 +94,14 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
       );
       // print(response.toString());
       if (response.statusCode == 200) {
-        customSuccesSnackBar(
-          context,
-          "Bank Account Removed Successfully",
-        );
+        showSuccessToast("Bank Account Removed Successfully");
         focus.requestFocus();
         fetchBankDetailsModel();
       } else {
-        customErrorSnackBar(
-          context,
-          "Unable To Delete Unverified Banks",
-        );
+        showErrorToast("Unable To Delete Unverified Banks");
       }
     } catch (e) {
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+      showErrorToast(e.toString());
     }
   }
 
@@ -138,33 +121,21 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
       );
       if (response.statusCode == 200) {
         if (response.data['success']) {
-          customSuccesSnackBar(
-            context,
-            response.data['message'],
-          );
+          showSuccessToast(response.data['message']);
           fetchBankDetailsModel();
           focus.requestFocus();
           accountTitleController.clear();
           accountNumberController.clear();
         } else {
-          customErrorSnackBar(
-            context,
-            response.data['message'],
-          );
+          showErrorToast(response.data['message']);
           accountTitleController.clear();
           accountNumberController.clear();
         }
       } else {
-        customErrorSnackBar(
-          context,
-          response.data['message'],
-        );
+        showErrorToast(response.data['message']);
       }
     } on DioError {
-      customErrorSnackBar(
-        context,
-        "Something went wrong please try again later",
-      );
+      showErrorToast("Something went wrong please try again later");
     }
   }
 
@@ -455,20 +426,11 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                             GestureDetector(
                                               onTap: () {
                                                 if (selectedNames == null) {
-                                                  customErrorSnackBar(
-                                                    context,
-                                                    "Please Select Bank Names",
-                                                  );
+                                                  showErrorToast("Please Select Bank Names");
                                                 } else if (accountTitleController.text.isEmpty) {
-                                                  customErrorSnackBar(
-                                                    context,
-                                                    "Please Enter Account Title",
-                                                  );
+                                                  showErrorToast("Please Enter Account Title");
                                                 } else if (accountNumberController.text.isEmpty) {
-                                                  customErrorSnackBar(
-                                                    context,
-                                                    "Please Enter Account Number",
-                                                  );
+                                                  showErrorToast("Please Enter Account Number");
                                                 } else {
                                                   if (bankKey.currentState!.validate()) {
                                                     postAddBank();

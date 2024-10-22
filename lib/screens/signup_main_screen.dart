@@ -8,9 +8,9 @@ import 'package:island_app/models/register_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/verify_email.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 
@@ -560,13 +560,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     onTap: () {
                       if (!_signUpFormKey.currentState!.validate()) {
                       } else if (dobController.text.isEmpty) {
-                        customErrorSnackBar(context, "Please Enter Date of Birth");
+                        showErrorToast("Please Enter Date of Birth");
                       } else if (_isSelectedService == null) {
-                        customErrorSnackBar(context, "Please Select Service ");
+                        showErrorToast("Please Select Service ");
                       } else if (selectedService == null) {
-                        customErrorSnackBar(context, "Please Select Services You Provide ");
+                        showErrorToast("Please Select Services You Provide ");
                       } else if (_isRadioSelected == "0") {
-                        customErrorSnackBar(context, "Please Select Terms of Services & Privacy Policy");
+                        showErrorToast("Please Select Terms of Services & Privacy Policy");
                       } else {
                         // print(dobController.text.toString());
                         var request = RegisterModel(
@@ -593,10 +593,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             var last = data["user"]['last_name'];
                             // var isProfileCompleted = data["is_profile_completed"];
                             if (status == 3) {
-                              customErrorSnackBar(
-                                context,
-                                "User Blocked",
-                              );
+                              showErrorToast("User Blocked");
                             } else {
                               if (data["user"]["email_verified_at"] == null) {
                                 Navigator.pushReplacement(
@@ -638,10 +635,7 @@ class _SignupScreenState extends State<SignupScreen> {
                             setState(() {
                               errors = response.data['errors'];
                             });
-                            customErrorSnackBar(
-                              context,
-                              response.data['message'],
-                            );
+                            showErrorToast(response.data['message']);
                           }
                         });
                       }

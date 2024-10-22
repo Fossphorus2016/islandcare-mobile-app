@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -186,4 +187,44 @@ Future<String?> decodeThumbLoginToken({required String encodedToken}) async {
   // String timeDecoded = stringToBase64.decode(parts[2]);
 
   return emailDecoded;
+}
+
+class Utils {
+  static void fieldFocusChange(
+    BuildContext context,
+    FocusNode current,
+    FocusNode nextFocus,
+  ) {
+    current.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  static snackBar(String? message, BuildContext context) {
+    return ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: Colors.red,
+        content: Text(
+          message!,
+        ),
+      ),
+    );
+  }
+}
+
+bool checkDocuFileTypes(context, fileExtension) {
+  if (fileExtension == 'pdf' || fileExtension == 'docx' || fileExtension == 'doc') {
+    return true;
+  } else {
+    showErrorToast("Please select file types pdf, docx and doc");
+    return false;
+  }
+}
+
+bool checkImageFileTypes(context, fileExtension) {
+  if (fileExtension == 'png' || fileExtension == 'jpg' || fileExtension == 'jpeg') {
+    return true;
+  } else {
+    showErrorToast("Please select file types png, jpg and jpeg");
+    return false;
+  }
 }

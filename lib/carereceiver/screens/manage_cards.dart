@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/manage_cards_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/user_provider.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 class ManageCards extends StatefulWidget {
@@ -160,25 +161,16 @@ class _ManageCardsState extends State<ManageCards> {
       );
       if (response.statusCode == 200) {
         if (response.data['success'] == false) {
-          customErrorSnackBar(
-            context,
-            response.data['message'],
-          );
+          showErrorToast(response.data['message']);
         } else if (response.data['success'] == true) {
-          customSuccesSnackBar(
-            context,
-            "Card Added Successfully",
-          );
+          showSuccessToast("Card Added Successfully");
         }
         Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
       }
       Navigator.pop(context);
     } on DioError catch (e) {
       Navigator.pop(context);
-      customErrorSnackBar(
-        context,
-        e.response!.data['message'].toString(),
-      );
+      showErrorToast(e.response!.data['message'].toString());
     }
   }
 
@@ -613,30 +605,15 @@ class _ManageCardsState extends State<ManageCards> {
                                             GestureDetector(
                                               onTap: () {
                                                 if (nameOncardController.text.isEmpty) {
-                                                  customErrorSnackBar(
-                                                    context,
-                                                    "Please Enter Name",
-                                                  );
+                                                  showErrorToast("Please Enter Name");
                                                 } else if (cardNumberController.text.isEmpty) {
-                                                  customErrorSnackBar(
-                                                    context,
-                                                    "Please Enter Card Number",
-                                                  );
+                                                  showErrorToast("Please Enter Card Number");
                                                 } else if (selectedMonth == null) {
-                                                  customErrorSnackBar(
-                                                    context,
-                                                    "Please Select Month",
-                                                  );
+                                                  showErrorToast("Please Select Month");
                                                 } else if (selectedYear == null) {
-                                                  customErrorSnackBar(
-                                                    context,
-                                                    "Please Select Year",
-                                                  );
+                                                  showErrorToast("Please Select Year");
                                                 } else if (cvvController.text.isEmpty) {
-                                                  customErrorSnackBar(
-                                                    context,
-                                                    "Please Enter CVV",
-                                                  );
+                                                  showErrorToast("Please Enter CVV");
                                                 } else {
                                                   if (cardKey.currentState!.validate()) {
                                                     postAddCard();

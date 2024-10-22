@@ -1,16 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-// import 'package:island_app/caregiver/models/child_care_detail-dashbaord_model.dart';
-// import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model.dart';
-// import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart';
-// import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
-// import 'package:island_app/caregiver/models/senior_care_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/models/child_care_model.dart';
 import 'package:island_app/carereceiver/models/house_keeping_model.dart';
 import 'package:island_app/carereceiver/models/pet_care_model.dart';
 import 'package:island_app/carereceiver/models/school_support_model.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/assistance_container.dart';
@@ -20,7 +16,6 @@ import 'package:island_app/widgets/job_schedule_container.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/carereceiver/models/senior_care_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/utils/utils.dart';
 
 class ServiceProviderJobsDetail extends StatefulWidget {
   final String? id;
@@ -165,10 +160,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
   }
 
   Widget seniorCare(BuildContext context) {
-    // return FutureBuilder<SeniorCareDetailModel>(
-    //   future: futureSeniorCareDetail,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData) {
     return ListView.builder(
       itemCount: futureSeniorCareDetailDashboard!.job!.length,
       shrinkWrap: true,
@@ -279,18 +270,9 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
         );
       },
     );
-    //     } else {
-    //       return const Center(child: CircularProgressIndicator());
-    //     }
-    //   },
-    // );
   }
 
   Widget petCare(BuildContext context) {
-    // return FutureBuilder<PetCareDetailModel>(
-    //   future: futurePetCareDetail,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData) {
     return ListView.builder(
       itemCount: futurePetCareDetailDashboard!.job!.length,
       shrinkWrap: true,
@@ -501,18 +483,9 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
         );
       },
     );
-    //     } else {
-    //       return const Center(child: CircularProgressIndicator());
-    //     }
-    //   },
-    // );
   }
 
   Widget houseKeeping(BuildContext context) {
-    // return FutureBuilder<HouseKeepingDetailModel>(
-    //   future: futureHouseKeepingDetail,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData) {
     return ListView.builder(
       itemCount: futureHouseKeepingDetailDashboard!.job!.length,
       shrinkWrap: true,
@@ -571,18 +544,9 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
         );
       },
     );
-    //     } else {
-    //       return const Center(child: CircularProgressIndicator());
-    //     }
-    //   },
-    // );
   }
 
   Widget childCare(BuildContext context) {
-    // return FutureBuilder<ChildCareDetailModel>(
-    //   future: futureChildCareDetail,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData) {
     return ListView.builder(
       itemCount: futureChildCareDetailDashboard!.job!.length,
       shrinkWrap: true,
@@ -652,18 +616,9 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
         );
       },
     );
-    //     } else {
-    //       return const Center(child: CircularProgressIndicator());
-    //     }
-    //   },
-    // );
   }
 
   Widget schoolSupport(BuildContext context) {
-    // return FutureBuilder<SchoolSupportDetailModel>(
-    //   future: futureSchoolSupportDetail,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData) {
     return ListView.builder(
       itemCount: futureSchoolSupportDetailDashboard!.job!.length,
       shrinkWrap: true,
@@ -770,11 +725,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
         );
       },
     );
-    //     } else {
-    //       return const Center(child: CircularProgressIndicator());
-    //     }
-    //   },
-    // );
   }
 }
 

@@ -3,23 +3,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/screens/bank_detail.dart';
 import 'package:island_app/caregiver/screens/my_jobs_screen.dart';
 import 'package:island_app/caregiver/screens/provider_reviews_given_screen.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
-import 'package:island_app/utils/utils.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 class DrawerGiverWidget extends StatefulWidget {
   const DrawerGiverWidget({
@@ -119,31 +117,28 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
     }
   }
 
-  // fetchPRofile
-  late Future<ProfileGiverModel> fetchProfile;
-  Future<ProfileGiverModel> fetchProfileGiverModel() async {
-    var token = await getToken();
-    await getRequesthandler(
-      url: CareGiverUrl.serviceProviderProfile,
-      token: token,
-    ).then((response) {
-      // print(response.data);
-    });
-    final response = await getRequesthandler(
-      url: CareGiverUrl.serviceProviderProfile,
-      token: token,
-    );
-    if (response.statusCode == 200) {
-      return ProfileGiverModel.fromJson(response.data);
-    } else {
-      throw Exception(
-        customErrorSnackBar(
-          context,
-          'Failed to load Profile Model',
-        ),
-      );
-    }
-  }
+  // // fetchPRofile
+  // late Future<ProfileGiverModel> fetchProfile;
+  // Future<ProfileGiverModel> fetchProfileGiverModel() async {
+  //   var token = await getToken();
+  //   await getRequesthandler(
+  //     url: CareGiverUrl.serviceProviderProfile,
+  //     token: token,
+  //   ).then((response) {
+  //     // print(response.data);
+  //   });
+  //   final response = await getRequesthandler(
+  //     url: CareGiverUrl.serviceProviderProfile,
+  //     token: token,
+  //   );
+  //   if (response.statusCode == 200) {
+  //     return ProfileGiverModel.fromJson(response.data);
+  //   } else {
+  //     throw Exception(
+  //         // showErrorToast('Failed to load Profile Model'),
+  //         );
+  //   }
+  // }
 
   getUserId() async {
     var userId = await storageService.readSecureStorage('userId');
@@ -154,257 +149,223 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
   void initState() {
     getUserId();
     super.initState();
-    fetchProfile = fetchProfileGiverModel();
+    // fetchProfile = fetchProfileGiverModel();
   }
 
   @override
   Widget build(BuildContext context) {
-    bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
-    return profileStatus
-        ? Drawer(
-            backgroundColor: ServiceGiverColor.black,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
+    // bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
+    return Consumer3<ServiceGiverProvider, BottomNavigationProvider, NotificationProvider>(
+      builder: (context, giverProvider, bottomNavigationProvider, notificationProvider, __) {
+        return giverProvider.profileStatus
+            ? Drawer(
+                backgroundColor: ServiceGiverColor.black,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      FutureBuilder<ProfileGiverModel>(
-                        future: fetchProfile,
-                        builder: (context, snapshot) {
-                          if (snapshot.hasData) {
-                            return InkWell(
-                              onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(2),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 140,
-                                padding: const EdgeInsets.only(top: 25, left: 20, right: 20),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      radius: 40,
+                      Column(
+                        children: [
+                          // FutureBuilder<ProfileGiverModel>(
+                          //   future: giverProvider.fetchProviderDashboardModel(),
+                          //   builder: (context, snapshot) {
+                          //     if (snapshot.hasData) {
+                          // return
+                          InkWell(
+                            onTap: () => bottomNavigationProvider.updatePage(2),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 140,
+                              padding: const EdgeInsets.only(top: 25, left: 20, right: 20),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  CircleAvatar(
+                                    radius: 40,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(40),
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(40),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(100),
-                                          child: CachedNetworkImage(
-                                            width: 100,
-                                            height: 100,
-                                            fit: BoxFit.cover,
-                                            imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
-                                            placeholder: (context, url) => const CircularProgressIndicator(),
-                                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                                          ),
+                                        borderRadius: BorderRadius.circular(100),
+                                        child: CachedNetworkImage(
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                          imageUrl: "${giverProvider.fetchProfile!.folderPath}/${giverProvider.fetchProfile!.data!.avatar}",
+                                          placeholder: (context, url) => const CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) => const Icon(Icons.error),
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          Text(
-                                            "${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}",
-                                            overflow: TextOverflow.ellipsis,
-                                            maxLines: 2,
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: "Rubik",
-                                              color: CustomColors.white,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          Text(
-                                            snapshot.data!.data!.phone.toString(),
-                                            overflow: TextOverflow.visible,
-                                            style: TextStyle(
-                                              color: CustomColors.white,
-                                              fontFamily: "Rubik",
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          } else {
-                            return Shimmer.fromColors(
-                              baseColor: ServiceGiverColor.grey,
-                              highlightColor: const Color.fromARGB(255, 95, 95, 95),
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 25, bottom: 60),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    CircleAvatar(
-                                      backgroundColor: CustomColors.paraColor,
-                                      radius: 40,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(40),
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(100),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Column(
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
                                       children: <Widget>[
-                                        Container(
-                                          width: 130,
-                                          color: CustomColors.paraColor,
-                                          child: Text(
-                                            "",
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w400,
-                                              fontFamily: "Rubik",
-                                              color: CustomColors.white,
-                                            ),
+                                        Text(
+                                          "${giverProvider.fetchProfile!.data!.firstName} ${giverProvider.fetchProfile!.data!.lastName}",
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: "Rubik",
+                                            color: CustomColors.white,
                                           ),
                                         ),
                                         const SizedBox(height: 10),
-                                        Container(
-                                          width: 80,
-                                          color: CustomColors.paraColor,
-                                          child: Text(
-                                            " ",
-                                            style: TextStyle(
-                                              color: CustomColors.white,
-                                              fontFamily: "Rubik",
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                            ),
+                                        Text(
+                                          giverProvider.fetchProfile!.data!.phone.toString(),
+                                          overflow: TextOverflow.visible,
+                                          style: TextStyle(
+                                            color: CustomColors.white,
+                                            fontFamily: "Rubik",
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w400,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          // } else {
+                          //   return Shimmer.fromColors(
+                          //     baseColor: ServiceGiverColor.grey,
+                          //     highlightColor: const Color.fromARGB(255, 95, 95, 95),
+                          //     child: Padding(
+                          //       padding: const EdgeInsets.only(top: 25, bottom: 60),
+                          //       child: Row(
+                          //         crossAxisAlignment: CrossAxisAlignment.center,
+                          //         children: <Widget>[
+                          //           CircleAvatar(
+                          //             backgroundColor: CustomColors.paraColor,
+                          //             radius: 40,
+                          //             child: ClipRRect(
+                          //               borderRadius: BorderRadius.circular(40),
+                          //               child: ClipRRect(
+                          //                 borderRadius: BorderRadius.circular(100),
+                          //               ),
+                          //             ),
+                          //           ),
+                          //           const SizedBox(width: 10),
+                          //           Column(
+                          //             crossAxisAlignment: CrossAxisAlignment.start,
+                          //             children: <Widget>[
+                          //               Container(
+                          //                 width: 130,
+                          //                 color: CustomColors.paraColor,
+                          //                 child: Text(
+                          //                   "",
+                          //                   style: TextStyle(
+                          //                     fontSize: 16,
+                          //                     fontWeight: FontWeight.w400,
+                          //                     fontFamily: "Rubik",
+                          //                     color: CustomColors.white,
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //               const SizedBox(height: 10),
+                          //               Container(
+                          //                 width: 80,
+                          //                 color: CustomColors.paraColor,
+                          //                 child: Text(
+                          //                   " ",
+                          //                   style: TextStyle(
+                          //                     color: CustomColors.white,
+                          //                     fontFamily: "Rubik",
+                          //                     fontSize: 12,
+                          //                     fontWeight: FontWeight.w400,
+                          //                   ),
+                          //                 ),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ],
+                          //       ),
+                          //     ),
+                          //   );
+                          // }
+                          // },
+                          // ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: ListTile(
+                              hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                              selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                              focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                              leading: SizedBox(
+                                child: Image.asset("assets/images/icons/homeIcon.png"),
+                              ),
+                              title: Text(
+                                'Dashboard',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: CustomColors.white,
+                                  fontFamily: "Rubik",
                                 ),
                               ),
-                            );
-                          }
-                        },
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: SizedBox(
-                            child: Image.asset("assets/images/icons/homeIcon.png"),
-                          ),
-                          title: Text(
-                            'Dashboard',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: CustomColors.white,
-                              fontFamily: "Rubik",
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: CustomColors.white,
-                            size: 16,
-                          ),
-                          onTap: () {
-                            if (Provider.of<BottomNavigationProvider>(context, listen: false).page == 0) {
-                              Navigator.pop(context);
-                            } else {
-                              Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(0);
-                            }
-                          },
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ServiceProviderJobs(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: ListTile(
-                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            leading: SizedBox(
-                              child: Image.asset("assets/images/icons/payments.png"),
-                            ),
-                            title: Text(
-                              'Jobs',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
+                              trailing: Icon(
+                                Icons.arrow_forward_ios,
                                 color: CustomColors.white,
-                                fontFamily: "Rubik",
+                                size: 16,
+                              ),
+                              onTap: () {
+                                if (bottomNavigationProvider.page == 0) {
+                                  Navigator.pop(context);
+                                } else {
+                                  bottomNavigationProvider.updatePage(0);
+                                }
+                              },
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ServiceProviderJobs(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: ListTile(
+                                hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                leading: SizedBox(
+                                  child: Image.asset("assets/images/icons/payments.png"),
+                                ),
+                                title: Text(
+                                  'Jobs',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: CustomColors.white,
+                                    fontFamily: "Rubik",
+                                  ),
+                                ),
+                                trailing: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: CustomColors.white,
+                                  size: 16,
+                                ),
                               ),
                             ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              color: CustomColors.white,
-                              size: 16,
-                            ),
                           ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ProviderReviewsScreen(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: ListTile(
-                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            leading: SizedBox(
-                              child: Icon(
-                                Icons.star_border_outlined,
-                                color: CustomColors.white,
-                              ),
-                            ),
-                            title: Text(
-                              'Reviews Given',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: CustomColors.white,
-                                fontFamily: "Rubik",
-                              ),
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              color: CustomColors.white,
-                              size: 16,
-                            ),
+                          GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -413,47 +374,47 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                 ),
                               );
                             },
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const BankDetails(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: ListTile(
-                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            leading: SizedBox(
-                              child: Icon(
-                                Icons.card_membership,
-                                color: CustomColors.white,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: ListTile(
+                                hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                leading: SizedBox(
+                                  child: Icon(
+                                    Icons.star_border_outlined,
+                                    color: CustomColors.white,
+                                  ),
+                                ),
+                                title: Text(
+                                  'Reviews Given',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: CustomColors.white,
+                                    fontFamily: "Rubik",
+                                  ),
+                                ),
+                                trailing: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: CustomColors.white,
+                                  size: 16,
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ProviderReviewsScreen(),
+                                    ),
+                                  );
+                                },
                               ),
                             ),
-                            title: Text(
-                              'Bank Details',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: CustomColors.white,
-                                fontFamily: "Rubik",
-                              ),
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              color: CustomColors.white,
-                              size: 16,
-                            ),
+                          ),
+                          GestureDetector(
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -462,222 +423,263 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                 ),
                               );
                             },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(vertical: 6),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: ListTile(
+                                hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                leading: SizedBox(
+                                  child: Icon(
+                                    Icons.card_membership,
+                                    color: CustomColors.white,
+                                  ),
+                                ),
+                                title: Text(
+                                  'Bank Details',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: CustomColors.white,
+                                    fontFamily: "Rubik",
+                                  ),
+                                ),
+                                trailing: Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: CustomColors.white,
+                                  size: 16,
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const BankDetails(),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
-                        ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
+                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
+                            child: ListTile(
+                              hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                              selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                              focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                              leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
+                              title: Text(
+                                'Change Password',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: CustomColors.white,
+                                  fontFamily: "Rubik",
+                                ),
+                              ),
+                              trailing: Icon(
+                                Icons.arrow_forward_ios,
+                                color: CustomColors.white,
+                                size: 16,
+                              ),
+                              onTap: () {
+                                showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  context: context,
+                                  backgroundColor: Colors.white,
+                                  shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(30.0),
+                                      topRight: Radius.circular(30.0),
+                                    ),
+                                  ),
+                                  builder: (context) {
+                                    return const ChangePasswordWidget();
+                                  },
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
-                        child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
-                          title: Text(
-                            'Change Password',
+                      ListTile(
+                        onTap: () {
+                          _showLogoutDialog();
+                        },
+                        leading: Image.asset("assets/images/icons/logout.png"),
+                        title: Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text(
+                            'Logout',
                             style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w600,
                               color: CustomColors.white,
                               fontFamily: "Rubik",
                             ),
                           ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: CustomColors.white,
-                            size: 16,
-                          ),
-                          onTap: () {
-                            showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              backgroundColor: Colors.white,
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30.0),
-                                  topRight: Radius.circular(30.0),
-                                ),
-                              ),
-                              builder: (context) {
-                                return const ChangePasswordWidget();
-                              },
-                            );
-                          },
                         ),
                       ),
                     ],
                   ),
-                  ListTile(
-                    onTap: () {
-                      _showLogoutDialog();
-                    },
-                    leading: Image.asset("assets/images/icons/logout.png"),
-                    title: Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Text(
-                        'Logout',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: CustomColors.white,
-                          fontFamily: "Rubik",
+                ),
+              )
+            : Drawer(
+                backgroundColor: ServiceGiverColor.black,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child:
+                          // FutureBuilder<ProfileGiverModel>(
+                          //   future: fetchProfile,
+                          //   builder: (context, snapshot) {
+                          //     if (snapshot.hasData) {
+                          //       return
+                          InkWell(
+                        onTap: () => bottomNavigationProvider.updatePage(2),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 25, bottom: 60),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              CircleAvatar(
+                                radius: 40,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(40),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: CachedNetworkImage(
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.cover,
+                                      imageUrl: "${giverProvider.fetchProfile!.folderPath}/${giverProvider.fetchProfile!.data!.avatar}",
+                                      placeholder: (context, url) => const CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(
+                                    child: Text(
+                                      "${"${giverProvider.fetchProfile!.data!.firstName} ${giverProvider.fetchProfile!.data!.lastName}"} ",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "Rubik",
+                                        color: CustomColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  SizedBox(
+                                    child: Text(
+                                      giverProvider.fetchProfile!.data!.phone.toString(),
+                                      style: TextStyle(
+                                        color: CustomColors.white,
+                                        fontFamily: "Rubik",
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      //     } else {
+                      //       return Shimmer.fromColors(
+                      //         baseColor: CustomColors.primaryColor,
+                      //         highlightColor: const Color.fromARGB(255, 95, 95, 95),
+                      //         child: Padding(
+                      //           padding: const EdgeInsets.only(top: 25, bottom: 60),
+                      //           child: Row(
+                      //             crossAxisAlignment: CrossAxisAlignment.center,
+                      //             children: <Widget>[
+                      //               CircleAvatar(
+                      //                 backgroundColor: CustomColors.paraColor,
+                      //                 radius: 40,
+                      //                 child: ClipRRect(
+                      //                   borderRadius: BorderRadius.circular(40),
+                      //                   child: ClipRRect(
+                      //                     borderRadius: BorderRadius.circular(100),
+                      //                   ),
+                      //                 ),
+                      //               ),
+                      //               const SizedBox(width: 10),
+                      //               Column(
+                      //                 crossAxisAlignment: CrossAxisAlignment.start,
+                      //                 children: <Widget>[
+                      //                   Container(
+                      //                     width: 130,
+                      //                     color: CustomColors.paraColor,
+                      //                     child: Text(
+                      //                       "",
+                      //                       style: TextStyle(
+                      //                         fontSize: 16,
+                      //                         fontWeight: FontWeight.w400,
+                      //                         fontFamily: "Rubik",
+                      //                         color: CustomColors.white,
+                      //                       ),
+                      //                     ),
+                      //                   ),
+                      //                   const SizedBox(height: 10),
+                      //                   Container(
+                      //                     width: 80,
+                      //                     color: CustomColors.paraColor,
+                      //                     child: Text(
+                      //                       " ",
+                      //                       style: TextStyle(
+                      //                         color: CustomColors.white,
+                      //                         fontFamily: "Rubik",
+                      //                         fontSize: 12,
+                      //                         fontWeight: FontWeight.w400,
+                      //                       ),
+                      //                     ),
+                      //                   ),
+                      //                 ],
+                      //               ),
+                      //             ],
+                      //           ),
+                      //         ),
+                      //       );
+                      //     }
+                      //   },
+                      // ),
+                    ),
+                    Expanded(child: Container()),
+                    ListTile(
+                      onTap: () {
+                        _showLogoutDialog();
+                      },
+                      leading: Image.asset("assets/images/icons/logout.png"),
+                      title: Padding(
+                        padding: const EdgeInsets.only(bottom: 5),
+                        child: Text(
+                          'Logout',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: CustomColors.white,
+                            fontFamily: "Rubik",
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          )
-        : Drawer(
-            backgroundColor: ServiceGiverColor.black,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: FutureBuilder<ProfileGiverModel>(
-                    future: fetchProfile,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return InkWell(
-                          onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(2),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 25, bottom: 60),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  radius: 40,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(40),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                      child: CachedNetworkImage(
-                                        width: 100,
-                                        height: 100,
-                                        fit: BoxFit.cover,
-                                        imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
-                                        placeholder: (context, url) => const CircularProgressIndicator(),
-                                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      child: Text(
-                                        "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: "Rubik",
-                                          color: CustomColors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    SizedBox(
-                                      child: Text(
-                                        snapshot.data!.data!.phone.toString(),
-                                        style: TextStyle(
-                                          color: CustomColors.white,
-                                          fontFamily: "Rubik",
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      } else {
-                        return Shimmer.fromColors(
-                          baseColor: CustomColors.primaryColor,
-                          highlightColor: const Color.fromARGB(255, 95, 95, 95),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 25, bottom: 60),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                CircleAvatar(
-                                  backgroundColor: CustomColors.paraColor,
-                                  radius: 40,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(40),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Container(
-                                      width: 130,
-                                      color: CustomColors.paraColor,
-                                      child: Text(
-                                        "",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: "Rubik",
-                                          color: CustomColors.white,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Container(
-                                      width: 80,
-                                      color: CustomColors.paraColor,
-                                      child: Text(
-                                        " ",
-                                        style: TextStyle(
-                                          color: CustomColors.white,
-                                          fontFamily: "Rubik",
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
+                  ],
                 ),
-                Expanded(child: Container()),
-                ListTile(
-                  onTap: () {
-                    _showLogoutDialog();
-                  },
-                  leading: Image.asset("assets/images/icons/logout.png"),
-                  title: Padding(
-                    padding: const EdgeInsets.only(bottom: 5),
-                    child: Text(
-                      'Logout',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w600,
-                        color: CustomColors.white,
-                        fontFamily: "Rubik",
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
+              );
+      },
+    );
   }
 }
 
@@ -731,17 +733,14 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
       // print(response.data);
       Navigator.pop(context);
       if (response.data['success']) {
-        customSuccesSnackBar(context, "Password Updated Successfully");
+        showSuccessToast("Password Updated Successfully");
       } else {
-        customErrorSnackBar(context, response.data['message'].toString());
+        showErrorToast(response.data['message'].toString());
       }
     } catch (e) {
       // print("print in error $e");
       Navigator.pop(context);
-      customErrorSnackBar(
-        context,
-        e.toString(),
-      );
+      showErrorToast(e.toString());
     }
   }
 

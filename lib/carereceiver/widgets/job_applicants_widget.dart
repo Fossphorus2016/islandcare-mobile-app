@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/utils/utils.dart';
+import 'package:island_app/utils/app_colors.dart';
 
 class JobApplicantsWidget extends StatelessWidget {
   final String? name;

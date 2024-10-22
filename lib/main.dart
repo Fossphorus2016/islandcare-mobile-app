@@ -1,8 +1,5 @@
 // ignore_for_file: await_only_futures, prefer_typing_uninitialized_variables
 
-import 'dart:async';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/screens/my_jobs_screen.dart';
 import 'package:island_app/caregiver/screens/profile_edit.dart';
@@ -20,9 +17,7 @@ import 'package:island_app/carereceiver/utils/home_pagination.dart';
 import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/navigation_service.dart';
-import 'package:island_app/utils/storage_service.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -69,34 +64,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  var token;
-  Future getUserToken() async {
-    var userToken = await getToken();
-    setState(() {
-      token = userToken;
-    });
-    if (kDebugMode) {
-      print("token == $token");
-    }
-    return userToken.toString();
-  }
-
-  var name;
-  Future getUserName() async {
-    var userName = await storageService.readSecureStorage("userName");
-    setState(() {
-      name = userName;
-    });
-    if (kDebugMode) {
-      print("Name == $name");
-    }
-    return userName.toString();
-  }
-
   @override
   void initState() {
-    getUserToken();
-    getUserName();
     IslandPusher().initPusher();
     super.initState();
   }
