@@ -3,7 +3,6 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
@@ -16,6 +15,8 @@ import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
+import 'package:island_app/widgets/loading_button.dart';
+import 'package:island_app/widgets/loading_with_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:island_app/carereceiver/models/service_receiver_dashboard_model.dart';
@@ -102,70 +103,18 @@ class _HomeScreenState extends State<HomeScreen> {
       "name": "No Prefrences",
     },
   ];
-  String? findSelected;
-  String? findArea;
-  String? findRate;
-  String? serviceId = '';
+  // String? findSelected;
+  // String? findArea;
+  // String? findRate;
+  // String? serviceId = '';
   // late Future<ServiceReceiverDashboardModel>? futureReceiverDashboard;
 
-  // Future<ServiceReceiverDashboardModel> fetchReceiverDashboardModel() async {
-  //   // print("object");
-  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareReceiverURl.serviceReceiverDashboard}?service=${findSelected ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
-  //     options: Options(headers: {
-  //       'Authorization': 'Bearer $token',
-  //       'Accept': 'application/json',
-  //       "Connection": "Keep-Alive",
-  //     }),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     var json = response.data as Map;
-  //     var listOfProviders = json['data'] as List;
-  //     var listOfFavourites = json['favourites'] as List;
-  //     setState(() {
-  //       providerList = listOfProviders;
-  //       favouriteList = listOfFavourites;
-  //       foundProviders = listOfProviders;
-  //     });
-  //     return ServiceReceiverDashboardModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
-  // Future<ServiceReceiverDashboardModel> fetchFindedReceiverDashboardModel() async {
-  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareReceiverURl.serviceReceiverDashboard}?service=${findSelected ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
-  //     options: Options(headers: {
-  //       'Authorization': 'Bearer ${token ?? widget.passedToken}',
-  //       'Accept': 'application/json',
-  //     }),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     var json = response.data as Map;
-  //     var listOfProviders = json['data'] as List;
-  //     var listOfFavourites = json['favourites'] as List;
-  //     setState(() {
-  //       findProviders = listOfProviders.reversed.toList();
-  //     });
-  //     return ServiceReceiverDashboardModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
   // Favourite API
-  fetchReceiverDashboardModel() async {
+  Future<void> fetchReceiverDashboardModel({required String? service, required String? serviceId, required String? findArea, required String? findRate}) async {
     // print("object");
     var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     final response = await getRequesthandler(
-      url: '${CareReceiverURl.serviceReceiverDashboard}?service=${findSelected ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
+      url: '${CareReceiverURl.serviceReceiverDashboard}?service=${service ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
       token: token,
     );
     if (response.statusCode == 200) {
@@ -187,8 +136,39 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  var providerId;
-  Future<Response> favourited(url) async {
+  // Favourite API
+  fetchReceiverDashboardModelInInitCall() async {
+    // print("object");
+    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    final response = await getRequesthandler(
+      url: '${CareReceiverURl.serviceReceiverDashboard}?service=&search=&area=&rate=',
+      token: token,
+    );
+    if (response.statusCode == 200) {
+      var json = response.data as Map;
+      var listOfProviders = json['data'] as List;
+      var listOfFavourites = json['favourites'] as List;
+      // setState(() {
+      providerList = listOfProviders;
+      favouriteList = listOfFavourites;
+      foundProviders = listOfProviders;
+      // });
+      var data = ServiceReceiverDashboardModel.fromJson(response.data);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          // Double-check if widget is still mounted before using context
+          Provider.of<HomePaginationProvider>(context, listen: false).setPaginationList(data.data);
+        }
+      });
+    } else {
+      throw Exception(
+        'Failed to load Service Provider Dashboard',
+      );
+    }
+  }
+
+  // var providerId;
+  Future<void> favourited(providerId) async {
     var url = '${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=$providerId';
     var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     var response = await postRequesthandler(
@@ -196,22 +176,18 @@ class _HomeScreenState extends State<HomeScreen> {
       token: token,
     );
     if (response.statusCode == 200) {
-      showSuccessToast("Added To Favourite");
+      if (response.data["data"].toString() == "1") {
+        favouriteList.add(providerId);
+        showSuccessToast("Added To Favourite");
+      } else {
+        favouriteList.remove(providerId);
+        showErrorToast("Remove from favourite");
+      }
     } else {
       showSuccessToast("Favourite Is Not Added");
     }
-    return response;
+    setState(() {});
   }
-
-  // var userPic;
-  // getUserAvatar() async {
-  //   SharedPreferences preferences = await SharedPreferences.getInstance();
-  //   var userAvatar = preferences.getString('userAvatar');
-  //   setState(() {
-  //     userPic = userAvatar;
-  //   });
-  //   return userPic.toString();
-  // }
 
   // Search bar
   List foundProviders = [];
@@ -219,21 +195,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // getUserAvatar();
     super.initState();
-    fetchReceiverDashboardModel();
-    // futureReceiverDashboard = fetchReceiverDashboardModel();
-  }
-
-  @override
-  void dispose() {
-    // Timer(const Duration(seconds: 2), () {
-    //   setState(() {
-    //     foundProviders = providerList;
-    //   });
-    // }).cancel();
-
-    super.dispose();
+    fetchReceiverDashboardModelInInitCall();
   }
 
   int? age;
@@ -377,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: () async {
-                        fetchReceiverDashboardModel();
+                        fetchReceiverDashboardModel(service: null, findArea: null, findRate: null, serviceId: null);
                       },
                       child: CustomScrollView(
                         slivers: [
@@ -464,6 +427,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   builder: (BuildContext context) {
                                                     return StatefulBuilder(
                                                       builder: (BuildContext context, StateSetter setState) {
+                                                        String? findSelected;
+                                                        String? findArea;
+                                                        String? findRate;
+                                                        String? serviceId = '';
                                                         return SingleChildScrollView(
                                                           child: Padding(
                                                             padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -746,33 +713,28 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           ],
                                                                         ),
                                                                       ),
-                                                                      // OTP
                                                                       const SizedBox(height: 20),
-                                                                      GestureDetector(
-                                                                        onTap: () {
-                                                                          fetchReceiverDashboardModel();
-                                                                          Navigator.pop(context);
-                                                                        },
-                                                                        child: Container(
-                                                                          width: MediaQuery.of(context).size.width,
-                                                                          height: 54,
-                                                                          decoration: BoxDecoration(
-                                                                            color: ServiceRecieverColor.primaryColor,
-                                                                            borderRadius: BorderRadius.circular(10),
-                                                                          ),
-                                                                          child: Center(
-                                                                            child: Text(
-                                                                              "Search",
-                                                                              style: TextStyle(
-                                                                                color: CustomColors.white,
-                                                                                fontFamily: "Rubik",
-                                                                                fontStyle: FontStyle.normal,
-                                                                                fontWeight: FontWeight.w500,
-                                                                                fontSize: 18,
-                                                                              ),
-                                                                            ),
-                                                                          ),
+                                                                      LoadingButton(
+                                                                        title: "Search",
+                                                                        backgroundColor: ServiceRecieverColor.primaryColor,
+                                                                        height: 54,
+                                                                        textStyle: TextStyle(
+                                                                          color: CustomColors.white,
+                                                                          fontFamily: "Rubik",
+                                                                          fontStyle: FontStyle.normal,
+                                                                          fontWeight: FontWeight.w500,
+                                                                          fontSize: 18,
                                                                         ),
+                                                                        onPressed: () async {
+                                                                          await fetchReceiverDashboardModel(
+                                                                            service: findSelected,
+                                                                            serviceId: serviceId,
+                                                                            findArea: findArea,
+                                                                            findRate: findRate,
+                                                                          );
+                                                                          Navigator.pop(context);
+                                                                          return false;
+                                                                        },
                                                                       ),
                                                                       const SizedBox(height: 30),
                                                                     ],
@@ -814,24 +776,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           ),
                                           const SizedBox(width: 10),
-                                          TextButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                findSelected = null;
-                                                serviceId = null;
-                                                findArea = null;
-                                                findRate = null;
-                                              });
-                                              fetchReceiverDashboardModel();
+                                          LoadingButton(
+                                            title: "Reset",
+                                            textStyle: TextStyle(color: Colors.red),
+                                            width: 80,
+                                            height: 50,
+                                            backgroundColor: Colors.white,
+                                            loadingColor: CustomColors.primaryColor,
+                                            onPressed: () async {
+                                              // setState(() {
+                                              //   findSelected = null;
+                                              //   serviceId = null;
+                                              //   findArea = null;
+                                              //   findRate = null;
+                                              // });
+                                              await fetchReceiverDashboardModel(service: null, findArea: null, findRate: null, serviceId: null);
+                                              return true;
                                             },
-                                            style: ButtonStyle(
-                                              backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.white),
-                                              shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-                                            ),
-                                            child: const Text(
-                                              "Reset",
-                                              style: TextStyle(color: Colors.red),
-                                            ),
                                           ),
                                         ],
                                       ),
@@ -853,8 +814,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     itemCount: provider.filterDataList.length,
                                     itemBuilder: (BuildContext context, int index) {
                                       var item = provider.filterDataList[index];
-                                      // print(item);
-                                      // return Container();
+
                                       return RecommendationReceiverWidget(
                                         imgPath: "${AppUrl.webStorageUrl}" '/' + item.avatar.toString(),
                                         title: "${item.firstName} ${item.lastName}",
@@ -863,20 +823,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         price: item.userdetailprovider.hourlyRate.toString() == "null" ? "0" : item.userdetailprovider.hourlyRate.toString(),
                                         dob: isAdult(item.userdetail.dob != null ? "${item.userdetail.dob}" : "00-00-0000").toString(),
                                         ratingCount: double.parse("${item.avgRating!.isEmpty ? "0.0" : item.avgRating![0].rating}"),
-                                        isFavouriteIcon: GestureDetector(
-                                          onTap: () {
-                                            // setState(() {});
-                                            // if (favouriteList.contains(item.id)) {
-                                            //   favouriteList.remove(foundProviders[index]['id']);
-                                            //   setState(() {});
-                                            // } else {
-                                            //   favouriteList.add(foundProviders[index]['id']);
-                                            //   setState(() {});
-                                            // }
-                                            // providerId = foundProviders[index]['id'];
-                                            // favourited("${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=${foundProviders[index]['id'].toString()}");
+                                        isFavouriteIcon: LoadingButtonWithIcon(
+                                          onPressed: () async {
+                                            await favourited(item.id);
+                                            return false;
                                           },
-                                          child: favouriteList.contains(item.id)
+                                          icon: favouriteList.contains(item.id)
                                               ? Icon(
                                                   Icons.favorite,
                                                   color: CustomColors.red,
@@ -929,320 +881,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            //  RefreshIndicator(
-            //   onRefresh: () async {
-            //     fetchReceiverDashboardModel();
-            //   },
-            //   child: SingleChildScrollView(
-            //     child: Column(
-            //       children: [
-            //         // Overlay Search bar
-            //         // Jobss
-            //         Container(
-            //           padding: const EdgeInsets.symmetric(horizontal: 17),
-            //           child: const Column(
-            //             children: [
-            //               // findProviders.isEmpty ?
-            // FutureBuilder<ServiceReceiverDashboardModel>(
-            //   future: futureReceiverDashboard,
-            //   builder: (context, snapshot) {
-            //     if (snapshot.hasData) {
-            //       return ListView.builder(
-            //         shrinkWrap: true,
-            //         scrollDirection: Axis.vertical,
-            //         physics: const NeverScrollableScrollPhysics(),
-            //         itemCount: foundProviders.length,
-            //         itemBuilder: (BuildContext context, int index) {
-            //           return RecommendationReceiverWidget(
-            //             imgPath: "${AppUrl.webStorageUrl}" '/' + foundProviders[index]['avatar'].toString(),
-            //             title: "${foundProviders[index]['first_name']} ${foundProviders[index]['last_name']}",
-            //             experience: foundProviders[index]['userdetailprovider']['experience'] == null ? "0" : foundProviders[index]['userdetailprovider']['experience'].toString(),
-            //             hourly: foundProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailprovider']['hourly_rate'].toString(),
-            //             price: foundProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailprovider']['hourly_rate'].toString(),
-            //             dob: isAdult(foundProviders[index]['userdetail']['dob'] != null ? "${foundProviders[index]['userdetail']['dob']}" : "00-00-0000").toString(),
-            //             ratingCount: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
-            //             isFavouriteIcon: GestureDetector(
-            //               onTap: () {
-            //                 setState(() {});
-            //                 if (favouriteList.contains(foundProviders[index]['id'])) {
-            //                   favouriteList.remove(foundProviders[index]['id']);
-            //                   setState(() {});
-            //                 } else {
-            //                   favouriteList.add(foundProviders[index]['id']);
-            //                   setState(() {});
-            //                 }
-            //                 providerId = foundProviders[index]['id'];
-            //                 favourited("${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=${foundProviders[index]['id'].toString()}");
-            //               },
-            //               child: favouriteList.contains(foundProviders[index]['id'])
-            //                   ? Icon(
-            //                       Icons.favorite,
-            //                       color: CustomColors.red,
-            //                       size: 24,
-            //                     )
-            //                   : Icon(
-            //                       Icons.favorite_outline,
-            //                       color: CustomColors.darkGreyRecommended,
-            //                       size: 24,
-            //                     ),
-            //             ),
-            //             onTap: () {
-            //               Navigator.push(
-            //                 context,
-            //                 MaterialPageRoute(
-            //                   builder: (context) => ProviderProfileDetailForReceiver(
-            //                     id: snapshot.data!.data![index].id.toString(),
-            //                     rating: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
-            //                   ),
-            //                 ),
-            //               );
-            //             },
-            //           );
-            //         },
-            //       );
-            //     } else if (snapshot.hasError) {
-            //       return Text(
-            //         snapshot.error.toString(),
-            //       );
-            //     } else if (snapshot.connectionState == ConnectionState.waiting) {
-            //       return Shimmer.fromColors(
-            //         baseColor: CustomColors.white,
-            //         highlightColor: CustomColors.primaryLight,
-            //         child: Column(
-            //           children: [
-            //             Container(
-            //               height: 200,
-            //               width: MediaQuery.of(context).size.width,
-            //               margin: const EdgeInsets.symmetric(
-            //                 vertical: 10,
-            //               ),
-            //               padding: const EdgeInsets.all(20),
-            //               decoration: const BoxDecoration(
-            //                 borderRadius: BorderRadius.only(
-            //                   topLeft: Radius.circular(20),
-            //                   topRight: Radius.circular(20),
-            //                   bottomLeft: Radius.circular(20),
-            //                   bottomRight: Radius.circular(20),
-            //                 ),
-            //                 boxShadow: [
-            //                   BoxShadow(
-            //                     color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-            //                     offset: Offset(0, 4),
-            //                     blurRadius: 45,
-            //                   )
-            //                 ],
-            //                 color: Color.fromRGBO(255, 255, 255, 1),
-            //               ),
-            //               child: const Text("data"),
-            //             ),
-            //             Container(
-            //               height: 200,
-            //               width: MediaQuery.of(context).size.width,
-            //               margin: const EdgeInsets.symmetric(
-            //                 vertical: 10,
-            //               ),
-            //               padding: const EdgeInsets.all(20),
-            //               decoration: const BoxDecoration(
-            //                 borderRadius: BorderRadius.only(
-            //                   topLeft: Radius.circular(20),
-            //                   topRight: Radius.circular(20),
-            //                   bottomLeft: Radius.circular(20),
-            //                   bottomRight: Radius.circular(20),
-            //                 ),
-            //                 boxShadow: [
-            //                   BoxShadow(
-            //                     color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-            //                     offset: Offset(0, 4),
-            //                     blurRadius: 45,
-            //                   )
-            //                 ],
-            //                 color: Color.fromRGBO(255, 255, 255, 1),
-            //               ),
-            //               child: const Text("data"),
-            //             ),
-            //             Container(
-            //               height: 200,
-            //               width: MediaQuery.of(context).size.width,
-            //               margin: const EdgeInsets.symmetric(
-            //                 vertical: 10,
-            //               ),
-            //               padding: const EdgeInsets.all(20),
-            //               decoration: const BoxDecoration(
-            //                 borderRadius: BorderRadius.only(
-            //                   topLeft: Radius.circular(20),
-            //                   topRight: Radius.circular(20),
-            //                   bottomLeft: Radius.circular(20),
-            //                   bottomRight: Radius.circular(20),
-            //                 ),
-            //                 boxShadow: [
-            //                   BoxShadow(
-            //                     color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-            //                     offset: Offset(0, 4),
-            //                     blurRadius: 45,
-            //                   )
-            //                 ],
-            //                 color: Color.fromRGBO(255, 255, 255, 1),
-            //               ),
-            //               child: const Text("data"),
-            //             ),
-            //           ],
-            //         ),
-            //       );
-            //     } else if (snapshot.connectionState == ConnectionState.none) {
-            //       return const Text("Cannot Establish Connection with server..");
-            //     } else {
-            //       return Shimmer.fromColors(
-            //         baseColor: CustomColors.white,
-            //         highlightColor: CustomColors.primaryLight,
-            //         child: Column(
-            //           children: [
-            //             Container(
-            //               height: 200,
-            //               width: MediaQuery.of(context).size.width,
-            //               margin: const EdgeInsets.symmetric(
-            //                 vertical: 10,
-            //               ),
-            //               padding: const EdgeInsets.all(20),
-            //               decoration: const BoxDecoration(
-            //                 borderRadius: BorderRadius.only(
-            //                   topLeft: Radius.circular(20),
-            //                   topRight: Radius.circular(20),
-            //                   bottomLeft: Radius.circular(20),
-            //                   bottomRight: Radius.circular(20),
-            //                 ),
-            //                 boxShadow: [
-            //                   BoxShadow(
-            //                     color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-            //                     offset: Offset(0, 4),
-            //                     blurRadius: 45,
-            //                   )
-            //                 ],
-            //                 color: Color.fromRGBO(255, 255, 255, 1),
-            //               ),
-            //               child: const Text("data"),
-            //             ),
-            //           ],
-            //         ),
-            //       );
-            //     }
-            //   },
-            // )
-            //               // : FutureBuilder<ServiceReceiverDashboardModel>(
-            //               //     future: futureReceiverDashboard,
-            //               //     builder: (context, snapshot) {
-            //               //       if (snapshot.hasData) {
-            //               //         return ListView.builder(
-            //               //           shrinkWrap: true,
-            //               //           scrollDirection: Axis.vertical,
-            //               //           physics: const NeverScrollableScrollPhysics(),
-            //               //           itemCount: findProviders.length,
-            //               //           itemBuilder: (BuildContext context, int index) {
-            //               //             return RecommendationReceiverWidget(
-            //               //               imgPath: findProviders[index]['avatar'] == null ? "${AppUrl.webStorageUrl}" '/' + findProviders[index]['avatar'].toString() : "https://fastly.picsum.photos/id/553/200/300.jpg?hmac=-A3VLW_dBmwUaXOe7bHhCt-lnmROrPFyTLslwNHVH1A",
-            //               //               title: "${findProviders[index]['first_name']} ${findProviders[index]['last_name']}",
-            //               //               experience: findProviders[index]['userdetailprovider']['experience'] == null ? "0" : findProviders[index]['userdetailprovider']['experience'].toString(),
-            //               //               hourly: findProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : findProviders[index]['userdetailprovider']['hourly_rate'].toString(),
-            //               //               price: findProviders[index]['userdetailprovider']['hourly_rate'].toString() == "null" ? "0" : findProviders[index]['userdetailprovider']['hourly_rate'].toString(),
-            //               //               dob: isAdult(findProviders[index]['userdetail']['dob'] != null ? "${findProviders[index]['userdetail']['dob']}" : "00-00-0000").toString(),
-            //               //               ratingCount: double.parse("${snapshot.data!.data![index].avgRating!.isEmpty ? "0.0" : snapshot.data!.data![index].avgRating![0].rating}"),
-            //               //               isFavouriteIcon: GestureDetector(
-            //               //                 onTap: () {
-            //               //                   setState(() {});
-            //               //                   if (favouriteList.contains(findProviders[index]['id'])) {
-            //               //                     favouriteList.remove(findProviders[index]['id']);
-            //               //                     setState(() {});
-            //               //                   } else {
-            //               //                     favouriteList.add(findProviders[index]['id']);
-            //               //                     setState(() {});
-            //               //                   }
-            //               //                   providerId = findProviders[index]['id'];
-            //               //                   favourited("${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=${findProviders[index]['id'].toString()}");
-            //               //                 },
-            //               //                 child: favouriteList.contains(findProviders[index]['id'])
-            //               //                     ? Icon(
-            //               //                         Icons.favorite,
-            //               //                         color: CustomColors.red,
-            //               //                         size: 24,
-            //               //                       )
-            //               //                     : Icon(
-            //               //                         Icons.favorite_outline,
-            //               //                         color: CustomColors.darkGreyRecommended,
-            //               //                         size: 24,
-            //               //                       ),
-            //               //               ),
-            //               //               onTap: () {},
-            //               //             );
-            //               //           },
-            //               //         );
-            //               //       } else if (snapshot.hasError) {
-            //               //         return Text(
-            //               //           snapshot.error.toString(),
-            //               //         );
-            //               //       } else if (snapshot.connectionState == ConnectionState.waiting) {
-            //               //         return const Text("Waiting...");
-            //               //       } else if (snapshot.connectionState == ConnectionState.none) {
-            //               //         return const Text("Cannot Establish Connection with server..");
-            //               //       } else {
-            //               //         return Shimmer.fromColors(
-            //               //           baseColor: CustomColors.white,
-            //               //           highlightColor: const Color.fromARGB(255, 95, 95, 95),
-            //               //           child: Column(
-            //               //             children: [
-            //               //               Container(
-            //               //                 height: 200,
-            //               //                 width: MediaQuery.of(context).size.width,
-            //               //                 margin: const EdgeInsets.symmetric(
-            //               //                   vertical: 10,
-            //               //                 ),
-            //               //                 padding: const EdgeInsets.all(20),
-            //               //                 decoration: const BoxDecoration(
-            //               //                   borderRadius: BorderRadius.only(
-            //               //                     topLeft: Radius.circular(20),
-            //               //                     topRight: Radius.circular(20),
-            //               //                     bottomLeft: Radius.circular(20),
-            //               //                     bottomRight: Radius.circular(20),
-            //               //                   ),
-            //               //                   boxShadow: [
-            //               //                     BoxShadow(
-            //               //                       color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-            //               //                       offset: Offset(0, 4),
-            //               //                       blurRadius: 45,
-            //               //                     )
-            //               //                   ],
-            //               //                   color: Color.fromRGBO(255, 255, 255, 1),
-            //               //                 ),
-            //               //                 child: const Text("data"),
-            //               //               ),
-            //               //             ],
-            //               //           ),
-            //               //         );
-            //               //       }
-            //               //     },
-            //               //   )
-            //             ],
-            //           ),
-            //         ),
-            //         SizedBox(
-            //           width: MediaQuery.of(context).size.width,
-            //           child: CustomPagination(
-            //             nextPage: (provider.currentPageIndex) < provider.totalRowsCount
-            //                 ? () {
-            //                     provider.handlePageChange(provider.currentPageIndex + 1);
-            //                   }
-            //                 : null,
-            //             previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
-            //             gotoPage: provider.handlePageChange,
-            //             gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
-            //             gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount ? () => provider.handlePageChange(provider.totalRowsCount) : null,
-            //             currentPageIndex: provider.currentPageIndex,
-            //             totalRowsCount: provider.totalRowsCount,
-            //           ),
-            //         ),
-            //         const SizedBox(height: 20),
-            //       ],
-            //     ),
-            //   ),
-            // ),
           ),
         );
       },

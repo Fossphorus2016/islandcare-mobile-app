@@ -442,8 +442,12 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                                                         const SizedBox(height: 30),
                                                                         GestureDetector(
                                                                           onTap: () {
-                                                                            provider.setFilterByTime(DateTime.parse(startTime!), DateTime.parse(endTime!));
-                                                                            Navigator.pop(context);
+                                                                            if (startTime != null && endTime != null) {
+                                                                              provider.setFilterByTime(DateTime.parse(startTime!), DateTime.parse(endTime!));
+                                                                              Navigator.pop(context);
+                                                                            } else {
+                                                                              showErrorToast("Please select start and end date.");
+                                                                            }
                                                                           },
                                                                           child: Container(
                                                                             width: MediaQuery.of(context).size.width,

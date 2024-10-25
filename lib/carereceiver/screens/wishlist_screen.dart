@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, prefer_interpolation_to_compose_strings
 
 import 'dart:async';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/favourite_get_model.dart';
@@ -10,7 +9,9 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/recommendation_widget.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/widgets/loading_with_icon_button.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
 class WishlistScreen extends StatefulWidget {
@@ -42,10 +43,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
       var json = response.data as Map;
       var listOfProviders = json['data'] as List;
       // print(listOfProviders);
-      setState(() {
-        providerList = listOfProviders;
-        foundProviders = listOfProviders;
-      });
+      // setState(() {
+      providerList = listOfProviders;
+      foundProviders = listOfProviders;
+      // });
       return FavouriteGetModel.fromJson(response.data);
     } else {
       throw Exception('Failed to load Service Provider Dashboard');
@@ -54,8 +55,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
   // Favourite API
   var favouriteList = [];
-  var providerId;
-  Future<Response> favourited(url) async {
+  Future<void> favourited(providerId) async {
     var token = RecieverUserProvider.userToken;
     var url = '${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=$providerId';
     var response = await postRequesthandler(
@@ -63,14 +63,18 @@ class _WishlistScreenState extends State<WishlistScreen> {
       token: token,
     );
     if (response.statusCode == 200) {
+      if (response.data["data"].toString() == "1") {
+        favouriteList.add(providerId);
+        showSuccessToast("Added To Favourite");
+      } else {
+        favouriteList.remove(providerId);
+        foundProviders.remove(providerId);
+        showErrorToast("Remove from favourite");
+      }
       setState(() {
         futureFavourite = fetchFavourite();
-        favouriteList;
-        foundProviders;
-        fetchFavourite();
       });
     }
-    return response;
   }
 
   // Search bar
@@ -97,13 +101,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
     ratingController = TextEditingController(text: '3.0');
     rating = initialRating;
     futureFavourite = fetchFavourite();
-    Timer(const Duration(seconds: 1), () {
-      if (mounted) {
-        setState(() {
-          foundProviders = providerList;
-        });
-      }
-    });
   }
 
   String isAdult(String enteredAge) {
@@ -185,23 +182,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                     price: foundProviders[index]['userdetailproviders']['hourly_rate'].toString() == "null" ? "0" : foundProviders[index]['userdetailproviders']['hourly_rate'].toString(),
                                     dob: isAdult(foundProviders[index]['userdetails']['dob'] != null ? "${foundProviders[index]['userdetails']['dob']}" : "00-00-0000"),
                                     isRatingShow: false,
-                                    isFavouriteIcon: GestureDetector(
-                                      onTap: () {
-                                        setState(() {});
-                                        if (favouriteList.contains(foundProviders[index]['users']['id'].toString())) {
-                                          setState(() {
-                                            favouriteList.remove(foundProviders[index]['users']['id'].toString());
-                                            foundProviders.remove(foundProviders[index].toString());
-                                          });
-                                        } else {
-                                          favouriteList.add(foundProviders[index]['users']['id'].toString());
-                                          setState(() {});
+                                    isFavouriteIcon: LoadingButtonWithIcon(
+                                      onPressed: () async {
+                                        if (snapshot.data!.data![index].users != null) {
+                                          await favourited(snapshot.data!.data![index].users!.id);
                                         }
-                                        providerId = foundProviders[index]['users']['id'];
-                                        favourited("https://islandcare.bm/api/service-receiver-add-to-favourite?favourite_id=${foundProviders[index]['users']['id'].toString()}");
-                                        setState(() {});
+                                        return false;
                                       },
-                                      child: favouriteList.contains(foundProviders[index]['users']['id'].toString())
+                                      icon: favouriteList.contains(foundProviders[index]['users']['id'].toString())
                                           ? Icon(
                                               Icons.favorite_outline,
                                               color: CustomColors.darkGreyRecommended,

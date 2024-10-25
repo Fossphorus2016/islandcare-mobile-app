@@ -97,7 +97,7 @@ class ServiceGiverProvider extends ChangeNotifier {
     }
   }
 
-  fetchFindedJobsDashboardModel(title, service, area, rate) async {
+  Future<void> fetchFindedJobsDashboardModel(title, service, area, rate) async {
     searchIsLoading = true;
     notifyListeners();
     var token = await getUserToken();

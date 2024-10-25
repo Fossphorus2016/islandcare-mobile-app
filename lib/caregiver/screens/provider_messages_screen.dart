@@ -11,7 +11,7 @@ import 'package:island_app/caregiver/widgets/provider_conversational_widget.dart
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/chatroom_model.dart';
 import 'package:island_app/utils/app_url.dart';
-import 'package:island_app/screens/notification.dart';
+// import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/profile_complete_widget.dart';
@@ -27,7 +27,6 @@ class ProviderMessagesScreen extends StatefulWidget {
 class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
   @override
   void initState() {
-    // getUserToken();
     super.initState();
   }
 
@@ -35,7 +34,6 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
     return Consumer2<ServiceProviderChat, ServiceGiverProvider>(builder: (context, providerChat, giverProvider, child) {
       return SafeArea(
         child: Scaffold(
@@ -101,14 +99,14 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
 class ServiceProviderChat extends ChangeNotifier {
   //   Pusher Connection
   connectChatChannel(userRole) async {
-    var channelName = IslandPusher().getPusherChatsChannel(userRole);
+    // var channelName = IslandPusher().getPusherChatsChannel(userRole);
 
-    IslandPusher.pusher.subscribe(
-      channelName: channelName,
-      onEvent: onEvent,
-      onSubscriptionError: onSubscriptionError,
-      onSubscriptionSucceeded: onSubscriptionSucceeded,
-    );
+    // IslandPusher.pusher.subscribe(
+    //   channelName: channelName,
+    //   onEvent: onEvent,
+    //   onSubscriptionError: onSubscriptionError,
+    //   onSubscriptionSucceeded: onSubscriptionSucceeded,
+    // );
   }
 
   onEvent(event) {
@@ -129,14 +127,10 @@ class ServiceProviderChat extends ChangeNotifier {
   List<Map<String, dynamic>> chatList = [];
   List allChatRooms = [];
   getChats() async {
-    // SharedPreferences? prefs = await SharedPreferences.getInstance();
-    // await prefs.reload();
-    // var userToken = prefs.getString('userToken');
     var resp = await getRequesthandler(
       url: ChatUrl.serviceProviderChats,
       token: ServiceGiverProvider.userToken,
     );
-    // print(resp.data);
     if (resp.statusCode == 200 && resp.data['flag'] == 1) {
       allChatRooms = resp.data['chats'];
       chatList = List.generate(
@@ -180,14 +174,12 @@ class ServiceProviderChat extends ChangeNotifier {
 
   getSingleChat(BuildContext context, id) async {
     var userToken = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-    // print(RecieverUserProvider.userToken);
-    // print(id);
+
     var resp = await postRequesthandler(
       url: "${AppUrl.webBaseURL}/api/get-chat",
       token: userToken,
       formData: FormData.fromMap({"chatId": id}),
     );
-    // print(resp.data);
     if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
       var chatRoom = resp.data['chat'];
       if (chatRoom != null) {
@@ -196,7 +188,6 @@ class ServiceProviderChat extends ChangeNotifier {
         Navigator.push(context, MaterialPageRoute(builder: (context) => const ServiceProviderChatRoom()));
       }
     }
-    // notifyListeners();
   }
 
   Map activeChat = {};
@@ -207,9 +198,6 @@ class ServiceProviderChat extends ChangeNotifier {
   }
 
   updateStatus() async {
-    // SharedPreferences? prefs = await SharedPreferences.getInstance();
-    // await prefs.reload();
-    // var userToken = prefs.getString('userToken');
     var resp = await postRequesthandler(
       url: ChatUrl.serviceProviderChatMessageStatus,
       formData: FormData.fromMap({"id": activeChat['id']}),

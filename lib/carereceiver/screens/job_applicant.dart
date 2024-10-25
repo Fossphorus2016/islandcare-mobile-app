@@ -454,8 +454,12 @@ class JobApplicantsState extends State<JobApplicants> {
                                                                         const SizedBox(height: 30),
                                                                         GestureDetector(
                                                                           onTap: () {
-                                                                            provider.setFilterByTime(DateTime.parse(startTime), DateTime.parse(endTime));
-                                                                            Navigator.pop(context);
+                                                                            if (startTime != null && endTime != null) {
+                                                                              provider.setFilterByTime(DateTime.parse(startTime), DateTime.parse(endTime));
+                                                                              Navigator.pop(context);
+                                                                            }
+                                                                            provider.clearFilter();
+                                                                            return;
                                                                           },
                                                                           child: Container(
                                                                             width: MediaQuery.of(context).size.width,
@@ -467,6 +471,33 @@ class JobApplicantsState extends State<JobApplicants> {
                                                                             child: Center(
                                                                               child: Text(
                                                                                 "Search",
+                                                                                style: TextStyle(
+                                                                                  color: CustomColors.white,
+                                                                                  fontFamily: "Rubik",
+                                                                                  fontStyle: FontStyle.normal,
+                                                                                  fontWeight: FontWeight.w500,
+                                                                                  fontSize: 18,
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(height: 15),
+                                                                        GestureDetector(
+                                                                          onTap: () {
+                                                                            provider.clearFilter();
+                                                                            Navigator.pop(context);
+                                                                          },
+                                                                          child: Container(
+                                                                            width: MediaQuery.of(context).size.width,
+                                                                            height: 54,
+                                                                            decoration: BoxDecoration(
+                                                                              color: ServiceRecieverColor.redButton,
+                                                                              borderRadius: BorderRadius.circular(10),
+                                                                            ),
+                                                                            child: Center(
+                                                                              child: Text(
+                                                                                "Clear",
                                                                                 style: TextStyle(
                                                                                   color: CustomColors.white,
                                                                                   fontFamily: "Rubik",

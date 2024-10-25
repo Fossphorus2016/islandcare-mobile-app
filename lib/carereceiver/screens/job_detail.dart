@@ -13,7 +13,6 @@ import 'package:island_app/widgets/job_info_container.dart';
 import 'package:island_app/widgets/job_schedule_container.dart';
 import 'package:island_app/caregiver/models/senior_care_detail_dashboard_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/widgets/progress_dialog.dart';
 
 class ReceiverJobDetail extends StatefulWidget {
   // final String? id;
@@ -34,17 +33,17 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
   List childInfo = [];
   List scheduleInfo = [];
   // Post Email Verification
-  ProgressDialog? pr;
-  void showProgress(context) async {
-    pr ??= ProgressDialog(context);
-    await pr!.show();
-  }
+  // ProgressDialog? pr;
+  // void showProgress(context) async {
+  //   pr ??= ProgressDialog(context);
+  //   await pr!.show();
+  // }
 
-  void hideProgress() async {
-    if (pr != null && pr!.isShowing()) {
-      await pr!.hide();
-    }
-  }
+  // void hideProgress() async {
+  //   if (pr != null && pr!.isShowing()) {
+  //     await pr!.hide();
+  //   }
+  // }
 
   // Future<Response> jobApply() async {
   //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
@@ -444,9 +443,7 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
 
               const SizedBox(height: 10),
               if (futureSeniorCareDetailDashboard!.jobDetail![index].schedule!.isNotEmpty) ...[
-                JobScheduleContainer(
-                  data: futureSeniorCareDetailDashboard!.jobDetail![index].schedule,
-                ),
+                JobScheduleContainer(data: futureSeniorCareDetailDashboard!.jobDetail![index].schedule),
               ],
               const SizedBox(height: 20),
               if (futureSeniorCareDetailDashboard!.jobDetail![index].isFunded == 0) ...[

@@ -29,14 +29,9 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   Future<ChatRoomMessagesModel> fetchFindedReceiverDashboardModel() async {
     var token = RecieverUserProvider.userToken;
-    final response = await Dio().get(
-      ChatUrl.serviceReceiverChat,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $token',
-          'Accept': 'application/json',
-        },
-      ),
+    final response = await getRequesthandler(
+      url: ChatUrl.serviceReceiverChat,
+      token: token,
     );
 
     if (response.statusCode == 200) {
@@ -121,12 +116,12 @@ class RecieverChatProvider extends ChangeNotifier {
   connectChatChannel(userRole) async {
     var channelName = IslandPusher().getPusherChatsChannel(userRole);
 
-    IslandPusher.pusher.subscribe(
-      channelName: channelName,
-      onEvent: onEvent,
-      onSubscriptionError: onSubscriptionError,
-      onSubscriptionSucceeded: onSubscriptionSucceeded,
-    );
+    // IslandPusher.pusher.subscribe(
+    //   channelName: channelName,
+    //   onEvent: onEvent,
+    //   onSubscriptionError: onSubscriptionError,
+    //   onSubscriptionSucceeded: onSubscriptionSucceeded,
+    // );
   }
 
   onEvent(event) {
@@ -152,14 +147,9 @@ class RecieverChatProvider extends ChangeNotifier {
   List allChatRooms = [];
   getChats() async {
     var userToken = await getToken();
-    var resp = await Dio().post(
-      ChatUrl.serviceReceiverAllChats,
-      options: Options(
-        headers: {
-          'Authorization': 'Bearer $userToken',
-          'Accept': 'application/json',
-        },
-      ),
+    var resp = await postRequesthandler(
+      url: ChatUrl.serviceReceiverAllChats,
+      token: userToken,
     );
     if (resp.statusCode == 200 && resp.data['flag'] == 1) {
       allChatRooms = resp.data['chats'];

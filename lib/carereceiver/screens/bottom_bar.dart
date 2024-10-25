@@ -40,10 +40,10 @@ class BottomBarState extends State<BottomBar> {
     await Provider.of<RecieverChatProvider>(context, listen: false).connectChatChannel(4);
     await Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
 
-    var resp = await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
-    if (resp['status'] == false) {
-      showErrorToast(resp['message']);
-    }
+    await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
+    // if (resp['status'] == false) {
+    //   showErrorToast(resp['message']);
+    // }
   }
 
   @override

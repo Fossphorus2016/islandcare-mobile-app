@@ -208,6 +208,10 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                       height: 110,
                                       alignment: Alignment.center,
                                       imageUrl: "${AppUrl.webStorageUrl}/${futureReceiverDashboardDetail!.data!.avatar.toString()}",
+                                      errorWidget: (context, url, error) => const Icon(
+                                        Icons.error,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 10),

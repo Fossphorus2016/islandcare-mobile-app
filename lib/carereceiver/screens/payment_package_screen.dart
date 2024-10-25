@@ -13,6 +13,7 @@ import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 
 class PaymentPackageScreen extends StatefulWidget {
@@ -198,7 +199,9 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                     actionsOverflowAlignment: OverflowBarAlignment.center,
                                     alignment: Alignment.center,
                                     actions: [
-                                      TextButton(
+                                      LoadingButton(
+                                        title: "Yes, unsubscribe please!",
+                                        backgroundColor: Colors.blue,
                                         onPressed: () async {
                                           try {
                                             var resp = await Provider.of<SubscriptionProvider>(context, listen: false).unSubscribe(userSubsDetail.id);
@@ -211,20 +214,42 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                             } else {
                                               throw "something went wrong please try again later";
                                             }
+                                            return true;
                                           } catch (e) {
                                             // print(e);
                                             Navigator.pop(context);
                                             showErrorToast(e.toString());
+                                            return false;
                                           }
                                         },
-                                        style: ButtonStyle(
-                                          backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.blue),
-                                        ),
-                                        child: const Text(
-                                          "Yes, unsubscribe please!",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
                                       ),
+                                      // TextButton(
+                                      //   onPressed: () async {
+                                      //     try {
+                                      //       var resp = await Provider.of<SubscriptionProvider>(context, listen: false).unSubscribe(userSubsDetail.id);
+                                      //       if (resp.statusCode == 200 && resp.data['success']) {
+                                      //         Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
+
+                                      //         Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
+                                      //         Navigator.pop(context);
+                                      //         showSuccessToast(resp.data['message'].toString());
+                                      //       } else {
+                                      //         throw "something went wrong please try again later";
+                                      //       }
+                                      //     } catch (e) {
+                                      //       // print(e);
+                                      //       Navigator.pop(context);
+                                      //       showErrorToast(e.toString());
+                                      //     }
+                                      //   },
+                                      //   style: ButtonStyle(
+                                      //     backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.blue),
+                                      //   ),
+                                      //   child: const Text(
+                                      //     "Yes, unsubscribe please!",
+                                      //     style: TextStyle(color: Colors.white),
+                                      //   ),
+                                      // ),
                                       TextButton(
                                         onPressed: () {
                                           // print("object");
@@ -363,162 +388,168 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    List<CreditCard>? allCards = context.watch<CardProvider>().allCards;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(13.0),
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: CustomColors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(30, 0, 0, 0),
-                    offset: Offset(2, 2),
-                    spreadRadius: 1,
-                    blurRadius: 7,
-                  ),
-                ],
-              ),
+    return Consumer<CardProvider>(
+      builder: (context, cardProvider, child) {
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            automaticallyImplyLeading: false,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
               child: Padding(
-                padding: const EdgeInsets.only(left: 4.0),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: CustomColors.primaryColor,
-                  size: 18,
+                padding: const EdgeInsets.all(13.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: CustomColors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromARGB(30, 0, 0, 0),
+                        offset: Offset(2, 2),
+                        spreadRadius: 1,
+                        blurRadius: 7,
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: CustomColors.primaryColor,
+                      size: 18,
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            // height: MediaQuery.of(context).size.height,
-            color: Colors.white,
-            padding: const EdgeInsets.only(top: 20),
-            child: Column(
-              children: [
-                if (allCards != null) ...[
-                  for (int j = 0; j < allCards.length; j++) ...[
-                    // RadioListTile(
-                    //   groupValue: selectedCard,
-                    //   activeColor: ServiceRecieverColor.primaryColor.withOpacity(0.8),
-                    //   value: allCards[j],
-                    //   onChanged: (value) {
-                    //     setState(() {
-                    //       newCard = false;
-                    //       selectedCard = value;
-                    //     });
-                    //     // Provider.of<SubscriptionProvider>(context, listen: false).setSelectCard(value);
-                    //   },
-                    //   title: Text(
-                    //     "Select Card: ${allCards[j].cardNumber}",
-                    //     style: const TextStyle(color: Colors.black),
-                    //   ),
-                    // ),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          newCard = false;
-                          selectedCard = allCards[j];
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60,
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: selectedCard != null && selectedCard!.id == allCards[j].id ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
-                              width: 0.5,
+          body: SafeArea(
+            child: RefreshIndicator(
+              onRefresh: () async {},
+              child: SingleChildScrollView(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  // height: MediaQuery.of(context).size.height,
+                  color: Colors.white,
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Column(
+                    children: [
+                      if (cardProvider.allCards != null && cardProvider.allCards!.isNotEmpty) ...[
+                        for (int j = 0; j < cardProvider.allCards!.length; j++) ...[
+                          // RadioListTile(
+                          //   groupValue: selectedCard,
+                          //   activeColor: ServiceRecieverColor.primaryColor.withOpacity(0.8),
+                          //   value: cardProvider.allCards[j],
+                          //   onChanged: (value) {
+                          //     setState(() {
+                          //       newCard = false;
+                          //       selectedCard = value;
+                          //     });
+                          //     // Provider.of<SubscriptionProvider>(context, listen: false).setSelectCard(value);
+                          //   },
+                          //   title: Text(
+                          //     "Select Card: ${cardProvider.allCards[j].cardNumber}",
+                          //     style: const TextStyle(color: Colors.black),
+                          //   ),
+                          // ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                newCard = false;
+                                selectedCard = cardProvider.allCards![j];
+                              });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 60,
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: selectedCard != null && selectedCard!.id == cardProvider.allCards![j].id ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
+                                    width: 0.5,
+                                  ),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Card Name: ${cardProvider.allCards![j].nameOnCard}",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: const TextStyle(color: Colors.black),
+                                    ),
+                                    Text(
+                                      "Card Number: ${cardProvider.allCards![j].cardNumber}",
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: const TextStyle(color: Colors.black),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Card Name: ${allCards[j].nameOnCard}",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: const TextStyle(color: Colors.black),
-                              ),
-                              Text(
-                                "Card Number: ${allCards[j].cardNumber}",
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                                style: const TextStyle(color: Colors.black),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                  if (selectedCard != null) ...[
-                    cardFormWidget(context),
-                  ],
-                ],
-                InkWell(
-                  onTap: () {
-                    setState(() {
-                      newCard = true;
-                      selectedCard = null;
-                    });
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 60,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: ServiceRecieverColor.redButton,
-                          width: 0.5,
-                        ),
-                      ),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Add New Card",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(color: Colors.black),
-                          ),
                         ],
+                        if (selectedCard != null) ...[
+                          cardFormWidget(context),
+                        ],
+                      ],
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            newCard = true;
+                            selectedCard = null;
+                          });
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 60,
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: ServiceRecieverColor.redButton,
+                                width: 0.5,
+                              ),
+                            ),
+                            child: const Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Add New Card",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      if (newCard) ...[
+                        newCardForm(),
+                      ],
+                    ],
                   ),
                 ),
-                if (newCard) ...[
-                  newCardForm(),
-                ],
-              ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -721,71 +752,115 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                     ),
                     const SizedBox(height: 25),
                     // BTN
-                    GestureDetector(
-                      onTap: !sendReq
-                          ? () async {
-                              setState(() {
-                                sendReq = true;
-                              });
-                              try {
-                                var token = Provider.of<RecieverUserProvider>(context).getUserToken();
-                                var response = await postRequesthandler(
-                                  url: CareReceiverURl.serviceReceiverSubscribePackage,
-                                  formData: FormData.fromMap({
-                                    "subscription_id": selectedSubscribe['id'],
-                                    "card_data": selectedCard!.id.toString(),
-                                    "save_card": false,
-                                    "name_on_card": selectedCard!.nameOnCard.toString(),
-                                    "card_number": selectedCard!.cardNumber.toString(),
-                                    "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
-                                    "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
-                                    "cvv": selectedCard!.cvv.toString(),
-                                  }),
-                                  token: token,
-                                );
-                                // print(response);
-                                if (response.statusCode == 200 && response.data['success']) {
-                                  Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
-                                  Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
+                    LoadingButton(
+                      title: "Subscribe",
+                      height: 60,
+                      backgroundColor: ServiceRecieverColor.redButton,
+                      textStyle: TextStyle(
+                        color: CustomColors.white,
+                        fontFamily: "Poppins",
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      onPressed: () async {
+                        try {
+                          var token = await getToken();
+                          var response = await postRequesthandler(
+                            url: CareReceiverURl.serviceReceiverSubscribePackage,
+                            formData: FormData.fromMap({
+                              "subscription_id": selectedSubscribe['id'],
+                              "card_data": selectedCard!.id.toString(),
+                              "save_card": false,
+                              "name_on_card": selectedCard!.nameOnCard.toString(),
+                              "card_number": selectedCard!.cardNumber.toString(),
+                              "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
+                              "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
+                              "cvv": selectedCard!.cvv.toString(),
+                            }),
+                            token: token,
+                          );
+                          // print(response);
+                          if (response.statusCode == 200 && response.data['success']) {
+                            Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
+                            Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
 
-                                  showSuccessToast(response.data['message']);
-                                  Navigator.pop(context);
-                                } else {
-                                  throw response.data['message'];
-                                }
-                              } catch (e) {
-                                // print(e);
-                                showErrorToast(e.toString());
-                              }
-
-                              setState(() {
-                                sendReq = false;
-                              });
-                            }
-                          : null,
-                      child: !sendReq
-                          ? Container(
-                              height: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: ServiceRecieverColor.redButton,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Subscribe",
-                                  style: TextStyle(
-                                    color: CustomColors.white,
-                                    fontFamily: "Poppins",
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            )
-                          : const Center(
-                              child: CircularProgressIndicator(color: Colors.green),
-                            ),
+                            showSuccessToast(response.data['message']);
+                            Navigator.pop(context);
+                          } else {
+                            throw response.data['message'];
+                          }
+                        } catch (e) {
+                          // print(e);
+                          showErrorToast(e.toString());
+                        }
+                        return false;
+                      },
                     ),
+                    // GestureDetector(
+                    //   onTap: !sendReq
+                    //       ? () async {
+                    //           setState(() {
+                    //             sendReq = true;
+                    //           });
+                    //           try {
+                    //             var token = await getToken();
+                    //             var response = await postRequesthandler(
+                    //               url: CareReceiverURl.serviceReceiverSubscribePackage,
+                    //               formData: FormData.fromMap({
+                    //                 "subscription_id": selectedSubscribe['id'],
+                    //                 "card_data": selectedCard!.id.toString(),
+                    //                 "save_card": false,
+                    //                 "name_on_card": selectedCard!.nameOnCard.toString(),
+                    //                 "card_number": selectedCard!.cardNumber.toString(),
+                    //                 "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
+                    //                 "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
+                    //                 "cvv": selectedCard!.cvv.toString(),
+                    //               }),
+                    //               token: token,
+                    //             );
+                    //             // print(response);
+                    //             if (response.statusCode == 200 && response.data['success']) {
+                    //               Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
+                    //               Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
+
+                    //               showSuccessToast(response.data['message']);
+                    //               Navigator.pop(context);
+                    //             } else {
+                    //               throw response.data['message'];
+                    //             }
+                    //           } catch (e) {
+                    //             // print(e);
+                    //             showErrorToast(e.toString());
+                    //           }
+
+                    //           setState(() {
+                    //             sendReq = false;
+                    //           });
+                    //         }
+                    //       : null,
+                    //   child: !sendReq
+                    //       ? Container(
+                    //           height: 60,
+                    //           decoration: BoxDecoration(
+                    //             borderRadius: BorderRadius.circular(10),
+                    //             color: ServiceRecieverColor.redButton,
+                    //           ),
+                    //           child: Center(
+                    //             child: Text(
+                    //               "Subscribe",
+                    //               style: TextStyle(
+                    //                 color: CustomColors.white,
+                    //                 fontFamily: "Poppins",
+                    //                 fontSize: 18,
+                    //                 fontWeight: FontWeight.w600,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         )
+                    //       : const Center(
+                    //           child: CircularProgressIndicator(color: Colors.green),
+                    //         ),
+                    // ),
                   ],
                 ),
               ),
@@ -1156,73 +1231,120 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
             const SizedBox(height: 10),
 
             // BTN
-            GestureDetector(
-              onTap: sendReq == true
-                  ? null
-                  : () async {
-                      if (newPaymentForm.currentState!.validate()) {
-                        setState(() {
-                          sendReq = true;
-                        });
-                        try {
-                          var token = Provider.of<RecieverUserProvider>(context).getUserToken();
-                          var response = await postRequesthandler(
-                            url: CareReceiverURl.serviceReceiverSubscribePackage,
-                            formData: FormData.fromMap({
-                              "subscription_id": selectedSubscribe['id'],
-                              "card_data": "card-form",
-                              "save_card": saveFrom,
-                              "name_on_card": cardHolderNameController.text.toString(),
-                              "card_number": cardNumberController.text.toString(),
-                              "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
-                              "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
-                              "cvv": cardCvvController.text.toString(),
-                            }),
-                            token: token,
-                          );
-                          // print(response);
-                          // print(response.data['message']);
-                          if (response.statusCode == 200 && response.data['success']) {
-                            Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
-                            Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
-                            Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
-                            showSuccessToast(response.data['message']);
-                            Navigator.pop(context);
-                          } else {
-                            throw response.data['message'];
-                          }
-                        } catch (e) {
-                          // print(e);
-                          showErrorToast(e.toString());
-                        }
-                        setState(() {
-                          sendReq = false;
-                        });
-                      }
-                    },
-              child: Container(
-                height: 60,
-                decoration: BoxDecoration(
-                  color: ServiceRecieverColor.redButton,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: sendReq
-                      ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
-                      : Text(
-                          "Subscribe",
-                          style: TextStyle(
-                            color: CustomColors.white,
-                            fontFamily: "Poppins",
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                ),
+            LoadingButton(
+              title: "Subscribe",
+              height: 60,
+              backgroundColor: ServiceRecieverColor.redButton,
+              textStyle: TextStyle(
+                color: CustomColors.white,
+                fontFamily: "Poppins",
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
               ),
+              onPressed: () async {
+                if (newPaymentForm.currentState!.validate()) {
+                  try {
+                    var token = await getToken();
+                    var response = await postRequesthandler(
+                      url: CareReceiverURl.serviceReceiverSubscribePackage,
+                      formData: FormData.fromMap({
+                        "subscription_id": selectedSubscribe['id'],
+                        "card_data": "card-form",
+                        "save_card": saveFrom,
+                        "name_on_card": cardHolderNameController.text.toString(),
+                        "card_number": cardNumberController.text.toString(),
+                        "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
+                        "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
+                        "cvv": cardCvvController.text.toString(),
+                      }),
+                      token: token,
+                    );
+                    // print(response);
+                    // print(response.data['message']);
+                    if (response.statusCode == 200 && response.data['success']) {
+                      Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
+                      Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
+                      await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
+                      showSuccessToast(response.data['message']);
+                      Navigator.pop(context);
+                    } else {
+                      throw response.data['message'];
+                    }
+                  } catch (e) {
+                    // print(e);
+                    showErrorToast(e.toString());
+                  }
+                }
+                return false;
+              },
             ),
+            // GestureDetector(
+            //   onTap: sendReq == true
+            //       ? null
+            //       : () async {
+            //           if (newPaymentForm.currentState!.validate()) {
+            //             setState(() {
+            //               sendReq = true;
+            //             });
+            //             try {
+            //               var token = await getToken();
+            //               var response = await postRequesthandler(
+            //                 url: CareReceiverURl.serviceReceiverSubscribePackage,
+            //                 formData: FormData.fromMap({
+            //                   "subscription_id": selectedSubscribe['id'],
+            //                   "card_data": "card-form",
+            //                   "save_card": saveFrom,
+            //                   "name_on_card": cardHolderNameController.text.toString(),
+            //                   "card_number": cardNumberController.text.toString(),
+            //                   "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
+            //                   "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
+            //                   "cvv": cardCvvController.text.toString(),
+            //                 }),
+            //                 token: token,
+            //               );
+            //               // print(response);
+            //               // print(response.data['message']);
+            //               if (response.statusCode == 200 && response.data['success']) {
+            //                 Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
+            //                 Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
+            //                 await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
+            //                 showSuccessToast(response.data['message']);
+            //                 Navigator.pop(context);
+            //               } else {
+            //                 throw response.data['message'];
+            //               }
+            //             } catch (e) {
+            //               // print(e);
+            //               showErrorToast(e.toString());
+            //             }
+            //             setState(() {
+            //               sendReq = false;
+            //             });
+            //           }
+            //         },
+            //   child: Container(
+            //     height: 60,
+            //     decoration: BoxDecoration(
+            //       color: ServiceRecieverColor.redButton,
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //     child: Center(
+            //       child: sendReq
+            //           ? const CircularProgressIndicator(
+            //               color: Colors.white,
+            //             )
+            //           : Text(
+            //               "Subscribe",
+            //               style: TextStyle(
+            //                 color: CustomColors.white,
+            //                 fontFamily: "Poppins",
+            //                 fontSize: 18,
+            //                 fontWeight: FontWeight.w600,
+            //               ),
+            //             ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),

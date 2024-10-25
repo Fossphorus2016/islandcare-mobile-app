@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -99,7 +100,7 @@ String formatDateSlashToDashFromSplit(String date) {
 
   // Split the date part by the '-' delimiter (["yyyy", "MM", "dd"]).
   var dateParts = onlyDate.split('/');
-  // print(dateParts);
+  print(dateParts);
   // Construct a DateTime object using the parts from the split string.
   var formatDate = DateTime(
       int.parse(dateParts[2]), // year
@@ -227,4 +228,21 @@ bool checkImageFileTypes(context, fileExtension) {
     showErrorToast("Please select file types png, jpg and jpeg");
     return false;
   }
+}
+
+void showProgress(context) async {
+  showDialog(
+    context: context,
+    barrierDismissible: true,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: CustomColors.primaryColor,
+        content: SizedBox(
+          height: 250,
+          width: 250,
+          child: Image.asset('assets/images/loaderLight.gif'),
+        ),
+      );
+    },
+  );
 }

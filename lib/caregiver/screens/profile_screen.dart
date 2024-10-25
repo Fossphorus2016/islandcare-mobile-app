@@ -104,8 +104,8 @@ class _ProfileGiverState extends State<ProfileGiver> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Consumer<ServiceGiverProvider>(builder: (context, giverProvider, __) {
+    return Consumer<ServiceGiverProvider>(
+      builder: (context, giverProvider, __) {
         return Scaffold(
           backgroundColor: CustomColors.loginBg,
           appBar: PreferredSize(
@@ -1502,7 +1502,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                   ),
                 ),
         );
-      }),
+      },
     );
   }
 }

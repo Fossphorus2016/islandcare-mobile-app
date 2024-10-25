@@ -32,6 +32,9 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
   fetchJobApplicantModel() async {
     if (widget.jobId == null || widget.jobId == "null" || widget.name == "null") {
       showErrorToast("No user found");
+      setState(() {
+        isLoading = false;
+      });
       return;
     }
     var token = RecieverUserProvider.userToken;
@@ -39,6 +42,9 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
       url: '${CareReceiverURl.serviceReceiverApplicantionApplicants}/${widget.name}/${widget.jobId}',
       token: token,
     );
+    setState(() {
+      isLoading = false;
+    });
     // print(response.data);
     if (response.statusCode == 200) {
       futureJobApplicantModel = JobApplicantDetailModel.fromJson(response.data);
@@ -107,9 +113,7 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: isLoading
               ? Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: ServiceRecieverColor.green,
-                  ),
+                  child: CircularProgressIndicator(backgroundColor: ServiceRecieverColor.green),
                 )
               : Column(
                   children: [

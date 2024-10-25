@@ -8,9 +8,10 @@ import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/screens/post_new_job.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/service_model.dart';
-import 'package:island_app/providers/user_provider.dart';
+// import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
@@ -702,7 +703,7 @@ class PostedJobsProvider extends ChangeNotifier {
   bool isLoading = true;
   fetchAllJobs() async {
     try {
-      var token = RecieverUserProvider.userToken;
+      var token = await getToken();
       final response = await getRequesthandler(
         url: CareReceiverURl.serviceReceiverJobBoard,
         token: token,

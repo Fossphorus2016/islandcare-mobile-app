@@ -12,7 +12,8 @@ import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
-import 'package:island_app/widgets/progress_dialog.dart';
+import 'package:island_app/widgets/loading_button.dart';
+// import 'package:island_app/widgets/progress_dialog.dart';
 
 class SignupScreen extends StatefulWidget {
   bool? isSelectedService = false;
@@ -153,33 +154,23 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
 // Post Login Req
-  ProgressDialog? pr;
-  void showProgress(context) async {
-    pr ??= ProgressDialog(context);
-    await pr!.show();
-  }
+  // ProgressDialog? pr;
 
-  void hideProgress() async {
-    if (pr != null && pr!.isShowing()) {
-      await pr!.hide();
-    }
-  }
-
-  Future<Response> postRegister(RegisterModel model) async {
-    showProgress(context);
-    try {
-      var formData = FormData.fromMap(model.toJson());
-      final response = await postRequesthandler(
-        url: SessionUrl.register,
-        formData: formData,
-      );
-      hideProgress();
-      return response;
-    } on DioError catch (e) {
-      hideProgress();
-      return Response(requestOptions: RequestOptions(), statusCode: 500, data: e.response!.data);
-    }
-  }
+  // Future<Response> postRegister(RegisterModel model) async {
+  //   // showProgress(context);
+  //   try {
+  //     var formData = FormData.fromMap(model.toJson());
+  //     final response = await postRequesthandler(
+  //       url: SessionUrl.register,
+  //       formData: formData,
+  //     );
+  //     Navigator.pop(context);
+  //     return response;
+  //   } on DioError catch (e) {
+  //     Navigator.pop(context);
+  //     return Response(requestOptions: RequestOptions(), statusCode: 500, data: e.response!.data);
+  //   }
+  // }
 
   @override
   void initState() {
@@ -556,8 +547,18 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  GestureDetector(
-                    onTap: () {
+                  LoadingButton(
+                    title: "Signup",
+                    backgroundColor: CustomColors.primaryColor,
+                    height: 54,
+                    textStyle: TextStyle(
+                      color: CustomColors.white,
+                      fontFamily: "Rubik",
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18,
+                    ),
+                    onPressed: () async {
                       if (!_signUpFormKey.currentState!.validate()) {
                       } else if (dobController.text.isEmpty) {
                         showErrorToast("Please Enter Date of Birth");
@@ -581,86 +582,176 @@ class _SignupScreenState extends State<SignupScreen> {
                           service: selectedService.toString(),
                         );
                         // print(request);
-                        postRegister(request).then((response) async {
-                          if (response.statusCode == 200) {
-                            var data = response.data;
-                            var role = data["user"]["role"];
-                            var status = data["user"]["status"];
-                            var token = data["token"];
-                            var avatar = data["user"]["avatar"];
-                            var userId = data["user"]['id'];
-                            var name = data["user"]['first_name'];
-                            var last = data["user"]['last_name'];
-                            // var isProfileCompleted = data["is_profile_completed"];
-                            if (status == 3) {
-                              showErrorToast("User Blocked");
-                            } else {
-                              if (data["user"]["email_verified_at"] == null) {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => VerifyEmail(token: data["token"]),
-                                  ),
-                                );
-                              } else if (data["user"]["role"] == 3) {
-                                await storageService.writeSecureData('userRole', data["user"]["role"].toString());
-                                await storageService.writeSecureData('userToken', data["token"].toString());
-                                await storageService.writeSecureData('userStatus', status.toString());
-                                await storageService.writeSecureData('userId', userId.toString());
-                                await storageService.writeSecureData('userAvatar', avatar.toString());
-                                await storageService.writeSecureData('userName', "$name $last");
-                                // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  '/bottom-bar-giver',
-                                  (route) => false,
-                                );
-                              } else if (data["user"]["role"] == 4) {
-                                await storageService.writeSecureData('userRole', data["user"]["role"].toString());
-                                await storageService.writeSecureData('userToken', data["token"].toString());
-                                await storageService.writeSecureData('userStatus', status.toString());
-                                await storageService.writeSecureData('userId', userId.toString());
-                                await storageService.writeSecureData('userAvatar', avatar.toString());
-                                await storageService.writeSecureData('userName', "$name $last");
-                                // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
-                                Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  '/bottom-bar',
-                                  (route) => false,
-                                );
-                              }
-                            }
+                        var formData = FormData.fromMap(request.toJson());
+                        final response = await postRequesthandler(
+                          url: SessionUrl.register,
+                          formData: formData,
+                        );
+
+                        if (response.statusCode == 200) {
+                          var data = response.data;
+                          var role = data["user"]["role"];
+                          var status = data["user"]["status"];
+                          var token = data["token"];
+                          var avatar = data["user"]["avatar"];
+                          var userId = data["user"]['id'];
+                          var name = data["user"]['first_name'];
+                          var last = data["user"]['last_name'];
+                          // var isProfileCompleted = data["is_profile_completed"];
+                          if (status == 3) {
+                            showErrorToast("User Blocked");
                           } else {
-                            // print(response.data);
-                            setState(() {
-                              errors = response.data['errors'];
-                            });
-                            showErrorToast(response.data['message']);
+                            if (data["user"]["email_verified_at"] == null) {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => VerifyEmail(token: data["token"]),
+                                ),
+                              );
+                            } else if (data["user"]["role"] == 3) {
+                              await storageService.writeSecureData('userRole', data["user"]["role"].toString());
+                              await storageService.writeSecureData('userToken', data["token"].toString());
+                              await storageService.writeSecureData('userStatus', status.toString());
+                              await storageService.writeSecureData('userId', userId.toString());
+                              await storageService.writeSecureData('userAvatar', avatar.toString());
+                              await storageService.writeSecureData('userName', "$name $last");
+                              // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/bottom-bar-giver',
+                                (route) => false,
+                              );
+                            } else if (data["user"]["role"] == 4) {
+                              await storageService.writeSecureData('userRole', data["user"]["role"].toString());
+                              await storageService.writeSecureData('userToken', data["token"].toString());
+                              await storageService.writeSecureData('userStatus', status.toString());
+                              await storageService.writeSecureData('userId', userId.toString());
+                              await storageService.writeSecureData('userAvatar', avatar.toString());
+                              await storageService.writeSecureData('userName', "$name $last");
+                              // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/bottom-bar',
+                                (route) => false,
+                              );
+                            }
                           }
-                        });
+                        } else {
+                          // print(response.data);
+                          setState(() {
+                            errors = response.data['errors'];
+                          });
+                          showErrorToast(response.data['message']);
+                        }
                       }
+                      return false;
                     },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 54,
-                      decoration: BoxDecoration(
-                        color: CustomColors.primaryColor,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                        child: Text(
-                          "Signup",
-                          style: TextStyle(
-                            color: CustomColors.white,
-                            fontFamily: "Rubik",
-                            fontStyle: FontStyle.normal,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 18,
-                          ),
-                        ),
-                      ),
-                    ),
                   ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     if (!_signUpFormKey.currentState!.validate()) {
+                  //     } else if (dobController.text.isEmpty) {
+                  //       showErrorToast("Please Enter Date of Birth");
+                  //     } else if (_isSelectedService == null) {
+                  //       showErrorToast("Please Select Service ");
+                  //     } else if (selectedService == null) {
+                  //       showErrorToast("Please Select Services You Provide ");
+                  //     } else if (_isRadioSelected == "0") {
+                  //       showErrorToast("Please Select Terms of Services & Privacy Policy");
+                  //     } else {
+                  //       // print(dobController.text.toString());
+                  //       var request = RegisterModel(
+                  //         firstName: firstNameController.text.toString(),
+                  //         lastName: lastNameController.text.toString(),
+                  //         email: emailController.text.toString(),
+                  //         date: dobController.text.toString(),
+                  //         password: passwordController.text.toString(),
+                  //         passwordConfirmation: cpasswordController.text.toString(),
+                  //         phone: phoneNumController.text.toString(),
+                  //         role: _isSelectedService.toString(),
+                  //         service: selectedService.toString(),
+                  //       );
+                  //       // print(request);
+                  //       postRegister(request).then((response) async {
+                  //         if (response.statusCode == 200) {
+                  //           var data = response.data;
+                  //           var role = data["user"]["role"];
+                  //           var status = data["user"]["status"];
+                  //           var token = data["token"];
+                  //           var avatar = data["user"]["avatar"];
+                  //           var userId = data["user"]['id'];
+                  //           var name = data["user"]['first_name'];
+                  //           var last = data["user"]['last_name'];
+                  //           // var isProfileCompleted = data["is_profile_completed"];
+                  //           if (status == 3) {
+                  //             showErrorToast("User Blocked");
+                  //           } else {
+                  //             if (data["user"]["email_verified_at"] == null) {
+                  //               Navigator.pushReplacement(
+                  //                 context,
+                  //                 MaterialPageRoute(
+                  //                   builder: (context) => VerifyEmail(token: data["token"]),
+                  //                 ),
+                  //               );
+                  //             } else if (data["user"]["role"] == 3) {
+                  //               await storageService.writeSecureData('userRole', data["user"]["role"].toString());
+                  //               await storageService.writeSecureData('userToken', data["token"].toString());
+                  //               await storageService.writeSecureData('userStatus', status.toString());
+                  //               await storageService.writeSecureData('userId', userId.toString());
+                  //               await storageService.writeSecureData('userAvatar', avatar.toString());
+                  //               await storageService.writeSecureData('userName', "$name $last");
+                  //               // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                  //               Navigator.pushNamedAndRemoveUntil(
+                  //                 context,
+                  //                 '/bottom-bar-giver',
+                  //                 (route) => false,
+                  //               );
+                  //             } else if (data["user"]["role"] == 4) {
+                  //               await storageService.writeSecureData('userRole', data["user"]["role"].toString());
+                  //               await storageService.writeSecureData('userToken', data["token"].toString());
+                  //               await storageService.writeSecureData('userStatus', status.toString());
+                  //               await storageService.writeSecureData('userId', userId.toString());
+                  //               await storageService.writeSecureData('userAvatar', avatar.toString());
+                  //               await storageService.writeSecureData('userName', "$name $last");
+                  //               // await pref.setString('isProfileCompleted', isProfileCompleted.toString());
+                  //               Navigator.pushNamedAndRemoveUntil(
+                  //                 context,
+                  //                 '/bottom-bar',
+                  //                 (route) => false,
+                  //               );
+                  //             }
+                  //           }
+                  //         } else {
+                  //           // print(response.data);
+                  //           setState(() {
+                  //             errors = response.data['errors'];
+                  //           });
+                  //           showErrorToast(response.data['message']);
+                  //         }
+                  //       });
+                  //     }
+                  //   },
+                  //   child: Container(
+                  //     width: MediaQuery.of(context).size.width,
+                  //     height: 54,
+                  //     decoration: BoxDecoration(
+                  //       color: CustomColors.primaryColor,
+                  //       borderRadius: BorderRadius.circular(10),
+                  //     ),
+                  //     child: Center(
+                  //       child: Text(
+                  //         "Signup",
+                  //         style: TextStyle(
+                  //           color: CustomColors.white,
+                  //           fontFamily: "Rubik",
+                  //           fontStyle: FontStyle.normal,
+                  //           fontWeight: FontWeight.w500,
+                  //           fontSize: 18,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {

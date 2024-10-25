@@ -12,11 +12,13 @@ import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/document_download_list.dart';
+import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
-import 'package:island_app/widgets/progress_dialog.dart';
+// import 'package:island_app/widgets/progress_dialog.dart';
 
 class ProfileGiverPendingEdit extends StatefulWidget {
   final String? name;
@@ -432,19 +434,19 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   // }
 
   // Image Picking
-  ProgressDialog? pr;
-  void showProgress(context) async {
-    pr ??= ProgressDialog(context);
-    await pr!.show();
-    setState(() {});
-  }
+  // ProgressDialog? pr;
+  // void showProgress(context) async {
+  //   pr ??= ProgressDialog(context);
+  //   await pr!.show();
+  //   setState(() {});
+  // }
 
-  void hideProgress() async {
-    if (pr != null && pr!.isShowing()) {
-      await pr!.hide();
-      setState(() {});
-    }
-  }
+  // void hideProgress() async {
+  //   if (pr != null && pr!.isShowing()) {
+  //     await pr!.hide();
+  //     setState(() {});
+  //   }
+  // }
 
   File? image;
   File? imageFileDio;
@@ -506,9 +508,9 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   }
 
   var error;
-  sendPrfileUpdateRequest() async {
+  Future<void> sendPrfileUpdateRequest() async {
     var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     // print(jsonEncode(List<dynamic>.from(selectedAdditionalService.map((x) => {"value": x}))));
     var formData = FormData.fromMap({
       '_method': 'PUT',
@@ -547,30 +549,28 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     setState(() {
       sendRequest = true;
     });
-    // try {
-    //   var response = await dio.post('https://islandcare.bm/api/service-provider-profile/update', data: formData, options: Options(contentType: 'application/json', followRedirects: false, validateStatus: (status) => true, headers: {"Accept": "application/json", "Authorization": "Bearer $token"}));
-    //   setState(() {
-    //     sendRequest = false;
-    //   });
-    //   if (response.statusCode == 200) {
-    //     Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
-    //     customSuccesSnackBar(
-    //       context,
-    //       "Profile Updated Successfully.",
-    //     );
-    //   } else {
-    //     setState(() {
-    //       error = response.data;
-    //     });
-    //     customErrorSnackBar(
-    //       context,
-    //       "Something went wrong please try agan later.",
-    //     );
-    //   }
-    // } catch (e) {
-    //   // print(e);
-    //   customErrorSnackBar(context, e.toString());
-    // }
+    try {
+      var response = await postRequesthandler(
+        url: 'https://islandcare.bm/api/service-provider-profile/update',
+        formData: formData,
+        token: token,
+      );
+      setState(() {
+        sendRequest = false;
+      });
+      if (response.statusCode == 200) {
+        Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
+        showSuccessToast("Profile Updated Successfully.");
+      } else {
+        setState(() {
+          error = response.data;
+        });
+        showErrorToast("Something went wrong please try agan later.");
+      }
+    } catch (e) {
+      // print(e);
+      showErrorToast(e.toString());
+    }
   }
 
   final List areaList = [
@@ -1427,6 +1427,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                           setState(() {});
                                                           additionalServiceSearchController.clear();
                                                         }
+                                                        Navigator.pop(context);
                                                       },
                                                       child: const Icon(Icons.done, size: 24),
                                                     ),
@@ -1583,7 +1584,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                     "Institute Name",
                                                     style: TextStyle(
                                                       color: ServiceGiverColor.black,
-                                                      fontSize: 12,
+                                                      fontSize: 16,
                                                       fontFamily: "Rubik",
                                                       fontWeight: FontWeight.w600,
                                                     ),
@@ -1635,7 +1636,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                     "Degree/Certification",
                                                     style: TextStyle(
                                                       color: ServiceGiverColor.black,
-                                                      fontSize: 12,
+                                                      fontSize: 16,
                                                       fontFamily: "Rubik",
                                                       fontWeight: FontWeight.w600,
                                                     ),
@@ -1686,7 +1687,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                     "Time Period",
                                                     style: TextStyle(
                                                       color: ServiceGiverColor.black,
-                                                      fontSize: 12,
+                                                      fontSize: 16,
                                                       fontFamily: "Rubik",
                                                       fontWeight: FontWeight.w600,
                                                     ),
@@ -1719,7 +1720,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                     "From",
                                                     style: TextStyle(
                                                       color: ServiceGiverColor.black,
-                                                      fontSize: 12,
+                                                      fontSize: 16,
                                                       fontFamily: "Rubik",
                                                       fontWeight: FontWeight.w600,
                                                     ),
@@ -1756,7 +1757,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                       "To",
                                                       style: TextStyle(
                                                         color: ServiceGiverColor.black,
-                                                        fontSize: 12,
+                                                        fontSize: 16,
                                                         fontFamily: "Rubik",
                                                         fontWeight: FontWeight.w600,
                                                       ),
@@ -1784,90 +1785,141 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                 ),
                                               ],
                                               // AddBtn
-                                              GestureDetector(
-                                                onTap: () async {
-                                                  {
-                                                    String institute = instituteController.text.trim();
-                                                    String major = majorController.text.trim();
-                                                    String from = fromController.text.toString();
-                                                    String to = toController.text.toString();
-
-                                                    if (institute.isNotEmpty && major.isNotEmpty && from.isNotEmpty) {
-                                                      if (isPeriodSeleted == "0" && to.isEmpty) {
-                                                        return;
-                                                      }
-                                                      instituteController.text = '';
-                                                      majorController.text = '';
-                                                      fromController.text = '';
-                                                      toController.text = '';
-                                                      instituteMapList.add(institute);
-                                                      majorMapList.add(major);
-                                                      startDateMapList.add(from);
-                                                      endDateMapList.add(to);
-                                                      currentMapList.add(isPeriodSeleted);
-                                                      educationApiList.add(
-                                                        {
-                                                          "name": institute.toString(),
-                                                          "major": major.toString(),
-                                                          "from": from.toString(),
-                                                          "current": isPeriodSeleted.toString(),
-                                                          "to": to.toString(),
-                                                        },
-                                                      );
-                                                      toggleradio(false);
-                                                      instituteController.text = '';
-                                                      majorController.text = '';
-                                                      fromController.text = '';
-                                                      toController.text = '';
-                                                      setState(() {});
-
-                                                      // SharedPreferences pref = await SharedPreferences.getInstance();
-                                                      // var data = await pref.setString('ListData', education.toString());
-
-                                                      Navigator.pop(context, true);
-                                                    }
-                                                  }
-                                                },
-                                                child: Container(
-                                                  width: MediaQuery.of(context).size.width,
-                                                  height: 50,
-                                                  margin: const EdgeInsets.only(top: 20),
-                                                  decoration: BoxDecoration(
-                                                    gradient: LinearGradient(
-                                                      begin: Alignment.center,
-                                                      end: Alignment.center,
-                                                      colors: [
-                                                        ServiceGiverColor.black,
-                                                        ServiceGiverColor.black,
-                                                      ],
-                                                    ),
-                                                    color: CustomColors.white,
-                                                    boxShadow: const [
-                                                      BoxShadow(
-                                                        color: Color.fromARGB(13, 0, 0, 0),
-                                                        blurRadius: 4.0,
-                                                        spreadRadius: 2.0,
-                                                        offset: Offset(
-                                                          2.0,
-                                                          2.0,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                    borderRadius: BorderRadius.circular(6),
-                                                  ),
-                                                  child: Center(
-                                                    child: Text(
-                                                      "Save",
-                                                      style: TextStyle(
-                                                        color: CustomColors.white,
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w600,
-                                                        fontFamily: "Rubik",
-                                                      ),
-                                                    ),
-                                                  ),
+                                              LoadingButton(
+                                                title: "Save",
+                                                // backgroundColor: CustomColors.white,
+                                                textStyle: TextStyle(
+                                                  color: CustomColors.white,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontFamily: "Rubik",
                                                 ),
+                                                onPressed: () async {
+                                                  String institute = instituteController.text.trim();
+                                                  String major = majorController.text.trim();
+                                                  String from = fromController.text.toString();
+                                                  String to = toController.text.toString();
+
+                                                  if (institute.isNotEmpty && major.isNotEmpty && from.isNotEmpty) {
+                                                    if (isPeriodSeleted == "0" && to.isEmpty) {
+                                                      return false;
+                                                    }
+                                                    instituteController.text = '';
+                                                    majorController.text = '';
+                                                    fromController.text = '';
+                                                    toController.text = '';
+                                                    instituteMapList.add(institute);
+                                                    majorMapList.add(major);
+                                                    startDateMapList.add(from);
+                                                    endDateMapList.add(to);
+                                                    currentMapList.add(isPeriodSeleted);
+                                                    educationApiList.add(
+                                                      {
+                                                        "name": institute.toString(),
+                                                        "major": major.toString(),
+                                                        "from": from.toString(),
+                                                        "current": isPeriodSeleted.toString(),
+                                                        "to": to.toString(),
+                                                      },
+                                                    );
+                                                    toggleradio(false);
+                                                    instituteController.text = '';
+                                                    majorController.text = '';
+                                                    fromController.text = '';
+                                                    toController.text = '';
+                                                    setState(() {});
+
+                                                    // SharedPreferences pref = await SharedPreferences.getInstance();
+                                                    // var data = await pref.setString('ListData', education.toString());
+
+                                                    Navigator.pop(context, true);
+                                                  }
+                                                  return true;
+                                                },
                                               ),
+                                              // GestureDetector(
+                                              //   onTap: () async {
+                                              //     String institute = instituteController.text.trim();
+                                              //     String major = majorController.text.trim();
+                                              //     String from = fromController.text.toString();
+                                              //     String to = toController.text.toString();
+
+                                              //     if (institute.isNotEmpty && major.isNotEmpty && from.isNotEmpty) {
+                                              //       if (isPeriodSeleted == "0" && to.isEmpty) {
+                                              //         return;
+                                              //       }
+                                              //       instituteController.text = '';
+                                              //       majorController.text = '';
+                                              //       fromController.text = '';
+                                              //       toController.text = '';
+                                              //       instituteMapList.add(institute);
+                                              //       majorMapList.add(major);
+                                              //       startDateMapList.add(from);
+                                              //       endDateMapList.add(to);
+                                              //       currentMapList.add(isPeriodSeleted);
+                                              //       educationApiList.add(
+                                              //         {
+                                              //           "name": institute.toString(),
+                                              //           "major": major.toString(),
+                                              //           "from": from.toString(),
+                                              //           "current": isPeriodSeleted.toString(),
+                                              //           "to": to.toString(),
+                                              //         },
+                                              //       );
+                                              //       toggleradio(false);
+                                              //       instituteController.text = '';
+                                              //       majorController.text = '';
+                                              //       fromController.text = '';
+                                              //       toController.text = '';
+                                              //       setState(() {});
+
+                                              //       // SharedPreferences pref = await SharedPreferences.getInstance();
+                                              //       // var data = await pref.setString('ListData', education.toString());
+
+                                              //       Navigator.pop(context, true);
+                                              //     }
+                                              //   },
+                                              //   child: Container(
+                                              //     width: MediaQuery.of(context).size.width,
+                                              //     height: 50,
+                                              //     margin: const EdgeInsets.only(top: 20),
+                                              //     decoration: BoxDecoration(
+                                              //       gradient: LinearGradient(
+                                              //         begin: Alignment.center,
+                                              //         end: Alignment.center,
+                                              //         colors: [
+                                              //           ServiceGiverColor.black,
+                                              //           ServiceGiverColor.black,
+                                              //         ],
+                                              //       ),
+                                              //       color: CustomColors.white,
+                                              //       boxShadow: const [
+                                              //         BoxShadow(
+                                              //           color: Color.fromARGB(13, 0, 0, 0),
+                                              //           blurRadius: 4.0,
+                                              //           spreadRadius: 2.0,
+                                              //           offset: Offset(
+                                              //             2.0,
+                                              //             2.0,
+                                              //           ),
+                                              //         ),
+                                              //       ],
+                                              //       borderRadius: BorderRadius.circular(6),
+                                              //     ),
+                                              //     child: Center(
+                                              //       child: Text(
+                                              //         "Save",
+                                              //         style: TextStyle(
+                                              //           color: CustomColors.white,
+                                              //           fontSize: 16,
+                                              //           fontWeight: FontWeight.w600,
+                                              //           fontFamily: "Rubik",
+                                              //         ),
+                                              //       ),
+                                              //     ),
+                                              //   ),
+                                              // ),
+                                              const SizedBox(height: 50)
                                             ],
                                           ),
                                         ),
@@ -2529,12 +2581,21 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                         ),
                       ),
                     ],
+                    const SizedBox(height: 20),
                     // file type 7
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0),
-                      child: GestureDetector(
-                        onTap: () async {
+                      child: LoadingButton(
+                        title: "Save",
+                        height: 60,
+                        backgroundColor: ServiceGiverColor.black,
+                        textStyle: TextStyle(
+                          color: CustomColors.white,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: "Rubik",
+                        ),
+                        onPressed: () async {
                           updateFormKey.currentState!.validate();
                           if (isSelectedGender == null) {
                             showErrorToast("Please Select Gender");
@@ -2585,43 +2646,106 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               // You can proceed with your logic here
                               // print("All required documents are available");
                               if (updateFormKey.currentState!.validate()) {
-                                sendPrfileUpdateRequest();
+                                await sendPrfileUpdateRequest();
                               }
                             }
                           }
+                          return false;
                         },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 60,
-                          margin: const EdgeInsets.symmetric(vertical: 10),
-                          decoration: BoxDecoration(
-                            color: ServiceGiverColor.black,
-                            boxShadow: const [
-                              BoxShadow(
-                                color: Color.fromARGB(13, 0, 0, 0),
-                                blurRadius: 4.0,
-                                spreadRadius: 2.0,
-                                offset: Offset(2.0, 2.0),
-                              ),
-                            ],
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Center(
-                            child: sendRequest
-                                ? const CircularProgressIndicator(color: Colors.white)
-                                : Text(
-                                    "Save",
-                                    style: TextStyle(
-                                      color: CustomColors.white,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600,
-                                      fontFamily: "Rubik",
-                                    ),
-                                  ),
-                          ),
-                        ),
                       ),
                     ),
+                    const SizedBox(height: 20),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(horizontal: 0),
+                    //   child: GestureDetector(
+                    //     onTap: () async {
+                    //       updateFormKey.currentState!.validate();
+                    //       if (isSelectedGender == null) {
+                    //         showErrorToast("Please Select Gender");
+                    //       } else if (dobController.text.isEmpty) {
+                    //         showErrorToast("Please Select Date Of Birth");
+                    //       } else if (phoneController.text.isEmpty) {
+                    //         showErrorToast("Please Enter Phone Number");
+                    //       } else if (experienceController.text.isEmpty) {
+                    //         showErrorToast("Please Enter Years of Experience");
+                    //       } else if (hourlyController.text.isEmpty) {
+                    //         showErrorToast("Please Enter Hourly Rate");
+                    //       } else if (addressController.text.isEmpty) {
+                    //         showErrorToast("Please Enter Address");
+                    //       } else if (selectedArea == "select") {
+                    //         showErrorToast("Please Select Area");
+                    //       } else if (zipController.text.isEmpty) {
+                    //         showErrorToast("Please Enter Postal Code");
+                    //       } else if (selectedAdditionalService.isEmpty) {
+                    //         showErrorToast("Please Select Additional Services");
+                    //       } else if (educationApiList.isEmpty) {
+                    //         showErrorToast("Please Enter education");
+                    //       } else if (userInfoController.text.isEmpty) {
+                    //         showErrorToast("Please Enter User Info");
+                    //       } else if (availabilityController.text.isEmpty) {
+                    //         showErrorToast("Please Enter User Availability");
+                    //       } else if (widget.workReference == null && lists['work_reference']!.isEmpty) {
+                    //         showErrorToast("Work Refrence is Required");
+                    //       } else if (widget.resume == null && lists['resume']!.isEmpty) {
+                    //         showErrorToast("Resume is Required");
+                    //       } else {
+                    //         List<String> missingDocuments = [];
+                    //         setValidateErrorToDefault();
+                    //         // print(validationErrorsObj);
+                    //         removeRequireDocumentDuplicate();
+                    //         for (String documentKey in requireDocument) {
+                    //           if (!isDocumentAvailable(documentKey)) {
+                    //             missingDocuments.add(documentKey);
+                    //           }
+                    //         }
+                    //         if (missingDocuments.isNotEmpty) {
+                    //           // Show errors for missing documents
+                    //           for (String missingDocument in missingDocuments) {
+                    //             // print("missing doc $missingDocument");
+                    //             setValidateError(missingDocument);
+                    //           }
+                    //         } else {
+                    //           // All required documents are available
+                    //           // You can proceed with your logic here
+                    //           // print("All required documents are available");
+                    //           if (updateFormKey.currentState!.validate()) {
+                    //             sendPrfileUpdateRequest();
+                    //           }
+                    //         }
+                    //       }
+                    //     },
+                    //     child: Container(
+                    //       width: MediaQuery.of(context).size.width,
+                    //       height: 60,
+                    //       margin: const EdgeInsets.symmetric(vertical: 10),
+                    //       decoration: BoxDecoration(
+                    //         color: ServiceGiverColor.black,
+                    //         boxShadow: const [
+                    //           BoxShadow(
+                    //             color: Color.fromARGB(13, 0, 0, 0),
+                    //             blurRadius: 4.0,
+                    //             spreadRadius: 2.0,
+                    //             offset: Offset(2.0, 2.0),
+                    //           ),
+                    //         ],
+                    //         borderRadius: BorderRadius.circular(6),
+                    //       ),
+                    //       child: Center(
+                    //         child: sendRequest
+                    //             ? const CircularProgressIndicator(color: Colors.white)
+                    //             : Text(
+                    //                 "Save",
+                    //                 style: TextStyle(
+                    //                   color: CustomColors.white,
+                    //                   fontSize: 22,
+                    //                   fontWeight: FontWeight.w600,
+                    //                   fontFamily: "Rubik",
+                    //                 ),
+                    //               ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

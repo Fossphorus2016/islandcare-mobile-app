@@ -13,6 +13,7 @@ import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:island_app/carereceiver/models/applicant_profile_detail-model.dart';
@@ -102,7 +103,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
     }
   }
 
-  declineApplicant() async {
+  Future<void> declineApplicant() async {
     var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     var formData = FormData.fromMap(
       {
@@ -1234,29 +1235,44 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                     ),
                                   ),
                                 ),
-                                GestureDetector(
-                                  onTap: () {
-                                    declineApplicant();
-                                  },
-                                  child: Container(
-                                    height: 40,
-                                    width: MediaQuery.of(context).size.width * .4,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: CustomColors.loginBorder,
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        "Decline Applicant",
-                                        style: TextStyle(
-                                          color: CustomColors.white,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
+                                LoadingButton(
+                                  title: "Decline Applicant",
+                                  height: 40,
+                                  width: MediaQuery.of(context).size.width * .4,
+                                  backgroundColor: CustomColors.loginBorder,
+                                  textStyle: TextStyle(
+                                    color: CustomColors.white,
+                                    fontFamily: "Rubik",
+                                    fontWeight: FontWeight.w500,
                                   ),
+                                  onPressed: () async {
+                                    await declineApplicant();
+                                    return true;
+                                  },
                                 ),
+                                // GestureDetector(
+                                //   onTap: () {
+                                //     declineApplicant();
+                                //   },
+                                //   child: Container(
+                                //     height: 40,
+                                //     width: MediaQuery.of(context).size.width * .4,
+                                //     decoration: BoxDecoration(
+                                //       borderRadius: BorderRadius.circular(6),
+                                //       color: CustomColors.loginBorder,
+                                //     ),
+                                //     child: Center(
+                                //       child: Text(
+                                //         "Decline Applicant",
+                                //         style: TextStyle(
+                                //           color: CustomColors.white,
+                                //           fontFamily: "Rubik",
+                                //           fontWeight: FontWeight.w500,
+                                //         ),
+                                //       ),
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
                           ] else ...[
@@ -1283,8 +1299,11 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                             ),
                           ],
                           const SizedBox(height: 10),
-                          GestureDetector(
-                            onTap: () async {
+                          LoadingButton(
+                            title: "Chat with User",
+                            height: 40,
+                            backgroundColor: CustomColors.primaryColor,
+                            onPressed: () async {
                               var resp = await postRequesthandler(
                                 url: "${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}",
                                 token: RecieverUserProvider.userToken,
@@ -1295,22 +1314,37 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                               }
                               // await Provider.of<RecieverChatProvider>(context, listen: false).getSingleChat(futureapplicantProfileDetail!.data!.id.toString());
                               Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatDetailPage()));
+                              return true;
                             },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: CustomColors.primaryColor,
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "Chat with User",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                            ),
                           ),
+                          // GestureDetector(
+                          //   onTap: () async {
+                          //     var resp = await postRequesthandler(
+                          //       url: "${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}",
+                          //       token: RecieverUserProvider.userToken,
+                          //     );
+                          //     // print("${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}");
+                          //     if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+                          //       Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat(resp.data['chat_room']);
+                          //     }
+                          //     // await Provider.of<RecieverChatProvider>(context, listen: false).getSingleChat(futureapplicantProfileDetail!.data!.id.toString());
+                          //     Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatDetailPage()));
+                          //   },
+                          //   child: Container(
+                          //     width: MediaQuery.of(context).size.width,
+                          //     height: 40,
+                          //     decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(6),
+                          //       color: CustomColors.primaryColor,
+                          //     ),
+                          //     child: const Center(
+                          //       child: Text(
+                          //         "Chat with User",
+                          //         style: TextStyle(color: Colors.white),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

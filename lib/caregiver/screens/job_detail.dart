@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/child_care_detail-dashbaord_model.dart';
 import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model.dart';
@@ -15,10 +14,11 @@ import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 import 'package:island_app/widgets/job_info_container.dart';
 import 'package:island_app/widgets/job_schedule_container.dart';
+import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/caregiver/models/senior_care_detail_dashboard_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/widgets/progress_dialog.dart';
+// import 'package:island_app/widgets/progress_dialog.dart';
 
 class JobDetailGiver extends StatefulWidget {
   final String? id;
@@ -36,20 +36,8 @@ class JobDetailGiver extends StatefulWidget {
 class _JobDetailGiverState extends State<JobDetailGiver> {
   List childInfo = [];
   List scheduleInfo = [];
-  // Post Email Verification
-  ProgressDialog? pr;
-  void showProgress(context) async {
-    pr ??= ProgressDialog(context);
-    await pr!.show();
-  }
 
-  void hideProgress() async {
-    if (pr != null && pr!.isShowing()) {
-      await pr!.hide();
-    }
-  }
-
-  Future<Response> jobApply() async {
+  Future<void> jobApply() async {
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     final response = await putRequesthandler(
       url: "${CareGiverUrl.serviceProviderJobApply}/${widget.id}",
@@ -57,11 +45,9 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
     );
     if (response.statusCode == 200) {
       showSuccessToast("Job applied successfully");
-      return response;
     } else {
       showErrorToast("Server Error");
     }
-    return response;
   }
 
   SeniorCareDetailDashboardModel? futureSeniorCareDetailDashboard;
@@ -192,35 +178,27 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
     );
   }
 
-  GestureDetector applyButton(bool isApplied) {
-    return GestureDetector(
-      onTap: () {
+  LoadingButton applyButton(bool isApplied) {
+    return LoadingButton(
+      title: isApplied ? "Apply Now" : "Applied",
+      height: 60,
+      backgroundColor: isApplied ? ServiceGiverColor.redButton : ServiceGiverColor.redButtonLigth,
+      textStyle: TextStyle(
+        color: CustomColors.white,
+        fontFamily: "Poppins",
+        fontSize: 16,
+        fontStyle: FontStyle.normal,
+        fontWeight: FontWeight.w900,
+      ),
+      onPressed: () async {
         if (isApplied) {
-          jobApply();
+          await jobApply();
+          return true;
         } else {
           showSuccessToast("Already Applied");
+          return true;
         }
       },
-      child: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: isApplied ? ServiceGiverColor.redButton : ServiceGiverColor.redButtonLigth,
-        ),
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        child: Center(
-          child: Text(
-            isApplied ? "Apply Now" : "Applied",
-            style: TextStyle(
-              color: CustomColors.white,
-              fontFamily: "Poppins",
-              fontSize: 16,
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-        ),
-      ),
     );
   }
 

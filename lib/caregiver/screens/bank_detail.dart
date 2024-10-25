@@ -8,6 +8,7 @@ import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 import 'dart:core';
 
@@ -53,7 +54,7 @@ class _BankDetailsState extends State<BankDetails> {
     }
   }
 
-  selectBank(var bankId) async {
+  Future<void> selectBank(var bankId) async {
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     var formData = FormData.fromMap(
       {
@@ -82,7 +83,7 @@ class _BankDetailsState extends State<BankDetails> {
     }
   }
 
-  deleteBank(var bankId) async {
+  Future<void> deleteBank(var bankId) async {
     var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     var formData = FormData.fromMap(
       {
@@ -113,7 +114,7 @@ class _BankDetailsState extends State<BankDetails> {
   }
 
   // Add Bank Detail
-  postAddBank() async {
+  Future<void> postAddBank() async {
     var requestBody = FormData.fromMap({
       'name_of_bank': selectedNames.toString(),
       'name_on_account': accountTitleController.text.toString(),
@@ -438,51 +439,80 @@ class _BankDetailsState extends State<BankDetails> {
                                               height: 20,
                                             ),
                                             // OTP
-                                            GestureDetector(
-                                              onTap: () {
+                                            LoadingButton(
+                                              title: "Add Bank Detail",
+                                              height: 54,
+                                              backgroundColor: ServiceGiverColor.redButton,
+                                              textStyle: TextStyle(
+                                                color: CustomColors.white,
+                                                fontFamily: "Rubik",
+                                                fontStyle: FontStyle.normal,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 18,
+                                              ),
+                                              onPressed: () async {
                                                 if (selectedNames == null) {
-                                                  showErrorToast(
-                                                    "Please Select Bank Names",
-                                                  );
+                                                  showErrorToast("Please Select Bank Names");
+                                                  return false;
                                                 } else if (accountTitleController.text.isEmpty) {
-                                                  showErrorToast(
-                                                    "Please Enter Account Title",
-                                                  );
+                                                  showErrorToast("Please Enter Account Title");
+                                                  return false;
                                                 } else if (accountNumberController.text.isEmpty) {
-                                                  showErrorToast(
-                                                    "Please Enter Account Number",
-                                                  );
+                                                  showErrorToast("Please Enter Account Number");
+                                                  return false;
                                                 } else {
                                                   if (bankKey.currentState!.validate()) {
-                                                    postAddBank();
+                                                    await postAddBank();
                                                     Navigator.pop(context);
+                                                    return true;
                                                   }
+                                                  return false;
                                                 }
                                               },
-                                              child: Container(
-                                                width: MediaQuery.of(context).size.width,
-                                                height: 54,
-                                                decoration: BoxDecoration(
-                                                  color: ServiceGiverColor.redButton,
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    "Add Bank Detail",
-                                                    style: TextStyle(
-                                                      color: CustomColors.white,
-                                                      fontFamily: "Rubik",
-                                                      fontStyle: FontStyle.normal,
-                                                      fontWeight: FontWeight.w500,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
                                             ),
-                                            const SizedBox(
-                                              height: 30,
-                                            ),
+                                            // GestureDetector(
+                                            //   onTap: () {
+                                            //     if (selectedNames == null) {
+                                            //       showErrorToast(
+                                            //         "Please Select Bank Names",
+                                            //       );
+                                            //     } else if (accountTitleController.text.isEmpty) {
+                                            //       showErrorToast(
+                                            //         "Please Enter Account Title",
+                                            //       );
+                                            //     } else if (accountNumberController.text.isEmpty) {
+                                            //       showErrorToast(
+                                            //         "Please Enter Account Number",
+                                            //       );
+                                            //     } else {
+                                            //       if (bankKey.currentState!.validate()) {
+                                            //         postAddBank();
+                                            //         Navigator.pop(context);
+                                            //       }
+                                            //     }
+                                            //   },
+                                            //   child: Container(
+                                            //     width: MediaQuery.of(context).size.width,
+                                            //     height: 54,
+                                            //     decoration: BoxDecoration(
+                                            //       color: ServiceGiverColor.redButton,
+                                            //       borderRadius: BorderRadius.circular(10),
+                                            //     ),
+                                            //     child: Center(
+                                            //       child: Text(
+                                            //         "Add Bank Detail",
+                                            //         style: TextStyle(
+                                            //           color: CustomColors.white,
+                                            //           fontFamily: "Rubik",
+                                            //           fontStyle: FontStyle.normal,
+                                            //           fontWeight: FontWeight.w500,
+                                            //           fontSize: 18,
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                            const SizedBox(height: 30),
                                           ],
                                         ),
                                       ),
@@ -688,42 +718,62 @@ class _BankDetailsState extends State<BankDetails> {
                     Row(
                       children: [
                         if (selectedBank!.selected == 0) ...[
-                          TextButton(
-                            onPressed: () {
-                              selectBank(selectedBank!.id);
+                          LoadingButton(
+                            title: "Set Default Bank",
+                            backgroundColor: Colors.green,
+                            width: 150,
+                            height: 50,
+                            onPressed: () async {
+                              await selectBank(selectedBank!.id);
+                              return true;
                             },
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.green),
-                              shape: MaterialStateProperty.resolveWith(
-                                (states) => RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-                            child: const Text(
-                              "Set Default Bank",
-                              style: TextStyle(color: Colors.white),
-                            ),
                           ),
+                          // TextButton(
+                          //   onPressed: () {
+                          //     selectBank(selectedBank!.id);
+                          //   },
+                          //   style: ButtonStyle(
+                          //     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.green),
+                          //     shape: MaterialStateProperty.resolveWith(
+                          //       (states) => RoundedRectangleBorder(
+                          //         borderRadius: BorderRadius.circular(10),
+                          //       ),
+                          //     ),
+                          //   ),
+                          //   child: const Text(
+                          //     "Set Default Bank",
+                          //     style: TextStyle(color: Colors.white),
+                          //   ),
+                          // ),
                           const SizedBox(width: 20),
                         ],
-                        TextButton(
-                          onPressed: () {
-                            deleteBank(selectedBank!.id);
+                        LoadingButton(
+                          title: "Delete",
+                          width: 120,
+                          height: 50,
+                          backgroundColor: Colors.red,
+                          onPressed: () async {
+                            await deleteBank(selectedBank!.id);
+                            return true;
                           },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.red),
-                            shape: MaterialStateProperty.resolveWith(
-                              (states) => RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ),
-                          child: const Text(
-                            "Delete",
-                            style: TextStyle(color: Colors.white),
-                          ),
                         ),
+                        // TextButton(
+                        //   onPressed: () {
+                        //     deleteBank(selectedBank!.id);
+                        //   },
+                        //   style: ButtonStyle(
+                        //     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.red),
+                        //     shape: MaterialStateProperty.resolveWith(
+                        //       (states) => RoundedRectangleBorder(
+                        //         borderRadius: BorderRadius.circular(10),
+                        //       ),
+                        //     ),
+                        //   ),
+                        //   child: const Text(
+                        //     "Delete",
+                        //     style: TextStyle(color: Colors.white),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ]

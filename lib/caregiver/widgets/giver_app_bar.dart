@@ -40,29 +40,29 @@ class GiverCustomAppBar extends StatelessWidget {
       actions: [
         GestureDetector(
           onTap: () {
-            if (profileStatus) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationScreen(),
-                ),
-              );
-            } else {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  backgroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  content: const Text(
-                    "Please Complete Your \n Profile For Approval",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                  ),
-                ),
-              );
-            }
+            // if (profileStatus) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NotificationScreen(),
+              ),
+            );
+            // } else {
+            //   showDialog(
+            //     context: context,
+            //     builder: (context) => AlertDialog(
+            //       backgroundColor: Colors.white,
+            //       shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(12),
+            //       ),
+            //       content: const Text(
+            //         "Please Complete Your \n Profile For Approval",
+            //         textAlign: TextAlign.center,
+            //         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+            //       ),
+            //     ),
+            //   );
+            // }
           },
           child: Padding(
             padding: const EdgeInsets.all(12.0),

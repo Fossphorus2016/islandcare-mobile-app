@@ -8,6 +8,7 @@ class AssistanceContainer extends StatelessWidget {
   final List? dd;
   @override
   Widget build(BuildContext context) {
+    print(dd);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),

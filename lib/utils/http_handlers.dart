@@ -62,11 +62,19 @@ Future<Response> getRequesthandler({required String url, String? token, FormData
       } else {
         showErrorToast("something went wrong");
       }
-      return Response(
-        statusCode: err.response!.statusCode,
-        statusMessage: err.response!.statusMessage,
-        requestOptions: RequestOptions(data: err.response!.data),
-      );
+      if (err.response != null) {
+        return Response(
+          statusCode: err.response!.statusCode,
+          statusMessage: err.response!.statusMessage,
+          requestOptions: RequestOptions(data: err.response!.data),
+        );
+      } else {
+        return Response(
+          statusCode: 500,
+          statusMessage: "Something went wrong",
+          requestOptions: RequestOptions(data: {"success": false, "data": null}),
+        );
+      }
     }
   } else {
     showNetworkErrorToast("No internet connected");
@@ -115,11 +123,19 @@ Future<Response> postRequesthandler({required String url, String? token, FormDat
       } else {
         showErrorToast("something went wrong");
       }
-      return Response(
-        statusCode: err.response!.statusCode,
-        statusMessage: err.response!.statusMessage,
-        requestOptions: RequestOptions(data: err.response!.data),
-      );
+      if (err.response != null) {
+        return Response(
+          statusCode: err.response!.statusCode,
+          statusMessage: err.response!.statusMessage,
+          requestOptions: RequestOptions(data: err.response!.data),
+        );
+      } else {
+        return Response(
+          statusCode: 500,
+          statusMessage: "Something went wrong",
+          requestOptions: RequestOptions(data: {"success": false, "data": null}),
+        );
+      }
     }
   } else {
     showNetworkErrorToast("No internet connected");
@@ -168,11 +184,19 @@ Future<Response> putRequesthandler({required String url, String? token, FormData
       } else {
         showErrorToast("something went wrong");
       }
-      return Response(
-        statusCode: err.response!.statusCode,
-        statusMessage: err.response!.statusMessage,
-        requestOptions: RequestOptions(data: err.response!.data),
-      );
+      if (err.response != null) {
+        return Response(
+          statusCode: err.response!.statusCode,
+          statusMessage: err.response!.statusMessage,
+          requestOptions: RequestOptions(data: err.response!.data),
+        );
+      } else {
+        return Response(
+          statusCode: 500,
+          statusMessage: "Something went wrong",
+          requestOptions: RequestOptions(data: {"success": false, "data": null}),
+        );
+      }
     }
   } else {
     showNetworkErrorToast("No internet connected");

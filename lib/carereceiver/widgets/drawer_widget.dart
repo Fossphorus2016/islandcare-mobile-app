@@ -19,10 +19,11 @@ import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
+import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
-import 'package:island_app/widgets/progress_dialog.dart';
+// import 'package:island_app/widgets/progress_dialog.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({
@@ -89,15 +90,15 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
-              child: Text(
-                'Ok',
-                style: TextStyle(
-                  color: CustomColors.primaryColor,
-                  fontSize: 16,
-                  fontFamily: "Rubik",
-                  fontWeight: FontWeight.w600,
-                ),
+            LoadingButton(
+              title: "Ok",
+              width: 50,
+              height: 50,
+              textStyle: TextStyle(
+                color: CustomColors.primaryColor,
+                fontSize: 16,
+                fontFamily: "Rubik",
+                fontWeight: FontWeight.w600,
               ),
               onPressed: () async {
                 Provider.of<NotificationProvider>(context, listen: false).unSubscribeChannels(4);
@@ -110,8 +111,32 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   '/',
                   (route) => false,
                 );
+                return true;
               },
             ),
+            // TextButton(
+            //   child: Text(
+            //     'Ok',
+            //     style: TextStyle(
+            //       color: CustomColors.primaryColor,
+            //       fontSize: 16,
+            //       fontFamily: "Rubik",
+            //       fontWeight: FontWeight.w600,
+            //     ),
+            //   ),
+            //   onPressed: () async {
+            //     Provider.of<NotificationProvider>(context, listen: false).unSubscribeChannels(4);
+            //     await storageService.deleteSecureStorage('userRole');
+            //     await storageService.deleteSecureStorage('userToken');
+            //     await storageService.deleteSecureStorage("userStatus");
+            //     Provider.of<BottomNavigationProvider>(context, listen: false).page = 0;
+            //     Navigator.pushNamedAndRemoveUntil(
+            //       context,
+            //       '/',
+            //       (route) => false,
+            //     );
+            //   },
+            // ),
           ],
         );
       },
@@ -142,17 +167,17 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   // }
 
   // Post Change Password Req
-  ProgressDialog? pr;
-  void showProgress(context) async {
-    pr ??= ProgressDialog(context);
-    await pr!.show();
-  }
+  // ProgressDialog? pr;
+  // void showProgress(context) async {
+  //   pr ??= ProgressDialog(context);
+  //   await pr!.show();
+  // }
 
-  void hideProgress() async {
-    if (pr != null && pr!.isShowing()) {
-      await pr!.hide();
-    }
-  }
+  // void hideProgress() async {
+  //   if (pr != null && pr!.isShowing()) {
+  //     await pr!.hide();
+  //   }
+  // }
 
   var avatar;
   getUserAvatar() async {
@@ -974,7 +999,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
     });
   }
 
-  chnagePassword() async {
+  Future<void> chnagePassword() async {
     var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     var userId = await Provider.of<RecieverUserProvider>(context, listen: false).getUserId();
     // print('route url ${AppUrl.webBaseURL}/api/password-update/$userId');
@@ -1177,34 +1202,51 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // OTP
-                    GestureDetector(
-                      onTap: () {
-                        if (changePassKey.currentState!.validate()) {
-                          chnagePassword();
-                        }
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 54,
-                        decoration: BoxDecoration(
-                          color: CustomColors.primaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: Text(
-                            "Continue",
-                            style: TextStyle(
-                              color: CustomColors.white,
-                              fontFamily: "Rubik",
-                              fontStyle: FontStyle.normal,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 18,
-                            ),
-                          ),
-                        ),
+                    LoadingButton(
+                      title: "Continue",
+                      height: 54,
+                      backgroundColor: CustomColors.primaryColor,
+                      textStyle: TextStyle(
+                        color: CustomColors.white,
+                        fontFamily: "Rubik",
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18,
                       ),
+                      onPressed: () async {
+                        if (changePassKey.currentState!.validate()) {
+                          await chnagePassword();
+                        }
+                        return false;
+                      },
                     ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     if (changePassKey.currentState!.validate()) {
+                    //       chnagePassword();
+                    //     }
+                    //   },
+                    //   child: Container(
+                    //     width: MediaQuery.of(context).size.width,
+                    //     height: 54,
+                    //     decoration: BoxDecoration(
+                    //       color: CustomColors.primaryColor,
+                    //       borderRadius: BorderRadius.circular(10),
+                    //     ),
+                    //     child: Center(
+                    //       child: Text(
+                    //         "Continue",
+                    //         style: TextStyle(
+                    //           color: CustomColors.white,
+                    //           fontFamily: "Rubik",
+                    //           fontStyle: FontStyle.normal,
+                    //           fontWeight: FontWeight.w500,
+                    //           fontSize: 18,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                     const SizedBox(height: 30),
                   ],
                 ),

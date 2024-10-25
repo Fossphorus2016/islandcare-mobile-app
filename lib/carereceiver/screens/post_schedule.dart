@@ -10,6 +10,7 @@ import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/check_tile_container.dart';
+import 'package:island_app/widgets/loading_button.dart';
 import 'package:island_app/widgets/show_day_container.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -281,8 +282,8 @@ class _PostScheduleState extends State<PostSchedule> {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate!,
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2050),
+      firstDate: DateTime(1970),
+      lastDate: DateTime.now(),
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
@@ -321,7 +322,7 @@ class _PostScheduleState extends State<PostSchedule> {
   }
 
   // Post JOB API
-  PostSeniorCare() async {
+  Future<void> postSeniorCare() async {
     var token = await getToken();
     var formData = FormData.fromMap({
       'job_title': jobTitleController.text.toString(),
@@ -351,7 +352,7 @@ class _PostScheduleState extends State<PostSchedule> {
       'duration[]': durationMapList,
     });
     // Dio dio = Dio();
-    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await postRequesthandler(
@@ -370,7 +371,7 @@ class _PostScheduleState extends State<PostSchedule> {
     }
   }
 
-  PostPetCare() async {
+  Future<void> postPetCare() async {
     var token = await getToken();
     var formData = FormData.fromMap(
       {
@@ -396,7 +397,7 @@ class _PostScheduleState extends State<PostSchedule> {
       },
     );
 
-    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await postRequesthandler(
@@ -415,7 +416,7 @@ class _PostScheduleState extends State<PostSchedule> {
     }
   }
 
-  PostHouseKeeping() async {
+  postHouseKeeping() async {
     var token = await getToken();
     var formData = FormData.fromMap(
       {
@@ -436,7 +437,7 @@ class _PostScheduleState extends State<PostSchedule> {
       },
     );
 
-    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await postRequesthandler(
@@ -455,7 +456,7 @@ class _PostScheduleState extends State<PostSchedule> {
     }
   }
 
-  PostChildCare() async {
+  Future<void> postChildCare() async {
     var token = await getToken();
     var formData = FormData.fromMap(
       {
@@ -474,7 +475,7 @@ class _PostScheduleState extends State<PostSchedule> {
       },
     );
 
-    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await postRequesthandler(
@@ -486,16 +487,14 @@ class _PostScheduleState extends State<PostSchedule> {
           showSuccessToast("Job Created Successfully");
         }
       } catch (e) {
-        showErrorToast(
-          e.toString(),
-        );
+        showErrorToast(e.toString());
       }
     } else {
       showErrorToast("Please Subscribe Package First");
     }
   }
 
-  PostSchoolSupport() async {
+  Future<void> postSchoolSupport() async {
     var token = await getToken();
     var formData = FormData.fromMap(
       {
@@ -523,7 +522,7 @@ class _PostScheduleState extends State<PostSchedule> {
       },
     );
 
-    var userSubs = await Provider.of<RecieverUserProvider>(context).userProfile;
+    var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
         var response = await postRequesthandler(
@@ -786,52 +785,38 @@ class _PostScheduleState extends State<PostSchedule> {
                   height: 45,
                   width: MediaQuery.of(context).size.width,
                   padding: const EdgeInsets.only(left: 10),
-                  clipBehavior: Clip.hardEdge,
+                  // clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     border: Border.all(color: Colors.grey, width: 0.5),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    verticalDirection: VerticalDirection.up,
-                    children: [
-                      const Text(
-                        "\$ ",
-                        style: TextStyle(
-                          // color: Colors.grey,
-                          fontSize: 16,
-                        ),
+                  alignment: Alignment.center,
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: hourlyController,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontFamily: "Rubik",
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    textAlign: TextAlign.left,
+                    textAlignVertical: TextAlignVertical.center,
+                    decoration: InputDecoration(
+                      hintText: "Please add Hourly Rate",
+                      contentPadding: EdgeInsets.zero,
+                      // prefixIcon: Text("\$"),
+                      prefixText: "\$",
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Rubik",
+                        fontWeight: FontWeight.w600,
+                        // color: Colors.grey,
                       ),
-                      Flexible(
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          controller: hourlyController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontFamily: "Rubik",
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlignVertical: TextAlignVertical.center,
-                          maxLines: 1,
-                          decoration: const InputDecoration(
-                            hintText: "Please add Hourly Rate",
-                            hintStyle: TextStyle(
-                              fontSize: 14,
-                              fontFamily: "Rubik",
-                              fontWeight: FontWeight.w600,
-                              // color: Colors.grey,
-                            ),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    ],
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
 
@@ -1543,8 +1528,17 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: GestureDetector(
-            onTap: () async {
+          child: LoadingButton(
+            title: "Submit",
+            height: 60,
+            backgroundColor: ServiceRecieverColor.redButton,
+            textStyle: TextStyle(
+              color: CustomColors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Rubik",
+            ),
+            onPressed: () async {
               if (jobTitleController.text.isEmpty) {
                 showErrorToast("Job Title is Required");
               } else if (addressController.text.isEmpty) {
@@ -1562,45 +1556,10 @@ class _PostScheduleState extends State<PostSchedule> {
               } else if (costRangeOfCampController.text.isEmpty) {
                 showErrorToast("Cost Range of Camp is Required");
               } else {
-                PostChildCare();
+                postChildCare();
               }
+              return false;
             },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 60,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.center,
-                  colors: [
-                    ServiceRecieverColor.redButton.withOpacity(0.1),
-                    ServiceRecieverColor.redButton.withOpacity(0.8),
-                  ],
-                ),
-                color: ServiceRecieverColor.redButton,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(13, 0, 0, 0),
-                    blurRadius: 4.0,
-                    spreadRadius: 2.0,
-                    offset: Offset(2.0, 2.0),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Center(
-                child: Text(
-                  "Submit",
-                  style: TextStyle(
-                    color: CustomColors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Rubik",
-                  ),
-                ),
-              ),
-            ),
           ),
         ),
       ],
@@ -2408,8 +2367,17 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: GestureDetector(
-            onTap: () async {
+          child: LoadingButton(
+            title: "Submit",
+            backgroundColor: ServiceRecieverColor.redButton,
+            height: 60,
+            textStyle: TextStyle(
+              color: CustomColors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Rubik",
+            ),
+            onPressed: () async {
               if (jobTitleController.text.isEmpty) {
                 showErrorToast("Job Title is Required");
               } else if (addressController.text.isEmpty) {
@@ -2429,46 +2397,72 @@ class _PostScheduleState extends State<PostSchedule> {
               } else if (learningChallengeController.text.isEmpty) {
                 showErrorToast("Learning Challenge is Required");
               } else {
-                PostSchoolSupport();
+                await postSchoolSupport();
               }
+              return false;
             },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 60,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.center,
-                  colors: [
-                    ServiceRecieverColor.redButton.withOpacity(0.1),
-                    ServiceRecieverColor.redButton.withOpacity(0.8),
-                  ],
-                ),
-                color: ServiceRecieverColor.redButton,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(13, 0, 0, 0),
-                    blurRadius: 4.0,
-                    spreadRadius: 2.0,
-                    offset: Offset(2.0, 2.0),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Center(
-                child: Text(
-                  "Submit",
-                  style: TextStyle(
-                    color: CustomColors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Rubik",
-                  ),
-                ),
-              ),
-            ),
           ),
+          // GestureDetector(
+          //   onTap: () async {
+          //     if (jobTitleController.text.isEmpty) {
+          //       showErrorToast("Job Title is Required");
+          //     } else if (addressController.text.isEmpty) {
+          //       showErrorToast("Job Location is Required");
+          //     } else if (selectedLocation == null) {
+          //       showErrorToast("Job Area is Required");
+          //     } else if (hourlyController.text.isEmpty) {
+          //       showErrorToast("Hourly Rate is Required");
+          //     } else if (seniorCareDays.isEmpty) {
+          //       showErrorToast("Please Enter Add Days");
+          //     } else if (children.isEmpty) {
+          //       showErrorToast("Child Initials is Required");
+          //     } else if (other == "1" && otherFieldController.text.isEmpty) {
+          //       showErrorToast("Other is Required");
+          //     } else if (learningStyleController.text.isEmpty) {
+          //       showErrorToast("Learning Style is Required");
+          //     } else if (learningChallengeController.text.isEmpty) {
+          //       showErrorToast("Learning Challenge is Required");
+          //     } else {
+          //       PostSchoolSupport();
+          //     }
+          //   },
+          //   child: Container(
+          //     width: MediaQuery.of(context).size.width,
+          //     height: 60,
+          //     margin: const EdgeInsets.symmetric(vertical: 10),
+          //     decoration: BoxDecoration(
+          //       gradient: LinearGradient(
+          //         begin: Alignment.center,
+          //         end: Alignment.center,
+          //         colors: [
+          //           ServiceRecieverColor.redButton.withOpacity(0.1),
+          //           ServiceRecieverColor.redButton.withOpacity(0.8),
+          //         ],
+          //       ),
+          //       color: ServiceRecieverColor.redButton,
+          //       boxShadow: const [
+          //         BoxShadow(
+          //           color: Color.fromARGB(13, 0, 0, 0),
+          //           blurRadius: 4.0,
+          //           spreadRadius: 2.0,
+          //           offset: Offset(2.0, 2.0),
+          //         ),
+          //       ],
+          //       borderRadius: BorderRadius.circular(6),
+          //     ),
+          //     child: Center(
+          //       child: Text(
+          //         "Submit",
+          //         style: TextStyle(
+          //           color: CustomColors.white,
+          //           fontSize: 22,
+          //           fontWeight: FontWeight.w600,
+          //           fontFamily: "Rubik",
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ),
       ],
     );
@@ -3260,8 +3254,17 @@ class _PostScheduleState extends State<PostSchedule> {
         // btn
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: GestureDetector(
-            onTap: () async {
+          child: LoadingButton(
+            title: "Submit",
+            backgroundColor: ServiceRecieverColor.redButton,
+            height: 60,
+            textStyle: TextStyle(
+              color: CustomColors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Rubik",
+            ),
+            onPressed: () async {
               if (jobTitleController.text.isEmpty) {
                 showErrorToast("Job Title is Required");
               } else if (addressController.text.isEmpty) {
@@ -3281,46 +3284,72 @@ class _PostScheduleState extends State<PostSchedule> {
               } else if (seniorCareDays.isEmpty) {
                 showErrorToast("Please Enter Add Days");
               } else {
-                PostHouseKeeping();
+                postHouseKeeping();
               }
+              return false;
             },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 60,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.center,
-                  colors: [
-                    ServiceRecieverColor.redButton.withOpacity(0.1),
-                    ServiceRecieverColor.redButton.withOpacity(0.8),
-                  ],
-                ),
-                color: ServiceRecieverColor.redButton,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(13, 0, 0, 0),
-                    blurRadius: 4.0,
-                    spreadRadius: 2.0,
-                    offset: Offset(2.0, 2.0),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Center(
-                child: Text(
-                  "Submit",
-                  style: TextStyle(
-                    color: CustomColors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Rubik",
-                  ),
-                ),
-              ),
-            ),
           ),
+          // GestureDetector(
+          //   onTap: () async {
+          //     if (jobTitleController.text.isEmpty) {
+          //       showErrorToast("Job Title is Required");
+          //     } else if (addressController.text.isEmpty) {
+          //       showErrorToast("Job Location is Required");
+          //     } else if (selectedLocation == null) {
+          //       showErrorToast("Job Area is Required");
+          //     } else if (hourlyController.text.isEmpty) {
+          //       showErrorToast("Hourly Rate is Required");
+          //     } else if (cleaningTypeValue == null) {
+          //       showErrorToast("Cleaning Type is Required");
+          //     } else if (bedroomValue == null) {
+          //       showErrorToast("Please Select Bedroom");
+          //     } else if (bathroomValue == null) {
+          //       showErrorToast("Please Select Bathroom");
+          //     } else if (other == "1" && otherFieldController.text.isEmpty) {
+          //       showErrorToast("Other is Required");
+          //     } else if (seniorCareDays.isEmpty) {
+          //       showErrorToast("Please Enter Add Days");
+          //     } else {
+          //       PostHouseKeeping();
+          //     }
+          //   },
+          //   child: Container(
+          //     width: MediaQuery.of(context).size.width,
+          //     height: 60,
+          //     margin: const EdgeInsets.symmetric(vertical: 10),
+          //     decoration: BoxDecoration(
+          //       gradient: LinearGradient(
+          //         begin: Alignment.center,
+          //         end: Alignment.center,
+          //         colors: [
+          //           ServiceRecieverColor.redButton.withOpacity(0.1),
+          //           ServiceRecieverColor.redButton.withOpacity(0.8),
+          //         ],
+          //       ),
+          //       color: ServiceRecieverColor.redButton,
+          //       boxShadow: const [
+          //         BoxShadow(
+          //           color: Color.fromARGB(13, 0, 0, 0),
+          //           blurRadius: 4.0,
+          //           spreadRadius: 2.0,
+          //           offset: Offset(2.0, 2.0),
+          //         ),
+          //       ],
+          //       borderRadius: BorderRadius.circular(6),
+          //     ),
+          //     child: Center(
+          //       child: Text(
+          //         "Submit",
+          //         style: TextStyle(
+          //           color: CustomColors.white,
+          //           fontSize: 22,
+          //           fontWeight: FontWeight.w600,
+          //           fontFamily: "Rubik",
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ),
       ],
     );
@@ -4221,8 +4250,17 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: GestureDetector(
-            onTap: () async {
+          child: LoadingButton(
+            title: "Submit",
+            backgroundColor: ServiceRecieverColor.redButton,
+            height: 60,
+            textStyle: TextStyle(
+              color: CustomColors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Rubik",
+            ),
+            onPressed: () async {
               if (jobTitleController.text.isEmpty) {
                 showErrorToast("Job Title is Required");
               } else if (addressController.text.isEmpty) {
@@ -4244,46 +4282,74 @@ class _PostScheduleState extends State<PostSchedule> {
               } else if (temperamentValue == null) {
                 showErrorToast("Temprament is Required");
               } else {
-                PostPetCare();
+                await postPetCare();
               }
+              return false;
             },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 60,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.center,
-                  colors: [
-                    ServiceRecieverColor.redButton.withOpacity(0.1),
-                    ServiceRecieverColor.redButton.withOpacity(0.8),
-                  ],
-                ),
-                color: ServiceRecieverColor.redButton,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(13, 0, 0, 0),
-                    blurRadius: 4.0,
-                    spreadRadius: 2.0,
-                    offset: Offset(2.0, 2.0),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Center(
-                child: Text(
-                  "Submit",
-                  style: TextStyle(
-                    color: CustomColors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Rubik",
-                  ),
-                ),
-              ),
-            ),
           ),
+          // GestureDetector(
+          //   onTap: () async {
+          //     if (jobTitleController.text.isEmpty) {
+          //       showErrorToast("Job Title is Required");
+          //     } else if (addressController.text.isEmpty) {
+          //       showErrorToast("Job Location is Required");
+          //     } else if (selectedLocation == null) {
+          //       showErrorToast("Job Area is Required");
+          //     } else if (hourlyController.text.isEmpty) {
+          //       showErrorToast("Hourly Rate is Required");
+          //     } else if (seniorCareDays.isEmpty) {
+          //       showErrorToast("Please Enter Add Days");
+          //     } else if (other == "1" && otherFieldController.text.isEmpty) {
+          //       showErrorToast("Other is Required");
+          //     } else if (petTypeValue == null) {
+          //       showErrorToast("Pet Type is Required");
+          //     } else if (numberOfPetValue == null) {
+          //       showErrorToast("Number of pets is Required");
+          //     } else if (petBreedController.text.isEmpty) {
+          //       showErrorToast("Pet Breed is Required");
+          //     } else if (temperamentValue == null) {
+          //       showErrorToast("Temprament is Required");
+          //     } else {
+          //       PostPetCare();
+          //     }
+          //   },
+          //   child: Container(
+          //     width: MediaQuery.of(context).size.width,
+          //     height: 60,
+          //     margin: const EdgeInsets.symmetric(vertical: 10),
+          //     decoration: BoxDecoration(
+          //       gradient: LinearGradient(
+          //         begin: Alignment.center,
+          //         end: Alignment.center,
+          //         colors: [
+          //           ServiceRecieverColor.redButton.withOpacity(0.1),
+          //           ServiceRecieverColor.redButton.withOpacity(0.8),
+          //         ],
+          //       ),
+          //       color: ServiceRecieverColor.redButton,
+          //       boxShadow: const [
+          //         BoxShadow(
+          //           color: Color.fromARGB(13, 0, 0, 0),
+          //           blurRadius: 4.0,
+          //           spreadRadius: 2.0,
+          //           offset: Offset(2.0, 2.0),
+          //         ),
+          //       ],
+          //       borderRadius: BorderRadius.circular(6),
+          //     ),
+          //     child: Center(
+          //       child: Text(
+          //         "Submit",
+          //         style: TextStyle(
+          //           color: CustomColors.white,
+          //           fontSize: 22,
+          //           fontWeight: FontWeight.w600,
+          //           fontFamily: "Rubik",
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ),
       ],
     );
@@ -4719,8 +4785,17 @@ class _PostScheduleState extends State<PostSchedule> {
         // btn
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 0),
-          child: GestureDetector(
-            onTap: () async {
+          child: LoadingButton(
+            title: "Submit",
+            backgroundColor: ServiceRecieverColor.redButton,
+            height: 60,
+            textStyle: TextStyle(
+              color: CustomColors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Rubik",
+            ),
+            onPressed: () async {
               if (jobTitleController.text.isEmpty) {
                 showErrorToast("Job Title is Required");
               } else if (addressController.text.isEmpty) {
@@ -4736,46 +4811,68 @@ class _PostScheduleState extends State<PostSchedule> {
               } else if (seniorCareDays.isEmpty) {
                 showErrorToast("Please Enter Add Days");
               } else {
-                PostSeniorCare();
+                await postSeniorCare();
               }
+              return false;
             },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 60,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.center,
-                  end: Alignment.center,
-                  colors: [
-                    ServiceRecieverColor.redButton.withOpacity(0.1),
-                    ServiceRecieverColor.redButton.withOpacity(0.8),
-                  ],
-                ),
-                color: CustomColors.white,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(13, 0, 0, 0),
-                    blurRadius: 4.0,
-                    spreadRadius: 2.0,
-                    // offset: Offset(2.0, 2.0),
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: Center(
-                child: Text(
-                  "Submit",
-                  style: TextStyle(
-                    color: CustomColors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: "Rubik",
-                  ),
-                ),
-              ),
-            ),
           ),
+          // GestureDetector(
+          //   onTap: () async {
+          //     if (jobTitleController.text.isEmpty) {
+          //       showErrorToast("Job Title is Required");
+          //     } else if (addressController.text.isEmpty) {
+          //       showErrorToast("Job Location is Required");
+          //     } else if (selectedLocation == null) {
+          //       showErrorToast("Job Area is Required");
+          //     } else if (hourlyController.text.isEmpty) {
+          //       showErrorToast("Hourly Rate is Required");
+          //     } else if (seniorNameController.text.isEmpty) {
+          //       showErrorToast("Senior Name is Required");
+          //     } else if (dobController.text.isEmpty) {
+          //       showErrorToast("DOB is Required");
+          //     } else if (seniorCareDays.isEmpty) {
+          //       showErrorToast("Please Enter Add Days");
+          //     } else {
+          //       PostSeniorCare();
+          //     }
+          //   },
+          //   child: Container(
+          //     width: MediaQuery.of(context).size.width,
+          //     height: 60,
+          //     margin: const EdgeInsets.symmetric(vertical: 10),
+          //     decoration: BoxDecoration(
+          //       gradient: LinearGradient(
+          //         begin: Alignment.center,
+          //         end: Alignment.center,
+          //         colors: [
+          //           ServiceRecieverColor.redButton.withOpacity(0.1),
+          //           ServiceRecieverColor.redButton.withOpacity(0.8),
+          //         ],
+          //       ),
+          //       color: CustomColors.white,
+          //       boxShadow: const [
+          //         BoxShadow(
+          //           color: Color.fromARGB(13, 0, 0, 0),
+          //           blurRadius: 4.0,
+          //           spreadRadius: 2.0,
+          //           // offset: Offset(2.0, 2.0),
+          //         ),
+          //       ],
+          //       borderRadius: BorderRadius.circular(6),
+          //     ),
+          //     child: Center(
+          //       child: Text(
+          //         "Submit",
+          //         style: TextStyle(
+          //           color: CustomColors.white,
+          //           fontSize: 22,
+          //           fontWeight: FontWeight.w600,
+          //           fontFamily: "Rubik",
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ),
       ],
     );

@@ -14,6 +14,8 @@ class JobScheduleContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(data![0].startingDate);
+    print(DateFormat("dd-MM-yyyy").format(DateTime.parse(formatDateSlashToDashFromSplit(data![0].startingDate.toString()))));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,7 +36,7 @@ class JobScheduleContainer extends StatelessWidget {
             ],
             JobDetailTile(
               name: "Date",
-              title: DateFormat.d().format(DateTime.parse(formatDateWithDashFromString(changeDateFormatFromString(data![i].startingDate.toString().toLowerCase()))).toLocal()),
+              title: data![0].startingDate.toString(),
             ),
             const SizedBox(height: 10),
             JobDetailTile(

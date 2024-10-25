@@ -11,6 +11,7 @@ import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 
 class ManageCards extends StatefulWidget {
@@ -144,7 +145,7 @@ class _ManageCardsState extends State<ManageCards> {
   ];
   String? selectedYear;
 
-  postAddCard() async {
+  Future<void> postAddCard() async {
     var requestBody = FormData.fromMap({
       'name_on_card': nameOncardController.text.toString(),
       'card_number': cardNumberController.text.toString(),
@@ -152,7 +153,7 @@ class _ManageCardsState extends State<ManageCards> {
       'card_expiration_year': selectedYear.toString(),
       'cvv': cvvController.text.toString(),
     });
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     try {
       final response = await postRequesthandler(
         url: CareReceiverURl.serviceReceiverAddCreditCards,
@@ -165,7 +166,7 @@ class _ManageCardsState extends State<ManageCards> {
         } else if (response.data['success'] == true) {
           showSuccessToast("Card Added Successfully");
         }
-        Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
+        await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
       }
       Navigator.pop(context);
     } on DioError catch (e) {
@@ -597,13 +598,21 @@ class _ManageCardsState extends State<ManageCards> {
                                                 ),
                                               ),
                                             ),
-
                                             const SizedBox(
                                               height: 20,
                                             ),
-                                            // OTP
-                                            GestureDetector(
-                                              onTap: () {
+                                            LoadingButton(
+                                              title: "Add Card",
+                                              height: 54,
+                                              backgroundColor: CustomColors.primaryColor,
+                                              textStyle: TextStyle(
+                                                color: CustomColors.white,
+                                                fontFamily: "Rubik",
+                                                fontStyle: FontStyle.normal,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 18,
+                                              ),
+                                              onPressed: () async {
                                                 if (nameOncardController.text.isEmpty) {
                                                   showErrorToast("Please Enter Name");
                                                 } else if (cardNumberController.text.isEmpty) {
@@ -616,31 +625,81 @@ class _ManageCardsState extends State<ManageCards> {
                                                   showErrorToast("Please Enter CVV");
                                                 } else {
                                                   if (cardKey.currentState!.validate()) {
-                                                    postAddCard();
+                                                    await postAddCard();
                                                   }
                                                 }
+                                                return false;
                                               },
-                                              child: Container(
-                                                width: MediaQuery.of(context).size.width,
-                                                height: 54,
-                                                decoration: BoxDecoration(
-                                                  color: CustomColors.primaryColor,
-                                                  borderRadius: BorderRadius.circular(10),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    "Add Card",
-                                                    style: TextStyle(
-                                                      color: CustomColors.white,
-                                                      fontFamily: "Rubik",
-                                                      fontStyle: FontStyle.normal,
-                                                      fontWeight: FontWeight.w500,
-                                                      fontSize: 18,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
                                             ),
+                                            LoadingButton(
+                                              title: "Add Card",
+                                              height: 54,
+                                              backgroundColor: CustomColors.primaryColor,
+                                              textStyle: TextStyle(
+                                                color: CustomColors.white,
+                                                fontFamily: "Rubik",
+                                                fontStyle: FontStyle.normal,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 18,
+                                              ),
+                                              onPressed: () async {
+                                                if (nameOncardController.text.isEmpty) {
+                                                  showErrorToast("Please Enter Name");
+                                                } else if (cardNumberController.text.isEmpty) {
+                                                  showErrorToast("Please Enter Card Number");
+                                                } else if (selectedMonth == null) {
+                                                  showErrorToast("Please Select Month");
+                                                } else if (selectedYear == null) {
+                                                  showErrorToast("Please Select Year");
+                                                } else if (cvvController.text.isEmpty) {
+                                                  showErrorToast("Please Enter CVV");
+                                                } else {
+                                                  if (cardKey.currentState!.validate()) {
+                                                    await postAddCard();
+                                                  }
+                                                }
+                                                return false;
+                                              },
+                                            ),
+                                            // GestureDetector(
+                                            //   onTap: () {
+                                            //     if (nameOncardController.text.isEmpty) {
+                                            //       showErrorToast("Please Enter Name");
+                                            //     } else if (cardNumberController.text.isEmpty) {
+                                            //       showErrorToast("Please Enter Card Number");
+                                            //     } else if (selectedMonth == null) {
+                                            //       showErrorToast("Please Select Month");
+                                            //     } else if (selectedYear == null) {
+                                            //       showErrorToast("Please Select Year");
+                                            //     } else if (cvvController.text.isEmpty) {
+                                            //       showErrorToast("Please Enter CVV");
+                                            //     } else {
+                                            //       if (cardKey.currentState!.validate()) {
+                                            //         postAddCard();
+                                            //       }
+                                            //     }
+                                            //   },
+                                            //   child: Container(
+                                            //     width: MediaQuery.of(context).size.width,
+                                            //     height: 54,
+                                            //     decoration: BoxDecoration(
+                                            //       color: CustomColors.primaryColor,
+                                            //       borderRadius: BorderRadius.circular(10),
+                                            //     ),
+                                            //     child: Center(
+                                            //       child: Text(
+                                            //         "Add Card",
+                                            //         style: TextStyle(
+                                            //           color: CustomColors.white,
+                                            //           fontFamily: "Rubik",
+                                            //           fontStyle: FontStyle.normal,
+                                            //           fontWeight: FontWeight.w500,
+                                            //           fontSize: 18,
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
                                             const SizedBox(
                                               height: 30,
                                             ),
@@ -1063,7 +1122,7 @@ class CardProvider extends ChangeNotifier {
   List<CreditCard>? allCards = [];
   List<CreditCard>? filteredList = [];
   CreditCard? selectedCard;
-  fetchManageCardsModel() async {
+  Future<void> fetchManageCardsModel() async {
     var token = await RecieverUserProvider.userToken;
     final response = await getRequesthandler(
       url: CareReceiverURl.serviceReceiverGetCreditCards,
@@ -1073,9 +1132,11 @@ class CardProvider extends ChangeNotifier {
       allCards = List<CreditCard>.from(response.data["credit-cards"]!.map((x) => CreditCard.fromJson(x)));
       filteredList = allCards;
       notifyListeners();
-      return {"status": true, "message": "Cards is loaded successfully"};
+      showSuccessToast("Cards is loaded successfully");
+      // return {"status": true, "message": "Cards is loaded successfully"};
     } else {
-      return {"status": false, "message": "Failed to load Cards"};
+      showErrorToast("Failed to load Cards");
+      // return {"status": false, "message": "Failed to load Cards"};
     }
   }
 

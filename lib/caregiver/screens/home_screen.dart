@@ -7,6 +7,7 @@ import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
+import 'package:island_app/widgets/loading_button.dart';
 import 'package:island_app/widgets/profile_complete_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
@@ -537,38 +538,60 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                           ),
                                                                           // OTP
                                                                           const SizedBox(height: 20),
-                                                                          GestureDetector(
-                                                                            onTap: () async {
-                                                                              provider.fetchFindedJobsDashboardModel(findtitle, findSelected, findArea, findRate);
-                                                                              Navigator.pop(context);
+                                                                          LoadingButton(
+                                                                            title: "Search",
+                                                                            backgroundColor: CustomColors.primaryColor,
+                                                                            textStyle: TextStyle(
+                                                                              color: CustomColors.white,
+                                                                              fontFamily: "Rubik",
+                                                                              fontStyle: FontStyle.normal,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontSize: 18,
+                                                                            ),
+                                                                            onPressed: () async {
+                                                                              await provider.fetchFindedJobsDashboardModel(findtitle, findSelected, findArea, findRate);
                                                                               setState(() {
                                                                                 findtitle = '';
                                                                                 findSelected = null;
                                                                                 findArea = null;
                                                                                 findRate = null;
                                                                               });
+                                                                              Navigator.pop(context);
+                                                                              return true;
                                                                             },
-                                                                            child: Container(
-                                                                              width: MediaQuery.of(context).size.width,
-                                                                              height: 54,
-                                                                              decoration: BoxDecoration(
-                                                                                color: CustomColors.primaryColor,
-                                                                                borderRadius: BorderRadius.circular(10),
-                                                                              ),
-                                                                              child: Center(
-                                                                                child: Text(
-                                                                                  "Search",
-                                                                                  style: TextStyle(
-                                                                                    color: CustomColors.white,
-                                                                                    fontFamily: "Rubik",
-                                                                                    fontStyle: FontStyle.normal,
-                                                                                    fontWeight: FontWeight.w500,
-                                                                                    fontSize: 18,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
                                                                           ),
+                                                                          // GestureDetector(
+                                                                          //   onTap: () async {
+                                                                          //     provider.fetchFindedJobsDashboardModel(findtitle, findSelected, findArea, findRate);
+                                                                          //     Navigator.pop(context);
+                                                                          //     setState(() {
+                                                                          //       findtitle = '';
+                                                                          //       findSelected = null;
+                                                                          //       findArea = null;
+                                                                          //       findRate = null;
+                                                                          //     });
+                                                                          //   },
+                                                                          //   child: Container(
+                                                                          //     width: MediaQuery.of(context).size.width,
+                                                                          //     height: 54,
+                                                                          //     decoration: BoxDecoration(
+                                                                          //       color: CustomColors.primaryColor,
+                                                                          //       borderRadius: BorderRadius.circular(10),
+                                                                          //     ),
+                                                                          //     child: Center(
+                                                                          //       child: Text(
+                                                                          //         "Search",
+                                                                          //         style: TextStyle(
+                                                                          //           color: CustomColors.white,
+                                                                          //           fontFamily: "Rubik",
+                                                                          //           fontStyle: FontStyle.normal,
+                                                                          //           fontWeight: FontWeight.w500,
+                                                                          //           fontSize: 18,
+                                                                          //         ),
+                                                                          //       ),
+                                                                          //     ),
+                                                                          //   ),
+                                                                          // ),
                                                                           const SizedBox(height: 30),
                                                                         ],
                                                                       ),

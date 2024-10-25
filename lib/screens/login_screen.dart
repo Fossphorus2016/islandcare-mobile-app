@@ -4,7 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/carereceiver/widgets/bottom_bar.dart';
+import 'package:island_app/carereceiver/screens/bottom_bar.dart';
 import 'package:island_app/models/login_model.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
@@ -13,7 +13,8 @@ import 'package:island_app/screens/verify_email.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
-import 'package:island_app/widgets/progress_dialog.dart';
+import 'package:island_app/widgets/loading_button.dart';
+// import 'package:island_app/widgets/progress_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -37,33 +38,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final pinfocusNode = FocusNode();
   final addPassformKey = GlobalKey<FormState>();
   final pinformKey = GlobalKey<FormState>();
-  // Post Login Req
-  ProgressDialog? pr;
-  void showProgress(context) async {
-    pr ??= ProgressDialog(context);
-    await pr!.show();
-  }
-
-  void hideProgress() async {
-    if (pr != null && pr!.isShowing()) {
-      await pr!.hide();
-    }
-  }
-
-  Future<Response> postLogin(LoginModel model) async {
-    showProgress(context);
-    try {
-      final response = await postRequesthandler(
-        url: SessionUrl.login,
-        formData: FormData.fromMap(model.toJson()),
-      );
-      hideProgress();
-      return response;
-    } catch (e) {
-      hideProgress();
-      return Response(requestOptions: RequestOptions(), statusCode: 400);
-    }
-  }
 
   // Show/Hide
   bool _showPassword = false;
@@ -249,8 +223,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 20),
                         // Login btn
-                        GestureDetector(
-                          onTap: () {
+                        LoadingButton(
+                          title: "Log In",
+                          width: 220,
+                          height: 60,
+                          backgroundColor: const Color(0xffffffff),
+                          loadingColor: CustomColors.green,
+                          textStyle: TextStyle(
+                            fontFamily: 'Rubik',
+                            fontSize: 20,
+                            fontWeight: FontWeight.w700,
+                            color: CustomColors.primaryColor,
+                          ),
+                          onPressed: () async {
                             if (emailController.text.isEmpty) {
                               showErrorToast("Please Enter Email");
                             } else if (passwordController.text.isEmpty) {
@@ -263,8 +248,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   email: emailController.text.toString(),
                                   password: passwordController.text.toString(),
                                 );
-                                postLogin(request).then((response) async {
-                                  // print(response.data);
+                                try {
+                                  final response = await postRequesthandler(
+                                    url: SessionUrl.login,
+                                    formData: FormData.fromMap(request.toJson()),
+                                  );
+
                                   if (response.statusCode == 200) {
                                     var data = response.data;
                                     var role = data["user"]["role"];
@@ -318,37 +307,120 @@ class _LoginScreenState extends State<LoginScreen> {
                                   } else {
                                     showErrorToast("Bad Credentials");
                                   }
-                                });
+                                } catch (e) {
+                                  showErrorToast("something went wrong");
+                                }
                               }
                             }
+                            return false;
                           },
-                          child: Container(
-                            width: 220,
-                            height: 60,
-                            decoration: BoxDecoration(
-                              color: const Color(0xffffffff),
-                              borderRadius: BorderRadius.circular(15),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Color(0x3f000000),
-                                  offset: Offset(2, 4),
-                                  blurRadius: 3.5,
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Log In',
-                                style: TextStyle(
-                                  fontFamily: 'Rubik',
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: CustomColors.primaryColor,
-                                ),
-                              ),
-                            ),
-                          ),
                         ),
+                        // GestureDetector(
+                        //   onTap: () async {
+                        //     if (emailController.text.isEmpty) {
+                        //       showErrorToast("Please Enter Email");
+                        //     } else if (passwordController.text.isEmpty) {
+                        //       showErrorToast("Please Enter Password");
+                        //     } else if (passwordController.text.length < 3) {
+                        //       showErrorToast("Please Enter 3 digit Password");
+                        //     } else {
+                        //       if (_signInFormKey.currentState!.validate()) {
+                        //         var request = LoginModel(
+                        //           email: emailController.text.toString(),
+                        //           password: passwordController.text.toString(),
+                        //         );
+                        //         try {
+                        //           final response = await postRequesthandler(
+                        //             url: SessionUrl.login,
+                        //             formData: FormData.fromMap(request.toJson()),
+                        //           );
+
+                        //           if (response.statusCode == 200) {
+                        //             var data = response.data;
+                        //             var role = data["user"]["role"];
+                        //             var status = data["user"]["status"];
+                        //             var token = data["token"];
+                        //             // var isProfileCompleted = data["is_profile_completed"];
+                        //             var userId = data["user"]['id'];
+                        //             var avatar = data["user"]['avatar'];
+                        //             var name = data["user"]['first_name'];
+                        //             var last = data["user"]['last_name'];
+
+                        //             if (status == 3) {
+                        //               showErrorToast("User Blocked");
+                        //             } else {
+                        //               if (data["user"]["email_verified_at"] == null) {
+                        //                 Navigator.pushReplacement(
+                        //                   context,
+                        //                   MaterialPageRoute(builder: (context) => VerifyEmail(token: data["token"])),
+                        //                 );
+                        //               } else if (data["user"]["role"] == 3) {
+                        //                 await storageService.writeSecureData('userRole', data["user"]["role"].toString());
+                        //                 await storageService.writeSecureData('userToken', data["token"].toString());
+                        //                 await storageService.writeSecureData('userStatus', status.toString());
+                        //                 await storageService.writeSecureData('userId', userId.toString());
+                        //                 await storageService.writeSecureData('userAvatar', avatar.toString());
+                        //                 await storageService.writeSecureData('userName', "$name $last");
+                        //                 Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
+
+                        //                 Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+                        //               } else if (data["user"]["role"] == 4) {
+                        //                 if (data["user"]["status"] == 0) {
+                        //                   await storageService.writeSecureData('userStatus', status.toString());
+                        //                   await storageService.writeSecureData('userToken', data["token"].toString());
+                        //                   await storageService.writeSecureData('userAvatar', avatar.toString());
+                        //                   await storageService.writeSecureData('userId', userId.toString());
+                        //                   await storageService.writeSecureData('userName', "$name $last");
+
+                        //                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomBar(data: data['token'].toString())), (route) => false);
+                        //                 } else {
+                        //                   await storageService.writeSecureData('userRole', data["user"]["role"].toString());
+                        //                   await storageService.writeSecureData('userToken', data["token"].toString());
+                        //                   await storageService.writeSecureData('userStatus', status.toString());
+                        //                   await storageService.writeSecureData('userId', userId.toString());
+                        //                   await storageService.writeSecureData('userAvatar', avatar.toString());
+                        //                   await storageService.writeSecureData('userName', "$name $last");
+                        //                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
+                        //                 }
+                        //                 Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+                        //               }
+                        //             }
+                        //           } else {
+                        //             showErrorToast("Bad Credentials");
+                        //           }
+                        //         } catch (e) {
+                        //           showErrorToast("something went wrong");
+                        //         }
+                        //       }
+                        //     }
+                        //   },
+                        //   child: Container(
+                        //     width: 220,
+                        //     height: 60,
+                        //     decoration: BoxDecoration(
+                        //       color: const Color(0xffffffff),
+                        //       borderRadius: BorderRadius.circular(15),
+                        //       boxShadow: const [
+                        //         BoxShadow(
+                        //           color: Color(0x3f000000),
+                        //           offset: Offset(2, 4),
+                        //           blurRadius: 3.5,
+                        //         ),
+                        //       ],
+                        //     ),
+                        //     child: Center(
+                        //       child: Text(
+                        //         'Log In',
+                        //         style: TextStyle(
+                        //           fontFamily: 'Rubik',
+                        //           fontSize: 20,
+                        //           fontWeight: FontWeight.w700,
+                        //           color: CustomColors.primaryColor,
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),

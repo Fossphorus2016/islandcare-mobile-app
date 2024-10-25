@@ -13,6 +13,7 @@ import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 
 class JobPaymentsScreen extends StatefulWidget {
@@ -380,76 +381,129 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
                     ),
                     const SizedBox(height: 25),
                     // Submit Button
-                    GestureDetector(
-                      onTap: !sendReq
-                          ? () async {
-                              setState(() {
-                                sendReq = true;
-                              });
-                              try {
-                                var token = RecieverUserProvider.userToken;
-                                var response = await postRequesthandler(
-                                  url: "${AppUrl.webBaseURL}/api/charge-card",
-                                  formData: FormData.fromMap({
-                                    "job_id": widget.jobId,
-                                    "card_data": selectedCard!.id.toString(),
-                                    "save_card": false,
-                                    "name_on_card": selectedCard!.nameOnCard.toString(),
-                                    "card_number": selectedCard!.cardNumber.toString(),
-                                    "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
-                                    "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
-                                    "cvv": selectedCard!.cvv.toString(),
-                                  }),
-                                  token: token,
-                                );
-                                setState(() {
-                                  sendReq = false;
-                                });
-                                if (response.statusCode == 200 && response.data['status'] == true) {
-                                  showSuccessToast(response.data['message']);
-                                  Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
-                                  Navigator.pop(context);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => JobApplicantsDetail(jobId: widget.jobId, name: widget.jobName),
-                                    ),
-                                  );
-                                } else {
-                                  if (response.data['error'].toString().contains("Job Already Funded")) {
-                                    showSuccessToast("Job Already Funded");
-                                  } else if (response.data['error'] != null) {
-                                    throw response.data['error']['original'][0];
-                                  }
-                                }
-                              } catch (e) {
-                                showErrorToast(e.toString());
-                              }
+                    LoadingButton(
+                      title: "Pay Now",
+                      backgroundColor: ServiceRecieverColor.redButton,
+                      height: 60,
+                      loadingColor: Colors.green,
+                      textStyle: TextStyle(
+                        color: CustomColors.white,
+                        fontFamily: "Poppins",
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      onPressed: () async {
+                        try {
+                          var token = await getToken();
+                          var response = await postRequesthandler(
+                            url: "${AppUrl.webBaseURL}/api/charge-card",
+                            formData: FormData.fromMap({
+                              "job_id": widget.jobId,
+                              "card_data": selectedCard!.id.toString(),
+                              "save_card": false,
+                              "name_on_card": selectedCard!.nameOnCard.toString(),
+                              "card_number": selectedCard!.cardNumber.toString(),
+                              "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
+                              "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
+                              "cvv": selectedCard!.cvv.toString(),
+                            }),
+                            token: token,
+                          );
+
+                          if (response.statusCode == 200 && response.data['status'] == true) {
+                            showSuccessToast(response.data['message']);
+                            Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => JobApplicantsDetail(jobId: widget.jobId, name: widget.jobName),
+                              ),
+                            );
+                          } else {
+                            if (response.data['error'].toString().contains("Job Already Funded")) {
+                              showSuccessToast("Job Already Funded");
+                            } else if (response.data['error'] != null) {
+                              throw response.data['error']['original'][0];
                             }
-                          : null,
-                      child: !sendReq
-                          ? Container(
-                              height: 60,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: ServiceRecieverColor.redButton,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Pay Now",
-                                  style: TextStyle(
-                                    color: CustomColors.white,
-                                    fontFamily: "Poppins",
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                            )
-                          : const Center(
-                              child: CircularProgressIndicator(color: Colors.green),
-                            ),
+                          }
+                          return true;
+                        } catch (e) {
+                          showErrorToast(e.toString());
+                          return false;
+                        }
+                      },
                     ),
+                    // GestureDetector(
+                    //   onTap: !sendReq
+                    //       ? () async {
+                    //           setState(() {
+                    //             sendReq = true;
+                    //           });
+                    //           try {
+                    //             var token = RecieverUserProvider.userToken;
+                    //             var response = await postRequesthandler(
+                    //               url: "${AppUrl.webBaseURL}/api/charge-card",
+                    //               formData: FormData.fromMap({
+                    //                 "job_id": widget.jobId,
+                    //                 "card_data": selectedCard!.id.toString(),
+                    //                 "save_card": false,
+                    //                 "name_on_card": selectedCard!.nameOnCard.toString(),
+                    //                 "card_number": selectedCard!.cardNumber.toString(),
+                    //                 "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
+                    //                 "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
+                    //                 "cvv": selectedCard!.cvv.toString(),
+                    //               }),
+                    //               token: token,
+                    //             );
+                    //             setState(() {
+                    //               sendReq = false;
+                    //             });
+                    //             if (response.statusCode == 200 && response.data['status'] == true) {
+                    //               showSuccessToast(response.data['message']);
+                    //               Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
+                    //               Navigator.pop(context);
+                    //               Navigator.push(
+                    //                 context,
+                    //                 MaterialPageRoute(
+                    //                   builder: (context) => JobApplicantsDetail(jobId: widget.jobId, name: widget.jobName),
+                    //                 ),
+                    //               );
+                    //             } else {
+                    //               if (response.data['error'].toString().contains("Job Already Funded")) {
+                    //                 showSuccessToast("Job Already Funded");
+                    //               } else if (response.data['error'] != null) {
+                    //                 throw response.data['error']['original'][0];
+                    //               }
+                    //             }
+                    //           } catch (e) {
+                    //             showErrorToast(e.toString());
+                    //           }
+                    //         }
+                    //       : null,
+                    //   child: !sendReq
+                    //       ? Container(
+                    //           height: 60,
+                    //           decoration: BoxDecoration(
+                    //             borderRadius: BorderRadius.circular(10),
+                    //             color: ServiceRecieverColor.redButton,
+                    //           ),
+                    //           child: Center(
+                    //             child: Text(
+                    //               "Pay Now",
+                    //               style: TextStyle(
+                    //                 color: CustomColors.white,
+                    //                 fontFamily: "Poppins",
+                    //                 fontSize: 18,
+                    //                 fontWeight: FontWeight.w600,
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         )
+                    //       : const Center(
+                    //           child: CircularProgressIndicator(color: Colors.green),
+                    //         ),
+                    // ),
                   ],
                 ),
               ),
@@ -821,79 +875,135 @@ class _JobPaymentsScreenState extends State<JobPaymentsScreen> {
             const SizedBox(height: 10),
 
             // BTN
-            GestureDetector(
-              onTap: sendReq == true
-                  ? null
-                  : () async {
-                      if (newPaymentForm.currentState!.validate()) {
-                        setState(() {
-                          sendReq = true;
-                        });
-                        try {
-                          var token = RecieverUserProvider.userToken;
-                          var response = await postRequesthandler(
-                            url: "${AppUrl.webBaseURL}/api/charge-card",
-                            formData: FormData.fromMap({
-                              "job_id": widget.jobId,
-                              "card_data": "card-form",
-                              "save_card": saveFrom,
-                              "name_on_card": cardHolderNameController.text.toString(),
-                              "card_number": cardNumberController.text.toString(),
-                              "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
-                              "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
-                              "cvv": cardCvvController.text.toString(),
-                            }),
-                            token: token,
-                          );
-
-                          if (response.statusCode == 200 && response.data['status'] == true) {
-                            showSuccessToast(response.data['message']);
-                            Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => JobApplicantsDetail(jobId: widget.jobId, name: widget.jobName),
-                              ),
-                            );
-                          } else {
-                            if (response.data['error'].toString().contains("Job Already Funded")) {
-                              showSuccessToast("Job Already Funded");
-                            } else if (response.data['error'] != null) {
-                              throw response.data['error']['original'][0];
-                            }
-                          }
-                        } catch (e) {
-                          showErrorToast(e.toString());
-                        }
-                        setState(() {
-                          sendReq = false;
-                        });
-                      }
-                    },
-              child: Container(
-                height: 60,
-                decoration: BoxDecoration(
-                  color: ServiceRecieverColor.redButton,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Center(
-                  child: sendReq
-                      ? const CircularProgressIndicator(
-                          color: Colors.white,
-                        )
-                      : Text(
-                          "Pay Now",
-                          style: TextStyle(
-                            color: CustomColors.white,
-                            fontFamily: "Poppins",
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                ),
+            LoadingButton(
+              title: "Pay Now",
+              backgroundColor: ServiceRecieverColor.redButton,
+              height: 60,
+              loadingColor: Colors.white,
+              textStyle: TextStyle(
+                color: CustomColors.white,
+                fontFamily: "Poppins",
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
               ),
+              onPressed: () async {
+                if (newPaymentForm.currentState!.validate()) {
+                  try {
+                    var token = RecieverUserProvider.userToken;
+                    var response = await postRequesthandler(
+                      url: "${AppUrl.webBaseURL}/api/charge-card",
+                      formData: FormData.fromMap({
+                        "job_id": widget.jobId,
+                        "card_data": "card-form",
+                        "save_card": saveFrom,
+                        "name_on_card": cardHolderNameController.text.toString(),
+                        "card_number": cardNumberController.text.toString(),
+                        "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
+                        "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
+                        "cvv": cardCvvController.text.toString(),
+                      }),
+                      token: token,
+                    );
+
+                    if (response.statusCode == 200 && response.data['status'] == true) {
+                      showSuccessToast(response.data['message']);
+                      Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => JobApplicantsDetail(jobId: widget.jobId, name: widget.jobName),
+                        ),
+                      );
+                    } else {
+                      if (response.data['error'].toString().contains("Job Already Funded")) {
+                        showSuccessToast("Job Already Funded");
+                      } else if (response.data['error'] != null) {
+                        throw response.data['error']['original'][0];
+                      }
+                    }
+                    return true;
+                  } catch (e) {
+                    showErrorToast(e.toString());
+                    return false;
+                  }
+                }
+                return true;
+              },
             ),
+            // GestureDetector(
+            //   onTap: sendReq == true
+            //       ? null
+            //       : () async {
+            //           if (newPaymentForm.currentState!.validate()) {
+            //             setState(() {
+            //               sendReq = true;
+            //             });
+            //             try {
+            //               var token = RecieverUserProvider.userToken;
+            //               var response = await postRequesthandler(
+            //                 url: "${AppUrl.webBaseURL}/api/charge-card",
+            //                 formData: FormData.fromMap({
+            //                   "job_id": widget.jobId,
+            //                   "card_data": "card-form",
+            //                   "save_card": saveFrom,
+            //                   "name_on_card": cardHolderNameController.text.toString(),
+            //                   "card_number": cardNumberController.text.toString(),
+            //                   "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
+            //                   "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
+            //                   "cvv": cardCvvController.text.toString(),
+            //                 }),
+            //                 token: token,
+            //               );
+
+            //               if (response.statusCode == 200 && response.data['status'] == true) {
+            //                 showSuccessToast(response.data['message']);
+            //                 Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
+            //                 Navigator.pop(context);
+            //                 Navigator.push(
+            //                   context,
+            //                   MaterialPageRoute(
+            //                     builder: (context) => JobApplicantsDetail(jobId: widget.jobId, name: widget.jobName),
+            //                   ),
+            //                 );
+            //               } else {
+            //                 if (response.data['error'].toString().contains("Job Already Funded")) {
+            //                   showSuccessToast("Job Already Funded");
+            //                 } else if (response.data['error'] != null) {
+            //                   throw response.data['error']['original'][0];
+            //                 }
+            //               }
+            //             } catch (e) {
+            //               showErrorToast(e.toString());
+            //             }
+            //             setState(() {
+            //               sendReq = false;
+            //             });
+            //           }
+            //         },
+            //   child: Container(
+            //     height: 60,
+            //     decoration: BoxDecoration(
+            //       color: ServiceRecieverColor.redButton,
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //     child: Center(
+            //       child: sendReq
+            //           ? const CircularProgressIndicator(
+            //               color: Colors.white,
+            //             )
+            //           : Text(
+            //               "Pay Now",
+            //               style: TextStyle(
+            //                 color: CustomColors.white,
+            //                 fontFamily: "Poppins",
+            //                 fontSize: 18,
+            //                 fontWeight: FontWeight.w600,
+            //               ),
+            //             ),
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
