@@ -189,28 +189,12 @@ class Providerverification {
     this.governmentRegisteredCareProviderVerify,
     this.policeBackgroundCheck,
     this.policeBackgroundCheckVerify,
-    // this.enhancedCriminal,
-    // this.enhancedCriminalVerify,
-    // this.basicCriminal,
-    // this.basicCriminalVerify,
-    // this.firstAid,
-    // this.firstAidVerify,
-    // this.vehicleRecord,
-    // this.vehicleRecordVerify,
     this.createdAt,
     this.updatedAt,
   });
 
   int? id;
   int? userId;
-  // String? enhancedCriminal;
-  // int? enhancedCriminalVerify;
-  // dynamic basicCriminal;
-  // int? basicCriminalVerify;
-  // dynamic firstAid;
-  // int? firstAidVerify;
-  // dynamic vehicleRecord;
-  // int? vehicleRecordVerify;
   String? validDriverLicense;
   int? validDriverLicenseVerify;
   String? scarsAwarenessCertification;
@@ -253,14 +237,6 @@ class Providerverification {
         governmentRegisteredCareProviderVerify: json["government_registered_care_provider_verify"],
         policeBackgroundCheck: json["police_background_check"],
         policeBackgroundCheckVerify: json["police_background_check_verify"],
-        // enhancedCriminal: json["enhanced_criminal"],
-        // enhancedCriminalVerify: json["enhanced_criminal_verify"],
-        // basicCriminal: json["basic_criminal"],
-        // basicCriminalVerify: json["basic_criminal_verify"],
-        // firstAid: json["first_aid"],
-        // firstAidVerify: json["first_aid_verify"],
-        // vehicleRecord: json["vehicle_record"],
-        // vehicleRecordVerify: json["vehicle_record_verify"],
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
       );
@@ -286,14 +262,6 @@ class Providerverification {
         "government_registered_care_provider_verify": governmentRegisteredCareProviderVerify,
         "police_background_check": policeBackgroundCheck,
         "police_background_check_verify": policeBackgroundCheckVerify,
-        // "enhanced_criminal": enhancedCriminal,
-        // "enhanced_criminal_verify": enhancedCriminalVerify,
-        // "basic_criminal": basicCriminal,
-        // "basic_criminal_verify": basicCriminalVerify,
-        // "first_aid": firstAid,
-        // "first_aid_verify": firstAidVerify,
-        // "vehicle_record": vehicleRecord,
-        // "vehicle_record_verify": vehicleRecordVerify,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
       };
@@ -471,46 +439,6 @@ class Userdetail {
       };
 }
 
-// class Service {
-//   Service({
-//     this.id,
-//     this.name,
-//     this.image,
-//     this.description,
-//     this.deletedAt,
-//     this.createdAt,
-//     this.updatedAt,
-//   });
-
-//   int? id;
-//   String? name;
-//   String? image;
-//   String? description;
-//   dynamic deletedAt;
-//   DateTime? createdAt;
-//   DateTime? updatedAt;
-
-//   factory Service.fromJson(Map<String, dynamic> json) => Service(
-//         id: json["id"],
-//         name: json["name"],
-//         image: json["image"],
-//         description: json["description"],
-//         deletedAt: json["deleted_at"],
-//         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-//         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-//       );
-
-//   Map<String, dynamic> toJson() => {
-//         "id": id,
-//         "name": name,
-//         "image": image,
-//         "description": description,
-//         "deleted_at": deletedAt,
-//         "created_at": createdAt?.toIso8601String(),
-//         "updated_at": updatedAt?.toIso8601String(),
-//       };
-// }
-
 class Userdetailprovider {
   Userdetailprovider({
     this.id,
@@ -530,24 +458,26 @@ class Userdetailprovider {
   String? availability;
   int? experience;
   String? educations;
-  String? keywords;
+  List<dynamic>? keywords;
   List? badge;
   String? hourlyRate;
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  factory Userdetailprovider.fromJson(Map<String, dynamic> json) => Userdetailprovider(
-        id: json["id"],
-        userId: json["user_id"],
-        availability: json["availability"],
-        experience: json["experience"],
-        educations: json["educations"],
-        keywords: json["keywords"],
-        badge: json["badge"] == null ? null : json["badge"].toString().split(','),
-        hourlyRate: json["hourly_rate"],
-        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-      );
+  factory Userdetailprovider.fromJson(Map<String, dynamic> json) {
+    return Userdetailprovider(
+      id: json["id"],
+      userId: json["user_id"],
+      availability: json["availability"],
+      experience: json["experience"],
+      educations: json["educations"],
+      keywords: json["keywords"] != null ? jsonDecode(json["keywords"]) : null,
+      badge: json["badge"] == null ? null : json["badge"].toString().split(','),
+      hourlyRate: json["hourly_rate"],
+      createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
+      updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         "id": id,

@@ -64,6 +64,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
       initialDate: selectedDate!,
       firstDate: DateTime(1975),
       lastDate: DateTime.now(),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
       selectableDayPredicate: _isDateSelectable,
       initialDatePickerMode: DatePickerMode.day,
       builder: (BuildContext context, Widget? child) {
@@ -71,7 +72,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              // primaryColorDark: CustomColors.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -181,12 +181,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
     }
   }
 
-  // getUserToken() async {
-  //   var userToken = await getToken();
-  //   // print(userToken);
-  //   return userToken.toString();
-  // }
-
   getUserId() async {
     var userId = await storageService.readSecureStorage('userId');
     return userId.toString();
@@ -269,7 +263,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                   padding: const EdgeInsets.all(4),
                                   clipBehavior: Clip.antiAlias,
                                   decoration: BoxDecoration(
-                                    // color: CustomColors.primaryColor,
                                     borderRadius: BorderRadius.circular(100),
                                     boxShadow: const [
                                       BoxShadow(
@@ -668,69 +661,11 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           ),
                         ),
                       ),
-                      // Services
-                      // Container(
-                      //   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                      //   margin: const EdgeInsets.only(bottom: 15),
-                      //   decoration: BoxDecoration(
-                      //     color: CustomColors.white,
-                      //     borderRadius: BorderRadius.circular(12),
-                      //   ),
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Text(
-                      //         "Services",
-                      //         style: TextStyle(
-                      //           color: CustomColors.primaryColor,
-                      //           fontSize: 12,
-                      //           fontFamily: "Rubik",
-                      //           fontWeight: FontWeight.w600,
-                      //         ),
-                      //       ),
-                      //       Center(
-                      //         child: DecoratedBox(
-                      //           decoration: BoxDecoration(
-                      //             color: Colors.transparent,
-                      //             border: Border.all(color: const Color.fromARGB(255, 255, 255, 255), width: 0.5),
-                      //             borderRadius: BorderRadius.circular(12),
-                      //           ),
-                      //           child: Padding(
-                      //             padding: const EdgeInsets.symmetric(
-                      //               horizontal: 10,
-                      //               vertical: 4,
-                      //             ),
-                      //             child: DropdownButtonHideUnderline(
-                      //               child: DropdownButton(
-                      //                 hint: const Text("Services You Provide"),
-                      //                 isExpanded: true,
-                      //                 items: data!.map((item) {
-                      //                   return DropdownMenuItem(
-                      //                     value: item['id'].toString(),
-                      //                     child: Text(item['name']),
-                      //                   );
-                      //                 }).toList(),
-                      //                 onChanged: (newVal) {
-                      //                   setState(() {
-                      //                     selectedService = newVal;
-                      //                   });
-                      //                 },
-                      //                 value: selectedService,
-                      //               ),
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
 
                       const SizedBox(height: 10),
                       const Text(
                         "Bio",
                         style: TextStyle(
-                          // color: CustomColors.primaryColor,
                           fontSize: 16,
                           fontFamily: "Rubik",
                           fontWeight: FontWeight.w600,
@@ -850,58 +785,3 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
     );
   }
 }
-
-                      //   onTap: () {
-                      //     if (_isSelectedGender == null) {
-                      //       showErrorToast("Please Select Gender");
-                      //     } else if (dobController.text.isEmpty) {
-                      //       showErrorToast("Please Select Date Of Birth");
-                      //     } else if (selectedService == null) {
-                      //       showErrorToast("Please Select Services");
-                      //     } else if (phoneController.text.isEmpty) {
-                      //       showErrorToast("Please Enter Phone Number");
-                      //     } else if (zipController.text.isEmpty) {
-                      //       showErrorToast("Please Enter Zip Code");
-                      //     } else if (addressController.text.isEmpty) {
-                      //       showErrorToast("Please Enter User Address");
-                      //     } else {
-                      //       uploadImage(image!.path);
-                      //     }
-                      //   },
-                      //   child: Container(
-                      //     width: MediaQuery.of(context).size.width,
-                      //     height: 60,
-                      //     margin: const EdgeInsets.symmetric(vertical: 10),
-                      //     decoration: BoxDecoration(
-                      //       gradient: LinearGradient(
-                      //         begin: Alignment.center,
-                      //         end: Alignment.center,
-                      //         colors: [
-                      //           const Color(0xff90EAB4).withOpacity(0.1),
-                      //           const Color(0xff6BD294).withOpacity(0.8),
-                      //         ],
-                      //       ),
-                      //       color: CustomColors.white,
-                      //       boxShadow: const [
-                      //         BoxShadow(
-                      //           color: Color.fromARGB(13, 0, 0, 0),
-                      //           blurRadius: 4.0,
-                      //           spreadRadius: 2.0,
-                      //           offset: Offset(2.0, 2.0),
-                      //         ),
-                      //       ],
-                      //       borderRadius: BorderRadius.circular(6),
-                      //     ),
-                      //     child: Center(
-                      //       child: Text(
-                      //         "Save",
-                      //         style: TextStyle(
-                      //           color: CustomColors.white,
-                      //           fontSize: 22,
-                      //           fontWeight: FontWeight.w600,
-                      //           fontFamily: "Rubik",
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),

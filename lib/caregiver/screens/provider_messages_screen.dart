@@ -5,15 +5,16 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:island_app/caregiver/screens/chat_provider_detail_screen.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/widgets/provider_conversational_widget.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/chatroom_model.dart';
+import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/app_url.dart';
-// import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/widgets/profile_complete_widget.dart';
 import 'package:provider/provider.dart';
 
@@ -69,7 +70,6 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
                               itemCount: providerChat.chatList.length,
                               shrinkWrap: true,
                               padding: const EdgeInsets.only(top: 16),
-                              // physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (context, index) {
                                 return ProviderConversationList(
                                   roomId: providerChat.chatList[index]["roomId"],
@@ -99,14 +99,14 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
 class ServiceProviderChat extends ChangeNotifier {
   //   Pusher Connection
   connectChatChannel(userRole) async {
-    // var channelName = IslandPusher().getPusherChatsChannel(userRole);
+    var channelName = IslandPusher().getPusherChatsChannel(userRole);
 
-    // IslandPusher.pusher.subscribe(
-    //   channelName: channelName,
-    //   onEvent: onEvent,
-    //   onSubscriptionError: onSubscriptionError,
-    //   onSubscriptionSucceeded: onSubscriptionSucceeded,
-    // );
+    IslandPusher.pusher.subscribe(
+      channelName: channelName,
+      onEvent: onEvent,
+      onSubscriptionError: onSubscriptionError,
+      onSubscriptionSucceeded: onSubscriptionSucceeded,
+    );
   }
 
   onEvent(event) {
@@ -124,12 +124,20 @@ class ServiceProviderChat extends ChangeNotifier {
 
   //   Pusher Connection End
 
+  setDefault() {
+    chatList = [];
+    allChatRooms = [];
+    activeChat = {};
+    sendMessageReq = false;
+  }
+
   List<Map<String, dynamic>> chatList = [];
   List allChatRooms = [];
   getChats() async {
+    var token = await getToken();
     var resp = await getRequesthandler(
       url: ChatUrl.serviceProviderChats,
-      token: ServiceGiverProvider.userToken,
+      token: token,
     );
     if (resp.statusCode == 200 && resp.data['flag'] == 1) {
       allChatRooms = resp.data['chats'];
@@ -157,7 +165,7 @@ class ServiceProviderChat extends ChangeNotifier {
   }
 
   getSingleChatAndSetActive(id) async {
-    var userToken = ServiceGiverProvider.userToken;
+    var userToken = await getToken();
     var resp = await postRequesthandler(
       url: "${AppUrl.webBaseURL}/api/get-chat",
       token: userToken,
@@ -173,7 +181,7 @@ class ServiceProviderChat extends ChangeNotifier {
   }
 
   getSingleChat(BuildContext context, id) async {
-    var userToken = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    var userToken = await getToken();
 
     var resp = await postRequesthandler(
       url: "${AppUrl.webBaseURL}/api/get-chat",
@@ -184,8 +192,7 @@ class ServiceProviderChat extends ChangeNotifier {
       var chatRoom = resp.data['chat'];
       if (chatRoom != null) {
         setActiveChat(chatRoom['id']);
-        // ignore: use_build_context_synchronously
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const ServiceProviderChatRoom()));
+        navigationService.push(RoutesName.giverChatRoom);
       }
     }
   }
@@ -198,10 +205,11 @@ class ServiceProviderChat extends ChangeNotifier {
   }
 
   updateStatus() async {
+    var token = await getToken();
     var resp = await postRequesthandler(
       url: ChatUrl.serviceProviderChatMessageStatus,
       formData: FormData.fromMap({"id": activeChat['id']}),
-      token: ServiceGiverProvider.userToken,
+      token: token,
     );
     if (resp.statusCode == 200) {
       getChats();

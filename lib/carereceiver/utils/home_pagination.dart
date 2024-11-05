@@ -3,6 +3,17 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class HomePaginationProvider extends ChangeNotifier {
+  setDefault() {
+    isLoading = true;
+    dataList = [];
+    filterDataList = [];
+    currentPageIndex = 0;
+    rowsPerPage = 10;
+    startIndex = 0;
+    endIndex = 0;
+    totalRowsCount = 0;
+  }
+
   bool isLoading = true;
   // Get Documents
   List dataList = [];
@@ -29,55 +40,6 @@ class HomePaginationProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
-
-  // setFilter(String searchText) {
-  //   filterDocuments = filterDocuments.where((element) {
-  //     if (element.expandedValue['document_title']
-  //             .toString()
-  //             .toLowerCase()
-  //             .contains(searchText.toLowerCase()) ||
-  //         element.expandedValue['file_type']
-  //             .toString()
-  //             .toLowerCase()
-  //             .contains(searchText.toLowerCase()) ||
-  //         element.expandedValue['property']['property_name']
-  //             .toString()
-  //             .toLowerCase()
-  //             .contains(searchText.toLowerCase()) ||
-  //         element.expandedValue['category']
-  //             .toString()
-  //             .toLowerCase()
-  //             .contains(searchText.toLowerCase())) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }).toList();
-  //   notifyListeners();
-  // }
-
-  // clearFilter() {
-  //   filterDocuments.clear();
-  //   notifyListeners();
-  // }
-
-  // setDefaultFilter() {
-  //   filterDocuments = documents.sublist(startIndex, endIndex).toList();
-  //   notifyListeners();
-  // }
-
-  // setFilterByTime(DateTime startTime, DateTime endTime) {
-  //   filterDocuments = filterDocuments.where((element) {
-  //     var docTime = element.expandedValue['updated_at'];
-  //     if (startTime.isBefore(DateTime.parse(docTime)) &&
-  //         endTime.isAfter(DateTime.parse(docTime))) {
-  //       return true;
-  //     } else {
-  //       return false;
-  //     }
-  //   }).toList();
-  //   notifyListeners();
-  // }
 
   // Generate List per page
   getCurrentPageData() {

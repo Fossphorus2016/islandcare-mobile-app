@@ -7,7 +7,6 @@ import 'package:external_path/external_path.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
@@ -35,28 +34,28 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
   bool isLoading = true;
   ServiceReceiverDashboardDetailModel? futureReceiverDashboardDetail;
   fetchReceiverDashboardDetailModel() async {
-    // try {
-    var token = RecieverUserProvider.userToken;
-    final response = await getRequesthandler(
-      url: "${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}",
-      token: token,
-    );
-    if (response.statusCode == 200) {
-      setState(() {
-        isLoading = false;
-        futureReceiverDashboardDetail = ServiceReceiverDashboardDetailModel.fromJson(response.data);
-      });
-    } else {
-      setState(() {
-        isLoading = false;
-      });
-      throw Exception(
-        'Failed to load Service Receiver Dashboard Details',
+    try {
+      var token = await getToken();
+      final response = await getRequesthandler(
+        url: "${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}",
+        token: token,
       );
+      if (response.statusCode == 200) {
+        setState(() {
+          isLoading = false;
+          futureReceiverDashboardDetail = ServiceReceiverDashboardDetailModel.fromJson(response.data);
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+        });
+        throw Exception(
+          'Failed to load Service Receiver Dashboard Details',
+        );
+      }
+    } catch (error) {
+      showErrorToast("Failed to load Service Receiver Dashboard Details");
     }
-    // } catch (error) {
-    //   showErrorToast( error.toString());
-    // }
   }
 
   bool downloading = false;
@@ -240,16 +239,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                           style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
                                         ),
                                         const SizedBox(width: 10),
-                                        // Text(
-                                        //   futureReceiverDashboardDetail!.data!.email.toString(),
-                                        //   style: TextStyle(
-                                        //     fontSize: 12,
-                                        //     fontFamily: "Rubik",
-                                        //     fontWeight: FontWeight.w400,
-                                        //     color: CustomColors.white,
-                                        //   ),
-                                        // ),
-                                        const SizedBox(width: 10),
                                         if (futureReceiverDashboardDetail!.data!.avgRating != null) ...[
                                           RatingBar(
                                             ignoreGestures: true,
@@ -271,9 +260,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                 color: Colors.grey,
                                               ),
                                             ),
-                                            onRatingUpdate: (rating) {
-                                              // print(rating);
-                                            },
+                                            onRatingUpdate: (rating) {},
                                           ),
                                         ],
                                       ],
@@ -373,7 +360,6 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                           borderRadius: BorderRadius.circular(08),
                                           value: futureReceiverDashboardDetail!.percentage != null ? (futureReceiverDashboardDetail!.percentage! / 100) : 00,
                                           valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
-                                          // color: Colors.white,
                                         ),
                                       ],
                                     ),
@@ -711,55 +697,63 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                               margin: const EdgeInsets.only(bottom: 15),
+                              width: MediaQuery.of(context).size.width,
                               decoration: BoxDecoration(
                                 color: CustomColors.white,
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Additional Services",
-                                          style: TextStyle(
-                                            color: ServiceGiverColor.black,
-                                            fontSize: 10,
-                                            fontFamily: "Rubik",
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 8,
-                                        ),
-                                        futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords.toString() == "null"
-                                            ? Text(
-                                                "Not Available",
-                                                softWrap: true,
-                                                style: TextStyle(
-                                                  color: CustomColors.hintText,
-                                                  fontSize: 16,
-                                                  fontFamily: "Rubik",
-                                                  fontWeight: FontWeight.w200,
-                                                ),
-                                              )
-                                            : Text(
-                                                futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords.toString() == "null" ? "Required" : futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords.toString(),
-                                                softWrap: true,
-                                                style: TextStyle(
-                                                  color: CustomColors.hintText,
-                                                  fontSize: 16,
-                                                  fontFamily: "Rubik",
-                                                  fontWeight: FontWeight.w200,
-                                                ),
-                                              ),
-                                      ],
+                                  Text(
+                                    "Additional Services",
+                                    style: TextStyle(
+                                      color: ServiceGiverColor.black,
+                                      fontSize: 10,
+                                      fontFamily: "Rubik",
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
+                                  const SizedBox(height: 8),
+                                  if (futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords != null) ...[
+                                    Wrap(
+                                      spacing: 10,
+                                      children: [
+                                        for (var item in futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords!) ...[
+                                          Container(
+                                            padding: const EdgeInsets.all(05),
+                                            margin: const EdgeInsets.only(bottom: 05),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey.shade100,
+                                              borderRadius: BorderRadius.circular(16),
+                                            ),
+                                            child: Text(
+                                              item['value'],
+                                              softWrap: true,
+                                              style: TextStyle(
+                                                color: CustomColors.hintText,
+                                                fontSize: 12,
+                                                fontFamily: "Rubik",
+                                                fontWeight: FontWeight.w200,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ] else ...[
+                                    Text(
+                                      "Not Available",
+                                      softWrap: true,
+                                      style: TextStyle(
+                                        color: CustomColors.hintText,
+                                        fontSize: 16,
+                                        fontFamily: "Rubik",
+                                        fontWeight: FontWeight.w200,
+                                      ),
+                                    ),
+                                  ],
                                 ],
                               ),
                             ),
@@ -1173,198 +1167,11 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                 },
                               ),
                             ]
-                            // else ...[
-                            //   const Center(
-                            //     child: Text("No Review Yet!"),
-                            //   )
-                            // ],
                           ],
                         ),
                       ),
                     ],
                   ),
-                  // FutureBuilder<ServiceReceiverDashboardDetailModel>(
-                  //   future: futureReceiverDashboardDetail,
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.hasData) {
-                  //       return ListView.builder(
-                  //         shrinkWrap: true,
-                  //         scrollDirection: Axis.vertical,
-                  //         physics: const NeverScrollableScrollPhysics(),
-                  //         itemCount: snapshot.data!.data!.length,
-                  //         itemBuilder: (BuildContext context, int index) {
-                  //           return ReceiverDashboardDetailWidget(
-                  //             imgPath: snapshot.data!.data![0].avatar != null
-                  //                 ? ("https://islandcare.bm/storage/${snapshot.data!.data![0].avatar}")
-                  //                 : "https://img.icons8.com/material-rounded/256/question-mark.png",
-                  //             title: "${snapshot.data!.data![0].firstName} ${snapshot.data!.data![0].lastName}",
-                  //             services: snapshot.data!.data![0].userdetail!.service!.name.toString(),
-                  //             desc: snapshot.data!.data![0].userdetail!.userInfo.toString() == "null"
-                  //                 ? "Not Available"
-                  //                 : snapshot.data!.data![0].userdetail!.userInfo.toString(),
-                  //             experience: snapshot.data!.data![0].userdetailprovider != null
-                  //                 ? snapshot.data!.data![0].userdetailprovider!.experience.toString() == "null"
-                  //                     ? "0"
-                  //                     : snapshot.data!.data![0].userdetailprovider!.experience.toString()
-                  //                 : "",
-                  //             address: snapshot.data!.data![0].userdetail!.address.toString() == "null"
-                  //                 ? "Not Available"
-                  //                 : snapshot.data!.data![0].userdetail!.address.toString(),
-                  //             initialRating: widget.rating,
-                  //             instituteName:
-                  //                 snapshot.data!.data![0].educations!.isEmpty ? "Not Available" : snapshot.data!.data![0].educations![index].name.toString(),
-                  //             major:
-                  //                 snapshot.data!.data![0].educations!.isEmpty ? "Not Available" : snapshot.data!.data![0].educations![index].major.toString(),
-                  //             from: snapshot.data!.data![0].educations!.isEmpty ? "Not Available" : snapshot.data!.data![0].educations![index].from.toString(),
-                  //             to: snapshot.data!.data![0].educations!.isEmpty ? "Not Available" : snapshot.data!.data![0].educations![index].to.toString(),
-                  //             hour: snapshot.data!.data![0].userdetailprovider != null
-                  //                 ? snapshot.data!.data![0].userdetailprovider!.hourlyRate.toString() == "null"
-                  //                     ? "0"
-                  //                     : snapshot.data!.data![0].userdetailprovider!.hourlyRate.toString()
-                  //                 : '',
-                  //             zip: snapshot.data!.data![0].userdetail!.zip.toString() == "null"
-                  //                 ? "Not Available"
-                  //                 : snapshot.data!.data![0].userdetail!.zip.toString(),
-                  //             documentsSection: Column(
-                  //               children: [
-                  //                 if (snapshot.data!.data![0].providerverification != null) ...[
-                  //                   // file type 1
-                  //                   if (snapshot.data!.data![0].providerverification!.validDriverLicense != null) ...[
-                  //                     const SizedBox(height: 10),
-                  //                     BasicDocumentDownloadList(
-                  //                       onTap: () {
-                  //                         doDownloadFile(snapshot.data!.data![0].providerverification!.validDriverLicense);
-                  //                       },
-                  //                       fileStatus: snapshot.data!.data![0].providerverification!.validDriverLicenseVerify.toString(),
-                  //                       downloading: downloading,
-                  //                       downloadProgress: downloadProgress,
-                  //                       title: "Valid Driver's License",
-                  //                     ),
-                  //                   ],
-                  //                   // file type 2
-                  //                   if (snapshot.data!.data![0].providerverification!.scarsAwarenessCertification != null) ...[
-                  //                     const SizedBox(height: 10),
-                  //                     BasicDocumentDownloadList(
-                  //                       onTap: () {
-                  //                         doDownloadFile(snapshot.data!.data![0].providerverification!.scarsAwarenessCertification);
-                  //                       },
-                  //                       fileStatus: snapshot.data!.data![0].providerverification!.scarsAwarenessCertificationVerify.toString(),
-                  //                       downloading: downloading,
-                  //                       downloadProgress: downloadProgress,
-                  //                       title: "Scars Awareness Certification",
-                  //                     ),
-                  //                   ],
-                  //                   // file type 8
-                  //                   if (snapshot.data!.data![0].providerverification!.policeBackgroundCheck != null) ...[
-                  //                     const SizedBox(height: 10),
-                  //                     BasicDocumentDownloadList(
-                  //                       onTap: () {
-                  //                         doDownloadFile(snapshot.data!.data![0].providerverification!.policeBackgroundCheck);
-                  //                       },
-                  //                       fileStatus: snapshot.data!.data![0].providerverification!.policeBackgroundCheckVerify.toString(),
-                  //                       downloading: downloading,
-                  //                       downloadProgress: downloadProgress,
-                  //                       title: "Police Background Check",
-                  //                     ),
-                  //                   ],
-                  //                   // file type 3
-                  //                   if (snapshot.data!.data![0].providerverification!.cprFirstAidCertification != null) ...[
-                  //                     const SizedBox(height: 10),
-                  //                     BasicDocumentDownloadList(
-                  //                       onTap: () {
-                  //                         doDownloadFile(snapshot.data!.data![0].providerverification!.cprFirstAidCertification);
-                  //                       },
-                  //                       fileStatus: snapshot.data!.data![0].providerverification!.cprFirstAidCertificationVerify.toString(),
-                  //                       downloading: downloading,
-                  //                       downloadProgress: downloadProgress,
-                  //                       title: "CPR/First Aid Certificate",
-                  //                     ),
-                  //                   ],
-                  //                   // file type 7
-                  //                   if (snapshot.data!.data![0].providerverification!.governmentRegisteredCareProvider != null) ...[
-                  //                     const SizedBox(height: 10),
-                  //                     BasicDocumentDownloadList(
-                  //                       onTap: () {
-                  //                         doDownloadFile(snapshot.data!.data![0].providerverification!.governmentRegisteredCareProvider);
-                  //                       },
-                  //                       fileStatus: snapshot.data!.data![0].providerverification!.governmentRegisteredCareProviderVerify.toString(),
-                  //                       downloading: downloading,
-                  //                       downloadProgress: downloadProgress,
-                  //                       title: "Government Registered Care Provider",
-                  //                     ),
-                  //                   ],
-                  //                   // file type 4
-                  //                   if (snapshot.data!.data![0].providerverification!.animalCareProviderCertification != null) ...[
-                  //                     const SizedBox(height: 10),
-                  //                     BasicDocumentDownloadList(
-                  //                       onTap: () {
-                  //                         doDownloadFile(snapshot.data!.data![0].providerverification!.animalCareProviderCertification);
-                  //                       },
-                  //                       fileStatus: snapshot.data!.data![0].providerverification!.animalCareProviderCertificationVerify.toString(),
-                  //                       downloading: downloading,
-                  //                       downloadProgress: downloadProgress,
-                  //                       title: "Animal Care Provider Certificate",
-                  //                     ),
-                  //                   ],
-                  //                   // file type 6
-                  //                   if (snapshot.data!.data![0].providerverification!.animailFirstAid != null) ...[
-                  //                     const SizedBox(height: 10),
-                  //                     BasicDocumentDownloadList(
-                  //                       onTap: () {
-                  //                         doDownloadFile(snapshot.data!.data![0].providerverification!.animailFirstAid);
-                  //                       },
-                  //                       fileStatus: snapshot.data!.data![0].providerverification!.animailFirstAidVerify.toString(),
-                  //                       downloading: downloading,
-                  //                       downloadProgress: downloadProgress,
-                  //                       title: "Animal First Aid",
-                  //                     ),
-                  //                   ],
-                  //                   // file type 3a
-                  //                   if (snapshot.data!.data![0].providerverification!.redCrossBabysittingCertification != null) ...[
-                  //                     const SizedBox(height: 10),
-                  //                     BasicDocumentDownloadList(
-                  //                       onTap: () {
-                  //                         doDownloadFile(snapshot.data!.data![0].providerverification!.redCrossBabysittingCertification);
-                  //                       },
-                  //                       fileStatus: snapshot.data!.data![0].providerverification!.redCrossBabysittingCertificationVerify.toString(),
-                  //                       downloading: downloading,
-                  //                       downloadProgress: downloadProgress,
-                  //                       title: "Red Cross Babysitting Certification",
-                  //                     ),
-                  //                   ],
-                  //                   // file type 5
-                  //                   if (snapshot.data!.data![0].providerverification!.chaildAndFamilyServicesAndAbuse != null) ...[
-                  //                     const SizedBox(height: 10),
-                  //                     BasicDocumentDownloadList(
-                  //                       onTap: () {
-                  //                         doDownloadFile(snapshot.data!.data![0].providerverification!.chaildAndFamilyServicesAndAbuse);
-                  //                       },
-                  //                       fileStatus: snapshot.data!.data![0].providerverification!.chaildAndFamilyServicesAndAbuseVerify.toString(),
-                  //                       downloading: downloading,
-                  //                       downloadProgress: downloadProgress,
-                  //                       title: "Dept Child and Family Services Child Abuse Check",
-                  //                     ),
-                  //                   ],
-                  //                 ]
-                  //               ],
-                  //             ),
-                  //             imgProviderPath: snapshot.data!.data![index].ratings!.isEmpty
-                  //                 ? "https://img.icons8.com/material-rounded/256/question-mark.png"
-                  //                 : "https://islandcare.bm/storage/${snapshot.data!.data![index].ratings![index].receiverRating!.avatar}",
-                  //             ratings: snapshot.data!.data![index].ratings,
-                  //             // providerName: snapshot.data!.data![index].ratings!.isEmpty ? "Not Available" : "${snapshot.data!.data![index].ratings![index].receiverRating!.firstName} ${snapshot.data!.data![index].ratings![index].receiverRating!.lastName}",
-                  //             // providerComment: snapshot.data!.data![index].ratings!.isEmpty ? "Not Available" : snapshot.data!.data![index].ratings![index].comment.toString(),
-                  //             // providerRating: snapshot.data!.data![index].ratings!.isEmpty ? 0.0 : snapshot.data!.data![index].ratings![index].rating!.toDouble(),
-                  //           );
-                  //         },
-                  //       );
-                  //     } else {
-                  //       return const Center(
-                  //         child: CircularProgressIndicator(),
-                  //       );
-                  //     }
-                  //   },
-                  // ),
                 )
               : const Center(
                   child: Text("No Data Found"),

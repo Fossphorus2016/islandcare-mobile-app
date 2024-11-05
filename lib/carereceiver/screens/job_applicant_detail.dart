@@ -2,14 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/job_applicant_detail.dart';
-import 'package:island_app/carereceiver/screens/applicant_profile_detail.dart';
-import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_applicants_widget.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 
 class JobApplicantsDetail extends StatefulWidget {
   final String name;
@@ -37,7 +37,7 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
       });
       return;
     }
-    var token = RecieverUserProvider.userToken;
+    var token = await getToken();
     final response = await getRequesthandler(
       url: '${CareReceiverURl.serviceReceiverApplicantionApplicants}/${widget.name}/${widget.jobId}',
       token: token,
@@ -45,7 +45,7 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
     setState(() {
       isLoading = false;
     });
-    // print(response.data);
+
     if (response.statusCode == 200) {
       futureJobApplicantModel = JobApplicantDetailModel.fromJson(response.data);
     } else {
@@ -179,16 +179,13 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
                               jobType: item.userdetail!.gender.toString() == '1' ? "Male" : "Female",
                               count: '',
                               onTap: () {
-                                // add null check in applicant profile
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ApplicantProfileDetail(
-                                      jobTitle: widget.name,
-                                      jobId: widget.jobId!,
-                                      profileId: item.id.toString(),
-                                    ),
-                                  ),
+                                navigationService.push(
+                                  RoutesName.recieverProviderDetailApplicantProfileDetail,
+                                  arguments: {
+                                    "jobId": widget.jobId!,
+                                    "jobTitle": widget.name,
+                                    "profileId": item.id.toString(),
+                                  },
                                 );
                               },
                             );

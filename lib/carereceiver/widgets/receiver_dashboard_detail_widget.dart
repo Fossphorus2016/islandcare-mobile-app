@@ -113,9 +113,7 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                                 color: Colors.grey,
                               ),
                             ),
-                            onRatingUpdate: (rating) {
-                              // print(rating);
-                            },
+                            onRatingUpdate: (rating) {},
                           ),
                         ],
                       ),
@@ -157,8 +155,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 10),
                   Container(
-                      // margin: const EdgeInsets.symmetric(
-                      //     horizontal: 14),
                       padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
                       decoration: const BoxDecoration(
                         color: Colors.white,
@@ -192,8 +188,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    // margin: const EdgeInsets.symmetric(
-                    //     horizontal: 14),
                     padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
                     decoration: const BoxDecoration(
                       color: Colors.white,
@@ -242,85 +236,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
             ],
           ),
         ),
-        // Container(
-        //   alignment: Alignment.center,
-        //   decoration: BoxDecoration(
-        //     color: CustomColors.white,
-        //   ),
-        //   child: Column(
-        //     children: [
-        //       CircleAvatar(
-        //         radius: 40,
-        //         child: ClipRRect(
-        //           borderRadius: BorderRadius.circular(40),
-        //           child: ClipRRect(
-        //             borderRadius: BorderRadius.circular(100),
-        //             child: CachedNetworkImage(
-        //               width: 100,
-        //               height: 100,
-        //               fit: BoxFit.cover,
-        //               imageUrl: imgPath.toString(),
-        //               placeholder: (context, url) => const CircularProgressIndicator(),
-        //               errorWidget: (context, url, error) => const Icon(Icons.error),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       Text(
-        //         title.toString(),
-        //         style: TextStyle(
-        //           color: CustomColors.primaryText,
-        //           fontFamily: "Poppins",
-        //           fontSize: 24,
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //       Text(
-        //         services.toString(),
-        //         style: TextStyle(
-        //           color: CustomColors.primaryText,
-        //           fontFamily: "Poppins",
-        //           fontSize: 16,
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //       SizedBox(
-        //         child: Text(
-        //           "$experience years experience \n \$$hour/hour \n  $address \n $zip",
-        //           textAlign: TextAlign.center,
-        //           style: TextStyle(
-        //             color: CustomColors.primaryText,
-        //             fontFamily: "Poppins",
-        //             fontSize: 13,
-        //             fontWeight: FontWeight.w400,
-        //           ),
-        //         ),
-        //       ),
-        //       const SizedBox(
-        //         height: 5,
-        //       ),
-        //       if (initialRating != null) ...[
-        //         RatingBar.builder(
-        //           initialRating: initialRating!,
-        //           minRating: 1,
-        //           direction: Axis.horizontal,
-        //           allowHalfRating: true,
-        //           ignoreGestures: false,
-        //           itemSize: 20,
-        //           itemCount: 5,
-        //           itemBuilder: (context, _) => const Icon(
-        //             Icons.star,
-        //             color: Colors.amber,
-        //           ),
-        //           onRatingUpdate: (rating) {},
-        //         ),
-        //       ],
-        //       const SizedBox(
-        //         height: 10,
-        //       ),
-        //     ],
-        //   ),
-        // ),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           child: Column(
@@ -487,12 +402,8 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
               const SizedBox(height: 5),
               // Verified
 
-              // Reviews
-
               const SizedBox(height: 15),
-              // ReviewExpansionList(
-              //   list: ratings,
-              // ),
+
               Container(
                 alignment: Alignment.topLeft,
                 padding: const EdgeInsets.all(10),
@@ -538,119 +449,6 @@ class ReceiverDashboardDetailWidget extends StatelessWidget {
                         );
                       },
                     ),
-                    // Column( ${widget.list![i].receiverRating.firstName} ${widget.list![i].receiverRating.lastName}
-                    //   children: [
-                    //     Row(
-                    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //       children: [
-                    //         Text(
-                    //           "Name",
-                    //           style: TextStyle(
-                    //             fontFamily: "Rubik",
-                    //             fontSize: 14,
-                    //             color: CustomColors.primaryTextLight,
-                    //             fontWeight: FontWeight.w600,
-                    //           ),
-                    //         ),
-                    //         Text(
-                    //           "Ratings",
-                    //           style: TextStyle(
-                    //             fontFamily: "Rubik",
-                    //             fontSize: 14,
-                    //             color: CustomColors.primaryTextLight,
-                    //             fontWeight: FontWeight.w600,
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ),
-                    //     const SizedBox(height: 10),
-                    //     // Container(
-                    //     //   padding: const EdgeInsets.symmetric(vertical: 5),
-                    //     //   decoration: BoxDecoration(
-                    //     //     border: Border(
-                    //     //       top: BorderSide(
-                    //     //         color: CustomColors.paraColor,
-                    //     //         width: .5,
-                    //     //       ),
-                    //     //       bottom: BorderSide(
-                    //     //         color: CustomColors.paraColor,
-                    //     //         width: .5,
-                    //     //       ),
-                    //     //     ),
-                    //     //   ),
-                    //     //   child: Row(
-                    //     //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //     //     children: [
-                    //     //       SizedBox(
-                    //     //         width: 100,
-                    //     //         child: Column(
-                    //     //           crossAxisAlignment: CrossAxisAlignment.start,
-                    //     //           children: [
-                    //     //             // CircleAvatar(
-                    //     //             //   radius: 15,
-                    //     //             //   child: ClipRRect(
-                    //     //             //     borderRadius: BorderRadius.circular(15),
-                    //     //             //     child: ClipRRect(
-                    //     //             //       borderRadius: BorderRadius.circular(15),
-                    //     //             //       child: CachedNetworkImage(
-                    //     //             //         width: 100,
-                    //     //             //         height: 100,
-                    //     //             //         fit: BoxFit.cover,
-                    //     //             //         imageUrl: imgProviderPath.toString(),
-                    //     //             //         placeholder: (context, url) => const CircularProgressIndicator(),
-                    //     //             //         errorWidget: (context, url, error) => const Icon(Icons.error),
-                    //     //             //       ),
-                    //     //             //     ),
-                    //     //             //   ),
-                    //     //             // ),
-                    //     //             const SizedBox(width: 4),
-                    //     //             Text(
-                    //     //               providerName.toString(),
-                    //     //               style: TextStyle(
-                    //     //                 fontSize: 13,
-                    //     //                 fontFamily: "Poppins",
-                    //     //                 fontWeight: FontWeight.w400,
-                    //     //                 color: CustomColors.primaryText,
-                    //     //               ),
-                    //     //             ),
-                    //     //           ],
-                    //     //         ),
-                    //     //       ),
-                    //     //       SizedBox(
-                    //     //         width: 100,
-                    //     //         child: RatingBar.builder(
-                    //     //           initialRating: providerRating!.toDouble(),
-                    //     //           minRating: 1,
-                    //     //           direction: Axis.horizontal,
-                    //     //           allowHalfRating: true,
-                    //     //           ignoreGestures: false,
-                    //     //           itemSize: 15,
-                    //     //           itemCount: 5,
-                    //     //           itemBuilder: (context, _) => const Icon(
-                    //     //             Icons.star,
-                    //     //             color: Colors.amber,
-                    //     //           ),
-                    //     //           onRatingUpdate: (rating) {},
-                    //     //         ),
-                    //     //       ),
-                    //     //       Container(
-                    //     //         alignment: Alignment.center,
-                    //     //         width: 100,
-                    //     //         child: Text(
-                    //     //           providerComment.toString(),
-                    //     //           style: TextStyle(
-                    //     //             fontSize: 13,
-                    //     //             fontFamily: "Poppins",
-                    //     //             fontWeight: FontWeight.w400,
-                    //     //             color: CustomColors.primaryText,
-                    //     //           ),
-                    //     //         ),
-                    //     //       ),
-                    //     //     ],
-                    //     //   ),
-                    //     // ),
-                    //   ],
-                    // ),
                   ],
                 ),
               ),

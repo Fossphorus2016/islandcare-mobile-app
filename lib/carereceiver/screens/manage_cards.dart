@@ -1,12 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, await_only_futures, deprecated_member_use
 
-// import 'dart:async';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/manage_cards_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
@@ -661,48 +658,7 @@ class _ManageCardsState extends State<ManageCards> {
                                                 return false;
                                               },
                                             ),
-                                            // GestureDetector(
-                                            //   onTap: () {
-                                            //     if (nameOncardController.text.isEmpty) {
-                                            //       showErrorToast("Please Enter Name");
-                                            //     } else if (cardNumberController.text.isEmpty) {
-                                            //       showErrorToast("Please Enter Card Number");
-                                            //     } else if (selectedMonth == null) {
-                                            //       showErrorToast("Please Select Month");
-                                            //     } else if (selectedYear == null) {
-                                            //       showErrorToast("Please Select Year");
-                                            //     } else if (cvvController.text.isEmpty) {
-                                            //       showErrorToast("Please Enter CVV");
-                                            //     } else {
-                                            //       if (cardKey.currentState!.validate()) {
-                                            //         postAddCard();
-                                            //       }
-                                            //     }
-                                            //   },
-                                            //   child: Container(
-                                            //     width: MediaQuery.of(context).size.width,
-                                            //     height: 54,
-                                            //     decoration: BoxDecoration(
-                                            //       color: CustomColors.primaryColor,
-                                            //       borderRadius: BorderRadius.circular(10),
-                                            //     ),
-                                            //     child: Center(
-                                            //       child: Text(
-                                            //         "Add Card",
-                                            //         style: TextStyle(
-                                            //           color: CustomColors.white,
-                                            //           fontFamily: "Rubik",
-                                            //           fontStyle: FontStyle.normal,
-                                            //           fontWeight: FontWeight.w500,
-                                            //           fontSize: 18,
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
-                                            const SizedBox(
-                                              height: 30,
-                                            ),
+                                            const SizedBox(height: 30),
                                           ],
                                         ),
                                       ),
@@ -732,230 +688,6 @@ class _ManageCardsState extends State<ManageCards> {
                   ),
                 ),
                 const SizedBox(height: 10),
-                // Listing
-                // ListView.builder(
-                //   physics: const NeverScrollableScrollPhysics(),
-                //   shrinkWrap: true,
-                //   itemCount: allCards.length,
-                //   itemBuilder: (BuildContext context, int index) {
-                //     return CardDetailPanel(
-                //       cardName: allCards[index].nameOnCard.toString(),
-                //       cardNumber: allCards[index].cardNumber.toString(),
-                //       expireMonth: allCards[index].cardExpirationMonth.toString(),
-                //       expireYers: allCards[index].cardExpirationYear.toString(),
-                //       cvv: allCards[index].cvv.toString(),
-                //     );
-                //   },
-                // ),
-                // FutureBuilder<List<CreditCard>>(
-                //   future: context.watch<CardProvider>().allCards,
-                //   builder: (context, snapshot) {
-                //     if (snapshot.hasData) {
-                //       return ListView.builder(
-                //         physics: const NeverScrollableScrollPhysics(),
-                //         shrinkWrap: true,
-                //         itemCount: snapshot.data?.length,
-                //         itemBuilder: (BuildContext context, int index) {
-                //           return GestureDetector(
-                //             onTap: () {
-                //               if (showItem.contains(index)) {
-                //                 showItem.remove(index);
-                //               } else {
-                //                 showItem.add(index);
-                //               }
-                //               setState(() {});
-                //             },
-                //             child: Container(
-                //               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                //               decoration: BoxDecoration(
-                //                 border: Border(
-                //                   bottom: BorderSide(
-                //                     color: CustomColors.borderLight,
-                //                     width: 0.1,
-                //                   ),
-                //                 ),
-                //               ),
-                //               child: Column(
-                //                 children: [
-                //                   Row(
-                //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //                     crossAxisAlignment: CrossAxisAlignment.start,
-                //                     children: [
-                //                       Column(
-                //                         crossAxisAlignment: CrossAxisAlignment.start,
-                //                         mainAxisAlignment: MainAxisAlignment.start,
-                //                         children: [
-                //                           Container(
-                //                             width: MediaQuery.of(context).size.width * .4,
-                //                             alignment: Alignment.topLeft,
-                //                             child: Text(
-                //                               snapshot.data![index].nameOnCard.toString(),
-                //                               style: TextStyle(
-                //                                 color: CustomColors.primaryText,
-                //                                 fontFamily: "Poppins",
-                //                                 fontWeight: FontWeight.w600,
-                //                                 fontSize: 13,
-                //                               ),
-                //                             ),
-                //                           ),
-                //                         ],
-                //                       ),
-                //                       Container(
-                //                         width: MediaQuery.of(context).size.width * .4,
-                //                         alignment: Alignment.center,
-                //                         child: Text(
-                //                           snapshot.data![index].cardNumber.toString(),
-                //                           style: TextStyle(
-                //                             color: CustomColors.primaryText,
-                //                             fontFamily: "Poppins",
-                //                             fontWeight: FontWeight.w600,
-                //                             fontSize: 13,
-                //                           ),
-                //                         ),
-                //                       ),
-                //                     ],
-                //                   ),
-                //                   const SizedBox(height: 10),
-                //                   showItem.contains(index)
-                //                       ? Container(
-                //                           padding: const EdgeInsets.symmetric(vertical: 5),
-                //                           decoration: BoxDecoration(
-                //                             color: CustomColors.loginBg,
-                //                             border: Border(
-                //                               top: BorderSide(
-                //                                 color: CustomColors.borderLight,
-                //                                 width: 0.1,
-                //                               ),
-                //                             ),
-                //                           ),
-                //                           child: Column(
-                //                             children: [
-                //                               Row(
-                //                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //                                 crossAxisAlignment: CrossAxisAlignment.start,
-                //                                 children: [
-                //                                   Column(
-                //                                     crossAxisAlignment: CrossAxisAlignment.center,
-                //                                     children: [
-                //                                       Container(
-                //                                         width: MediaQuery.of(context).size.width * .3,
-                //                                         alignment: Alignment.center,
-                //                                         child: Text(
-                //                                           "Expiry Month",
-                //                                           // "Babysitters",
-                //                                           style: TextStyle(
-                //                                             color: CustomColors.primaryText,
-                //                                             fontFamily: "Poppins",
-                //                                             fontWeight: FontWeight.w600,
-                //                                             fontSize: 13,
-                //                                           ),
-                //                                         ),
-                //                                       ),
-                //                                       const SizedBox(height: 5),
-                //                                       Container(
-                //                                         width: MediaQuery.of(context).size.width * .3,
-                //                                         alignment: Alignment.center,
-                //                                         child: Text(
-                //                                           snapshot.data![index].cardExpirationMonth.toString(),
-                //                                           // "One-Time",
-                //                                           style: TextStyle(
-                //                                             color: CustomColors.hintText,
-                //                                             fontFamily: "Poppins",
-                //                                             fontWeight: FontWeight.w500,
-                //                                             fontSize: 12,
-                //                                           ),
-                //                                         ),
-                //                                       ),
-                //                                     ],
-                //                                   ),
-                //                                   Column(
-                //                                     crossAxisAlignment: CrossAxisAlignment.center,
-                //                                     children: [
-                //                                       Container(
-                //                                         width: MediaQuery.of(context).size.width * .3,
-                //                                         alignment: Alignment.center,
-                //                                         child: Text(
-                //                                           "Expiry Year",
-                //                                           // "Babysitters",
-                //                                           style: TextStyle(
-                //                                             color: CustomColors.primaryText,
-                //                                             fontFamily: "Poppins",
-                //                                             fontWeight: FontWeight.w600,
-                //                                             fontSize: 13,
-                //                                           ),
-                //                                         ),
-                //                                       ),
-                //                                       const SizedBox(height: 5),
-                //                                       Container(
-                //                                         width: MediaQuery.of(context).size.width * .3,
-                //                                         alignment: Alignment.center,
-                //                                         child: Text(
-                //                                           snapshot.data![index].cardExpirationYear.toString(),
-                //                                           style: TextStyle(
-                //                                             color: CustomColors.hintText,
-                //                                             fontFamily: "Poppins",
-                //                                             fontWeight: FontWeight.w500,
-                //                                             fontSize: 12,
-                //                                           ),
-                //                                         ),
-                //                                       ),
-                //                                     ],
-                //                                   ),
-                //                                   Column(
-                //                                     crossAxisAlignment: CrossAxisAlignment.center,
-                //                                     children: [
-                //                                       Container(
-                //                                         width: MediaQuery.of(context).size.width * .3,
-                //                                         alignment: Alignment.center,
-                //                                         child: Text(
-                //                                           "CVV",
-                //                                           // "Babysitters",
-                //                                           style: TextStyle(
-                //                                             color: CustomColors.primaryText,
-                //                                             fontFamily: "Poppins",
-                //                                             fontWeight: FontWeight.w600,
-                //                                             fontSize: 13,
-                //                                           ),
-                //                                         ),
-                //                                       ),
-                //                                       const SizedBox(height: 5),
-                //                                       Container(
-                //                                         width: MediaQuery.of(context).size.width * .3,
-                //                                         alignment: Alignment.center,
-                //                                         child: Text(
-                //                                           snapshot.data![index].cvv.toString(),
-                //                                           // "One-Time",
-                //                                           style: TextStyle(
-                //                                             color: CustomColors.hintText,
-                //                                             fontFamily: "Poppins",
-                //                                             fontWeight: FontWeight.w500,
-                //                                             fontSize: 12,
-                //                                           ),
-                //                                         ),
-                //                                       ),
-                //                                     ],
-                //                                   ),
-                //                                 ],
-                //                               ),
-                //                             ],
-                //                           ),
-                //                         )
-                //                       : Container(),
-                //                 ],
-                //               ),
-                //             ),
-                //           );
-                //         },
-                //       );
-                //     } else {
-                //       return const Center(
-                //         child: CircularProgressIndicator(),
-                //       );
-                //     }
-                //   },
-                // ),
-
-                // if (selectCard != null) ...[
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: FocusScope.of(context).hasFocus ? MediaQuery.of(context).size.height : 80,
@@ -1019,7 +751,6 @@ class _ManageCardsState extends State<ManageCards> {
                                     provider.setSelectedCard(provider.filteredList![index]);
                                   },
                                   child: Container(
-                                    // color: Colors.red,
                                     padding: const EdgeInsets.symmetric(vertical: 10),
                                     decoration: const BoxDecoration(
                                       border: Border(
@@ -1095,7 +826,6 @@ class _ManageCardsState extends State<ManageCards> {
                   ),
                   const SizedBox(height: 10),
                   Row(
-                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
                         "Expiry Year: ",
@@ -1109,7 +839,6 @@ class _ManageCardsState extends State<ManageCards> {
                   ),
                 ]
               ],
-              // ],
             ),
           ),
         ),
@@ -1119,11 +848,17 @@ class _ManageCardsState extends State<ManageCards> {
 }
 
 class CardProvider extends ChangeNotifier {
+  setDefault() {
+    allCards = [];
+    filteredList = [];
+    selectedCard = null;
+  }
+
   List<CreditCard>? allCards = [];
   List<CreditCard>? filteredList = [];
   CreditCard? selectedCard;
   Future<void> fetchManageCardsModel() async {
-    var token = await RecieverUserProvider.userToken;
+    var token = await getToken();
     final response = await getRequesthandler(
       url: CareReceiverURl.serviceReceiverGetCreditCards,
       token: token,
@@ -1132,11 +867,8 @@ class CardProvider extends ChangeNotifier {
       allCards = List<CreditCard>.from(response.data["credit-cards"]!.map((x) => CreditCard.fromJson(x)));
       filteredList = allCards;
       notifyListeners();
-      showSuccessToast("Cards is loaded successfully");
-      // return {"status": true, "message": "Cards is loaded successfully"};
     } else {
       showErrorToast("Failed to load Cards");
-      // return {"status": false, "message": "Failed to load Cards"};
     }
   }
 

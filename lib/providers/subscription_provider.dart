@@ -3,25 +3,32 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/manage_cards_model.dart';
-import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 
 class SubscriptionProvider extends ChangeNotifier {
+  setDefault() {
+    allPackages = [];
+    selectedPackage = {};
+    cardValue = null;
+    addNewCard = false;
+  }
+
   List allPackages = [];
   getPackages() async {
+    var token = await getToken();
     try {
-      // print("user provider token ${RecieverUserProvider.userToken}");
       var response = await getRequesthandler(
         url: CareReceiverURl.serviceSubscribe,
-        token: RecieverUserProvider.userToken,
+        token: token,
       );
       if (response.statusCode == 200) {
         allPackages = response.data['subscription_package'];
         notifyListeners();
       }
     } on DioError {
-      // print("error on get packages $e");
+      //
     }
   }
 
@@ -35,12 +42,13 @@ class SubscriptionProvider extends ChangeNotifier {
   }
 
   Future<Response> unSubscribe(id) async {
+    var token = await getToken();
     var response = await postRequesthandler(
       url: CareReceiverURl.serviceReceiverUnSubscribe,
       formData: FormData.fromMap({
         "subscription_id": id,
       }),
-      token: RecieverUserProvider.userToken,
+      token: token,
     );
     return response;
   }
@@ -59,10 +67,6 @@ class SubscriptionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // setSelectCardOnInit(value) {
-  //   cardValue = value;
-  // }
-
   Future<Response> subscribePackage(
     id,
     cardId,
@@ -73,6 +77,7 @@ class SubscriptionProvider extends ChangeNotifier {
     cardExpirationYear,
     cvv,
   ) async {
+    var token = await getToken();
     var response = await postRequesthandler(
       url: CareReceiverURl.serviceReceiverUnSubscribe,
       formData: FormData.fromMap({
@@ -85,7 +90,7 @@ class SubscriptionProvider extends ChangeNotifier {
         "card_expiration_year": cardExpirationYear,
         "cvv": cvv,
       }),
-      token: RecieverUserProvider.userToken,
+      token: token,
     );
     return response;
   }

@@ -2,9 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class StorageService {
   final _storageKey = const FlutterSecureStorage();
-  AndroidOptions _getAndroidOption() => const AndroidOptions(
-        encryptedSharedPreferences: true,
-      );
+  AndroidOptions _getAndroidOption() => AndroidOptions();
 
   IOSOptions _getIOSOption() => const IOSOptions(
         synchronizable: true,

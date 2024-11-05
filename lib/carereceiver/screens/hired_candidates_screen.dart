@@ -8,7 +8,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/hired_candidate_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
@@ -29,44 +28,12 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
   TextEditingController commentController = TextEditingController();
   String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
-  // Service Receiver Hired Candidates
-  // late Future<HiredCandidateModel>? futureHiredCandidate;
-
-  // Future<HiredCandidateModel> fetchHiredCandidateModel() async {
-  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=$currentDate',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     var json = response.data as Map;
-  //     // print(response.data);
-  //     if (json['data'].isNotEmpty) {
-  //       var hired = json['data'] as List;
-  //       setState(() {
-  //         hiredCandidates = hired;
-  //       });
-  //       // print(hired);
-  //       return HiredCandidateModel.fromJson(response.data);
-  //     } else {
-  //       return HiredCandidateModel.fromJson({});
-  //     }
-  //   } else {
-  //     throw Exception('Failed to load Hired Candidates');
-  //   }
-  // }
-
   var providerId;
   var rating;
   var jobId;
   jobCompleted() async {
     var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     var response = await postRequesthandler(
       url: url,
       token: token,
@@ -87,20 +54,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
       }
     }
   }
-
-  // var token;
-  // Future getUserToken() async {
-  //   SharedPreferences? prefs = await SharedPreferences.getInstance();
-  //   await prefs.reload();
-  //   var userToken = await prefs.getString('userToken');
-  //   setState(() {
-  //     token = userToken;
-  //   });
-  //   // if (kDebugMode) {
-  //   //   print("token == $token");
-  //   // }
-  //   return userToken.toString();
-  // }
 
   @override
   void initState() {
@@ -330,7 +283,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                       Text(
                                                                         "Start Date",
                                                                         style: TextStyle(
-                                                                          // fontSize: 16,
                                                                           fontFamily: "Rubik",
                                                                           fontWeight: FontWeight.w600,
                                                                           color: CustomColors.primaryText,
@@ -362,7 +314,12 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                           ),
                                                                           child: InkWell(
                                                                             onTap: () async {
-                                                                              var tt = await showDatePicker(context: context, firstDate: DateTime(2020, 1, 1), lastDate: DateTime.now());
+                                                                              var tt = await showDatePicker(
+                                                                                context: context,
+                                                                                initialEntryMode: DatePickerEntryMode.calendarOnly,
+                                                                                firstDate: DateTime(2020, 1, 1),
+                                                                                lastDate: DateTime.now(),
+                                                                              );
 
                                                                               if (tt != null) {
                                                                                 setState(() {
@@ -390,7 +347,6 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                       Text(
                                                                         "End Date",
                                                                         style: TextStyle(
-                                                                          // fontSize: 16,
                                                                           fontFamily: "Rubik",
                                                                           fontWeight: FontWeight.w600,
                                                                           color: CustomColors.primaryText,
@@ -422,13 +378,17 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                           ),
                                                                           child: InkWell(
                                                                             onTap: () async {
-                                                                              var tt = await showDatePicker(context: context, firstDate: DateTime(2020, 1, 1), lastDate: DateTime.now());
+                                                                              var tt = await showDatePicker(
+                                                                                context: context,
+                                                                                initialEntryMode: DatePickerEntryMode.calendarOnly,
+                                                                                firstDate: DateTime(2020, 1, 1),
+                                                                                lastDate: DateTime.now(),
+                                                                              );
                                                                               if (tt != null) {
                                                                                 setState(() {
                                                                                   endTime = DateFormat('yyyy-MM-dd').format(tt);
                                                                                 });
                                                                               }
-                                                                              // print(endTime.runtimeType);
                                                                             },
                                                                             child: Container(
                                                                               height: 50,
@@ -701,7 +661,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                     ),
                                                                     onPressed: () async {
                                                                       var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
-                                                                      var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+                                                                      var token = await getToken();
                                                                       var response = await postRequesthandler(
                                                                         url: url,
                                                                         token: token,
@@ -792,25 +752,32 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
 }
 
 class HiredCandidatesProvider extends ChangeNotifier {
+  setDefault() {
+    hiredCandidates = [];
+    isLoading = true;
+    filterDataList = [];
+    currentPageIndex = 0;
+    rowsPerPage = 10;
+    startIndex = 0;
+    endIndex = 0;
+    totalRowsCount = 0;
+  }
+
   List hiredCandidates = [];
   // Get all jobs
 
   bool isLoading = true;
   Future<void> fetchHiredCandidateModel() async {
-    var token = await RecieverUserProvider.userToken;
+    var token = await getToken();
+
     final response = await getRequesthandler(
       url: '${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=${DateTime.now()}',
       token: token,
     );
     if (response.statusCode == 200) {
       var json = response.data as Map;
-      // print(response.data);
+
       if (json['data'].isNotEmpty) {
-        // var hired = json['data'] as List;
-
-        // hiredCandidates = hired;
-
-        // print(hired);
         var data = HiredCandidateModel.fromJson(response.data);
         hiredCandidates = data.data!;
         isLoading = false;
@@ -824,7 +791,6 @@ class HiredCandidatesProvider extends ChangeNotifier {
 
   // Pagination List
 
-  // List dataList = [];
   List filterDataList = [];
   int currentPageIndex = 0;
   int rowsPerPage = 10;
@@ -834,15 +800,12 @@ class HiredCandidatesProvider extends ChangeNotifier {
 
   setPaginationList(List? data) async {
     try {
-      // if (data != null && data.isNotEmpty) {
-      // hiredCandidates = data;
       startIndex = currentPageIndex * rowsPerPage;
       endIndex = min(startIndex + rowsPerPage, data!.length);
 
       filterDataList = data.sublist(startIndex, endIndex).toList();
       totalRowsCount = (data.length / 10).floor();
       notifyListeners();
-      // }
     } catch (error) {
       //
     }

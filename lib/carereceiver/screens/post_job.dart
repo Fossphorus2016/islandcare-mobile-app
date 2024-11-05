@@ -5,15 +5,14 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:island_app/carereceiver/screens/post_new_job.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/service_model.dart';
-// import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:provider/provider.dart';
 
@@ -48,10 +47,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const PostNewJob()),
-                  );
+                  navigationService.push(RoutesName.recieverPostNewJob);
                 },
                 style: ButtonStyle(
                   shape: WidgetStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(08))),
@@ -291,7 +287,6 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                                                             Text(
                                                                               "Start Date",
                                                                               style: TextStyle(
-                                                                                // fontSize: 16,
                                                                                 fontFamily: "Rubik",
                                                                                 fontWeight: FontWeight.w600,
                                                                                 color: CustomColors.primaryText,
@@ -323,7 +318,12 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                                                                 ),
                                                                                 child: InkWell(
                                                                                   onTap: () async {
-                                                                                    var tt = await showDatePicker(context: context, firstDate: DateTime(2020, 1, 1), lastDate: DateTime.now());
+                                                                                    var tt = await showDatePicker(
+                                                                                      context: context,
+                                                                                      initialEntryMode: DatePickerEntryMode.calendarOnly,
+                                                                                      firstDate: DateTime(2020, 1, 1),
+                                                                                      lastDate: DateTime.now(),
+                                                                                    );
 
                                                                                     if (tt != null) {
                                                                                       setState(() {
@@ -337,7 +337,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                                                                     alignment: Alignment.centerLeft,
                                                                                     child: Text(
                                                                                       // ignore: unnecessary_null_comparison
-                                                                                      startTime != null ? startTime.toString() : "Start Date",
+                                                                                      startTime != null && startTime.isNotEmpty ? startTime.toString() : "Start Date",
                                                                                     ),
                                                                                   ),
                                                                                 ),
@@ -352,7 +352,6 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                                                             Text(
                                                                               "End Date",
                                                                               style: TextStyle(
-                                                                                // fontSize: 16,
                                                                                 fontFamily: "Rubik",
                                                                                 fontWeight: FontWeight.w600,
                                                                                 color: CustomColors.primaryText,
@@ -384,13 +383,17 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                                                                 ),
                                                                                 child: InkWell(
                                                                                   onTap: () async {
-                                                                                    var tt = await showDatePicker(context: context, firstDate: DateTime(2020, 1, 1), lastDate: DateTime.now());
+                                                                                    var tt = await showDatePicker(
+                                                                                      context: context,
+                                                                                      initialEntryMode: DatePickerEntryMode.calendarOnly,
+                                                                                      firstDate: DateTime(2020, 1, 1),
+                                                                                      lastDate: DateTime.now(),
+                                                                                    );
                                                                                     if (tt != null) {
                                                                                       setState(() {
                                                                                         endTime = DateFormat('yyyy-MM-dd').format(tt);
                                                                                       });
                                                                                     }
-                                                                                    // print(endTime.runtimeType);
                                                                                   },
                                                                                   child: Container(
                                                                                     height: 50,
@@ -399,7 +402,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                                                                     alignment: Alignment.centerLeft,
                                                                                     child: Text(
                                                                                       // ignore: unnecessary_null_comparison
-                                                                                      endTime != null ? endTime.toString() : "End Date",
+                                                                                      endTime != null && endTime.isNotEmpty ? endTime.toString() : "End Date",
                                                                                     ),
                                                                                   ),
                                                                                 ),
@@ -697,6 +700,17 @@ class JobDetail {
 }
 
 class PostedJobsProvider extends ChangeNotifier {
+  setDefault() {
+    allJobs = null;
+    isLoading = true;
+    filterDataList = [];
+    currentPageIndex = 0;
+    rowsPerPage = 10;
+    startIndex = 0;
+    endIndex = 0;
+    totalRowsCount = 0;
+  }
+
   AllJobModel? allJobs;
   // Get all jobs
 
@@ -721,12 +735,6 @@ class PostedJobsProvider extends ChangeNotifier {
         }
       } else {
         throw 'Failed to load Posted Jobs';
-        //  Exception(
-        //   customErrorSnackBar(
-        //     context,
-        //     'Failed to load Job Applicant Model',
-        //   ),
-        // );
       }
     } catch (e) {
       if (kDebugMode) {
@@ -761,15 +769,12 @@ class PostedJobsProvider extends ChangeNotifier {
 
   setPaginationList(List<JobDetail>? data) async {
     try {
-      // if (data != null && data.isNotEmpty) {
-
       startIndex = currentPageIndex * rowsPerPage;
       endIndex = min(startIndex + rowsPerPage, data!.length);
 
       filterDataList = data.sublist(startIndex, endIndex).toList();
       totalRowsCount = (data.length / 10).floor();
       notifyListeners();
-      // }
     } catch (error) {
       isLoading = false;
       notifyListeners();

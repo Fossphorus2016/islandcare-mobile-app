@@ -5,7 +5,6 @@ import 'package:island_app/caregiver/models/child_care_detail-dashbaord_model.da
 import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
-import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
@@ -15,10 +14,8 @@ import 'package:island_app/widgets/job_detail_tile.dart';
 import 'package:island_app/widgets/job_info_container.dart';
 import 'package:island_app/widgets/job_schedule_container.dart';
 import 'package:island_app/widgets/loading_button.dart';
-import 'package:provider/provider.dart';
 import 'package:island_app/caregiver/models/senior_care_detail_dashboard_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-// import 'package:island_app/widgets/progress_dialog.dart';
 
 class JobDetailGiver extends StatefulWidget {
   final String? id;
@@ -38,7 +35,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   List scheduleInfo = [];
 
   Future<void> jobApply() async {
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     final response = await putRequesthandler(
       url: "${CareGiverUrl.serviceProviderJobApply}/${widget.id}",
       token: token,
@@ -58,13 +55,12 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   String serviceName = '';
   bool? noDataFound;
   fetchJobDetail() async {
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     final response = await getRequesthandler(
       url: '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
       token: token,
     );
     if (response.statusCode == 200) {
-      // print(response.data['job_detail'][0]['service']);
       if (response.data['job_detail'] != null) {
         serviceName = response.data['job_detail'][0]['service']['name'];
         if (serviceName.toLowerCase() == "senior care") {
@@ -82,7 +78,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
         }
         setState(() {});
       }
-      // return PetCareDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
         'Failed to load Service Provider Dashboard',
@@ -94,11 +89,6 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
   void initState() {
     super.initState();
     fetchJobDetail();
-    // futureSeniorCareDetailDashboard = fetchSeniorCareDetailDashboardModel();
-    // futureSchoolSupportDetailDashboard = fetchSchoolSupportDetailDashboardModel();
-    // futureChildCareDetailDashboard = fetchChildCareDetailDashboardModel();
-    // futureHouseKeepingDetailDashboard = fetchHouseKeepingDetailDashboardModel();
-    // futurePetCareDetailDashboard = fetchPetCareDetailDashboardModel();
   }
 
   @override
@@ -304,19 +294,9 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
         );
       },
     );
-
-    // return const Center(
-    //   child: CircularProgressIndicator(),
-    // );
   }
 
-  // done
-
   Widget serviceSchoolSupport(BuildContext context) {
-    // return FutureBuilder<SchoolSupportDetailDashboardModel>(
-    //   future: futureSchoolSupportDetailDashboard,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData) {
     return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
@@ -417,21 +397,9 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
         );
       },
     );
-    // } else {
-    //   return const Center(
-    //     child: CircularProgressIndicator(),
-    //   );
-    // }
-    // },
-    // );
   }
-  //  Done
 
   Widget serviceChildCare(BuildContext context) {
-    // return FutureBuilder<ChildCareDetailDashboardModel>(
-    //   future: futureChildCareDetailDashboard,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData) {
     return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
@@ -505,22 +473,9 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
         );
       },
     );
-    //     } else {
-    //       return const Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     }
-    //   },
-    // );
   }
 
-  // done
-
   Widget serviceHouseKeeping(BuildContext context) {
-    // return FutureBuilder<HouseKeepingDetailDashboardModel>(
-    //   future: futureHouseKeepingDetailDashboard,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData) {
     return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
@@ -590,21 +545,9 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
         );
       },
     );
-    //     } else {
-    //       return const Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     }
-    //   },
-    // );
   }
 
-// done
   Widget servicePetCare(BuildContext context) {
-    // return FutureBuilder<PetCareDetailDashboardModel>(
-    //   future: futurePetCareDetailDashboard,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.hasData) {
     return ListView.builder(
       shrinkWrap: true,
       scrollDirection: Axis.vertical,
@@ -692,12 +635,5 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
         );
       },
     );
-    //     } else {
-    //       return const Center(
-    //         child: CircularProgressIndicator(),
-    //       );
-    //     }
-    //   },
-    // );
   }
 }

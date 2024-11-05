@@ -24,7 +24,6 @@ class JobBoardCartWidget extends StatelessWidget {
       onTap: detail,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        // height: 100,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
@@ -33,13 +32,15 @@ class JobBoardCartWidget extends StatelessWidget {
             width: 0.1,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
+                SizedBox(
+                  width: MediaQuery.of(context).size.width - 150,
                   child: Text(
                     jobTitle.toString(),
                     overflow: TextOverflow.ellipsis,
@@ -52,33 +53,33 @@ class JobBoardCartWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                Icon(
-                  Icons.arrow_circle_right_outlined,
-                  color: ServiceGiverColor.black,
+                Row(
+                  children: [
+                    Text(
+                      "Type: ",
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: CustomColors.black,
+                      ),
+                    ),
+                    Text(
+                      jobType.toString(),
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                      style: TextStyle(
+                        color: CustomColors.hintText,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            Row(
-              children: [
-                Text(
-                  "Type: ",
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: CustomColors.black,
-                  ),
-                ),
-                Text(
-                  jobType.toString(),
-                  maxLines: 1,
-                  overflow: TextOverflow.fade,
-                  style: TextStyle(
-                    color: CustomColors.hintText,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+            Icon(
+              Icons.arrow_circle_right_outlined,
+              color: ServiceGiverColor.black,
             ),
           ],
         ),

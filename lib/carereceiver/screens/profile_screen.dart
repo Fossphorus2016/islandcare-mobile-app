@@ -1,13 +1,13 @@
-// import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
-import 'package:island_app/screens/notification.dart';
 import 'package:island_app/carereceiver/screens/profile_edit.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/drawer_widget.dart';
@@ -29,7 +29,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // var userProfile = Provider.of<RecieverUserProvider>(context).gWAUserProfile;
     return Consumer<RecieverUserProvider>(
       builder: (context, userProvider, child) {
         return Scaffold(
@@ -50,12 +49,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
             actions: [
               GestureDetector(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NotificationScreen(),
-                    ),
-                  );
+                  navigationService.push(RoutesName.notification);
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(12.0),
@@ -145,30 +139,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                             style: TextStyle(fontSize: 12, fontFamily: "Rubik", fontWeight: FontWeight.w400, color: CustomColors.white),
                                           ),
                                           const SizedBox(width: 10),
-                                          // RatingBar(
-                                          //   ignoreGestures: true,
-                                          //   itemCount: 5,
-                                          //   itemSize: 20,
-                                          //   initialRating: userProfile.data!.avgRating!['rating'] == null ? 0.0 : double.parse(userProfile.data!.avgRating!['rating'].toString()),
-                                          //   minRating: 0,
-                                          //   ratingWidget: RatingWidget(
-                                          //     full: const Icon(
-                                          //       Icons.star_rounded,
-                                          //       color: Colors.amber,
-                                          //     ),
-                                          //     half: const Icon(
-                                          //       Icons.star_rounded,
-                                          //       color: Colors.amber,
-                                          //     ),
-                                          //     empty: const Icon(
-                                          //       Icons.star_rounded,
-                                          //       color: Colors.grey,
-                                          //     ),
-                                          //   ),
-                                          //   onRatingUpdate: (rating) {
-                                          //     // print(rating);
-                                          //   },
-                                          // ),
                                         ],
                                       ),
                                     ),
@@ -296,151 +266,6 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                   ],
                                 ),
                               ),
-                              // SizedBox(
-                              //   height: 50,
-                              //   child: Row(
-                              //     crossAxisAlignment: CrossAxisAlignment.center,
-                              //     children: [
-                              //       Container(
-                              //         padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                              //         decoration: const BoxDecoration(
-                              //           color: Colors.white,
-                              //           boxShadow: [
-                              //             BoxShadow(
-                              //               color: Color.fromARGB(13, 0, 0, 0),
-                              //               blurRadius: 4.0,
-                              //               spreadRadius: 2.0,
-                              //               offset: Offset(2.0, 2.0),
-                              //             ),
-                              //           ],
-                              //           borderRadius: BorderRadius.only(
-                              //             bottomLeft: Radius.circular(6),
-                              //             bottomRight: Radius.circular(6),
-                              //             topLeft: Radius.circular(6),
-                              //             topRight: Radius.circular(6),
-                              //           ),
-                              //         ),
-                              //         child: RichText(
-                              //           text: TextSpan(
-                              //             children: [
-                              //               WidgetSpan(
-                              //                 child: Padding(
-                              //                   padding: const EdgeInsets.only(left: 1, right: 5),
-                              //                   child: Icon(
-                              //                     Icons.phone_outlined,
-                              //                     size: 14,
-                              //                     color: CustomColors.primaryTextLight,
-                              //                   ),
-                              //                 ),
-                              //               ),
-                              //               TextSpan(
-                              //                 text: userProfile.data!.phone,
-                              //                 style: TextStyle(
-                              //                   fontSize: 12,
-                              //                   fontWeight: FontWeight.w400,
-                              //                   color: CustomColors.primaryTextLight,
-                              //                 ),
-                              //               ),
-                              //             ],
-                              //           ),
-                              //         ),
-                              //       ),
-                              //       const SizedBox(width: 15),
-                              //       Expanded(
-                              //         child: Column(
-                              //           crossAxisAlignment: CrossAxisAlignment.center,
-                              //           mainAxisAlignment: MainAxisAlignment.center,
-                              //           children: [
-                              //             Row(
-                              //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              //               children: [
-                              //                 Text(
-                              //                   "Profile Completion",
-                              //                   style: TextStyle(
-                              //                     fontSize: 14,
-                              //                     fontFamily: "Rubik",
-                              //                     fontWeight: FontWeight.w400,
-                              //                     color: CustomColors.white,
-                              //                   ),
-                              //                 ),
-                              //                 Text(
-                              //                   "53%",
-                              //                   style: TextStyle(
-                              //                     fontSize: 14,
-                              //                     fontFamily: "Rubik",
-                              //                     fontWeight: FontWeight.w400,
-                              //                     color: CustomColors.white,
-                              //                   ),
-                              //                 ),
-                              //               ],
-                              //             ),
-                              //             const SizedBox(height: 05),
-                              //             LinearProgressIndicator(
-                              //               minHeight: 08,
-                              //               borderRadius: BorderRadius.circular(08),
-                              //               value: 0.53,
-                              //               valueColor: AlwaysStoppedAnimation<Color>(Colors.red.shade300),
-                              //             ),
-                              //           ],
-                              //         ),
-                              //       ),
-                              //     ],
-                              //   ),
-                              // ),
-                              // const SizedBox(height: 5),
-                              // Container(
-                              //   padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                              //   decoration: const BoxDecoration(
-                              //     color: Colors.white,
-                              //     boxShadow: [
-                              //       BoxShadow(
-                              //         color: Color.fromARGB(13, 0, 0, 0),
-                              //         blurRadius: 4.0,
-                              //         spreadRadius: 2.0,
-                              //         offset: Offset(2.0, 2.0),
-                              //       ),
-                              //     ],
-                              //     borderRadius: BorderRadius.only(
-                              //       bottomLeft: Radius.circular(6),
-                              //       bottomRight: Radius.circular(6),
-                              //       topLeft: Radius.circular(6),
-                              //       topRight: Radius.circular(6),
-                              //     ),
-                              //   ),
-                              //   child: RichText(
-                              //     text: TextSpan(
-                              //       children: [
-                              //         WidgetSpan(
-                              //           child: Padding(
-                              //             padding: const EdgeInsets.only(left: 3, right: 5),
-                              //             child: Icon(
-                              //               Icons.location_on_outlined,
-                              //               size: 14,
-                              //               color: CustomColors.primaryTextLight,
-                              //             ),
-                              //           ),
-                              //         ),
-                              //         userProfile.data!.userdetail!.address.toString() != "null"
-                              //             ? TextSpan(
-                              //                 text: userProfile.data!.userdetail!.address.toString(),
-                              //                 style: TextStyle(
-                              //                   fontSize: 12,
-                              //                   fontWeight: FontWeight.w400,
-                              //                   color: CustomColors.primaryTextLight,
-                              //                 ),
-                              //               )
-                              //             : TextSpan(
-                              //                 text: "Not Available",
-                              //                 style: TextStyle(
-                              //                   fontSize: 12,
-                              //                   fontWeight: FontWeight.w400,
-                              //                   color: CustomColors.hintText,
-                              //                 ),
-                              //               ),
-                              //       ],
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
@@ -797,7 +622,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
   // fetchPRofile
   late Future<ProfileReceiverModel> fetchProfile;
   Future<ProfileReceiverModel> fetchProfileReceiverModel() async {
-    var token = await userTokenProfile();
+    var token = await getToken();
     final response = await getRequesthandler(
       url: CareReceiverURl.serviceReceiverProfile,
       token: token,
@@ -811,15 +636,8 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
     }
   }
 
-  userTokenProfile() async {
-    var userToken = await getToken();
-    // print(userToken);
-    return userToken.toString();
-  }
-
   @override
   void initState() {
-    userTokenProfile();
     super.initState();
     fetchProfile = fetchProfileReceiverModel();
   }
@@ -845,12 +663,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
           actions: [
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationScreen(),
-                  ),
-                );
+                navigationService.push(RoutesName.notification);
               },
               child: const Padding(
                 padding: EdgeInsets.all(12.0),

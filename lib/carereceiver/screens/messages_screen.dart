@@ -1,20 +1,17 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-// import 'package:http/http.dart' as http;
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/conversational_widget.dart';
 import 'package:island_app/models/chatroom_model.dart';
-import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
+import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:provider/provider.dart';
 
 class MessagesScreen extends StatefulWidget {
@@ -28,7 +25,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
   late Future<ChatRoomMessagesModel>? futureReceiverDashboard;
 
   Future<ChatRoomMessagesModel> fetchFindedReceiverDashboardModel() async {
-    var token = RecieverUserProvider.userToken;
+    var token = await getToken();
     final response = await getRequesthandler(
       url: ChatUrl.serviceReceiverChat,
       token: token,
@@ -116,16 +113,16 @@ class RecieverChatProvider extends ChangeNotifier {
   connectChatChannel(userRole) async {
     var channelName = IslandPusher().getPusherChatsChannel(userRole);
 
-    // IslandPusher.pusher.subscribe(
-    //   channelName: channelName,
-    //   onEvent: onEvent,
-    //   onSubscriptionError: onSubscriptionError,
-    //   onSubscriptionSucceeded: onSubscriptionSucceeded,
-    // );
+    IslandPusher.pusher.subscribe(
+      channelName: channelName,
+      onEvent: onEvent,
+      onSubscriptionError: onSubscriptionError,
+      onSubscriptionSucceeded: onSubscriptionSucceeded,
+    );
   }
 
   onEvent(event) {
-    log("onEventxsxsxsXS: ${event.toString()}");
+    // log("onEventxsxsxsXS: ${event.toString()}");
     if (activeChat.isNotEmpty) {
       getSingleChatAndSetActive(activeChat['id']);
     } else {
@@ -134,14 +131,21 @@ class RecieverChatProvider extends ChangeNotifier {
   }
 
   onSubscriptionSucceeded(dynamic data) {
-    log("onSubscriptionSucceeded: channelName, data: ${data.toString()}");
+    // log("onSubscriptionSucceeded: channelName, data: ${data.toString()}");
   }
 
   onSubscriptionError(dynamic data) {
-    log("onSubscriptionError: ${data.toString()} Exception: ${data.toString()}");
+    // log("onSubscriptionError: ${data.toString()} Exception: ${data.toString()}");
   }
 
   //   Pusher Connection End
+  setDefault() {
+    chatList = [];
+    allChatRooms = [];
+    activeChatMessages = [];
+    activeChat = {};
+    sendMessageReq = false;
+  }
 
   List<Map<String, dynamic>> chatList = [];
   List allChatRooms = [];
@@ -182,11 +186,11 @@ class RecieverChatProvider extends ChangeNotifier {
   }
 
   getSingleChatAndSetActive(id) async {
-    var userToken = RecieverUserProvider.userToken;
+    var token = await getToken();
     var resp = await postRequesthandler(
       url: "${AppUrl.webBaseURL}/api/get-chat",
       formData: FormData.fromMap({"chatId": id}),
-      token: userToken,
+      token: token,
     );
     if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
       var chatRoom = resp.data['chat'];
@@ -198,23 +202,20 @@ class RecieverChatProvider extends ChangeNotifier {
   }
 
   getSingleChat(BuildContext context, id) async {
-    var userToken = RecieverUserProvider.userToken;
-    // print(RecieverUserProvider.userToken);
-    // print(id);
+    var token = await getToken();
+
     var resp = await postRequesthandler(
       url: "${AppUrl.webBaseURL}/api/get-chat",
       formData: FormData.fromMap({"chatId": id}),
-      token: userToken,
+      token: token,
     );
     if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
       var chatRoom = resp.data['chat'];
       if (chatRoom != null) {
         setActiveChat(chatRoom);
-        // ignore: use_build_context_synchronously
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatDetailPage()));
+        navigationService.push(RoutesName.recieverChatScreen);
       }
     }
-    // notifyListeners();
   }
 
   List activeChatMessages = [];

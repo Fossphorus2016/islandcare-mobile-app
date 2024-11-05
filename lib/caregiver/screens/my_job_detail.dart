@@ -1,19 +1,18 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/models/child_care_model.dart';
 import 'package:island_app/carereceiver/models/house_keeping_model.dart';
 import 'package:island_app/carereceiver/models/pet_care_model.dart';
 import 'package:island_app/carereceiver/models/school_support_model.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 import 'package:island_app/widgets/job_info_container.dart';
 import 'package:island_app/widgets/job_schedule_container.dart';
-import 'package:provider/provider.dart';
 import 'package:island_app/carereceiver/models/senior_care_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 
@@ -39,13 +38,12 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
   String serviceName = '';
   bool? noDataFound;
   fetchJobDetail() async {
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     final response = await getRequesthandler(
       url: '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
       token: token,
     );
     if (response.statusCode == 200) {
-      // print(response.data['job_detail'][0]['service']);
       if (response.data['job_detail'] != null) {
         serviceName = response.data['job_detail'][0]['service']['name'];
         if (serviceName.toLowerCase() == "senior care") {
@@ -63,7 +61,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
         }
         setState(() {});
       }
-      // return PetCareDetailDashboardModel.fromJson(response.data);
     } else {
       throw Exception(
         'Failed to load Service Provider Dashboard',
@@ -328,11 +325,9 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                 children: [
                   Container(
                     alignment: Alignment.topLeft,
-                    // width: 150,
                     child: const Text(
                       "Requires Assistance ",
                       style: TextStyle(
-                        // color: CustomColors.primaryColor,
                         fontFamily: "Poppins",
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -459,21 +454,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            // const SizedBox(height: 10),
-            // JobDetailTile(
-            //   name: "Date :",
-            //   title: job.schedule![index].startingDate.toString(),
-            // ),
-            // const SizedBox(height: 10),
-            // JobDetailTile(
-            //   name: "Start Time :",
-            //   title: job.schedule![index].startingTime.toString(),
-            // ),
-            // const SizedBox(height: 10),
-            // JobDetailTile(
-            //   name: "Duration :",
-            //   title: "${job.schedule![index].duration.toString()} hour",
-            // ),
             if (job.schedule!.isNotEmpty) ...[
               JobScheduleContainer(
                 data: job.schedule,
@@ -670,18 +650,6 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
               ),
               const SizedBox(height: 10),
             ],
-            // if (job.schoolCamp != null) ...[
-            //   const SizedBox(height: 10),
-            //   JobDetailTile(
-            //     name: "Interest for Child",
-            //     title: job.schoolCamp!.interestForChild.toString(),
-            //   ),
-            //   const SizedBox(height: 10),
-            //   JobDetailTile(
-            //     name: "Cost Range For Camp",
-            //     title: "\$${job.schoolCamp!.costRange.toString()}",
-            //   ),
-            // ],
             const SizedBox(height: 10),
             if (job.learning != null) ...[
               AssistanceContainer(

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/app_colors.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -40,29 +41,7 @@ class GiverCustomAppBar extends StatelessWidget {
       actions: [
         GestureDetector(
           onTap: () {
-            // if (profileStatus) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const NotificationScreen(),
-              ),
-            );
-            // } else {
-            //   showDialog(
-            //     context: context,
-            //     builder: (context) => AlertDialog(
-            //       backgroundColor: Colors.white,
-            //       shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(12),
-            //       ),
-            //       content: const Text(
-            //         "Please Complete Your \n Profile For Approval",
-            //         textAlign: TextAlign.center,
-            //         style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-            //       ),
-            //     ),
-            //   );
-            // }
+            navigationService.push(RoutesName.notification);
           },
           child: Padding(
             padding: const EdgeInsets.all(12.0),

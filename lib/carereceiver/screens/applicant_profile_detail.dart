@@ -6,13 +6,13 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
-import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -36,38 +36,22 @@ class ApplicantProfileDetail extends StatefulWidget {
 
 class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
   // Service Receiver Dashboard
-  // int? ratings;
+
   ApplicantDetailProfileModel? futureapplicantProfileDetail;
   var id;
   var isHiredd;
 
-  // var fetchData;
-
   fetchApplicantProfileDetailModel() async {
     try {
-      var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+      var token = await getToken();
       //
       final response = await getRequesthandler(
         url: "${CareReceiverURl.serviceReceiverApplicantDetails}/${widget.jobTitle}/${widget.profileId}/${widget.jobId}",
         token: token,
       );
-      // print(response.data);
       if (response.statusCode == 200) {
-        // fetchData = response.data;
         Map<String, dynamic> map = response.data;
-        // var ratingList = map['data'][0]["ratings"];
-        // var jobname = map["job_title"];
-        // var id = map['data'][0]["id"];
-        // var hired = map['is_hired'];
-        // var sumRating = map['data'][0]['ratings'];
-        // double sum = 0;
-        // for (int i = 0; i < sumRating.length; i++) {
-        //   sum += sumRating[i]['rating'];
-        // }
-        // int average = sum ~/ sumRating.length;
-        // setState(() {
-        //   // ratings = average;
-        // });
+
         setState(() {
           futureapplicantProfileDetail = ApplicantDetailProfileModel.fromJson(response.data);
         });
@@ -80,7 +64,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
   }
 
   acceptApplicant() async {
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap(
       {
         "_method": "put",
@@ -104,7 +88,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
   }
 
   Future<void> declineApplicant() async {
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap(
       {
         "_method": "put",
@@ -277,16 +261,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                         style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
                                       ),
                                       const SizedBox(width: 10),
-                                      // Text(
-                                      //   futureapplicantProfileDetail!.data!.email.toString(),
-                                      //   style: TextStyle(
-                                      //     fontSize: 12,
-                                      //     fontFamily: "Rubik",
-                                      //     fontWeight: FontWeight.w400,
-                                      //     color: CustomColors.white,
-                                      //   ),
-                                      // ),
-                                      // const SizedBox(width: 10),
                                       if (futureapplicantProfileDetail!.data!.avgRating != null) ...[
                                         RatingBar(
                                           ignoreGestures: true,
@@ -308,9 +282,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                               color: Colors.grey,
                                             ),
                                           ),
-                                          onRatingUpdate: (rating) {
-                                            // print(rating);
-                                          },
+                                          onRatingUpdate: (rating) {},
                                         ),
                                       ],
                                     ],
@@ -1250,29 +1222,6 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                     return true;
                                   },
                                 ),
-                                // GestureDetector(
-                                //   onTap: () {
-                                //     declineApplicant();
-                                //   },
-                                //   child: Container(
-                                //     height: 40,
-                                //     width: MediaQuery.of(context).size.width * .4,
-                                //     decoration: BoxDecoration(
-                                //       borderRadius: BorderRadius.circular(6),
-                                //       color: CustomColors.loginBorder,
-                                //     ),
-                                //     child: Center(
-                                //       child: Text(
-                                //         "Decline Applicant",
-                                //         style: TextStyle(
-                                //           color: CustomColors.white,
-                                //           fontFamily: "Rubik",
-                                //           fontWeight: FontWeight.w500,
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
                               ],
                             ),
                           ] else ...[
@@ -1304,47 +1253,21 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                             height: 40,
                             backgroundColor: CustomColors.primaryColor,
                             onPressed: () async {
+                              var token = await getToken();
                               var resp = await postRequesthandler(
                                 url: "${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}",
-                                token: RecieverUserProvider.userToken,
+                                token: token,
                               );
-                              // print("${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}");
+
                               if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
                                 Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat(resp.data['chat_room']);
                               }
-                              // await Provider.of<RecieverChatProvider>(context, listen: false).getSingleChat(futureapplicantProfileDetail!.data!.id.toString());
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatDetailPage()));
+
+                              navigationService.push(RoutesName.recieverChatScreen);
+
                               return true;
                             },
                           ),
-                          // GestureDetector(
-                          //   onTap: () async {
-                          //     var resp = await postRequesthandler(
-                          //       url: "${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}",
-                          //       token: RecieverUserProvider.userToken,
-                          //     );
-                          //     // print("${ChatUrl.serviceReceiverChat}?provider_id=${widget.profileId}");
-                          //     if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
-                          //       Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat(resp.data['chat_room']);
-                          //     }
-                          //     // await Provider.of<RecieverChatProvider>(context, listen: false).getSingleChat(futureapplicantProfileDetail!.data!.id.toString());
-                          //     Navigator.push(context, MaterialPageRoute(builder: (context) => const ChatDetailPage()));
-                          //   },
-                          //   child: Container(
-                          //     width: MediaQuery.of(context).size.width,
-                          //     height: 40,
-                          //     decoration: BoxDecoration(
-                          //       borderRadius: BorderRadius.circular(6),
-                          //       color: CustomColors.primaryColor,
-                          //     ),
-                          //     child: const Center(
-                          //       child: Text(
-                          //         "Chat with User",
-                          //         style: TextStyle(color: Colors.white),
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
                         ],
                       ),
                     ),

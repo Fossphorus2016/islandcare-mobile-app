@@ -30,8 +30,6 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
   TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    // ServiceProviderChat chatProvider = Provider.of<ServiceProviderChat>(context);
-
     return Consumer<ServiceProviderChat>(builder: (context, chatProvider, __) {
       return Scaffold(
         appBar: AppBar(

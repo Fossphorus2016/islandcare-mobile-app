@@ -3,6 +3,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
@@ -255,12 +256,12 @@ class _PostScheduleState extends State<PostSchedule> {
       initialDate: selectedDate!,
       firstDate: DateTime.now(),
       lastDate: DateTime(2050),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              // primaryColorDark: ServiceRecieverColor.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -284,12 +285,12 @@ class _PostScheduleState extends State<PostSchedule> {
       initialDate: selectedDate!,
       firstDate: DateTime(1970),
       lastDate: DateTime.now(),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              // primaryColorDark: ServiceRecieverColor.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -351,7 +352,6 @@ class _PostScheduleState extends State<PostSchedule> {
       'start_time[]': startTimeMapList,
       'duration[]': durationMapList,
     });
-    // Dio dio = Dio();
     var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
     if (userSubs!.data!.userSubscriptionDetail != null) {
       try {
@@ -361,6 +361,7 @@ class _PostScheduleState extends State<PostSchedule> {
           token: token,
         );
         if (response.statusCode == 200) {
+          Navigator.pop(context);
           showSuccessToast("Job Created Successfully");
         }
       } on DioError catch (e) {
@@ -471,7 +472,6 @@ class _PostScheduleState extends State<PostSchedule> {
         "duration[]": durationMapList,
         "name[]": childnameMapList,
         "age[]": childageMapList,
-        // "grade[]": gradeLevelMapList,
       },
     );
 
@@ -650,7 +650,6 @@ class _PostScheduleState extends State<PostSchedule> {
                     "Job Title",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      // color: ServiceRecieverColor.primaryColor,
                       fontFamily: "Rubik",
                       fontSize: 14,
                     ),
@@ -679,7 +678,6 @@ class _PostScheduleState extends State<PostSchedule> {
                     "Job Location",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      // color: ServiceRecieverColor.primaryColor,
                       fontFamily: "Rubik",
                       fontSize: 14,
                     ),
@@ -694,7 +692,6 @@ class _PostScheduleState extends State<PostSchedule> {
                       fontSize: 12,
                       fontFamily: "Rubik",
                       fontWeight: FontWeight.w600,
-                      // color: ServiceRecieverColor.primaryColor,
                     ),
                     textAlignVertical: TextAlignVertical.center,
                     maxLines: 1,
@@ -709,7 +706,6 @@ class _PostScheduleState extends State<PostSchedule> {
                     "Job Area",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      // color: ServiceRecieverColor.primaryColor,
                       fontFamily: "Rubik",
                       fontSize: 14,
                     ),
@@ -774,48 +770,51 @@ class _PostScheduleState extends State<PostSchedule> {
                     "Hourly Rate",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      // color: ServiceRecieverColor.primaryColor,
                       fontFamily: "Rubik",
                       fontSize: 14,
                     ),
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
+                SizedBox(
                   height: 45,
                   width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(left: 10),
-                  // clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey, width: 0.5),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  alignment: Alignment.center,
                   child: TextFormField(
                     keyboardType: TextInputType.number,
                     controller: hourlyController,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     style: const TextStyle(
-                      fontSize: 12,
                       fontFamily: "Rubik",
                       fontWeight: FontWeight.w600,
                     ),
                     maxLines: 1,
-                    textAlign: TextAlign.left,
-                    textAlignVertical: TextAlignVertical.center,
                     decoration: InputDecoration(
                       hintText: "Please add Hourly Rate",
-                      contentPadding: EdgeInsets.zero,
-                      // prefixIcon: Text("\$"),
-                      prefixText: "\$",
-                      hintStyle: TextStyle(
+                      hintStyle: const TextStyle(
                         fontSize: 14,
                         fontFamily: "Rubik",
                         fontWeight: FontWeight.w600,
                         // color: Colors.grey,
                       ),
-                      border: InputBorder.none,
+                      prefixIconConstraints: const BoxConstraints(
+                        maxWidth: 60,
+                        minWidth: 30,
+                      ),
+                      prefixIcon: const SvgPicture(
+                        SvgAssetLoader("assets/images/icons/currency-dollar.svg"),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+                      ),
                     ),
                   ),
                 ),
@@ -915,21 +914,6 @@ class _PostScheduleState extends State<PostSchedule> {
                     _fromDate(context);
                   },
                 ),
-                //  CustomTextFieldWidget(
-                //   borderColor: CustomColors.white,
-                //   obsecure: false,
-                //   keyboardType: TextInputType.number,
-                //   controller: startDateController,
-                //   hintText: "Date",
-                //   onChanged: (value) {
-                //     setState(() {
-                //       getfromPickedDate = value;
-                //     });
-                //   },
-                //   onTap: () async {
-                //     _fromDate(context);
-                //   },
-                // ),
               ),
               //Timer
               SizedBox(
@@ -1062,7 +1046,7 @@ class _PostScheduleState extends State<PostSchedule> {
                   ),
                   child: Center(
                     child: Text(
-                      "Add More Days",
+                      "Add Days",
                       style: TextStyle(
                         color: CustomColors.white,
                         fontSize: 16,
@@ -1098,107 +1082,6 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 }),
               );
-              // SizedBox(
-              //   width: MediaQuery.of(context).size.width,
-              //   height: 100,
-              //   child: Stack(
-              //     children: [
-              //       Padding(
-              //         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              //         child: Container(
-              //           padding: const EdgeInsets.symmetric(
-              //             horizontal: 10,
-              //             vertical: 10,
-              //           ),
-              //           decoration: BoxDecoration(
-              //             color: Colors.white,
-              //             borderRadius: BorderRadius.circular(12),
-              //             boxShadow: [
-              //               BoxShadow(
-              //                 color: Colors.grey.shade300,
-              //                 spreadRadius: 01,
-              //                 blurRadius: 05,
-              //                 blurStyle: BlurStyle.outer,
-              //               ),
-              //             ],
-              //           ),
-              //           height: 85,
-              //           width: MediaQuery.of(context).size.width,
-              //           child: Column(
-              //             children: [
-              //               Row(
-              //                 children: [
-              //                   const Text("Date: "),
-              //                   Expanded(
-              //                     child: Text(
-              //                       seniorCareDays[index]['starting_date'].toString(),
-              //                     ),
-              //                   ),
-              //                 ],
-              //               ),
-              //               Row(
-              //                 children: [
-              //                   const Text("Time: "),
-              //                   Expanded(
-              //                     child: Text("${seniorCareDays[index]['starting_time']}"),
-              //                   ),
-              //                 ],
-              //               ),
-              //               Row(
-              //                 children: [
-              //                   const Text("Duration: "),
-              //                   Expanded(
-              //                     child: Text("${seniorCareDays[index]['duration']} hours"),
-              //                   ),
-              //                 ],
-              //               ),
-              //             ],
-              //           ),
-              //         ),
-              //       ),
-              //       Positioned(
-              //         top: -10,
-              //         right: 0,
-              //         child: GestureDetector(
-              //           onTap: (() {
-              //             setState(() {
-              //               seniorCareDays.removeAt(index);
-              //               startTimeMapList.removeAt(index);
-              //               dateMapList.removeAt(index);
-              //               durationMapList.removeAt(index);
-              //             });
-              //           }),
-              //           child: Container(
-              //             decoration: BoxDecoration(
-              //               borderRadius: const BorderRadius.only(
-              //                 topLeft: Radius.circular(100),
-              //                 bottomLeft: Radius.circular(100),
-              //                 bottomRight: Radius.circular(100),
-              //                 topRight: Radius.circular(100),
-              //               ),
-              //               color: CustomColors.white,
-              //               boxShadow: const [
-              //                 BoxShadow(
-              //                   color: Color.fromARGB(13, 0, 0, 0),
-              //                   blurRadius: 4.0,
-              //                   spreadRadius: 2.0,
-              //                   offset: Offset(2.0, 2.0),
-              //                 ),
-              //               ],
-              //             ),
-              //             // alignment: Alignment.center,
-              //             width: 30,
-              //             height: 30,
-              //             child: const Icon(
-              //               Icons.close,
-              //               size: 16,
-              //             ),
-              //           ),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // );
             }),
         const SizedBox(height: 10),
       ],
@@ -1321,7 +1204,7 @@ class _PostScheduleState extends State<PostSchedule> {
                   ),
                   child: Center(
                     child: Text(
-                      "Add More Children",
+                      "Add Children",
                       style: TextStyle(
                         color: CustomColors.white,
                         fontSize: 16,
@@ -1473,7 +1356,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Interest For Child",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -1502,7 +1384,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Cost Range Of Camp",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -1518,7 +1399,6 @@ class _PostScheduleState extends State<PostSchedule> {
               fontSize: 12,
               fontFamily: "Rubik",
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
             ),
             textAlignVertical: TextAlignVertical.center,
             decoration: inputdecoration("Cost Range Of Camp"),
@@ -1703,7 +1583,7 @@ class _PostScheduleState extends State<PostSchedule> {
                   ),
                   child: Center(
                     child: Text(
-                      "Add More Children",
+                      "Add Children",
                       style: TextStyle(
                         color: CustomColors.white,
                         fontSize: 16,
@@ -1749,7 +1629,6 @@ class _PostScheduleState extends State<PostSchedule> {
                       height: 85,
                       width: MediaQuery.of(context).size.width,
                       child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
@@ -1824,303 +1703,7 @@ class _PostScheduleState extends State<PostSchedule> {
         const SizedBox(height: 20),
         // Add Days
         addDaysColumn(context),
-        // Container(
-        //   padding: const EdgeInsets.all(12),
-        //   decoration: const BoxDecoration(
-        //     borderRadius: BorderRadius.only(
-        //       topLeft: Radius.circular(20),
-        //       topRight: Radius.circular(20),
-        //       bottomLeft: Radius.circular(20),
-        //       bottomRight: Radius.circular(20),
-        //     ),
-        //     boxShadow: [
-        //       BoxShadow(
-        //         color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-        //         spreadRadius: 5,
-        //         blurRadius: 3,
-        //       )
-        //     ],
-        //     color: Color.fromRGBO(255, 255, 255, 1),
-        //   ),
-        //   child: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: <Widget>[
-        //       Text(
-        //         "Add Days",
-        //         style: TextStyle(
-        //           fontFamily: "Rubik",
-        //           fontSize: 18,
-        //           color: CustomColors.primaryText,
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //       // Start Date
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
-        //         decoration: BoxDecoration(
-        //           color: Colors.white,
-        //           borderRadius: BorderRadius.circular(12),
-        //         ),
-        //         child: CustomTextFieldWidget(
-        //           borderColor: CustomColors.white,
-        //           obsecure: false,
-        //           keyboardType: TextInputType.number,
-        //           controller: startDateController,
-        //           hintText: "Start Date",
-        //           onChanged: (value) {
-        //             setState(() {
-        //               getfromPickedDate = value;
-        //             });
-        //           },
-        //           onTap: () async {
-        //             _fromDate(context);
-        //           },
-        //         ),
-        //       ),
-        //       //Timer
-        //       SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 50,
-        //         child: TextButton(
-        //           style: ButtonStyle(
-        //             alignment: Alignment.centerLeft,
-        //             padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-        //             shape: MaterialStateProperty.resolveWith(
-        //               (states) => RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               ),
-        //             ),
-        //           ),
-        //           child: Text(
-        //             selectedTime != null ? '$selectedTime' : 'Select Time',
-        //             textAlign: TextAlign.left,
-        //             style: TextStyle(
-        //               fontSize: 16,
-        //               fontFamily: "Rubik",
-        //               fontWeight: FontWeight.w400,
-        //               color: CustomColors.primaryText,
-        //             ),
-        //           ),
-        //           onPressed: () {
-        //             setState(
-        //               () {
-        //                 displayTimeDialog();
-        //               },
-        //             );
-        //           },
-        //         ),
-        //       ),
-        //       // Duration
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
-        //         child: Center(
-        //           child: DecoratedBox(
-        //             decoration: BoxDecoration(
-        //               border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               borderRadius: BorderRadius.circular(12),
-        //             ),
-        //             child: Padding(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 4,
-        //               ),
-        //               child: DropdownButtonHideUnderline(
-        //                 child: DropdownButton(
-        //                   hint: Text(
-        //                     "Duration in hours",
-        //                     style: TextStyle(
-        //                       fontSize: 12,
-        //                       fontFamily: "Rubik",
-        //                       fontWeight: FontWeight.w600,
-        //                       color: CustomColors.primaryText,
-        //                     ),
-        //                   ),
-        //                   isExpanded: true,
-        //                   items: hours!.map((item) {
-        //                     return DropdownMenuItem(
-        //                       value: item['id'].toString(),
-        //                       child: Text(item['name']),
-        //                     );
-        //                   }).toList(),
-        //                   onChanged: (newVal) {
-        //                     setState(() {
-        //                       selectedHours = newVal;
-        //                     });
-        //                   },
-        //                   value: selectedHours,
-        //                 ),
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       // AddBtn
-        //       GestureDetector(
-        //         onTap: () {
-        //           String startDate = startDateController.text.trim();
-        //           String time = selectedTime.toString();
-        //           setState(() {
-        //             dateMapList.add(startDate);
-        //             startTimeMapList.add(time);
-        //             durationMapList.add(selectedHours);
-        //             seniorCareDays.add(
-        //               {
-        //                 "starting_date": startDate,
-        //                 "starting_time": time,
-        //                 "duration": selectedHours,
-        //               },
-        //             );
-        //           });
-        //         },
-        //         child: Container(
-        //           width: MediaQuery.of(context).size.width,
-        //           height: 50,
-        //           margin: const EdgeInsets.only(top: 20),
-        //           decoration: BoxDecoration(
-        //             gradient: LinearGradient(
-        //               begin: Alignment.center,
-        //               end: Alignment.center,
-        //               colors: [
-        //                 ServiceRecieverColor.redButton.withOpacity(0.1),
-        //                 ServiceRecieverColor.redButton.withOpacity(0.8),
-        //               ],
-        //             ),
-        //             color: ServiceRecieverColor.redButton,
-        //             boxShadow: const [
-        //               BoxShadow(
-        //                 color: Color.fromARGB(13, 0, 0, 0),
-        //                 blurRadius: 4.0,
-        //                 spreadRadius: 2.0,
-        //                 offset: Offset(2.0, 2.0),
-        //               ),
-        //             ],
-        //             borderRadius: BorderRadius.circular(6),
-        //           ),
-        //           child: Center(
-        //             child: Text(
-        //               "Add More Days",
-        //               style: TextStyle(
-        //                 color: CustomColors.white,
-        //                 fontSize: 16,
-        //                 fontWeight: FontWeight.w600,
-        //                 fontFamily: "Rubik",
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // // Show Days
-        // const SizedBox(height: 20),
-        // ListView.builder(
-        //     shrinkWrap: true,
-        //     scrollDirection: Axis.vertical,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemCount: seniorCareDays.length,
-        //     itemBuilder: (context, index) {
-        //       return SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 95,
-        //         child: Stack(
-        //           children: [
-        //             Container(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 10,
-        //               ),
-        //               decoration: BoxDecoration(
-        //                 color: Colors.white,
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 boxShadow: [
-        //                   BoxShadow(
-        //                     color: Colors.grey.shade300,
-        //                     spreadRadius: 01,
-        //                     blurRadius: 05,
-        //                   ),
-        //                 ],
-        //               ),
-        //               height: 85,
-        //               width: MediaQuery.of(context).size.width,
-        //               child: Column(
-        //                 children: [
-        //                   Row(
-        //                     children: [
-        //                       const Text("Date: "),
-        //                       Expanded(
-        //                         child: Text(
-        //                           seniorCareDays[index]['starting_date'].toString(),
-        //                         ),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Time: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['starting_time']}"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Duration: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['duration']} hours"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //             Positioned(
-        //               top: 00,
-        //               right: 0,
-        //               child: GestureDetector(
-        //                 onTap: (() {
-        //                   setState(() {
-        //                     seniorCareDays.removeAt(index);
-        //                     startTimeMapList.removeAt(index);
-        //                     dateMapList.removeAt(index);
-        //                     durationMapList.removeAt(index);
-        //                   });
-        //                 }),
-        //                 child: Container(
-        //                   decoration: BoxDecoration(
-        //                     borderRadius: const BorderRadius.only(
-        //                       topLeft: Radius.circular(100),
-        //                       bottomLeft: Radius.circular(100),
-        //                       bottomRight: Radius.circular(100),
-        //                       topRight: Radius.circular(100),
-        //                     ),
-        //                     color: CustomColors.white,
-        //                     boxShadow: const [
-        //                       BoxShadow(
-        //                         color: Color.fromARGB(13, 0, 0, 0),
-        //                         blurRadius: 4.0,
-        //                         spreadRadius: 2.0,
-        //                         offset: Offset(2.0, 2.0),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   // alignment: Alignment.center,
-        //                   width: 30,
-        //                   height: 30,
-        //                   child: const Icon(
-        //                     Icons.close,
-        //                     size: 16,
-        //                   ),
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       );
-        //     }),
+
         //Need Assistance
         const SizedBox(height: 20),
         Container(
@@ -2129,7 +1712,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Need Assistance",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2269,7 +1851,6 @@ class _PostScheduleState extends State<PostSchedule> {
                 fontSize: 12,
                 fontFamily: "Rubik",
                 fontWeight: FontWeight.w600,
-                // color: ServiceRecieverColor.primaryColor,
               ),
               textAlignVertical: TextAlignVertical.center,
               maxLines: 1,
@@ -2285,7 +1866,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Learning Style",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2313,7 +1893,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Learning Challenge",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2342,7 +1921,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Additional Info (optional)",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2402,73 +1980,12 @@ class _PostScheduleState extends State<PostSchedule> {
               return false;
             },
           ),
-          // GestureDetector(
-          //   onTap: () async {
-          //     if (jobTitleController.text.isEmpty) {
-          //       showErrorToast("Job Title is Required");
-          //     } else if (addressController.text.isEmpty) {
-          //       showErrorToast("Job Location is Required");
-          //     } else if (selectedLocation == null) {
-          //       showErrorToast("Job Area is Required");
-          //     } else if (hourlyController.text.isEmpty) {
-          //       showErrorToast("Hourly Rate is Required");
-          //     } else if (seniorCareDays.isEmpty) {
-          //       showErrorToast("Please Enter Add Days");
-          //     } else if (children.isEmpty) {
-          //       showErrorToast("Child Initials is Required");
-          //     } else if (other == "1" && otherFieldController.text.isEmpty) {
-          //       showErrorToast("Other is Required");
-          //     } else if (learningStyleController.text.isEmpty) {
-          //       showErrorToast("Learning Style is Required");
-          //     } else if (learningChallengeController.text.isEmpty) {
-          //       showErrorToast("Learning Challenge is Required");
-          //     } else {
-          //       PostSchoolSupport();
-          //     }
-          //   },
-          //   child: Container(
-          //     width: MediaQuery.of(context).size.width,
-          //     height: 60,
-          //     margin: const EdgeInsets.symmetric(vertical: 10),
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(
-          //         begin: Alignment.center,
-          //         end: Alignment.center,
-          //         colors: [
-          //           ServiceRecieverColor.redButton.withOpacity(0.1),
-          //           ServiceRecieverColor.redButton.withOpacity(0.8),
-          //         ],
-          //       ),
-          //       color: ServiceRecieverColor.redButton,
-          //       boxShadow: const [
-          //         BoxShadow(
-          //           color: Color.fromARGB(13, 0, 0, 0),
-          //           blurRadius: 4.0,
-          //           spreadRadius: 2.0,
-          //           offset: Offset(2.0, 2.0),
-          //         ),
-          //       ],
-          //       borderRadius: BorderRadius.circular(6),
-          //     ),
-          //     child: Center(
-          //       child: Text(
-          //         "Submit",
-          //         style: TextStyle(
-          //           color: CustomColors.white,
-          //           fontSize: 22,
-          //           fontWeight: FontWeight.w600,
-          //           fontFamily: "Rubik",
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ),
       ],
     );
   }
 
-  Column ServiceHouseKeeping(BuildContext context) {
+  Widget ServiceHouseKeeping(BuildContext context) {
     return Column(
       children: [
         const SizedBox(height: 10),
@@ -2480,7 +1997,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Cleaning Type",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2551,303 +2067,7 @@ class _PostScheduleState extends State<PostSchedule> {
         // Add Days
         const SizedBox(height: 20),
         addDaysColumn(context),
-        // Container(
-        //   padding: const EdgeInsets.all(12),
-        //   decoration: const BoxDecoration(
-        //     borderRadius: BorderRadius.only(
-        //       topLeft: Radius.circular(20),
-        //       topRight: Radius.circular(20),
-        //       bottomLeft: Radius.circular(20),
-        //       bottomRight: Radius.circular(20),
-        //     ),
-        //     boxShadow: [
-        //       BoxShadow(
-        //         color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-        //         blurRadius: 3,
-        //         spreadRadius: 5,
-        //       )
-        //     ],
-        //     color: Color.fromRGBO(255, 255, 255, 1),
-        //   ),
-        //   child: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: <Widget>[
-        //       const Text(
-        //         "Add Days",
-        //         style: TextStyle(
-        //           fontFamily: "Rubik",
-        //           fontSize: 18,
-        //           // color: CustomColors.primaryText,
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //       // Start Date
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
-        //         decoration: BoxDecoration(
-        //           color: Colors.white,
-        //           borderRadius: BorderRadius.circular(12),
-        //         ),
-        //         child: CustomTextFieldWidget(
-        //           borderColor: CustomColors.white,
-        //           obsecure: false,
-        //           keyboardType: TextInputType.number,
-        //           controller: startDateController,
-        //           hintText: "Date",
-        //           onChanged: (value) {
-        //             setState(() {
-        //               getfromPickedDate = value;
-        //             });
-        //           },
-        //           onTap: () async {
-        //             _fromDate(context);
-        //           },
-        //         ),
-        //       ),
-        //       //Timer
-        //       SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 50,
-        //         child: TextButton(
-        //           style: ButtonStyle(
-        //             alignment: Alignment.centerLeft,
-        //             padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-        //             shape: MaterialStateProperty.resolveWith(
-        //               (states) => RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               ),
-        //             ),
-        //           ),
-        //           child: Text(
-        //             selectedTime != null ? '$selectedTime' : 'Start Time',
-        //             textAlign: TextAlign.left,
-        //             style: TextStyle(
-        //               fontSize: 16,
-        //               fontFamily: "Rubik",
-        //               fontWeight: FontWeight.w400,
-        //               color: CustomColors.primaryText,
-        //             ),
-        //           ),
-        //           onPressed: () {
-        //             setState(
-        //               () {
-        //                 displayTimeDialog();
-        //               },
-        //             );
-        //           },
-        //         ),
-        //       ),
-        //       // Duration
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
-        //         child: Center(
-        //           child: DecoratedBox(
-        //             decoration: BoxDecoration(
-        //               border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               borderRadius: BorderRadius.circular(12),
-        //             ),
-        //             child: Padding(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 4,
-        //               ),
-        //               child: DropdownButtonHideUnderline(
-        //                 child: DropdownButton(
-        //                   hint: Text(
-        //                     "Duration",
-        //                     style: TextStyle(
-        //                       fontSize: 12,
-        //                       fontFamily: "Rubik",
-        //                       fontWeight: FontWeight.w600,
-        //                       color: CustomColors.primaryText,
-        //                     ),
-        //                   ),
-        //                   isExpanded: true,
-        //                   items: hours!.map((item) {
-        //                     return DropdownMenuItem(
-        //                       value: item['id'].toString(),
-        //                       child: Text(item['name']),
-        //                     );
-        //                   }).toList(),
-        //                   onChanged: (newVal) {
-        //                     setState(() {
-        //                       selectedHours = newVal;
-        //                     });
-        //                   },
-        //                   value: selectedHours,
-        //                 ),
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       // AddBtn
-        //       GestureDetector(
-        //         onTap: () {
-        //           String startDate = startDateController.text.trim();
-        //           String time = selectedTime.toString();
-        //           setState(() {
-        //             dateMapList.add(startDate);
-        //             startTimeMapList.add(time);
-        //             durationMapList.add(selectedHours);
-        //             seniorCareDays.add(
-        //               {
-        //                 "starting_date": startDate,
-        //                 "starting_time": time,
-        //                 "duration": selectedHours,
-        //               },
-        //             );
-        //           });
-        //         },
-        //         child: Container(
-        //           width: MediaQuery.of(context).size.width,
-        //           height: 50,
-        //           margin: const EdgeInsets.only(top: 20),
-        //           decoration: BoxDecoration(
-        //             gradient: LinearGradient(
-        //               begin: Alignment.center,
-        //               end: Alignment.center,
-        //               colors: [
-        //                 ServiceRecieverColor.redButton.withOpacity(0.1),
-        //                 ServiceRecieverColor.redButton.withOpacity(0.8),
-        //               ],
-        //             ),
-        //             color: ServiceRecieverColor.redButton,
-        //             boxShadow: const [
-        //               BoxShadow(
-        //                 color: Color.fromARGB(13, 0, 0, 0),
-        //                 blurRadius: 4.0,
-        //                 spreadRadius: 2.0,
-        //                 offset: Offset(2.0, 2.0),
-        //               ),
-        //             ],
-        //             borderRadius: BorderRadius.circular(6),
-        //           ),
-        //           child: Center(
-        //             child: Text(
-        //               "Add More Days",
-        //               style: TextStyle(
-        //                 color: CustomColors.white,
-        //                 fontSize: 16,
-        //                 fontWeight: FontWeight.w600,
-        //                 fontFamily: "Rubik",
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // // Show Days
-        // const SizedBox(height: 20),
-        // ListView.builder(
-        //     shrinkWrap: true,
-        //     scrollDirection: Axis.vertical,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemCount: seniorCareDays.length,
-        //     itemBuilder: (context, index) {
-        //       return SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 95,
-        //         child: Stack(
-        //           children: [
-        //             Container(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 10,
-        //               ),
-        //               decoration: BoxDecoration(
-        //                 color: Colors.white,
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 boxShadow: [
-        //                   BoxShadow(
-        //                     color: Colors.grey.shade300,
-        //                     spreadRadius: 01,
-        //                     blurRadius: 05,
-        //                   ),
-        //                 ],
-        //               ),
-        //               height: 85,
-        //               width: MediaQuery.of(context).size.width,
-        //               child: Column(
-        //                 children: [
-        //                   Row(
-        //                     children: [
-        //                       const Text("Date: "),
-        //                       Expanded(
-        //                         child: Text(
-        //                           seniorCareDays[index]['starting_date'].toString(),
-        //                         ),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Time: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['starting_time']}"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Duration: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['duration']} hours"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //             Positioned(
-        //               top: 00,
-        //               right: 0,
-        //               child: GestureDetector(
-        //                 onTap: (() {
-        //                   setState(() {
-        //                     seniorCareDays.removeAt(index);
-        //                     startTimeMapList.removeAt(index);
-        //                     dateMapList.removeAt(index);
-        //                     durationMapList.removeAt(index);
-        //                   });
-        //                 }),
-        //                 child: Container(
-        //                   decoration: BoxDecoration(
-        //                     borderRadius: const BorderRadius.only(
-        //                       topLeft: Radius.circular(100),
-        //                       bottomLeft: Radius.circular(100),
-        //                       bottomRight: Radius.circular(100),
-        //                       topRight: Radius.circular(100),
-        //                     ),
-        //                     color: CustomColors.white,
-        //                     boxShadow: const [
-        //                       BoxShadow(
-        //                         color: Color.fromARGB(13, 0, 0, 0),
-        //                         blurRadius: 4.0,
-        //                         spreadRadius: 2.0,
-        //                         offset: Offset(2.0, 2.0),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   // alignment: Alignment.center,
-        //                   width: 30,
-        //                   height: 30,
-        //                   child: const Icon(
-        //                     Icons.close,
-        //                     size: 16,
-        //                   ),
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       );
-        //     }),
+
         // Size of House/Apartment
         const SizedBox(height: 20),
         Container(
@@ -2856,7 +2076,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Size of House/Apartment",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3118,7 +2337,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Other",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3212,7 +2430,6 @@ class _PostScheduleState extends State<PostSchedule> {
                 fontSize: 12,
                 fontFamily: "Rubik",
                 fontWeight: FontWeight.w600,
-                // color: ServiceRecieverColor.primaryColor,
               ),
               textAlignVertical: TextAlignVertical.center,
               maxLines: 1,
@@ -3229,7 +2446,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Additional Info (optional)",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3289,67 +2505,6 @@ class _PostScheduleState extends State<PostSchedule> {
               return false;
             },
           ),
-          // GestureDetector(
-          //   onTap: () async {
-          //     if (jobTitleController.text.isEmpty) {
-          //       showErrorToast("Job Title is Required");
-          //     } else if (addressController.text.isEmpty) {
-          //       showErrorToast("Job Location is Required");
-          //     } else if (selectedLocation == null) {
-          //       showErrorToast("Job Area is Required");
-          //     } else if (hourlyController.text.isEmpty) {
-          //       showErrorToast("Hourly Rate is Required");
-          //     } else if (cleaningTypeValue == null) {
-          //       showErrorToast("Cleaning Type is Required");
-          //     } else if (bedroomValue == null) {
-          //       showErrorToast("Please Select Bedroom");
-          //     } else if (bathroomValue == null) {
-          //       showErrorToast("Please Select Bathroom");
-          //     } else if (other == "1" && otherFieldController.text.isEmpty) {
-          //       showErrorToast("Other is Required");
-          //     } else if (seniorCareDays.isEmpty) {
-          //       showErrorToast("Please Enter Add Days");
-          //     } else {
-          //       PostHouseKeeping();
-          //     }
-          //   },
-          //   child: Container(
-          //     width: MediaQuery.of(context).size.width,
-          //     height: 60,
-          //     margin: const EdgeInsets.symmetric(vertical: 10),
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(
-          //         begin: Alignment.center,
-          //         end: Alignment.center,
-          //         colors: [
-          //           ServiceRecieverColor.redButton.withOpacity(0.1),
-          //           ServiceRecieverColor.redButton.withOpacity(0.8),
-          //         ],
-          //       ),
-          //       color: ServiceRecieverColor.redButton,
-          //       boxShadow: const [
-          //         BoxShadow(
-          //           color: Color.fromARGB(13, 0, 0, 0),
-          //           blurRadius: 4.0,
-          //           spreadRadius: 2.0,
-          //           offset: Offset(2.0, 2.0),
-          //         ),
-          //       ],
-          //       borderRadius: BorderRadius.circular(6),
-          //     ),
-          //     child: Center(
-          //       child: Text(
-          //         "Submit",
-          //         style: TextStyle(
-          //           color: CustomColors.white,
-          //           fontSize: 22,
-          //           fontWeight: FontWeight.w600,
-          //           fontFamily: "Rubik",
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ),
       ],
     );
@@ -3361,306 +2516,7 @@ class _PostScheduleState extends State<PostSchedule> {
         // Add Days
         const SizedBox(height: 20),
         addDaysColumn(context),
-        // Container(
-        //   padding: const EdgeInsets.all(12),
-        //   decoration: const BoxDecoration(
-        //     borderRadius: BorderRadius.only(
-        //       topLeft: Radius.circular(20),
-        //       topRight: Radius.circular(20),
-        //       bottomLeft: Radius.circular(20),
-        //       bottomRight: Radius.circular(20),
-        //     ),
-        //     boxShadow: [
-        //       BoxShadow(
-        //         color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-        //         spreadRadius: 5,
-        //         blurRadius: 3,
-        //       )
-        //     ],
-        //     color: Color.fromRGBO(255, 255, 255, 1),
-        //   ),
-        //   child: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: <Widget>[
-        //       Text(
-        //         "Add Days",
-        //         style: TextStyle(
-        //           fontFamily: "Rubik",
-        //           fontSize: 18,
-        //           color: CustomColors.primaryText,
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //       const SizedBox(height: 10),
-        //       // Start Date
-        //       Container(
-        //         height: 50,
-        //         // margin: const EdgeInsets.only(bottom: 15, top: 15),
-        //         decoration: BoxDecoration(
-        //           color: Colors.white,
-        //           borderRadius: BorderRadius.circular(12),
-        //         ),
-        //         child: CustomTextFieldWidget(
-        //           borderColor: CustomColors.white,
-        //           obsecure: false,
-        //           keyboardType: TextInputType.number,
-        //           controller: startDateController,
-        //           hintText: "Date",
-        //           onChanged: (value) {
-        //             setState(() {
-        //               getfromPickedDate = value;
-        //             });
-        //           },
-        //           onTap: () async {
-        //             _fromDate(context);
-        //           },
-        //         ),
-        //       ),
-        //       //Timer
-        //       const SizedBox(height: 10),
-        //       SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 50,
-        //         child: TextButton(
-        //           style: ButtonStyle(
-        //             alignment: Alignment.centerLeft,
-        //             padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-        //             shape: MaterialStateProperty.resolveWith(
-        //               (states) => RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               ),
-        //             ),
-        //           ),
-        //           child: Text(
-        //             selectedTime != null ? '$selectedTime' : 'Start Time',
-        //             textAlign: TextAlign.left,
-        //             style: TextStyle(
-        //               fontSize: 16,
-        //               fontFamily: "Rubik",
-        //               fontWeight: FontWeight.w400,
-        //               color: CustomColors.primaryText,
-        //             ),
-        //           ),
-        //           onPressed: () {
-        //             setState(
-        //               () {
-        //                 displayTimeDialog();
-        //               },
-        //             );
-        //           },
-        //         ),
-        //       ),
-        //       // Duration
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.only(bottom: 0, top: 15),
-        //         child: Center(
-        //           child: DecoratedBox(
-        //             decoration: BoxDecoration(
-        //               // color: CustomColors.myJobDetail,
-        //               border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               borderRadius: BorderRadius.circular(12),
-        //             ),
-        //             child: Padding(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 4,
-        //               ),
-        //               child: DropdownButtonHideUnderline(
-        //                 child: DropdownButton(
-        //                   hint: Text(
-        //                     "Duration",
-        //                     style: TextStyle(
-        //                       fontSize: 12,
-        //                       fontFamily: "Rubik",
-        //                       fontWeight: FontWeight.w600,
-        //                       color: CustomColors.primaryText,
-        //                     ),
-        //                   ),
-        //                   isExpanded: true,
-        //                   items: hours!.map((item) {
-        //                     return DropdownMenuItem(
-        //                       value: item['id'].toString(),
-        //                       child: Text(item['name']),
-        //                     );
-        //                   }).toList(),
-        //                   onChanged: (newVal) {
-        //                     setState(() {
-        //                       selectedHours = newVal;
-        //                     });
-        //                   },
-        //                   value: selectedHours,
-        //                 ),
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       // AddBtn
-        //       GestureDetector(
-        //         onTap: () {
-        //           String startDate = startDateController.text.trim();
-        //           String time = selectedTime.toString();
-        //           setState(() {
-        //             dateMapList.add(startDate);
-        //             startTimeMapList.add(time);
-        //             durationMapList.add(selectedHours);
-        //             seniorCareDays.add(
-        //               {
-        //                 "starting_date": startDate,
-        //                 "starting_time": time,
-        //                 "duration": selectedHours,
-        //               },
-        //             );
-        //           });
-        //         },
-        //         child: Container(
-        //           width: MediaQuery.of(context).size.width,
-        //           height: 50,
-        //           margin: const EdgeInsets.only(top: 20),
-        //           decoration: BoxDecoration(
-        //             gradient: LinearGradient(
-        //               begin: Alignment.center,
-        //               end: Alignment.center,
-        //               colors: [
-        //                 ServiceRecieverColor.redButton.withOpacity(0.1),
-        //                 ServiceRecieverColor.redButton.withOpacity(0.8),
-        //               ],
-        //             ),
-        //             color: ServiceRecieverColor.redButton,
-        //             boxShadow: const [
-        //               BoxShadow(
-        //                 color: Color.fromARGB(13, 0, 0, 0),
-        //                 blurRadius: 4.0,
-        //                 spreadRadius: 2.0,
-        //                 offset: Offset(2.0, 2.0),
-        //               ),
-        //             ],
-        //             borderRadius: BorderRadius.circular(6),
-        //           ),
-        //           child: Center(
-        //             child: Text(
-        //               "Add More Days",
-        //               style: TextStyle(
-        //                 color: CustomColors.white,
-        //                 fontSize: 16,
-        //                 fontWeight: FontWeight.w600,
-        //                 fontFamily: "Rubik",
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // const SizedBox(height: 20),
-        // // Show Days
-        // ListView.builder(
-        //     shrinkWrap: true,
-        //     scrollDirection: Axis.vertical,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemCount: seniorCareDays.length,
-        //     itemBuilder: (context, index) {
-        //       return SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 95,
-        //         child: Stack(
-        //           children: [
-        //             Container(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 10,
-        //               ),
-        //               decoration: BoxDecoration(
-        //                 color: Colors.white,
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 boxShadow: [
-        //                   BoxShadow(
-        //                     color: Colors.grey.shade300,
-        //                     spreadRadius: 01,
-        //                     blurRadius: 05,
-        //                   ),
-        //                 ],
-        //               ),
-        //               height: 85,
-        //               width: MediaQuery.of(context).size.width,
-        //               child: Column(
-        //                 children: [
-        //                   Row(
-        //                     children: [
-        //                       const Text("Date: "),
-        //                       Expanded(
-        //                         child: Text(
-        //                           seniorCareDays[index]['starting_date'].toString(),
-        //                         ),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Time: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['starting_time']}"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Duration: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['duration']} hours"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //             Positioned(
-        //               top: 00,
-        //               right: 0,
-        //               child: GestureDetector(
-        //                 onTap: (() {
-        //                   setState(() {
-        //                     seniorCareDays.removeAt(index);
-        //                     startTimeMapList.removeAt(index);
-        //                     dateMapList.removeAt(index);
-        //                     durationMapList.removeAt(index);
-        //                   });
-        //                 }),
-        //                 child: Container(
-        //                   decoration: BoxDecoration(
-        //                     borderRadius: const BorderRadius.only(
-        //                       topLeft: Radius.circular(100),
-        //                       bottomLeft: Radius.circular(100),
-        //                       bottomRight: Radius.circular(100),
-        //                       topRight: Radius.circular(100),
-        //                     ),
-        //                     color: CustomColors.white,
-        //                     boxShadow: const [
-        //                       BoxShadow(
-        //                         color: Color.fromARGB(13, 0, 0, 0),
-        //                         blurRadius: 4.0,
-        //                         spreadRadius: 2.0,
-        //                         offset: Offset(2.0, 2.0),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   // alignment: Alignment.center,
-        //                   width: 30,
-        //                   height: 30,
-        //                   child: const Icon(
-        //                     Icons.close,
-        //                     size: 16,
-        //                   ),
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       );
-        //     }),
+
         // Pet type
         const SizedBox(height: 20),
         Container(
@@ -3669,7 +2525,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Pet Type",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3764,7 +2619,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Number of Pets",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3829,7 +2683,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Pet Breed",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3858,7 +2711,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Size Of Pet",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3923,7 +2775,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Temperament",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4066,7 +2917,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Need Assistance",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4225,7 +3075,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Additional Info (optional)",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4287,69 +3136,6 @@ class _PostScheduleState extends State<PostSchedule> {
               return false;
             },
           ),
-          // GestureDetector(
-          //   onTap: () async {
-          //     if (jobTitleController.text.isEmpty) {
-          //       showErrorToast("Job Title is Required");
-          //     } else if (addressController.text.isEmpty) {
-          //       showErrorToast("Job Location is Required");
-          //     } else if (selectedLocation == null) {
-          //       showErrorToast("Job Area is Required");
-          //     } else if (hourlyController.text.isEmpty) {
-          //       showErrorToast("Hourly Rate is Required");
-          //     } else if (seniorCareDays.isEmpty) {
-          //       showErrorToast("Please Enter Add Days");
-          //     } else if (other == "1" && otherFieldController.text.isEmpty) {
-          //       showErrorToast("Other is Required");
-          //     } else if (petTypeValue == null) {
-          //       showErrorToast("Pet Type is Required");
-          //     } else if (numberOfPetValue == null) {
-          //       showErrorToast("Number of pets is Required");
-          //     } else if (petBreedController.text.isEmpty) {
-          //       showErrorToast("Pet Breed is Required");
-          //     } else if (temperamentValue == null) {
-          //       showErrorToast("Temprament is Required");
-          //     } else {
-          //       PostPetCare();
-          //     }
-          //   },
-          //   child: Container(
-          //     width: MediaQuery.of(context).size.width,
-          //     height: 60,
-          //     margin: const EdgeInsets.symmetric(vertical: 10),
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(
-          //         begin: Alignment.center,
-          //         end: Alignment.center,
-          //         colors: [
-          //           ServiceRecieverColor.redButton.withOpacity(0.1),
-          //           ServiceRecieverColor.redButton.withOpacity(0.8),
-          //         ],
-          //       ),
-          //       color: ServiceRecieverColor.redButton,
-          //       boxShadow: const [
-          //         BoxShadow(
-          //           color: Color.fromARGB(13, 0, 0, 0),
-          //           blurRadius: 4.0,
-          //           spreadRadius: 2.0,
-          //           offset: Offset(2.0, 2.0),
-          //         ),
-          //       ],
-          //       borderRadius: BorderRadius.circular(6),
-          //     ),
-          //     child: Center(
-          //       child: Text(
-          //         "Submit",
-          //         style: TextStyle(
-          //           color: CustomColors.white,
-          //           fontSize: 22,
-          //           fontWeight: FontWeight.w600,
-          //           fontFamily: "Rubik",
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ),
       ],
     );
@@ -4380,7 +3166,6 @@ class _PostScheduleState extends State<PostSchedule> {
               fontSize: 12,
               fontFamily: "Rubik",
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
             ),
             textAlignVertical: TextAlignVertical.center,
             maxLines: 1,
@@ -4395,7 +3180,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Date Of Birth",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4419,7 +3203,6 @@ class _PostScheduleState extends State<PostSchedule> {
               fontSize: 12,
               fontFamily: "Rubik",
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
             ),
             textAlignVertical: TextAlignVertical.center,
             maxLines: 1,
@@ -4434,7 +3217,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Medical Condition (optional)",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4465,7 +3247,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Requires Assistance With",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4760,7 +3541,6 @@ class _PostScheduleState extends State<PostSchedule> {
             "Additional Info (optional)",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4816,63 +3596,6 @@ class _PostScheduleState extends State<PostSchedule> {
               return false;
             },
           ),
-          // GestureDetector(
-          //   onTap: () async {
-          //     if (jobTitleController.text.isEmpty) {
-          //       showErrorToast("Job Title is Required");
-          //     } else if (addressController.text.isEmpty) {
-          //       showErrorToast("Job Location is Required");
-          //     } else if (selectedLocation == null) {
-          //       showErrorToast("Job Area is Required");
-          //     } else if (hourlyController.text.isEmpty) {
-          //       showErrorToast("Hourly Rate is Required");
-          //     } else if (seniorNameController.text.isEmpty) {
-          //       showErrorToast("Senior Name is Required");
-          //     } else if (dobController.text.isEmpty) {
-          //       showErrorToast("DOB is Required");
-          //     } else if (seniorCareDays.isEmpty) {
-          //       showErrorToast("Please Enter Add Days");
-          //     } else {
-          //       PostSeniorCare();
-          //     }
-          //   },
-          //   child: Container(
-          //     width: MediaQuery.of(context).size.width,
-          //     height: 60,
-          //     margin: const EdgeInsets.symmetric(vertical: 10),
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(
-          //         begin: Alignment.center,
-          //         end: Alignment.center,
-          //         colors: [
-          //           ServiceRecieverColor.redButton.withOpacity(0.1),
-          //           ServiceRecieverColor.redButton.withOpacity(0.8),
-          //         ],
-          //       ),
-          //       color: CustomColors.white,
-          //       boxShadow: const [
-          //         BoxShadow(
-          //           color: Color.fromARGB(13, 0, 0, 0),
-          //           blurRadius: 4.0,
-          //           spreadRadius: 2.0,
-          //           // offset: Offset(2.0, 2.0),
-          //         ),
-          //       ],
-          //       borderRadius: BorderRadius.circular(6),
-          //     ),
-          //     child: Center(
-          //       child: Text(
-          //         "Submit",
-          //         style: TextStyle(
-          //           color: CustomColors.white,
-          //           fontSize: 22,
-          //           fontWeight: FontWeight.w600,
-          //           fontFamily: "Rubik",
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
         ),
       ],
     );
@@ -4885,7 +3608,6 @@ class _PostScheduleState extends State<PostSchedule> {
         fontSize: 12,
         fontFamily: "Rubik",
         fontWeight: FontWeight.w600,
-        // color: ServiceRecieverColor.primaryColor,
       ),
       fillColor: CustomColors.white,
       focusColor: CustomColors.white,

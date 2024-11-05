@@ -3,13 +3,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/child_care_model.dart';
 import 'package:island_app/carereceiver/models/house_keeping_model.dart';
 import 'package:island_app/carereceiver/models/pet_care_model.dart';
 import 'package:island_app/carereceiver/models/school_support_model.dart';
 import 'package:island_app/carereceiver/models/senior_care_model.dart';
-import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
@@ -118,11 +118,9 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     '3',
   ];
   List days = [];
-  // List childInfo = [];
   List seniorCareDays = [];
 
   List children = [];
-  // List data send
   List dateMapList = [];
   List startTimeMapList = [];
   List durationMapList = [];
@@ -252,22 +250,19 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
   DateTime? selectedDate = DateTime.now();
 
   var getfromPickedDate;
-  // bool _isDateSelectable(DateTime date) {
-//     // Disable dates before today
-//     return date.isAfter(DateTime.now());
-//   }
+
   _fromDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate!,
       firstDate: DateTime.now(),
       lastDate: DateTime(2050),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              // primaryColorDark: ServiceRecieverColor.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -291,12 +286,12 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       initialDate: selectedDate!,
       firstDate: DateTime.now(),
       lastDate: DateTime(2050),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
       builder: (BuildContext context, Widget? child) {
         return Theme(
           data: ThemeData.light().copyWith(
             colorScheme: ColorScheme.fromSwatch(
               primarySwatch: Colors.teal,
-              // primaryColorDark: ServiceRecieverColor.primaryColor,
               accentColor: const Color(0xff55CE86),
             ),
             dialogBackgroundColor: Colors.white,
@@ -330,7 +325,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
 
   // Post JOB API
   Future<void> postSeniorCare() async {
-    // var token = await getUserToken();
     var formData = FormData.fromMap({
       'job_id': widget.jobData['id'],
       'job_title': jobTitleController.text.toString(),
@@ -360,13 +354,12 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       'duration[]': durationMapList,
     });
 
-    // var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
-    // if (userSubs!.data!.userSubscriptionDetail != null) {
     try {
+      var token = await getToken();
       var response = await postRequesthandler(
         url: CareReceiverURl.serviceReceiverSeniorCareJobCreater,
         formData: formData,
-        token: RecieverUserProvider.userToken,
+        token: token,
       );
       if (response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
@@ -380,13 +373,9 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         buttonLoading = false;
       });
     }
-    // } else {
-    //   showErrorToast( "Please Subscribe Package First");
-    // }
   }
 
   Future<void> postPetCare() async {
-    // var token = await getUserToken();
     var formData = FormData.fromMap(
       {
         'job_id': widget.jobData['id'],
@@ -412,13 +401,12 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       },
     );
 
-    // var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
-    // if (userSubs!.data!.userSubscriptionDetail != null) {
     try {
+      var token = await getToken();
       var response = await postRequesthandler(
         url: CareReceiverURl.serviceReceiverPetCareJobCreater,
         formData: formData,
-        token: RecieverUserProvider.userToken,
+        token: token,
       );
       setState(() {
         buttonLoading = false;
@@ -432,13 +420,9 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         buttonLoading = false;
       });
     }
-    // } else {
-    //   showErrorToast( "Please Subscribe Package First");
-    // }
   }
 
   Future<void> postHouseKeeping() async {
-    // var token = await getUserToken();
     var formData = FormData.fromMap(
       {
         'job_id': widget.jobData['id'],
@@ -459,13 +443,12 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       },
     );
 
-    // var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
-    // if (userSubs!.data!.userSubscriptionDetail != null) {
     try {
+      var token = await getToken();
       var response = await postRequesthandler(
         url: CareReceiverURl.serviceReceiverHouseKeepingJobCreater,
         formData: formData,
-        token: RecieverUserProvider.userToken,
+        token: token,
       );
       setState(() {
         buttonLoading = false;
@@ -479,13 +462,9 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       });
       showErrorToast(e.toString());
     }
-    // } else {
-    //   showErrorToast( "Please Subscribe Package First");
-    // }
   }
 
   Future<void> PostChildCare() async {
-    // var token = await getUserToken();
     var formData = FormData.fromMap(
       {
         'job_id': widget.jobData['id'],
@@ -500,17 +479,15 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         "duration[]": durationMapList,
         "name[]": childnameMapList,
         "age[]": childageMapList,
-        // "grade[]": gradeLevelMapList,
       },
     );
 
-    // var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
-    // if (userSubs!.data!.userSubscriptionDetail != null) {
     try {
+      var token = await getToken();
       var response = await postRequesthandler(
         url: CareReceiverURl.serviceReceiverLearningJobCreater,
         formData: formData,
-        token: RecieverUserProvider.userToken,
+        token: token,
       );
       setState(() {
         buttonLoading = false;
@@ -524,13 +501,9 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       });
       showErrorToast(e.toString());
     }
-    // } else {
-    //   showErrorToast( "Please Subscribe Package First");
-    // }
   }
 
   Future<void> PostSchoolSupport() async {
-    // var token = await getUserToken();
     var formData = FormData.fromMap(
       {
         'job_id': widget.jobData['id'],
@@ -558,13 +531,12 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       },
     );
 
-    // var userSubs = await Provider.of<RecieverUserProvider>(context, listen: false).userProfile;
-    // if (userSubs!.data!.userSubscriptionDetail != null) {
     try {
+      var token = await getToken();
       var response = await postRequesthandler(
         url: CareReceiverURl.serviceReceiverSchoolCampJobCreater,
         formData: formData,
-        token: RecieverUserProvider.userToken,
+        token: token,
       );
       setState(() {
         buttonLoading = false;
@@ -578,9 +550,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       });
       showErrorToast(e.toString());
     }
-    // } else {
-    //   showErrorToast( "Please Subscribe Package First");
-    // }
   }
 
   SeniorCareDetailModel? futureSeniorCareDetail;
@@ -594,7 +563,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     super.initState();
     if (widget.serviceId == "1") {
       // service id 1
-      // serviceSeniorCare(context);
+
       futureSeniorCareDetail = SeniorCareDetailModel.fromJson({
         "job_detail": [widget.jobData]
       });
@@ -616,7 +585,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       }
       seniorNameController.text = futureSeniorCareDetail!.job![0].seniorCare!.seniorName.toString();
       dobController.text = futureSeniorCareDetail!.job![0].seniorCare!.dob.toString();
-      medicalConditionController.text = futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition.toString();
+      medicalConditionController.text = futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition != null && futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition != "null" ? futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition : "";
 
       if (futureSeniorCareDetail!.job![0].seniorCare!.bathing == 1) {
         isChecked = true;
@@ -674,7 +643,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         isChecked14 = true;
         grooming_hair_and_nail_trimming = "1";
       }
-      additionalInfoController.text = futureSeniorCareDetail!.job![0].additionalInfo.toString();
+      additionalInfoController.text = futureSeniorCareDetail!.job![0].additionalInfo != null && futureSeniorCareDetail!.job![0].additionalInfo != "null" ? futureSeniorCareDetail!.job![0].additionalInfo.toString() : "";
     } else if (widget.serviceId == "2") {
       // service id 2;
       // servicePetCare(context);
@@ -780,10 +749,10 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         isChecked6 = true;
         boarding = "1";
       }
-      additionalInfoController.text = futurePetCareDetailDashboard!.job![0].additionalInfo.toString();
+      additionalInfoController.text = futurePetCareDetailDashboard!.job![0].additionalInfo != null && futurePetCareDetailDashboard!.job![0].additionalInfo != "null" ? futurePetCareDetailDashboard!.job![0].additionalInfo.toString() : "";
     } else if (widget.serviceId == "3") {
       // service id 3
-      // serviceHouseKeeping(context);
+
       futureHouseKeepingDetailDashboard = HouseKeepingDetailModel.fromJson({
         "job_detail": [widget.jobData]
       });
@@ -795,7 +764,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       hourlyController.text = futureHouseKeepingDetailDashboard!.job![0].hourlyRate.toString();
       selectedLocation = futureHouseKeepingDetailDashboard!.job![0].location.toString().toLowerCase();
 
-      // selectedCleaning = futureHouseKeepingDetailDashboard!.job![0].houseKeeping.cleaningType;
       if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.cleaningType! == "Light Cleaning") {
         selectedCleaning = 0;
         cleaningTypeValue = "Light Cleaning";
@@ -845,23 +813,20 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.laundry == 1) {
         isChecked = true;
         laundry = "1";
-        // futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.
       }
       if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.ironing == 1) {
         isChecked2 = true;
         ironing = "1";
-        // futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.
       }
       if (futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.other != null) {
         isChecked3 = true;
         other = "1";
         otherFieldController.text = futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.other.toString();
-        // futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.
       }
-      additionalInfoController.text = futureHouseKeepingDetailDashboard!.job![0].additionalInfo.toString();
+      additionalInfoController.text = futureHouseKeepingDetailDashboard!.job![0].additionalInfo != null && futureHouseKeepingDetailDashboard!.job![0].additionalInfo != "null" ? futureHouseKeepingDetailDashboard!.job![0].additionalInfo.toString() : "";
     } else if (widget.serviceId == "4") {
       // Service Id 4
-      // serviceSchoolSupport(context);
+
       futureSchoolSupportDetailDashboard = SchoolSupportDetailModel.fromJson({
         "job_detail": [widget.jobData]
       });
@@ -919,10 +884,10 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       }
       learningStyleController.text = futureSchoolSupportDetailDashboard!.job![0].learning!.learningStyle.toString();
       learningChallengeController.text = futureSchoolSupportDetailDashboard!.job![0].learning!.learningChallenge.toString();
-      additionalInfoController.text = futureSchoolSupportDetailDashboard!.job![0].additionalInfo.toString();
+      additionalInfoController.text = futureSchoolSupportDetailDashboard!.job![0].additionalInfo != null && futureSchoolSupportDetailDashboard!.job![0].additionalInfo != "null" ? futureSchoolSupportDetailDashboard!.job![0].additionalInfo.toString() : "";
     } else if (widget.serviceId == "5") {
       // Service Id 5
-      // serviceChildCare(context);
+
       futureChildCareDetailDashboard = ChildCareDetailModel.fromJson({
         "job_detail": [widget.jobData]
       });
@@ -989,7 +954,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
 
   @override
   Widget build(BuildContext context) {
-    // print(selectedLocation);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -1062,7 +1026,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                     "Job Title",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      // color: ServiceRecieverColor.primaryColor,
                       fontFamily: "Rubik",
                       fontSize: 14,
                     ),
@@ -1091,7 +1054,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                     "Job Location",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      // color: ServiceRecieverColor.primaryColor,
                       fontFamily: "Rubik",
                       fontSize: 14,
                     ),
@@ -1106,7 +1068,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                       fontSize: 12,
                       fontFamily: "Rubik",
                       fontWeight: FontWeight.w600,
-                      // color: ServiceRecieverColor.primaryColor,
                     ),
                     textAlignVertical: TextAlignVertical.center,
                     maxLines: 1,
@@ -1121,7 +1082,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                     "Job Area",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      // color: ServiceRecieverColor.primaryColor,
                       fontFamily: "Rubik",
                       fontSize: 14,
                     ),
@@ -1179,66 +1139,54 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                     "Hourly Rate",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      // color: ServiceRecieverColor.primaryColor,
                       fontFamily: "Rubik",
                       fontSize: 14,
                     ),
                   ),
                 ),
                 const SizedBox(height: 10),
-                Container(
+
+                SizedBox(
                   height: 45,
                   width: MediaQuery.of(context).size.width,
-                  padding: const EdgeInsets.only(left: 10),
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey, width: 0.5),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Flex(
-                    direction: Axis.horizontal,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    verticalDirection: VerticalDirection.up,
-                    children: [
-                      const Text(
-                        "\$ ",
-                        style: TextStyle(
-                          // color: Colors.grey,
-                          fontSize: 16,
-                        ),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: hourlyController,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    style: const TextStyle(
+                      fontFamily: "Rubik",
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    decoration: InputDecoration(
+                      hintText: "Please add Hourly Rate",
+                      hintStyle: const TextStyle(
+                        fontSize: 14,
+                        fontFamily: "Rubik",
+                        fontWeight: FontWeight.w600,
                       ),
-                      Flexible(
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          controller: hourlyController,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                          ],
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontFamily: "Rubik",
-                            fontWeight: FontWeight.w600,
-                          ),
-                          textAlignVertical: TextAlignVertical.center,
-                          maxLines: 1,
-                          decoration: const InputDecoration(
-                            hintText: "Please add Hourly Rate",
-                            hintStyle: TextStyle(
-                              fontSize: 14,
-                              fontFamily: "Rubik",
-                              fontWeight: FontWeight.w600,
-                              // color: Colors.grey,
-                            ),
-                            border: InputBorder.none,
-                          ),
-                        ),
+                      prefixIconConstraints: const BoxConstraints(
+                        maxWidth: 60,
+                        minWidth: 30,
                       ),
-                    ],
+                      prefixIcon: const SvgPicture(
+                        SvgAssetLoader("assets/images/icons/currency-dollar.svg"),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.grey, width: 0.5),
+                      ),
+                    ),
                   ),
                 ),
-
                 // Switch View,
                 if (widget.serviceId == "1") ...[
                   // service id 1
@@ -1347,39 +1295,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   return true;
                 },
               ),
-              // SizedBox(
-              //   width: MediaQuery.of(context).size.width,
-              //   height: 50,
-              //   child: TextButton(
-              //     style: ButtonStyle(
-              //       alignment: Alignment.centerLeft,
-              //       padding: MaterialStateProperty.resolveWith(
-              //         (states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              //       ),
-              //       shape: MaterialStateProperty.resolveWith(
-              //         (states) => RoundedRectangleBorder(
-              //           borderRadius: BorderRadius.circular(12),
-              //           side: const BorderSide(color: Colors.grey, width: 0.5),
-              //         ),
-              //       ),
-              //     ),
-              //     child: Text(
-              //       selectedTime != null ? '$selectedTime' : 'Start Time',
-              //       textAlign: TextAlign.left,
-              //       style: TextStyle(
-              //         fontSize: 16,
-              //         fontFamily: "Rubik",
-              //         fontWeight: FontWeight.w400,
-              //         color: CustomColors.primaryText,
-              //       ),
-              //     ),
-              //     onPressed: () {
-              //       setState(() {
-              //         displayTimeDialog();
-              //       });
-              //     },
-              //   ),
-              // ),
+
               // Duration
               Container(
                 height: 50,
@@ -1651,7 +1567,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
           ),
         ),
         // Show Children
-        // if (futureChildCareDetailDashboard!.job![0].childinfo != null) ...[
         const SizedBox(height: 20),
         ListView.builder(
             shrinkWrap: true,
@@ -1659,33 +1574,13 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: children.length,
             itemBuilder: (context, index) {
-              // Childinfo childinfo = futureChildCareDetailDashboard!.job![0].childinfo![index];
               return Stack(
                 children: [
-                  // Container(
-                  //   decoration: const BoxDecoration(
-                  //     color: Colors.transparent,
-                  //   ),
-                  //   alignment: Alignment.centerRight,
-                  //   width: MediaQuery.of(context).size.width,
-                  //   height: 100,
-                  //   child: const RotatedBox(
-                  //     quarterTurns: 1,
-                  //     child: Text(
-                  //       'Container 1',
-                  //       style: TextStyle(
-                  //         fontSize: 18.0,
-                  //         color: Colors.white,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       decoration: BoxDecoration(
-                        // color: Colors.grey,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
@@ -1696,7 +1591,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                           ),
                         ],
                       ),
-                      // alignment: Alignment.centerLeft,
                       width: MediaQuery.of(context).size.width,
                       height: 80,
                       child: Row(
@@ -1787,7 +1681,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                 ],
               );
             }),
-        // ],
 
         const SizedBox(height: 20),
         addDaysColumn(context),
@@ -1799,7 +1692,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Interest For Child",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -1828,7 +1720,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Cost Range Of Camp",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -1844,7 +1735,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
               fontSize: 12,
               fontFamily: "Rubik",
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
             ),
             textAlignVertical: TextAlignVertical.center,
             decoration: inputdecoration("Cost Range Of Camp"),
@@ -1891,73 +1781,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             },
           ),
         ),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(horizontal: 0),
-        //   child: GestureDetector(
-        //     onTap: () async {
-        //       if (jobTitleController.text.isEmpty) {
-        //         showErrorToast("Job Title is Required");
-        //       } else if (addressController.text.isEmpty) {
-        //         showErrorToast("Job Location is Required");
-        //       } else if (selectedLocation == null) {
-        //         showErrorToast("Job Area is Required");
-        //       } else if (hourlyController.text.isEmpty) {
-        //         showErrorToast("Hourly Rate is Required");
-        //       } else if (children.isEmpty) {
-        //         showErrorToast("Child Initials is Required");
-        //       } else if (seniorCareDays.isEmpty) {
-        //         showErrorToast("Please Enter Add Days");
-        //       } else if (interestForChildController.text.isEmpty) {
-        //         showErrorToast("Interest for Child is Required");
-        //       } else if (costRangeOfCampController.text.isEmpty) {
-        //         showErrorToast("Cost Range of Camp is Required");
-        //       } else {
-        //         setState(() {
-        //           buttonLoading = true;
-        //         });
-        //         PostChildCare();
-        //       }
-        //     },
-        //     child: Container(
-        //       width: MediaQuery.of(context).size.width,
-        //       height: 60,
-        //       margin: const EdgeInsets.symmetric(vertical: 10),
-        //       decoration: BoxDecoration(
-        //         gradient: LinearGradient(
-        //           begin: Alignment.center,
-        //           end: Alignment.center,
-        //           colors: [
-        //             ServiceRecieverColor.redButton.withOpacity(0.1),
-        //             ServiceRecieverColor.redButton.withOpacity(0.8),
-        //           ],
-        //         ),
-        //         color: ServiceRecieverColor.redButton,
-        //         boxShadow: const [
-        //           BoxShadow(
-        //             color: Color.fromARGB(13, 0, 0, 0),
-        //             blurRadius: 4.0,
-        //             spreadRadius: 2.0,
-        //             offset: Offset(2.0, 2.0),
-        //           ),
-        //         ],
-        //         borderRadius: BorderRadius.circular(6),
-        //       ),
-        //       child: Center(
-        //         child: buttonLoading
-        //             ? const CircularProgressIndicator(color: Colors.white)
-        //             : Text(
-        //                 "Submit",
-        //                 style: TextStyle(
-        //                   color: CustomColors.white,
-        //                   fontSize: 22,
-        //                   fontWeight: FontWeight.w600,
-        //                   fontFamily: "Rubik",
-        //                 ),
-        //               ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }
@@ -2145,7 +1968,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                       height: 85,
                       width: MediaQuery.of(context).size.width,
                       child: Column(
-                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
@@ -2220,303 +2042,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         const SizedBox(height: 20),
         // Add Days
         addDaysColumn(context),
-        // Container(
-        //   padding: const EdgeInsets.all(12),
-        //   decoration: const BoxDecoration(
-        //     borderRadius: BorderRadius.only(
-        //       topLeft: Radius.circular(20),
-        //       topRight: Radius.circular(20),
-        //       bottomLeft: Radius.circular(20),
-        //       bottomRight: Radius.circular(20),
-        //     ),
-        //     boxShadow: [
-        //       BoxShadow(
-        //         color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-        //         spreadRadius: 5,
-        //         blurRadius: 3,
-        //       )
-        //     ],
-        //     color: Color.fromRGBO(255, 255, 255, 1),
-        //   ),
-        //   child: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: <Widget>[
-        //       Text(
-        //         "Add Days",
-        //         style: TextStyle(
-        //           fontFamily: "Rubik",
-        //           fontSize: 18,
-        //           color: CustomColors.primaryText,
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //       // Start Date
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
-        //         decoration: BoxDecoration(
-        //           color: Colors.white,
-        //           borderRadius: BorderRadius.circular(12),
-        //         ),
-        //         child: CustomTextFieldWidget(
-        //           borderColor: CustomColors.white,
-        //           obsecure: false,
-        //           keyboardType: TextInputType.number,
-        //           controller: startDateController,
-        //           hintText: "Start Date",
-        //           onChanged: (value) {
-        //             setState(() {
-        //               getfromPickedDate = value;
-        //             });
-        //           },
-        //           onTap: () async {
-        //             _fromDate(context);
-        //           },
-        //         ),
-        //       ),
-        //       //Timer
-        //       SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 50,
-        //         child: TextButton(
-        //           style: ButtonStyle(
-        //             alignment: Alignment.centerLeft,
-        //             padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-        //             shape: MaterialStateProperty.resolveWith(
-        //               (states) => RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               ),
-        //             ),
-        //           ),
-        //           child: Text(
-        //             selectedTime != null ? '$selectedTime' : 'Select Time',
-        //             textAlign: TextAlign.left,
-        //             style: TextStyle(
-        //               fontSize: 16,
-        //               fontFamily: "Rubik",
-        //               fontWeight: FontWeight.w400,
-        //               color: CustomColors.primaryText,
-        //             ),
-        //           ),
-        //           onPressed: () {
-        //             setState(
-        //               () {
-        //                 displayTimeDialog();
-        //               },
-        //             );
-        //           },
-        //         ),
-        //       ),
-        //       // Duration
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
-        //         child: Center(
-        //           child: DecoratedBox(
-        //             decoration: BoxDecoration(
-        //               border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               borderRadius: BorderRadius.circular(12),
-        //             ),
-        //             child: Padding(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 4,
-        //               ),
-        //               child: DropdownButtonHideUnderline(
-        //                 child: DropdownButton(
-        //                   hint: Text(
-        //                     "Duration in hours",
-        //                     style: TextStyle(
-        //                       fontSize: 12,
-        //                       fontFamily: "Rubik",
-        //                       fontWeight: FontWeight.w600,
-        //                       color: CustomColors.primaryText,
-        //                     ),
-        //                   ),
-        //                   isExpanded: true,
-        //                   items: hours!.map((item) {
-        //                     return DropdownMenuItem(
-        //                       value: item['id'].toString(),
-        //                       child: Text(item['name']),
-        //                     );
-        //                   }).toList(),
-        //                   onChanged: (newVal) {
-        //                     setState(() {
-        //                       selectedHours = newVal;
-        //                     });
-        //                   },
-        //                   value: selectedHours,
-        //                 ),
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       // AddBtn
-        //       GestureDetector(
-        //         onTap: () {
-        //           String startDate = startDateController.text.trim();
-        //           String time = selectedTime.toString();
-        //           setState(() {
-        //             dateMapList.add(startDate);
-        //             startTimeMapList.add(time);
-        //             durationMapList.add(selectedHours);
-        //             seniorCareDays.add(
-        //               {
-        //                 "starting_date": startDate,
-        //                 "starting_time": time,
-        //                 "duration": selectedHours,
-        //               },
-        //             );
-        //           });
-        //         },
-        //         child: Container(
-        //           width: MediaQuery.of(context).size.width,
-        //           height: 50,
-        //           margin: const EdgeInsets.only(top: 20),
-        //           decoration: BoxDecoration(
-        //             gradient: LinearGradient(
-        //               begin: Alignment.center,
-        //               end: Alignment.center,
-        //               colors: [
-        //                 ServiceRecieverColor.redButton.withOpacity(0.1),
-        //                 ServiceRecieverColor.redButton.withOpacity(0.8),
-        //               ],
-        //             ),
-        //             color: ServiceRecieverColor.redButton,
-        //             boxShadow: const [
-        //               BoxShadow(
-        //                 color: Color.fromARGB(13, 0, 0, 0),
-        //                 blurRadius: 4.0,
-        //                 spreadRadius: 2.0,
-        //                 offset: Offset(2.0, 2.0),
-        //               ),
-        //             ],
-        //             borderRadius: BorderRadius.circular(6),
-        //           ),
-        //           child: Center(
-        //             child: Text(
-        //               "Add More Days",
-        //               style: TextStyle(
-        //                 color: CustomColors.white,
-        //                 fontSize: 16,
-        //                 fontWeight: FontWeight.w600,
-        //                 fontFamily: "Rubik",
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // // Show Days
-        // const SizedBox(height: 20),
-        // ListView.builder(
-        //     shrinkWrap: true,
-        //     scrollDirection: Axis.vertical,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemCount: seniorCareDays.length,
-        //     itemBuilder: (context, index) {
-        //       return SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 95,
-        //         child: Stack(
-        //           children: [
-        //             Container(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 10,
-        //               ),
-        //               decoration: BoxDecoration(
-        //                 color: Colors.white,
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 boxShadow: [
-        //                   BoxShadow(
-        //                     color: Colors.grey.shade300,
-        //                     spreadRadius: 01,
-        //                     blurRadius: 05,
-        //                   ),
-        //                 ],
-        //               ),
-        //               height: 85,
-        //               width: MediaQuery.of(context).size.width,
-        //               child: Column(
-        //                 children: [
-        //                   Row(
-        //                     children: [
-        //                       const Text("Date: "),
-        //                       Expanded(
-        //                         child: Text(
-        //                           seniorCareDays[index]['starting_date'].toString(),
-        //                         ),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Time: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['starting_time']}"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Duration: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['duration']} hours"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //             Positioned(
-        //               top: 00,
-        //               right: 0,
-        //               child: GestureDetector(
-        //                 onTap: (() {
-        //                   setState(() {
-        //                     seniorCareDays.removeAt(index);
-        //                     startTimeMapList.removeAt(index);
-        //                     dateMapList.removeAt(index);
-        //                     durationMapList.removeAt(index);
-        //                   });
-        //                 }),
-        //                 child: Container(
-        //                   decoration: BoxDecoration(
-        //                     borderRadius: const BorderRadius.only(
-        //                       topLeft: Radius.circular(100),
-        //                       bottomLeft: Radius.circular(100),
-        //                       bottomRight: Radius.circular(100),
-        //                       topRight: Radius.circular(100),
-        //                     ),
-        //                     color: CustomColors.white,
-        //                     boxShadow: const [
-        //                       BoxShadow(
-        //                         color: Color.fromARGB(13, 0, 0, 0),
-        //                         blurRadius: 4.0,
-        //                         spreadRadius: 2.0,
-        //                         offset: Offset(2.0, 2.0),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   // alignment: Alignment.center,
-        //                   width: 30,
-        //                   height: 30,
-        //                   child: const Icon(
-        //                     Icons.close,
-        //                     size: 16,
-        //                   ),
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       );
-        //     }),
+
         //Need Assistance
         const SizedBox(height: 20),
         Container(
@@ -2525,7 +2051,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Need Assistance",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2658,14 +2183,10 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             height: 45,
             child: TextFormField(
               controller: otherFieldController,
-              // onChanged: (value) {
-              //   other = value;
-              // },
               style: const TextStyle(
                 fontSize: 12,
                 fontFamily: "Rubik",
                 fontWeight: FontWeight.w600,
-                // color: ServiceRecieverColor.primaryColor,
               ),
               textAlignVertical: TextAlignVertical.center,
               maxLines: 1,
@@ -2675,14 +2196,13 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         ],
         const SizedBox(height: 20),
         // Learning Style
-        // const SizedBox(height: 20),
+
         Container(
           alignment: Alignment.topLeft,
           child: const Text(
             "Learning Style",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2710,7 +2230,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Learning Challenge",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2739,7 +2258,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Additional Info (optional)",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2805,72 +2323,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
               },
             ),
           ),
-          // GestureDetector(
-          //   onTap: () async {
-          //     if (jobTitleController.text.isEmpty) {
-          //       showErrorToast("Job Title is Required");
-          //     } else if (addressController.text.isEmpty) {
-          //       showErrorToast("Job Location is Required");
-          //     } else if (selectedLocation == null) {
-          //       showErrorToast("Job Area is Required");
-          //     } else if (hourlyController.text.isEmpty) {
-          //       showErrorToast("Hourly Rate is Required");
-          //     } else if (seniorCareDays.isEmpty) {
-          //       showErrorToast("Please Enter Add Days");
-          //     } else if (children.isEmpty) {
-          //       showErrorToast("Child Initials is Required");
-          //     } else if (other == "1" && otherFieldController.text.isEmpty) {
-          //       showErrorToast("Other is Required");
-          //     } else if (learningStyleController.text.isEmpty) {
-          //       showErrorToast("Learning Style is Required");
-          //     } else if (learningChallengeController.text.isEmpty) {
-          //       showErrorToast("Learning Challenge is Required");
-          //     } else {
-          //       setState(() {
-          //         buttonLoading = true;
-          //       });
-          //       PostSchoolSupport();
-          //     }
-          //   },
-          //   child: Container(
-          //     width: MediaQuery.of(context).size.width,
-          //     height: 60,
-          //     margin: const EdgeInsets.symmetric(vertical: 10),
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(
-          //         begin: Alignment.center,
-          //         end: Alignment.center,
-          //         colors: [
-          //           ServiceRecieverColor.redButton.withOpacity(0.1),
-          //           ServiceRecieverColor.redButton.withOpacity(0.8),
-          //         ],
-          //       ),
-          //       color: ServiceRecieverColor.redButton,
-          //       boxShadow: const [
-          //         BoxShadow(
-          //           color: Color.fromARGB(13, 0, 0, 0),
-          //           blurRadius: 4.0,
-          //           spreadRadius: 2.0,
-          //           offset: Offset(2.0, 2.0),
-          //         ),
-          //       ],
-          //       borderRadius: BorderRadius.circular(6),
-          //     ),
-          //     child: Center(
-          //       child: buttonLoading
-          //           ? const CircularProgressIndicator(color: Colors.white)
-          //           : Text(
-          //               "Submit",
-          //               style: TextStyle(
-          //                 color: CustomColors.white,
-          //                 fontSize: 22,
-          //                 fontWeight: FontWeight.w600,
-          //                 fontFamily: "Rubik",
-          //               ),
-          //             ),
-          //     ),
-          //   ),
-          // ),
         ),
       ],
     );
@@ -2887,7 +2339,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Cleaning Type",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -2958,303 +2409,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         // Add Days
         const SizedBox(height: 20),
         addDaysColumn(context),
-        // Container(
-        //   padding: const EdgeInsets.all(12),
-        //   decoration: const BoxDecoration(
-        //     borderRadius: BorderRadius.only(
-        //       topLeft: Radius.circular(20),
-        //       topRight: Radius.circular(20),
-        //       bottomLeft: Radius.circular(20),
-        //       bottomRight: Radius.circular(20),
-        //     ),
-        //     boxShadow: [
-        //       BoxShadow(
-        //         color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-        //         blurRadius: 3,
-        //         spreadRadius: 5,
-        //       )
-        //     ],
-        //     color: Color.fromRGBO(255, 255, 255, 1),
-        //   ),
-        //   child: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: <Widget>[
-        //       const Text(
-        //         "Add Days",
-        //         style: TextStyle(
-        //           fontFamily: "Rubik",
-        //           fontSize: 18,
-        //           // color: CustomColors.primaryText,
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //       // Start Date
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
-        //         decoration: BoxDecoration(
-        //           color: Colors.white,
-        //           borderRadius: BorderRadius.circular(12),
-        //         ),
-        //         child: CustomTextFieldWidget(
-        //           borderColor: CustomColors.white,
-        //           obsecure: false,
-        //           keyboardType: TextInputType.number,
-        //           controller: startDateController,
-        //           hintText: "Date",
-        //           onChanged: (value) {
-        //             setState(() {
-        //               getfromPickedDate = value;
-        //             });
-        //           },
-        //           onTap: () async {
-        //             _fromDate(context);
-        //           },
-        //         ),
-        //       ),
-        //       //Timer
-        //       SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 50,
-        //         child: TextButton(
-        //           style: ButtonStyle(
-        //             alignment: Alignment.centerLeft,
-        //             padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-        //             shape: MaterialStateProperty.resolveWith(
-        //               (states) => RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               ),
-        //             ),
-        //           ),
-        //           child: Text(
-        //             selectedTime != null ? '$selectedTime' : 'Start Time',
-        //             textAlign: TextAlign.left,
-        //             style: TextStyle(
-        //               fontSize: 16,
-        //               fontFamily: "Rubik",
-        //               fontWeight: FontWeight.w400,
-        //               color: CustomColors.primaryText,
-        //             ),
-        //           ),
-        //           onPressed: () {
-        //             setState(
-        //               () {
-        //                 displayTimeDialog();
-        //               },
-        //             );
-        //           },
-        //         ),
-        //       ),
-        //       // Duration
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.only(bottom: 15, top: 15),
-        //         child: Center(
-        //           child: DecoratedBox(
-        //             decoration: BoxDecoration(
-        //               border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               borderRadius: BorderRadius.circular(12),
-        //             ),
-        //             child: Padding(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 4,
-        //               ),
-        //               child: DropdownButtonHideUnderline(
-        //                 child: DropdownButton(
-        //                   hint: Text(
-        //                     "Duration",
-        //                     style: TextStyle(
-        //                       fontSize: 12,
-        //                       fontFamily: "Rubik",
-        //                       fontWeight: FontWeight.w600,
-        //                       color: CustomColors.primaryText,
-        //                     ),
-        //                   ),
-        //                   isExpanded: true,
-        //                   items: hours!.map((item) {
-        //                     return DropdownMenuItem(
-        //                       value: item['id'].toString(),
-        //                       child: Text(item['name']),
-        //                     );
-        //                   }).toList(),
-        //                   onChanged: (newVal) {
-        //                     setState(() {
-        //                       selectedHours = newVal;
-        //                     });
-        //                   },
-        //                   value: selectedHours,
-        //                 ),
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       // AddBtn
-        //       GestureDetector(
-        //         onTap: () {
-        //           String startDate = startDateController.text.trim();
-        //           String time = selectedTime.toString();
-        //           setState(() {
-        //             dateMapList.add(startDate);
-        //             startTimeMapList.add(time);
-        //             durationMapList.add(selectedHours);
-        //             seniorCareDays.add(
-        //               {
-        //                 "starting_date": startDate,
-        //                 "starting_time": time,
-        //                 "duration": selectedHours,
-        //               },
-        //             );
-        //           });
-        //         },
-        //         child: Container(
-        //           width: MediaQuery.of(context).size.width,
-        //           height: 50,
-        //           margin: const EdgeInsets.only(top: 20),
-        //           decoration: BoxDecoration(
-        //             gradient: LinearGradient(
-        //               begin: Alignment.center,
-        //               end: Alignment.center,
-        //               colors: [
-        //                 ServiceRecieverColor.redButton.withOpacity(0.1),
-        //                 ServiceRecieverColor.redButton.withOpacity(0.8),
-        //               ],
-        //             ),
-        //             color: ServiceRecieverColor.redButton,
-        //             boxShadow: const [
-        //               BoxShadow(
-        //                 color: Color.fromARGB(13, 0, 0, 0),
-        //                 blurRadius: 4.0,
-        //                 spreadRadius: 2.0,
-        //                 offset: Offset(2.0, 2.0),
-        //               ),
-        //             ],
-        //             borderRadius: BorderRadius.circular(6),
-        //           ),
-        //           child: Center(
-        //             child: Text(
-        //               "Add More Days",
-        //               style: TextStyle(
-        //                 color: CustomColors.white,
-        //                 fontSize: 16,
-        //                 fontWeight: FontWeight.w600,
-        //                 fontFamily: "Rubik",
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // // Show Days
-        // const SizedBox(height: 20),
-        // ListView.builder(
-        //     shrinkWrap: true,
-        //     scrollDirection: Axis.vertical,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemCount: seniorCareDays.length,
-        //     itemBuilder: (context, index) {
-        //       return SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 95,
-        //         child: Stack(
-        //           children: [
-        //             Container(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 10,
-        //               ),
-        //               decoration: BoxDecoration(
-        //                 color: Colors.white,
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 boxShadow: [
-        //                   BoxShadow(
-        //                     color: Colors.grey.shade300,
-        //                     spreadRadius: 01,
-        //                     blurRadius: 05,
-        //                   ),
-        //                 ],
-        //               ),
-        //               height: 85,
-        //               width: MediaQuery.of(context).size.width,
-        //               child: Column(
-        //                 children: [
-        //                   Row(
-        //                     children: [
-        //                       const Text("Date: "),
-        //                       Expanded(
-        //                         child: Text(
-        //                           seniorCareDays[index]['starting_date'].toString(),
-        //                         ),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Time: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['starting_time']}"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Duration: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['duration']} hours"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //             Positioned(
-        //               top: 00,
-        //               right: 0,
-        //               child: GestureDetector(
-        //                 onTap: (() {
-        //                   setState(() {
-        //                     seniorCareDays.removeAt(index);
-        //                     startTimeMapList.removeAt(index);
-        //                     dateMapList.removeAt(index);
-        //                     durationMapList.removeAt(index);
-        //                   });
-        //                 }),
-        //                 child: Container(
-        //                   decoration: BoxDecoration(
-        //                     borderRadius: const BorderRadius.only(
-        //                       topLeft: Radius.circular(100),
-        //                       bottomLeft: Radius.circular(100),
-        //                       bottomRight: Radius.circular(100),
-        //                       topRight: Radius.circular(100),
-        //                     ),
-        //                     color: CustomColors.white,
-        //                     boxShadow: const [
-        //                       BoxShadow(
-        //                         color: Color.fromARGB(13, 0, 0, 0),
-        //                         blurRadius: 4.0,
-        //                         spreadRadius: 2.0,
-        //                         offset: Offset(2.0, 2.0),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   // alignment: Alignment.center,
-        //                   width: 30,
-        //                   height: 30,
-        //                   child: const Icon(
-        //                     Icons.close,
-        //                     size: 16,
-        //                   ),
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       );
-        //     }),
+
         // Size of House/Apartment
         const SizedBox(height: 20),
         Container(
@@ -3263,7 +2418,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Size of House/Apartment",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3525,7 +2679,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Other",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -3611,15 +2764,11 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
           SizedBox(
             height: 45,
             child: TextFormField(
-              // onChanged: (value) {
-              //   other = value;
-              // },
               controller: otherFieldController,
               style: const TextStyle(
                 fontSize: 12,
                 fontFamily: "Rubik",
                 fontWeight: FontWeight.w600,
-                // color: ServiceRecieverColor.primaryColor,
               ),
               textAlignVertical: TextAlignVertical.center,
               maxLines: 1,
@@ -3699,72 +2848,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
               return false;
             },
           ),
-          // GestureDetector(
-          //   onTap: () async {
-          //     if (jobTitleController.text.isEmpty) {
-          //       showErrorToast("Job Title is Required");
-          //     } else if (addressController.text.isEmpty) {
-          //       showErrorToast("Job Location is Required");
-          //     } else if (selectedLocation == null) {
-          //       showErrorToast("Job Area is Required");
-          //     } else if (hourlyController.text.isEmpty) {
-          //       showErrorToast("Hourly Rate is Required");
-          //     } else if (cleaningTypeValue == null) {
-          //       showErrorToast("Cleaning Type is Required");
-          //     } else if (other == "1" && otherFieldController.text.isEmpty) {
-          //       showErrorToast("Other is Required");
-          //     } else if (bedroomValue == null) {
-          //       showErrorToast("Please Select Bedroom");
-          //     } else if (seniorCareDays.isEmpty) {
-          //       showErrorToast("Please Enter Add Days");
-          //     } else if (bathroomValue == null) {
-          //       showErrorToast("Please Select Bathroom");
-          //     } else {
-          //       setState(() {
-          //         buttonLoading = true;
-          //       });
-          //       PostHouseKeeping();
-          //     }
-          //   },
-          //   child: Container(
-          //     width: MediaQuery.of(context).size.width,
-          //     height: 60,
-          //     margin: const EdgeInsets.symmetric(vertical: 10),
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(
-          //         begin: Alignment.center,
-          //         end: Alignment.center,
-          //         colors: [
-          //           ServiceRecieverColor.redButton.withOpacity(0.1),
-          //           ServiceRecieverColor.redButton.withOpacity(0.8),
-          //         ],
-          //       ),
-          //       color: ServiceRecieverColor.redButton,
-          //       boxShadow: const [
-          //         BoxShadow(
-          //           color: Color.fromARGB(13, 0, 0, 0),
-          //           blurRadius: 4.0,
-          //           spreadRadius: 2.0,
-          //           offset: Offset(2.0, 2.0),
-          //         ),
-          //       ],
-          //       borderRadius: BorderRadius.circular(6),
-          //     ),
-          //     child: Center(
-          //       child: buttonLoading
-          //           ? const CircularProgressIndicator(color: Colors.white)
-          //           : Text(
-          //               "Submit",
-          //               style: TextStyle(
-          //                 color: CustomColors.white,
-          //                 fontSize: 22,
-          //                 fontWeight: FontWeight.w600,
-          //                 fontFamily: "Rubik",
-          //               ),
-          //             ),
-          //     ),
-          //   ),
-          // ),
         ),
       ],
     );
@@ -3776,306 +2859,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         // Add Days
         const SizedBox(height: 20),
         addDaysColumn(context),
-        // Container(
-        //   padding: const EdgeInsets.all(12),
-        //   decoration: const BoxDecoration(
-        //     borderRadius: BorderRadius.only(
-        //       topLeft: Radius.circular(20),
-        //       topRight: Radius.circular(20),
-        //       bottomLeft: Radius.circular(20),
-        //       bottomRight: Radius.circular(20),
-        //     ),
-        //     boxShadow: [
-        //       BoxShadow(
-        //         color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-        //         spreadRadius: 5,
-        //         blurRadius: 3,
-        //       )
-        //     ],
-        //     color: Color.fromRGBO(255, 255, 255, 1),
-        //   ),
-        //   child: Column(
-        //     mainAxisSize: MainAxisSize.min,
-        //     children: <Widget>[
-        //       Text(
-        //         "Add Days",
-        //         style: TextStyle(
-        //           fontFamily: "Rubik",
-        //           fontSize: 18,
-        //           color: CustomColors.primaryText,
-        //           fontWeight: FontWeight.w600,
-        //         ),
-        //       ),
-        //       const SizedBox(height: 10),
-        //       // Start Date
-        //       Container(
-        //         height: 50,
-        //         // margin: const EdgeInsets.only(bottom: 15, top: 15),
-        //         decoration: BoxDecoration(
-        //           color: Colors.white,
-        //           borderRadius: BorderRadius.circular(12),
-        //         ),
-        //         child: CustomTextFieldWidget(
-        //           borderColor: CustomColors.white,
-        //           obsecure: false,
-        //           keyboardType: TextInputType.number,
-        //           controller: startDateController,
-        //           hintText: "Date",
-        //           onChanged: (value) {
-        //             setState(() {
-        //               getfromPickedDate = value;
-        //             });
-        //           },
-        //           onTap: () async {
-        //             _fromDate(context);
-        //           },
-        //         ),
-        //       ),
-        //       //Timer
-        //       const SizedBox(height: 10),
-        //       SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 50,
-        //         child: TextButton(
-        //           style: ButtonStyle(
-        //             alignment: Alignment.centerLeft,
-        //             padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
-        //             shape: MaterialStateProperty.resolveWith(
-        //               (states) => RoundedRectangleBorder(
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 side: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               ),
-        //             ),
-        //           ),
-        //           child: Text(
-        //             selectedTime != null ? '$selectedTime' : 'Start Time',
-        //             textAlign: TextAlign.left,
-        //             style: TextStyle(
-        //               fontSize: 16,
-        //               fontFamily: "Rubik",
-        //               fontWeight: FontWeight.w400,
-        //               color: CustomColors.primaryText,
-        //             ),
-        //           ),
-        //           onPressed: () {
-        //             setState(
-        //               () {
-        //                 displayTimeDialog();
-        //               },
-        //             );
-        //           },
-        //         ),
-        //       ),
-        //       // Duration
-        //       Container(
-        //         height: 50,
-        //         margin: const EdgeInsets.only(bottom: 0, top: 15),
-        //         child: Center(
-        //           child: DecoratedBox(
-        //             decoration: BoxDecoration(
-        //               // color: CustomColors.myJobDetail,
-        //               border: Border.all(color: ServiceRecieverColor.primaryColor, width: 0.5),
-        //               borderRadius: BorderRadius.circular(12),
-        //             ),
-        //             child: Padding(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 4,
-        //               ),
-        //               child: DropdownButtonHideUnderline(
-        //                 child: DropdownButton(
-        //                   hint: Text(
-        //                     "Duration",
-        //                     style: TextStyle(
-        //                       fontSize: 12,
-        //                       fontFamily: "Rubik",
-        //                       fontWeight: FontWeight.w600,
-        //                       color: CustomColors.primaryText,
-        //                     ),
-        //                   ),
-        //                   isExpanded: true,
-        //                   items: hours!.map((item) {
-        //                     return DropdownMenuItem(
-        //                       value: item['id'].toString(),
-        //                       child: Text(item['name']),
-        //                     );
-        //                   }).toList(),
-        //                   onChanged: (newVal) {
-        //                     setState(() {
-        //                       selectedHours = newVal;
-        //                     });
-        //                   },
-        //                   value: selectedHours,
-        //                 ),
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //       // AddBtn
-        //       GestureDetector(
-        //         onTap: () {
-        //           String startDate = startDateController.text.trim();
-        //           String time = selectedTime.toString();
-        //           setState(() {
-        //             dateMapList.add(startDate);
-        //             startTimeMapList.add(time);
-        //             durationMapList.add(selectedHours);
-        //             seniorCareDays.add(
-        //               {
-        //                 "starting_date": startDate,
-        //                 "starting_time": time,
-        //                 "duration": selectedHours,
-        //               },
-        //             );
-        //           });
-        //         },
-        //         child: Container(
-        //           width: MediaQuery.of(context).size.width,
-        //           height: 50,
-        //           margin: const EdgeInsets.only(top: 20),
-        //           decoration: BoxDecoration(
-        //             gradient: LinearGradient(
-        //               begin: Alignment.center,
-        //               end: Alignment.center,
-        //               colors: [
-        //                 ServiceRecieverColor.redButton.withOpacity(0.1),
-        //                 ServiceRecieverColor.redButton.withOpacity(0.8),
-        //               ],
-        //             ),
-        //             color: ServiceRecieverColor.redButton,
-        //             boxShadow: const [
-        //               BoxShadow(
-        //                 color: Color.fromARGB(13, 0, 0, 0),
-        //                 blurRadius: 4.0,
-        //                 spreadRadius: 2.0,
-        //                 offset: Offset(2.0, 2.0),
-        //               ),
-        //             ],
-        //             borderRadius: BorderRadius.circular(6),
-        //           ),
-        //           child: Center(
-        //             child: Text(
-        //               "Add More Days",
-        //               style: TextStyle(
-        //                 color: CustomColors.white,
-        //                 fontSize: 16,
-        //                 fontWeight: FontWeight.w600,
-        //                 fontFamily: "Rubik",
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
-        // const SizedBox(height: 20),
-        // // Show Days
-        // ListView.builder(
-        //     shrinkWrap: true,
-        //     scrollDirection: Axis.vertical,
-        //     physics: const NeverScrollableScrollPhysics(),
-        //     itemCount: seniorCareDays.length,
-        //     itemBuilder: (context, index) {
-        //       return SizedBox(
-        //         width: MediaQuery.of(context).size.width,
-        //         height: 95,
-        //         child: Stack(
-        //           children: [
-        //             Container(
-        //               padding: const EdgeInsets.symmetric(
-        //                 horizontal: 10,
-        //                 vertical: 10,
-        //               ),
-        //               decoration: BoxDecoration(
-        //                 color: Colors.white,
-        //                 borderRadius: BorderRadius.circular(12),
-        //                 boxShadow: [
-        //                   BoxShadow(
-        //                     color: Colors.grey.shade300,
-        //                     spreadRadius: 01,
-        //                     blurRadius: 05,
-        //                   ),
-        //                 ],
-        //               ),
-        //               height: 85,
-        //               width: MediaQuery.of(context).size.width,
-        //               child: Column(
-        //                 children: [
-        //                   Row(
-        //                     children: [
-        //                       const Text("Date: "),
-        //                       Expanded(
-        //                         child: Text(
-        //                           seniorCareDays[index]['starting_date'].toString(),
-        //                         ),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Time: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['starting_time']}"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   Row(
-        //                     children: [
-        //                       const Text("Duration: "),
-        //                       Expanded(
-        //                         child: Text("${seniorCareDays[index]['duration']} hours"),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                 ],
-        //               ),
-        //             ),
-        //             Positioned(
-        //               top: 00,
-        //               right: 0,
-        //               child: GestureDetector(
-        //                 onTap: (() {
-        //                   setState(() {
-        //                     seniorCareDays.removeAt(index);
-        //                     startTimeMapList.removeAt(index);
-        //                     dateMapList.removeAt(index);
-        //                     durationMapList.removeAt(index);
-        //                   });
-        //                 }),
-        //                 child: Container(
-        //                   decoration: BoxDecoration(
-        //                     borderRadius: const BorderRadius.only(
-        //                       topLeft: Radius.circular(100),
-        //                       bottomLeft: Radius.circular(100),
-        //                       bottomRight: Radius.circular(100),
-        //                       topRight: Radius.circular(100),
-        //                     ),
-        //                     color: CustomColors.white,
-        //                     boxShadow: const [
-        //                       BoxShadow(
-        //                         color: Color.fromARGB(13, 0, 0, 0),
-        //                         blurRadius: 4.0,
-        //                         spreadRadius: 2.0,
-        //                         offset: Offset(2.0, 2.0),
-        //                       ),
-        //                     ],
-        //                   ),
-        //                   // alignment: Alignment.center,
-        //                   width: 30,
-        //                   height: 30,
-        //                   child: const Icon(
-        //                     Icons.close,
-        //                     size: 16,
-        //                   ),
-        //                 ),
-        //               ),
-        //             ),
-        //           ],
-        //         ),
-        //       );
-        //     }),
+
         // Pet type
         const SizedBox(height: 20),
         Container(
@@ -4084,7 +2868,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Pet Type",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4179,7 +2962,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Number of Pets",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4244,7 +3026,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Pet Breed",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4273,7 +3054,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Size Of Pet",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4338,7 +3118,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Temperament",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4481,7 +3260,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Need Assistance",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4640,7 +3418,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Additional Info (optional)",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4705,74 +3482,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
               return false;
             },
           ),
-          // GestureDetector(
-          //   onTap: () async {
-          //     if (jobTitleController.text.isEmpty) {
-          //       showErrorToast("Job Title is Required");
-          //     } else if (addressController.text.isEmpty) {
-          //       showErrorToast("Job Location is Required");
-          //     } else if (selectedLocation == null) {
-          //       showErrorToast("Job Area is Required");
-          //     } else if (hourlyController.text.isEmpty) {
-          //       showErrorToast("Hourly Rate is Required");
-          //     } else if (seniorCareDays.isEmpty) {
-          //       showErrorToast("Please Enter Add Days");
-          //     } else if (other == "1" && otherFieldController.text.isEmpty) {
-          //       showErrorToast("Other is Required");
-          //     } else if (petTypeValue == null) {
-          //       showErrorToast("Pet Type is Required");
-          //     } else if (numberOfPetValue == null) {
-          //       showErrorToast("Number of pets is Required");
-          //     } else if (petBreedController.text.isEmpty) {
-          //       showErrorToast("Pet Breed is Required");
-          //     } else if (temperamentValue == null) {
-          //       showErrorToast("Temprament is Required");
-          //     } else {
-          //       setState(() {
-          //         buttonLoading = true;
-          //       });
-          //       postPetCare();
-          //     }
-          //   },
-          //   child: Container(
-          //     width: MediaQuery.of(context).size.width,
-          //     height: 60,
-          //     margin: const EdgeInsets.symmetric(vertical: 10),
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(
-          //         begin: Alignment.center,
-          //         end: Alignment.center,
-          //         colors: [
-          //           ServiceRecieverColor.redButton.withOpacity(0.1),
-          //           ServiceRecieverColor.redButton.withOpacity(0.8),
-          //         ],
-          //       ),
-          //       color: ServiceRecieverColor.redButton,
-          //       boxShadow: const [
-          //         BoxShadow(
-          //           color: Color.fromARGB(13, 0, 0, 0),
-          //           blurRadius: 4.0,
-          //           spreadRadius: 2.0,
-          //           offset: Offset(2.0, 2.0),
-          //         ),
-          //       ],
-          //       borderRadius: BorderRadius.circular(6),
-          //     ),
-          //     child: Center(
-          //       child: buttonLoading
-          //           ? const CircularProgressIndicator(color: Colors.white)
-          //           : Text(
-          //               "Submit",
-          //               style: TextStyle(
-          //                 color: CustomColors.white,
-          //                 fontSize: 22,
-          //                 fontWeight: FontWeight.w600,
-          //                 fontFamily: "Rubik",
-          //               ),
-          //             ),
-          //     ),
-          //   ),
-          // ),
         ),
       ],
     );
@@ -4789,7 +3498,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Senior Initials",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4804,7 +3512,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
               fontSize: 12,
               fontFamily: "Rubik",
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
             ),
             textAlignVertical: TextAlignVertical.center,
             maxLines: 1,
@@ -4819,7 +3526,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Date Of Birth",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -4843,7 +3549,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
               fontSize: 12,
               fontFamily: "Rubik",
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
             ),
             textAlignVertical: TextAlignVertical.center,
             maxLines: 1,
@@ -4858,7 +3563,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Medical Condition (optional)",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -5184,7 +3888,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             "Additional Info (optional)",
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              // color: ServiceRecieverColor.primaryColor,
               fontFamily: "Rubik",
               fontSize: 14,
             ),
@@ -5243,68 +3946,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
               return false;
             },
           ),
-          //  GestureDetector(
-          //   onTap: () async {
-          //     if (jobTitleController.text.isEmpty) {
-          //       showErrorToast("Job Title is Required");
-          //     } else if (addressController.text.isEmpty) {
-          //       showErrorToast("Job Location is Required");
-          //     } else if (selectedLocation == null) {
-          //       showErrorToast("Job Area is Required");
-          //     } else if (hourlyController.text.isEmpty) {
-          //       showErrorToast("Hourly Rate is Required");
-          //     } else if (seniorNameController.text.isEmpty) {
-          //       showErrorToast("Senior Name is Required");
-          //     } else if (dobController.text.isEmpty) {
-          //       showErrorToast("DOB is Required");
-          //     } else if (seniorCareDays.isEmpty) {
-          //       showErrorToast("Please Enter Add Days");
-          //     } else {
-          //       setState(() {
-          //         buttonLoading = true;
-          //       });
-          //       PostSeniorCare();
-          //     }
-          //   },
-          //   child: Container(
-          //     width: MediaQuery.of(context).size.width,
-          //     height: 60,
-          //     margin: const EdgeInsets.symmetric(vertical: 10),
-          //     decoration: BoxDecoration(
-          //       gradient: LinearGradient(
-          //         begin: Alignment.center,
-          //         end: Alignment.center,
-          //         colors: [
-          //           ServiceRecieverColor.redButton.withOpacity(0.1),
-          //           ServiceRecieverColor.redButton.withOpacity(0.8),
-          //         ],
-          //       ),
-          //       color: CustomColors.white,
-          //       boxShadow: const [
-          //         BoxShadow(
-          //           color: Color.fromARGB(13, 0, 0, 0),
-          //           blurRadius: 4.0,
-          //           spreadRadius: 2.0,
-          //           // offset: Offset(2.0, 2.0),
-          //         ),
-          //       ],
-          //       borderRadius: BorderRadius.circular(6),
-          //     ),
-          //     child: Center(
-          //       child: buttonLoading
-          //           ? const CircularProgressIndicator(color: Colors.white)
-          //           : Text(
-          //               "Submit",
-          //               style: TextStyle(
-          //                 color: CustomColors.white,
-          //                 fontSize: 22,
-          //                 fontWeight: FontWeight.w600,
-          //                 fontFamily: "Rubik",
-          //               ),
-          //             ),
-          //     ),
-          //   ),
-          // ),
         ),
       ],
     );
@@ -5317,7 +3958,6 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         fontSize: 12,
         fontFamily: "Rubik",
         fontWeight: FontWeight.w600,
-        // color: ServiceRecieverColor.primaryColor,
       ),
       fillColor: CustomColors.white,
       focusColor: CustomColors.white,

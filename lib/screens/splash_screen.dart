@@ -2,7 +2,8 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:island_app/screens/onboard_screen.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/utils/storage_service.dart';
 import '../carereceiver/utils/colors.dart';
 
@@ -19,19 +20,11 @@ class _SplashScreenState extends State<SplashScreen> {
     var userToken = await storageService.readSecureStorage('userToken');
 
     if (userRole == null && userToken == null) {
-      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => const OnBoardScreen()));
+      navigationService.pushReplacement(RoutesName.onBoard);
     } else if (userRole == "3") {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/bottom-bar-giver',
-        (route) => false,
-      );
+      navigationService.pushNamedAndRemoveUntil(RoutesName.bottomBarGiver);
     } else if (userRole == "4") {
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/bottom-bar',
-        (route) => false,
-      );
+      navigationService.pushNamedAndRemoveUntil(RoutesName.bottomBar);
     }
   }
 

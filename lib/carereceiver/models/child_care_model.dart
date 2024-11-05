@@ -48,9 +48,7 @@ class Job {
     this.childinfo,
     this.service,
     this.schedule,
-    // this.learning,
     this.schoolCamp,
-    // this.additionalInfo,
   });
 
   int? id;
@@ -75,9 +73,7 @@ class Job {
 
   Service? service;
   List<Schedule>? schedule;
-  // Learning? learning;
   SchoolCamp? schoolCamp;
-  // String? additionalInfo;
 
   factory Job.fromJson(Map<String, dynamic> json) => Job(
         id: json["id"],
@@ -102,7 +98,6 @@ class Job {
         service: json["service"] == null ? null : Service.fromJson(json["service"]),
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
         schoolCamp: json["school_camp"] == null ? null : SchoolCamp.fromJson(json["school_camp"]),
-        // additionalInfo: json["additional_info"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -128,6 +123,5 @@ class Job {
         "service": service?.toJson(),
         "schedule": schedule == null ? [] : List<dynamic>.from(schedule!.map((x) => x.toJson())),
         "school_camp": schoolCamp?.toJson(),
-        // "additional_info": additionalInfo,
       };
 }

@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/screens/my_jobs_screen.dart';
-import 'package:island_app/caregiver/screens/profile_edit.dart';
 import 'package:island_app/caregiver/screens/provider_reviews_given_screen.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
@@ -36,13 +35,12 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => RecieverUserProvider()),
         ChangeNotifierProvider(create: (context) => ServiceGiverProvider()),
-        ChangeNotifierProvider(create: (context) => GiverProfileEidtProvider()),
         ChangeNotifierProvider(create: (context) => GiverMyJobsProvider()),
         ChangeNotifierProvider(create: (context) => GiverReviewsProvider()),
         ChangeNotifierProvider(create: (context) => NotificationProvider()),
-        ChangeNotifierProvider(create: (context) => RecieverChatProvider()),
         ChangeNotifierProvider(create: (context) => ServiceProviderChat()),
         ChangeNotifierProvider(create: (context) => SubscriptionProvider()),
+        ChangeNotifierProvider(create: (context) => RecieverChatProvider()),
         ChangeNotifierProvider(create: (context) => CardProvider()),
         ChangeNotifierProvider(create: (context) => BottomNavigationProvider()),
         ChangeNotifierProvider(create: (context) => ReceiverReviewsProvider()),

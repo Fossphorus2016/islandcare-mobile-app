@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 
 class OnBoardScreen extends StatefulWidget {
   const OnBoardScreen({super.key});
@@ -18,7 +20,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 8),
           child: GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, "/login");
+              navigationService.push(RoutesName.login);
             },
             child: Container(
               width: MediaQuery.of(context).size.width,

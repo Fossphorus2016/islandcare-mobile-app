@@ -13,17 +13,19 @@ import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 
-class PaymentPackageScreen extends StatefulWidget {
-  const PaymentPackageScreen({super.key});
+class PackagePaymentScreen extends StatefulWidget {
+  const PackagePaymentScreen({super.key});
 
   @override
-  State<PaymentPackageScreen> createState() => _PaymentPackageScreenState();
+  State<PackagePaymentScreen> createState() => _PackagePaymentScreenState();
 }
 
-class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
+class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
   @override
   void initState() {
     callInInit();
@@ -42,7 +44,7 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
     List allpackages = context.watch<SubscriptionProvider>().allPackages;
     ProfileReceiverModel? user = context.watch<RecieverUserProvider>().gWAUserProfile;
     UserSubscriptionDetail? userSubsDetail = user!.data!.userSubscriptionDetail;
-    // print(MediaQuery.of(context).size.width * .90);
+
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -88,19 +90,7 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                // Container(
-                //   alignment: Alignment.center,
-                //   child: Text(
-                //     "Hire with Premium",
-                //     style: TextStyle(
-                //       color: CustomColors.primaryText,
-                //       fontSize: 22,
-                //       fontFamily: "Rubik",
-                //       fontWeight: FontWeight.w500,
-                //     ),
-                //   ),
-                // ),
-                // const SizedBox(height: 5),
+
                 Container(
                   alignment: Alignment.center,
                   child: Text(
@@ -154,16 +144,6 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                               color: CustomColors.white,
                             ),
                           ),
-                          // const SizedBox(height: 10),
-                          // Text(
-                          //   allpackages[i]['period_type'],
-                          //   style: TextStyle(
-                          //     fontSize: 14,
-                          //     fontWeight: FontWeight.w400,
-                          //     fontFamily: "Poppins",
-                          //     color: CustomColors.white,
-                          //   ),
-                          // ),
                           const SizedBox(height: 05),
                           TextButton(
                             onPressed: () async {
@@ -216,43 +196,14 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                                             }
                                             return true;
                                           } catch (e) {
-                                            // print(e);
                                             Navigator.pop(context);
                                             showErrorToast(e.toString());
                                             return false;
                                           }
                                         },
                                       ),
-                                      // TextButton(
-                                      //   onPressed: () async {
-                                      //     try {
-                                      //       var resp = await Provider.of<SubscriptionProvider>(context, listen: false).unSubscribe(userSubsDetail.id);
-                                      //       if (resp.statusCode == 200 && resp.data['success']) {
-                                      //         Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
-
-                                      //         Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
-                                      //         Navigator.pop(context);
-                                      //         showSuccessToast(resp.data['message'].toString());
-                                      //       } else {
-                                      //         throw "something went wrong please try again later";
-                                      //       }
-                                      //     } catch (e) {
-                                      //       // print(e);
-                                      //       Navigator.pop(context);
-                                      //       showErrorToast(e.toString());
-                                      //     }
-                                      //   },
-                                      //   style: ButtonStyle(
-                                      //     backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.blue),
-                                      //   ),
-                                      //   child: const Text(
-                                      //     "Yes, unsubscribe please!",
-                                      //     style: TextStyle(color: Colors.white),
-                                      //   ),
-                                      // ),
                                       TextButton(
                                         onPressed: () {
-                                          // print("object");
                                           Navigator.pop(context);
                                         },
                                         style: ButtonStyle(
@@ -294,13 +245,9 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
                     InkWell(
                       onTap: () {
                         Provider.of<SubscriptionProvider>(context, listen: false).setSelectedPackage(allpackages[i]);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PaymentsFormScreen(
-                              subsId: allpackages[i]['id'].toString(),
-                            ),
-                          ),
+                        navigationService.push(
+                          RoutesName.recieverPaymentScreen,
+                          arguments: {"subsId": allpackages[i]['id'].toString()},
                         );
                       },
                       child: Container(
@@ -364,15 +311,15 @@ class _PaymentPackageScreenState extends State<PaymentPackageScreen> {
   }
 }
 
-class PaymentsFormScreen extends StatefulWidget {
+class RecieverPaymentScreen extends StatefulWidget {
   final String subsId;
-  const PaymentsFormScreen({super.key, required this.subsId});
+  const RecieverPaymentScreen({super.key, required this.subsId});
 
   @override
-  State<PaymentsFormScreen> createState() => _PaymentsFormScreenState();
+  State<RecieverPaymentScreen> createState() => _RecieverPaymentScreenState();
 }
 
-class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
+class _RecieverPaymentScreenState extends State<RecieverPaymentScreen> {
   final paymentForm = GlobalKey<FormState>();
 
   CreditCard? selectedCard;
@@ -433,29 +380,12 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
               child: SingleChildScrollView(
                 child: Container(
                   width: MediaQuery.of(context).size.width,
-                  // height: MediaQuery.of(context).size.height,
                   color: Colors.white,
                   padding: const EdgeInsets.only(top: 20),
                   child: Column(
                     children: [
                       if (cardProvider.allCards != null && cardProvider.allCards!.isNotEmpty) ...[
                         for (int j = 0; j < cardProvider.allCards!.length; j++) ...[
-                          // RadioListTile(
-                          //   groupValue: selectedCard,
-                          //   activeColor: ServiceRecieverColor.primaryColor.withOpacity(0.8),
-                          //   value: cardProvider.allCards[j],
-                          //   onChanged: (value) {
-                          //     setState(() {
-                          //       newCard = false;
-                          //       selectedCard = value;
-                          //     });
-                          //     // Provider.of<SubscriptionProvider>(context, listen: false).setSelectCard(value);
-                          //   },
-                          //   title: Text(
-                          //     "Select Card: ${cardProvider.allCards[j].cardNumber}",
-                          //     style: const TextStyle(color: Colors.black),
-                          //   ),
-                          // ),
                           InkWell(
                             onTap: () {
                               setState(() {
@@ -779,7 +709,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                             }),
                             token: token,
                           );
-                          // print(response);
+
                           if (response.statusCode == 200 && response.data['success']) {
                             Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
                             Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
@@ -790,77 +720,11 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                             throw response.data['message'];
                           }
                         } catch (e) {
-                          // print(e);
                           showErrorToast(e.toString());
                         }
                         return false;
                       },
                     ),
-                    // GestureDetector(
-                    //   onTap: !sendReq
-                    //       ? () async {
-                    //           setState(() {
-                    //             sendReq = true;
-                    //           });
-                    //           try {
-                    //             var token = await getToken();
-                    //             var response = await postRequesthandler(
-                    //               url: CareReceiverURl.serviceReceiverSubscribePackage,
-                    //               formData: FormData.fromMap({
-                    //                 "subscription_id": selectedSubscribe['id'],
-                    //                 "card_data": selectedCard!.id.toString(),
-                    //                 "save_card": false,
-                    //                 "name_on_card": selectedCard!.nameOnCard.toString(),
-                    //                 "card_number": selectedCard!.cardNumber.toString(),
-                    //                 "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
-                    //                 "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
-                    //                 "cvv": selectedCard!.cvv.toString(),
-                    //               }),
-                    //               token: token,
-                    //             );
-                    //             // print(response);
-                    //             if (response.statusCode == 200 && response.data['success']) {
-                    //               Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
-                    //               Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
-
-                    //               showSuccessToast(response.data['message']);
-                    //               Navigator.pop(context);
-                    //             } else {
-                    //               throw response.data['message'];
-                    //             }
-                    //           } catch (e) {
-                    //             // print(e);
-                    //             showErrorToast(e.toString());
-                    //           }
-
-                    //           setState(() {
-                    //             sendReq = false;
-                    //           });
-                    //         }
-                    //       : null,
-                    //   child: !sendReq
-                    //       ? Container(
-                    //           height: 60,
-                    //           decoration: BoxDecoration(
-                    //             borderRadius: BorderRadius.circular(10),
-                    //             color: ServiceRecieverColor.redButton,
-                    //           ),
-                    //           child: Center(
-                    //             child: Text(
-                    //               "Subscribe",
-                    //               style: TextStyle(
-                    //                 color: CustomColors.white,
-                    //                 fontFamily: "Poppins",
-                    //                 fontSize: 18,
-                    //                 fontWeight: FontWeight.w600,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //         )
-                    //       : const Center(
-                    //           child: CircularProgressIndicator(color: Colors.green),
-                    //         ),
-                    // ),
                   ],
                 ),
               ),
@@ -905,7 +769,6 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
               ),
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width,
-              // height: 40,
               child: TextFormField(
                 controller: cardHolderNameController,
                 validator: (value) {
@@ -1055,7 +918,6 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
               ),
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width,
-              // height: 40,
               child: TextFormField(
                 controller: cardExpiryDateController,
                 textInputAction: TextInputAction.next,
@@ -1070,7 +932,6 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                     return 'Please enter a date';
                   }
                   if (!_dateRegex.hasMatch(value)) {
-                    // print("object");
                     return 'Invalid date format (MM-YYYY)';
                   }
                   // You can add additional validation here if needed.
@@ -1137,7 +998,6 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
               ),
               alignment: Alignment.center,
               width: MediaQuery.of(context).size.width,
-              // height: 40,
               child: TextFormField(
                 controller: cardCvvController,
                 textInputAction: TextInputAction.next,
@@ -1259,8 +1119,7 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                       }),
                       token: token,
                     );
-                    // print(response);
-                    // print(response.data['message']);
+
                     if (response.statusCode == 200 && response.data['success']) {
                       Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
                       Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
@@ -1271,80 +1130,12 @@ class _PaymentsFormScreenState extends State<PaymentsFormScreen> {
                       throw response.data['message'];
                     }
                   } catch (e) {
-                    // print(e);
                     showErrorToast(e.toString());
                   }
                 }
                 return false;
               },
             ),
-            // GestureDetector(
-            //   onTap: sendReq == true
-            //       ? null
-            //       : () async {
-            //           if (newPaymentForm.currentState!.validate()) {
-            //             setState(() {
-            //               sendReq = true;
-            //             });
-            //             try {
-            //               var token = await getToken();
-            //               var response = await postRequesthandler(
-            //                 url: CareReceiverURl.serviceReceiverSubscribePackage,
-            //                 formData: FormData.fromMap({
-            //                   "subscription_id": selectedSubscribe['id'],
-            //                   "card_data": "card-form",
-            //                   "save_card": saveFrom,
-            //                   "name_on_card": cardHolderNameController.text.toString(),
-            //                   "card_number": cardNumberController.text.toString(),
-            //                   "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
-            //                   "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
-            //                   "cvv": cardCvvController.text.toString(),
-            //                 }),
-            //                 token: token,
-            //               );
-            //               // print(response);
-            //               // print(response.data['message']);
-            //               if (response.statusCode == 200 && response.data['success']) {
-            //                 Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
-            //                 Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
-            //                 await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
-            //                 showSuccessToast(response.data['message']);
-            //                 Navigator.pop(context);
-            //               } else {
-            //                 throw response.data['message'];
-            //               }
-            //             } catch (e) {
-            //               // print(e);
-            //               showErrorToast(e.toString());
-            //             }
-            //             setState(() {
-            //               sendReq = false;
-            //             });
-            //           }
-            //         },
-            //   child: Container(
-            //     height: 60,
-            //     decoration: BoxDecoration(
-            //       color: ServiceRecieverColor.redButton,
-            //       borderRadius: BorderRadius.circular(10),
-            //     ),
-            //     child: Center(
-            //       child: sendReq
-            //           ? const CircularProgressIndicator(
-            //               color: Colors.white,
-            //             )
-            //           : Text(
-            //               "Subscribe",
-            //               style: TextStyle(
-            //                 color: CustomColors.white,
-            //                 fontFamily: "Poppins",
-            //                 fontSize: 18,
-            //                 fontWeight: FontWeight.w600,
-            //               ),
-            //             ),
-            //     ),
-            //   ),
-            // ),
           ],
         ),
       ),

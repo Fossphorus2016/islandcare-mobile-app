@@ -46,7 +46,7 @@ class User {
   String? createdAt;
   String? updatedAt;
   dynamic deletedAt;
-  // Userdetail? userdetail;
+
   User({
     required this.id,
     required this.firstName,
@@ -65,7 +65,6 @@ class User {
     required this.createdAt,
     required this.updatedAt,
     required this.deletedAt,
-    // required this.userdetail,
   });
 
   Map<String, dynamic> toMap() {
@@ -87,7 +86,6 @@ class User {
       'createdAt': createdAt,
       'updatedAt': updatedAt,
       'deletedAt': deletedAt,
-      // 'userdetail': userdetail?.toMap(),
     };
   }
 
@@ -110,7 +108,6 @@ class User {
       createdAt: map['createdAt'] ?? '',
       updatedAt: map['updatedAt'] ?? '',
       deletedAt: map['deletedAt'] as dynamic ?? '',
-      // userdetail: map['userdetail'] != null ? Userdetail.fromMap(map['user'] as Map<String, dynamic>) : null,
     );
   }
 
@@ -118,66 +115,3 @@ class User {
 
   factory User.fromJson(String source) => User.fromMap(json.decode(source) as Map<String, dynamic>);
 }
-
-// class Userdetail {
-//   String? id;
-//   String? userId;
-//   dynamic gender;
-//   String? dob;
-//   String? servicesRequired;
-//   dynamic zip;
-//   dynamic address;
-//   dynamic area;
-//   dynamic userInfo;
-//   String? createdAt;
-//   String? updatedAt;
-//   Userdetail({
-//     required this.id,
-//     required this.userId,
-//     required this.gender,
-//     required this.dob,
-//     required this.servicesRequired,
-//     required this.zip,
-//     required this.address,
-//     required this.area,
-//     required this.userInfo,
-//     required this.createdAt,
-//     required this.updatedAt,
-//   });
-
-//   Map<String, dynamic> toMap() {
-//     return <String, dynamic>{
-//       'id': id,
-//       'user_id': userId,
-//       'gender': gender,
-//       'dob': dob,
-//       'services_required': servicesRequired,
-//       'zip': zip,
-//       'address': address,
-//       'area': area,
-//       'user_info': userInfo,
-//       'created_at': createdAt,
-//       'updated_at': updatedAt,
-//     };
-//   }
-
-//   factory Userdetail.fromMap(Map<String, dynamic> map) {
-//     return Userdetail(
-//       id: map['id'] != null ? map['id'] as String : null,
-//       userId: map['user_id'] != null ? map['user_id'] as String : null,
-//       gender: map['gender'] as dynamic,
-//       dob: map['dob'] != null ? map['dob'] as String : null,
-//       servicesRequired: map['services_required'] != null ? map['services_required'] as String : null,
-//       zip: map['zip'] as dynamic,
-//       address: map['address'] as dynamic,
-//       area: map['area'] as dynamic,
-//       userInfo: map['user_info'] as dynamic,
-//       createdAt: map['created_at'] != null ? map['created_at'] as String : null,
-//       updatedAt: map['updated_at'] != null ? map['updated_at'] as String : null,
-//     );
-//   }
-
-//   String toJson() => json.encode(toMap());
-
-//   factory Userdetail.fromJson(String source) => Userdetail.fromMap(json.decode(source) as Map<String, dynamic>);
-// }

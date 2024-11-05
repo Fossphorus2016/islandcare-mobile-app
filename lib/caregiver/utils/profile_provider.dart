@@ -12,6 +12,25 @@ import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 
 class ServiceGiverProvider extends ChangeNotifier {
+  setDefault() {
+    fetchProfile = null;
+    badges = [];
+    profileStatus = false;
+    profileIsLoading = true;
+    dashboardIsLoading = true;
+    searchIsLoading = false;
+    providerIsVerified = false;
+    userName = null;
+    profilePerentage = '';
+    serviceJobs = null;
+    filterDataList = [];
+    currentPageIndex = 0;
+    rowsPerPage = 10;
+    startIndex = 0;
+    endIndex = 0;
+    totalRowsCount = 0;
+  }
+
   // fetchPRofile
   ProfileGiverModel? fetchProfile;
   List? badges = [];
@@ -22,7 +41,7 @@ class ServiceGiverProvider extends ChangeNotifier {
   bool providerIsVerified = false;
   fetchProfileGiverModel() async {
     getUserName();
-    var token = await getUserToken();
+    var token = await getToken();
     final response = await getRequesthandler(
       url: CareGiverUrl.serviceProviderProfile,
       token: token,
@@ -35,16 +54,6 @@ class ServiceGiverProvider extends ChangeNotifier {
       badges = fetchProfile!.data!.userdetailprovider!.badge != null ? fetchProfile!.data!.userdetailprovider!.badge.toString().split(',') : null;
       notifyListeners();
     }
-  }
-
-  static String userToken = '';
-  getUserToken() async {
-    var token = await getToken();
-    // print(userToken);
-    if (token != null) {
-      userToken = token;
-    }
-    return token.toString();
   }
 
   getUserId() async {
@@ -61,7 +70,7 @@ class ServiceGiverProvider extends ChangeNotifier {
 
   String profilePerentage = '';
   getProfilePercentage() async {
-    var token = await getUserToken();
+    var token = await getToken();
 
     final response = await postRequesthandler(
       url: CareGiverUrl.serviceProviderProfilePercentage,
@@ -76,7 +85,7 @@ class ServiceGiverProvider extends ChangeNotifier {
   ServiceProviderDashboardModel? serviceJobs;
   fetchProviderDashboardModel() async {
     try {
-      var token = await getUserToken();
+      var token = await getToken();
       final response = await getRequesthandler(
         url: CareGiverUrl.serviceProviderDashboard,
         token: token,
@@ -93,15 +102,15 @@ class ServiceGiverProvider extends ChangeNotifier {
         );
       }
     } catch (e) {
-      // print(e.toString());
+      //
     }
   }
 
   Future<void> fetchFindedJobsDashboardModel(title, service, area, rate) async {
     searchIsLoading = true;
     notifyListeners();
-    var token = await getUserToken();
-    // print(token);
+    var token = await getToken();
+
     var minRate = "";
     var maxRate = "";
     if (rate != null && rate!['id'] != 0) {
@@ -109,7 +118,7 @@ class ServiceGiverProvider extends ChangeNotifier {
       minRate = rate!['minValue'];
     }
     var serviceId = '';
-    // print(service);
+
     if (service != null) {
       serviceId = service;
     }
@@ -124,11 +133,10 @@ class ServiceGiverProvider extends ChangeNotifier {
       }),
       token: token,
     );
-    // print(response);
+
     searchIsLoading = false;
     notifyListeners();
 
-    // Navigator.pop(context);
     if (response.statusCode == 200) {
       serviceJobs = ServiceProviderDashboardModel.fromJson(response.data);
       setPaginationList(serviceJobs!.jobs);
@@ -151,15 +159,12 @@ class ServiceGiverProvider extends ChangeNotifier {
 
   setPaginationList(List? data) async {
     try {
-      // if (data != null && data.isNotEmpty) {
-      // hiredCandidates = data;
       startIndex = currentPageIndex * rowsPerPage;
       endIndex = min(startIndex + rowsPerPage, data!.length);
 
       filterDataList = data.sublist(startIndex, endIndex).toList();
       totalRowsCount = (data.length / 10).floor();
       notifyListeners();
-      // }
     } catch (error) {
       //
     }

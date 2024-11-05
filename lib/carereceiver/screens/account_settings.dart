@@ -206,21 +206,13 @@ class _AccountSettingsState extends State<AccountSettings> {
                     width: 38,
                     height: 20,
                     child: CupertinoSwitch(
-                      // padding: 0.5,
-                      // width: 40,
                       activeColor: Colors.red,
-                      // borderRadius: 10,
                       value: status1,
                       onChanged: (value) {
                         setState(() {
                           status1 = value;
                         });
                       },
-                      // onToggle: (val) {
-                      //   setState(() {
-                      //     status1 = val;
-                      //   });
-                      // },
                     ),
                   ),
                 ),
@@ -239,10 +231,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                     width: 38,
                     height: 20,
                     child: CupertinoSwitch(
-                      // padding: 0.5,
-                      // width: 40,
                       activeColor: Colors.red,
-                      // borderRadius: 10,
                       value: status2,
                       onChanged: (val) {
                         setState(

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/screens/notification.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -42,12 +43,7 @@ class CustomAppBar extends StatelessWidget {
         GestureDetector(
           onTap: () {
             if (profileStatus) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const NotificationScreen(),
-                ),
-              );
+              navigationService.push(RoutesName.notification);
             } else {
               showDialog(
                 context: context,

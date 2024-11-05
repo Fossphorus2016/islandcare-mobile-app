@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, use_build_context_synchronously, unnecessary_null_comparison
 
-// import 'dart:typed_data';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -290,9 +288,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                         color: Colors.grey,
                                                       ),
                                                     ),
-                                                    onRatingUpdate: (rating) {
-                                                      // print(rating);
-                                                    },
+                                                    onRatingUpdate: (rating) {},
                                                   ),
                                                 ],
                                               ],
@@ -884,31 +880,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                     );
                                                   }),
                                                 ),
-                                                // if (giverProvider.fetchProfile!.data!.userdetailprovider!.additionalServices == null || giverProvider.fetchProfile!.data!.userdetailprovider!.additionalServices!.isEmpty) ...[
-                                                //   Text(
-                                                //     "Not Available",
-                                                //     softWrap: true,
-                                                //     style: TextStyle(
-                                                //       color: CustomColors.hintText,
-                                                //       fontSize: 16,
-                                                //       fontFamily: "Rubik",
-                                                //       fontWeight: FontWeight.w200,
-                                                //     ),
-                                                //   )
-                                                // ] else ...[
-                                                //   for (var i = 0; i < giverProvider.fetchProfile!.data!.userdetailprovider!.additionalServices!.length; i++) ...[
-                                                //     Text(
-                                                //       giverProvider.fetchProfile!.data!.userdetailprovider!.additionalServices![i],
-                                                //       softWrap: true,
-                                                //       style: TextStyle(
-                                                //         color: CustomColors.hintText,
-                                                //         fontSize: 16,
-                                                //         fontFamily: "Rubik",
-                                                //         fontWeight: FontWeight.w200,
-                                                //       ),
-                                                //     ),
-                                                //   ],
-                                                // ],
                                               ],
                                             ),
                                           ),
@@ -1229,7 +1200,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                     // Work Refrence file
                                     const SizedBox(height: 10),
                                     GestureDetector(
-                                      // onTap: onTap,
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                                         height: 50,
@@ -1302,7 +1272,6 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                     // Resume file
                                     const SizedBox(height: 10),
                                     GestureDetector(
-                                      // onTap: onTap,
                                       child: Container(
                                         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                                         height: 50,

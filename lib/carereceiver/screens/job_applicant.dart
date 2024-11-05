@@ -6,14 +6,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/job_applicant_model.dart';
-import 'package:island_app/carereceiver/screens/job_payment_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/job_applicants_widget.dart';
-import 'package:island_app/providers/user_provider.dart';
+// import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:provider/provider.dart';
 
@@ -229,7 +230,6 @@ class JobApplicantsState extends State<JobApplicants> {
                                               bottomRight: Radius.circular(6),
                                               topRight: Radius.circular(6),
                                             ),
-                                            // color: CustomColors.white,
                                           ),
                                           alignment: Alignment.center,
                                           width: MediaQuery.of(context).size.width,
@@ -337,7 +337,6 @@ class JobApplicantsState extends State<JobApplicants> {
                                                                             Text(
                                                                               "Start Date",
                                                                               style: TextStyle(
-                                                                                // fontSize: 16,
                                                                                 fontFamily: "Rubik",
                                                                                 fontWeight: FontWeight.w600,
                                                                                 color: CustomColors.primaryText,
@@ -369,7 +368,12 @@ class JobApplicantsState extends State<JobApplicants> {
                                                                                 ),
                                                                                 child: InkWell(
                                                                                   onTap: () async {
-                                                                                    var tt = await showDatePicker(context: context, firstDate: DateTime(2020, 1, 1), lastDate: DateTime.now());
+                                                                                    var tt = await showDatePicker(
+                                                                                      context: context,
+                                                                                      initialEntryMode: DatePickerEntryMode.calendarOnly,
+                                                                                      firstDate: DateTime(2020, 1, 1),
+                                                                                      lastDate: DateTime.now(),
+                                                                                    );
 
                                                                                     if (tt != null) {
                                                                                       setState(() {
@@ -397,7 +401,6 @@ class JobApplicantsState extends State<JobApplicants> {
                                                                             Text(
                                                                               "End Date",
                                                                               style: TextStyle(
-                                                                                // fontSize: 16,
                                                                                 fontFamily: "Rubik",
                                                                                 fontWeight: FontWeight.w600,
                                                                                 color: CustomColors.primaryText,
@@ -429,13 +432,17 @@ class JobApplicantsState extends State<JobApplicants> {
                                                                                 ),
                                                                                 child: InkWell(
                                                                                   onTap: () async {
-                                                                                    var tt = await showDatePicker(context: context, firstDate: DateTime(2020, 1, 1), lastDate: DateTime.now());
+                                                                                    var tt = await showDatePicker(
+                                                                                      context: context,
+                                                                                      initialEntryMode: DatePickerEntryMode.calendarOnly,
+                                                                                      firstDate: DateTime(2020, 1, 1),
+                                                                                      lastDate: DateTime.now(),
+                                                                                    );
                                                                                     if (tt != null) {
                                                                                       setState(() {
                                                                                         endTime = DateFormat('yyyy-MM-dd').format(tt);
                                                                                       });
                                                                                     }
-                                                                                    // print(endTime.runtimeType);
                                                                                   },
                                                                                   child: Container(
                                                                                     height: 50,
@@ -602,212 +609,6 @@ class JobApplicantsState extends State<JobApplicants> {
                     ],
                   ),
                 ),
-          // provider.isLoading
-          //      Center(
-          //         child: CircularProgressIndicator(color: ServiceRecieverColor.primaryColor),
-          //       )
-          //     : RefreshIndicator(
-          //         key: jobrefreshKey,
-          //         onRefresh: () => provider.fetchJobApplicantModel(),
-          //         child: SingleChildScrollView(
-          //           child: Padding(
-          //             padding: const EdgeInsets.symmetric(horizontal: 12),
-          //             child: Column(
-          //               children: [
-          //                 const SizedBox(height: 20),
-          //                 // Listing
-          //                 Container(
-          //                   padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-          //                   decoration: BoxDecoration(
-          //                     color: CustomColors.blackLight,
-          //                     border: Border(
-          //                       bottom: BorderSide(
-          //                         color: CustomColors.borderLight,
-          //                         width: 0.1,
-          //                       ),
-          //                     ),
-          //                   ),
-          //                   child: Row(
-          //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                     crossAxisAlignment: CrossAxisAlignment.start,
-          //                     children: [
-          //                       Text(
-          //                         "Job Title & Type",
-          //                         style: TextStyle(
-          //                           color: CustomColors.black,
-          //                           fontSize: 12,
-          //                           fontFamily: "Poppins",
-          //                           fontWeight: FontWeight.w600,
-          //                         ),
-          //                       ),
-          //                       Text(
-          //                         "Application Count",
-          //                         style: TextStyle(
-          //                           color: CustomColors.black,
-          //                           fontSize: 12,
-          //                           fontFamily: "Poppins",
-          //                           fontWeight: FontWeight.w600,
-          //                         ),
-          //                       ),
-          //                       Text(
-          //                         "Details",
-          //                         style: TextStyle(
-          //                           color: CustomColors.black,
-          //                           fontSize: 12,
-          //                           fontFamily: "Poppins",
-          //                           fontWeight: FontWeight.w600,
-          //                         ),
-          //                       ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //                 if (provider.futureJobApplicantModel != null && provider.futureJobApplicantModel!.data != null) ...[
-          //                   ListView.builder(
-          //                     itemCount: provider.futureJobApplicantModel!.data!.length,
-          //                     shrinkWrap: true,
-          //                     padding: const EdgeInsets.only(top: 16),
-          //                     physics: const NeverScrollableScrollPhysics(),
-          //                     cacheExtent: 10,
-          //                     itemBuilder: (context, index) {
-          //                       var jobData = provider.futureJobApplicantModel!.data![index];
-          //                       return JobApplicantsWidget(
-          //                         name: jobData.jobTitle.toString(),
-          //                         jobType: (jobData.serviceId.toString() == "1")
-          //                             ? "Senior Care"
-          //                             : (jobData.serviceId.toString() == "2")
-          //                                 ? "Pet Care"
-          //                                 : (jobData.serviceId.toString() == "3")
-          //                                     ? "House Keeping"
-          //                                     : (jobData.serviceId.toString() == "4")
-          //                                         ? "School Support"
-          //                                         : "Child Care",
-          //                         count: provider.futureJobApplicantModel!.applicationCounts![index].count.toString(),
-          //                         onTap: () {
-          //                           if (jobData.isFunded == 1) {
-          //                             Navigator.push(
-          //                               context,
-          //                               MaterialPageRoute(
-          //                                 builder: (context) => JobApplicantsDetail(
-          //                                   name: jobData.jobTitle.toString(),
-          //                                   jobId: jobData.id.toString(),
-          //                                 ),
-          //                               ),
-          //                             );
-          //                           } else if (provider.futureJobApplicantModel!.applicationCounts![index].count != null && provider.futureJobApplicantModel!.applicationCounts![index].count! < 1) {
-          //                             showDialog(
-          //                               context: context,
-          //                               builder: (context) => const AlertDialog(
-          //                                 content: Text(
-          //                                   "No applications available for this job.",
-          //                                   style: TextStyle(
-          //                                     fontWeight: FontWeight.w600,
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                             );
-          //                           } else {
-          //                             var percentage = 7.5;
-          //                             var amonut = double.parse(jobData.totalAmount.toString());
-          //                             //  (() / 100 * 7.5) + (double.parse(jobData.totalAmount.toString()));
-          //                             var totalamount = ((amonut / 100 * percentage) + amonut);
-          //                             showDialog(
-          //                               context: context,
-          //                               builder: (context) => AlertDialog(
-          //                                 content: Column(
-          //                                   mainAxisSize: MainAxisSize.min,
-          //                                   crossAxisAlignment: CrossAxisAlignment.center,
-          //                                   children: [
-          //                                     Text(
-          //                                       "Total Applications Available : ${provider.futureJobApplicantModel!.applicationCounts![index].count.toString()}",
-          //                                       style: const TextStyle(
-          //                                         fontWeight: FontWeight.w600,
-          //                                       ),
-          //                                     ),
-          //                                     const SizedBox(height: 10),
-          //                                     Text(
-          //                                       "Fund The Job Amount \$${jobData.totalAmount}  With Service Charges of 7.5%",
-          //                                       textAlign: TextAlign.center,
-          //                                       style: const TextStyle(
-          //                                         fontWeight: FontWeight.w600,
-          //                                       ),
-          //                                     ),
-          //                                     const SizedBox(height: 10),
-          //                                     Text(
-          //                                       "Total Amount To Be Paid \$$totalamount  To View Applicant",
-          //                                       textAlign: TextAlign.center,
-          //                                       style: const TextStyle(
-          //                                         fontWeight: FontWeight.w600,
-          //                                       ),
-          //                                     ),
-          //                                   ],
-          //                                 ),
-          //                                 actions: [
-          //                                   TextButton(
-          //                                     style: ButtonStyle(
-          //                                       shape: MaterialStateProperty.resolveWith(
-          //                                         (states) => RoundedRectangleBorder(
-          //                                           borderRadius: BorderRadius.circular(08),
-          //                                         ),
-          //                                       ),
-          //                                       backgroundColor: MaterialStateProperty.resolveWith(
-          //                                         (states) => ServiceRecieverColor.primaryColor,
-          //                                       ),
-          //                                     ),
-          //                                     onPressed: () {
-          //                                       Navigator.pop(context);
-          //                                       Navigator.push(
-          //                                         context,
-          //                                         MaterialPageRoute(
-          //                                           builder: (context) => JobPaymentsScreen(
-          //                                             jobId: jobData.id.toString(),
-          //                                             jobName: jobData.jobTitle.toString(),
-          //                                             amount: totalamount.toString(),
-          //                                           ),
-          //                                         ),
-          //                                       );
-          //                                     },
-          //                                     child: const Text(
-          //                                       "Payment Now",
-          //                                       style: TextStyle(color: Colors.white),
-          //                                     ),
-          //                                   ),
-          //                                   TextButton(
-          //                                     style: ButtonStyle(
-          //                                       shape: MaterialStateProperty.resolveWith(
-          //                                         (states) => RoundedRectangleBorder(
-          //                                           borderRadius: BorderRadius.circular(08),
-          //                                         ),
-          //                                       ),
-          //                                       backgroundColor: MaterialStateProperty.resolveWith(
-          //                                         (states) => ServiceRecieverColor.redButtonLigth,
-          //                                       ),
-          //                                     ),
-          //                                     onPressed: () {
-          //                                       Navigator.pop(context);
-          //                                     },
-          //                                     child: const Text(
-          //                                       "Close",
-          //                                       style: TextStyle(color: Colors.white),
-          //                                     ),
-          //                                   ),
-          //                                 ],
-          //                               ),
-          //                             );
-          //                           }
-          //                         },
-          //                       );
-          //                     },
-          //                   ),
-          //                 ] else ...[
-          //                   const Center(
-          //                     child: Text("No Data Found"),
-          //                   )
-          //                 ],
-          //               ],
-          //             ),
-          //           ),
-          //         ),
-          //       ),
         );
       }),
     );
@@ -815,13 +616,25 @@ class JobApplicantsState extends State<JobApplicants> {
 }
 
 class JobApplicantsProvider extends ChangeNotifier {
+  setDefault() {
+    allJobs = [];
+    isLoading = true;
+    futureJobApplicantModel = null;
+    filterDataList = [];
+    currentPageIndex = 0;
+    rowsPerPage = 10;
+    startIndex = 0;
+    endIndex = 0;
+    totalRowsCount = 0;
+  }
+
   List allJobs = [];
   // Get all jobs
   ServiceReceiverJobApplicantModel? futureJobApplicantModel;
   bool isLoading = true;
   fetchJobApplicantModel() async {
     try {
-      var token = RecieverUserProvider.userToken;
+      var token = await getToken();
       final response = await getRequesthandler(
         url: CareReceiverURl.serviceReceiverApplication,
         token: token,
@@ -840,12 +653,6 @@ class JobApplicantsProvider extends ChangeNotifier {
         }
       } else {
         throw 'Failed to load Job Applicant Model';
-        //  Exception(
-        //   customErrorSnackBar(
-        //     context,
-        //     'Failed to load Job Applicant Model',
-        //   ),
-        // );
       }
     } catch (e) {
       if (kDebugMode) {
@@ -861,8 +668,6 @@ class JobApplicantsProvider extends ChangeNotifier {
         'name': data.jobTitle.toString(),
         'id': data.id.toString(),
       });
-
-      // provider.futureJobApplicantModel!.applicationCounts![index].count && provider.futureJobApplicantModel!.applicationCounts![index].count!
     } else if (count != null && count < 1) {
       showDialog(
         context: context,
@@ -886,7 +691,6 @@ class JobApplicantsProvider extends ChangeNotifier {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              // provider.futureJobApplicantModel!.applicationCounts![index].
               Text(
                 "Total Applications Available : ${count.toString()}",
                 style: const TextStyle(
@@ -924,16 +728,14 @@ class JobApplicantsProvider extends ChangeNotifier {
                 ),
               ),
               onPressed: () {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => JobPaymentsScreen(
-                      jobId: data.id.toString(),
-                      jobName: data.jobTitle.toString(),
-                      amount: totalamount.toString(),
-                    ),
-                  ),
+                navigationService.pop();
+                navigationService.push(
+                  RoutesName.recieverJobPayment,
+                  arguments: {
+                    "jobId": data.id.toString(),
+                    "jobName": data.jobTitle.toString(),
+                    "amount": totalamount.toString(),
+                  },
                 );
               },
               child: const Text(
@@ -978,7 +780,7 @@ class JobApplicantsProvider extends ChangeNotifier {
       var getIndex = futureJobApplicantModel!.data!.indexWhere((element) => element.id.toString() == id);
       var applicationCount = futureJobApplicantModel!.applicationCounts![getIndex];
       var getSingleJob = futureJobApplicantModel!.data!.firstWhere((element) => element.id.toString() == id);
-      // print(getSingleJob);
+
       // ignore: unnecessary_null_comparison
       if (getSingleJob != null) {
         checkApplicationDetail(context, getSingleJob, applicationCount.count);
@@ -1001,15 +803,12 @@ class JobApplicantsProvider extends ChangeNotifier {
 
   setPaginationList(List? data) async {
     try {
-      // if (data != null && data.isNotEmpty) {
-
       startIndex = currentPageIndex * rowsPerPage;
       endIndex = min(startIndex + rowsPerPage, data!.length);
 
       filterDataList = data.sublist(startIndex, endIndex).toList();
       totalRowsCount = (data.length / 10).floor();
       notifyListeners();
-      // }
     } catch (error) {
       isLoading = false;
       notifyListeners();

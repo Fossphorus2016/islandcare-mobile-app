@@ -6,7 +6,7 @@ import 'package:island_app/widgets/custom_expansion_panel.dart';
 
 class ReviewExpansionList extends StatefulWidget {
   const ReviewExpansionList({super.key, required this.name, this.rating, this.comment, this.imgProviderPath});
-  // final List? list;
+
   final String name;
   final int? rating;
   final String? comment;
@@ -112,7 +112,6 @@ class _ReviewExpansionListState extends State<ReviewExpansionList> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        // widget.list![i]!.rating.toDouble()
                         RatingBar.builder(
                           initialRating: widget.rating!.toDouble(),
                           minRating: 1,
@@ -133,8 +132,6 @@ class _ReviewExpansionListState extends State<ReviewExpansionList> {
                   ],
                   if (widget.comment != null && widget.comment!.isNotEmpty && widget.comment != "null") ...[
                     Wrap(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
                           "Comment:",
@@ -146,7 +143,6 @@ class _ReviewExpansionListState extends State<ReviewExpansionList> {
                           ),
                         ),
                         const SizedBox(width: 10),
-                        // widget.list![i]!.comment
                         Text(
                           widget.comment.toString(),
                           maxLines: 20,

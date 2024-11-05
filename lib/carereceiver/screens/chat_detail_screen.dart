@@ -8,14 +8,14 @@ import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:provider/provider.dart';
 
-class ChatDetailPage extends StatefulWidget {
-  const ChatDetailPage({super.key});
+class RecieverChatScreen extends StatefulWidget {
+  const RecieverChatScreen({super.key});
 
   @override
-  ChatDetailPageState createState() => ChatDetailPageState();
+  RecieverChatScreenState createState() => RecieverChatScreenState();
 }
 
-class ChatDetailPageState extends State<ChatDetailPage> {
+class RecieverChatScreenState extends State<RecieverChatScreen> {
   @override
   void initState() {
     super.initState();
@@ -30,7 +30,6 @@ class ChatDetailPageState extends State<ChatDetailPage> {
   TextEditingController messageController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    // RecieverChatProvider chatProvider = Provider.of<RecieverChatProvider>(context);
     return Consumer<RecieverChatProvider>(builder: (context, chatProvider, __) {
       return Scaffold(
         appBar: AppBar(

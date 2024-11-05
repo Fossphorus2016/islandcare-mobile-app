@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 
-class Availability extends StatefulWidget {
-  const Availability({super.key});
+class RecieverAvailabilityScreen extends StatefulWidget {
+  const RecieverAvailabilityScreen({super.key});
 
   @override
-  State<Availability> createState() => _AvailabilityState();
+  State<RecieverAvailabilityScreen> createState() => _RecieverAvailabilityScreenState();
 }
 
-class _AvailabilityState extends State<Availability> {
+class _RecieverAvailabilityScreenState extends State<RecieverAvailabilityScreen> {
   int? selectedIndex;
   int? selectedTimeIndex;
   int? selectedEveningTimeIndex;

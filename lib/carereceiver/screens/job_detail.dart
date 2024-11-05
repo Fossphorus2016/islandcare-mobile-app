@@ -5,8 +5,9 @@ import 'package:island_app/caregiver/models/child_care_detail-dashbaord_model.da
 import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
-import 'package:island_app/carereceiver/screens/edit_job_post.dart';
 import 'package:island_app/utils/app_colors.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 import 'package:island_app/widgets/job_info_container.dart';
@@ -15,12 +16,10 @@ import 'package:island_app/caregiver/models/senior_care_detail_dashboard_model.d
 import 'package:island_app/carereceiver/utils/colors.dart';
 
 class ReceiverJobDetail extends StatefulWidget {
-  // final String? id;
   final dynamic jobData;
   final String? serviceId;
   const ReceiverJobDetail({
     super.key,
-    // this.id,
     required this.serviceId,
     this.jobData,
   });
@@ -32,43 +31,6 @@ class ReceiverJobDetail extends StatefulWidget {
 class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
   List childInfo = [];
   List scheduleInfo = [];
-  // Post Email Verification
-  // ProgressDialog? pr;
-  // void showProgress(context) async {
-  //   pr ??= ProgressDialog(context);
-  //   await pr!.show();
-  // }
-
-  // void hideProgress() async {
-  //   if (pr != null && pr!.isShowing()) {
-  //     await pr!.hide();
-  //   }
-  // }
-
-  // Future<Response> jobApply() async {
-  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().put(
-  //     "${CareReceiverURl.serviceReceiverJobBoardDetail}/${widget.id}",
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     customSuccesSnackBar(
-  //       context,
-  //       "Job applied successfully",
-  //     );
-  //     return response;
-  //   } else {
-  //     customErrorSnackBar(
-  //       context,
-  //       "Server Error",
-  //     );
-  //   }
-  //   return response;
-  // }
 
   SeniorCareDetailDashboardModel? futureSeniorCareDetailDashboard;
   SchoolSupportDetailDashboardModel? futureSchoolSupportDetailDashboard;
@@ -76,137 +38,34 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
   HouseKeepingDetailDashboardModel? futureHouseKeepingDetailDashboard;
   PetCareDetailDashboardModel? futurePetCareDetailDashboard;
 
-  // Future<SeniorCareDetailDashboardModel> fetchSeniorCareDetailDashboardModel() async {
-  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareReceiverURl.serviceReceiverJobBoardDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return SeniorCareDetailDashboardModel.fromJson({"job_detail": response.data['job']});
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
-  // Future<SchoolSupportDetailDashboardModel> fetchSchoolSupportDetailDashboardModel() async {
-  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-  //   // print(token);
-  //   final response = await Dio().get(
-  //     '${CareReceiverURl.serviceReceiverJobBoardDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return SchoolSupportDetailDashboardModel.fromJson({"job_detail": response.data['job']});
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
-  // Future<ChildCareDetailDashboardModel> fetchChildCareDetailDashboardModel() async {
-  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareReceiverURl.serviceReceiverJobBoardDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return ChildCareDetailDashboardModel.fromJson({"job_detail": response.data['job']});
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
-  // Future<HouseKeepingDetailDashboardModel> fetchHouseKeepingDetailDashboardModel() async {
-  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareReceiverURl.serviceReceiverJobBoardDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return HouseKeepingDetailDashboardModel.fromJson({"job_detail": response.data['job']});
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
-  // Future<PetCareDetailDashboardModel> fetchPetCareDetailDashboardModel() async {
-  //   var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
-  //   final response = await Dio().get(
-  //     '${CareReceiverURl.serviceReceiverJobBoardDetail}/${widget.id}',
-  //     options: Options(
-  //       headers: {
-  //         'Authorization': 'Bearer $token',
-  //         'Accept': 'application/json',
-  //       },
-  //     ),
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return PetCareDetailDashboardModel.fromJson({"job_detail": response.data['job']});
-  //   } else {
-  //     throw Exception(
-  //       'Failed to load Service Provider Dashboard',
-  //     );
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
     if (widget.serviceId == "1") {
       // service id 1
-      // serviceSeniorCare(context);
+
       futureSeniorCareDetailDashboard = SeniorCareDetailDashboardModel.fromJson({
         "job_detail": [widget.jobData]
       });
     } else if (widget.serviceId == "2") {
       // service id 2;
-      // servicePetCare(context);
+
       futurePetCareDetailDashboard = PetCareDetailDashboardModel.fromJson({
         "job_detail": [widget.jobData]
       });
     } else if (widget.serviceId == "3") {
       // service id 3
-      // serviceHouseKeeping(context);
+
       futureHouseKeepingDetailDashboard = HouseKeepingDetailDashboardModel.fromJson({
         "job_detail": [widget.jobData]
       });
     } else if (widget.serviceId == "4") {
       // Service Id 4
-      // serviceSchoolSupport(context);
       futureSchoolSupportDetailDashboard = SchoolSupportDetailDashboardModel.fromJson({
         "job_detail": [widget.jobData]
       });
     } else if (widget.serviceId == "5") {
       // Service Id 5
-      // serviceChildCare(context);
       futureChildCareDetailDashboard = ChildCareDetailDashboardModel.fromJson({
         "job_detail": [widget.jobData]
       });
@@ -249,8 +108,6 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
             ),
           ),
         ),
-        // elevation: 0,
-        // backgroundColor: CustomColors.white,
         centerTitle: true,
         title: Text(
           "Job Detail",
@@ -289,9 +146,7 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
 
   GestureDetector deleteButton(int? id) {
     return GestureDetector(
-      onTap: () {
-        // jobApply();
-      },
+      onTap: () {},
       child: Container(
         height: 60,
         decoration: BoxDecoration(
@@ -318,15 +173,10 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
   GestureDetector editButton(String? serviceId, id) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => EditPostSchedule(
-              jobData: id,
-              serviceId: serviceId,
-            ),
-          ),
-        );
+        navigationService.push(RoutesName.serviceRecieverEditJobPost, arguments: {
+          "jobData": id,
+          "serviceId": serviceId,
+        });
       },
       child: Container(
         height: 60,
@@ -351,7 +201,6 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
     );
   }
 
-// Done
   Widget serviceSeniorCare(BuildContext context) {
     if (futureSeniorCareDetailDashboard!.jobDetail!.isNotEmpty) {
       return ListView.builder(
@@ -383,7 +232,7 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
               const SizedBox(height: 10),
               JobDetailTile(
                 name: "Medical Condition",
-                title: futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.medicalCondition.toString(),
+                title: futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.medicalCondition ?? "",
               ),
               const SizedBox(height: 10),
               JobDetailTile(
@@ -462,8 +311,6 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
     }
   }
 
-  // done
-
   Widget serviceSchoolSupport(BuildContext context) {
     if (futureSchoolSupportDetailDashboard!.jobDetail!.isNotEmpty) {
       return ListView.builder(
@@ -520,18 +367,6 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
                 ),
                 const SizedBox(height: 10),
               ],
-              // if (futureSchoolSupportDetailDashboard!.jobDetail![index].schoolCamp != null) ...[
-              //   JobDetailTile(
-              //     name: "Interest for Child",
-              //     title: futureSchoolSupportDetailDashboard!.jobDetail![index].schoolCamp!.interestForChild.toString(),
-              //   ),
-              //   const SizedBox(height: 10),
-              //   JobDetailTile(
-              //     name: "Cost Range For Camp",
-              //     title: futureSchoolSupportDetailDashboard!.jobDetail![index].schoolCamp!.costRange.toString(),
-              //   ),
-              //   const SizedBox(height: 10),
-              // ],
               if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning != null) ...[
                 const SizedBox(height: 10),
                 AssistanceContainer(
@@ -587,7 +422,6 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
       );
     }
   }
-  //  Done
 
   Widget serviceChildCare(BuildContext context) {
     if (futureChildCareDetailDashboard!.jobDetail!.isNotEmpty) {
@@ -674,8 +508,6 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
     }
   }
 
-  // done
-
   Widget serviceHouseKeeping(BuildContext context) {
     if (futureHouseKeepingDetailDashboard!.jobDetail!.isNotEmpty) {
       return ListView.builder(
@@ -757,7 +589,6 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
     }
   }
 
-// done
   Widget servicePetCare(BuildContext context) {
     if (futurePetCareDetailDashboard!.jobDetail!.isNotEmpty) {
       return ListView.builder(

@@ -7,7 +7,6 @@ import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/app_colors.dart';
-import 'package:island_app/utils/functions.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/carereceiver/screens/home_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
@@ -34,16 +33,12 @@ class BottomBarState extends State<BottomBar> {
   late List<Widget> pages;
 
   callUserData() async {
-    await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
     await Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
     await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(4);
     await Provider.of<RecieverChatProvider>(context, listen: false).connectChatChannel(4);
     await Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
 
     await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
-    // if (resp['status'] == false) {
-    //   showErrorToast(resp['message']);
-    // }
   }
 
   @override

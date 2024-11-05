@@ -1,9 +1,10 @@
 // ignore_for_file: library_private_types_in_public_api, must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:provider/provider.dart';
 
 class ConversationList extends StatefulWidget {
@@ -24,10 +25,10 @@ class _ConversationListState extends State<ConversationList> {
     return GestureDetector(
       onTap: () {
         Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat(widget.chat);
-
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const ChatDetailPage();
-        }));
+        navigationService.push(RoutesName.recieverChatScreen);
+        // Navigator.push(context, MaterialPageRoute(builder: (context) {
+        //   return const ChatDetailPage();
+        // }));
       },
       child: Container(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),

@@ -197,15 +197,6 @@ class Providerverification {
     this.governmentRegisteredCareProviderVerify,
     this.policeBackgroundCheck,
     this.policeBackgroundCheckVerify,
-
-    // this.enhancedCriminal,
-    // this.enhancedCriminalVerify,
-    // this.basicCriminal,
-    // this.basicCriminalVerify,
-    // this.firstAid,
-    // this.firstAidVerify,
-    // this.vehicleRecord,
-    // this.vehicleRecordVerify,
     this.createdAt,
     this.updatedAt,
   });
@@ -230,14 +221,7 @@ class Providerverification {
   int? governmentRegisteredCareProviderVerify;
   String? policeBackgroundCheck;
   int? policeBackgroundCheckVerify;
-  // String? enhancedCriminal;
-  // int? enhancedCriminalVerify;
-  // dynamic basicCriminal;
-  // int? basicCriminalVerify;
-  // dynamic firstAid;
-  // int? firstAidVerify;
-  // dynamic vehicleRecord;
-  // int? vehicleRecordVerify;
+
   String? createdAt;
   String? updatedAt;
 
@@ -262,14 +246,6 @@ class Providerverification {
         governmentRegisteredCareProviderVerify: json["government_registered_care_provider_verify"],
         policeBackgroundCheck: json["police_background_check"],
         policeBackgroundCheckVerify: json["police_background_check_verify"],
-        // enhancedCriminal: json["enhanced_criminal"],
-        // enhancedCriminalVerify: json["enhanced_criminal_verify"],
-        // basicCriminal: json["basic_criminal"],
-        // basicCriminalVerify: json["basic_criminal_verify"],
-        // firstAid: json["first_aid"],
-        // firstAidVerify: json["first_aid_verify"],
-        // vehicleRecord: json["vehicle_record"],
-        // vehicleRecordVerify: json["vehicle_record_verify"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
       );

@@ -9,18 +9,18 @@ import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/home_pagination.dart';
 import 'package:island_app/providers/user_provider.dart';
-import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:island_app/widgets/loading_button.dart';
 import 'package:island_app/widgets/loading_with_icon_button.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:island_app/carereceiver/models/service_receiver_dashboard_model.dart';
-import 'package:island_app/carereceiver/screens/provider_profile_detail_for_giver.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/drawer_widget.dart';
 import 'package:island_app/carereceiver/widgets/recommendation_widget.dart';
@@ -37,8 +37,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List providerList = [];
-  List favouriteListTwo = [];
+  // List providerList = [];
+  // List favouriteListTwo = [];
   var favouriteList = [];
   var ratingList = [];
   List<Map>? data = [
@@ -103,16 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
       "name": "No Prefrences",
     },
   ];
-  // String? findSelected;
-  // String? findArea;
-  // String? findRate;
-  // String? serviceId = '';
-  // late Future<ServiceReceiverDashboardModel>? futureReceiverDashboard;
 
-  // Favourite API
   Future<void> fetchReceiverDashboardModel({required String? service, required String? serviceId, required String? findArea, required String? findRate}) async {
-    // print("object");
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     final response = await getRequesthandler(
       url: '${CareReceiverURl.serviceReceiverDashboard}?service=${service ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
       token: token,
@@ -122,9 +115,9 @@ class _HomeScreenState extends State<HomeScreen> {
       var listOfProviders = json['data'] as List;
       var listOfFavourites = json['favourites'] as List;
       setState(() {
-        providerList = listOfProviders;
+        // providerList = listOfProviders;
         favouriteList = listOfFavourites;
-        foundProviders = listOfProviders;
+        // foundProviders = listOfProviders;
       });
 
       var data = ServiceReceiverDashboardModel.fromJson(response.data);
@@ -136,10 +129,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Favourite API
   fetchReceiverDashboardModelInInitCall() async {
-    // print("object");
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     final response = await getRequesthandler(
       url: '${CareReceiverURl.serviceReceiverDashboard}?service=&search=&area=&rate=',
       token: token,
@@ -148,11 +139,11 @@ class _HomeScreenState extends State<HomeScreen> {
       var json = response.data as Map;
       var listOfProviders = json['data'] as List;
       var listOfFavourites = json['favourites'] as List;
-      // setState(() {
-      providerList = listOfProviders;
+
+      // providerList = listOfProviders;
       favouriteList = listOfFavourites;
-      foundProviders = listOfProviders;
-      // });
+      // foundProviders = listOfProviders;
+
       var data = ServiceReceiverDashboardModel.fromJson(response.data);
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
@@ -167,10 +158,10 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // var providerId;
+  // Favourite API
   Future<void> favourited(providerId) async {
     var url = '${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=$providerId';
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     var response = await postRequesthandler(
       url: url,
       token: token,
@@ -190,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   // Search bar
-  List foundProviders = [];
+  // List foundProviders = [];
   List findProviders = [];
 
   @override
@@ -233,12 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
               actions: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationScreen(),
-                      ),
-                    );
+                    navigationService.push(RoutesName.notification);
                   },
                   child: const Padding(
                     padding: EdgeInsets.all(12.0),
@@ -253,10 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 FutureBuilder<ProfileReceiverModel?>(
                   future: recieverUserProvider.userProfile,
                   builder: (context, snapshot) {
-                    // print("${AppUrl.localStorageUrl}/${snapshot.data}");
-
                     if (snapshot.hasData) {
-                      // print(snapshot.data!.data!.userSubscriptionDetail!.periodType);
                       return InkWell(
                         onTap: () => bottomNavigationProvider.updatePage(3),
                         child: Padding(
@@ -778,18 +761,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                           const SizedBox(width: 10),
                                           LoadingButton(
                                             title: "Reset",
-                                            textStyle: TextStyle(color: Colors.red),
+                                            textStyle: const TextStyle(color: Colors.red),
                                             width: 80,
                                             height: 50,
                                             backgroundColor: Colors.white,
                                             loadingColor: CustomColors.primaryColor,
                                             onPressed: () async {
-                                              // setState(() {
-                                              //   findSelected = null;
-                                              //   serviceId = null;
-                                              //   findArea = null;
-                                              //   findRate = null;
-                                              // });
                                               await fetchReceiverDashboardModel(service: null, findArea: null, findRate: null, serviceId: null);
                                               return true;
                                             },
@@ -841,14 +818,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                         ),
                                         onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) => ProviderProfileDetailForReceiver(
-                                                id: item.id.toString(),
-                                                rating: double.parse("${item.avgRating!.isEmpty ? "0.0" : item.avgRating![0].rating}"),
-                                              ),
-                                            ),
+                                          navigationService.push(
+                                            RoutesName.recieverProviderDetail,
+                                            arguments: {
+                                              "id": item.id.toString(),
+                                              "rating": double.parse("${item.avgRating!.isEmpty ? "0.0" : item.avgRating![0].rating}"),
+                                            },
                                           );
                                         },
                                       );

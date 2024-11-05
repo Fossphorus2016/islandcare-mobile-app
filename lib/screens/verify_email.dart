@@ -6,7 +6,6 @@ import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
-// import 'package:island_app/widgets/progress_dialog.dart';
 
 class VerifyEmail extends StatefulWidget {
   String? token;
@@ -20,19 +19,7 @@ class VerifyEmail extends StatefulWidget {
 }
 
 class _VerifyEmailState extends State<VerifyEmail> {
-  // ProgressDialog? pr;
-  // void showProgress(context) async {
-  //   pr ??= ProgressDialog(context);
-  //   await pr!.show();
-  // }
-
   var updatedData;
-
-  // void hideProgress() async {
-  //   if (pr != null && pr!.isShowing()) {
-  //     await pr!.hide();
-  //   }
-  // }
 
   Future<Response> postEmailVerify() async {
     showProgress(context);
@@ -41,7 +28,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
       token: widget.token,
     );
 
-    Navigator.pop(context);
     return response;
   }
 
@@ -153,11 +139,12 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                       width: 320 * fem,
                                       height: 54.86 * fem,
                                       child: GestureDetector(
-                                        onTap: () {
-                                          postEmailVerify();
+                                        onTap: () async {
+                                          await postEmailVerify();
                                           setState(() {
                                             updatedData = "Verification link has been sent to your email address.";
                                           });
+                                          Navigator.pop(context);
                                         },
                                         child: Container(
                                           width: 220 * fem,

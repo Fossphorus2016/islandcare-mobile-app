@@ -4,13 +4,11 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/bank_details_models.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/loading_button.dart';
-import 'package:provider/provider.dart';
 import 'dart:core';
 
 class ReceiverBankDetails extends StatefulWidget {
@@ -29,7 +27,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
   List<BankDetail>? filteredList = [];
 
   fetchBankDetailsModel() async {
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     final response = await getRequesthandler(
       url: CareReceiverURl.serviceReceiverBankDetails,
       token: token,
@@ -55,7 +53,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
   }
 
   Future<void> selectBank(bankId) async {
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap(
       {
         "id": bankId,
@@ -80,7 +78,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
   }
 
   Future<void> deleteBank(bankId) async {
-    var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap(
       {
         "id": bankId,
@@ -93,7 +91,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
         formData: formData,
         token: token,
       );
-      // print(response.toString());
+
       if (response.statusCode == 200) {
         showSuccessToast("Bank Account Removed Successfully");
         focus.requestFocus();
@@ -114,7 +112,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
       'account_number': accountNumberController.text.toString(),
     });
     try {
-      var token = await Provider.of<RecieverUserProvider>(context, listen: false).getUserToken();
+      var token = await getToken();
       final response = await postRequesthandler(
         url: CareReceiverURl.addServiceReceiverBank,
         formData: requestBody,
@@ -455,42 +453,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                                 }
                                               },
                                             ),
-                                            // GestureDetector(
-                                            //   onTap: () async {
-                                            //     if (selectedNames == null) {
-                                            //       showErrorToast("Please Select Bank Names");
-                                            //     } else if (accountTitleController.text.isEmpty) {
-                                            //       showErrorToast("Please Enter Account Title");
-                                            //     } else if (accountNumberController.text.isEmpty) {
-                                            //       showErrorToast("Please Enter Account Number");
-                                            //     } else {
-                                            //       if (bankKey.currentState!.validate()) {
-                                            //         await postAddBank();
-                                            //         Navigator.pop(context);
-                                            //       }
-                                            //     }
-                                            //   },
-                                            //   child: Container(
-                                            //     width: MediaQuery.of(context).size.width,
-                                            //     height: 54,
-                                            //     decoration: BoxDecoration(
-                                            //       color: ServiceRecieverColor.redButton,
-                                            //       borderRadius: BorderRadius.circular(10),
-                                            //     ),
-                                            //     child: Center(
-                                            //       child: Text(
-                                            //         "Add Bank Detail",
-                                            //         style: TextStyle(
-                                            //           color: CustomColors.white,
-                                            //           fontFamily: "Rubik",
-                                            //           fontStyle: FontStyle.normal,
-                                            //           fontWeight: FontWeight.w500,
-                                            //           fontSize: 18,
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
+
                                             const SizedBox(height: 30),
                                           ],
                                         ),
@@ -598,14 +561,12 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                                 return InkWell(
                                   onTap: () {
                                     FocusScope.of(context).unfocus();
-                                    // widget.onSelected(filteredList[index]);
+
                                     setState(() {
                                       selectedBank = filteredList![index];
                                     });
-                                    // print(filteredList![index]);
                                   },
                                   child: Container(
-                                    // color: Colors.red,
                                     padding: const EdgeInsets.symmetric(vertical: 10),
                                     decoration: const BoxDecoration(
                                       border: Border(
@@ -669,7 +630,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                     ),
                     const SizedBox(height: 10),
                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           "Status: ",
@@ -687,7 +647,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                     ),
                     const SizedBox(height: 10),
                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           "Selected Default Bank: ",
@@ -721,23 +680,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                               return true;
                             },
                           ),
-                          // TextButton(
-                          //   onPressed: () {
-                          //     selectBank(selectedBank!.id);
-                          //   },
-                          //   style: ButtonStyle(
-                          //     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.green),
-                          //     shape: MaterialStateProperty.resolveWith(
-                          //       (states) => RoundedRectangleBorder(
-                          //         borderRadius: BorderRadius.circular(10),
-                          //       ),
-                          //     ),
-                          //   ),
-                          //   child: const Text(
-                          //     "Set Default Bank",
-                          //     style: TextStyle(color: Colors.white),
-                          //   ),
-                          // ),
                           const SizedBox(width: 20),
                         ],
                         LoadingButton(
@@ -748,23 +690,6 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
                             return true;
                           },
                         ),
-                        // TextButton(
-                        //   onPressed: () {
-                        //     deleteBank(selectedBank!.id);
-                        //   },
-                        //   style: ButtonStyle(
-                        //     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.red),
-                        //     shape: MaterialStateProperty.resolveWith(
-                        //       (states) => RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(10),
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   child: const Text(
-                        //     "Delete",
-                        //     style: TextStyle(color: Colors.white),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ]

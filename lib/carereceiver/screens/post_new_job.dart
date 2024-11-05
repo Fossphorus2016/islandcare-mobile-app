@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/models/profile_model.dart';
-import 'package:island_app/carereceiver/screens/post_schedule.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/models/service_model.dart';
 import 'package:island_app/providers/user_provider.dart';
@@ -9,6 +8,8 @@ import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:provider/provider.dart';
 
 class PostNewJob extends StatefulWidget {
@@ -29,9 +30,7 @@ class _PostNewJobState extends State<PostNewJob> {
     if (response.statusCode == 200) {
       return ServicesModel.fromJson(response.data);
     } else {
-      throw Exception(
-          // showErrorToast('Failed to load Job Post'),
-          );
+      throw "Failed to load Job Post";
     }
   }
 
@@ -121,13 +120,9 @@ class _PostNewJobState extends State<PostNewJob> {
                               });
 
                               if (subscriptionDetail != null && subscriptionDetail.isActive != 0) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => PostSchedule(
-                                      serviceId: snapshot.data!.services![index].id.toString(),
-                                    ),
-                                  ),
+                                navigationService.push(
+                                  RoutesName.serviceRecieverJobPostServiceSchedule,
+                                  arguments: {"serviceId": snapshot.data!.services![index].id.toString()},
                                 );
                               } else {
                                 showErrorToast("Please subscribe package first");

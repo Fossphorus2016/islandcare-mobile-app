@@ -106,40 +106,16 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   Map? findRate;
   String serviceId = '';
 
-  // fetchPRofile
-  // late Future<ProfileGiverModel> fetchProfile;
-  // Future<ProfileGiverModel> fetchProfileGiverModel() async {
-  //   var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
-  //   final response = await getRequesthandler(
-  //     url: CareGiverUrl.serviceProviderProfile,
-  //     token: token,
-  //     data: null,
-  //   );
-  //   if (response.statusCode == 200) {
-  //     return ProfileGiverModel.fromJson(response.data);
-  //   } else {
-  //     throw Exception(
-  //       customErrorSnackBar(
-  //         context,
-  //         'Failed to load Profile Model',
-  //       ),
-  //     );
-  //   }
-  // }
-
   @override
   void initState() {
     super.initState();
-    // fetchProfile = fetchProfileGiverModel();
+
     Provider.of<ServiceGiverProvider>(context, listen: false).fetchProviderDashboardModel();
   }
 
   bool? isRecommended = true;
   @override
   Widget build(BuildContext context) {
-    // bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
-    // bool dashboardLoading = Provider.of<ServiceGiverProvider>(context).dashboardIsLoading;
-
     return Consumer<ServiceGiverProvider>(
       builder: (context, provider, child) {
         return SafeArea(
@@ -268,6 +244,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                     mainAxisSize: MainAxisSize.min,
                                                                     children: [
                                                                       const SizedBox(height: 20),
+                                                                      // Top Grey Line
                                                                       Center(
                                                                         child: Container(
                                                                           width: 130,
@@ -281,6 +258,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                       const SizedBox(height: 10),
                                                                       Column(
                                                                         mainAxisAlignment: MainAxisAlignment.center,
+                                                                        crossAxisAlignment: CrossAxisAlignment.start,
                                                                         children: [
                                                                           Center(
                                                                             child: Text(
@@ -354,193 +332,172 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                             ),
                                                                           ),
                                                                           const SizedBox(height: 20),
-                                                                          Center(
-                                                                            child: Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: [
-                                                                                Text(
-                                                                                  "Find",
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 15,
-                                                                                    fontFamily: "Rubik",
-                                                                                    fontWeight: FontWeight.w600,
-                                                                                    color: CustomColors.primaryText,
-                                                                                  ),
-                                                                                ),
-                                                                                const SizedBox(height: 5),
-                                                                                DecoratedBox(
-                                                                                  decoration: BoxDecoration(
-                                                                                    borderRadius: const BorderRadius.only(
-                                                                                      topLeft: Radius.circular(6),
-                                                                                      bottomLeft: Radius.circular(6),
-                                                                                      bottomRight: Radius.circular(6),
-                                                                                      topRight: Radius.circular(6),
-                                                                                    ),
-                                                                                    color: CustomColors.white,
-                                                                                    boxShadow: const [
-                                                                                      BoxShadow(
-                                                                                        color: Color.fromARGB(13, 0, 0, 0),
-                                                                                        blurRadius: 4.0,
-                                                                                        spreadRadius: 2.0,
-                                                                                        offset: Offset(2.0, 2.0),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  child: Padding(
-                                                                                    padding: const EdgeInsets.symmetric(
-                                                                                      horizontal: 7,
-                                                                                      vertical: 1,
-                                                                                    ),
-                                                                                    child: DropdownButtonHideUnderline(
-                                                                                      child: DropdownButton(
-                                                                                        hint: const Text("Find"),
-                                                                                        isExpanded: true,
-                                                                                        items: data!.map((item) {
-                                                                                          return DropdownMenuItem(
-                                                                                            value: item['id'].toString(),
-                                                                                            child: Text(item['name']),
-                                                                                          );
-                                                                                        }).toList(),
-                                                                                        onChanged: (newVal) {
-                                                                                          setState(() {
-                                                                                            findSelected = newVal;
-                                                                                          });
-                                                                                        },
-                                                                                        value: findSelected,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
+                                                                          Text(
+                                                                            "Find",
+                                                                            style: TextStyle(
+                                                                              fontSize: 15,
+                                                                              fontFamily: "Rubik",
+                                                                              fontWeight: FontWeight.w600,
+                                                                              color: CustomColors.primaryText,
+                                                                            ),
+                                                                          ),
+                                                                          const SizedBox(height: 5),
+                                                                          DecoratedBox(
+                                                                            decoration: BoxDecoration(
+                                                                              borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(6),
+                                                                                bottomLeft: Radius.circular(6),
+                                                                                bottomRight: Radius.circular(6),
+                                                                                topRight: Radius.circular(6),
+                                                                              ),
+                                                                              color: CustomColors.white,
+                                                                              boxShadow: const [
+                                                                                BoxShadow(
+                                                                                  color: Color.fromARGB(13, 0, 0, 0),
+                                                                                  blurRadius: 4.0,
+                                                                                  spreadRadius: 2.0,
+                                                                                  offset: Offset(2.0, 2.0),
                                                                                 ),
                                                                               ],
+                                                                            ),
+                                                                            child: Padding(
+                                                                              padding: const EdgeInsets.symmetric(
+                                                                                horizontal: 7,
+                                                                                vertical: 1,
+                                                                              ),
+                                                                              child: DropdownButtonHideUnderline(
+                                                                                child: DropdownButton(
+                                                                                  hint: const Text("Find"),
+                                                                                  isExpanded: true,
+                                                                                  items: data!.map((item) {
+                                                                                    return DropdownMenuItem(
+                                                                                      value: item['id'].toString(),
+                                                                                      child: Text(item['name']),
+                                                                                    );
+                                                                                  }).toList(),
+                                                                                  onChanged: (newVal) {
+                                                                                    setState(() {
+                                                                                      findSelected = newVal;
+                                                                                    });
+                                                                                  },
+                                                                                  value: findSelected,
+                                                                                ),
+                                                                              ),
                                                                             ),
                                                                           ),
                                                                           const SizedBox(height: 20),
-                                                                          Center(
-                                                                            child: Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: [
-                                                                                Text(
-                                                                                  "Area",
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 15,
-                                                                                    fontFamily: "Rubik",
-                                                                                    fontWeight: FontWeight.w600,
-                                                                                    color: CustomColors.primaryText,
-                                                                                  ),
-                                                                                ),
-                                                                                const SizedBox(height: 5),
-                                                                                DecoratedBox(
-                                                                                  decoration: BoxDecoration(
-                                                                                    borderRadius: const BorderRadius.only(
-                                                                                      topLeft: Radius.circular(6),
-                                                                                      bottomLeft: Radius.circular(6),
-                                                                                      bottomRight: Radius.circular(6),
-                                                                                      topRight: Radius.circular(6),
-                                                                                    ),
-                                                                                    color: CustomColors.white,
-                                                                                    boxShadow: const [
-                                                                                      BoxShadow(
-                                                                                        color: Color.fromARGB(13, 0, 0, 0),
-                                                                                        blurRadius: 4.0,
-                                                                                        spreadRadius: 2.0,
-                                                                                        offset: Offset(2.0, 2.0),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  child: Padding(
-                                                                                    padding: const EdgeInsets.symmetric(
-                                                                                      horizontal: 7,
-                                                                                      vertical: 1,
-                                                                                    ),
-                                                                                    child: DropdownButtonHideUnderline(
-                                                                                      child: DropdownButton(
-                                                                                        hint: const Text("Select Area"),
-                                                                                        isExpanded: true,
-                                                                                        items: area!.map((item) {
-                                                                                          return DropdownMenuItem(
-                                                                                            value: item['id'].toString(),
-                                                                                            child: Text(item['name']),
-                                                                                          );
-                                                                                        }).toList(),
-                                                                                        onChanged: (newVal) {
-                                                                                          setState(() {
-                                                                                            findArea = newVal;
-                                                                                          });
-                                                                                        },
-                                                                                        value: findArea,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
+                                                                          Text(
+                                                                            "Area",
+                                                                            style: TextStyle(
+                                                                              fontSize: 15,
+                                                                              fontFamily: "Rubik",
+                                                                              fontWeight: FontWeight.w600,
+                                                                              color: CustomColors.primaryText,
+                                                                            ),
+                                                                          ),
+                                                                          const SizedBox(height: 5),
+                                                                          DecoratedBox(
+                                                                            decoration: BoxDecoration(
+                                                                              borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(6),
+                                                                                bottomLeft: Radius.circular(6),
+                                                                                bottomRight: Radius.circular(6),
+                                                                                topRight: Radius.circular(6),
+                                                                              ),
+                                                                              color: CustomColors.white,
+                                                                              boxShadow: const [
+                                                                                BoxShadow(
+                                                                                  color: Color.fromARGB(13, 0, 0, 0),
+                                                                                  blurRadius: 4.0,
+                                                                                  spreadRadius: 2.0,
+                                                                                  offset: Offset(2.0, 2.0),
                                                                                 ),
                                                                               ],
+                                                                            ),
+                                                                            child: Padding(
+                                                                              padding: const EdgeInsets.symmetric(
+                                                                                horizontal: 7,
+                                                                                vertical: 1,
+                                                                              ),
+                                                                              child: DropdownButtonHideUnderline(
+                                                                                child: DropdownButton(
+                                                                                  hint: const Text("Select Area"),
+                                                                                  isExpanded: true,
+                                                                                  items: area!.map((item) {
+                                                                                    return DropdownMenuItem(
+                                                                                      value: item['id'].toString(),
+                                                                                      child: Text(item['name']),
+                                                                                    );
+                                                                                  }).toList(),
+                                                                                  onChanged: (newVal) {
+                                                                                    setState(() {
+                                                                                      findArea = newVal;
+                                                                                    });
+                                                                                  },
+                                                                                  value: findArea,
+                                                                                ),
+                                                                              ),
                                                                             ),
                                                                           ),
                                                                           const SizedBox(height: 20),
-                                                                          Center(
-                                                                            child: Column(
-                                                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                                                              children: [
-                                                                                Text(
-                                                                                  "Rate",
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 15,
-                                                                                    fontFamily: "Rubik",
-                                                                                    fontWeight: FontWeight.w600,
-                                                                                    color: CustomColors.primaryText,
-                                                                                  ),
-                                                                                ),
-                                                                                const SizedBox(height: 5),
-                                                                                DecoratedBox(
-                                                                                  decoration: BoxDecoration(
-                                                                                    borderRadius: const BorderRadius.only(
-                                                                                      topLeft: Radius.circular(6),
-                                                                                      bottomLeft: Radius.circular(6),
-                                                                                      bottomRight: Radius.circular(6),
-                                                                                      topRight: Radius.circular(6),
-                                                                                    ),
-                                                                                    color: CustomColors.white,
-                                                                                    boxShadow: const [
-                                                                                      BoxShadow(
-                                                                                        color: Color.fromARGB(13, 0, 0, 0),
-                                                                                        blurRadius: 4.0,
-                                                                                        spreadRadius: 2.0,
-                                                                                        offset: Offset(2.0, 2.0),
-                                                                                      ),
-                                                                                    ],
-                                                                                  ),
-                                                                                  child: Padding(
-                                                                                    padding: const EdgeInsets.symmetric(
-                                                                                      horizontal: 7,
-                                                                                      vertical: 1,
-                                                                                    ),
-                                                                                    child: DropdownButtonHideUnderline(
-                                                                                      child: DropdownButton(
-                                                                                        hint: const Text("Select Rate"),
-                                                                                        isExpanded: true,
-                                                                                        items: rate!.map((item) {
-                                                                                          return DropdownMenuItem(
-                                                                                            value: item,
-                                                                                            child: Text(item['name']),
-                                                                                          );
-                                                                                        }).toList(),
-                                                                                        onChanged: (newVal) {
-                                                                                          setState(() {
-                                                                                            findRate = newVal!;
-                                                                                          });
-                                                                                        },
-                                                                                        value: findRate,
-                                                                                      ),
-                                                                                    ),
-                                                                                  ),
+                                                                          Text(
+                                                                            "Rate",
+                                                                            style: TextStyle(
+                                                                              fontSize: 15,
+                                                                              fontFamily: "Rubik",
+                                                                              fontWeight: FontWeight.w600,
+                                                                              color: CustomColors.primaryText,
+                                                                            ),
+                                                                          ),
+                                                                          const SizedBox(height: 5),
+                                                                          DecoratedBox(
+                                                                            decoration: BoxDecoration(
+                                                                              borderRadius: const BorderRadius.only(
+                                                                                topLeft: Radius.circular(6),
+                                                                                bottomLeft: Radius.circular(6),
+                                                                                bottomRight: Radius.circular(6),
+                                                                                topRight: Radius.circular(6),
+                                                                              ),
+                                                                              color: CustomColors.white,
+                                                                              boxShadow: const [
+                                                                                BoxShadow(
+                                                                                  color: Color.fromARGB(13, 0, 0, 0),
+                                                                                  blurRadius: 4.0,
+                                                                                  spreadRadius: 2.0,
+                                                                                  offset: Offset(2.0, 2.0),
                                                                                 ),
                                                                               ],
                                                                             ),
+                                                                            child: Padding(
+                                                                              padding: const EdgeInsets.symmetric(
+                                                                                horizontal: 7,
+                                                                                vertical: 1,
+                                                                              ),
+                                                                              child: DropdownButtonHideUnderline(
+                                                                                child: DropdownButton(
+                                                                                  hint: const Text("Select Rate"),
+                                                                                  isExpanded: true,
+                                                                                  items: rate!.map((item) {
+                                                                                    return DropdownMenuItem(
+                                                                                      value: item,
+                                                                                      child: Text(item['name']),
+                                                                                    );
+                                                                                  }).toList(),
+                                                                                  onChanged: (newVal) {
+                                                                                    setState(() {
+                                                                                      findRate = newVal!;
+                                                                                    });
+                                                                                  },
+                                                                                  value: findRate,
+                                                                                ),
+                                                                              ),
+                                                                            ),
                                                                           ),
-                                                                          // OTP
                                                                           const SizedBox(height: 20),
                                                                           LoadingButton(
                                                                             title: "Search",
                                                                             backgroundColor: CustomColors.primaryColor,
+                                                                            height: 60,
                                                                             textStyle: TextStyle(
                                                                               color: CustomColors.white,
                                                                               fontFamily: "Rubik",
@@ -560,38 +517,30 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                               return true;
                                                                             },
                                                                           ),
-                                                                          // GestureDetector(
-                                                                          //   onTap: () async {
-                                                                          //     provider.fetchFindedJobsDashboardModel(findtitle, findSelected, findArea, findRate);
-                                                                          //     Navigator.pop(context);
-                                                                          //     setState(() {
-                                                                          //       findtitle = '';
-                                                                          //       findSelected = null;
-                                                                          //       findArea = null;
-                                                                          //       findRate = null;
-                                                                          //     });
-                                                                          //   },
-                                                                          //   child: Container(
-                                                                          //     width: MediaQuery.of(context).size.width,
-                                                                          //     height: 54,
-                                                                          //     decoration: BoxDecoration(
-                                                                          //       color: CustomColors.primaryColor,
-                                                                          //       borderRadius: BorderRadius.circular(10),
-                                                                          //     ),
-                                                                          //     child: Center(
-                                                                          //       child: Text(
-                                                                          //         "Search",
-                                                                          //         style: TextStyle(
-                                                                          //           color: CustomColors.white,
-                                                                          //           fontFamily: "Rubik",
-                                                                          //           fontStyle: FontStyle.normal,
-                                                                          //           fontWeight: FontWeight.w500,
-                                                                          //           fontSize: 18,
-                                                                          //         ),
-                                                                          //       ),
-                                                                          //     ),
-                                                                          //   ),
-                                                                          // ),
+                                                                          const SizedBox(height: 15),
+                                                                          LoadingButton(
+                                                                            title: "Clear",
+                                                                            backgroundColor: ServiceRecieverColor.redButton,
+                                                                            height: 60,
+                                                                            textStyle: TextStyle(
+                                                                              color: CustomColors.white,
+                                                                              fontFamily: "Rubik",
+                                                                              fontStyle: FontStyle.normal,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              fontSize: 18,
+                                                                            ),
+                                                                            onPressed: () async {
+                                                                              await provider.fetchFindedJobsDashboardModel(findtitle, findSelected, findArea, findRate);
+                                                                              setState(() {
+                                                                                findtitle = '';
+                                                                                findSelected = null;
+                                                                                findArea = null;
+                                                                                findRate = null;
+                                                                              });
+                                                                              Navigator.pop(context);
+                                                                              return true;
+                                                                            },
+                                                                          ),
                                                                           const SizedBox(height: 30),
                                                                         ],
                                                                       ),
@@ -652,11 +601,6 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                               itemCount: provider.filterDataList.length,
                                               itemBuilder: (BuildContext context, int index) {
                                                 var job = provider.filterDataList[index];
-                                                // if (provider.searchIsLoading) {
-                                                //   return const Center(
-                                                //     child: CircularProgressIndicator(),
-                                                //   );
-                                                // }
                                                 return JobCardContainer(
                                                   jobId: job!.id.toString(),
                                                   serviceId: job!.service!.id.toString(),

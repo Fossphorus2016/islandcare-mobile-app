@@ -50,15 +50,12 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          // const SizedBox(height: 05),
           FormField(
             autovalidateMode: _hasInteractedByUser ? AutovalidateMode.onUserInteraction : AutovalidateMode.disabled,
             builder: (FormFieldState<String> state) {
-              // print(state.hasError);
               if (state.hasInteractedByUser) {
                 _focusNode.requestFocus();
               }
-              // print("controller text ${widget.controller.text}");
               return Container(
                 padding: state.hasError ? const EdgeInsets.only(left: 12) : null,
                 decoration: state.hasError
@@ -85,7 +82,6 @@ class _ProfileContainerFieldState extends State<ProfileContainerField> {
                       onChanged: (value) {
                         // ignore: invalid_use_of_protected_member
                         state.setValue(value);
-                        // state.didChange(value);
                       },
                       onTap: () {
                         if (!_hasInteractedByUser) {

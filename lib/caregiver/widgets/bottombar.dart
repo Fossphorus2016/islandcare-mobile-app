@@ -24,7 +24,6 @@ class BottomBarGiver extends StatefulWidget {
 }
 
 class _BottomBarGiverState extends State<BottomBarGiver> {
-  // int _page = 0;
   double bottomBarWidth = 42;
   double bottomBarBorderWidth = 5;
 
@@ -35,7 +34,6 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
   ];
 
   callUserData() async {
-    await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
     await Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
     await Provider.of<ServiceGiverProvider>(context, listen: false).getProfilePercentage();
     await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(3);

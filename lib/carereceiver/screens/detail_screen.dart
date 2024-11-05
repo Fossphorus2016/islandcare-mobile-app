@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:island_app/carereceiver/screens/availability.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 
 class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key});
@@ -264,12 +265,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       // Card Button
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const Availability(),
-                            ),
-                          );
+                          navigationService.push(RoutesName.recieverAvailability);
                         },
                         child: Container(
                           margin: EdgeInsets.fromLTRB(77.81 * fem, 0 * fem, 76.42 * fem, 0 * fem),

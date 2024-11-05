@@ -3,8 +3,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:island_app/caregiver/screens/bank_detail.dart';
 import 'package:island_app/caregiver/screens/my_jobs_screen.dart';
+import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
 import 'package:island_app/caregiver/screens/provider_reviews_given_screen.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
@@ -14,6 +14,8 @@ import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/loading_button.dart';
@@ -79,6 +81,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
               title: 'Ok',
               width: 50,
               height: 50,
+              loadingColor: CustomColors.primaryColor,
               textStyle: TextStyle(
                 color: CustomColors.primaryColor,
                 fontSize: 16,
@@ -96,32 +99,14 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                   '/', // Replace with the name of the new route you want to push
                   (Route<dynamic> route) => false, // This condition removes all routes
                 );
+                Provider.of<ServiceGiverProvider>(context, listen: false).setDefault();
+                Provider.of<GiverMyJobsProvider>(context, listen: false).setDefault();
+                Provider.of<GiverReviewsProvider>(context, listen: false).setDefault();
+                Provider.of<NotificationProvider>(context, listen: false).setDefault();
+                Provider.of<ServiceProviderChat>(context, listen: false).setDefault();
                 return true;
               },
             ),
-            // TextButton(
-            //   child: Text(
-            //     'Ok',
-            //     style: TextStyle(
-            //       color: CustomColors.primaryColor,
-            //       fontSize: 16,
-            //       fontFamily: "Rubik",
-            //       fontWeight: FontWeight.w600,
-            //     ),
-            //   ),
-            //   onPressed: () async {
-            //     Provider.of<NotificationProvider>(context, listen: false).unSubscribeChannels(3);
-            //     Provider.of<BottomNavigationProvider>(context, listen: false).page = 0;
-            //     await storageService.deleteSecureStorage('userRole');
-            //     await storageService.deleteSecureStorage('userToken');
-            //     await storageService.deleteSecureStorage("userStatus");
-            //     Navigator.pushNamedAndRemoveUntil(
-            //       context,
-            //       '/', // Replace with the name of the new route you want to push
-            //       (Route<dynamic> route) => false, // This condition removes all routes
-            //     );
-            //   },
-            // ),
           ],
         );
       },
@@ -135,7 +120,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // bool profileStatus = Provider.of<ServiceGiverProvider>(context).profileStatus;
     return Consumer3<ServiceGiverProvider, BottomNavigationProvider, NotificationProvider>(
       builder: (context, giverProvider, bottomNavigationProvider, notificationProvider, __) {
         return giverProvider.profileStatus
@@ -246,12 +230,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ServiceProviderJobs(),
-                                ),
-                              );
+                              navigationService.push(RoutesName.myJobsGiver);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 6),
@@ -284,12 +263,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ProviderReviewsScreen(),
-                                ),
-                              );
+                              navigationService.push(RoutesName.giverReviews);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 6),
@@ -321,24 +295,14 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                   size: 16,
                                 ),
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const ProviderReviewsScreen(),
-                                    ),
-                                  );
+                                  navigationService.push(RoutesName.giverReviews);
                                 },
                               ),
                             ),
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const BankDetails(),
-                                ),
-                              );
+                              navigationService.push(RoutesName.giverBankDetails);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 6),
@@ -370,12 +334,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                   size: 16,
                                 ),
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const BankDetails(),
-                                    ),
-                                  );
+                                  navigationService.push(RoutesName.giverBankDetails);
                                 },
                               ),
                             ),
@@ -507,65 +466,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                           ),
                         ),
                       ),
-                      //     } else {
-                      //       return Shimmer.fromColors(
-                      //         baseColor: CustomColors.primaryColor,
-                      //         highlightColor: const Color.fromARGB(255, 95, 95, 95),
-                      //         child: Padding(
-                      //           padding: const EdgeInsets.only(top: 25, bottom: 60),
-                      //           child: Row(
-                      //             crossAxisAlignment: CrossAxisAlignment.center,
-                      //             children: <Widget>[
-                      //               CircleAvatar(
-                      //                 backgroundColor: CustomColors.paraColor,
-                      //                 radius: 40,
-                      //                 child: ClipRRect(
-                      //                   borderRadius: BorderRadius.circular(40),
-                      //                   child: ClipRRect(
-                      //                     borderRadius: BorderRadius.circular(100),
-                      //                   ),
-                      //                 ),
-                      //               ),
-                      //               const SizedBox(width: 10),
-                      //               Column(
-                      //                 crossAxisAlignment: CrossAxisAlignment.start,
-                      //                 children: <Widget>[
-                      //                   Container(
-                      //                     width: 130,
-                      //                     color: CustomColors.paraColor,
-                      //                     child: Text(
-                      //                       "",
-                      //                       style: TextStyle(
-                      //                         fontSize: 16,
-                      //                         fontWeight: FontWeight.w400,
-                      //                         fontFamily: "Rubik",
-                      //                         color: CustomColors.white,
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                   const SizedBox(height: 10),
-                      //                   Container(
-                      //                     width: 80,
-                      //                     color: CustomColors.paraColor,
-                      //                     child: Text(
-                      //                       " ",
-                      //                       style: TextStyle(
-                      //                         color: CustomColors.white,
-                      //                         fontFamily: "Rubik",
-                      //                         fontSize: 12,
-                      //                         fontWeight: FontWeight.w400,
-                      //                       ),
-                      //                     ),
-                      //                   ),
-                      //                 ],
-                      //               ),
-                      //             ],
-                      //           ),
-                      //         ),
-                      //       );
-                      //     }
-                      //   },
-                      // ),
                     ),
                     Expanded(child: Container()),
                     ListTile(
@@ -628,9 +528,9 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
   }
 
   Future<void> chnagePassword() async {
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     var userId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
-    // print("object");
+
     var formData = FormData.fromMap(
       {"_method": "PUT", "old_password": oldPasswordController.text.toString(), "password": passwordController.text.toString(), "password_confirmation": cpasswordController.text.toString()},
     );
@@ -641,7 +541,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
         formData: formData,
         token: token,
       );
-      // print(response.data);
+
       Navigator.pop(context);
       if (response.data['success']) {
         showSuccessToast("Password Updated Successfully");
@@ -649,7 +549,6 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
         showErrorToast(response.data['message'].toString());
       }
     } catch (e) {
-      // print("print in error $e");
       Navigator.pop(context);
       showErrorToast(e.toString());
     }
@@ -847,33 +746,6 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
                         return false;
                       },
                     ),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     if (changePassKey.currentState!.validate()) {
-                    //       chnagePassword();
-                    //     }
-                    //   },
-                    //   child: Container(
-                    //     width: MediaQuery.of(context).size.width,
-                    //     height: 54,
-                    //     decoration: BoxDecoration(
-                    //       color: ServiceGiverColor.black,
-                    //       borderRadius: BorderRadius.circular(10),
-                    //     ),
-                    //     child: Center(
-                    //       child: Text(
-                    //         "Continue",
-                    //         style: TextStyle(
-                    //           color: CustomColors.white,
-                    //           fontFamily: "Rubik",
-                    //           fontStyle: FontStyle.normal,
-                    //           fontWeight: FontWeight.w500,
-                    //           fontSize: 18,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                     const SizedBox(height: 30),
                   ],
                 ),

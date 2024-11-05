@@ -8,16 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/screens/provider_messages_screen.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/storage_service.dart';
-// import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 
 import 'package:provider/provider.dart';
 import 'dart:core';
+
+import 'package:pusher_channels_flutter/pusher_channels_flutter.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -33,8 +33,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     @override
     void initState() {
       super.initState();
-      Provider.of<NotificationProvider>(context, listen: false)
-          .getNotifications();
+      Provider.of<NotificationProvider>(context, listen: false).getNotifications();
     }
 
     @override
@@ -46,9 +45,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
       setState(() {
         isLoading = false;
       });
-      var token =
-          await Provider.of<RecieverUserProvider>(context, listen: false)
-              .getUserToken();
+      var token = await getToken();
       final response = await getRequesthandler(
         url: '${CareReceiverURl.serviceReceiverJobBoardDetail}/$id',
         token: token,
@@ -79,8 +76,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             setState(() {
               isLoading = false;
             });
-            navigationService.push('/service-reciever-job-applicant',
-                arguments: {"id": actionId});
+            navigationService.push('/service-reciever-job-applicant', arguments: {"id": actionId});
             break;
           case "admin-approved":
             getReceiverJobData(actionId);
@@ -119,8 +115,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             setState(() {
               isLoading = false;
             });
-            Provider.of<RecieverChatProvider>(context, listen: false)
-                .getSingleChat(context, actionId);
+            Provider.of<RecieverChatProvider>(context, listen: false).getSingleChat(context, actionId);
             break;
           case "admin-chat":
             break;
@@ -128,8 +123,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
             setState(() {
               isLoading = false;
             });
-            Provider.of<ServiceProviderChat>(context, listen: false)
-                .getSingleChat(context, actionId);
+            Provider.of<ServiceProviderChat>(context, listen: false).getSingleChat(context, actionId);
             break;
           case "job-applied":
             break;
@@ -197,32 +191,22 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 onSelected: (value) async {
                   if (value == 1) {
                     try {
-                      var userToken =
-                          await storageService.readSecureStorage('userToken');
+                      var userToken = await storageService.readSecureStorage('userToken');
 
                       var resp = await getRequesthandler(
-                        url:
-                            "${AppUrl.webBaseURL}/api/mark-notifications-as-read",
+                        url: "${AppUrl.webBaseURL}/api/mark-notifications-as-read",
                         token: userToken,
                       );
                       if (resp.statusCode == 200) {
-                        Provider.of<NotificationProvider>(context,
-                                listen: false)
-                            .getNotifications();
+                        Provider.of<NotificationProvider>(context, listen: false).getNotifications();
                       }
                     } catch (error) {
-                      showErrorToast(
-                          "something went wrong please try again later");
+                      showErrorToast("something went wrong please try again later");
                     }
                   } else if (value == 2) {
-                    var allNotification = Provider.of<NotificationProvider>(
-                            context,
-                            listen: false)
-                        .allNotifications;
+                    var allNotification = Provider.of<NotificationProvider>(context, listen: false).allNotifications;
 
-                    List allRead = allNotification
-                        .where((item) => item['is_read'] == 1)
-                        .toList();
+                    List allRead = allNotification.where((item) => item['is_read'] == 1).toList();
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -256,8 +240,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 )
               : RefreshIndicator(
                   onRefresh: () async {
-                    Provider.of<NotificationProvider>(context, listen: false)
-                        .getNotifications();
+                    Provider.of<NotificationProvider>(context, listen: false).getNotifications();
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -274,12 +257,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     padding: const EdgeInsets.all(5.0),
                                     child: InkWell(
                                       onTap: () {
-                                        // print(provider.allNotifications[index]);
-                                        gotoScreen(
-                                            provider.allNotifications[index]
-                                                ['type'],
-                                            provider.allNotifications[index]
-                                                ['action_id']);
+                                        gotoScreen(provider.allNotifications[index]['type'], provider.allNotifications[index]['action_id']);
                                       },
                                       child: Container(
                                         height: 70,
@@ -290,64 +268,45 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                             width: 1,
                                             color: Colors.grey.shade200,
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                         child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
                                             SizedBox(
                                               child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                                child:
-                                                    provider.allNotifications[
-                                                                        index]
-                                                                    ['users']
-                                                                ['avatar'] ==
-                                                            null
-                                                        ? Container(
-                                                            width: 50,
-                                                            // height: 50,
-                                                            // color: CustomColors.primaryColor,
-                                                            // child: Center(
-                                                            //   child: Text(
-                                                            //     "${provider.allNotifications[index]['users']['first_name'][0].toString().toUpperCase()} ${provider.allNotifications[index]['users']['last_name'][0].toString().toUpperCase()}",
-                                                            //     style: const TextStyle(
-                                                            //       fontSize: 20,
-                                                            //       color: Colors.white,
-                                                            //     ),
-                                                            //   ),
-                                                            // ),
-                                                          )
-                                                        : CachedNetworkImage(
-                                                            height: 50,
-                                                            width: 50,
-                                                            fit: BoxFit.cover,
-                                                            alignment: Alignment
-                                                                .topCenter,
-                                                            imageUrl:
-                                                                "${AppUrl.webStorageUrl}/${provider.allNotifications[index]['users']['avatar']}",
-                                                            placeholder: (context,
-                                                                    url) =>
-                                                                const CircularProgressIndicator(),
-                                                            errorWidget: (context,
-                                                                    url,
-                                                                    error) =>
-                                                                const Icon(Icons
-                                                                    .error),
-                                                          ),
+                                                borderRadius: BorderRadius.circular(50),
+                                                child: provider.allNotifications[index]['users']['avatar'] == null
+                                                    ? Container(
+                                                        width: 50,
+                                                        // height: 50,
+                                                        // color: CustomColors.primaryColor,
+                                                        // child: Center(
+                                                        //   child: Text(
+                                                        //     "${provider.allNotifications[index]['users']['first_name'][0].toString().toUpperCase()} ${provider.allNotifications[index]['users']['last_name'][0].toString().toUpperCase()}",
+                                                        //     style: const TextStyle(
+                                                        //       fontSize: 20,
+                                                        //       color: Colors.white,
+                                                        //     ),
+                                                        //   ),
+                                                        // ),
+                                                      )
+                                                    : CachedNetworkImage(
+                                                        height: 50,
+                                                        width: 50,
+                                                        fit: BoxFit.cover,
+                                                        alignment: Alignment.topCenter,
+                                                        imageUrl: "${AppUrl.webStorageUrl}/${provider.allNotifications[index]['users']['avatar']}",
+                                                        placeholder: (context, url) => const CircularProgressIndicator(),
+                                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                      ),
                                               ),
                                             ),
                                             const SizedBox(width: 05),
                                             Expanded(
                                               child: Text(
-                                                provider.allNotifications[index]
-                                                        ['message']
-                                                    .toString(),
+                                                provider.allNotifications[index]['message'].toString(),
                                                 maxLines: 3,
                                                 overflow: TextOverflow.clip,
                                               ),
@@ -408,34 +367,30 @@ class AllReadNotificationScreen extends StatelessWidget {
                     SizedBox(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(50),
-                        child:
-                            readNotification[index]['users']['avatar'] == null
-                                ? Container(
-                                    width: 50,
-                                    height: 50,
-                                    color: CustomColors.primaryColor,
-                                    child: Center(
-                                      child: Text(
-                                        "${readNotification[index]['users']['first_name'][0].toString().toUpperCase()} ${readNotification[index]['users']['last_name'][0].toString().toUpperCase()}",
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.white,
-                                        ),
-                                      ),
+                        child: readNotification[index]['users']['avatar'] == null
+                            ? Container(
+                                width: 50,
+                                height: 50,
+                                color: CustomColors.primaryColor,
+                                child: Center(
+                                  child: Text(
+                                    "${readNotification[index]['users']['first_name'][0].toString().toUpperCase()} ${readNotification[index]['users']['last_name'][0].toString().toUpperCase()}",
+                                    style: const TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.white,
                                     ),
-                                  )
-                                : CachedNetworkImage(
-                                    height: 50,
-                                    width: 50,
-                                    fit: BoxFit.cover,
-                                    alignment: Alignment.topCenter,
-                                    imageUrl:
-                                        "${AppUrl.webStorageUrl}/${readNotification[index]['users']['avatar']}",
-                                    placeholder: (context, url) =>
-                                        const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
                                   ),
+                                ),
+                              )
+                            : CachedNetworkImage(
+                                height: 50,
+                                width: 50,
+                                fit: BoxFit.cover,
+                                alignment: Alignment.topCenter,
+                                imageUrl: "${AppUrl.webStorageUrl}/${readNotification[index]['users']['avatar']}",
+                                placeholder: (context, url) => const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                              ),
                       ),
                     ),
                     const SizedBox(width: 05),
@@ -459,17 +414,20 @@ class AllReadNotificationScreen extends StatelessWidget {
 
 class NotificationProvider extends ChangeNotifier {
   List allNotifications = [];
+  setDefault() {
+    allNotifications = [];
+  }
 
   connectNotificationChannel(userRole) async {
     var channelName = IslandPusher().getPusherNotificationChannel(userRole);
     var eventname = IslandPusher().getPusherNotificationEvent(userRole);
 
-    // IslandPusher.pusher.subscribe(
-    //   channelName: channelName,
-    //   onEvent: onEvent,
-    //   onSubscriptionError: onSubscriptionError,
-    //   onSubscriptionSucceeded: onSubscriptionSucceeded,
-    // );
+    IslandPusher.pusher.subscribe(
+      channelName: channelName,
+      onEvent: onEvent,
+      onSubscriptionError: onSubscriptionError,
+      onSubscriptionSucceeded: onSubscriptionSucceeded,
+    );
   }
 
   onEvent(event) {
@@ -510,19 +468,19 @@ class NotificationProvider extends ChangeNotifier {
     var notiEventname = IslandPusher().getPusherNotificationEvent(userRole);
     var chatChannelName = IslandPusher().getPusherChatsChannel(userRole);
     var chatEventname = IslandPusher().getPusherChatsEvent(userRole);
-    // await IslandPusher.pusher.unsubscribe(channelName: notiChannelName);
-    // await IslandPusher.pusher.unsubscribe(channelName: chatChannelName);
+    await IslandPusher.pusher.unsubscribe(channelName: notiChannelName);
+    await IslandPusher.pusher.unsubscribe(channelName: chatChannelName);
   }
 }
 
 class IslandPusher {
   String apiKey = "9805223081ead5006cf0";
   String cluster = "ap2";
-  // static PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
+  static PusherChannelsFlutter pusher = PusherChannelsFlutter.getInstance();
   initPusher() async {
     try {
-      // await pusher.init(apiKey: apiKey, cluster: cluster);
-      // await pusher.connect();
+      await pusher.init(apiKey: apiKey, cluster: cluster);
+      await pusher.connect();
     } catch (e) {
       log("ERROR: $e");
     }

@@ -8,7 +8,6 @@ class AssistanceContainer extends StatelessWidget {
   final List? dd;
   @override
   Widget build(BuildContext context) {
-    print(dd);
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 0),
@@ -22,11 +21,9 @@ class AssistanceContainer extends StatelessWidget {
         children: [
           Container(
             alignment: Alignment.topLeft,
-            // width: 150,
             child: const Text(
               "Requires Assistance ",
               style: TextStyle(
-                // color: CustomColors.primaryColor,
                 fontFamily: "Poppins",
                 fontSize: 16,
                 fontWeight: FontWeight.bold,

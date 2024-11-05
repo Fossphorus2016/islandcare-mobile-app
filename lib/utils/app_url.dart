@@ -38,7 +38,6 @@ class CareGiverUrl {
   static String serviceProviderProfilePercentage = "${AppUrl.webBaseURL}/api/profile-percentage";
 }
 
-// service-receiver-subscribe
 class CareReceiverURl {
   static String serviceReceiverApplicantDetails = "${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details";
   static String serviceReceiverApplicantionApplicantsAccept = "${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details-approve";

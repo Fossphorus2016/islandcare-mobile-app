@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:island_app/models/schedule_model.dart';
-import 'package:island_app/utils/functions.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 
 class JobScheduleContainer extends StatelessWidget {
@@ -14,8 +12,6 @@ class JobScheduleContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(data![0].startingDate);
-    print(DateFormat("dd-MM-yyyy").format(DateTime.parse(formatDateSlashToDashFromSplit(data![0].startingDate.toString()))));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

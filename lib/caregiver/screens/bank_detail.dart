@@ -2,36 +2,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:island_app/caregiver/models/bank_details_models.dart';
-import 'package:island_app/caregiver/utils/profile_provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/loading_button.dart';
-import 'package:provider/provider.dart';
 import 'dart:core';
 
 import 'package:dio/dio.dart';
 
-class BankDetails extends StatefulWidget {
-  const BankDetails({super.key});
+class GiverBankDetails extends StatefulWidget {
+  const GiverBankDetails({super.key});
 
   @override
-  State<BankDetails> createState() => _BankDetailsState();
+  State<GiverBankDetails> createState() => _GiverBankDetailsState();
 }
 
-class _BankDetailsState extends State<BankDetails> {
-  // List? allCards = [];
-  // List showItem = [];
-
+class _GiverBankDetailsState extends State<GiverBankDetails> {
   BankDetailsModel? futureBankDetails;
   List bankDetails = [];
   TextEditingController accountTitleController = TextEditingController();
   TextEditingController accountNumberController = TextEditingController();
   final bankKey = GlobalKey<FormState>();
   fetchBankDetailsModel() async {
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     final response = await getRequesthandler(url: CareGiverUrl.serviceProviderBankDetails, token: token, data: null);
     if (response.statusCode == 200) {
       var json = response.data as Map;
@@ -40,7 +35,6 @@ class _BankDetailsState extends State<BankDetails> {
       futureBankDetails = BankDetailsModel.fromJson(response.data);
       setState(() {
         bankDetails = bankdetails;
-        // print(json['bank_details']);
         if (futureBankDetails != null && futureBankDetails!.bankDetails != null) {
           filteredList = futureBankDetails!.bankDetails;
         } else {
@@ -55,7 +49,7 @@ class _BankDetailsState extends State<BankDetails> {
   }
 
   Future<void> selectBank(var bankId) async {
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap(
       {
         "id": bankId,
@@ -84,7 +78,7 @@ class _BankDetailsState extends State<BankDetails> {
   }
 
   Future<void> deleteBank(var bankId) async {
-    var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+    var token = await getToken();
     var formData = FormData.fromMap(
       {
         "id": bankId,
@@ -121,7 +115,7 @@ class _BankDetailsState extends State<BankDetails> {
       'account_number': accountNumberController.text.toString(),
     });
     try {
-      var token = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserToken();
+      var token = await getToken();
       final response = await postRequesthandler(
         url: CareGiverUrl.addServiceProviderBank,
         token: token,
@@ -470,48 +464,6 @@ class _BankDetailsState extends State<BankDetails> {
                                                 }
                                               },
                                             ),
-                                            // GestureDetector(
-                                            //   onTap: () {
-                                            //     if (selectedNames == null) {
-                                            //       showErrorToast(
-                                            //         "Please Select Bank Names",
-                                            //       );
-                                            //     } else if (accountTitleController.text.isEmpty) {
-                                            //       showErrorToast(
-                                            //         "Please Enter Account Title",
-                                            //       );
-                                            //     } else if (accountNumberController.text.isEmpty) {
-                                            //       showErrorToast(
-                                            //         "Please Enter Account Number",
-                                            //       );
-                                            //     } else {
-                                            //       if (bankKey.currentState!.validate()) {
-                                            //         postAddBank();
-                                            //         Navigator.pop(context);
-                                            //       }
-                                            //     }
-                                            //   },
-                                            //   child: Container(
-                                            //     width: MediaQuery.of(context).size.width,
-                                            //     height: 54,
-                                            //     decoration: BoxDecoration(
-                                            //       color: ServiceGiverColor.redButton,
-                                            //       borderRadius: BorderRadius.circular(10),
-                                            //     ),
-                                            //     child: Center(
-                                            //       child: Text(
-                                            //         "Add Bank Detail",
-                                            //         style: TextStyle(
-                                            //           color: CustomColors.white,
-                                            //           fontFamily: "Rubik",
-                                            //           fontStyle: FontStyle.normal,
-                                            //           fontWeight: FontWeight.w500,
-                                            //           fontSize: 18,
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
                                             const SizedBox(height: 30),
                                           ],
                                         ),
@@ -687,7 +639,6 @@ class _BankDetailsState extends State<BankDetails> {
                     ),
                     const SizedBox(height: 10),
                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           "Status: ",
@@ -704,7 +655,6 @@ class _BankDetailsState extends State<BankDetails> {
                     ),
                     const SizedBox(height: 10),
                     Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const Text(
                           "Selected Default Bank: ",
@@ -728,23 +678,6 @@ class _BankDetailsState extends State<BankDetails> {
                               return true;
                             },
                           ),
-                          // TextButton(
-                          //   onPressed: () {
-                          //     selectBank(selectedBank!.id);
-                          //   },
-                          //   style: ButtonStyle(
-                          //     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.green),
-                          //     shape: MaterialStateProperty.resolveWith(
-                          //       (states) => RoundedRectangleBorder(
-                          //         borderRadius: BorderRadius.circular(10),
-                          //       ),
-                          //     ),
-                          //   ),
-                          //   child: const Text(
-                          //     "Set Default Bank",
-                          //     style: TextStyle(color: Colors.white),
-                          //   ),
-                          // ),
                           const SizedBox(width: 20),
                         ],
                         LoadingButton(
@@ -757,23 +690,6 @@ class _BankDetailsState extends State<BankDetails> {
                             return true;
                           },
                         ),
-                        // TextButton(
-                        //   onPressed: () {
-                        //     deleteBank(selectedBank!.id);
-                        //   },
-                        //   style: ButtonStyle(
-                        //     backgroundColor: MaterialStateProperty.resolveWith((states) => Colors.red),
-                        //     shape: MaterialStateProperty.resolveWith(
-                        //       (states) => RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.circular(10),
-                        //       ),
-                        //     ),
-                        //   ),
-                        //   child: const Text(
-                        //     "Delete",
-                        //     style: TextStyle(color: Colors.white),
-                        //   ),
-                        // ),
                       ],
                     ),
                   ]

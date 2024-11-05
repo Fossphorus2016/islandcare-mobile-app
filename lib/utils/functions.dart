@@ -100,7 +100,7 @@ String formatDateSlashToDashFromSplit(String date) {
 
   // Split the date part by the '-' delimiter (["yyyy", "MM", "dd"]).
   var dateParts = onlyDate.split('/');
-  print(dateParts);
+  // print(dateParts);
   // Construct a DateTime object using the parts from the split string.
   var formatDate = DateTime(
       int.parse(dateParts[2]), // year
