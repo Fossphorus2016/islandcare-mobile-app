@@ -710,14 +710,18 @@ class _RecieverPaymentScreenState extends State<RecieverPaymentScreen> {
                             token: token,
                           );
 
-                          if (response.statusCode == 200 && response.data['success']) {
+                          if (response != null && response.statusCode == 200 && response.data['success']) {
                             Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
                             Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
 
                             showSuccessToast(response.data['message']);
                             Navigator.pop(context);
                           } else {
-                            throw response.data['message'];
+                            if (response != null && response.data != null && response.data["message"] != null) {
+                              showErrorToast(response.data['message']);
+                            } else {
+                              showErrorToast("something went wrong");
+                            }
                           }
                         } catch (e) {
                           showErrorToast(e.toString());
@@ -1120,14 +1124,18 @@ class _RecieverPaymentScreenState extends State<RecieverPaymentScreen> {
                       token: token,
                     );
 
-                    if (response.statusCode == 200 && response.data['success']) {
+                    if (response != null && response.statusCode == 200 && response.data['success']) {
                       Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
                       Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
-                      await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
+                      await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel(notify: true);
                       showSuccessToast(response.data['message']);
                       Navigator.pop(context);
                     } else {
-                      throw response.data['message'];
+                      if (response != null && response.data != null && response.data["message"] != null) {
+                        throw response.data['message'];
+                      } else {
+                        throw "something went wrong";
+                      }
                     }
                   } catch (e) {
                     showErrorToast(e.toString());

@@ -394,7 +394,7 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
                         try {
                           var token = await getToken();
                           var response = await postRequesthandler(
-                            url: "${AppUrl.webBaseURL}/api/charge-card",
+                            url: ManageCardUrl.chargeCard,
                             formData: FormData.fromMap({
                               "job_id": widget.jobId,
                               "card_data": selectedCard!.id.toString(),
@@ -408,7 +408,7 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
                             token: token,
                           );
 
-                          if (response.statusCode == 200 && response.data['status'] == true) {
+                          if (response != null && response.statusCode == 200 && response.data['status'] == true) {
                             showSuccessToast(response.data['message']);
                             Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
                             navigationService.pop();
@@ -420,9 +420,9 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
                               },
                             );
                           } else {
-                            if (response.data['error'].toString().contains("Job Already Funded")) {
+                            if (response != null && response.data['error'].toString().contains("Job Already Funded")) {
                               showSuccessToast("Job Already Funded");
-                            } else if (response.data['error'] != null) {
+                            } else if (response != null && response.data != null && response.data['error'] != null) {
                               throw response.data['error']['original'][0];
                             }
                           }
@@ -816,7 +816,7 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
                   try {
                     var token = await getToken();
                     var response = await postRequesthandler(
-                      url: "${AppUrl.webBaseURL}/api/charge-card",
+                      url: ManageCardUrl.chargeCard,
                       formData: FormData.fromMap({
                         "job_id": widget.jobId,
                         "card_data": "card-form",
@@ -830,7 +830,7 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
                       token: token,
                     );
 
-                    if (response.statusCode == 200 && response.data['status'] == true) {
+                    if (response != null && response.statusCode == 200 && response.data['status'] == true) {
                       showSuccessToast(response.data['message']);
                       Provider.of<JobApplicantsProvider>(context, listen: false).fetchJobApplicantModel();
                       navigationService.pop();
@@ -842,10 +842,12 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
                         },
                       );
                     } else {
-                      if (response.data['error'].toString().contains("Job Already Funded")) {
+                      if (response != null && response.data != null && response.data["error"] != null && response.data['error'].toString().contains("Job Already Funded")) {
                         showSuccessToast("Job Already Funded");
-                      } else if (response.data['error'] != null) {
+                      } else if (response != null && response.data != null && response.data['error'] != null) {
                         throw response.data['error']['original'][0];
+                      } else {
+                        throw "something went wrong";
                       }
                     }
                     return true;

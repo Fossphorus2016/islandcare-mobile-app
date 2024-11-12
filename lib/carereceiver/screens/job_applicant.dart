@@ -465,7 +465,7 @@ class JobApplicantsState extends State<JobApplicants> {
                                                                               provider.setFilterByTime(DateTime.parse(startTime), DateTime.parse(endTime));
                                                                               Navigator.pop(context);
                                                                             }
-                                                                            provider.clearFilter();
+                                                                            // provider.clearFilter();
                                                                             return;
                                                                           },
                                                                           child: Container(
@@ -639,7 +639,7 @@ class JobApplicantsProvider extends ChangeNotifier {
         url: CareReceiverURl.serviceReceiverApplication,
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         var data = response.data;
         if (data['data'] != "No Job Found!") {
           futureJobApplicantModel = ServiceReceiverJobApplicantModel.fromJson(response.data);
@@ -798,6 +798,7 @@ class JobApplicantsProvider extends ChangeNotifier {
   setDataList(List? data) {
     allJobs = data!;
     notifyListeners();
+    currentPageIndex = 0;
     setPaginationList(allJobs);
   }
 
@@ -823,7 +824,7 @@ class JobApplicantsProvider extends ChangeNotifier {
         return false;
       }
     }).toList();
-
+    currentPageIndex = 0;
     setPaginationList(filterData);
 
     notifyListeners();
@@ -843,6 +844,7 @@ class JobApplicantsProvider extends ChangeNotifier {
         return false;
       }
     }).toList();
+    currentPageIndex = 0;
     setPaginationList(filterData);
     notifyListeners();
   }

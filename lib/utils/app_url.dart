@@ -1,14 +1,17 @@
 class AppUrl {
-  static String localBaseURL = "https://islandcare.bm";
-  static String webBaseURL = "https://islandcare.bm";
+  static String localBaseURL = "http://192.168.10.238:8000"; //"https://islandcare.bm";
+  static String webBaseURL = "http://192.168.10.238:8000"; // "https://islandcare.bm";
   static String webStorageUrl = "$webBaseURL/storage";
   static String localStorageUrl = "$localBaseURL/storage";
   static String localImageUser = "assets/images/user.png";
   static String services = "$webBaseURL/api/services";
   static String bankName = "$webBaseURL/api/bank-names";
   static String sampleImage = "$webBaseURL/storage/avatar/sample.jpg";
+}
 
-  static String getNotification = "$webBaseURL/api/get-notifications";
+class NotificationUrl {
+  static String getNotification = "${AppUrl.webBaseURL}/api/get-notifications";
+  static String notificationMarkRead = "${AppUrl.webBaseURL}/api/mark-notifications-as-read";
 }
 
 class BankUrl {
@@ -16,15 +19,21 @@ class BankUrl {
   static String deleteBank = "${AppUrl.webBaseURL}/api/delete-bank";
 }
 
+class ManageCardUrl {
+  static String chargeCard = "${AppUrl.webBaseURL}/api/charge-card";
+}
+
 class SessionUrl {
   static String login = "${AppUrl.webBaseURL}/api/login";
   static String register = "${AppUrl.webBaseURL}/api/register";
   static String signup = "${AppUrl.webBaseURL}/api/signup";
   static String emailVerification = "${AppUrl.webBaseURL}/api/email-verification";
+  static String updatePassword = "${AppUrl.webBaseURL}/api/password-update";
 }
 
 class CareGiverUrl {
   static String serviceProviderProfile = "${AppUrl.webBaseURL}/api/service-provider-profile";
+  static String serviceProviderProfileUpdate = "${AppUrl.webBaseURL}/api/service-provider-profile/update";
   static String serviceProviderProfileReviews = "${AppUrl.webBaseURL}/api/provider-reviews";
   static String serviceProviderDashboard = "${AppUrl.webBaseURL}/api/service-provider-dashboard";
   static String serviceProviderDashboardSearch = "${AppUrl.webBaseURL}/api/service-provider-job-search";
@@ -39,9 +48,11 @@ class CareGiverUrl {
 }
 
 class CareReceiverURl {
+  static String serviceReceiverProfileEdit = "${AppUrl.webBaseURL}/api/service-receiver-profile";
   static String serviceReceiverApplicantDetails = "${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details";
   static String serviceReceiverApplicantionApplicantsAccept = "${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details-approve";
   static String serviceReceiverApplicantionApplicants = "${AppUrl.webBaseURL}/api/service-receiver-my-application-applicants";
+  static String serviceReceiverApplicantionApplicantsDetailReject = "${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details-reject";
   static String serviceReceiverBankDetails = "${AppUrl.webBaseURL}/api/service-receiver-bank-details";
   static String addServiceReceiverBank = "${AppUrl.webBaseURL}/api/add-service-receiver-bank";
   static String serviceReceiverJobCompleted = "${AppUrl.webBaseURL}/api/service-receiver-job-completed";
@@ -71,6 +82,7 @@ class CareReceiverURl {
 }
 
 class ChatUrl {
+  static String getChat = "${AppUrl.webBaseURL}/api/get-chat";
   static String serviceReceiverAllChats = "${AppUrl.webBaseURL}/api/service-receiver-chats";
   static String serviceReceiverChat = "${AppUrl.webBaseURL}/api/service-receiver-chat";
   static String serviceReceiverSendMessage = "${AppUrl.webBaseURL}/api/service-receiver-send-message";

@@ -54,7 +54,7 @@ class _PostScheduleState extends State<PostSchedule> {
   final TextEditingController otherFieldController = TextEditingController();
   final TextEditingController gradeLevelController = TextEditingController();
   final TextEditingController additionalInfoController = TextEditingController();
-
+  String chilCarechildAgeController = "select";
   int? selectedIndex;
   int? otherField = 0;
   int? otherGuarded = 0;
@@ -360,7 +360,7 @@ class _PostScheduleState extends State<PostSchedule> {
           formData: formData,
           token: token,
         );
-        if (response.statusCode == 200) {
+        if (response != null && response.statusCode == 200) {
           Navigator.pop(context);
           showSuccessToast("Job Created Successfully");
         }
@@ -406,7 +406,7 @@ class _PostScheduleState extends State<PostSchedule> {
           formData: formData,
           token: token,
         );
-        if (response.statusCode == 200) {
+        if (response != null && response.statusCode == 200) {
           showSuccessToast("Job Created Successfully");
         }
       } catch (e) {
@@ -446,7 +446,7 @@ class _PostScheduleState extends State<PostSchedule> {
           formData: formData,
           token: token,
         );
-        if (response.statusCode == 200) {
+        if (response != null && response.statusCode == 200) {
           showSuccessToast("Job Created Successfully");
         }
       } catch (e) {
@@ -483,7 +483,7 @@ class _PostScheduleState extends State<PostSchedule> {
           formData: formData,
           token: token,
         );
-        if (response.statusCode == 200) {
+        if (response != null && response.statusCode == 200) {
           showSuccessToast("Job Created Successfully");
         }
       } catch (e) {
@@ -530,7 +530,7 @@ class _PostScheduleState extends State<PostSchedule> {
           formData: formData,
           token: token,
         );
-        if (response.statusCode == 200) {
+        if (response != null && response.statusCode == 200) {
           showSuccessToast("Job Created Successfully");
         }
       } catch (e) {
@@ -1149,34 +1149,151 @@ class _PostScheduleState extends State<PostSchedule> {
                 margin: const EdgeInsets.only(bottom: 15, top: 15),
                 decoration: BoxDecoration(
                   color: CustomColors.white,
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey),
                 ),
-                child: TextFormField(
-                  controller: childrenAgeController,
-                  keyboardType: TextInputType.number,
-                  style: const TextStyle(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: DropdownButton(
+                  value: chilCarechildAgeController,
+                  isExpanded: true,
+                  underline: Container(),
+                  style: TextStyle(
                     fontSize: 16,
                     fontFamily: "Rubik",
                     fontWeight: FontWeight.w400,
+                    color: Colors.grey.shade700,
                   ),
-                  textAlignVertical: TextAlignVertical.center,
-                  maxLines: 1,
-                  decoration: inputdecoration("Child Age"),
+                  items: const [
+                    DropdownMenuItem(
+                      value: "select",
+                      enabled: false,
+                      child: Text("Select Age"),
+                    ),
+                    DropdownMenuItem(
+                      value: "Less than 6",
+                      child: Text("Less than 6"),
+                    ),
+                    DropdownMenuItem(
+                      value: "6 Months",
+                      child: Text("6 Months"),
+                    ),
+                    DropdownMenuItem(
+                      value: "1 Year",
+                      child: Text("1 Year"),
+                    ),
+                    DropdownMenuItem(
+                      value: "2 Years",
+                      child: Text("2 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "3 Years",
+                      child: Text("3 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "4 Years",
+                      child: Text("4 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "5 Years",
+                      child: Text("5 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "6 Years",
+                      child: Text("6 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "7 Years",
+                      child: Text("7 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "8 Years",
+                      child: Text("8 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "9 Years",
+                      child: Text("9 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "10 Years",
+                      child: Text("10 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "11 Years",
+                      child: Text("11 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "12 Years",
+                      child: Text("12 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "13 Years",
+                      child: Text("13 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "14 Years",
+                      child: Text("14 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "15 Years",
+                      child: Text("15 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "16 Years",
+                      child: Text("16 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "17 Years",
+                      child: Text("17 Years"),
+                    ),
+                    DropdownMenuItem(
+                      value: "18 Years",
+                      child: Text("18 Years"),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() {
+                        chilCarechildAgeController = value;
+                      });
+                    }
+                  },
                 ),
+                // TextFormField(
+                //   controller: childrenAgeController,
+                //   keyboardType: TextInputType.number,
+                //   style: const TextStyle(
+                //     fontSize: 16,
+                //     fontFamily: "Rubik",
+                //     fontWeight: FontWeight.w400,
+                //   ),
+                //   textAlignVertical: TextAlignVertical.center,
+                //   maxLines: 1,
+                //   decoration: inputdecoration("Child Age"),
+                // ),
               ),
               // AddBtn
               GestureDetector(
                 onTap: () {
+                  if (childrenController.text.isEmpty) {
+                    showErrorToast("Child Initials is required");
+                    return;
+                  }
+                  if (chilCarechildAgeController == "select") {
+                    showErrorToast("Child Age is required");
+                    return;
+                  }
                   setState(() {
                     childnameMapList.add(childrenController.text.toString());
-                    childageMapList.add(childrenAgeController.text.toString());
+                    childageMapList.add(chilCarechildAgeController.toString());
 
                     children.add(
                       {
                         "name": childrenController.text.toString(),
-                        "age": childrenAgeController.text.toString(),
+                        "age": chilCarechildAgeController.toString(),
                       },
                     );
+                    childrenController.clear();
+                    chilCarechildAgeController = "select";
                   });
                 },
                 child: Container(
@@ -1220,132 +1337,149 @@ class _PostScheduleState extends State<PostSchedule> {
         ),
         // Show Children
         ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: children.length,
-            itemBuilder: (context, index) {
-              return Stack(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                    ),
-                    alignment: Alignment.centerRight,
-                    width: MediaQuery.of(context).size.width,
-                    height: 100,
-                    child: const RotatedBox(
-                      quarterTurns: 1,
-                      child: Text(
-                        'Container 1',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          color: Colors.white,
-                        ),
+          shrinkWrap: true,
+          scrollDirection: Axis.vertical,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: children.length,
+          itemBuilder: (context, index) {
+            return Stack(
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                  ),
+                  alignment: Alignment.centerRight,
+                  width: MediaQuery.of(context).size.width,
+                  height: 100,
+                  child: const RotatedBox(
+                    quarterTurns: 1,
+                    child: Text(
+                      'Container 1',
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 25,
-                    right: 10,
-                    left: 3,
-                    bottom: 5,
+                ),
+                Positioned(
+                  top: 25,
+                  right: 10,
+                  left: 3,
+                  bottom: 5,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 10,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade300,
+                          spreadRadius: 01,
+                          blurRadius: 05,
+                          blurStyle: BlurStyle.outer,
+                        ),
+                      ],
+                    ),
+                    // padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    // decoration: BoxDecoration(
+                    //   color: CustomColors.white,
+                    //   borderRadius: BorderRadius.circular(10),
+                    // ),
+                    alignment: Alignment.centerLeft,
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * .80,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    width: 100,
+                                    child: const Column(
+                                      children: [
+                                        Text("Child Initials :"),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text("${children[index]['name']}"),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Container(
+                                    alignment: Alignment.topLeft,
+                                    width: 100,
+                                    child: const Column(
+                                      children: [
+                                        Text("Child Age:"),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Text("${children[index]['age']}"),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 10,
+                  right: -2,
+                  child: GestureDetector(
+                    onTap: (() {
+                      setState(() {
+                        children.removeAt(index);
+                        childnameMapList.removeAt(index);
+                        childageMapList.removeAt(index);
+                      });
+                    }),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                       decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(100),
+                          bottomLeft: Radius.circular(100),
+                          bottomRight: Radius.circular(100),
+                          topRight: Radius.circular(100),
+                        ),
                         color: CustomColors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      alignment: Alignment.centerLeft,
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width * .80,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      width: 100,
-                                      child: const Column(
-                                        children: [
-                                          Text("Child Initials :"),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text("${children[index]['name']}"),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Container(
-                                      alignment: Alignment.topLeft,
-                                      width: 100,
-                                      child: const Column(
-                                        children: [
-                                          Text("Age:"),
-                                        ],
-                                      ),
-                                    ),
-                                    Expanded(
-                                      child: Text("${children[index]['age']}"),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Color.fromARGB(13, 0, 0, 0),
+                            blurRadius: 4.0,
+                            spreadRadius: 2.0,
+                            offset: Offset(2.0, 2.0),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                  Positioned(
-                    top: 10,
-                    right: -2,
-                    child: GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          children.removeAt(index);
-                          childnameMapList.removeAt(index);
-                          childageMapList.removeAt(index);
-                        });
-                      }),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(100),
-                            bottomLeft: Radius.circular(100),
-                            bottomRight: Radius.circular(100),
-                            topRight: Radius.circular(100),
-                          ),
-                          color: CustomColors.white,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color.fromARGB(13, 0, 0, 0),
-                              blurRadius: 4.0,
-                              spreadRadius: 2.0,
-                              offset: Offset(2.0, 2.0),
-                            ),
-                          ],
-                        ),
-                        alignment: Alignment.center,
-                        width: 30,
-                        height: 30,
-                        child: const Icon(
-                          Icons.close,
-                          size: 16,
-                        ),
+                      alignment: Alignment.center,
+                      width: 30,
+                      height: 30,
+                      child: const Icon(
+                        Icons.close,
+                        size: 16,
                       ),
                     ),
                   ),
-                ],
-              );
-            }),
+                ),
+              ],
+            );
+          },
+        ),
         const SizedBox(height: 20),
         addDaysColumn(context),
         // Interest For Child
@@ -1378,32 +1512,32 @@ class _PostScheduleState extends State<PostSchedule> {
         ),
         // cost rang
         const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: const Text(
-            "Cost Range Of Camp",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            keyboardType: TextInputType.number,
-            controller: costRangeOfCampController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            decoration: inputdecoration("Cost Range Of Camp"),
-          ),
-        ),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: const Text(
+        //     "Cost Range Of Camp",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: TextFormField(
+        //     keyboardType: TextInputType.number,
+        //     controller: costRangeOfCampController,
+        //     style: const TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: "Rubik",
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //     textAlignVertical: TextAlignVertical.center,
+        //     decoration: inputdecoration("Cost Range Of Camp"),
+        //   ),
+        // ),
         // btn
         const SizedBox(height: 20),
         Padding(
@@ -1433,9 +1567,11 @@ class _PostScheduleState extends State<PostSchedule> {
                 showErrorToast("Please Enter Add Days");
               } else if (interestForChildController.text.isEmpty) {
                 showErrorToast("Interest for Child is Required");
-              } else if (costRangeOfCampController.text.isEmpty) {
-                showErrorToast("Cost Range of Camp is Required");
-              } else {
+              }
+              // else if (costRangeOfCampController.text.isEmpty) {
+              //   showErrorToast("Cost Range of Camp is Required");
+              // }
+              else {
                 postChildCare();
               }
               return false;
@@ -1543,6 +1679,19 @@ class _PostScheduleState extends State<PostSchedule> {
               // AddBtn
               GestureDetector(
                 onTap: () {
+                  if (childrenController.text.isEmpty) {
+                    showErrorToast("Child Initials is required");
+                    return;
+                  }
+                  if (childrenAgeController.text.isEmpty) {
+                    showErrorToast("Child Age is required");
+                    return;
+                  }
+
+                  if (gradeLevelController.text.isEmpty) {
+                    showErrorToast("Grade Level is required");
+                    return;
+                  }
                   setState(() {
                     childnameMapList.add(childrenController.text.toString());
                     childageMapList.add(childrenAgeController.text.toString());
@@ -1555,6 +1704,9 @@ class _PostScheduleState extends State<PostSchedule> {
                         "grade": gradeLevelController.text.toString(),
                       },
                     );
+                    childrenController.clear();
+                    childrenAgeController.clear();
+                    gradeLevelController.clear();
                   });
                 },
                 child: Container(
@@ -1981,6 +2133,7 @@ class _PostScheduleState extends State<PostSchedule> {
             },
           ),
         ),
+        const SizedBox(height: 50),
       ],
     );
   }
@@ -2506,6 +2659,7 @@ class _PostScheduleState extends State<PostSchedule> {
             },
           ),
         ),
+        const SizedBox(height: 50),
       ],
     );
   }
@@ -3137,6 +3291,7 @@ class _PostScheduleState extends State<PostSchedule> {
             },
           ),
         ),
+        const SizedBox(height: 50),
       ],
     );
   }
@@ -3597,6 +3752,7 @@ class _PostScheduleState extends State<PostSchedule> {
             },
           ),
         ),
+        const SizedBox(height: 50),
       ],
     );
   }

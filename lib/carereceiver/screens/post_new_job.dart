@@ -24,10 +24,12 @@ class _PostNewJobState extends State<PostNewJob> {
   // fetchJobPost
   late Future<ServicesModel>? futureJobPost;
   Future<ServicesModel> fetchJobPost() async {
+    var token = await getToken();
     final response = await getRequesthandler(
       url: AppUrl.services,
+      token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       return ServicesModel.fromJson(response.data);
     } else {
       throw "Failed to load Job Post";

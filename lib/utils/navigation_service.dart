@@ -4,6 +4,7 @@ import 'package:island_app/caregiver/screens/chat_provider_detail_screen.dart';
 import 'package:island_app/caregiver/screens/job_detail.dart';
 import 'package:island_app/caregiver/screens/my_job_detail.dart';
 import 'package:island_app/caregiver/screens/my_jobs_screen.dart';
+import 'package:island_app/caregiver/screens/provider_reviews_given_screen.dart';
 import 'package:island_app/caregiver/widgets/bottombar.dart';
 import 'package:island_app/carereceiver/screens/applicant_profile_detail.dart';
 import 'package:island_app/carereceiver/screens/availability.dart';
@@ -104,6 +105,10 @@ class RouteGenerator {
       case RoutesName.myJobsGiver:
         return MaterialPageRoute(
           builder: (context) => const ServiceProviderJobs(),
+        );
+      case RoutesName.giverReviews:
+        return MaterialPageRoute(
+          builder: (context) => const ProviderReviewsScreen(),
         );
       case RoutesName.myJobDetailGiver:
         return MaterialPageRoute(
@@ -209,7 +214,15 @@ class RouteGenerator {
       case RoutesName.recieverChatScreen:
         return MaterialPageRoute(builder: (context) => const RecieverChatScreen());
       default:
-        return MaterialPageRoute(builder: (context) => const SplashScreen());
+        return MaterialPageRoute(
+          builder: (context) => const Scaffold(
+            body: SafeArea(
+              child: Center(
+                child: Text("No Page Found"),
+              ),
+            ),
+          ),
+        );
     }
   }
 }

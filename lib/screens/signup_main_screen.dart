@@ -114,13 +114,13 @@ class _SignupScreenState extends State<SignupScreen> {
   // Services API
   String? selectedService;
 
-  final String url = AppUrl.services;
+  // final String url = AppUrl.services;
 
   List? data = []; //edited line
 
   Future<String> getSWData() async {
     var res = await Dio().get(
-      url,
+      AppUrl.services,
       options: Options(
         headers: {
           'Accept': 'application/json',
@@ -544,14 +544,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           role: _isSelectedService.toString(),
                           service: selectedService.toString(),
                         );
-
                         var formData = FormData.fromMap(request.toJson());
                         final response = await postRequesthandler(
                           url: SessionUrl.register,
                           formData: formData,
                         );
 
-                        if (response.statusCode == 200) {
+                        if (response != null && response.statusCode == 200) {
                           var data = response.data;
                           var role = data["user"]["role"];
                           var status = data["user"]["status"];
@@ -595,10 +594,14 @@ class _SignupScreenState extends State<SignupScreen> {
                             }
                           }
                         } else {
-                          setState(() {
-                            errors = response.data['errors'];
-                          });
-                          showErrorToast(response.data['message']);
+                          if (response != null && response.data != null && response.data["message"] != null) {
+                            setState(() {
+                              errors = response.data['errors'];
+                            });
+                            showErrorToast(response.data['message']);
+                          } else {
+                            showErrorToast("something went wrong");
+                          }
                         }
                       }
                       return false;

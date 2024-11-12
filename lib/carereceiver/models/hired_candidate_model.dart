@@ -9,10 +9,10 @@ class HiredCandidateModel {
     this.data,
   });
 
-  List<Datum>? data;
+  List<HiredCandidateData>? data;
 
   factory HiredCandidateModel.fromJson(Map<String, dynamic> json) => HiredCandidateModel(
-        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))),
+        data: json["data"] == null ? [] : List<HiredCandidateData>.from(json["data"]!.map((x) => HiredCandidateData.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -20,8 +20,8 @@ class HiredCandidateModel {
       };
 }
 
-class Datum {
-  Datum({
+class HiredCandidateData {
+  HiredCandidateData({
     this.id,
     this.providerId,
     this.jobId,
@@ -43,7 +43,7 @@ class Datum {
   Jobs? jobs;
   UserDetail? userDetail;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory HiredCandidateData.fromJson(Map<String, dynamic> json) => HiredCandidateData(
         id: json["id"],
         providerId: json["provider_id"],
         jobId: json["job_id"],

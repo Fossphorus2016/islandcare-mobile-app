@@ -283,7 +283,7 @@ class ReceiverReviewsProvider extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
 
-    if (response.statusCode == 200 && response.data['data'] != null) {
+    if (response != null && response.statusCode == 200 && response.data['data'] != null) {
       futurereviews = ProviderReviewsModel.fromJson(response.data);
       allReviews = futurereviews!.data;
       setPaginationList(allReviews);

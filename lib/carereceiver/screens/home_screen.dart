@@ -104,13 +104,13 @@ class _HomeScreenState extends State<HomeScreen> {
     },
   ];
 
-  Future<void> fetchReceiverDashboardModel({required String? service, required String? serviceId, required String? findArea, required String? findRate}) async {
+  Future<void> fetchReceiverDashboardModel({required String? name, required String? serviceType, required String? location, required String? rate}) async {
     var token = await getToken();
     final response = await getRequesthandler(
-      url: '${CareReceiverURl.serviceReceiverDashboard}?service=${service ?? ""}&search=${serviceId ?? ""}&area=${findArea ?? ""}&rate=${findRate ?? ""}',
+      url: '${CareReceiverURl.serviceReceiverDashboard}?name=${name ?? ""}&serviceType=${serviceType ?? ""}&location=${location ?? ""}&rate=${rate ?? ""}',
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       var json = response.data as Map;
       var listOfProviders = json['data'] as List;
       var listOfFavourites = json['favourites'] as List;
@@ -123,9 +123,10 @@ class _HomeScreenState extends State<HomeScreen> {
       var data = ServiceReceiverDashboardModel.fromJson(response.data);
       Provider.of<HomePaginationProvider>(context, listen: false).setPaginationList(data.data);
     } else {
-      throw Exception(
-        'Failed to load Service Provider Dashboard',
-      );
+      showErrorToast("Failed to load Dashboard");
+      // throw Exception(
+      //   'Failed to load Service Provider Dashboard',
+      // );
     }
   }
 
@@ -135,7 +136,7 @@ class _HomeScreenState extends State<HomeScreen> {
       url: '${CareReceiverURl.serviceReceiverDashboard}?service=&search=&area=&rate=',
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       var json = response.data as Map;
       var listOfProviders = json['data'] as List;
       var listOfFavourites = json['favourites'] as List;
@@ -152,9 +153,10 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       });
     } else {
-      throw Exception(
-        'Failed to load Service Provider Dashboard',
-      );
+      showErrorToast("Failed to load Dashboard");
+      // throw Exception(
+      //   'Failed to load Service Provider Dashboard',
+      // );
     }
   }
 
@@ -166,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
       url: url,
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       if (response.data["data"].toString() == "1") {
         favouriteList.add(providerId);
         showSuccessToast("Added To Favourite");
@@ -323,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: () async {
-                        fetchReceiverDashboardModel(service: null, findArea: null, findRate: null, serviceId: null);
+                        await fetchReceiverDashboardModel(name: null, location: null, rate: null, serviceType: null);
                       },
                       child: CustomScrollView(
                         slivers: [
@@ -400,8 +402,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             child: TextFormField(
                                               readOnly: true,
                                               onTap: () {
-                                                showModalBottomSheet(
-                                                  isScrollControlled: true,
+                                                String? findSelected;
+                                                String? findArea;
+                                                String? findRate;
+                                                String? serviceId = '';
+                                                showBottomSheet(
+                                                  // isScrollControlled: true,
                                                   shape: const RoundedRectangleBorder(
                                                     borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
                                                   ),
@@ -410,320 +416,155 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   builder: (BuildContext context) {
                                                     return StatefulBuilder(
                                                       builder: (BuildContext context, StateSetter setState) {
-                                                        String? findSelected;
-                                                        String? findArea;
-                                                        String? findRate;
-                                                        String? serviceId = '';
                                                         return SingleChildScrollView(
                                                           child: Padding(
-                                                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                            child: Container(
-                                                              padding: const EdgeInsets.symmetric(horizontal: 25),
-                                                              child: Column(
-                                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                mainAxisSize: MainAxisSize.min,
-                                                                children: [
-                                                                  const SizedBox(height: 20),
-                                                                  Center(
-                                                                    child: Container(
-                                                                      width: 130,
-                                                                      height: 5,
-                                                                      decoration: BoxDecoration(
-                                                                        color: const Color(0xffC4C4C4),
-                                                                        borderRadius: BorderRadius.circular(6),
+                                                            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 25, right: 25),
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              children: [
+                                                                const SizedBox(height: 20),
+                                                                Center(child: Container(width: 130, height: 5, decoration: BoxDecoration(color: const Color(0xffC4C4C4), borderRadius: BorderRadius.circular(6)))),
+                                                                const SizedBox(height: 10),
+                                                                Column(
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  children: [
+                                                                    Center(child: Text("Apply Filter", style: TextStyle(fontSize: 18, color: CustomColors.primaryText, fontFamily: "Poppins", fontWeight: FontWeight.w600))),
+                                                                    const SizedBox(height: 40),
+                                                                    Container(
+                                                                      decoration: BoxDecoration(borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6), topRight: Radius.circular(6)), color: CustomColors.white, boxShadow: const [BoxShadow(color: Color.fromARGB(13, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))]),
+                                                                      alignment: Alignment.center,
+                                                                      width: MediaQuery.of(context).size.width,
+                                                                      height: 50,
+                                                                      child: TextFormField(
+                                                                        style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
+                                                                        textAlignVertical: TextAlignVertical.bottom,
+                                                                        maxLines: 1,
+                                                                        onChanged: (value) {
+                                                                          setState(() {
+                                                                            serviceId = value;
+                                                                          });
+                                                                        },
+                                                                        decoration: InputDecoration(
+                                                                          prefixIcon: Icon(Icons.search, size: 17, color: CustomColors.hintText),
+                                                                          hintText: "Search...",
+                                                                          fillColor: CustomColors.white,
+                                                                          focusColor: CustomColors.white,
+                                                                          hoverColor: CustomColors.white,
+                                                                          filled: true,
+                                                                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+                                                                          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: CustomColors.white, width: 2.0), borderRadius: BorderRadius.circular(4.0)),
+                                                                          enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: CustomColors.white, width: 2.0), borderRadius: BorderRadius.circular(4.0)),
+                                                                        ),
                                                                       ),
                                                                     ),
-                                                                  ),
-                                                                  const SizedBox(height: 10),
-                                                                  Column(
-                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                    children: [
-                                                                      Center(
-                                                                        child: Text(
-                                                                          "Apply Filter",
-                                                                          style: TextStyle(
-                                                                            fontSize: 18,
-                                                                            color: CustomColors.primaryText,
-                                                                            fontFamily: "Poppins",
-                                                                            fontWeight: FontWeight.w600,
+                                                                    const SizedBox(height: 20),
+                                                                    Text("Filter by Service", style: TextStyle(fontSize: 15, fontFamily: "Rubik", fontWeight: FontWeight.w600, color: CustomColors.primaryText)),
+                                                                    const SizedBox(height: 5),
+                                                                    DecoratedBox(
+                                                                      decoration: BoxDecoration(borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6), topRight: Radius.circular(6)), color: CustomColors.white, boxShadow: const [BoxShadow(color: Color.fromARGB(13, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))]),
+                                                                      child: Padding(
+                                                                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+                                                                        child: DropdownButtonHideUnderline(
+                                                                          child: DropdownButton(
+                                                                            // hint: const Text("Select Service"),
+                                                                            isExpanded: true,
+                                                                            value: findSelected,
+                                                                            style: const TextStyle(color: Colors.black),
+                                                                            items: data!.map((item) {
+                                                                              // print(item['id'].runtimeType);
+                                                                              return DropdownMenuItem(
+                                                                                value: item['id'].toString(),
+                                                                                child: Text(item['name']),
+                                                                              );
+                                                                            }).toList(),
+                                                                            onChanged: (newVal) {
+                                                                              setState(() {
+                                                                                findSelected = newVal;
+                                                                              });
+                                                                              // print(findSelected.runtimeType);
+                                                                            },
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      const SizedBox(height: 40),
-                                                                      Container(
-                                                                        decoration: BoxDecoration(
-                                                                          borderRadius: const BorderRadius.only(
-                                                                            topLeft: Radius.circular(6),
-                                                                            bottomLeft: Radius.circular(6),
-                                                                            bottomRight: Radius.circular(6),
-                                                                            topRight: Radius.circular(6),
-                                                                          ),
-                                                                          color: CustomColors.white,
-                                                                          boxShadow: const [
-                                                                            BoxShadow(
-                                                                              color: Color.fromARGB(13, 0, 0, 0),
-                                                                              blurRadius: 4.0,
-                                                                              spreadRadius: 2.0,
-                                                                              offset: Offset(2.0, 2.0),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                        alignment: Alignment.center,
-                                                                        width: MediaQuery.of(context).size.width,
-                                                                        height: 50,
-                                                                        child: TextFormField(
-                                                                          style: const TextStyle(
-                                                                            fontSize: 16,
-                                                                            fontFamily: "Rubik",
-                                                                            fontWeight: FontWeight.w400,
-                                                                          ),
-                                                                          textAlignVertical: TextAlignVertical.bottom,
-                                                                          maxLines: 1,
-                                                                          onChanged: (value) {
-                                                                            setState(
-                                                                              () {
-                                                                                serviceId = value;
-                                                                              },
-                                                                            );
-                                                                            serviceId = value;
-                                                                          },
-                                                                          decoration: InputDecoration(
-                                                                            prefixIcon: Icon(
-                                                                              Icons.search,
-                                                                              size: 17,
-                                                                              color: CustomColors.hintText,
-                                                                            ),
-                                                                            hintText: "Search...",
-                                                                            fillColor: CustomColors.white,
-                                                                            focusColor: CustomColors.white,
-                                                                            hoverColor: CustomColors.white,
-                                                                            filled: true,
-                                                                            border: OutlineInputBorder(
-                                                                              borderRadius: BorderRadius.circular(4),
-                                                                            ),
-                                                                            focusedBorder: OutlineInputBorder(
-                                                                              borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                                              borderRadius: BorderRadius.circular(4.0),
-                                                                            ),
-                                                                            enabledBorder: OutlineInputBorder(
-                                                                              borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                                              borderRadius: BorderRadius.circular(4.0),
-                                                                            ),
+                                                                    ),
+                                                                    const SizedBox(height: 20),
+                                                                    Text("Filter by Location", style: TextStyle(fontSize: 15, fontFamily: "Rubik", fontWeight: FontWeight.w600, color: CustomColors.primaryText)),
+                                                                    const SizedBox(height: 5),
+                                                                    DecoratedBox(
+                                                                      decoration: BoxDecoration(borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6), topRight: Radius.circular(6)), color: CustomColors.white, boxShadow: const [BoxShadow(color: Color.fromARGB(13, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))]),
+                                                                      child: Padding(
+                                                                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+                                                                        child: DropdownButtonHideUnderline(
+                                                                          child: DropdownButton(
+                                                                            hint: const Text("Select Area"),
+                                                                            isExpanded: true,
+                                                                            items: area!.map((item) {
+                                                                              return DropdownMenuItem(
+                                                                                value: item['id'].toString(),
+                                                                                child: Text(item['name']),
+                                                                              );
+                                                                            }).toList(),
+                                                                            onChanged: (newVal) {
+                                                                              setState(() {
+                                                                                findArea = newVal;
+                                                                              });
+                                                                            },
+                                                                            value: findArea,
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      const SizedBox(height: 20),
-                                                                      Center(
-                                                                        child: Column(
-                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                          children: [
-                                                                            Text(
-                                                                              "Find",
-                                                                              style: TextStyle(
-                                                                                fontSize: 15,
-                                                                                fontFamily: "Rubik",
-                                                                                fontWeight: FontWeight.w600,
-                                                                                color: CustomColors.primaryText,
-                                                                              ),
-                                                                            ),
-                                                                            const SizedBox(height: 5),
-                                                                            DecoratedBox(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: const BorderRadius.only(
-                                                                                  topLeft: Radius.circular(6),
-                                                                                  bottomLeft: Radius.circular(6),
-                                                                                  bottomRight: Radius.circular(6),
-                                                                                  topRight: Radius.circular(6),
-                                                                                ),
-                                                                                color: CustomColors.white,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: Color.fromARGB(13, 0, 0, 0),
-                                                                                    blurRadius: 4.0,
-                                                                                    spreadRadius: 2.0,
-                                                                                    offset: Offset(2.0, 2.0),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              child: Padding(
-                                                                                padding: const EdgeInsets.symmetric(
-                                                                                  horizontal: 7,
-                                                                                  vertical: 1,
-                                                                                ),
-                                                                                child: DropdownButtonHideUnderline(
-                                                                                  child: DropdownButton(
-                                                                                    hint: const Text("Find"),
-                                                                                    isExpanded: true,
-                                                                                    items: data!.map((item) {
-                                                                                      return DropdownMenuItem(
-                                                                                        value: item['id'].toString(),
-                                                                                        child: Text(item['name']),
-                                                                                      );
-                                                                                    }).toList(),
-                                                                                    onChanged: (newVal) {
-                                                                                      setState(() {
-                                                                                        findSelected = newVal;
-                                                                                      });
-                                                                                    },
-                                                                                    value: findSelected,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ],
+                                                                    ),
+                                                                    const SizedBox(height: 20),
+                                                                    Text("Rate", style: TextStyle(fontSize: 15, fontFamily: "Rubik", fontWeight: FontWeight.w600, color: CustomColors.primaryText)),
+                                                                    const SizedBox(height: 5),
+                                                                    DecoratedBox(
+                                                                      decoration: BoxDecoration(borderRadius: const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6), topRight: Radius.circular(6)), color: CustomColors.white, boxShadow: const [BoxShadow(color: Color.fromARGB(13, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))]),
+                                                                      child: Padding(
+                                                                        padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 1),
+                                                                        child: DropdownButtonHideUnderline(
+                                                                          child: DropdownButton(
+                                                                            hint: const Text("Select Rate"),
+                                                                            isExpanded: true,
+                                                                            items: rate!.map((item) {
+                                                                              return DropdownMenuItem(
+                                                                                value: item['id'].toString(),
+                                                                                child: Text(item['name']),
+                                                                              );
+                                                                            }).toList(),
+                                                                            onChanged: (newVal) {
+                                                                              setState(() {
+                                                                                findRate = newVal;
+                                                                              });
+                                                                            },
+                                                                            value: findRate,
+                                                                          ),
                                                                         ),
                                                                       ),
-                                                                      const SizedBox(height: 20),
-                                                                      Center(
-                                                                        child: Column(
-                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                          children: [
-                                                                            Text(
-                                                                              "Area",
-                                                                              style: TextStyle(
-                                                                                fontSize: 15,
-                                                                                fontFamily: "Rubik",
-                                                                                fontWeight: FontWeight.w600,
-                                                                                color: CustomColors.primaryText,
-                                                                              ),
-                                                                            ),
-                                                                            const SizedBox(height: 5),
-                                                                            DecoratedBox(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: const BorderRadius.only(
-                                                                                  topLeft: Radius.circular(6),
-                                                                                  bottomLeft: Radius.circular(6),
-                                                                                  bottomRight: Radius.circular(6),
-                                                                                  topRight: Radius.circular(6),
-                                                                                ),
-                                                                                color: CustomColors.white,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: Color.fromARGB(13, 0, 0, 0),
-                                                                                    blurRadius: 4.0,
-                                                                                    spreadRadius: 2.0,
-                                                                                    offset: Offset(2.0, 2.0),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              child: Padding(
-                                                                                padding: const EdgeInsets.symmetric(
-                                                                                  horizontal: 7,
-                                                                                  vertical: 1,
-                                                                                ),
-                                                                                child: DropdownButtonHideUnderline(
-                                                                                  child: DropdownButton(
-                                                                                    hint: const Text("Select Area"),
-                                                                                    isExpanded: true,
-                                                                                    items: area!.map((item) {
-                                                                                      return DropdownMenuItem(
-                                                                                        value: item['id'].toString(),
-                                                                                        child: Text(item['name']),
-                                                                                      );
-                                                                                    }).toList(),
-                                                                                    onChanged: (newVal) {
-                                                                                      setState(() {
-                                                                                        findArea = newVal;
-                                                                                      });
-                                                                                    },
-                                                                                    value: findArea,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      const SizedBox(height: 20),
-                                                                      Center(
-                                                                        child: Column(
-                                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                                          children: [
-                                                                            Text(
-                                                                              "Rate",
-                                                                              style: TextStyle(
-                                                                                fontSize: 15,
-                                                                                fontFamily: "Rubik",
-                                                                                fontWeight: FontWeight.w600,
-                                                                                color: CustomColors.primaryText,
-                                                                              ),
-                                                                            ),
-                                                                            const SizedBox(height: 5),
-                                                                            DecoratedBox(
-                                                                              decoration: BoxDecoration(
-                                                                                borderRadius: const BorderRadius.only(
-                                                                                  topLeft: Radius.circular(6),
-                                                                                  bottomLeft: Radius.circular(6),
-                                                                                  bottomRight: Radius.circular(6),
-                                                                                  topRight: Radius.circular(6),
-                                                                                ),
-                                                                                color: CustomColors.white,
-                                                                                boxShadow: const [
-                                                                                  BoxShadow(
-                                                                                    color: Color.fromARGB(13, 0, 0, 0),
-                                                                                    blurRadius: 4.0,
-                                                                                    spreadRadius: 2.0,
-                                                                                    offset: Offset(2.0, 2.0),
-                                                                                  ),
-                                                                                ],
-                                                                              ),
-                                                                              child: Padding(
-                                                                                padding: const EdgeInsets.symmetric(
-                                                                                  horizontal: 7,
-                                                                                  vertical: 1,
-                                                                                ),
-                                                                                child: DropdownButtonHideUnderline(
-                                                                                  child: DropdownButton(
-                                                                                    hint: const Text("Select Rate"),
-                                                                                    isExpanded: true,
-                                                                                    items: rate!.map((item) {
-                                                                                      return DropdownMenuItem(
-                                                                                        value: item['id'].toString(),
-                                                                                        child: Text(item['name']),
-                                                                                      );
-                                                                                    }).toList(),
-                                                                                    onChanged: (newVal) {
-                                                                                      setState(() {
-                                                                                        findRate = newVal;
-                                                                                      });
-                                                                                    },
-                                                                                    value: findRate,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                      ),
-                                                                      const SizedBox(height: 20),
-                                                                      LoadingButton(
-                                                                        title: "Search",
-                                                                        backgroundColor: ServiceRecieverColor.primaryColor,
-                                                                        height: 54,
-                                                                        textStyle: TextStyle(
-                                                                          color: CustomColors.white,
-                                                                          fontFamily: "Rubik",
-                                                                          fontStyle: FontStyle.normal,
-                                                                          fontWeight: FontWeight.w500,
-                                                                          fontSize: 18,
-                                                                        ),
-                                                                        onPressed: () async {
-                                                                          await fetchReceiverDashboardModel(
-                                                                            service: findSelected,
-                                                                            serviceId: serviceId,
-                                                                            findArea: findArea,
-                                                                            findRate: findRate,
-                                                                          );
-                                                                          Navigator.pop(context);
-                                                                          return false;
-                                                                        },
-                                                                      ),
-                                                                      const SizedBox(height: 30),
-                                                                    ],
-                                                                  ),
-                                                                ],
-                                                              ),
+                                                                    ),
+                                                                    const SizedBox(height: 20),
+                                                                    LoadingButton(
+                                                                      title: "Search",
+                                                                      backgroundColor: ServiceRecieverColor.primaryColor,
+                                                                      height: 54,
+                                                                      textStyle: TextStyle(color: CustomColors.white, fontFamily: "Rubik", fontStyle: FontStyle.normal, fontWeight: FontWeight.w500, fontSize: 18),
+                                                                      onPressed: () async {
+                                                                        await fetchReceiverDashboardModel(
+                                                                          name: serviceId,
+                                                                          serviceType: findSelected,
+                                                                          location: findArea,
+                                                                          rate: findRate,
+                                                                        );
+                                                                        Navigator.pop(context);
+                                                                        return false;
+                                                                      },
+                                                                    ),
+                                                                    const SizedBox(height: 30),
+                                                                  ],
+                                                                ),
+                                                              ],
                                                             ),
                                                           ),
                                                         );
@@ -736,25 +577,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                               textAlignVertical: TextAlignVertical.bottom,
                                               style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
                                               decoration: InputDecoration(
-                                                prefixIcon: Icon(
-                                                  Icons.search,
-                                                  size: 17,
-                                                  color: CustomColors.hintText,
-                                                ),
+                                                prefixIcon: Icon(Icons.search, size: 17, color: CustomColors.hintText),
                                                 hintText: "Search...",
                                                 fillColor: CustomColors.white,
                                                 focusColor: CustomColors.white,
                                                 hoverColor: CustomColors.white,
                                                 filled: true,
                                                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
-                                                focusedBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                  borderRadius: BorderRadius.circular(4.0),
-                                                ),
-                                                enabledBorder: OutlineInputBorder(
-                                                  borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                  borderRadius: BorderRadius.circular(4.0),
-                                                ),
+                                                focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: CustomColors.white, width: 2.0), borderRadius: BorderRadius.circular(4.0)),
+                                                enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: CustomColors.white, width: 2.0), borderRadius: BorderRadius.circular(4.0)),
                                               ),
                                             ),
                                           ),
@@ -767,7 +598,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             backgroundColor: Colors.white,
                                             loadingColor: CustomColors.primaryColor,
                                             onPressed: () async {
-                                              await fetchReceiverDashboardModel(service: null, findArea: null, findRate: null, serviceId: null);
+                                              await fetchReceiverDashboardModel(name: null, location: null, rate: null, serviceType: null);
                                               return true;
                                             },
                                           ),
@@ -784,51 +615,54 @@ class _HomeScreenState extends State<HomeScreen> {
                               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                               child: Column(
                                 children: [
-                                  ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.vertical,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemCount: provider.filterDataList.length,
-                                    itemBuilder: (BuildContext context, int index) {
-                                      var item = provider.filterDataList[index];
-
-                                      return RecommendationReceiverWidget(
-                                        imgPath: "${AppUrl.webStorageUrl}" '/' + item.avatar.toString(),
-                                        title: "${item.firstName} ${item.lastName}",
-                                        experience: item.userdetailprovider.experience == null ? "0" : item.userdetailprovider.experience.toString(),
-                                        hourly: item.userdetailprovider.hourlyRate.toString() == "null" ? "0" : item.userdetailprovider.hourlyRate.toString(),
-                                        price: item.userdetailprovider.hourlyRate.toString() == "null" ? "0" : item.userdetailprovider.hourlyRate.toString(),
-                                        dob: isAdult(item.userdetail.dob != null ? "${item.userdetail.dob}" : "00-00-0000").toString(),
-                                        ratingCount: double.parse("${item.avgRating!.isEmpty ? "0.0" : item.avgRating![0].rating}"),
-                                        isFavouriteIcon: LoadingButtonWithIcon(
-                                          onPressed: () async {
-                                            await favourited(item.id);
-                                            return false;
-                                          },
-                                          icon: favouriteList.contains(item.id)
-                                              ? Icon(
-                                                  Icons.favorite,
-                                                  color: CustomColors.red,
-                                                  size: 24,
-                                                )
-                                              : Icon(
-                                                  Icons.favorite_outline,
-                                                  color: CustomColors.darkGreyRecommended,
-                                                  size: 24,
-                                                ),
-                                        ),
-                                        onTap: () {
-                                          navigationService.push(
-                                            RoutesName.recieverProviderDetail,
-                                            arguments: {
-                                              "id": item.id.toString(),
-                                              "rating": double.parse("${item.avgRating!.isEmpty ? "0.0" : item.avgRating![0].rating}"),
+                                  if (provider.filterDataList.isNotEmpty) ...[
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.vertical,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: provider.filterDataList.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        var item = provider.filterDataList[index];
+                                        return RecommendationReceiverWidget(
+                                          imgPath: "${AppUrl.webStorageUrl}" '/' + item.avatar.toString(),
+                                          title: "${item.firstName} ${item.lastName}",
+                                          experience: item.userdetailprovider.experience == null ? "0" : item.userdetailprovider.experience.toString(),
+                                          hourly: item.userdetailprovider.hourlyRate.toString() == "null" ? "0" : item.userdetailprovider.hourlyRate.toString(),
+                                          price: item.userdetailprovider.hourlyRate.toString() == "null" ? "0" : item.userdetailprovider.hourlyRate.toString(),
+                                          dob: isAdult(item.userdetail.dob != null ? "${item.userdetail.dob}" : "00-00-0000").toString(),
+                                          ratingCount: double.parse("${item.avgRating!.isEmpty ? "0.0" : item.avgRating![0].rating}"),
+                                          isFavouriteIcon: LoadingButtonWithIcon(
+                                            onPressed: () async {
+                                              await favourited(item.id);
+                                              return false;
                                             },
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ),
+                                            icon: favouriteList.contains(item.id)
+                                                ? Icon(
+                                                    Icons.favorite,
+                                                    color: CustomColors.red,
+                                                    size: 24,
+                                                  )
+                                                : Icon(
+                                                    Icons.favorite_outline,
+                                                    color: CustomColors.darkGreyRecommended,
+                                                    size: 24,
+                                                  ),
+                                          ),
+                                          onTap: () {
+                                            navigationService.push(
+                                              RoutesName.recieverProviderDetail,
+                                              arguments: {
+                                                "id": item.id.toString(),
+                                                "rating": double.parse("${item.avgRating!.isEmpty ? "0.0" : item.avgRating![0].rating}"),
+                                              },
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ] else ...[
+                                    const Text("No Provider Found"),
+                                  ],
                                 ],
                               ),
                             ),

@@ -23,7 +23,7 @@ class SubscriptionProvider extends ChangeNotifier {
         url: CareReceiverURl.serviceSubscribe,
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         allPackages = response.data['subscription_package'];
         notifyListeners();
       }
@@ -50,7 +50,14 @@ class SubscriptionProvider extends ChangeNotifier {
       }),
       token: token,
     );
-    return response;
+    if (response != null) {
+      return response;
+    } else {
+      return Response(
+        requestOptions: RequestOptions(data: {"message": "something went wrong"}),
+        statusCode: 400,
+      );
+    }
   }
 
   CreditCard? cardValue;
@@ -92,6 +99,13 @@ class SubscriptionProvider extends ChangeNotifier {
       }),
       token: token,
     );
-    return response;
+    if (response != null) {
+      return response;
+    } else {
+      return Response(
+        requestOptions: RequestOptions(data: {"message": "something went wrong"}),
+        statusCode: 400,
+      );
+    }
   }
 }

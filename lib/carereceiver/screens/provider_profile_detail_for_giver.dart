@@ -34,28 +34,32 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
   bool isLoading = true;
   ServiceReceiverDashboardDetailModel? futureReceiverDashboardDetail;
   fetchReceiverDashboardDetailModel() async {
-    try {
-      var token = await getToken();
-      final response = await getRequesthandler(
-        url: "${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}",
-        token: token,
-      );
-      if (response.statusCode == 200) {
-        setState(() {
-          isLoading = false;
-          futureReceiverDashboardDetail = ServiceReceiverDashboardDetailModel.fromJson(response.data);
-        });
-      } else {
-        setState(() {
-          isLoading = false;
-        });
-        throw Exception(
-          'Failed to load Service Receiver Dashboard Details',
-        );
-      }
-    } catch (error) {
-      showErrorToast("Failed to load Service Receiver Dashboard Details");
+    // try {
+    var token = await getToken();
+    final response = await getRequesthandler(
+      url: "${CareReceiverURl.serviceReceiverProviderDetail}/${widget.id}",
+      token: token,
+    );
+    if (response != null && response.statusCode == 200) {
+      setState(() {
+        isLoading = false;
+        futureReceiverDashboardDetail = ServiceReceiverDashboardDetailModel.fromJson(response.data);
+      });
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+      showErrorToast("Failed to load Provider Details");
+      // throw Exception(
+      //   'Failed to load Service Receiver Dashboard Details',
+      // );
     }
+    // } catch (error) {
+    //   setState(() {
+    //     isLoading = false;
+    //   });
+    //   showErrorToast("Failed to load Provider Details");
+    // }
   }
 
   bool downloading = false;

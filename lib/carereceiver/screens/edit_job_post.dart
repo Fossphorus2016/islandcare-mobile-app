@@ -361,7 +361,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         formData: formData,
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
       }
       setState(() {
@@ -411,7 +411,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       setState(() {
         buttonLoading = false;
       });
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
       }
     } catch (e) {
@@ -453,7 +453,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       setState(() {
         buttonLoading = false;
       });
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
       }
     } catch (e) {
@@ -492,7 +492,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       setState(() {
         buttonLoading = false;
       });
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
       }
     } catch (e) {
@@ -541,7 +541,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       setState(() {
         buttonLoading = false;
       });
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
       }
     } catch (e) {
@@ -1713,33 +1713,33 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
           ),
         ),
         // cost rang
-        const SizedBox(height: 20),
-        Container(
-          alignment: Alignment.topLeft,
-          child: const Text(
-            "Cost Range Of Camp",
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontFamily: "Rubik",
-              fontSize: 14,
-            ),
-          ),
-        ),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 45,
-          child: TextFormField(
-            keyboardType: TextInputType.number,
-            controller: costRangeOfCampController,
-            style: const TextStyle(
-              fontSize: 12,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w600,
-            ),
-            textAlignVertical: TextAlignVertical.center,
-            decoration: inputdecoration("Cost Range Of Camp"),
-          ),
-        ),
+        // const SizedBox(height: 20),
+        // Container(
+        //   alignment: Alignment.topLeft,
+        //   child: const Text(
+        //     "Cost Range Of Camp",
+        //     style: TextStyle(
+        //       fontWeight: FontWeight.w600,
+        //       fontFamily: "Rubik",
+        //       fontSize: 14,
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 10),
+        // SizedBox(
+        //   height: 45,
+        //   child: TextFormField(
+        //     keyboardType: TextInputType.number,
+        //     controller: costRangeOfCampController,
+        //     style: const TextStyle(
+        //       fontSize: 12,
+        //       fontFamily: "Rubik",
+        //       fontWeight: FontWeight.w600,
+        //     ),
+        //     textAlignVertical: TextAlignVertical.center,
+        //     decoration: inputdecoration("Cost Range Of Camp"),
+        //   ),
+        // ),
         // btn
         const SizedBox(height: 20),
         Padding(
@@ -1769,9 +1769,11 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                 showErrorToast("Please Enter Add Days");
               } else if (interestForChildController.text.isEmpty) {
                 showErrorToast("Interest for Child is Required");
-              } else if (costRangeOfCampController.text.isEmpty) {
-                showErrorToast("Cost Range of Camp is Required");
-              } else {
+              }
+              // else if (costRangeOfCampController.text.isEmpty) {
+              // showErrorToast("Cost Range of Camp is Required");
+              // }
+              else {
                 setState(() {
                   buttonLoading = true;
                 });

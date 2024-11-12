@@ -46,7 +46,7 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
       isLoading = false;
     });
 
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       futureJobApplicantModel = JobApplicantDetailModel.fromJson(response.data);
     } else {
       showErrorToast('Failed to load job applicant detail');
@@ -143,15 +143,15 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Text(
-                            "Date of birth",
-                            style: TextStyle(
-                              color: CustomColors.black,
-                              fontSize: 12,
-                              fontFamily: "Poppins",
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          // Text(
+                          //   "Date of birth",
+                          //   style: TextStyle(
+                          //     color: CustomColors.black,
+                          //     fontSize: 12,
+                          //     fontFamily: "Poppins",
+                          //     fontWeight: FontWeight.w600,
+                          //   ),
+                          // ),
                           Text(
                             "Details",
                             style: TextStyle(

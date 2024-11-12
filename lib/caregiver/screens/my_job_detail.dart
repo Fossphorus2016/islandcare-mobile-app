@@ -43,7 +43,7 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
       url: '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       if (response.data['job_detail'] != null) {
         serviceName = response.data['job_detail'][0]['service']['name'];
         if (serviceName.toLowerCase() == "senior care") {
@@ -579,10 +579,10 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                 title: job.schoolCamp!.interestForChild.toString(),
               ),
               const SizedBox(height: 10),
-              JobDetailTile(
-                name: "Cost Range For Camp",
-                title: job.schoolCamp!.costRange.toString(),
-              ),
+              // JobDetailTile(
+              //   name: "Cost Range For Camp",
+              //   title: job.schoolCamp!.costRange.toString(),
+              // ),
               const SizedBox(height: 10),
             ],
             const SizedBox(height: 10),

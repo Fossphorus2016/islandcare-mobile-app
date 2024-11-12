@@ -31,7 +31,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
       token: token,
     );
 
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       return ChatRoomMessagesModel.fromJson(response.data);
     } else {
       throw Exception(
@@ -84,9 +84,12 @@ class _MessagesScreenState extends State<MessagesScreen> {
                           padding: const EdgeInsets.only(top: 16),
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
+                            if (provider.chatList[index]['userDate'] == null || provider.chatList[index]['userDate'].firstName == null) {
+                              return null;
+                            }
                             return ConversationList(
                               chat: provider.chatList[index]['chat'],
-                              name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].firstName}",
+                              name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].lastName}",
                               messageText: provider.chatList[index]['lastMessage'],
                               imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
                               time: provider.chatList[index]['lastMessageTime'].toString(),
@@ -155,7 +158,7 @@ class RecieverChatProvider extends ChangeNotifier {
       url: ChatUrl.serviceReceiverAllChats,
       token: userToken,
     );
-    if (resp.statusCode == 200 && resp.data['flag'] == 1) {
+    if (resp != null && resp.statusCode == 200 && resp.data['flag'] == 1) {
       allChatRooms = resp.data['chats'];
       chatList = List.generate(
         resp.data['chats'].length,
@@ -169,18 +172,13 @@ class RecieverChatProvider extends ChangeNotifier {
           return {
             "roomId": resp.data['chats'][index]['id'],
             "chat": resp.data['chats'][index],
-            "userDate": ChatroomUser.fromJson(resp.data['chats'][index]['receiver']),
+            "userDate": resp.data['chats'][index] != null && resp.data['chats'][index]['receiver'] != null ? ChatroomUser.fromJson(resp.data['chats'][index]['receiver']) : null,
             "lastMessage": getlastmessage != null ? getlastmessage['message'] : null,
             "lastMessagesCount": resp.data['chats'][index]["status"],
             "lastMessageTime": lastmessagetime,
           };
         },
       );
-      // print(activeChat.isNotEmpty);
-      // if (activeChat.isNotEmpty) {
-      //   var getChatRoom = allChatRooms.firstWhere((element) => element["id"] == activeChat['id']);
-      //   setActiveChat(getChatRoom);
-      // }
     }
     notifyListeners();
   }
@@ -188,11 +186,11 @@ class RecieverChatProvider extends ChangeNotifier {
   getSingleChatAndSetActive(id) async {
     var token = await getToken();
     var resp = await postRequesthandler(
-      url: "${AppUrl.webBaseURL}/api/get-chat",
+      url: ChatUrl.getChat,
       formData: FormData.fromMap({"chatId": id}),
       token: token,
     );
-    if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+    if (resp != null && resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
       var chatRoom = resp.data['chat'];
       if (chatRoom != null) {
         activeChat = chatRoom;
@@ -205,11 +203,11 @@ class RecieverChatProvider extends ChangeNotifier {
     var token = await getToken();
 
     var resp = await postRequesthandler(
-      url: "${AppUrl.webBaseURL}/api/get-chat",
+      url: ChatUrl.getChat,
       formData: FormData.fromMap({"chatId": id}),
       token: token,
     );
-    if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+    if (resp != null && resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
       var chatRoom = resp.data['chat'];
       if (chatRoom != null) {
         setActiveChat(chatRoom);
@@ -263,11 +261,15 @@ class RecieverChatProvider extends ChangeNotifier {
       formData: formData,
       token: userToken,
     );
-    if (resp.statusCode == 200) {
+    if (resp != null && resp.statusCode == 200) {
       activeChat = resp.data['chat_room'];
       sendMessageReq = false;
       getChats();
       notifyListeners();
+    } else {
+      sendMessageReq = false;
+      notifyListeners();
+      getChats();
     }
   }
 
@@ -283,8 +285,25 @@ class RecieverChatProvider extends ChangeNotifier {
       formData: FormData.fromMap({"id": activeChat['id']}),
       token: userToken,
     );
-    if (resp.statusCode == 200) {
+    if (resp != null && resp.statusCode == 200) {
       getChats();
     }
   }
 }
+
+// class RecieverUserChatModel {
+//   final String firstName;
+//   final String? lastName;
+//   final String? avatar;
+//   final int id;
+//   RecieverUserChatModel({
+//     required this.id,
+//     required this.firstName,
+//     this.lastName,
+//     this.avatar,
+//   });
+
+//   RecieverUserChatModel fromJson(Map json) {
+//     return RecieverUserChatModel(id: json["id"], firstName: json["first_name"], lastName: json["last_name"], avatar: json["avatar"]);
+//   }
+// }

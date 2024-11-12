@@ -157,13 +157,13 @@ class _ManageCardsState extends State<ManageCards> {
         formData: requestBody,
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         if (response.data['success'] == false) {
           showErrorToast(response.data['message']);
         } else if (response.data['success'] == true) {
           showSuccessToast("Card Added Successfully");
         }
-        await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
+        await Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel(notify: true);
       }
       Navigator.pop(context);
     } on DioError catch (e) {
@@ -175,7 +175,7 @@ class _ManageCardsState extends State<ManageCards> {
   @override
   void initState() {
     super.initState();
-    Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel();
+    Provider.of<CardProvider>(context, listen: false).fetchManageCardsModel(notify: true);
   }
 
   TextEditingController textController = TextEditingController();
@@ -628,10 +628,11 @@ class _ManageCardsState extends State<ManageCards> {
                                                 return false;
                                               },
                                             ),
+                                            const SizedBox(height: 10),
                                             LoadingButton(
-                                              title: "Add Card",
+                                              title: "Cancel",
                                               height: 54,
-                                              backgroundColor: CustomColors.primaryColor,
+                                              backgroundColor: CustomColors.red,
                                               textStyle: TextStyle(
                                                 color: CustomColors.white,
                                                 fontFamily: "Rubik",
@@ -640,21 +641,22 @@ class _ManageCardsState extends State<ManageCards> {
                                                 fontSize: 18,
                                               ),
                                               onPressed: () async {
-                                                if (nameOncardController.text.isEmpty) {
-                                                  showErrorToast("Please Enter Name");
-                                                } else if (cardNumberController.text.isEmpty) {
-                                                  showErrorToast("Please Enter Card Number");
-                                                } else if (selectedMonth == null) {
-                                                  showErrorToast("Please Select Month");
-                                                } else if (selectedYear == null) {
-                                                  showErrorToast("Please Select Year");
-                                                } else if (cvvController.text.isEmpty) {
-                                                  showErrorToast("Please Enter CVV");
-                                                } else {
-                                                  if (cardKey.currentState!.validate()) {
-                                                    await postAddCard();
-                                                  }
-                                                }
+                                                // if (nameOncardController.text.isEmpty) {
+                                                //   showErrorToast("Please Enter Name");
+                                                // } else if (cardNumberController.text.isEmpty) {
+                                                //   showErrorToast("Please Enter Card Number");
+                                                // } else if (selectedMonth == null) {
+                                                //   showErrorToast("Please Select Month");
+                                                // } else if (selectedYear == null) {
+                                                //   showErrorToast("Please Select Year");
+                                                // } else if (cvvController.text.isEmpty) {
+                                                //   showErrorToast("Please Enter CVV");
+                                                // } else {
+                                                //   if (cardKey.currentState!.validate()) {
+                                                //     await postAddCard();
+                                                //   }
+                                                // }
+                                                Navigator.pop(context);
                                                 return false;
                                               },
                                             ),
@@ -857,16 +859,18 @@ class CardProvider extends ChangeNotifier {
   List<CreditCard>? allCards = [];
   List<CreditCard>? filteredList = [];
   CreditCard? selectedCard;
-  Future<void> fetchManageCardsModel() async {
+  Future<void> fetchManageCardsModel({required bool notify}) async {
     var token = await getToken();
     final response = await getRequesthandler(
       url: CareReceiverURl.serviceReceiverGetCreditCards,
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       allCards = List<CreditCard>.from(response.data["credit-cards"]!.map((x) => CreditCard.fromJson(x)));
       filteredList = allCards;
-      notifyListeners();
+      if (notify) {
+        notifyListeners();
+      }
     } else {
       showErrorToast("Failed to load Cards");
     }

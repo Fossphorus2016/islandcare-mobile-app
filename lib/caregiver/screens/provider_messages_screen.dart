@@ -139,7 +139,7 @@ class ServiceProviderChat extends ChangeNotifier {
       url: ChatUrl.serviceProviderChats,
       token: token,
     );
-    if (resp.statusCode == 200 && resp.data['flag'] == 1) {
+    if (resp != null && resp.statusCode == 200 && resp.data['flag'] == 1) {
       allChatRooms = resp.data['chats'];
       chatList = List.generate(
         resp.data['chats'].length,
@@ -167,11 +167,11 @@ class ServiceProviderChat extends ChangeNotifier {
   getSingleChatAndSetActive(id) async {
     var userToken = await getToken();
     var resp = await postRequesthandler(
-      url: "${AppUrl.webBaseURL}/api/get-chat",
+      url: ChatUrl.getChat,
       token: userToken,
       formData: FormData.fromMap({"chatId": id}),
     );
-    if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+    if (resp != null && resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
       var chatRoom = resp.data['chat'];
       if (chatRoom != null) {
         activeChat = chatRoom;
@@ -184,11 +184,11 @@ class ServiceProviderChat extends ChangeNotifier {
     var userToken = await getToken();
 
     var resp = await postRequesthandler(
-      url: "${AppUrl.webBaseURL}/api/get-chat",
+      url: ChatUrl.getChat,
       token: userToken,
       formData: FormData.fromMap({"chatId": id}),
     );
-    if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+    if (resp != null && resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
       var chatRoom = resp.data['chat'];
       if (chatRoom != null) {
         setActiveChat(chatRoom['id']);
@@ -211,7 +211,7 @@ class ServiceProviderChat extends ChangeNotifier {
       formData: FormData.fromMap({"id": activeChat['id']}),
       token: token,
     );
-    if (resp.statusCode == 200) {
+    if (resp != null && resp.statusCode == 200) {
       getChats();
     }
   }
@@ -240,7 +240,7 @@ class ServiceProviderChat extends ChangeNotifier {
       formData: formData,
       token: userToken,
     );
-    if (resp.statusCode == 200) {
+    if (resp != null && resp.statusCode == 200) {
       activeChat = resp.data['chat_room'];
       sendMessageReq = false;
       getChats();

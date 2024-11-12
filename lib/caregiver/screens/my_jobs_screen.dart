@@ -656,9 +656,10 @@ class GiverMyJobsProvider extends ChangeNotifier {
     );
     isLoading = false;
     notifyListeners();
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       fetchJobBoard = ServiceProviderJobBoardModel.fromJson(response.data);
       allJobs = fetchJobBoard!.job;
+      currentPageIndex = 0;
       setPaginationList(allJobs);
       notifyListeners();
     } else {
@@ -694,7 +695,7 @@ class GiverMyJobsProvider extends ChangeNotifier {
         return false;
       }
     }).toList();
-
+    currentPageIndex = 0;
     setPaginationList(filterData);
 
     notifyListeners();

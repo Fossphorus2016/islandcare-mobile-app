@@ -37,7 +37,7 @@ class CustomPagination extends StatelessWidget {
               width: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               height: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(05)),
-              child: currentPageIndex > 0 ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-skip-backward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/step-backward.svg")),
+              child: currentPageIndex > 0 && totalRowsCount != 1 ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-skip-backward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/step-backward.svg")),
             ),
           ),
           const SizedBox(width: 05),
@@ -48,7 +48,7 @@ class CustomPagination extends StatelessWidget {
               width: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               height: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(05)),
-              child: currentPageIndex > 0 ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-backward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/backward.svg")),
+              child: currentPageIndex > 0 && totalRowsCount != 1 ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-backward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/backward.svg")),
             ),
           ),
           const SizedBox(width: 10),
@@ -63,37 +63,68 @@ class CustomPagination extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    for (var i = 0; i <= totalLoop; i++) ...[
-                      if (i <= totalRowsCount) ...[
-                        InkWell(
-                          onTap: () {
-                            if (currentPageIndex > totalLoop) {
-                              gotoPage(startloop + i);
-                            } else {
-                              gotoPage(i);
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(05),
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: currentPageIndex == (startloop + i) ? ServiceRecieverColor.primaryColor : Colors.white,
-                              borderRadius: BorderRadius.circular(05),
-                              border: Border.all(color: currentPageIndex == (startloop + i) ? ServiceRecieverColor.primaryColor : Colors.grey.shade100),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "${startloop + i + 1}",
-                                maxLines: 1,
-                                style: TextStyle(
-                                  color: currentPageIndex == (startloop + i) ? Colors.white : Colors.grey,
-                                ),
+                    if (totalRowsCount == 1) ...[
+                      InkWell(
+                        onTap: () {
+                          // if (currentPageIndex > totalLoop) {
+                          //   gotoPage(startloop + i);
+                          // } else {
+                          //   gotoPage(i);
+                          // }
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(05),
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                            color: ServiceRecieverColor.primaryColor,
+                            borderRadius: BorderRadius.circular(05),
+                            border: Border.all(color: ServiceRecieverColor.primaryColor),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "1",
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Colors.white,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 05),
+                      ),
+                    ] else ...[
+                      for (var i = 0; i <= totalLoop; i++) ...[
+                        if (i <= totalRowsCount) ...[
+                          InkWell(
+                            onTap: () {
+                              if (currentPageIndex > totalLoop) {
+                                gotoPage(startloop + i);
+                              } else {
+                                gotoPage(i);
+                              }
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(05),
+                              width: 30,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                color: currentPageIndex == (startloop + i) ? ServiceRecieverColor.primaryColor : Colors.white,
+                                borderRadius: BorderRadius.circular(05),
+                                border: Border.all(color: currentPageIndex == (startloop + i) ? ServiceRecieverColor.primaryColor : Colors.grey.shade100),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "${startloop + i + 1}",
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    color: currentPageIndex == (startloop + i) ? Colors.white : Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 05),
+                        ],
                       ],
                     ],
                   ],
@@ -109,7 +140,7 @@ class CustomPagination extends StatelessWidget {
               width: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               height: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(05)),
-              child: currentPageIndex < totalRowsCount ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-forward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/forward.svg")),
+              child: currentPageIndex < totalRowsCount && totalRowsCount != 1 ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-forward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/forward.svg")),
             ),
           ),
           const SizedBox(width: 05),
@@ -120,7 +151,7 @@ class CustomPagination extends StatelessWidget {
               width: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               height: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(05)),
-              child: currentPageIndex < totalRowsCount ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-skip-forward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/step-forward.svg")),
+              child: currentPageIndex < totalRowsCount && totalRowsCount != 1 ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-skip-forward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/step-forward.svg")),
             ),
           ),
           const SizedBox(width: 20),

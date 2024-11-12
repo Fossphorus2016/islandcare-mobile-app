@@ -46,7 +46,7 @@ class ServiceGiverProvider extends ChangeNotifier {
       url: CareGiverUrl.serviceProviderProfile,
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       fetchProfile = ProfileGiverModel.fromJson(response.data);
       profileStatus = fetchProfile!.data!.status == 1;
       providerIsVerified = response.data['isVerified'] == 1;
@@ -76,7 +76,7 @@ class ServiceGiverProvider extends ChangeNotifier {
       url: CareGiverUrl.serviceProviderProfilePercentage,
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       profilePerentage = response.data['percentage'].toString();
     }
   }
@@ -92,8 +92,9 @@ class ServiceGiverProvider extends ChangeNotifier {
       );
       dashboardIsLoading = false;
       notifyListeners();
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         serviceJobs = ServiceProviderDashboardModel.fromJson(response.data);
+        currentPageIndex = 0;
         setPaginationList(serviceJobs!.jobs);
         notifyListeners();
       } else {
@@ -137,14 +138,13 @@ class ServiceGiverProvider extends ChangeNotifier {
     searchIsLoading = false;
     notifyListeners();
 
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       serviceJobs = ServiceProviderDashboardModel.fromJson(response.data);
-      setPaginationList(serviceJobs!.jobs);
+      currentPageIndex = 0;
       notifyListeners();
+      setPaginationList(serviceJobs!.jobs);
     } else {
-      throw Exception(
-        'Failed to load Service Jobs Dashboard',
-      );
+      throw Exception('Failed to load Service Jobs Dashboard');
     }
   }
 
@@ -165,6 +165,7 @@ class ServiceGiverProvider extends ChangeNotifier {
       filterDataList = data.sublist(startIndex, endIndex).toList();
       totalRowsCount = (data.length / 10).floor();
       notifyListeners();
+      getCurrentPageData();
     } catch (error) {
       //
     }
@@ -178,7 +179,7 @@ class ServiceGiverProvider extends ChangeNotifier {
         return false;
       }
     }).toList();
-
+    currentPageIndex = 0;
     setPaginationList(filterData);
 
     notifyListeners();
@@ -198,6 +199,7 @@ class ServiceGiverProvider extends ChangeNotifier {
         return false;
       }
     }).toList();
+    currentPageIndex = 0;
     setPaginationList(filterData);
     notifyListeners();
   }

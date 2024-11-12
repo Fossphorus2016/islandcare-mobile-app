@@ -282,9 +282,10 @@ class GiverReviewsProvider extends ChangeNotifier {
     );
     isLoading = false;
     notifyListeners();
-    if (response.statusCode == 200 && response.data['data'] != null) {
+    if (response != null && response.statusCode == 200 && response.data['data'] != null) {
       futurereviews = ProviderReviewsModel.fromJson(response.data);
       allReviews = futurereviews!.data;
+      currentPageIndex = 0;
       setPaginationList(allReviews);
       notifyListeners();
     }
@@ -318,7 +319,7 @@ class GiverReviewsProvider extends ChangeNotifier {
         return false;
       }
     }).toList();
-
+    currentPageIndex = 0;
     setPaginationList(filterData);
 
     notifyListeners();
@@ -338,6 +339,7 @@ class GiverReviewsProvider extends ChangeNotifier {
         return false;
       }
     }).toList();
+    currentPageIndex = 0;
     setPaginationList(filterData);
     notifyListeners();
   }

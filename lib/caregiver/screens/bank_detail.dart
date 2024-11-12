@@ -28,7 +28,7 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
   fetchBankDetailsModel() async {
     var token = await getToken();
     final response = await getRequesthandler(url: CareGiverUrl.serviceProviderBankDetails, token: token, data: null);
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       var json = response.data as Map;
       var bankdetails = json['bank_details'] as List;
 
@@ -62,13 +62,11 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
         token: token,
         formData: formData,
       );
-      if (response.statusCode == 200 && !response.data['message'].contains("Unable To Select Unverified Banks")) {
+      if (response != null && response.statusCode == 200 && !response.data['message'].contains("Unable To Select Unverified Banks")) {
         showSuccessToast("Bank Account Selected");
         fetchBankDetailsModel();
       } else {
-        showErrorToast(
-          response.data['message'].toString(),
-        );
+        showErrorToast("unable to fetch bank data");
       }
     } catch (e) {
       showErrorToast(
@@ -91,14 +89,12 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
         token: token,
         formData: formData,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         showSuccessToast("Bank Account Removed Successfully");
         focus.requestFocus();
         fetchBankDetailsModel();
       } else {
-        showErrorToast(
-          response.data['message'].toString(),
-        );
+        showErrorToast("unable to fetch data");
       }
     } catch (e) {
       showErrorToast(
@@ -121,7 +117,7 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
         token: token,
         formData: requestBody,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         if (response.data['success']) {
           showSuccessToast(response.data['message']);
           fetchBankDetailsModel();
@@ -134,7 +130,11 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
           accountNumberController.clear();
         }
       } else {
-        showErrorToast(response.data['message']);
+        if (response != null && response.data != null && response.data["message"] != null) {
+          showErrorToast(response.data['message']);
+        } else {
+          showErrorToast("unable to add bank");
+        }
       }
     } on DioError catch (e) {
       showErrorToast("Something went wrong please try again later");

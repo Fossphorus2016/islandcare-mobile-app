@@ -150,336 +150,154 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   @override
   Widget build(BuildContext context) {
     return Consumer2<RecieverUserProvider, BottomNavigationProvider>(builder: (context, recieverProvider, bottomProvider, __) {
-      return ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: Column(
-              children: [
-                Column(
-                  children: [
-                    FutureBuilder<ProfileReceiverModel?>(
-                      future: recieverProvider.userProfile,
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData) {
-                          return InkWell(
-                            onTap: () {
-                              bottomProvider.updatePage(3);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 25, bottom: 60),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    radius: 40,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(40),
+      return SafeArea(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Column(
+                children: [
+                  Column(
+                    children: [
+                      FutureBuilder<ProfileReceiverModel?>(
+                        future: recieverProvider.userProfile,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return InkWell(
+                              onTap: () {
+                                bottomProvider.updatePage(3);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 25, bottom: 60),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      radius: 40,
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(100),
-                                        child: CachedNetworkImage(
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
-                                          imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
-                                          placeholder: (context, url) => const CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        borderRadius: BorderRadius.circular(40),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(100),
+                                          child: CachedNetworkImage(
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                            imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.data!.avatar}",
+                                            placeholder: (context, url) => const CircularProgressIndicator(),
+                                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      SizedBox(
-                                        child: Text(
-                                          "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "Rubik",
-                                            color: CustomColors.white,
+                                    const SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        SizedBox(
+                                          child: Text(
+                                            "${"${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}"} ",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "Rubik",
+                                              color: CustomColors.white,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      SizedBox(
-                                        child: Text(
-                                          snapshot.data!.data!.phone.toString(),
-                                          style: TextStyle(
-                                            color: CustomColors.white,
-                                            fontFamily: "Rubik",
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
+                                        const SizedBox(height: 10),
+                                        SizedBox(
+                                          child: Text(
+                                            snapshot.data!.data!.phone.toString(),
+                                            style: TextStyle(
+                                              color: CustomColors.white,
+                                              fontFamily: "Rubik",
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          );
-                        } else {
-                          return Shimmer.fromColors(
-                            baseColor: CustomColors.primaryColor,
-                            highlightColor: const Color.fromARGB(255, 95, 95, 95),
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 25, bottom: 60),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    backgroundColor: CustomColors.paraColor,
-                                    radius: 40,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(40),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(100),
-                                      ),
+                                      ],
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Container(
-                                        width: 130,
-                                        color: CustomColors.paraColor,
-                                        child: Text(
-                                          "",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "Rubik",
-                                            color: CustomColors.white,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                        width: 80,
-                                        color: CustomColors.paraColor,
-                                        child: Text(
-                                          " ",
-                                          style: TextStyle(
-                                            color: CustomColors.white,
-                                            fontFamily: "Rubik",
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
-                      child: ListTile(
-                        hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                        leading: SizedBox(
-                          child: Image.asset("assets/images/icons/homeIcon.png"),
-                        ),
-                        title: Text(
-                          'Dashboard',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                            color: CustomColors.white,
-                            fontFamily: "Rubik",
-                          ),
-                        ),
-                        trailing: Icon(
-                          Icons.arrow_forward_ios,
-                          color: CustomColors.white,
-                          size: 16,
-                        ),
-                        onTap: () {
-                          if (widget.type == "home") {
-                            Navigator.pop(context);
+                            );
                           } else {
-                            bottomProvider.updatePage(0);
+                            return Shimmer.fromColors(
+                              baseColor: CustomColors.primaryColor,
+                              highlightColor: const Color.fromARGB(255, 95, 95, 95),
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 25, bottom: 60),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      backgroundColor: CustomColors.paraColor,
+                                      radius: 40,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(40),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(100),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      width: 10,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Container(
+                                          width: 130,
+                                          color: CustomColors.paraColor,
+                                          child: Text(
+                                            "",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "Rubik",
+                                              color: CustomColors.white,
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Container(
+                                          width: 80,
+                                          color: CustomColors.paraColor,
+                                          child: Text(
+                                            " ",
+                                            style: TextStyle(
+                                              color: CustomColors.white,
+                                              fontFamily: "Rubik",
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
                           }
                         },
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        navigationService.push(RoutesName.serviceRecieverJobPost);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: const SvgPicture(
-                            SvgAssetLoader("assets/images/icons/jobPost.svg"),
-                            height: 20,
-                          ),
-                          title: Text(
-                            'Post a Job',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: CustomColors.white,
-                              fontFamily: "Rubik",
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: CustomColors.white,
-                            size: 16,
-                          ),
-                          onTap: () {
-                            navigationService.push(RoutesName.serviceRecieverJobPost);
-                          },
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: const SvgPicture(
-                            SvgAssetLoader("assets/images/icons/bookings.svg"),
-                            height: 20,
-                          ),
-                          title: Text(
-                            'Job Applicants',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: CustomColors.white,
-                              fontFamily: "Rubik",
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: CustomColors.white,
-                            size: 16,
-                          ),
-                          onTap: () {
-                            navigationService.push(RoutesName.serviceRecieverJobApplicant);
-                          },
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        navigationService.push(RoutesName.serviceRecieverHireCandidates);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: const SvgPicture(
-                            SvgAssetLoader("assets/images/icons/hired-candidate.svg"),
-                            height: 20,
-                          ),
-                          title: Text(
-                            'Hired Candidates',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: CustomColors.white,
-                              fontFamily: "Rubik",
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: CustomColors.white,
-                            size: 16,
-                          ),
-                          onTap: () {
-                            navigationService.push(RoutesName.serviceRecieverHireCandidates);
-                          },
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        navigationService.push(RoutesName.recieverPackagePayment);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: SizedBox(
-                            child: Image.asset("assets/images/icons/payments.png"),
-                          ),
-                          title: Text(
-                            'Payment Center',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: CustomColors.white,
-                              fontFamily: "Rubik",
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: CustomColors.white,
-                            size: 16,
-                          ),
-                          onTap: () {
-                            navigationService.push(RoutesName.recieverPackagePayment);
-                          },
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        navigationService.push(RoutesName.recieverManageCard);
-                      },
-                      child: Container(
+                      Container(
                         padding: const EdgeInsets.symmetric(vertical: 6),
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
                         child: ListTile(
                           hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                           selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                           focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: const SvgPicture(
-                            SvgAssetLoader("assets/images/icons/manage-card.svg"),
-                            height: 20,
+                          leading: SizedBox(
+                            child: Image.asset("assets/images/icons/homeIcon.png"),
                           ),
                           title: Text(
-                            'Manage Cards',
+                            'Dashboard',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -493,111 +311,295 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             size: 16,
                           ),
                           onTap: () {
-                            navigationService.push(RoutesName.recieverManageCard);
+                            if (widget.type == "home") {
+                              Navigator.pop(context);
+                            } else {
+                              bottomProvider.updatePage(0);
+                            }
                           },
                         ),
                       ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        navigationService.push(RoutesName.serviceRecieverBank);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 6),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: const SvgPicture(
-                            SvgAssetLoader("assets/images/icons/bank-detail.svg"),
-                            height: 20,
+                      GestureDetector(
+                        onTap: () {
+                          navigationService.push(RoutesName.serviceRecieverJobPost);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
                           ),
-                          title: Text(
-                            'Bank Details',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: CustomColors.white,
-                              fontFamily: "Rubik",
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: const SvgPicture(
+                              SvgAssetLoader("assets/images/icons/jobPost.svg"),
+                              height: 20,
                             ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios,
-                            color: CustomColors.white,
-                            size: 16,
-                          ),
-                          onTap: () {
-                            navigationService.push(RoutesName.serviceRecieverBank);
-                          },
-                        ),
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 6),
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
-                      child: ListTile(
-                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                          leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
-                          title: Text('Change Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomColors.white, fontFamily: "Rubik")),
-                          trailing: Icon(Icons.arrow_forward_ios, color: CustomColors.white, size: 16),
-                          onTap: () {
-                            showModalBottomSheet(
-                              isScrollControlled: true,
-                              context: context,
-                              backgroundColor: Colors.white,
-                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
-                              builder: (BuildContext context) {
-                                return StatefulBuilder(
-                                  builder: (BuildContext context, StateSetter setState) {
-                                    return const ChangePasswordWidget();
-                                  },
-                                );
-                              },
-                            );
-                          }),
-                    )
-                  ],
-                ),
-                GestureDetector(
-                  onTap: () {
-                    _showLogoutDialog();
-                  },
-                  child: SizedBox(
-                    height: 150,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ListTile(
-                          onTap: () {
-                            _showLogoutDialog();
-                          },
-                          leading: Image.asset("assets/images/icons/logout.png"),
-                          title: Padding(
-                            padding: const EdgeInsets.only(bottom: 5),
-                            child: Text(
-                              'Logout',
+                            title: Text(
+                              'Post a Job',
                               style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                                 color: CustomColors.white,
                                 fontFamily: "Rubik",
                               ),
                             ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              navigationService.push(RoutesName.serviceRecieverJobPost);
+                            },
                           ),
                         ),
-                      ],
+                      ),
+                      GestureDetector(
+                        onTap: () {},
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: const SvgPicture(
+                              SvgAssetLoader("assets/images/icons/bookings.svg"),
+                              height: 20,
+                            ),
+                            title: Text(
+                              'Job Applicants',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              navigationService.push(RoutesName.serviceRecieverJobApplicant);
+                            },
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          navigationService.push(RoutesName.serviceRecieverHireCandidates);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: const SvgPicture(
+                              SvgAssetLoader("assets/images/icons/hired-candidate.svg"),
+                              height: 20,
+                            ),
+                            title: Text(
+                              'Hired Candidates',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              navigationService.push(RoutesName.serviceRecieverHireCandidates);
+                            },
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          navigationService.push(RoutesName.recieverPackagePayment);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: SizedBox(
+                              child: Image.asset("assets/images/icons/payments.png"),
+                            ),
+                            title: Text(
+                              'Payment Center',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              navigationService.push(RoutesName.recieverPackagePayment);
+                            },
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          navigationService.push(RoutesName.recieverManageCard);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: const SvgPicture(
+                              SvgAssetLoader("assets/images/icons/manage-card.svg"),
+                              height: 20,
+                            ),
+                            title: Text(
+                              'Manage Cards',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              navigationService.push(RoutesName.recieverManageCard);
+                            },
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          navigationService.push(RoutesName.serviceRecieverBank);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: const SvgPicture(
+                              SvgAssetLoader("assets/images/icons/bank-detail.svg"),
+                              height: 20,
+                            ),
+                            title: Text(
+                              'Bank Details',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              navigationService.push(RoutesName.serviceRecieverBank);
+                            },
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
+                        child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
+                            title: Text('Change Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomColors.white, fontFamily: "Rubik")),
+                            trailing: Icon(Icons.arrow_forward_ios, color: CustomColors.white, size: 16),
+                            onTap: () {
+                              showModalBottomSheet(
+                                isScrollControlled: true,
+                                context: context,
+                                backgroundColor: Colors.white,
+                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+                                builder: (BuildContext context) {
+                                  return StatefulBuilder(
+                                    builder: (BuildContext context, StateSetter setState) {
+                                      return const ChangePasswordWidget();
+                                    },
+                                  );
+                                },
+                              );
+                            }),
+                      )
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _showLogoutDialog();
+                    },
+                    child: SizedBox(
+                      height: 150,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ListTile(
+                            onTap: () {
+                              _showLogoutDialog();
+                            },
+                            leading: Image.asset("assets/images/icons/logout.png"),
+                            title: Padding(
+                              padding: const EdgeInsets.only(bottom: 5),
+                              child: Text(
+                                'Logout',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  color: CustomColors.white,
+                                  fontFamily: "Rubik",
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       );
     });
   }
@@ -646,16 +648,20 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
 
     try {
       var response = await postRequesthandler(
-        url: '${AppUrl.webBaseURL}/api/password-update/$userId',
+        url: '${SessionUrl.updatePassword}/$userId',
         formData: formData,
         token: token,
       );
 
       Navigator.pop(context);
-      if (response.data['success']) {
+      if (response != null && response.data['success']) {
         showSuccessToast("Password Updated Successfully");
       } else {
-        showErrorToast(response.data['message'].toString());
+        if (response != null && response.data != null && response.data["message"] != null) {
+          showErrorToast(response.data['message'].toString());
+        } else {
+          showErrorToast("something went wrong");
+        }
       }
     } catch (e) {
       Navigator.pop(context);

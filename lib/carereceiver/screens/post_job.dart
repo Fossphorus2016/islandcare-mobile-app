@@ -570,7 +570,7 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                                 ),
                                                 GestureDetector(
                                                   onTap: () {
-                                                    navigationService.push('/service-reciever-job-detail', arguments: {
+                                                    navigationService.push(RoutesName.serviceRecieverJobDetail, arguments: {
                                                       "serviceId": item!.serviceId.toString(),
                                                       "jobData": item.data,
                                                     });
@@ -722,7 +722,7 @@ class PostedJobsProvider extends ChangeNotifier {
         url: CareReceiverURl.serviceReceiverJobBoard,
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         var data = response.data;
         if (data['job'] != "No Job Found!") {
           setDataList(data);

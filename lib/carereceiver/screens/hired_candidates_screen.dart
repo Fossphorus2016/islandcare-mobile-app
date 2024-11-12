@@ -27,7 +27,6 @@ class HiredCandidatesScreen extends StatefulWidget {
 class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
   TextEditingController commentController = TextEditingController();
   String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-
   var providerId;
   var rating;
   var jobId;
@@ -38,7 +37,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
       url: url,
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       showSuccessToast("Added To Favourite");
       commentController.clear();
       setState(
@@ -50,7 +49,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
       Navigator.pop(context);
     } else {
       if (kDebugMode) {
-        print("jobCompleted = ${response.data}");
+        print("jobCompleted = ${response!.data}");
       }
     }
   }
@@ -667,7 +666,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                         token: token,
                                                                       );
 
-                                                                      if (response.statusCode == 200) {
+                                                                      if (response != null && response.statusCode == 200) {
                                                                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response.data['message'].toString())));
                                                                         commentController.clear();
                                                                         setState(
@@ -763,7 +762,7 @@ class HiredCandidatesProvider extends ChangeNotifier {
     totalRowsCount = 0;
   }
 
-  List hiredCandidates = [];
+  List<HiredCandidateData> hiredCandidates = [];
   // Get all jobs
 
   bool isLoading = true;
@@ -774,7 +773,7 @@ class HiredCandidatesProvider extends ChangeNotifier {
       url: '${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=${DateTime.now()}',
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       var json = response.data as Map;
 
       if (json['data'].isNotEmpty) {
@@ -813,15 +812,14 @@ class HiredCandidatesProvider extends ChangeNotifier {
 
   setFilter(String searchText) {
     var filterData = hiredCandidates.where((element) {
-      if (element.jobs.jobTitle.toString().toLowerCase().contains(searchText.toLowerCase()) || element.jobs.address.toString().toLowerCase().contains(searchText.toLowerCase())) {
+      if (element.jobs!.jobTitle.toString().toLowerCase().contains(searchText.toLowerCase()) || element.users!.firstName.toString().toLowerCase().contains(searchText.toLowerCase()) || element.users!.lastName.toString().toLowerCase().contains(searchText.toLowerCase()) || element.jobs!.address.toString().toLowerCase().contains(searchText.toLowerCase())) {
+        // print(element);
         return true;
       } else {
         return false;
       }
     }).toList();
-
     setPaginationList(filterData);
-
     notifyListeners();
   }
 
@@ -833,7 +831,7 @@ class HiredCandidatesProvider extends ChangeNotifier {
   setFilterByTime(DateTime startTime, DateTime endTime) {
     var filterData = hiredCandidates.where((element) {
       var docTime = element.updatedAt;
-      if (startTime.isBefore(DateTime.parse(docTime)) && endTime.isAfter(DateTime.parse(docTime))) {
+      if (startTime.isBefore(DateTime.parse(docTime!)) && endTime.isAfter(DateTime.parse(docTime))) {
         return true;
       } else {
         return false;

@@ -97,24 +97,26 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
   List? data = []; //edited line
 
   Future<String> getSWData() async {
-    var res = await getRequesthandler(url: serviceurl);
-    Map<String, dynamic> resBody = res.data;
-    List<dynamic> serviceData = resBody["services"];
-    if (widget.service != null) {
-      var getServiceByProfile = serviceData
-          .where(
-            (element) => element['name'] == widget.service,
-          )
-          .first;
+    var token = await getToken();
+    var res = await getRequesthandler(url: serviceurl, token: token);
+    if (res != null && res.statusCode == 200) {
+      Map<String, dynamic> resBody = res.data;
+      List<dynamic> serviceData = resBody["services"];
+      if (widget.service != null) {
+        var getServiceByProfile = serviceData
+            .where(
+              (element) => element['name'] == widget.service,
+            )
+            .first;
 
+        setState(() {
+          selectedService = getServiceByProfile['id'].toString();
+        });
+      }
       setState(() {
-        selectedService = getServiceByProfile['id'].toString();
+        data = serviceData;
       });
     }
-    setState(() {
-      data = serviceData;
-    });
-
     return "Sucess";
   }
 
@@ -161,14 +163,18 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
 
     try {
       var response = await postRequesthandler(
-        url: 'https://islandcare.bm/api/service-receiver-profile/$usersId',
+        url: '${CareReceiverURl.serviceReceiverProfileEdit}/$usersId',
         formData: formData,
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         showSuccessToast("Profile Updated Successfully.");
       } else {
-        showErrorToast(response.data['message']);
+        if (response != null && response.data != null && response.data["message"] != null) {
+          showErrorToast(response.data['message']);
+        } else {
+          showErrorToast("something went wrong");
+        }
       }
       setState(() {
         isButtonLoading = false;

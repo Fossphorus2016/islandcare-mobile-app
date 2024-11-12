@@ -32,7 +32,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
       url: CareReceiverURl.serviceReceiverBankDetails,
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       var json = response.data as Map;
       var bankdetails = json['bank_details'] as List;
 
@@ -62,15 +62,19 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
 
     try {
       var response = await postRequesthandler(
-        url: '${AppUrl.webBaseURL}/api/select-bank',
+        url: BankUrl.selectBank,
         formData: formData,
         token: token,
       );
-      if (response.statusCode == 200 && !response.data['message'].contains("Unable To Select Unverified Banks")) {
+      if (response != null && response.statusCode == 200 && !response.data['message'].contains("Unable To Select Unverified Banks")) {
         showSuccessToast("Bank Account Selected");
         fetchBankDetailsModel();
       } else {
-        showErrorToast(response.data['message'].toString());
+        if (response != null && response.data != null && response.data["message"] != null) {
+          showErrorToast(response.data['message'].toString());
+        } else {
+          showErrorToast("something went wrong");
+        }
       }
     } catch (e) {
       showErrorToast(e.toString());
@@ -87,12 +91,12 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
 
     try {
       var response = await postRequesthandler(
-        url: '${AppUrl.webBaseURL}/api/delete-bank',
+        url: BankUrl.deleteBank,
         formData: formData,
         token: token,
       );
 
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         showSuccessToast("Bank Account Removed Successfully");
         focus.requestFocus();
         fetchBankDetailsModel();
@@ -118,7 +122,7 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
         formData: requestBody,
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         if (response.data['success']) {
           showSuccessToast(response.data['message']);
           fetchBankDetailsModel();
@@ -131,7 +135,11 @@ class _ReceiverBankDetailsState extends State<ReceiverBankDetails> {
           accountNumberController.clear();
         }
       } else {
-        showErrorToast(response.data['message']);
+        if (response != null && response.data != null && response.data["message"] != null) {
+          showErrorToast(response.data['message']);
+        } else {
+          showErrorToast("something went wrong");
+        }
       }
     } on DioError {
       showErrorToast("Something went wrong please try again later");

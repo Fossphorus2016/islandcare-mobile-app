@@ -40,7 +40,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       url: "${CareGiverUrl.serviceProviderJobApply}/${widget.id}",
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       showSuccessToast("Job applied successfully");
     } else {
       showErrorToast("Server Error");
@@ -60,7 +60,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
       url: '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       if (response.data['job_detail'] != null) {
         serviceName = response.data['job_detail'][0]['service']['name'];
         if (serviceName.toLowerCase() == "senior care") {
@@ -455,10 +455,10 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
                 title: item.schoolCamp!.interestForChild.toString(),
               ),
               const SizedBox(height: 10),
-              JobDetailTile(
-                name: "Cost Range For Camp",
-                title: item.schoolCamp!.costRange.toString(),
-              ),
+              // JobDetailTile(
+              //   name: "Cost Range For Camp",
+              //   title: item.schoolCamp!.costRange.toString(),
+              // ),
               const SizedBox(height: 10),
             ],
             const SizedBox(height: 10),

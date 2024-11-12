@@ -267,9 +267,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 6),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
                               child: ListTile(
                                 hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                                 selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
@@ -537,16 +535,20 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
 
     try {
       var response = await postRequesthandler(
-        url: '${AppUrl.webBaseURL}/api/password-update/$userId',
+        url: '${SessionUrl.updatePassword}/$userId',
         formData: formData,
         token: token,
       );
 
       Navigator.pop(context);
-      if (response.data['success']) {
+      if (response != null && response.data['success']) {
         showSuccessToast("Password Updated Successfully");
       } else {
-        showErrorToast(response.data['message'].toString());
+        if (response != null && response.data != null && response.data["message"] != null) {
+          showErrorToast(response.data['message'].toString());
+        } else {
+          showErrorToast("something went wrong");
+        }
       }
     } catch (e) {
       Navigator.pop(context);

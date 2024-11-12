@@ -39,7 +39,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
       token: token,
     );
 
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       var json = response.data as Map;
       var listOfProviders = json['data'] as List;
 
@@ -62,7 +62,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
       url: url,
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       if (response.data["data"].toString() == "1") {
         favouriteList.add(providerId);
         showSuccessToast("Added To Favourite");

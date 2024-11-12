@@ -479,11 +479,11 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
                   title: futureChildCareDetailDashboard!.jobDetail![index].schoolCamp!.interestForChild.toString(),
                 ),
                 const SizedBox(height: 10),
-                JobDetailTile(
-                  name: "Cost Range For Camp",
-                  title: "\$ ${futureChildCareDetailDashboard!.jobDetail![index].schoolCamp!.costRange.toString()}",
-                ),
-                const SizedBox(height: 10),
+                // JobDetailTile(
+                //   name: "Cost Range For Camp",
+                //   title: "\$ ${futureChildCareDetailDashboard!.jobDetail![index].schoolCamp!.costRange.toString()}",
+                // ),
+                // const SizedBox(height: 10),
               ],
               const SizedBox(height: 10),
               if (futureChildCareDetailDashboard!.jobDetail![index].schedule!.isNotEmpty) ...[

@@ -27,8 +27,11 @@ class _VerifyEmailState extends State<VerifyEmail> {
       url: SessionUrl.emailVerification,
       token: widget.token,
     );
-
-    return response;
+    if (response != null) {
+      return response;
+    } else {
+      return Response(requestOptions: RequestOptions(data: {"message": "something went wrong"}), statusCode: 400);
+    }
   }
 
   @override
@@ -144,6 +147,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                           setState(() {
                                             updatedData = "Verification link has been sent to your email address.";
                                           });
+                                          // ignore: use_build_context_synchronously
                                           Navigator.pop(context);
                                         },
                                         child: Container(

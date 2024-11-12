@@ -49,7 +49,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         url: "${CareReceiverURl.serviceReceiverApplicantDetails}/${widget.jobTitle}/${widget.profileId}/${widget.jobId}",
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         Map<String, dynamic> map = response.data;
 
         setState(() {
@@ -77,7 +77,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
         formData: formData,
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         showSuccessToast("Applicant Hired Successfully");
       } else {
         showErrorToast("Server Error Occured!");
@@ -97,11 +97,11 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
 
     try {
       var response = await postRequesthandler(
-        url: '${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details-reject/${widget.profileId}/${widget.jobId}',
+        url: '${CareReceiverURl.serviceReceiverApplicantionApplicantsDetailReject}/${widget.profileId}/${widget.jobId}',
         formData: formData,
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         showSuccessToast("Applicant Declined Successfully");
       } else {
         showErrorToast("Server Error Occured!");
@@ -1259,7 +1259,7 @@ class _ApplicantProfileDetailState extends State<ApplicantProfileDetail> {
                                 token: token,
                               );
 
-                              if (resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
+                              if (resp != null && resp.statusCode == 200 && resp.data['message'].toString().contains("success")) {
                                 Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat(resp.data['chat_room']);
                               }
 

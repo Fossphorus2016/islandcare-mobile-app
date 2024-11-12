@@ -495,20 +495,22 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     });
     try {
       var response = await postRequesthandler(
-        url: 'https://islandcare.bm/api/service-provider-profile/update',
+        url: CareGiverUrl.serviceProviderProfileUpdate,
         formData: formData,
         token: token,
       );
       setState(() {
         sendRequest = false;
       });
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
         showSuccessToast("Profile Updated Successfully.");
       } else {
-        setState(() {
-          error = response.data;
-        });
+        if (response != null && response.data != null) {
+          setState(() {
+            error = response.data;
+          });
+        }
         showErrorToast("Something went wrong please try agan later.");
       }
     } catch (e) {

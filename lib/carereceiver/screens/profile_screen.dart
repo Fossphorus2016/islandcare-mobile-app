@@ -627,7 +627,7 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
       url: CareReceiverURl.serviceReceiverProfile,
       token: token,
     );
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       return ProfileReceiverModel.fromJson(response.data);
     } else {
       throw Exception(

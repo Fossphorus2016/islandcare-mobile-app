@@ -50,7 +50,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         url: '${CareReceiverURl.serviceReceiverJobBoardDetail}/$id',
         token: token,
       );
-      if (response.statusCode == 200) {
+      if (response != null && response.statusCode == 200) {
         var data = response.data['job'][0];
         navigationService.push('/service-reciever-job-detail', arguments: {
           "serviceId": data['service_id'].toString(),
@@ -194,10 +194,10 @@ class _NotificationScreenState extends State<NotificationScreen> {
                       var userToken = await storageService.readSecureStorage('userToken');
 
                       var resp = await getRequesthandler(
-                        url: "${AppUrl.webBaseURL}/api/mark-notifications-as-read",
+                        url: NotificationUrl.notificationMarkRead,
                         token: userToken,
                       );
-                      if (resp.statusCode == 200) {
+                      if (resp != null && resp.statusCode == 200) {
                         Provider.of<NotificationProvider>(context, listen: false).getNotifications();
                       }
                     } catch (error) {
@@ -448,10 +448,10 @@ class NotificationProvider extends ChangeNotifier {
       var userToken = await storageService.readSecureStorage('userToken');
 
       var resp = await getRequesthandler(
-        url: AppUrl.getNotification,
+        url: NotificationUrl.getNotification,
         token: userToken,
       );
-      if (resp.statusCode == 200) {
+      if (resp != null && resp.statusCode == 200) {
         var data = resp.data;
 
         allNotifications = data;

@@ -33,6 +33,14 @@ class HomePaginationProvider extends ChangeNotifier {
 
         filterDataList = data.sublist(startIndex, endIndex).toList();
         totalRowsCount = (data.length / 10).floor();
+        // print("Total Rows Count $totalRowsCount");
+        notifyListeners();
+      } else {
+        dataList = [];
+        startIndex = 0;
+        endIndex = 0;
+        filterDataList = [];
+        totalRowsCount = 0;
         notifyListeners();
       }
     } catch (error) {

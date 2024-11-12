@@ -250,7 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     formData: FormData.fromMap(request.toJson()),
                                   );
 
-                                  if (response.statusCode == 200) {
+                                  if (response != null && response.statusCode == 200) {
                                     var data = response.data;
                                     var role = data["user"]["role"];
                                     var status = data["user"]["status"];

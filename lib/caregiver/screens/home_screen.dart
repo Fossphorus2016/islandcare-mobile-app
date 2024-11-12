@@ -304,7 +304,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                               onChanged: (value) {
                                                                                 setState(
                                                                                   () {
-                                                                                    findtitle = value;
+                                                                                    findtitle = value.trim();
                                                                                   },
                                                                                 );
                                                                               },
@@ -530,13 +530,13 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                                                                               fontSize: 18,
                                                                             ),
                                                                             onPressed: () async {
-                                                                              await provider.fetchFindedJobsDashboardModel(findtitle, findSelected, findArea, findRate);
                                                                               setState(() {
                                                                                 findtitle = '';
                                                                                 findSelected = null;
                                                                                 findArea = null;
                                                                                 findRate = null;
                                                                               });
+                                                                              await provider.fetchProviderDashboardModel();
                                                                               Navigator.pop(context);
                                                                               return true;
                                                                             },
