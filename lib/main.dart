@@ -11,6 +11,7 @@ import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/screens/post_job.dart';
 import 'package:island_app/carereceiver/screens/receiver_reviews_given_screen.dart';
+import 'package:island_app/carereceiver/screens/refund_screen.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
 import 'package:island_app/carereceiver/utils/home_pagination.dart';
 import 'package:island_app/providers/subscription_provider.dart';
@@ -47,6 +48,7 @@ void main() {
         ChangeNotifierProvider(create: (context) => JobApplicantsProvider()),
         ChangeNotifierProvider(create: (context) => HomePaginationProvider()),
         ChangeNotifierProvider(create: (context) => HiredCandidatesProvider()),
+        ChangeNotifierProvider(create: (context) => RefundsProvider()),
         ChangeNotifierProvider(create: (context) => PostedJobsProvider())
       ],
       child: const MyApp(),

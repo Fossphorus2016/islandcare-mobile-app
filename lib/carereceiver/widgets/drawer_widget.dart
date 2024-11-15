@@ -466,6 +466,81 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                       ),
                       GestureDetector(
                         onTap: () {
+                          navigationService.push(RoutesName.recieverPackagePayment);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: const SizedBox(
+                              child: SvgPicture(SvgAssetLoader("assets/images/icons/refund-icon.svg")),
+                              // Image.asset("assets/images/icons/payments.png")
+                            ),
+                            title: Text(
+                              'Refund Center',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              navigationService.push(RoutesName.recieverRefund);
+                            },
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          navigationService.push(RoutesName.receiverReviews);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 6),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
+                          child: ListTile(
+                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                            leading: SizedBox(
+                              child: Icon(
+                                Icons.star_border_outlined,
+                                color: CustomColors.white,
+                              ),
+                            ),
+                            title: Text(
+                              'Reviews Given',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: CustomColors.white,
+                                fontFamily: "Rubik",
+                              ),
+                            ),
+                            trailing: Icon(
+                              Icons.arrow_forward_ios,
+                              color: CustomColors.white,
+                              size: 16,
+                            ),
+                            onTap: () {
+                              navigationService.push(RoutesName.receiverReviews);
+                            },
+                          ),
+                        ),
+                      ),
+
+                      GestureDetector(
+                        onTap: () {
                           navigationService.push(RoutesName.recieverManageCard);
                         },
                         child: Container(
@@ -499,68 +574,70 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           ),
                         ),
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          navigationService.push(RoutesName.serviceRecieverBank);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 6),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: ListTile(
-                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            leading: const SvgPicture(
-                              SvgAssetLoader("assets/images/icons/bank-detail.svg"),
-                              height: 20,
-                            ),
-                            title: Text(
-                              'Bank Details',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: CustomColors.white,
-                                fontFamily: "Rubik",
-                              ),
-                            ),
-                            trailing: Icon(
-                              Icons.arrow_forward_ios,
-                              color: CustomColors.white,
-                              size: 16,
-                            ),
-                            onTap: () {
-                              navigationService.push(RoutesName.serviceRecieverBank);
-                            },
-                          ),
-                        ),
-                      ),
+
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     navigationService.push(RoutesName.serviceRecieverBank);
+                      //   },
+                      //   child: Container(
+                      //     padding: const EdgeInsets.symmetric(vertical: 6),
+                      //     decoration: BoxDecoration(
+                      //       borderRadius: BorderRadius.circular(6),
+                      //     ),
+                      //     child: ListTile(
+                      //       hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                      //       selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                      //       focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                      //       leading: const SvgPicture(
+                      //         SvgAssetLoader("assets/images/icons/bank-detail.svg"),
+                      //         height: 20,
+                      //       ),
+                      //       title: Text(
+                      //         'Bank Details',
+                      //         style: TextStyle(
+                      //           fontSize: 16,
+                      //           fontWeight: FontWeight.w500,
+                      //           color: CustomColors.white,
+                      //           fontFamily: "Rubik",
+                      //         ),
+                      //       ),
+                      //       trailing: Icon(
+                      //         Icons.arrow_forward_ios,
+                      //         color: CustomColors.white,
+                      //         size: 16,
+                      //       ),
+                      //       onTap: () {
+                      //         navigationService.push(RoutesName.serviceRecieverBank);
+                      //       },
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
                         padding: const EdgeInsets.symmetric(vertical: 6),
                         decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
                         child: ListTile(
-                            hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                            leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
-                            title: Text('Change Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomColors.white, fontFamily: "Rubik")),
-                            trailing: Icon(Icons.arrow_forward_ios, color: CustomColors.white, size: 16),
-                            onTap: () {
-                              showModalBottomSheet(
-                                isScrollControlled: true,
-                                context: context,
-                                backgroundColor: Colors.white,
-                                shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
-                                builder: (BuildContext context) {
-                                  return StatefulBuilder(
-                                    builder: (BuildContext context, StateSetter setState) {
-                                      return const ChangePasswordWidget();
-                                    },
-                                  );
-                                },
-                              );
-                            }),
+                          hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                          leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
+                          title: Text('Change Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomColors.white, fontFamily: "Rubik")),
+                          trailing: Icon(Icons.arrow_forward_ios, color: CustomColors.white, size: 16),
+                          onTap: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+                              builder: (BuildContext context) {
+                                return StatefulBuilder(
+                                  builder: (BuildContext context, StateSetter setState) {
+                                    return const ChangePasswordWidget();
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
                       )
                     ],
                   ),

@@ -51,6 +51,7 @@ class CareReceiverURl {
   static String serviceReceiverProfileEdit = "${AppUrl.webBaseURL}/api/service-receiver-profile";
   static String serviceReceiverApplicantDetails = "${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details";
   static String serviceReceiverApplicantionApplicantsAccept = "${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details-approve";
+  static String serviceReceiverReviews = "${AppUrl.webBaseURL}/api/service-receiver-ratings";
   static String serviceReceiverApplicantionApplicants = "${AppUrl.webBaseURL}/api/service-receiver-my-application-applicants";
   static String serviceReceiverApplicantionApplicantsDetailReject = "${AppUrl.webBaseURL}/api/service-receiver-my-application-applicant-details-reject";
   static String serviceReceiverBankDetails = "${AppUrl.webBaseURL}/api/service-receiver-bank-details";
@@ -74,7 +75,9 @@ class CareReceiverURl {
   static String serviceReceiverJobBoardDetail = "${AppUrl.webBaseURL}/api/service-receiver-job-board-detail";
   static String serviceReceiverJobBoard = "${AppUrl.webBaseURL}/api/service-receiver-job-board";
   static String serviceReceiverProviderDetail = "${AppUrl.webBaseURL}/api/service-receiver-provider-detail";
-  static String serviceReceiverRating = "${AppUrl.webBaseURL}/api/service-receiver-rating";
+  static String serviceReceiverRating = "${AppUrl.webBaseURL}/api/service-receiver-ratings";
+  static String serviceReceiverRefund = "${AppUrl.webBaseURL}/api/service-receiver-refunds";
+  static String serviceReceiverRefundStore = "${AppUrl.webBaseURL}/api/service-receiver-refund-store";
 
   static String serviceReceiverUnSubscribe = "${AppUrl.webBaseURL}/api/service-receiver-unsubscribe";
   static String serviceSubscribe = "${AppUrl.webBaseURL}/api/subscription-package";

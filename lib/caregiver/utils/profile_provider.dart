@@ -112,12 +112,12 @@ class ServiceGiverProvider extends ChangeNotifier {
     notifyListeners();
     var token = await getToken();
 
-    var minRate = "";
-    var maxRate = "";
-    if (rate != null && rate!['id'] != 0) {
-      maxRate = rate!['maxValue'];
-      minRate = rate!['minValue'];
-    }
+    // var minRate = "";
+    // var maxRate = "";
+    // if (rate != null && rate!['id'] != 0) {
+    //   maxRate = rate!['maxValue'];
+    //   minRate = rate!['minValue'];
+    // }
     var serviceId = '';
 
     if (service != null) {
@@ -129,8 +129,7 @@ class ServiceGiverProvider extends ChangeNotifier {
         "title": title,
         "serviceType": serviceId,
         "area": area,
-        "priceMin": minRate,
-        "priceMax": maxRate,
+        "rate": rate,
       }),
       token: token,
     );

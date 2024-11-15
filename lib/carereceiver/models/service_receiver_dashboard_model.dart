@@ -15,7 +15,7 @@ class ServiceReceiverDashboardModel {
 
   factory ServiceReceiverDashboardModel.fromJson(Map<String, dynamic> json) => ServiceReceiverDashboardModel(
         favourites: json["favourites"] == null ? [] : List<int>.from(json["favourites"]!.map((x) => x)),
-        data: json["data"] == null ? [] : List<Datum>.from(json["data"]!.map((x) => Datum.fromJson(x))).reversed.toList(),
+        data: json["providers"] == null ? [] : List<Datum>.from(json["providers"]!.map((x) => Datum.fromJson(x))).reversed.toList(),
       );
 
   Map<String, dynamic> toJson() => {

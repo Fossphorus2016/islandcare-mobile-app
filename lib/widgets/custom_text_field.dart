@@ -66,32 +66,32 @@ class CustomTextFieldWidget extends StatelessWidget {
         hintStyle: textStyle,
         contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(08),
           borderSide: const BorderSide(
             width: 0.5,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(08),
           borderSide: const BorderSide(
             width: 0.5,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(08),
           borderSide: const BorderSide(
             width: 0.5,
           ),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(08),
           borderSide: const BorderSide(
             color: Color.fromARGB(255, 194, 0, 0),
             width: 0.5,
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(08),
           borderSide: const BorderSide(
             color: Color.fromARGB(255, 194, 0, 0),
             width: 0.5,

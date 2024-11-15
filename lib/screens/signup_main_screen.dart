@@ -1,11 +1,11 @@
 // ignore_for_file: must_be_immutable, unused_local_variable, prefer_typing_uninitialized_variables, use_build_context_synchronously, deprecated_member_use
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:island_app/models/register_model.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
@@ -14,6 +14,7 @@ import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/loading_button.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class SignupScreen extends StatefulWidget {
   bool? isSelectedService = false;
@@ -112,11 +113,11 @@ class _SignupScreenState extends State<SignupScreen> {
   final pinformKey = GlobalKey<FormState>();
 
   // Services API
-  String? selectedService;
+  List<String> selectedService = [];
 
   // final String url = AppUrl.services;
 
-  List? data = []; //edited line
+  List? allServices = []; //edited line
 
   Future<String> getSWData() async {
     var res = await Dio().get(
@@ -131,7 +132,7 @@ class _SignupScreenState extends State<SignupScreen> {
     List<dynamic> serviceData = resBody["services"];
 
     setState(() {
-      data = serviceData;
+      allServices = serviceData;
     });
 
     return "Sucess";
@@ -158,10 +159,9 @@ class _SignupScreenState extends State<SignupScreen> {
   }
 
   var errors;
-
+  String phone = "";
   @override
   Widget build(BuildContext context) {
-    // print(errors);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -183,11 +183,20 @@ class _SignupScreenState extends State<SignupScreen> {
         body: SingleChildScrollView(
           child: Form(
             key: _signUpFormKey,
-            child: Container(
+            child: Padding(
               padding: const EdgeInsets.all(15),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 20),
+                  const Text(
+                    "First Name",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 05),
                   CustomTextFieldWidget(
                     obsecure: false,
                     keyboardType: TextInputType.name,
@@ -201,6 +210,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                   ),
                   const SizedBox(height: 20),
+                  const Text(
+                    "Last Name",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 05),
                   CustomTextFieldWidget(
                     obsecure: false,
                     keyboardType: TextInputType.name,
@@ -214,6 +231,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                   ),
                   const SizedBox(height: 20),
+                  const Text(
+                    "Email",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 05),
                   CustomTextFieldWidget(
                     obsecure: false,
                     keyboardType: TextInputType.emailAddress,
@@ -243,21 +268,38 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ],
                   const SizedBox(height: 20),
-                  CustomTextFieldWidget(
-                    obsecure: false,
-                    keyboardType: TextInputType.number,
-                    controller: phoneNumController,
-                    hintText: "Phone Number (e.g: 1650251531)",
-                    inputFormatters: [
-                      FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                      LengthLimitingTextInputFormatter(10),
-                    ],
-                    validation: (val) {
-                      if (val == null || val.isEmpty) {
-                        return 'Enter your Phone Number';
-                      }
-                      return null;
-                    },
+                  const Text(
+                    "Phone",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 05),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(08),
+                      border: Border.all(color: Colors.grey),
+                    ),
+                    child: InternationalPhoneNumberInput(
+                      spaceBetweenSelectorAndTextField: 00,
+                      selectorTextStyle: const TextStyle(color: Colors.black),
+                      formatInput: true,
+                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                      inputBorder: InputBorder.none,
+                      onInputChanged: (PhoneNumber number) {
+                        phone = "${number.phoneNumber}";
+                      },
+                      onInputValidated: (bool value) {
+                        // print(value);
+                      },
+                      selectorConfig: const SelectorConfig(
+                        setSelectorButtonAsPrefixIcon: true,
+                        selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                        useBottomSheetSafeArea: true,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   InkWell(
@@ -286,6 +328,14 @@ class _SignupScreenState extends State<SignupScreen> {
                   ),
                   // Choose Service
                   const SizedBox(height: 20),
+                  const Text(
+                    "Service",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 05),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -294,6 +344,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           onTap: () {
                             setState(() {
                               _isSelectedService = "3";
+                              selectedService = [];
                             });
                           },
                           child: Container(
@@ -316,6 +367,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               onPressed: () {
                                 setState(() {
                                   _isSelectedService = "3";
+                                  selectedService = [];
                                 });
                               },
                               icon: Image.asset(
@@ -339,14 +391,13 @@ class _SignupScreenState extends State<SignupScreen> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                        width: 15,
-                      ),
+                      const SizedBox(width: 15),
                       Expanded(
                         child: GestureDetector(
                           onTap: () {
                             setState(() {
                               _isSelectedService = "4";
+                              selectedService = [];
                             });
                           },
                           child: Container(
@@ -369,6 +420,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               onPressed: () {
                                 setState(() {
                                   _isSelectedService = "4";
+                                  selectedService = [];
                                 });
                               },
                               icon: Image.asset(
@@ -379,7 +431,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 fit: BoxFit.contain,
                               ),
                               label: Text(
-                                "i’m a Carereceiver",
+                                "i’m Looking for Care",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: _isSelectedService == "4" ? CustomColors.white : CustomColors.primaryText,
@@ -395,40 +447,86 @@ class _SignupScreenState extends State<SignupScreen> {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Center(
-                    child: DecoratedBox(
+                  _isSelectedService == "4"
+                      ? const Text(
+                          "Service You Require",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      : const Text(
+                          "Services You Provide",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                  const SizedBox(height: 05),
+                  if (_isSelectedService == "4") ...[
+                    InkWell(
+                      onTap: () async {
+                        await showDialog(
+                          context: context,
+                          builder: (context) {
+                            return servicesDailog();
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(color: const Color(0xff677294), width: 0.5),
+                          borderRadius: BorderRadius.circular(08),
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        child: selectedService.isNotEmpty ? Text(getServiceNameById()) : const Text("Select Services"),
+                      ),
+                    ),
+                  ] else ...[
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      alignment: Alignment.centerLeft,
                       decoration: BoxDecoration(
                         color: Colors.transparent,
                         border: Border.all(color: const Color(0xff677294), width: 0.5),
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(08),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 10,
-                          vertical: 4,
-                        ),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            hint: _isSelectedService == "4" ? const Text("Service You Require") : const Text("Services You Provide"),
-                            isExpanded: true,
-                            items: data!.map((item) {
-                              return DropdownMenuItem(
-                                value: item['id'].toString(),
-                                child: Text(item['name']),
-                              );
-                            }).toList(),
-                            onChanged: (newVal) {
-                              setState(() {
-                                selectedService = newVal;
-                              });
-                            },
-                            value: selectedService,
-                          ),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          hint: const Text("Services You Provide"),
+                          isExpanded: true,
+                          items: allServices!.map((item) {
+                            return DropdownMenuItem(
+                              value: item['id'].toString(),
+                              child: Text(item['name']),
+                            );
+                          }).toList(),
+                          onChanged: (newVal) {
+                            setState(() {
+                              selectedService.clear();
+                              selectedService.add(newVal.toString());
+                            });
+                          },
+                          value: selectedService.isNotEmpty ? selectedService.first : null,
                         ),
                       ),
                     ),
-                  ),
+                  ],
                   const SizedBox(height: 20),
+                  const Text(
+                    "Password",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 05),
                   CustomTextFieldWidget(
                     obsecure: !_showPassword,
                     controller: passwordController,
@@ -458,6 +556,14 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  const Text(
+                    "Confirm Password",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 05),
                   CustomTextFieldWidget(
                     obsecure: !_cshowPassword,
                     controller: cpasswordController,
@@ -523,28 +629,28 @@ class _SignupScreenState extends State<SignupScreen> {
                       fontSize: 18,
                     ),
                     onPressed: () async {
+                      // log(phone);
+                      _signUpFormKey.currentState?.save();
+                      // log(_signUpFormKey.currentState!.validate().toString());
                       if (!_signUpFormKey.currentState!.validate()) {
                       } else if (dobController.text.isEmpty) {
                         showErrorToast("Please Enter Date of Birth");
                       } else if (_isSelectedService == null) {
                         showErrorToast("Please Select Service ");
-                      } else if (selectedService == null) {
-                        showErrorToast("Please Select Services You Provide ");
                       } else if (_isRadioSelected == "0") {
                         showErrorToast("Please Select Terms of Services & Privacy Policy");
                       } else {
-                        var request = RegisterModel(
-                          firstName: firstNameController.text.toString(),
-                          lastName: lastNameController.text.toString(),
-                          email: emailController.text.toString(),
-                          date: dobController.text.toString(),
-                          password: passwordController.text.toString(),
-                          passwordConfirmation: cpasswordController.text.toString(),
-                          phone: phoneNumController.text.toString(),
-                          role: _isSelectedService.toString(),
-                          service: selectedService.toString(),
-                        );
-                        var formData = FormData.fromMap(request.toJson());
+                        var formData = FormData.fromMap({
+                          "first_name": firstNameController.text.toString(),
+                          "last_name": lastNameController.text.toString(),
+                          "email": emailController.text.toString(),
+                          "date": dobController.text.toString(),
+                          "password": passwordController.text.toString(),
+                          "password_confirmation": cpasswordController.text.toString(),
+                          "phone": phone.toString(),
+                          "role": _isSelectedService.toString(),
+                          "services[]": selectedService,
+                        });
                         final response = await postRequesthandler(
                           url: SessionUrl.register,
                           formData: formData,
@@ -607,7 +713,6 @@ class _SignupScreenState extends State<SignupScreen> {
                       return false;
                     },
                   ),
-
                   const SizedBox(height: 10),
                   GestureDetector(
                     onTap: () {
@@ -635,6 +740,89 @@ class _SignupScreenState extends State<SignupScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  String getServiceNameById() {
+    var getSer = allServices!.where((item) => item["id"].toString() == selectedService[0]).first;
+    return getSer["name"];
+  }
+
+  AlertDialog servicesDailog() {
+    return AlertDialog(
+      // backgroundColor: AppColors.ligthBlueGrey,
+      title: _isSelectedService == "4"
+          ? const Text(
+              "Service You Require",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            )
+          : const Text(
+              "Services You Provide",
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+      content: SizedBox(
+        height: 200,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              if (allServices != null) ...[
+                MultiSelectDialogField(
+                  items: allServices!
+                      .map(
+                        (item) => MultiSelectItem(
+                          item["id"].toString(),
+                          item["name"],
+                        ),
+                      )
+                      .toList(),
+                  listType: MultiSelectListType.CHIP,
+                  buttonIcon: const Icon(Icons.arrow_drop_down),
+                  initialValue: selectedService,
+                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(08)),
+                  title: const Text(
+                    "SELECT",
+                    style: TextStyle(fontSize: 18, color: Colors.black),
+                  ),
+                  buttonText: const Text(
+                    "select",
+                    style: TextStyle(fontSize: 14),
+                  ),
+                  confirmText: const Text("ok"),
+                  cancelText: const Text("cancel"),
+                  onConfirm: (values) {
+                    setState(() {
+                      selectedService = values;
+                    });
+                  },
+                ),
+              ],
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(ServiceRecieverColor.primaryColor),
+            shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(08))),
+          ),
+          child: const Text(
+            "OK",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 }

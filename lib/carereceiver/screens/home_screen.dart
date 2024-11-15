@@ -110,23 +110,22 @@ class _HomeScreenState extends State<HomeScreen> {
       url: '${CareReceiverURl.serviceReceiverDashboard}?name=${name ?? ""}&serviceType=${serviceType ?? ""}&location=${location ?? ""}&rate=${rate ?? ""}',
       token: token,
     );
-    if (response != null && response.statusCode == 200) {
-      var json = response.data as Map;
-      var listOfProviders = json['data'] as List;
-      var listOfFavourites = json['favourites'] as List;
-      setState(() {
-        // providerList = listOfProviders;
-        favouriteList = listOfFavourites;
-        // foundProviders = listOfProviders;
-      });
 
-      var data = ServiceReceiverDashboardModel.fromJson(response.data);
-      Provider.of<HomePaginationProvider>(context, listen: false).setPaginationList(data.data);
+    if (response != null && response.statusCode == 200 && response.data["status"] == true) {
+      if (response.data["data"] != null) {
+        var data = response.data["data"];
+        var listOfProviders = data['providers'] as List;
+        var listOfFavourites = data['favourites'] as List;
+
+        setState(() {
+          favouriteList = listOfFavourites;
+        });
+
+        var modelData = ServiceReceiverDashboardModel.fromJson(response.data["data"]);
+        Provider.of<HomePaginationProvider>(context, listen: false).setPaginationList(modelData.data);
+      }
     } else {
       showErrorToast("Failed to load Dashboard");
-      // throw Exception(
-      //   'Failed to load Service Provider Dashboard',
-      // );
     }
   }
 
@@ -136,27 +135,26 @@ class _HomeScreenState extends State<HomeScreen> {
       url: '${CareReceiverURl.serviceReceiverDashboard}?service=&search=&area=&rate=',
       token: token,
     );
-    if (response != null && response.statusCode == 200) {
-      var json = response.data as Map;
-      var listOfProviders = json['data'] as List;
-      var listOfFavourites = json['favourites'] as List;
+    if (response != null && response.statusCode == 200 && response.data["status"] == true) {
+      if (response.data["data"] != null) {
+        var data = response.data["data"];
+        var listOfProviders = data['providers'] as List;
+        var listOfFavourites = data['favourites'] as List;
 
-      // providerList = listOfProviders;
-      favouriteList = listOfFavourites;
-      // foundProviders = listOfProviders;
+        // providerList = listOfProviders;
+        favouriteList = listOfFavourites;
+        // foundProviders = listOfProviders;
 
-      var data = ServiceReceiverDashboardModel.fromJson(response.data);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          // Double-check if widget is still mounted before using context
-          Provider.of<HomePaginationProvider>(context, listen: false).setPaginationList(data.data);
-        }
-      });
+        var modelData = ServiceReceiverDashboardModel.fromJson(response.data["data"]);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            // Double-check if widget is still mounted before using context
+            Provider.of<HomePaginationProvider>(context, listen: false).setPaginationList(modelData.data);
+          }
+        });
+      }
     } else {
       showErrorToast("Failed to load Dashboard");
-      // throw Exception(
-      //   'Failed to load Service Provider Dashboard',
-      // );
     }
   }
 

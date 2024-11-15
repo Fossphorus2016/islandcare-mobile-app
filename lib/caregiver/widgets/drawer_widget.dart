@@ -263,7 +263,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              navigationService.push(RoutesName.giverReviews);
+                              navigationService.push(RoutesName.providerReviews);
                             },
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 6),
@@ -293,7 +293,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                   size: 16,
                                 ),
                                 onTap: () {
-                                  navigationService.push(RoutesName.giverReviews);
+                                  navigationService.push(RoutesName.providerReviews);
                                 },
                               ),
                             ),

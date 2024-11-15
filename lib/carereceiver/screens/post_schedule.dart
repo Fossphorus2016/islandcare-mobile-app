@@ -361,8 +361,8 @@ class _PostScheduleState extends State<PostSchedule> {
           token: token,
         );
         if (response != null && response.statusCode == 200) {
-          Navigator.pop(context);
           showSuccessToast("Job Created Successfully");
+          Navigator.pop(context);
         }
       } on DioError catch (e) {
         showErrorToast(e.toString());
@@ -408,6 +408,7 @@ class _PostScheduleState extends State<PostSchedule> {
         );
         if (response != null && response.statusCode == 200) {
           showSuccessToast("Job Created Successfully");
+          Navigator.pop(context);
         }
       } catch (e) {
         showErrorToast(e.toString());
@@ -448,6 +449,7 @@ class _PostScheduleState extends State<PostSchedule> {
         );
         if (response != null && response.statusCode == 200) {
           showSuccessToast("Job Created Successfully");
+          Navigator.pop(context);
         }
       } catch (e) {
         showErrorToast(e.toString());
@@ -485,6 +487,7 @@ class _PostScheduleState extends State<PostSchedule> {
         );
         if (response != null && response.statusCode == 200) {
           showSuccessToast("Job Created Successfully");
+          Navigator.pop(context);
         }
       } catch (e) {
         showErrorToast(e.toString());
@@ -532,6 +535,7 @@ class _PostScheduleState extends State<PostSchedule> {
         );
         if (response != null && response.statusCode == 200) {
           showSuccessToast("Job Created Successfully");
+          Navigator.pop(context);
         }
       } catch (e) {
         showErrorToast(
@@ -1578,6 +1582,7 @@ class _PostScheduleState extends State<PostSchedule> {
             },
           ),
         ),
+        const SizedBox(height: 20),
       ],
     );
   }
@@ -2133,7 +2138,7 @@ class _PostScheduleState extends State<PostSchedule> {
             },
           ),
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 20),
       ],
     );
   }
@@ -2659,7 +2664,7 @@ class _PostScheduleState extends State<PostSchedule> {
             },
           ),
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 20),
       ],
     );
   }
@@ -3291,7 +3296,7 @@ class _PostScheduleState extends State<PostSchedule> {
             },
           ),
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 20),
       ],
     );
   }
@@ -3752,7 +3757,7 @@ class _PostScheduleState extends State<PostSchedule> {
             },
           ),
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 20),
       ],
     );
   }

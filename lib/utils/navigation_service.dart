@@ -8,7 +8,6 @@ import 'package:island_app/caregiver/screens/provider_reviews_given_screen.dart'
 import 'package:island_app/caregiver/widgets/bottombar.dart';
 import 'package:island_app/carereceiver/screens/applicant_profile_detail.dart';
 import 'package:island_app/carereceiver/screens/availability.dart';
-import 'package:island_app/carereceiver/screens/bank_details.dart';
 import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';
 import 'package:island_app/carereceiver/screens/edit_job_post.dart';
 import 'package:island_app/carereceiver/screens/hired_candidates_screen.dart';
@@ -23,6 +22,9 @@ import 'package:island_app/carereceiver/screens/post_new_job.dart';
 import 'package:island_app/carereceiver/screens/post_schedule.dart';
 import 'package:island_app/carereceiver/screens/bottom_bar.dart';
 import 'package:island_app/carereceiver/screens/provider_profile_detail_for_giver.dart';
+import 'package:island_app/carereceiver/screens/receiver_reviews_given_screen.dart';
+import 'package:island_app/carereceiver/screens/refund_screen.dart';
+import 'package:island_app/carereceiver/screens/tip_payment_screen.dart';
 import 'package:island_app/screens/login_screen.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/screens/onboard_screen.dart';
@@ -106,10 +108,11 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) => const ServiceProviderJobs(),
         );
-      case RoutesName.giverReviews:
+      case RoutesName.providerReviews:
         return MaterialPageRoute(
           builder: (context) => const ProviderReviewsScreen(),
         );
+
       case RoutesName.myJobDetailGiver:
         return MaterialPageRoute(
           builder: (context) => ServiceProviderJobsDetail(
@@ -121,10 +124,10 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) => const GiverBankDetails(),
         );
-      case RoutesName.serviceRecieverBank:
-        return MaterialPageRoute(
-          builder: (context) => const ReceiverBankDetails(),
-        );
+      // case RoutesName.serviceRecieverBank:
+      //   return MaterialPageRoute(
+      //     builder: (context) => const ReceiverBankDetails(),
+      //   );
       case RoutesName.serviceRecieverJobPost:
         return MaterialPageRoute(
           builder: (context) => const PostJobScreen(),
@@ -157,6 +160,14 @@ class RouteGenerator {
             jobData: args['jobData'],
           ),
         );
+      case RoutesName.receiverReviews:
+        return MaterialPageRoute(
+          builder: (context) => const ReceiverReviewsScreen(),
+        );
+      case RoutesName.recieverRefund:
+        return MaterialPageRoute(
+          builder: (context) => const RefundScreen(),
+        );
       case RoutesName.recieverAvailability:
         return MaterialPageRoute(
           builder: (context) => const RecieverAvailabilityScreen(),
@@ -184,6 +195,15 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) => RecieverPaymentScreen(
             subsId: args!["subsId"],
+          ),
+        );
+      case RoutesName.recieverTipPayment:
+        return MaterialPageRoute(
+          builder: (context) => RecieverTipPaymentsScreen(
+            jobId: args!['jobId'],
+            comment: args["comment"],
+            rating: args["rating"],
+            providerId: args["providerId"],
           ),
         );
       case RoutesName.recieverJobPayment:

@@ -31,6 +31,12 @@ Future<Response?> getRequesthandler({required String url, String? token, FormDat
         navigationService.pushNamedAndRemoveUntil(RoutesName.login);
       } else if (err.response?.statusCode == 422) {
         showErrorToast(err.response?.data['message']);
+        return Response(
+          statusCode: err.response!.statusCode,
+          statusMessage: err.response!.statusMessage,
+          data: err.response!.data,
+          requestOptions: RequestOptions(data: err.response!.data),
+        );
       } else if (err.response?.statusCode == 400) {
         showErrorToast(err.response?.data['message']);
       } else if (err.response != null) {
@@ -38,12 +44,14 @@ Future<Response?> getRequesthandler({required String url, String? token, FormDat
         return Response(
           statusCode: err.response!.statusCode,
           statusMessage: err.response!.statusMessage,
+          data: err.response!.data,
           requestOptions: RequestOptions(data: err.response!.data),
         );
       } else {
         return Response(
           statusCode: 500,
           statusMessage: "Something went wrong",
+          data: {"success": false, "data": null},
           requestOptions: RequestOptions(data: {"success": false, "data": null}),
         );
       }
@@ -52,6 +60,7 @@ Future<Response?> getRequesthandler({required String url, String? token, FormDat
     showNetworkErrorToast("No internet connected");
     return Response(
       statusCode: 400,
+      data: {"message": "No Internet Connected"},
       requestOptions: RequestOptions(
         data: {"message": "No Internet Connected"},
       ),
@@ -88,6 +97,12 @@ Future<Response?> postRequesthandler({required String url, String? token, FormDa
       } else if (err.response?.statusCode == 422) {
         if (err.response?.data['message'] != null) {
           showErrorToast(err.response?.data['message']);
+          return Response(
+            statusCode: err.response!.statusCode,
+            statusMessage: err.response!.statusMessage,
+            data: err.response!.data,
+            requestOptions: RequestOptions(data: err.response!.data),
+          );
         } else {
           showErrorToast("something went wrong");
         }
@@ -100,12 +115,14 @@ Future<Response?> postRequesthandler({required String url, String? token, FormDa
         return Response(
           statusCode: err.response!.statusCode,
           statusMessage: err.response!.statusMessage,
+          data: err.response!.data,
           requestOptions: RequestOptions(data: err.response!.data),
         );
       } else {
         return Response(
           statusCode: 500,
           statusMessage: "Something went wrong",
+          data: {"success": false, "data": null},
           requestOptions: RequestOptions(data: {"success": false, "data": null}),
         );
       }
@@ -114,6 +131,7 @@ Future<Response?> postRequesthandler({required String url, String? token, FormDa
     showNetworkErrorToast("No internet connected");
     return Response(
       statusCode: 400,
+      data: {"message": "No Internet Connected"},
       requestOptions: RequestOptions(
         data: {"message": "No Internet Connected"},
       ),
@@ -150,6 +168,12 @@ Future<Response?> putRequesthandler({required String url, String? token, FormDat
       } else if (err.response?.statusCode == 422) {
         if (err.response?.data['message'] != null) {
           showErrorToast(err.response?.data['message']);
+          return Response(
+            statusCode: err.response!.statusCode,
+            statusMessage: err.response!.statusMessage,
+            data: err.response!.data,
+            requestOptions: RequestOptions(data: err.response!.data),
+          );
         } else {
           showErrorToast("something went wrong");
         }
@@ -162,12 +186,14 @@ Future<Response?> putRequesthandler({required String url, String? token, FormDat
         return Response(
           statusCode: err.response!.statusCode,
           statusMessage: err.response!.statusMessage,
+          data: err.response!.data,
           requestOptions: RequestOptions(data: err.response!.data),
         );
       } else {
         return Response(
           statusCode: 500,
           statusMessage: "Something went wrong",
+          data: {"success": false, "data": null},
           requestOptions: RequestOptions(data: {"success": false, "data": null}),
         );
       }
@@ -176,6 +202,7 @@ Future<Response?> putRequesthandler({required String url, String? token, FormDat
     showNetworkErrorToast("No internet connected");
     return Response(
       statusCode: 400,
+      data: {"message": "No Internet Connected"},
       requestOptions: RequestOptions(
         data: {"message": "No Internet Connected"},
       ),

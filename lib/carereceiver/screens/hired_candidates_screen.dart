@@ -2,18 +2,22 @@
 
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/carereceiver/models/hired_candidate_model.dart';
+import 'package:island_app/carereceiver/models/manage_cards_model.dart';
+import 'package:island_app/carereceiver/screens/manage_cards.dart';
+import 'package:island_app/carereceiver/screens/payment_package_screen.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
-import 'package:island_app/widgets/custom_text_field.dart';
 import 'package:island_app/widgets/loading_button.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +32,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
   TextEditingController commentController = TextEditingController();
   String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
   var providerId;
-  var rating;
+  var rating = 1;
   var jobId;
   jobCompleted() async {
     var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
@@ -563,134 +567,245 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                             onTap: () {
                                               providerId = item.providerId;
                                               jobId = item.jobId;
-                                              if (item.status == 3) {
-                                                showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  context: context,
-                                                  backgroundColor: Colors.white,
-                                                  shape: const RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.only(
-                                                      topLeft: Radius.circular(30.0),
-                                                      topRight: Radius.circular(30.0),
-                                                    ),
+                                              // print(item.status);
+                                              // if (item.status == 3) {
+                                              var scaffoldContext = context;
+                                              showModalBottomSheet(
+                                                isScrollControlled: true,
+                                                context: scaffoldContext,
+                                                backgroundColor: Colors.white,
+                                                shape: const RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(30.0),
+                                                    topRight: Radius.circular(30.0),
                                                   ),
-                                                  builder: (BuildContext context) {
-                                                    return SingleChildScrollView(
-                                                      child: Padding(
-                                                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                        child: Container(
-                                                          padding: const EdgeInsets.symmetric(horizontal: 25),
-                                                          child: Column(
-                                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                                            mainAxisAlignment: MainAxisAlignment.center,
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            children: [
-                                                              const SizedBox(height: 20),
-                                                              Center(
-                                                                child: Container(
-                                                                  width: 130,
-                                                                  height: 5,
-                                                                  decoration: BoxDecoration(
-                                                                    color: const Color(0xffC4C4C4),
-                                                                    borderRadius: BorderRadius.circular(6),
-                                                                  ),
+                                                ),
+                                                builder: (BuildContext scaffoldContext) {
+                                                  return SingleChildScrollView(
+                                                    child: Padding(
+                                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                      child: Container(
+                                                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                                                        child: Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          mainAxisAlignment: MainAxisAlignment.center,
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: [
+                                                            const SizedBox(height: 20),
+                                                            Center(
+                                                              child: Container(
+                                                                width: 130,
+                                                                height: 5,
+                                                                decoration: BoxDecoration(
+                                                                  color: const Color(0xffC4C4C4),
+                                                                  borderRadius: BorderRadius.circular(6),
                                                                 ),
                                                               ),
-                                                              const SizedBox(height: 10),
-                                                              Center(
-                                                                child: Text(
-                                                                  "Candidate Rating",
-                                                                  textAlign: TextAlign.center,
-                                                                  style: TextStyle(
-                                                                    color: CustomColors.black,
+                                                            ),
+                                                            const SizedBox(height: 10),
+                                                            Center(
+                                                              child: Text(
+                                                                "Candidate Rating",
+                                                                textAlign: TextAlign.center,
+                                                                style: TextStyle(
+                                                                  color: CustomColors.black,
+                                                                  fontFamily: "Rubik",
+                                                                  fontStyle: FontStyle.normal,
+                                                                  fontSize: 22,
+                                                                  fontWeight: FontWeight.w600,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(height: 40),
+                                                            Container(
+                                                              alignment: Alignment.center,
+                                                              child: RatingBar.builder(
+                                                                initialRating: 1,
+                                                                minRating: 1,
+                                                                direction: Axis.horizontal,
+                                                                itemSize: 24,
+                                                                itemCount: 5,
+                                                                itemBuilder: (context, _) => const Icon(
+                                                                  Icons.star,
+                                                                  color: Colors.amber,
+                                                                ),
+                                                                onRatingUpdate: (ratingValue) {
+                                                                  setState(() {
+                                                                    rating = ratingValue.ceil();
+                                                                  });
+                                                                },
+                                                              ),
+                                                            ),
+                                                            const SizedBox(height: 15),
+                                                            Column(
+                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                              children: [
+                                                                SizedBox(
+                                                                  width: MediaQuery.of(context).size.width,
+                                                                  height: 100,
+                                                                  child: TextFormField(
+                                                                    controller: commentController,
+                                                                    expands: true,
+                                                                    maxLines: null,
+                                                                    minLines: null,
+                                                                    textAlignVertical: TextAlignVertical.top,
+                                                                    decoration: InputDecoration(
+                                                                      fillColor: Colors.white,
+                                                                      hintText: "Comment",
+                                                                      hintStyle: TextStyle(
+                                                                        fontSize: 15,
+                                                                        color: CustomColors.hintText,
+                                                                        fontFamily: "Calibri",
+                                                                        fontWeight: FontWeight.w400,
+                                                                      ),
+                                                                      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                                                      border: OutlineInputBorder(
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                        borderSide: const BorderSide(
+                                                                          width: 0.5,
+                                                                        ),
+                                                                      ),
+                                                                      enabledBorder: OutlineInputBorder(
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                        borderSide: const BorderSide(
+                                                                          width: 0.5,
+                                                                        ),
+                                                                      ),
+                                                                      focusedBorder: OutlineInputBorder(
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                        borderSide: const BorderSide(
+                                                                          width: 0.5,
+                                                                        ),
+                                                                      ),
+                                                                      errorBorder: OutlineInputBorder(
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                        borderSide: const BorderSide(
+                                                                          color: Color.fromARGB(255, 194, 0, 0),
+                                                                          width: 0.5,
+                                                                        ),
+                                                                      ),
+                                                                      focusedErrorBorder: OutlineInputBorder(
+                                                                        borderRadius: BorderRadius.circular(12),
+                                                                        borderSide: const BorderSide(
+                                                                          color: Color.fromARGB(255, 194, 0, 0),
+                                                                          width: 0.5,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(height: 20),
+                                                                LoadingButton(
+                                                                  title: "Rate Now",
+                                                                  height: 54,
+                                                                  backgroundColor: CustomColors.primaryColor,
+                                                                  textStyle: TextStyle(
+                                                                    color: CustomColors.white,
                                                                     fontFamily: "Rubik",
                                                                     fontStyle: FontStyle.normal,
-                                                                    fontSize: 22,
-                                                                    fontWeight: FontWeight.w600,
+                                                                    fontWeight: FontWeight.w500,
+                                                                    fontSize: 18,
                                                                   ),
-                                                                ),
-                                                              ),
-                                                              const SizedBox(height: 40),
-                                                              Container(
-                                                                alignment: Alignment.center,
-                                                                child: RatingBar.builder(
-                                                                  initialRating: 0,
-                                                                  minRating: 1,
-                                                                  direction: Axis.horizontal,
-                                                                  itemSize: 24,
-                                                                  itemCount: 5,
-                                                                  itemBuilder: (context, _) => const Icon(
-                                                                    Icons.star,
-                                                                    color: Colors.amber,
-                                                                  ),
-                                                                  onRatingUpdate: (ratingValue) {
-                                                                    setState(() {
-                                                                      rating = ratingValue.ceil();
-                                                                    });
+                                                                  onPressed: () async {
+                                                                    if (commentController.text.isEmpty) {
+                                                                      showErrorToast("Comment field is required");
+                                                                      return true;
+                                                                    }
+                                                                    var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
+                                                                    var token = await getToken();
+                                                                    var response = await postRequesthandler(
+                                                                      url: url,
+                                                                      token: token,
+                                                                    );
+
+                                                                    if (response != null && response.statusCode == 200) {
+                                                                      showSuccessToast(response.data['message'].toString());
+                                                                      commentController.clear();
+                                                                      setState(
+                                                                        () {
+                                                                          rating = 0;
+                                                                        },
+                                                                      );
+                                                                      provider.fetchHiredCandidateModel();
+                                                                    }
+                                                                    Navigator.pop(context);
+                                                                    return false;
                                                                   },
                                                                 ),
-                                                              ),
-                                                              const SizedBox(height: 15),
-                                                              Column(
-                                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                                children: [
-                                                                  CustomTextFieldWidget(
-                                                                    borderColor: CustomColors.loginBorder,
-                                                                    textStyle: TextStyle(
-                                                                      fontSize: 15,
-                                                                      color: CustomColors.hintText,
-                                                                      fontFamily: "Calibri",
-                                                                      fontWeight: FontWeight.w400,
-                                                                    ),
-                                                                    hintText: "Comment",
-                                                                    controller: commentController,
-                                                                    obsecure: false,
+                                                                const SizedBox(height: 15),
+                                                                TextButton(
+                                                                  onPressed: () {
+                                                                    if (commentController.text.isEmpty) {
+                                                                      showErrorToast("Comment field is required");
+                                                                      return;
+                                                                    }
+                                                                    Navigator.pop(context);
+                                                                    showModalBottomSheet(
+                                                                      context: scaffoldContext,
+                                                                      builder: (context) {
+                                                                        return showPaymentDailog(context: scaffoldContext);
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                  style: ButtonStyle(
+                                                                    backgroundColor: WidgetStatePropertyAll(CustomColors.primaryColor),
                                                                   ),
-                                                                  const SizedBox(height: 20),
-                                                                  LoadingButton(
-                                                                    title: "Continue",
-                                                                    height: 54,
-                                                                    backgroundColor: CustomColors.primaryColor,
-                                                                    textStyle: TextStyle(
+                                                                  child: Text(
+                                                                    "Add Tip",
+                                                                    style: TextStyle(
                                                                       color: CustomColors.white,
                                                                       fontFamily: "Rubik",
                                                                       fontStyle: FontStyle.normal,
                                                                       fontWeight: FontWeight.w500,
                                                                       fontSize: 18,
                                                                     ),
-                                                                    onPressed: () async {
-                                                                      var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
-                                                                      var token = await getToken();
-                                                                      var response = await postRequesthandler(
-                                                                        url: url,
-                                                                        token: token,
-                                                                      );
-
-                                                                      if (response != null && response.statusCode == 200) {
-                                                                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(response.data['message'].toString())));
-                                                                        commentController.clear();
-                                                                        setState(
-                                                                          () {
-                                                                            rating = 0;
-                                                                          },
-                                                                        );
-                                                                        provider.fetchHiredCandidateModel();
-                                                                      }
-                                                                      Navigator.pop(context);
-                                                                      return false;
-                                                                    },
                                                                   ),
-                                                                  const SizedBox(height: 15),
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
+                                                                ),
+                                                                // LoadingButton(
+                                                                //   title: "Add Tip",
+                                                                //   height: 54,
+                                                                //   backgroundColor: CustomColors.primaryColor,
+                                                                //   textStyle: TextStyle(
+                                                                //     color: CustomColors.white,
+                                                                //     fontFamily: "Rubik",
+                                                                //     fontStyle: FontStyle.normal,
+                                                                //     fontWeight: FontWeight.w500,
+                                                                //     fontSize: 18,
+                                                                //   ),
+                                                                //   onPressed: () async {
+                                                                //     if (commentController.text.isEmpty) {
+                                                                //       showErrorToast("Comment field is required");
+                                                                //       return true;
+                                                                //     }
+                                                                //     await showBottomSheet(
+                                                                //       context: context,
+                                                                //       builder: (context) {
+                                                                //         return showPaymentDailog(context);
+                                                                //       },
+                                                                //     );
+                                                                //     // navigationService.push(
+                                                                //     //   RoutesName.recieverTipPayment,
+                                                                //     //   arguments: {
+                                                                //     //     "jobId": jobId.toString(),
+                                                                //     //     "comment": commentController.text.trim(),
+                                                                //     //     "rating": rating,
+                                                                //     //     "providerId": providerId.toString(),
+                                                                //     //   },
+                                                                //     // );
+                                                                //     return false;
+                                                                //   },
+                                                                // ),
+                                                                const SizedBox(height: 15),
+                                                              ],
+                                                            ),
+                                                          ],
                                                         ),
                                                       ),
-                                                    );
-                                                  },
-                                                );
-                                              }
+                                                    ),
+                                                  );
+                                                },
+                                              );
+                                              // }
                                             },
                                             child: Container(
                                               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
@@ -747,6 +862,635 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
         ),
       );
     });
+  }
+
+  bool newCard = false;
+  final newPaymentForm = GlobalKey<FormState>();
+  TextEditingController cardHolderNameController = TextEditingController();
+  TextEditingController cardNumberController = TextEditingController();
+  TextEditingController cardExpiryDateController = TextEditingController();
+  TextEditingController cardCvvController = TextEditingController();
+  TextEditingController zipCodeController = TextEditingController();
+  TextEditingController tipAmountController = TextEditingController();
+  CreditCard? selectedCard;
+  final RegExp _dateRegex = RegExp(r'^(0[1-9]|1[0-2])-\d{4}$');
+  bool saveFrom = false;
+  Widget showPaymentDailog({required BuildContext context}) {
+    return StatefulBuilder(
+      builder: (context, setState) => Container(
+        height: 500,
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.only(left: 20, top: 20, right: 20, bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: SingleChildScrollView(
+          child: Consumer<CardProvider>(builder: (context, provider, __) {
+            return Column(
+              children: [
+                Align(
+                  alignment: Alignment.topRight,
+                  child: TextButton(
+                    onPressed: () {
+                      setState(() {
+                        newCard = true;
+                        selectedCard = null;
+                        tipAmountController.clear();
+                      });
+                    },
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(ServiceRecieverColor.redButton),
+                      shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(05))),
+                    ),
+                    child: const Text(
+                      "Add New Card",
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                if (provider.allCards != null) ...[
+                  for (int j = 0; j < provider.allCards!.length; j++) ...[
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          newCard = false;
+                          selectedCard = provider.allCards![j];
+                          tipAmountController.clear();
+                        });
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 60,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: selectedCard != null && selectedCard!.id == provider.allCards![j].id ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
+                            width: selectedCard != null && selectedCard!.id == provider.allCards![j].id ? 2 : 0.5,
+                          ),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Card Name: ${provider.allCards![j].nameOnCard}",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                            Text(
+                              "Card Number: ${provider.allCards![j].cardNumber}",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                  if (selectedCard != null) ...[
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      height: 50,
+                      child: TextFormField(
+                        controller: tipAmountController,
+                        keyboardType: TextInputType.phone,
+                        onChanged: (value) {},
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        decoration: InputDecoration(
+                          hintText: "Add Tip Amount",
+                          hintStyle: const TextStyle(fontWeight: FontWeight.w600),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // Submit Button
+                    LoadingButton(
+                      title: "Pay Now",
+                      backgroundColor: ServiceRecieverColor.redButton,
+                      height: 50,
+                      loadingColor: Colors.green,
+                      textStyle: TextStyle(
+                        color: CustomColors.white,
+                        fontFamily: "Poppins",
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      onPressed: () async {
+                        if (tipAmountController.text.isEmpty) {
+                          showErrorToast("Tip amount is required");
+                          return false;
+                        }
+                        try {
+                          var token = await getToken();
+                          var response = await postRequesthandler(
+                            url: CareReceiverURl.serviceReceiverJobCompleted,
+                            formData: FormData.fromMap({
+                              "job_id": jobId.toString(),
+                              "tip_amount": tipAmountController.text,
+                              "comment": commentController.text.trim(),
+                              "rating": rating,
+                              "card_data": selectedCard!.id.toString(),
+                              "save_card": false,
+                              "name_on_card": selectedCard!.nameOnCard.toString(),
+                              "card_number": selectedCard!.cardNumber.toString(),
+                              "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
+                              "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
+                              "cvv": selectedCard!.cvv.toString(),
+                            }),
+                            token: token,
+                          );
+                          if (response != null && response.statusCode == 200 && response.data['status'] == true) {
+                            showSuccessToast(response.data['message']);
+                            Provider.of<HiredCandidatesProvider>(context, listen: false).fetchHiredCandidateModel();
+                            Navigator.pop(context);
+                            // navigationService.push(RoutesName.serviceRecieverHireCandidates);
+                          } else {
+                            // if (response != null && response.data['error'].toString().contains("Job Already Funded")) {
+                            //   showSuccessToast("Job Already Funded");
+                            // } else
+                            if (response != null && response.data != null && response.data['error'] != null) {
+                              throw response.data['error']['original'][0];
+                            } else {
+                              throw "something went wrong";
+                            }
+                          }
+                          return true;
+                        } catch (e) {
+                          showErrorToast(e.toString());
+                          return false;
+                        }
+                      },
+                    ),
+                  ],
+                ],
+                if (newCard == true && selectedCard == null) ...[
+                  const SizedBox(height: 10),
+                  const Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Add New Card",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Form(
+                    key: newPaymentForm,
+                    child: Column(
+                      children: [
+                        // Card Holder Name
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Card Holder Name",
+                            style: TextStyle(
+                              color: CustomColors.primaryColor,
+                              fontFamily: "Rubik",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(6),
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6),
+                              topRight: Radius.circular(6),
+                            ),
+                            color: CustomColors.white,
+                          ),
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          child: TextFormField(
+                            controller: cardHolderNameController,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Please Enter Card Holder Name";
+                              }
+                              return null;
+                            },
+                            textInputAction: TextInputAction.next,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Rubik",
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlignVertical: TextAlignVertical.bottom,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              hintText: "Name",
+                              fillColor: CustomColors.white,
+                              focusColor: CustomColors.white,
+                              hoverColor: CustomColors.white,
+                              hintStyle: TextStyle(
+                                color: CustomColors.paymentHint,
+                                fontFamily: "Poppins",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Card Number
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Card Number",
+                            style: TextStyle(
+                              color: ServiceRecieverColor.primaryColor,
+                              fontFamily: "Rubik",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Container(
+                          padding: EdgeInsets.zero,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(6),
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6),
+                              topRight: Radius.circular(6),
+                            ),
+                            color: CustomColors.white,
+                          ),
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          child: TextFormField(
+                            controller: cardNumberController,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter(RegExp('[0-9]'), allow: true),
+                              LengthLimitingTextInputFormatter(16),
+                            ],
+                            validator: (value) {
+                              if (value == null) {
+                                return "Please Enter Card Number";
+                              } else if (value.length != 16) {
+                                return "Please Enter Correct Card Number";
+                              }
+                              return null;
+                            },
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Rubik",
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlignVertical: TextAlignVertical.bottom,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              hintText: "XXXXXX-XXXXXX-X",
+                              fillColor: CustomColors.white,
+                              focusColor: CustomColors.white,
+                              hoverColor: CustomColors.white,
+                              hintStyle: TextStyle(
+                                color: CustomColors.paymentHint,
+                                fontFamily: "Poppins",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Card Expiry Date
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Expiry Date",
+                            style: TextStyle(
+                              color: CustomColors.primaryColor,
+                              fontFamily: "Rubik",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Container(
+                          padding: EdgeInsets.zero,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(6),
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6),
+                              topRight: Radius.circular(6),
+                            ),
+                            color: CustomColors.white,
+                          ),
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          child: TextFormField(
+                            controller: cardExpiryDateController,
+                            textInputAction: TextInputAction.next,
+                            keyboardType: TextInputType.datetime,
+                            textAlignVertical: TextAlignVertical.bottom,
+                            inputFormatters: [
+                              DateTextFormatter(),
+                              LengthLimitingTextInputFormatter(7),
+                            ],
+                            validator: (String? value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter a date';
+                              }
+                              if (!_dateRegex.hasMatch(value)) {
+                                return 'Invalid date format (MM-YYYY)';
+                              }
+                              // You can add additional validation here if needed.
+                              return null;
+                            },
+                            maxLines: 1,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Rubik",
+                              fontWeight: FontWeight.w400,
+                            ),
+                            decoration: InputDecoration(
+                              hintText: "MM-YYYY",
+                              counterText: "",
+                              fillColor: CustomColors.white,
+                              focusColor: CustomColors.white,
+                              hoverColor: CustomColors.white,
+                              hintStyle: TextStyle(
+                                color: CustomColors.paymentHint,
+                                fontFamily: "Poppins",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Card CVV
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "CVV",
+                            style: TextStyle(
+                              color: CustomColors.primaryColor,
+                              fontFamily: "Rubik",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(6),
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6),
+                              topRight: Radius.circular(6),
+                            ),
+                            color: CustomColors.white,
+                          ),
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          child: TextFormField(
+                            controller: cardCvvController,
+                            textInputAction: TextInputAction.next,
+                            validator: (value) {
+                              if (value == null) {
+                                return "Please Enter Card CVV/CVC Number";
+                              } else if (value.length != 3) {
+                                return "Please Enter Correct Card CVV/CVC Number Length";
+                              }
+                              return null;
+                            },
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontFamily: "Rubik",
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlignVertical: TextAlignVertical.bottom,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              hintText: "XXXX",
+                              fillColor: CustomColors.white,
+                              focusColor: CustomColors.white,
+                              hoverColor: CustomColors.white,
+                              hintStyle: TextStyle(
+                                color: CustomColors.paymentHint,
+                                fontFamily: "Poppins",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor, width: 0.7),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        // Save For futher
+                        CheckboxListTile(
+                          value: saveFrom,
+                          activeColor: ServiceRecieverColor.primaryColor,
+                          onChanged: (value) {
+                            setState(() {
+                              saveFrom = !saveFrom;
+                            });
+                          },
+                          title: Text(
+                            "Save For Future Use",
+                            style: TextStyle(
+                              color: ServiceRecieverColor.primaryColor,
+                              fontFamily: "Rubik",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          controlAffinity: ListTileControlAffinity.leading,
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            "Tip Amount",
+                            style: TextStyle(
+                              color: CustomColors.primaryColor,
+                              fontFamily: "Rubik",
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60,
+                          // padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: TextFormField(
+                            controller: tipAmountController,
+                            keyboardType: TextInputType.phone,
+                            onChanged: (value) {},
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            decoration: InputDecoration(
+                              hintText: "XXXX",
+                              fillColor: CustomColors.white,
+                              focusColor: CustomColors.white,
+                              hoverColor: CustomColors.white,
+                              hintStyle: TextStyle(
+                                color: CustomColors.paymentHint,
+                                fontFamily: "Poppins",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor),
+                                borderRadius: BorderRadius.circular(05),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: ServiceRecieverColor.primaryColor),
+                                borderRadius: BorderRadius.circular(05),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        // BTN
+                        LoadingButton(
+                          title: "Pay Now",
+                          backgroundColor: ServiceRecieverColor.redButton,
+                          height: 60,
+                          loadingColor: Colors.white,
+                          textStyle: TextStyle(
+                            color: CustomColors.white,
+                            fontFamily: "Poppins",
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          onPressed: () async {
+                            if (newPaymentForm.currentState!.validate()) {
+                              if (tipAmountController.text.isEmpty) {
+                                showErrorToast("Tip amount is required");
+                                return false;
+                              }
+                              try {
+                                var token = await getToken();
+                                var response = await postRequesthandler(
+                                  url: CareReceiverURl.serviceReceiverJobCompleted,
+                                  formData: FormData.fromMap({
+                                    "job_id": jobId,
+                                    "tip_amount": tipAmountController.text,
+                                    "comment": commentController.text.trim(),
+                                    "rating": rating,
+                                    "card_data": "card-form",
+                                    "save_card": saveFrom,
+                                    "name_on_card": cardHolderNameController.text.toString(),
+                                    "card_number": cardNumberController.text.toString(),
+                                    "card_expiration_month": cardExpiryDateController.text.toString().substring(0, 2),
+                                    "card_expiration_year": cardExpiryDateController.text.toString().substring(3, 7),
+                                    "cvv": cardCvvController.text.toString(),
+                                  }),
+                                  token: token,
+                                );
+
+                                if (response != null && response.statusCode == 200 && response.data['status'] == true) {
+                                  showSuccessToast(response.data['message']);
+                                  Provider.of<HiredCandidatesProvider>(context, listen: false).fetchHiredCandidateModel();
+                                  Navigator.pop(context);
+                                  // navigationService.push(RoutesName.serviceRecieverHireCandidates);
+                                } else {
+                                  // if (response != null && response.data != null && response.data["error"] != null ) {
+                                  //   showSuccessToast("Job Already Funded");
+                                  // } else
+                                  if (response != null && response.data != null && response.data['error'] != null) {
+                                    throw response.data['error'];
+                                  } else {
+                                    throw "something went wrong";
+                                  }
+                                }
+                                return true;
+                              } catch (e) {
+                                showErrorToast(e.toString());
+                                return false;
+                              }
+                            }
+                            return true;
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                ]
+              ],
+            );
+          }),
+        ),
+      ),
+    );
   }
 }
 

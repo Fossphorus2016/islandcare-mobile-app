@@ -136,7 +136,7 @@ class _ReceiverReviewsScreenState extends State<ReceiverReviewsScreen> {
                                             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 08),
                                             margin: const EdgeInsets.only(bottom: 10),
                                             decoration: BoxDecoration(
-                                              border: Border.all(color: ServiceGiverColor.black),
+                                              border: Border.all(color: ServiceGiverColor.green),
                                               borderRadius: BorderRadius.circular(12),
                                             ),
                                             child: Row(
@@ -216,7 +216,7 @@ class _ReceiverReviewsScreenState extends State<ReceiverReviewsScreen> {
                                                   },
                                                   child: Icon(
                                                     Icons.arrow_circle_right_outlined,
-                                                    color: ServiceGiverColor.black,
+                                                    color: ServiceGiverColor.green,
                                                   ),
                                                 ),
                                               ],
@@ -277,7 +277,7 @@ class ReceiverReviewsProvider extends ChangeNotifier {
   fetchReviewsModel(BuildContext context) async {
     var token = await getToken();
     final response = await getRequesthandler(
-      url: CareGiverUrl.serviceProviderProfileReviews,
+      url: CareReceiverURl.serviceReceiverRating,
       token: token,
     );
     isLoading = false;
