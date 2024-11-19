@@ -143,15 +143,6 @@ class _JobApplicantsDetailState extends State<JobApplicantsDetail> {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          // Text(
-                          //   "Date of birth",
-                          //   style: TextStyle(
-                          //     color: CustomColors.black,
-                          //     fontSize: 12,
-                          //     fontFamily: "Poppins",
-                          //     fontWeight: FontWeight.w600,
-                          //   ),
-                          // ),
                           Text(
                             "Details",
                             style: TextStyle(

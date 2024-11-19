@@ -5,7 +5,11 @@ import 'package:island_app/caregiver/models/child_care_detail-dashbaord_model.da
 import 'package:island_app/caregiver/models/house_keeping_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/pet_care_detail_dashboard_model.dart';
 import 'package:island_app/caregiver/models/school_support_detail_dashboard.dart';
+import 'package:island_app/carereceiver/screens/post_job.dart';
 import 'package:island_app/utils/app_colors.dart';
+import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/widgets/assistance_container.dart';
@@ -14,6 +18,8 @@ import 'package:island_app/widgets/job_info_container.dart';
 import 'package:island_app/widgets/job_schedule_container.dart';
 import 'package:island_app/caregiver/models/senior_care_detail_dashboard_model.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/widgets/loading_button.dart';
+import 'package:provider/provider.dart';
 
 class ReceiverJobDetail extends StatefulWidget {
   final dynamic jobData;
@@ -144,61 +150,90 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
     );
   }
 
-  GestureDetector deleteButton(int? id) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: ServiceGiverColor.redButton,
-        ),
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        child: Center(
-          child: Text(
-            "Delete",
-            style: TextStyle(
-              color: CustomColors.white,
-              fontFamily: "Poppins",
-              fontSize: 16,
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-        ),
+  Widget deleteButton(int? id) {
+    return LoadingButton(
+      title: "Delete",
+      backgroundColor: ServiceGiverColor.redButton,
+      height: 60,
+      textStyle: TextStyle(
+        color: CustomColors.white,
+        fontFamily: "Poppins",
+        fontSize: 18,
+        fontStyle: FontStyle.normal,
+        fontWeight: FontWeight.w900,
       ),
+      onPressed: () async {
+        try {
+          var token = await getToken();
+          var resp = await postRequesthandler(
+            url: "${CareReceiverURl.serviceReceiverDeleteJob}/$id/delete",
+            token: token,
+          );
+          if (resp != null && resp.statusCode == 200 && resp.data["success"] == true) {
+            showSuccessToast("Job deleted successfully.");
+            Provider.of<PostedJobsProvider>(context, listen: false).fetchAllJobs();
+            navigationService.pop();
+          } else {
+            showErrorToast("something went wrong");
+          }
+          return true;
+        } catch (e) {
+          showErrorToast("something went wrong");
+          return false;
+        }
+      },
     );
   }
 
-  GestureDetector editButton(String? serviceId, id) {
-    return GestureDetector(
-      onTap: () {
+  Widget editButton(String? serviceId, id) {
+    return LoadingButton(
+      title: "Edit",
+      height: 60,
+      textStyle: TextStyle(
+        color: CustomColors.white,
+        fontFamily: "Poppins",
+        fontSize: 18,
+        fontStyle: FontStyle.normal,
+        fontWeight: FontWeight.w900,
+      ),
+      backgroundColor: ServiceGiverColor.green,
+      onPressed: () async {
         navigationService.push(RoutesName.serviceRecieverEditJobPost, arguments: {
           "jobData": id,
           "serviceId": serviceId,
         });
+        return false;
       },
-      child: Container(
-        height: 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: ServiceGiverColor.green,
-        ),
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        child: Center(
-          child: Text(
-            "Edit",
-            style: TextStyle(
-              color: CustomColors.white,
-              fontFamily: "Poppins",
-              fontSize: 16,
-              fontStyle: FontStyle.normal,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-        ),
-      ),
     );
+
+    // GestureDetector(
+    //   onTap: () {
+    //     navigationService.push(RoutesName.serviceRecieverEditJobPost, arguments: {
+    //       "jobData": id,
+    //       "serviceId": serviceId,
+    //     });
+    //   },
+    //   child: Container(
+    //     height: 60,
+    //     decoration: BoxDecoration(
+    //       borderRadius: BorderRadius.circular(14),
+    //       color: ServiceGiverColor.green,
+    //     ),
+    //     margin: const EdgeInsets.symmetric(horizontal: 10),
+    //     child: Center(
+    //       child: Text(
+    //         "Edit",
+    //         style: TextStyle(
+    //           color: CustomColors.white,
+    //           fontFamily: "Poppins",
+    //           fontSize: 16,
+    //           fontStyle: FontStyle.normal,
+    //           fontWeight: FontWeight.w900,
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   Widget serviceSeniorCare(BuildContext context) {

@@ -65,6 +65,7 @@ class CareReceiverURl {
   static String serviceReceiverApplication = "${AppUrl.webBaseURL}/api/service-receiver-my-application";
 
   static String serviceReceiverSeniorCareJobCreater = "${AppUrl.webBaseURL}/api/service-receiver-seniorcare-job-create";
+  static String serviceReceiverDeleteJob = "${AppUrl.webBaseURL}/api/service-receiver-job-board";
   static String serviceReceiverPetCareJobCreater = "${AppUrl.webBaseURL}/api/service-receiver-petcare-job-create";
   static String serviceReceiverHouseKeepingJobCreater = "${AppUrl.webBaseURL}/api/service-receiver-housekeeping-job-create";
   static String serviceReceiverLearningJobCreater = "${AppUrl.webBaseURL}/api/service-receiver-child-care-job-create";

@@ -131,95 +131,95 @@ class _ReceiverReviewsScreenState extends State<ReceiverReviewsScreen> {
                                                 child: const Text("0 Jobs Found"));
                                           }
                                           var review = provider.filterDataList[index];
-                                          return Container(
-                                            height: 60,
-                                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 08),
-                                            margin: const EdgeInsets.only(bottom: 10),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: ServiceGiverColor.green),
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                if (ResponsiveBreakpoints.of(context).isMobile) ...[
-                                                  Expanded(
-                                                    child: Text(
+                                          return InkWell(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) => AlertDialog(
+                                                  title: Center(child: Text('${review.receiverRating!.firstName} ${review.receiverRating!.lastName}')),
+                                                  alignment: Alignment.center,
+                                                  content: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      RatingBar.builder(
+                                                        initialRating: review.rating!.toDouble(),
+                                                        minRating: 1,
+                                                        direction: Axis.horizontal,
+                                                        allowHalfRating: true,
+                                                        ignoreGestures: false,
+                                                        itemSize: 24,
+                                                        itemCount: 5,
+                                                        itemBuilder: (context, _) => const Icon(
+                                                          Icons.star,
+                                                          color: Colors.amber,
+                                                        ),
+                                                        onRatingUpdate: (rating) {},
+                                                      ),
+                                                      Text(
+                                                        review.comment.toString() == "null" ? "Not Available" : review.comment.toString(),
+                                                        maxLines: 20,
+                                                        softWrap: true,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontFamily: "Poppins",
+                                                          fontWeight: FontWeight.w400,
+                                                          color: CustomColors.primaryText,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              height: 60,
+                                              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 08),
+                                              margin: const EdgeInsets.only(bottom: 10),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(color: ServiceGiverColor.green),
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  if (ResponsiveBreakpoints.of(context).isMobile) ...[
+                                                    Expanded(
+                                                      child: Text(
+                                                        '${review.receiverRating!.firstName} ${review.receiverRating!.lastName}',
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ),
+                                                  ] else ...[
+                                                    Text(
                                                       '${review.receiverRating!.firstName} ${review.receiverRating!.lastName}',
                                                       maxLines: 2,
                                                       overflow: TextOverflow.ellipsis,
                                                     ),
-                                                  ),
-                                                ] else ...[
-                                                  Text(
-                                                    '${review.receiverRating!.firstName} ${review.receiverRating!.lastName}',
-                                                    maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ],
-                                                if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
-                                                  RatingBar.builder(
-                                                    initialRating: review.rating!.toDouble(),
-                                                    minRating: 1,
-                                                    direction: Axis.horizontal,
-                                                    allowHalfRating: true,
-                                                    ignoreGestures: false,
-                                                    itemSize: 15,
-                                                    itemCount: 5,
-                                                    itemBuilder: (context, _) => const Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                    ),
-                                                    onRatingUpdate: (rating) {},
-                                                  ),
-                                                ],
-                                                InkWell(
-                                                  onTap: () {
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (context) => AlertDialog(
-                                                        title: Center(child: Text('${review.receiverRating!.firstName} ${review.receiverRating!.lastName}')),
-                                                        alignment: Alignment.center,
-                                                        content: Column(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            RatingBar.builder(
-                                                              initialRating: review.rating!.toDouble(),
-                                                              minRating: 1,
-                                                              direction: Axis.horizontal,
-                                                              allowHalfRating: true,
-                                                              ignoreGestures: false,
-                                                              itemSize: 24,
-                                                              itemCount: 5,
-                                                              itemBuilder: (context, _) => const Icon(
-                                                                Icons.star,
-                                                                color: Colors.amber,
-                                                              ),
-                                                              onRatingUpdate: (rating) {},
-                                                            ),
-                                                            Text(
-                                                              review.comment.toString() == "null" ? "Not Available" : review.comment.toString(),
-                                                              maxLines: 20,
-                                                              softWrap: true,
-                                                              style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontFamily: "Poppins",
-                                                                fontWeight: FontWeight.w400,
-                                                                color: CustomColors.primaryText,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
+                                                  ],
+                                                  if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                                    RatingBar.builder(
+                                                      initialRating: review.rating!.toDouble(),
+                                                      minRating: 1,
+                                                      direction: Axis.horizontal,
+                                                      allowHalfRating: true,
+                                                      ignoreGestures: false,
+                                                      itemSize: 15,
+                                                      itemCount: 5,
+                                                      itemBuilder: (context, _) => const Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
                                                       ),
-                                                    );
-                                                  },
-                                                  child: Icon(
+                                                      onRatingUpdate: (rating) {},
+                                                    ),
+                                                  ],
+                                                  Icon(
                                                     Icons.arrow_circle_right_outlined,
                                                     color: ServiceGiverColor.green,
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           );
                                         },
@@ -235,7 +235,7 @@ class _ReceiverReviewsScreenState extends State<ReceiverReviewsScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width,
                         child: CustomPagination(
-                          nextPage: (provider.currentPageIndex) < provider.totalRowsCount
+                          nextPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
                               ? () {
                                   provider.handlePageChange(provider.currentPageIndex + 1);
                                 }
@@ -243,7 +243,7 @@ class _ReceiverReviewsScreenState extends State<ReceiverReviewsScreen> {
                           previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
                           gotoPage: provider.handlePageChange,
                           gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
-                          gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount ? () => provider.handlePageChange(provider.totalRowsCount) : null,
+                          gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1 ? () => provider.handlePageChange(provider.totalRowsCount - 1) : null,
                           currentPageIndex: provider.currentPageIndex,
                           totalRowsCount: provider.totalRowsCount,
                         ),
@@ -304,7 +304,7 @@ class ReceiverReviewsProvider extends ChangeNotifier {
       endIndex = min(startIndex + rowsPerPage, data!.length);
 
       filterDataList = data.sublist(startIndex, endIndex).toList();
-      totalRowsCount = (data.length / 10).floor();
+      totalRowsCount = (data.length / 10).ceil();
       notifyListeners();
     } catch (error) {
       //

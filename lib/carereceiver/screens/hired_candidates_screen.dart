@@ -572,6 +572,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                               var scaffoldContext = context;
                                               showModalBottomSheet(
                                                 isScrollControlled: true,
+                                                useSafeArea: true,
                                                 context: scaffoldContext,
                                                 backgroundColor: Colors.white,
                                                 shape: const RoundedRectangleBorder(
@@ -581,224 +582,199 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                   ),
                                                 ),
                                                 builder: (BuildContext scaffoldContext) {
-                                                  return SingleChildScrollView(
-                                                    child: Padding(
-                                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                      child: Container(
-                                                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            const SizedBox(height: 20),
-                                                            Center(
-                                                              child: Container(
-                                                                width: 130,
-                                                                height: 5,
-                                                                decoration: BoxDecoration(
-                                                                  color: const Color(0xffC4C4C4),
-                                                                  borderRadius: BorderRadius.circular(6),
+                                                  return StatefulBuilder(
+                                                    builder: (context, setState) => SingleChildScrollView(
+                                                      child: Padding(
+                                                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                        child: Container(
+                                                          height: 480,
+                                                          // width: MediaQuery.of(context).size.width,
+                                                          padding: const EdgeInsets.only(
+                                                            left: 20,
+                                                            top: 20,
+                                                            right: 20,
+                                                          ),
+                                                          child: Column(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            mainAxisAlignment: MainAxisAlignment.center,
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              // const SizedBox(height: 20),
+                                                              Center(
+                                                                child: Container(
+                                                                  width: 130,
+                                                                  height: 5,
+                                                                  decoration: BoxDecoration(
+                                                                    color: const Color(0xffC4C4C4),
+                                                                    borderRadius: BorderRadius.circular(6),
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                            const SizedBox(height: 10),
-                                                            Center(
-                                                              child: Text(
-                                                                "Candidate Rating",
-                                                                textAlign: TextAlign.center,
-                                                                style: TextStyle(
-                                                                  color: CustomColors.black,
-                                                                  fontFamily: "Rubik",
-                                                                  fontStyle: FontStyle.normal,
-                                                                  fontSize: 22,
-                                                                  fontWeight: FontWeight.w600,
+                                                              const SizedBox(height: 10),
+                                                              Center(
+                                                                child: Text(
+                                                                  "Candidate Rating",
+                                                                  textAlign: TextAlign.center,
+                                                                  style: TextStyle(
+                                                                    color: CustomColors.black,
+                                                                    fontFamily: "Rubik",
+                                                                    fontStyle: FontStyle.normal,
+                                                                    fontSize: 22,
+                                                                    fontWeight: FontWeight.w600,
+                                                                  ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                            const SizedBox(height: 40),
-                                                            Container(
-                                                              alignment: Alignment.center,
-                                                              child: RatingBar.builder(
-                                                                initialRating: 1,
-                                                                minRating: 1,
-                                                                direction: Axis.horizontal,
-                                                                itemSize: 24,
-                                                                itemCount: 5,
-                                                                itemBuilder: (context, _) => const Icon(
-                                                                  Icons.star,
-                                                                  color: Colors.amber,
+                                                              const SizedBox(height: 20),
+                                                              Align(
+                                                                alignment: Alignment.center,
+                                                                child: RatingBar.builder(
+                                                                  initialRating: 1,
+                                                                  minRating: 1,
+                                                                  direction: Axis.horizontal,
+                                                                  itemSize: 24,
+                                                                  itemCount: 5,
+                                                                  itemBuilder: (context, _) => const Icon(
+                                                                    Icons.star,
+                                                                    color: Colors.amber,
+                                                                  ),
+                                                                  onRatingUpdate: (ratingValue) {
+                                                                    setState(() {
+                                                                      rating = ratingValue.ceil();
+                                                                    });
+                                                                  },
                                                                 ),
-                                                                onRatingUpdate: (ratingValue) {
-                                                                  setState(() {
-                                                                    rating = ratingValue.ceil();
-                                                                  });
-                                                                },
                                                               ),
-                                                            ),
-                                                            const SizedBox(height: 15),
-                                                            Column(
-                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                              children: [
-                                                                SizedBox(
-                                                                  width: MediaQuery.of(context).size.width,
-                                                                  height: 100,
-                                                                  child: TextFormField(
-                                                                    controller: commentController,
-                                                                    expands: true,
-                                                                    maxLines: null,
-                                                                    minLines: null,
-                                                                    textAlignVertical: TextAlignVertical.top,
-                                                                    decoration: InputDecoration(
-                                                                      fillColor: Colors.white,
-                                                                      hintText: "Comment",
-                                                                      hintStyle: TextStyle(
-                                                                        fontSize: 15,
-                                                                        color: CustomColors.hintText,
-                                                                        fontFamily: "Calibri",
-                                                                        fontWeight: FontWeight.w400,
-                                                                      ),
-                                                                      contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                                                      border: OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.circular(12),
-                                                                        borderSide: const BorderSide(
-                                                                          width: 0.5,
+                                                              const SizedBox(height: 15),
+                                                              Column(
+                                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                                children: [
+                                                                  SizedBox(
+                                                                    width: MediaQuery.of(context).size.width,
+                                                                    height: 100,
+                                                                    child: TextFormField(
+                                                                      controller: commentController,
+                                                                      expands: true,
+                                                                      maxLines: null,
+                                                                      minLines: null,
+                                                                      textAlignVertical: TextAlignVertical.top,
+                                                                      decoration: InputDecoration(
+                                                                        fillColor: Colors.white,
+                                                                        hintText: "Comment",
+                                                                        hintStyle: TextStyle(
+                                                                          fontSize: 15,
+                                                                          color: CustomColors.hintText,
+                                                                          fontFamily: "Calibri",
+                                                                          fontWeight: FontWeight.w400,
                                                                         ),
-                                                                      ),
-                                                                      enabledBorder: OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.circular(12),
-                                                                        borderSide: const BorderSide(
-                                                                          width: 0.5,
+                                                                        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                                                        border: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          borderSide: const BorderSide(width: 0.5),
                                                                         ),
-                                                                      ),
-                                                                      focusedBorder: OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.circular(12),
-                                                                        borderSide: const BorderSide(
-                                                                          width: 0.5,
+                                                                        enabledBorder: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          borderSide: const BorderSide(width: 0.5),
                                                                         ),
-                                                                      ),
-                                                                      errorBorder: OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.circular(12),
-                                                                        borderSide: const BorderSide(
-                                                                          color: Color.fromARGB(255, 194, 0, 0),
-                                                                          width: 0.5,
+                                                                        focusedBorder: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          borderSide: const BorderSide(width: 0.5),
                                                                         ),
-                                                                      ),
-                                                                      focusedErrorBorder: OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.circular(12),
-                                                                        borderSide: const BorderSide(
-                                                                          color: Color.fromARGB(255, 194, 0, 0),
-                                                                          width: 0.5,
+                                                                        errorBorder: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          borderSide: const BorderSide(
+                                                                            color: Color.fromARGB(255, 194, 0, 0),
+                                                                            width: 0.5,
+                                                                          ),
+                                                                        ),
+                                                                        focusedErrorBorder: OutlineInputBorder(
+                                                                          borderRadius: BorderRadius.circular(12),
+                                                                          borderSide: const BorderSide(
+                                                                            color: Color.fromARGB(255, 194, 0, 0),
+                                                                            width: 0.5,
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                                const SizedBox(height: 20),
-                                                                LoadingButton(
-                                                                  title: "Rate Now",
-                                                                  height: 54,
-                                                                  backgroundColor: CustomColors.primaryColor,
-                                                                  textStyle: TextStyle(
-                                                                    color: CustomColors.white,
-                                                                    fontFamily: "Rubik",
-                                                                    fontStyle: FontStyle.normal,
-                                                                    fontWeight: FontWeight.w500,
-                                                                    fontSize: 18,
-                                                                  ),
-                                                                  onPressed: () async {
-                                                                    if (commentController.text.isEmpty) {
-                                                                      showErrorToast("Comment field is required");
-                                                                      return true;
-                                                                    }
-                                                                    var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
-                                                                    var token = await getToken();
-                                                                    var response = await postRequesthandler(
-                                                                      url: url,
-                                                                      token: token,
-                                                                    );
-
-                                                                    if (response != null && response.statusCode == 200) {
-                                                                      showSuccessToast(response.data['message'].toString());
-                                                                      commentController.clear();
-                                                                      setState(
-                                                                        () {
-                                                                          rating = 0;
-                                                                        },
-                                                                      );
-                                                                      provider.fetchHiredCandidateModel();
-                                                                    }
-                                                                    Navigator.pop(context);
-                                                                    return false;
-                                                                  },
-                                                                ),
-                                                                const SizedBox(height: 15),
-                                                                TextButton(
-                                                                  onPressed: () {
-                                                                    if (commentController.text.isEmpty) {
-                                                                      showErrorToast("Comment field is required");
-                                                                      return;
-                                                                    }
-                                                                    Navigator.pop(context);
-                                                                    showModalBottomSheet(
-                                                                      context: scaffoldContext,
-                                                                      builder: (context) {
-                                                                        return showPaymentDailog(context: scaffoldContext);
-                                                                      },
-                                                                    );
-                                                                  },
-                                                                  style: ButtonStyle(
-                                                                    backgroundColor: WidgetStatePropertyAll(CustomColors.primaryColor),
-                                                                  ),
-                                                                  child: Text(
-                                                                    "Add Tip",
-                                                                    style: TextStyle(
+                                                                  const SizedBox(height: 20),
+                                                                  LoadingButton(
+                                                                    title: "Rate Now",
+                                                                    height: 54,
+                                                                    backgroundColor: CustomColors.primaryColor,
+                                                                    textStyle: TextStyle(
                                                                       color: CustomColors.white,
                                                                       fontFamily: "Rubik",
                                                                       fontStyle: FontStyle.normal,
                                                                       fontWeight: FontWeight.w500,
                                                                       fontSize: 18,
                                                                     ),
+                                                                    onPressed: () async {
+                                                                      if (commentController.text.isEmpty) {
+                                                                        showErrorToast("Comment field is required");
+                                                                        return true;
+                                                                      }
+                                                                      var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
+                                                                      var token = await getToken();
+                                                                      var response = await postRequesthandler(
+                                                                        url: url,
+                                                                        token: token,
+                                                                      );
+
+                                                                      if (response != null && response.statusCode == 200) {
+                                                                        showSuccessToast(response.data['message'].toString());
+                                                                        commentController.clear();
+                                                                        setState(
+                                                                          () {
+                                                                            rating = 0;
+                                                                          },
+                                                                        );
+                                                                        provider.fetchHiredCandidateModel();
+                                                                      }
+                                                                      Navigator.pop(context);
+                                                                      return false;
+                                                                    },
                                                                   ),
-                                                                ),
-                                                                // LoadingButton(
-                                                                //   title: "Add Tip",
-                                                                //   height: 54,
-                                                                //   backgroundColor: CustomColors.primaryColor,
-                                                                //   textStyle: TextStyle(
-                                                                //     color: CustomColors.white,
-                                                                //     fontFamily: "Rubik",
-                                                                //     fontStyle: FontStyle.normal,
-                                                                //     fontWeight: FontWeight.w500,
-                                                                //     fontSize: 18,
-                                                                //   ),
-                                                                //   onPressed: () async {
-                                                                //     if (commentController.text.isEmpty) {
-                                                                //       showErrorToast("Comment field is required");
-                                                                //       return true;
-                                                                //     }
-                                                                //     await showBottomSheet(
-                                                                //       context: context,
-                                                                //       builder: (context) {
-                                                                //         return showPaymentDailog(context);
-                                                                //       },
-                                                                //     );
-                                                                //     // navigationService.push(
-                                                                //     //   RoutesName.recieverTipPayment,
-                                                                //     //   arguments: {
-                                                                //     //     "jobId": jobId.toString(),
-                                                                //     //     "comment": commentController.text.trim(),
-                                                                //     //     "rating": rating,
-                                                                //     //     "providerId": providerId.toString(),
-                                                                //     //   },
-                                                                //     // );
-                                                                //     return false;
-                                                                //   },
-                                                                // ),
-                                                                const SizedBox(height: 15),
-                                                              ],
-                                                            ),
-                                                          ],
+                                                                  const SizedBox(height: 20),
+                                                                  SizedBox(
+                                                                    width: MediaQuery.of(context).size.width,
+                                                                    height: 54,
+                                                                    child: TextButton(
+                                                                      onPressed: () {
+                                                                        if (commentController.text.isEmpty) {
+                                                                          showErrorToast("Comment field is required");
+                                                                          return;
+                                                                        }
+                                                                        Navigator.pop(context);
+                                                                        showModalBottomSheet(
+                                                                          context: scaffoldContext,
+                                                                          builder: (context) {
+                                                                            return showPaymentDailog(context: scaffoldContext);
+                                                                          },
+                                                                        );
+                                                                      },
+                                                                      style: ButtonStyle(
+                                                                        backgroundColor: WidgetStatePropertyAll(CustomColors.primaryColor),
+                                                                        shape: WidgetStatePropertyAll(
+                                                                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)),
+                                                                        ),
+                                                                      ),
+                                                                      child: Text(
+                                                                        "Add Tip",
+                                                                        style: TextStyle(
+                                                                          color: CustomColors.white,
+                                                                          fontFamily: "Rubik",
+                                                                          fontStyle: FontStyle.normal,
+                                                                          fontWeight: FontWeight.w500,
+                                                                          fontSize: 18,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                  const SizedBox(height: 15),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -843,7 +819,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width,
                   child: CustomPagination(
-                    nextPage: (provider.currentPageIndex) < provider.totalRowsCount
+                    nextPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
                         ? () {
                             provider.handlePageChange(provider.currentPageIndex + 1);
                           }
@@ -851,7 +827,7 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                     previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
                     gotoPage: provider.handlePageChange,
                     gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
-                    gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount ? () => provider.handlePageChange(provider.totalRowsCount) : null,
+                    gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1 ? () => provider.handlePageChange(provider.totalRowsCount - 1) : null,
                     currentPageIndex: provider.currentPageIndex,
                     totalRowsCount: provider.totalRowsCount,
                   ),
@@ -989,21 +965,23 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                         }
                         try {
                           var token = await getToken();
+                          var data1 = FormData.fromMap({
+                            "job_id": jobId.toString(),
+                            "provider_id": providerId,
+                            "tip_amount": tipAmountController.text,
+                            "comment": commentController.text.trim(),
+                            "rating": rating,
+                            "card_data": selectedCard!.id.toString(),
+                            "save_card": false,
+                            "name_on_card": selectedCard!.nameOnCard.toString(),
+                            "card_number": selectedCard!.cardNumber.toString(),
+                            "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
+                            "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
+                            "cvv": selectedCard!.cvv.toString(),
+                          });
                           var response = await postRequesthandler(
                             url: CareReceiverURl.serviceReceiverJobCompleted,
-                            formData: FormData.fromMap({
-                              "job_id": jobId.toString(),
-                              "tip_amount": tipAmountController.text,
-                              "comment": commentController.text.trim(),
-                              "rating": rating,
-                              "card_data": selectedCard!.id.toString(),
-                              "save_card": false,
-                              "name_on_card": selectedCard!.nameOnCard.toString(),
-                              "card_number": selectedCard!.cardNumber.toString(),
-                              "card_expiration_month": selectedCard!.cardExpirationMonth.toString(),
-                              "card_expiration_year": selectedCard!.cardExpirationYear.toString(),
-                              "cvv": selectedCard!.cvv.toString(),
-                            }),
+                            formData: data1,
                             token: token,
                           );
                           if (response != null && response.statusCode == 200 && response.data['status'] == true) {
@@ -1547,7 +1525,7 @@ class HiredCandidatesProvider extends ChangeNotifier {
       endIndex = min(startIndex + rowsPerPage, data!.length);
 
       filterDataList = data.sublist(startIndex, endIndex).toList();
-      totalRowsCount = (data.length / 10).floor();
+      totalRowsCount = (data.length / 10).ceil();
       notifyListeners();
     } catch (error) {
       //

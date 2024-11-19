@@ -32,7 +32,7 @@ class HomePaginationProvider extends ChangeNotifier {
         endIndex = min(startIndex + rowsPerPage, data.length);
 
         filterDataList = data.sublist(startIndex, endIndex).toList();
-        totalRowsCount = (data.length / 10).floor();
+        totalRowsCount = (data.length / 10).ceil();
         // print("Total Rows Count $totalRowsCount");
         notifyListeners();
       } else {

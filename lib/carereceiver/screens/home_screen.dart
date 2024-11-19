@@ -672,7 +672,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                     width: MediaQuery.of(context).size.width,
                     child: CustomPagination(
-                      nextPage: (provider.currentPageIndex) < provider.totalRowsCount
+                      nextPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
                           ? () {
                               provider.handlePageChange(provider.currentPageIndex + 1);
                             }
@@ -680,7 +680,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
                       gotoPage: provider.handlePageChange,
                       gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
-                      gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount ? () => provider.handlePageChange(provider.totalRowsCount) : null,
+                      gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1 ? () => provider.handlePageChange(provider.totalRowsCount - 1) : null,
                       currentPageIndex: provider.currentPageIndex,
                       totalRowsCount: provider.totalRowsCount,
                     ),

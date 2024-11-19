@@ -63,7 +63,7 @@ class CustomPagination extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    if (totalRowsCount == 1) ...[
+                    if (totalRowsCount == 0) ...[
                       InkWell(
                         onTap: () {
                           // if (currentPageIndex > totalLoop) {
@@ -94,7 +94,7 @@ class CustomPagination extends StatelessWidget {
                       ),
                     ] else ...[
                       for (var i = 0; i <= totalLoop; i++) ...[
-                        if (i <= totalRowsCount) ...[
+                        if (i < totalRowsCount) ...[
                           InkWell(
                             onTap: () {
                               if (currentPageIndex > totalLoop) {
@@ -140,7 +140,7 @@ class CustomPagination extends StatelessWidget {
               width: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               height: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(05)),
-              child: currentPageIndex < totalRowsCount && totalRowsCount != 1 ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-forward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/forward.svg")),
+              child: currentPageIndex < totalRowsCount - 1 && totalRowsCount != 1 ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-forward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/forward.svg")),
             ),
           ),
           const SizedBox(width: 05),
@@ -151,7 +151,7 @@ class CustomPagination extends StatelessWidget {
               width: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               height: MediaQuery.of(context).size.width > 665 ? 30 : 20,
               decoration: BoxDecoration(borderRadius: BorderRadius.circular(05)),
-              child: currentPageIndex < totalRowsCount && totalRowsCount != 1 ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-skip-forward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/step-forward.svg")),
+              child: currentPageIndex < totalRowsCount - 1 && totalRowsCount != 1 ? const SvgPicture(SvgAssetLoader("assets/images/icons/active-skip-forward.svg")) : const SvgPicture(SvgAssetLoader("assets/images/icons/step-forward.svg")),
             ),
           ),
           const SizedBox(width: 20),
