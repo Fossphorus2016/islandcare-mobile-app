@@ -226,7 +226,7 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                                 cprFirstAidCertificationVerify: giverProvider.fetchProfile!.data!.providerverification!.cprFirstAidCertificationVerify == 1,
                                                                 governmentRegisteredCareProviderVerify: giverProvider.fetchProfile!.data!.providerverification!.governmentRegisteredCareProviderVerify == 1,
                                                                 animalCareProviderCertificationVerify: giverProvider.fetchProfile!.data!.providerverification!.animalCareProviderCertificationVerify == 1,
-                                                                animailFirstAidVerify: giverProvider.fetchProfile!.data!.providerverification!.animailFirstAidVerify == 1,
+                                                                animalFirstAidVerify: giverProvider.fetchProfile!.data!.providerverification!.animalFirstAidVerify == 1,
                                                                 redCrossBabysittingCertificationVerify: giverProvider.fetchProfile!.data!.providerverification!.redCrossBabysittingCertificationVerify == 1,
                                                                 chaildAndFamilyServicesAndAbuseVerify: giverProvider.fetchProfile!.data!.providerverification!.chaildAndFamilyServicesAndAbuseVerify == 1,
                                                               ),
@@ -817,21 +817,54 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                                 ),
                                               ),
                                               const SizedBox(height: 8),
-                                              Text(
-                                                giverProvider.fetchProfile!.data!.userdetail!.area.toString() == "0"
-                                                    ? "East"
-                                                    : giverProvider.fetchProfile!.data!.userdetail!.area.toString() == "1"
-                                                        ? "Central"
-                                                        : giverProvider.fetchProfile!.data!.userdetail!.area.toString() == "2"
-                                                            ? "West"
-                                                            : "Not Available",
-                                                style: TextStyle(
-                                                  color: CustomColors.hintText,
-                                                  fontSize: 16,
-                                                  fontFamily: "Rubik",
-                                                  fontWeight: FontWeight.w200,
+                                              if (giverProvider.fetchProfile!.data!.userdetail!.area != null) ...[
+                                                Wrap(
+                                                  children: [
+                                                    for (int i = 0; i < giverProvider.fetchProfile!.data!.userdetail!.area!.length; i++) ...[
+                                                      if (giverProvider.fetchProfile!.data!.userdetail!.area![i].toString() == "0") ...[
+                                                        Chip(
+                                                          backgroundColor: Colors.grey.shade200,
+                                                          deleteIconColor: Colors.black,
+                                                          side: BorderSide.none,
+                                                          label: const Text(
+                                                            "East",
+                                                            style: TextStyle(color: Colors.black),
+                                                          ),
+                                                        ),
+                                                      ] else if (giverProvider.fetchProfile!.data!.userdetail!.area![i].toString() == "1") ...[
+                                                        Chip(
+                                                          backgroundColor: Colors.grey.shade200,
+                                                          deleteIconColor: Colors.black,
+                                                          side: BorderSide.none,
+                                                          label: const Text(
+                                                            "Central",
+                                                            style: TextStyle(color: Colors.black),
+                                                          ),
+                                                        ),
+                                                      ] else if (giverProvider.fetchProfile!.data!.userdetail!.area![i].toString() == "2") ...[
+                                                        Chip(
+                                                          backgroundColor: Colors.grey.shade200,
+                                                          deleteIconColor: Colors.black,
+                                                          side: BorderSide.none,
+                                                          label: const Text(
+                                                            "West",
+                                                            style: TextStyle(color: Colors.black),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                      const SizedBox(width: 05),
+                                                    ],
+                                                  ],
                                                 ),
-                                              ),
+                                              ] else ...[
+                                                Text(
+                                                  "Not Available",
+                                                  style: TextStyle(
+                                                    color: CustomColors.hintText,
+                                                    fontSize: 16,
+                                                  ),
+                                                )
+                                              ],
                                             ],
                                           ),
                                         ],
@@ -1421,13 +1454,13 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                     ],
 
                                     // file type 6
-                                    if (giverProvider.fetchProfile!.data!.providerverification!.animailFirstAid != null) ...[
+                                    if (giverProvider.fetchProfile!.data!.providerverification!.animalFirstAid != null) ...[
                                       const SizedBox(height: 10),
                                       BasicDocumentDownloadList(
                                         onTap: () {
-                                          doDownloadFile(giverProvider.fetchProfile!.data!.providerverification!.animailFirstAid);
+                                          doDownloadFile(giverProvider.fetchProfile!.data!.providerverification!.animalFirstAid);
                                         },
-                                        fileStatus: giverProvider.fetchProfile!.data!.providerverification!.animailFirstAidVerify.toString(),
+                                        fileStatus: giverProvider.fetchProfile!.data!.providerverification!.animalFirstAidVerify.toString(),
                                         downloading: downloading,
                                         downloadProgress: downloadProgress,
                                         title: "Animal First Aid",

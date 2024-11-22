@@ -190,7 +190,7 @@ class Providerverification {
     this.animalCareProviderCertification,
     this.animalCareProviderCertificationVerify,
     this.animailFirstAid,
-    this.animailFirstAidVerify,
+    this.animalFirstAidVerify,
     this.chaildAndFamilyServicesAndAbuse,
     this.chaildAndFamilyServicesAndAbuseVerify,
     this.governmentRegisteredCareProvider,
@@ -216,7 +216,7 @@ class Providerverification {
   String? chaildAndFamilyServicesAndAbuse;
   int? chaildAndFamilyServicesAndAbuseVerify;
   String? animailFirstAid;
-  int? animailFirstAidVerify;
+  int? animalFirstAidVerify;
   String? governmentRegisteredCareProvider;
   int? governmentRegisteredCareProviderVerify;
   String? policeBackgroundCheck;
@@ -238,10 +238,10 @@ class Providerverification {
         cprFirstAidCertificationVerify: json["cpr_first_aid_certification_verify"],
         animalCareProviderCertification: json["animal_care_provider_certification"],
         animalCareProviderCertificationVerify: json["animal_care_provider_certification_verify"],
-        chaildAndFamilyServicesAndAbuse: json["chaild_and_family_services_and_abuse"],
-        chaildAndFamilyServicesAndAbuseVerify: json["chaild_and_family_services_and_abuse_verify"],
+        chaildAndFamilyServicesAndAbuse: json["child_and_family_services_and_abuse"],
+        chaildAndFamilyServicesAndAbuseVerify: json["child_and_family_services_and_abuse_verify"],
         animailFirstAid: json["animail_first_aid"],
-        animailFirstAidVerify: json["animail_first_aid_verify"],
+        animalFirstAidVerify: json["animail_first_aid_verify"],
         governmentRegisteredCareProvider: json["government_registered_care_provider"],
         governmentRegisteredCareProviderVerify: json["government_registered_care_provider_verify"],
         policeBackgroundCheck: json["police_background_check"],
@@ -263,10 +263,10 @@ class Providerverification {
         "cpr_first_aid_certification_verify": cprFirstAidCertificationVerify,
         "animal_care_provider_certification": animalCareProviderCertification,
         "animal_care_provider_certification_verify": animalCareProviderCertificationVerify,
-        "chaild_and_family_services_and_abuse": chaildAndFamilyServicesAndAbuse,
-        "chaild_and_family_services_and_abuse_verify": chaildAndFamilyServicesAndAbuseVerify,
+        "child_and_family_services_and_abuse": chaildAndFamilyServicesAndAbuse,
+        "child_and_family_services_and_abuse_verify": chaildAndFamilyServicesAndAbuseVerify,
         "animail_first_aid": animailFirstAid,
-        "animail_first_aid_verify": animailFirstAidVerify,
+        "animail_first_aid_verify": animalFirstAidVerify,
         "government_registered_care_provider": governmentRegisteredCareProvider,
         "government_registered_care_provider_verify": governmentRegisteredCareProviderVerify,
         "police_background_check": policeBackgroundCheck,

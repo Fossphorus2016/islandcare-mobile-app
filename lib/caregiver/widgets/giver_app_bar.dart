@@ -59,73 +59,80 @@ class GiverCustomAppBar extends StatelessWidget {
           ),
         ),
         if (showProfileIcon) ...[
-          InkWell(
-            onTap: () => Provider.of<BottomNavigationProvider>(context, listen: false).updatePage(2),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xffFFFFFF),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(15, 0, 0, 0),
-                      blurRadius: 4,
-                      spreadRadius: 4,
-                      offset: Offset(2, 2), // Shadow position
+          Consumer<BottomNavigationProvider>(
+            builder: (context, bottomNavigationProvider, child) {
+              return InkWell(
+                onTap: () {
+                  // int prePage = bottomNavigationProvider.page;
+                  bottomNavigationProvider.updatePage(2);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xffFFFFFF),
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color.fromARGB(15, 0, 0, 0),
+                          blurRadius: 4,
+                          spreadRadius: 4,
+                          offset: Offset(2, 2), // Shadow position
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: CircleAvatar(
-                  radius: 20,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Consumer<ServiceGiverProvider>(
-                        builder: (context, provider, child) {
-                          if (provider.fetchProfile == null) {
-                            return Shimmer.fromColors(
-                              baseColor: CustomColors.white,
-                              highlightColor: CustomColors.primaryLight,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xffFFFFFF),
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Color.fromARGB(15, 0, 0, 0),
-                                        blurRadius: 4,
-                                        spreadRadius: 4,
-                                        offset: Offset(2, 2), // Shadow position
+                    child: CircleAvatar(
+                      radius: 20,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(40),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: Consumer<ServiceGiverProvider>(
+                            builder: (context, provider, child) {
+                              if (provider.fetchProfile == null) {
+                                return Shimmer.fromColors(
+                                  baseColor: CustomColors.white,
+                                  highlightColor: CustomColors.primaryLight,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xffFFFFFF),
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: const [
+                                          BoxShadow(
+                                            color: Color.fromARGB(15, 0, 0, 0),
+                                            blurRadius: 4,
+                                            spreadRadius: 4,
+                                            offset: Offset(2, 2), // Shadow position
+                                          ),
+                                        ],
                                       ),
-                                    ],
+                                      child: CircleAvatar(
+                                        radius: 20,
+                                        backgroundColor: CustomColors.paraColor,
+                                      ),
+                                    ),
                                   ),
-                                  child: CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: CustomColors.paraColor,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                          return CachedNetworkImage(
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
-                            imageUrl: "${provider.fetchProfile!.folderPath}/${provider.fetchProfile!.data!.avatar}",
-                            placeholder: (context, url) => const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) => const Icon(Icons.error),
-                          );
-                        },
+                                );
+                              }
+                              return CachedNetworkImage(
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                imageUrl: "${provider.fetchProfile!.folderPath}/${provider.fetchProfile!.data!.avatar}",
+                                placeholder: (context, url) => const CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => const Icon(Icons.error),
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ],

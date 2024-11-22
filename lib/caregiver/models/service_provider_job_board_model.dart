@@ -59,7 +59,7 @@ class Job {
   String? address;
   String? location;
   int? userId;
-  int? status;
+  String? status;
   dynamic deletedAt;
   String? createdAt;
   String? updatedAt;

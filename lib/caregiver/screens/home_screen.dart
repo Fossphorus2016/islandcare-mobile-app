@@ -118,533 +118,530 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
   Widget build(BuildContext context) {
     return Consumer<ServiceGiverProvider>(
       builder: (context, provider, child) {
-        return SafeArea(
-          child: Scaffold(
-            backgroundColor: CustomColors.loginBg,
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(60),
-              child: GiverCustomAppBar(
-                profileStatus: provider.profileStatus,
-                // fetchProfile: fetchProfile,
-                showProfileIcon: true,
-              ),
+        return Scaffold(
+          backgroundColor: CustomColors.loginBg,
+          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(60),
+            child: GiverCustomAppBar(
+              profileStatus: provider.profileStatus,
+              showProfileIcon: true,
             ),
-            drawer: const DrawerGiverWidget(),
-            body: provider.dashboardIsLoading || provider.searchIsLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : provider.profileStatus
-                    ? SizedBox(
-                        height: MediaQuery.of(context).size.height,
-                        width: MediaQuery.of(context).size.width,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              child: RefreshIndicator(
-                                onRefresh: () => provider.fetchProviderDashboardModel(),
-                                child: CustomScrollView(
-                                  slivers: [
-                                    // Overlay Search bar
-                                    SliverToBoxAdapter(
-                                      child: SizedBox(
-                                        child: Stack(
-                                          children: [
-                                            Container(
-                                              decoration: const BoxDecoration(color: Colors.transparent),
-                                              alignment: Alignment.centerRight,
+          ),
+          drawer: const DrawerGiverWidget(),
+          body: provider.dashboardIsLoading || provider.searchIsLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : provider.profileStatus
+                  ? SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: RefreshIndicator(
+                              onRefresh: () => provider.fetchProviderDashboardModel(),
+                              child: CustomScrollView(
+                                slivers: [
+                                  // Overlay Search bar
+                                  SliverToBoxAdapter(
+                                    child: SizedBox(
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            decoration: const BoxDecoration(color: Colors.transparent),
+                                            alignment: Alignment.centerRight,
+                                            width: MediaQuery.of(context).size.width,
+                                            height: 100,
+                                            child: const RotatedBox(
+                                              quarterTurns: 1,
+                                              child: Text(
+                                                'Container 1',
+                                                style: TextStyle(fontSize: 18.0, color: Colors.white),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            top: -25,
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                                              decoration: BoxDecoration(
+                                                color: ServiceGiverColor.black,
+                                                borderRadius: const BorderRadius.only(
+                                                  bottomLeft: Radius.circular(12),
+                                                  bottomRight: Radius.circular(12),
+                                                ),
+                                              ),
+                                              alignment: Alignment.centerLeft,
                                               width: MediaQuery.of(context).size.width,
                                               height: 100,
-                                              child: const RotatedBox(
-                                                quarterTurns: 1,
-                                                child: Text(
-                                                  'Container 1',
-                                                  style: TextStyle(fontSize: 18.0, color: Colors.white),
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              top: -25,
-                                              child: Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                                decoration: BoxDecoration(
-                                                  color: ServiceGiverColor.black,
-                                                  borderRadius: const BorderRadius.only(
-                                                    bottomLeft: Radius.circular(12),
-                                                    bottomRight: Radius.circular(12),
-                                                  ),
-                                                ),
-                                                alignment: Alignment.centerLeft,
-                                                width: MediaQuery.of(context).size.width,
-                                                height: 100,
-                                                child: Consumer<ServiceGiverProvider>(
-                                                  builder: (context, provider, child) {
-                                                    return Text(
-                                                      provider.userName ?? "",
-                                                      style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight: FontWeight.w700,
-                                                        fontFamily: "Rubik",
-                                                        color: CustomColors.white,
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                            Positioned(
-                                              bottom: 5,
-                                              right: 20,
-                                              left: 20,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius: const BorderRadius.only(
-                                                    topLeft: Radius.circular(6),
-                                                    bottomLeft: Radius.circular(6),
-                                                    bottomRight: Radius.circular(6),
-                                                    topRight: Radius.circular(6),
-                                                  ),
-                                                  color: CustomColors.white,
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      color: Color.fromARGB(13, 0, 0, 0),
-                                                      blurRadius: 4.0,
-                                                      spreadRadius: 2.0,
-                                                      offset: Offset(2.0, 2.0),
+                                              child: Consumer<ServiceGiverProvider>(
+                                                builder: (context, provider, child) {
+                                                  return Text(
+                                                    provider.userName ?? "",
+                                                    style: TextStyle(
+                                                      fontSize: 20,
+                                                      fontWeight: FontWeight.w700,
+                                                      fontFamily: "Rubik",
+                                                      color: CustomColors.white,
                                                     ),
-                                                  ],
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: 5,
+                                            right: 20,
+                                            left: 20,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius: const BorderRadius.only(
+                                                  topLeft: Radius.circular(6),
+                                                  bottomLeft: Radius.circular(6),
+                                                  bottomRight: Radius.circular(6),
+                                                  topRight: Radius.circular(6),
                                                 ),
-                                                alignment: Alignment.center,
-                                                width: MediaQuery.of(context).size.width,
-                                                height: 50,
-                                                child: TextFormField(
-                                                  readOnly: true,
-                                                  onTap: () {
-                                                    showModalBottomSheet(
-                                                      isScrollControlled: true,
-                                                      context: context,
-                                                      backgroundColor: Colors.white,
-                                                      shape: const RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.only(
-                                                          topLeft: Radius.circular(30.0),
-                                                          topRight: Radius.circular(30.0),
-                                                        ),
+                                                color: CustomColors.white,
+                                                boxShadow: const [
+                                                  BoxShadow(
+                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                    blurRadius: 4.0,
+                                                    spreadRadius: 2.0,
+                                                    offset: Offset(2.0, 2.0),
+                                                  ),
+                                                ],
+                                              ),
+                                              alignment: Alignment.center,
+                                              width: MediaQuery.of(context).size.width,
+                                              height: 50,
+                                              child: TextFormField(
+                                                readOnly: true,
+                                                onTap: () {
+                                                  showModalBottomSheet(
+                                                    isScrollControlled: true,
+                                                    context: context,
+                                                    backgroundColor: Colors.white,
+                                                    shape: const RoundedRectangleBorder(
+                                                      borderRadius: BorderRadius.only(
+                                                        topLeft: Radius.circular(30.0),
+                                                        topRight: Radius.circular(30.0),
                                                       ),
-                                                      builder: (BuildContext context) {
-                                                        return StatefulBuilder(
-                                                          builder: (BuildContext context, StateSetter setState) {
-                                                            return SingleChildScrollView(
-                                                              child: Padding(
-                                                                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                                                child: Container(
-                                                                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                                                                  child: Column(
-                                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                                    mainAxisSize: MainAxisSize.min,
-                                                                    children: [
-                                                                      const SizedBox(height: 20),
-                                                                      // Top Grey Line
-                                                                      Center(
-                                                                        child: Container(
-                                                                          width: 130,
-                                                                          height: 5,
-                                                                          decoration: BoxDecoration(
-                                                                            color: const Color(0xffC4C4C4),
-                                                                            borderRadius: BorderRadius.circular(6),
-                                                                          ),
+                                                    ),
+                                                    builder: (BuildContext context) {
+                                                      return StatefulBuilder(
+                                                        builder: (BuildContext context, StateSetter setState) {
+                                                          return SingleChildScrollView(
+                                                            child: Padding(
+                                                              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                              child: Container(
+                                                                padding: const EdgeInsets.symmetric(horizontal: 25),
+                                                                child: Column(
+                                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                                  mainAxisSize: MainAxisSize.min,
+                                                                  children: [
+                                                                    const SizedBox(height: 20),
+                                                                    // Top Grey Line
+                                                                    Center(
+                                                                      child: Container(
+                                                                        width: 130,
+                                                                        height: 5,
+                                                                        decoration: BoxDecoration(
+                                                                          color: const Color(0xffC4C4C4),
+                                                                          borderRadius: BorderRadius.circular(6),
                                                                         ),
                                                                       ),
-                                                                      const SizedBox(height: 10),
-                                                                      Column(
-                                                                        mainAxisAlignment: MainAxisAlignment.center,
-                                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          Center(
-                                                                            child: Text(
-                                                                              "Apply Filter",
-                                                                              style: TextStyle(
-                                                                                fontSize: 18,
-                                                                                color: CustomColors.primaryText,
-                                                                                fontFamily: "Poppins",
-                                                                                fontWeight: FontWeight.w600,
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          const SizedBox(height: 40),
-                                                                          Container(
-                                                                            decoration: BoxDecoration(
-                                                                              borderRadius: const BorderRadius.only(
-                                                                                topLeft: Radius.circular(6),
-                                                                                bottomLeft: Radius.circular(6),
-                                                                                bottomRight: Radius.circular(6),
-                                                                                topRight: Radius.circular(6),
-                                                                              ),
-                                                                              color: CustomColors.white,
-                                                                              boxShadow: const [
-                                                                                BoxShadow(
-                                                                                  color: Color.fromARGB(13, 0, 0, 0),
-                                                                                  blurRadius: 4.0,
-                                                                                  spreadRadius: 2.0,
-                                                                                  offset: Offset(2.0, 2.0),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                            alignment: Alignment.center,
-                                                                            width: MediaQuery.of(context).size.width,
-                                                                            height: 50,
-                                                                            child: TextFormField(
-                                                                              style: const TextStyle(
-                                                                                fontSize: 16,
-                                                                                fontFamily: "Rubik",
-                                                                                fontWeight: FontWeight.w400,
-                                                                              ),
-                                                                              textAlignVertical: TextAlignVertical.bottom,
-                                                                              maxLines: 1,
-                                                                              onChanged: (value) {
-                                                                                setState(
-                                                                                  () {
-                                                                                    findtitle = value.trim();
-                                                                                  },
-                                                                                );
-                                                                              },
-                                                                              decoration: InputDecoration(
-                                                                                prefixIcon: Icon(
-                                                                                  Icons.search,
-                                                                                  size: 17,
-                                                                                  color: CustomColors.hintText,
-                                                                                ),
-                                                                                hintText: "Search...",
-                                                                                fillColor: CustomColors.white,
-                                                                                focusColor: CustomColors.white,
-                                                                                hoverColor: CustomColors.white,
-                                                                                filled: true,
-                                                                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
-                                                                                focusedBorder: OutlineInputBorder(
-                                                                                  borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                                                  borderRadius: BorderRadius.circular(4.0),
-                                                                                ),
-                                                                                enabledBorder: OutlineInputBorder(
-                                                                                  borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                                                  borderRadius: BorderRadius.circular(4.0),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          const SizedBox(height: 20),
-                                                                          Text(
-                                                                            "Find",
+                                                                    ),
+                                                                    const SizedBox(height: 10),
+                                                                    Column(
+                                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                                      children: [
+                                                                        Center(
+                                                                          child: Text(
+                                                                            "Apply Filter",
                                                                             style: TextStyle(
-                                                                              fontSize: 15,
-                                                                              fontFamily: "Rubik",
-                                                                              fontWeight: FontWeight.w600,
-                                                                              color: CustomColors.primaryText,
-                                                                            ),
-                                                                          ),
-                                                                          const SizedBox(height: 5),
-                                                                          DecoratedBox(
-                                                                            decoration: BoxDecoration(
-                                                                              borderRadius: const BorderRadius.only(
-                                                                                topLeft: Radius.circular(6),
-                                                                                bottomLeft: Radius.circular(6),
-                                                                                bottomRight: Radius.circular(6),
-                                                                                topRight: Radius.circular(6),
-                                                                              ),
-                                                                              color: CustomColors.white,
-                                                                              boxShadow: const [
-                                                                                BoxShadow(
-                                                                                  color: Color.fromARGB(13, 0, 0, 0),
-                                                                                  blurRadius: 4.0,
-                                                                                  spreadRadius: 2.0,
-                                                                                  offset: Offset(2.0, 2.0),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                            child: Padding(
-                                                                              padding: const EdgeInsets.symmetric(
-                                                                                horizontal: 7,
-                                                                                vertical: 1,
-                                                                              ),
-                                                                              child: DropdownButtonHideUnderline(
-                                                                                child: DropdownButton(
-                                                                                  hint: const Text("Find"),
-                                                                                  isExpanded: true,
-                                                                                  items: data!.map((item) {
-                                                                                    return DropdownMenuItem(
-                                                                                      value: item['id'].toString(),
-                                                                                      child: Text(item['name']),
-                                                                                    );
-                                                                                  }).toList(),
-                                                                                  onChanged: (newVal) {
-                                                                                    setState(() {
-                                                                                      findSelected = newVal;
-                                                                                    });
-                                                                                  },
-                                                                                  value: findSelected,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          const SizedBox(height: 20),
-                                                                          Text(
-                                                                            "Area",
-                                                                            style: TextStyle(
-                                                                              fontSize: 15,
-                                                                              fontFamily: "Rubik",
-                                                                              fontWeight: FontWeight.w600,
-                                                                              color: CustomColors.primaryText,
-                                                                            ),
-                                                                          ),
-                                                                          const SizedBox(height: 5),
-                                                                          DecoratedBox(
-                                                                            decoration: BoxDecoration(
-                                                                              borderRadius: const BorderRadius.only(
-                                                                                topLeft: Radius.circular(6),
-                                                                                bottomLeft: Radius.circular(6),
-                                                                                bottomRight: Radius.circular(6),
-                                                                                topRight: Radius.circular(6),
-                                                                              ),
-                                                                              color: CustomColors.white,
-                                                                              boxShadow: const [
-                                                                                BoxShadow(
-                                                                                  color: Color.fromARGB(13, 0, 0, 0),
-                                                                                  blurRadius: 4.0,
-                                                                                  spreadRadius: 2.0,
-                                                                                  offset: Offset(2.0, 2.0),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                            child: Padding(
-                                                                              padding: const EdgeInsets.symmetric(
-                                                                                horizontal: 7,
-                                                                                vertical: 1,
-                                                                              ),
-                                                                              child: DropdownButtonHideUnderline(
-                                                                                child: DropdownButton(
-                                                                                  hint: const Text("Select Area"),
-                                                                                  isExpanded: true,
-                                                                                  items: area!.map((item) {
-                                                                                    return DropdownMenuItem(
-                                                                                      value: item['id'].toString(),
-                                                                                      child: Text(item['name']),
-                                                                                    );
-                                                                                  }).toList(),
-                                                                                  onChanged: (newVal) {
-                                                                                    setState(() {
-                                                                                      findArea = newVal;
-                                                                                    });
-                                                                                  },
-                                                                                  value: findArea,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          const SizedBox(height: 20),
-                                                                          Text(
-                                                                            "Rate",
-                                                                            style: TextStyle(
-                                                                              fontSize: 15,
-                                                                              fontFamily: "Rubik",
-                                                                              fontWeight: FontWeight.w600,
-                                                                              color: CustomColors.primaryText,
-                                                                            ),
-                                                                          ),
-                                                                          const SizedBox(height: 5),
-                                                                          DecoratedBox(
-                                                                            decoration: BoxDecoration(
-                                                                              borderRadius: const BorderRadius.only(
-                                                                                topLeft: Radius.circular(6),
-                                                                                bottomLeft: Radius.circular(6),
-                                                                                bottomRight: Radius.circular(6),
-                                                                                topRight: Radius.circular(6),
-                                                                              ),
-                                                                              color: CustomColors.white,
-                                                                              boxShadow: const [
-                                                                                BoxShadow(
-                                                                                  color: Color.fromARGB(13, 0, 0, 0),
-                                                                                  blurRadius: 4.0,
-                                                                                  spreadRadius: 2.0,
-                                                                                  offset: Offset(2.0, 2.0),
-                                                                                ),
-                                                                              ],
-                                                                            ),
-                                                                            child: Padding(
-                                                                              padding: const EdgeInsets.symmetric(
-                                                                                horizontal: 7,
-                                                                                vertical: 1,
-                                                                              ),
-                                                                              child: DropdownButtonHideUnderline(
-                                                                                child: DropdownButton(
-                                                                                  hint: const Text("Select Rate"),
-                                                                                  isExpanded: true,
-                                                                                  items: rate!.map((item) {
-                                                                                    return DropdownMenuItem(
-                                                                                      value: item,
-                                                                                      child: Text(item['name']),
-                                                                                    );
-                                                                                  }).toList(),
-                                                                                  onChanged: (newVal) {
-                                                                                    setState(() {
-                                                                                      findRate = newVal!;
-                                                                                    });
-                                                                                  },
-                                                                                  value: findRate,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          const SizedBox(height: 20),
-                                                                          LoadingButton(
-                                                                            title: "Search",
-                                                                            backgroundColor: CustomColors.primaryColor,
-                                                                            height: 60,
-                                                                            textStyle: TextStyle(
-                                                                              color: CustomColors.white,
-                                                                              fontFamily: "Rubik",
-                                                                              fontStyle: FontStyle.normal,
-                                                                              fontWeight: FontWeight.w500,
                                                                               fontSize: 18,
+                                                                              color: CustomColors.primaryText,
+                                                                              fontFamily: "Poppins",
+                                                                              fontWeight: FontWeight.w600,
                                                                             ),
-                                                                            onPressed: () async {
-                                                                              await provider.fetchFindedJobsDashboardModel(findtitle, findSelected, findArea, findRate);
-                                                                              setState(() {
-                                                                                findtitle = '';
-                                                                                findSelected = null;
-                                                                                findArea = null;
-                                                                                findRate = null;
-                                                                              });
-                                                                              Navigator.pop(context);
-                                                                              return true;
-                                                                            },
                                                                           ),
-                                                                          const SizedBox(height: 15),
-                                                                          LoadingButton(
-                                                                            title: "Clear",
-                                                                            backgroundColor: ServiceRecieverColor.redButton,
-                                                                            height: 60,
-                                                                            textStyle: TextStyle(
-                                                                              color: CustomColors.white,
+                                                                        ),
+                                                                        const SizedBox(height: 40),
+                                                                        Container(
+                                                                          decoration: BoxDecoration(
+                                                                            borderRadius: const BorderRadius.only(
+                                                                              topLeft: Radius.circular(6),
+                                                                              bottomLeft: Radius.circular(6),
+                                                                              bottomRight: Radius.circular(6),
+                                                                              topRight: Radius.circular(6),
+                                                                            ),
+                                                                            color: CustomColors.white,
+                                                                            boxShadow: const [
+                                                                              BoxShadow(
+                                                                                color: Color.fromARGB(13, 0, 0, 0),
+                                                                                blurRadius: 4.0,
+                                                                                spreadRadius: 2.0,
+                                                                                offset: Offset(2.0, 2.0),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          alignment: Alignment.center,
+                                                                          width: MediaQuery.of(context).size.width,
+                                                                          height: 50,
+                                                                          child: TextFormField(
+                                                                            style: const TextStyle(
+                                                                              fontSize: 16,
                                                                               fontFamily: "Rubik",
-                                                                              fontStyle: FontStyle.normal,
-                                                                              fontWeight: FontWeight.w500,
-                                                                              fontSize: 18,
+                                                                              fontWeight: FontWeight.w400,
                                                                             ),
-                                                                            onPressed: () async {
-                                                                              setState(() {
-                                                                                findtitle = '';
-                                                                                findSelected = null;
-                                                                                findArea = null;
-                                                                                findRate = null;
-                                                                              });
-                                                                              await provider.fetchProviderDashboardModel();
-                                                                              Navigator.pop(context);
-                                                                              return true;
+                                                                            textAlignVertical: TextAlignVertical.bottom,
+                                                                            maxLines: 1,
+                                                                            onChanged: (value) {
+                                                                              setState(
+                                                                                () {
+                                                                                  findtitle = value.trim();
+                                                                                },
+                                                                              );
                                                                             },
+                                                                            decoration: InputDecoration(
+                                                                              prefixIcon: Icon(
+                                                                                Icons.search,
+                                                                                size: 17,
+                                                                                color: CustomColors.hintText,
+                                                                              ),
+                                                                              hintText: "Search...",
+                                                                              fillColor: CustomColors.white,
+                                                                              focusColor: CustomColors.white,
+                                                                              hoverColor: CustomColors.white,
+                                                                              filled: true,
+                                                                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+                                                                              focusedBorder: OutlineInputBorder(
+                                                                                borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                                                borderRadius: BorderRadius.circular(4.0),
+                                                                              ),
+                                                                              enabledBorder: OutlineInputBorder(
+                                                                                borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                                                borderRadius: BorderRadius.circular(4.0),
+                                                                              ),
+                                                                            ),
                                                                           ),
-                                                                          const SizedBox(height: 30),
-                                                                        ],
-                                                                      ),
-                                                                    ],
-                                                                  ),
+                                                                        ),
+                                                                        const SizedBox(height: 20),
+                                                                        Text(
+                                                                          "Find",
+                                                                          style: TextStyle(
+                                                                            fontSize: 15,
+                                                                            fontFamily: "Rubik",
+                                                                            fontWeight: FontWeight.w600,
+                                                                            color: CustomColors.primaryText,
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(height: 5),
+                                                                        DecoratedBox(
+                                                                          decoration: BoxDecoration(
+                                                                            borderRadius: const BorderRadius.only(
+                                                                              topLeft: Radius.circular(6),
+                                                                              bottomLeft: Radius.circular(6),
+                                                                              bottomRight: Radius.circular(6),
+                                                                              topRight: Radius.circular(6),
+                                                                            ),
+                                                                            color: CustomColors.white,
+                                                                            boxShadow: const [
+                                                                              BoxShadow(
+                                                                                color: Color.fromARGB(13, 0, 0, 0),
+                                                                                blurRadius: 4.0,
+                                                                                spreadRadius: 2.0,
+                                                                                offset: Offset(2.0, 2.0),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(
+                                                                              horizontal: 7,
+                                                                              vertical: 1,
+                                                                            ),
+                                                                            child: DropdownButtonHideUnderline(
+                                                                              child: DropdownButton(
+                                                                                hint: const Text("Find"),
+                                                                                isExpanded: true,
+                                                                                items: data!.map((item) {
+                                                                                  return DropdownMenuItem(
+                                                                                    value: item['id'].toString(),
+                                                                                    child: Text(item['name']),
+                                                                                  );
+                                                                                }).toList(),
+                                                                                onChanged: (newVal) {
+                                                                                  setState(() {
+                                                                                    findSelected = newVal;
+                                                                                  });
+                                                                                },
+                                                                                value: findSelected,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(height: 20),
+                                                                        Text(
+                                                                          "Area",
+                                                                          style: TextStyle(
+                                                                            fontSize: 15,
+                                                                            fontFamily: "Rubik",
+                                                                            fontWeight: FontWeight.w600,
+                                                                            color: CustomColors.primaryText,
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(height: 5),
+                                                                        DecoratedBox(
+                                                                          decoration: BoxDecoration(
+                                                                            borderRadius: const BorderRadius.only(
+                                                                              topLeft: Radius.circular(6),
+                                                                              bottomLeft: Radius.circular(6),
+                                                                              bottomRight: Radius.circular(6),
+                                                                              topRight: Radius.circular(6),
+                                                                            ),
+                                                                            color: CustomColors.white,
+                                                                            boxShadow: const [
+                                                                              BoxShadow(
+                                                                                color: Color.fromARGB(13, 0, 0, 0),
+                                                                                blurRadius: 4.0,
+                                                                                spreadRadius: 2.0,
+                                                                                offset: Offset(2.0, 2.0),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(
+                                                                              horizontal: 7,
+                                                                              vertical: 1,
+                                                                            ),
+                                                                            child: DropdownButtonHideUnderline(
+                                                                              child: DropdownButton(
+                                                                                hint: const Text("Select Area"),
+                                                                                isExpanded: true,
+                                                                                items: area!.map((item) {
+                                                                                  return DropdownMenuItem(
+                                                                                    value: item['id'].toString(),
+                                                                                    child: Text(item['name']),
+                                                                                  );
+                                                                                }).toList(),
+                                                                                onChanged: (newVal) {
+                                                                                  setState(() {
+                                                                                    findArea = newVal;
+                                                                                  });
+                                                                                },
+                                                                                value: findArea,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(height: 20),
+                                                                        Text(
+                                                                          "Rate",
+                                                                          style: TextStyle(
+                                                                            fontSize: 15,
+                                                                            fontFamily: "Rubik",
+                                                                            fontWeight: FontWeight.w600,
+                                                                            color: CustomColors.primaryText,
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(height: 5),
+                                                                        DecoratedBox(
+                                                                          decoration: BoxDecoration(
+                                                                            borderRadius: const BorderRadius.only(
+                                                                              topLeft: Radius.circular(6),
+                                                                              bottomLeft: Radius.circular(6),
+                                                                              bottomRight: Radius.circular(6),
+                                                                              topRight: Radius.circular(6),
+                                                                            ),
+                                                                            color: CustomColors.white,
+                                                                            boxShadow: const [
+                                                                              BoxShadow(
+                                                                                color: Color.fromARGB(13, 0, 0, 0),
+                                                                                blurRadius: 4.0,
+                                                                                spreadRadius: 2.0,
+                                                                                offset: Offset(2.0, 2.0),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          child: Padding(
+                                                                            padding: const EdgeInsets.symmetric(
+                                                                              horizontal: 7,
+                                                                              vertical: 1,
+                                                                            ),
+                                                                            child: DropdownButtonHideUnderline(
+                                                                              child: DropdownButton(
+                                                                                hint: const Text("Select Rate"),
+                                                                                isExpanded: true,
+                                                                                items: rate!.map((item) {
+                                                                                  return DropdownMenuItem(
+                                                                                    value: item,
+                                                                                    child: Text(item['name']),
+                                                                                  );
+                                                                                }).toList(),
+                                                                                onChanged: (newVal) {
+                                                                                  setState(() {
+                                                                                    findRate = newVal!;
+                                                                                  });
+                                                                                },
+                                                                                value: findRate,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                        const SizedBox(height: 20),
+                                                                        LoadingButton(
+                                                                          title: "Search",
+                                                                          backgroundColor: CustomColors.primaryColor,
+                                                                          height: 60,
+                                                                          textStyle: TextStyle(
+                                                                            color: CustomColors.white,
+                                                                            fontFamily: "Rubik",
+                                                                            fontStyle: FontStyle.normal,
+                                                                            fontWeight: FontWeight.w500,
+                                                                            fontSize: 18,
+                                                                          ),
+                                                                          onPressed: () async {
+                                                                            await provider.fetchFindedJobsDashboardModel(findtitle, findSelected, findArea, findRate);
+                                                                            setState(() {
+                                                                              findtitle = '';
+                                                                              findSelected = null;
+                                                                              findArea = null;
+                                                                              findRate = null;
+                                                                            });
+                                                                            Navigator.pop(context);
+                                                                            return true;
+                                                                          },
+                                                                        ),
+                                                                        const SizedBox(height: 15),
+                                                                        LoadingButton(
+                                                                          title: "Clear",
+                                                                          backgroundColor: ServiceRecieverColor.redButton,
+                                                                          height: 60,
+                                                                          textStyle: TextStyle(
+                                                                            color: CustomColors.white,
+                                                                            fontFamily: "Rubik",
+                                                                            fontStyle: FontStyle.normal,
+                                                                            fontWeight: FontWeight.w500,
+                                                                            fontSize: 18,
+                                                                          ),
+                                                                          onPressed: () async {
+                                                                            setState(() {
+                                                                              findtitle = '';
+                                                                              findSelected = null;
+                                                                              findArea = null;
+                                                                              findRate = null;
+                                                                            });
+                                                                            await provider.fetchProviderDashboardModel();
+                                                                            Navigator.pop(context);
+                                                                            return true;
+                                                                          },
+                                                                        ),
+                                                                        const SizedBox(height: 30),
+                                                                      ],
+                                                                    ),
+                                                                  ],
                                                                 ),
                                                               ),
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                    );
-                                                  },
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontFamily: "Rubik",
-                                                    fontWeight: FontWeight.w400,
+                                                            ),
+                                                          );
+                                                        },
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontFamily: "Rubik",
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                                textAlignVertical: TextAlignVertical.bottom,
+                                                maxLines: 1,
+                                                decoration: InputDecoration(
+                                                  prefixIcon: Icon(
+                                                    Icons.search,
+                                                    size: 17,
+                                                    color: CustomColors.hintText,
                                                   ),
-                                                  textAlignVertical: TextAlignVertical.bottom,
-                                                  maxLines: 1,
-                                                  decoration: InputDecoration(
-                                                    prefixIcon: Icon(
-                                                      Icons.search,
-                                                      size: 17,
-                                                      color: CustomColors.hintText,
-                                                    ),
-                                                    hintText: "Search...",
-                                                    fillColor: CustomColors.white,
-                                                    focusColor: CustomColors.white,
-                                                    hoverColor: CustomColors.white,
-                                                    filled: true,
-                                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
-                                                    focusedBorder: OutlineInputBorder(
-                                                      borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                      borderRadius: BorderRadius.circular(4.0),
-                                                    ),
-                                                    enabledBorder: OutlineInputBorder(
-                                                      borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                      borderRadius: BorderRadius.circular(4.0),
-                                                    ),
+                                                  hintText: "Search...",
+                                                  fillColor: CustomColors.white,
+                                                  focusColor: CustomColors.white,
+                                                  hoverColor: CustomColors.white,
+                                                  filled: true,
+                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+                                                  focusedBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                    borderRadius: BorderRadius.circular(4.0),
+                                                  ),
+                                                  enabledBorder: OutlineInputBorder(
+                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                    borderRadius: BorderRadius.circular(4.0),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    SliverToBoxAdapter(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                                        child: Column(
-                                          children: [
-                                            ListView.builder(
-                                              shrinkWrap: true,
-                                              scrollDirection: Axis.vertical,
-                                              physics: const NeverScrollableScrollPhysics(),
-                                              itemCount: provider.filterDataList.length,
-                                              itemBuilder: (BuildContext context, int index) {
-                                                var job = provider.filterDataList[index];
-                                                return JobCardContainer(
-                                                  jobId: job!.id.toString(),
-                                                  serviceId: job!.service!.id.toString(),
-                                                  imageUrl: "${AppUrl.webStorageUrl}/${job!.userImage}",
-                                                  serviceName: job!.service!.name.toString(),
-                                                  userName: "${job!.userFirstName} ${job!.userLastName}",
-                                                  jobAddress: job!.address.toString(),
-                                                  jobTitle: job!.jobTitle ?? "",
-                                                  hourlyRate: job!.hourlyRate.toString(),
-                                                  jobArea: job!.location.toString(),
-                                                  jobDuration: job!.totalDuration.toString(),
-                                                  jobAmount: job!.totalAmount.toString(),
-                                                );
-                                              },
-                                            ),
-                                          ],
-                                        ),
+                                  ),
+                                  SliverToBoxAdapter(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                                      child: Column(
+                                        children: [
+                                          ListView.builder(
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.vertical,
+                                            physics: const NeverScrollableScrollPhysics(),
+                                            itemCount: provider.filterDataList.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              var job = provider.filterDataList[index];
+                                              return JobCardContainer(
+                                                jobId: job!.id.toString(),
+                                                serviceId: job!.service!.id.toString(),
+                                                imageUrl: "${AppUrl.webStorageUrl}/${job!.userImage}",
+                                                serviceName: job!.service!.name.toString(),
+                                                userName: "${job!.userFirstName} ${job!.userLastName}",
+                                                jobAddress: job!.address.toString(),
+                                                jobTitle: job!.jobTitle ?? "",
+                                                hourlyRate: job!.hourlyRate.toString(),
+                                                jobArea: job!.location.toString(),
+                                                jobDuration: job!.totalDuration.toString(),
+                                                jobAmount: job!.totalAmount.toString(),
+                                              );
+                                            },
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              child: CustomPagination(
-                                nextPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
-                                    ? () {
-                                        provider.handlePageChange(provider.currentPageIndex + 1);
-                                      }
-                                    : null,
-                                previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
-                                gotoPage: provider.handlePageChange,
-                                gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
-                                gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1 ? () => provider.handlePageChange(provider.totalRowsCount - 1) : null,
-                                currentPageIndex: provider.currentPageIndex,
-                                totalRowsCount: provider.totalRowsCount,
-                              ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: CustomPagination(
+                              nextPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
+                                  ? () {
+                                      provider.handlePageChange(provider.currentPageIndex + 1);
+                                    }
+                                  : null,
+                              previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
+                              gotoPage: provider.handlePageChange,
+                              gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
+                              gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1 ? () => provider.handlePageChange(provider.totalRowsCount - 1) : null,
+                              currentPageIndex: provider.currentPageIndex,
+                              totalRowsCount: provider.totalRowsCount,
                             ),
-                          ],
-                        ),
-                      )
-                    : const ProfileCompletContainer(),
-          ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const ProfileCompletContainer(),
         );
       },
     );

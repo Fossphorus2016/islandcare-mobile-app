@@ -101,129 +101,139 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                                   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                                   child: Column(
                                     children: [
-                                      ListView.builder(
-                                        itemCount: provider.filterDataList.length,
-                                        shrinkWrap: true,
-                                        padding: const EdgeInsets.only(top: 16),
-                                        physics: const NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          if (provider.allReviews!.isEmpty) {
-                                            return Container(
-                                                width: MediaQuery.of(context).size.width,
-                                                alignment: Alignment.center,
-                                                padding: const EdgeInsets.all(20),
-                                                decoration: const BoxDecoration(
-                                                  borderRadius: BorderRadius.only(
-                                                    topLeft: Radius.circular(10),
-                                                    topRight: Radius.circular(10),
-                                                    bottomLeft: Radius.circular(10),
-                                                    bottomRight: Radius.circular(10),
+                                      if (provider.filterDataList.isNotEmpty) ...[
+                                        ListView.builder(
+                                          itemCount: provider.filterDataList.length,
+                                          shrinkWrap: true,
+                                          padding: const EdgeInsets.only(top: 16),
+                                          physics: const NeverScrollableScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            if (provider.allReviews!.isEmpty) {
+                                              return Container(
+                                                  width: MediaQuery.of(context).size.width,
+                                                  alignment: Alignment.center,
+                                                  padding: const EdgeInsets.all(20),
+                                                  decoration: const BoxDecoration(
+                                                    borderRadius: BorderRadius.only(
+                                                      topLeft: Radius.circular(10),
+                                                      topRight: Radius.circular(10),
+                                                      bottomLeft: Radius.circular(10),
+                                                      bottomRight: Radius.circular(10),
+                                                    ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
+                                                        offset: Offset(0, 4),
+                                                        blurRadius: 45,
+                                                      )
+                                                    ],
+                                                    color: Color.fromRGBO(255, 255, 255, 1),
                                                   ),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Color.fromRGBO(26, 41, 96, 0.05999999865889549),
-                                                      offset: Offset(0, 4),
-                                                      blurRadius: 45,
-                                                    )
-                                                  ],
-                                                  color: Color.fromRGBO(255, 255, 255, 1),
-                                                ),
-                                                child: const Text("0 Jobs Found"));
-                                          }
-                                          var review = provider.filterDataList[index];
-                                          return Container(
-                                            height: 60,
-                                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 08),
-                                            margin: const EdgeInsets.only(bottom: 10),
-                                            decoration: BoxDecoration(
-                                              border: Border.all(color: ServiceGiverColor.black),
-                                              borderRadius: BorderRadius.circular(12),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                if (ResponsiveBreakpoints.of(context).isMobile) ...[
-                                                  Expanded(
-                                                    child: Text(
+                                                  child: const Text("0 Jobs Found"));
+                                            }
+                                            var review = provider.filterDataList[index];
+                                            return Container(
+                                              height: 60,
+                                              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 08),
+                                              margin: const EdgeInsets.only(bottom: 10),
+                                              decoration: BoxDecoration(
+                                                border: Border.all(color: ServiceGiverColor.black),
+                                                borderRadius: BorderRadius.circular(12),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  if (ResponsiveBreakpoints.of(context).isMobile) ...[
+                                                    Expanded(
+                                                      child: Text(
+                                                        '${review.receiverRating!.firstName} ${review.receiverRating!.lastName}',
+                                                        maxLines: 2,
+                                                        overflow: TextOverflow.ellipsis,
+                                                      ),
+                                                    ),
+                                                  ] else ...[
+                                                    Text(
                                                       '${review.receiverRating!.firstName} ${review.receiverRating!.lastName}',
                                                       maxLines: 2,
                                                       overflow: TextOverflow.ellipsis,
                                                     ),
-                                                  ),
-                                                ] else ...[
-                                                  Text(
-                                                    '${review.receiverRating!.firstName} ${review.receiverRating!.lastName}',
-                                                    maxLines: 2,
-                                                    overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ],
-                                                if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
-                                                  RatingBar.builder(
-                                                    initialRating: review.rating!.toDouble(),
-                                                    minRating: 1,
-                                                    direction: Axis.horizontal,
-                                                    allowHalfRating: true,
-                                                    ignoreGestures: false,
-                                                    itemSize: 15,
-                                                    itemCount: 5,
-                                                    itemBuilder: (context, _) => const Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                    ),
-                                                    onRatingUpdate: (rating) {},
-                                                  ),
-                                                ],
-                                                InkWell(
-                                                  onTap: () {
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (context) => AlertDialog(
-                                                        title: Center(child: Text('${review.receiverRating!.firstName} ${review.receiverRating!.lastName}')),
-                                                        alignment: Alignment.center,
-                                                        content: Column(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          children: [
-                                                            RatingBar.builder(
-                                                              initialRating: review.rating!.toDouble(),
-                                                              minRating: 1,
-                                                              direction: Axis.horizontal,
-                                                              allowHalfRating: true,
-                                                              ignoreGestures: false,
-                                                              itemSize: 24,
-                                                              itemCount: 5,
-                                                              itemBuilder: (context, _) => const Icon(
-                                                                Icons.star,
-                                                                color: Colors.amber,
-                                                              ),
-                                                              onRatingUpdate: (rating) {},
-                                                            ),
-                                                            Text(
-                                                              review.comment.toString() == "null" ? "Not Available" : review.comment.toString(),
-                                                              maxLines: 20,
-                                                              softWrap: true,
-                                                              style: TextStyle(
-                                                                fontSize: 16,
-                                                                fontFamily: "Poppins",
-                                                                fontWeight: FontWeight.w400,
-                                                                color: CustomColors.primaryText,
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
+                                                  ],
+                                                  if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                                    RatingBar.builder(
+                                                      initialRating: review.rating!.toDouble(),
+                                                      minRating: 1,
+                                                      direction: Axis.horizontal,
+                                                      allowHalfRating: true,
+                                                      ignoreGestures: false,
+                                                      itemSize: 15,
+                                                      itemCount: 5,
+                                                      itemBuilder: (context, _) => const Icon(
+                                                        Icons.star,
+                                                        color: Colors.amber,
                                                       ),
-                                                    );
-                                                  },
-                                                  child: Icon(
-                                                    Icons.arrow_circle_right_outlined,
-                                                    color: ServiceGiverColor.black,
+                                                      onRatingUpdate: (rating) {},
+                                                    ),
+                                                  ],
+                                                  InkWell(
+                                                    onTap: () {
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (context) => AlertDialog(
+                                                          title: Center(child: Text('${review.receiverRating!.firstName} ${review.receiverRating!.lastName}')),
+                                                          alignment: Alignment.center,
+                                                          content: Column(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              RatingBar.builder(
+                                                                initialRating: review.rating!.toDouble(),
+                                                                minRating: 1,
+                                                                direction: Axis.horizontal,
+                                                                allowHalfRating: true,
+                                                                ignoreGestures: false,
+                                                                itemSize: 24,
+                                                                itemCount: 5,
+                                                                itemBuilder: (context, _) => const Icon(
+                                                                  Icons.star,
+                                                                  color: Colors.amber,
+                                                                ),
+                                                                onRatingUpdate: (rating) {},
+                                                              ),
+                                                              Text(
+                                                                review.comment.toString() == "null" ? "Not Available" : review.comment.toString(),
+                                                                maxLines: 20,
+                                                                softWrap: true,
+                                                                style: TextStyle(
+                                                                  fontSize: 16,
+                                                                  fontFamily: "Poppins",
+                                                                  fontWeight: FontWeight.w400,
+                                                                  color: CustomColors.primaryText,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Icon(
+                                                      Icons.arrow_circle_right_outlined,
+                                                      color: ServiceGiverColor.black,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ] else ...[
+                                        const SizedBox(height: 100),
+                                        const Center(
+                                          child: Text(
+                                            "No Review Found",
+                                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                                          ),
+                                        )
+                                      ],
                                     ],
                                   ),
                                 ),

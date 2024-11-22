@@ -5,7 +5,7 @@ import 'package:island_app/caregiver/screens/job_detail.dart';
 import 'package:island_app/caregiver/screens/my_job_detail.dart';
 import 'package:island_app/caregiver/screens/my_jobs_screen.dart';
 import 'package:island_app/caregiver/screens/provider_reviews_given_screen.dart';
-import 'package:island_app/caregiver/widgets/bottombar.dart';
+import 'package:island_app/caregiver/screens/bottombar.dart';
 import 'package:island_app/carereceiver/screens/applicant_profile_detail.dart';
 import 'package:island_app/carereceiver/screens/availability.dart';
 import 'package:island_app/carereceiver/screens/chat_detail_screen.dart';

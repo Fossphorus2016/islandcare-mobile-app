@@ -3,8 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/screens/terms_condition_screen.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
@@ -160,6 +161,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
   var errors;
   String phone = "";
+
+  bool showDOBError = false;
+  bool showServiceProvideSelectError = false;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -204,7 +208,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     hintText: "First Name",
                     validation: (val) {
                       if (val == null || val.isEmpty) {
-                        return 'Enter your First Name';
+                        return 'Please enter your first name';
                       }
                       return null;
                     },
@@ -225,7 +229,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     hintText: "Last Name",
                     validation: (val) {
                       if (val == null || val.isEmpty) {
-                        return 'Enter your Last Name';
+                        return 'Please enter your last name';
                       }
                       return null;
                     },
@@ -246,9 +250,9 @@ class _SignupScreenState extends State<SignupScreen> {
                     hintText: "Email",
                     validation: (val) {
                       if (val == null || val.isEmpty) {
-                        return 'Enter your Email';
+                        return 'Please enter your email';
                       } else if (!val.contains(RegExp(r'^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-z]'))) {
-                        return 'Please Enter Email Properly';
+                        return 'Please enter email properly';
                       }
                       return null;
                     },
@@ -276,32 +280,40 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(height: 05),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(08),
-                      border: Border.all(color: Colors.grey),
-                    ),
-                    child: InternationalPhoneNumberInput(
-                      spaceBetweenSelectorAndTextField: 00,
-                      selectorTextStyle: const TextStyle(color: Colors.black),
-                      formatInput: true,
-                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
-                      inputBorder: InputBorder.none,
-                      onInputChanged: (PhoneNumber number) {
-                        phone = "${number.phoneNumber}";
-                      },
-                      onInputValidated: (bool value) {
-                        // print(value);
-                      },
-                      selectorConfig: const SelectorConfig(
-                        setSelectorButtonAsPrefixIcon: true,
-                        selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                        useBottomSheetSafeArea: true,
+                  IntlPhoneField(
+                    showCountryFlag: true,
+                    initialCountryCode: "BM",
+                    controller: phoneNumController,
+                    showDropdownIcon: false,
+                    flagsButtonMargin: const EdgeInsets.symmetric(horizontal: 8),
+                    textAlignVertical: TextAlignVertical.center,
+                    dropdownIconPosition: IconPosition.leading,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    languageCode: "en",
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(08),
                       ),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                    onChanged: (value) {
+                      if (value.number.isNotEmpty) {
+                        phone = "${value.countryCode}${value.number}";
+                      } else {
+                        phone = "";
+                      }
+                    },
+                    keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Date of Birth",
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 05),
                   InkWell(
                     onTap: () {
                       _selectDate(context);
@@ -316,7 +328,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.only(left: 12),
                       child: Text(
-                        dobController.text.isEmpty ? "Date Of Birth" : dobController.text.toString(),
+                        dobController.text.isEmpty ? "Date of Birth" : dobController.text.toString(),
                         style: const TextStyle(
                           fontSize: 15,
                           color: Colors.black,
@@ -326,6 +338,21 @@ class _SignupScreenState extends State<SignupScreen> {
                       ),
                     ),
                   ),
+                  if (showDOBError) ...[
+                    const SizedBox(height: 05),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          "Please select date of birth",
+                          style: TextStyle(
+                            color: CustomColors.red,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                   // Choose Service
                   const SizedBox(height: 20),
                   const Text(
@@ -449,14 +476,14 @@ class _SignupScreenState extends State<SignupScreen> {
                   const SizedBox(height: 20),
                   _isSelectedService == "4"
                       ? const Text(
-                          "Service You Require",
+                          "Services You Require",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         )
                       : const Text(
-                          "Services You Provide",
+                          "Service You Provide",
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -483,7 +510,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           borderRadius: BorderRadius.circular(08),
                         ),
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        child: selectedService.isNotEmpty ? Text(getServiceNameById()) : const Text("Select Services"),
+                        child: selectedService.isNotEmpty ? Text(getServiceNameById()) : const Text("Select Services You Require"),
                       ),
                     ),
                   ] else ...[
@@ -499,7 +526,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton(
-                          hint: const Text("Services You Provide"),
+                          hint: const Text("Service You Provide"),
                           isExpanded: true,
                           items: allServices!.map((item) {
                             return DropdownMenuItem(
@@ -514,6 +541,21 @@ class _SignupScreenState extends State<SignupScreen> {
                             });
                           },
                           value: selectedService.isNotEmpty ? selectedService.first : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                  if (showServiceProvideSelectError) ...[
+                    const SizedBox(height: 05),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Text(
+                          _isSelectedService == "4" ? "Please select services you Require" : "Please select service you Provide",
+                          style: TextStyle(
+                            color: CustomColors.red,
+                          ),
                         ),
                       ),
                     ),
@@ -589,32 +631,64 @@ class _SignupScreenState extends State<SignupScreen> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  TextButton.icon(
-                    style: TextButton.styleFrom(splashFactory: NoSplash.splashFactory),
-                    onPressed: () {
-                      _toggleradio();
-                    },
-                    icon: CircleAvatar(
-                      backgroundColor: const Color.fromARGB(181, 171, 171, 171),
-                      radius: 8,
-                      child: CircleAvatar(
-                        radius: 4,
-                        backgroundColor: _isRadioSelected == "1" ? CustomColors.primaryText : const Color.fromARGB(181, 171, 171, 171),
+                  Row(
+                    children: [
+                      TextButton.icon(
+                        style: TextButton.styleFrom(
+                          splashFactory: NoSplash.splashFactory,
+                          // backgroundColor: Colors.amber,
+                          padding: const EdgeInsets.only(left: 10, bottom: 10, top: 10),
+                        ),
+                        onPressed: () {
+                          _toggleradio();
+                        },
+                        icon: CircleAvatar(
+                          backgroundColor: const Color.fromARGB(181, 171, 171, 171),
+                          radius: 8,
+                          child: CircleAvatar(
+                            radius: 4,
+                            backgroundColor: _isRadioSelected == "1" ? CustomColors.primaryText : const Color.fromARGB(181, 171, 171, 171),
+                          ),
+                        ),
+                        label: Text(
+                          "I agree",
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: CustomColors.primaryText,
+                            fontFamily: "Rubik",
+                            fontStyle: FontStyle.normal,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
                       ),
-                    ),
-                    label: Text(
-                      "I agree with the Terms of Service & Privacy Policy",
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: CustomColors.primaryText,
-                        fontFamily: "Rubik",
-                        fontStyle: FontStyle.normal,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
+                      const SizedBox(width: 05),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const TermsConditionScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text(
+                          "Terms and conditions.",
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontFamily: "Rubik",
+                            fontStyle: FontStyle.normal,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                   const SizedBox(height: 10),
                   LoadingButton(
@@ -629,16 +703,30 @@ class _SignupScreenState extends State<SignupScreen> {
                       fontSize: 18,
                     ),
                     onPressed: () async {
-                      // log(phone);
                       _signUpFormKey.currentState?.save();
-                      // log(_signUpFormKey.currentState!.validate().toString());
+                      setState(() {
+                        showDOBError = false;
+                        showServiceProvideSelectError = false;
+                      });
                       if (!_signUpFormKey.currentState!.validate()) {
                       } else if (dobController.text.isEmpty) {
                         showErrorToast("Please Enter Date of Birth");
+                        setState(() {
+                          showDOBError = true;
+                        });
                       } else if (_isSelectedService == null) {
                         showErrorToast("Please Select Service ");
+                      } else if (selectedService.isEmpty) {
+                        setState(() {
+                          showServiceProvideSelectError = true;
+                        });
+                        if (_isSelectedService == " 3") {
+                          showErrorToast("Please Select Service You Provide");
+                        } else {
+                          showErrorToast("Please Select Service You Require");
+                        }
                       } else if (_isRadioSelected == "0") {
-                        showErrorToast("Please Select Terms of Services & Privacy Policy");
+                        showErrorToast("Please agree to terms and conditions");
                       } else {
                         var formData = FormData.fromMap({
                           "first_name": firstNameController.text.toString(),

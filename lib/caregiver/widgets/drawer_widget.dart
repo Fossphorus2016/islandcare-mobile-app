@@ -132,7 +132,10 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                       Column(
                         children: [
                           InkWell(
-                            onTap: () => bottomNavigationProvider.updatePage(2),
+                            onTap: () {
+                              // int prePage = bottomNavigationProvider.page;
+                              bottomNavigationProvider.updatePage(2);
+                            },
                             child: Container(
                               width: MediaQuery.of(context).size.width,
                               height: 140,
@@ -223,6 +226,7 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                 if (bottomNavigationProvider.page == 0) {
                                   Navigator.pop(context);
                                 } else {
+                                  // int prePage = bottomNavigationProvider.page;
                                   bottomNavigationProvider.updatePage(0);
                                 }
                               },
@@ -408,7 +412,10 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                     Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: InkWell(
-                        onTap: () => bottomNavigationProvider.updatePage(2),
+                        onTap: () {
+                          // int prePage = bottomNavigationProvider.page;
+                          bottomNavigationProvider.updatePage(2);
+                        },
                         child: Padding(
                           padding: const EdgeInsets.only(top: 25, bottom: 60),
                           child: Row(

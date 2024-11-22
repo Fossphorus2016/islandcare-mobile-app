@@ -9,6 +9,7 @@ import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/widgets/assistance_container.dart';
 import 'package:island_app/widgets/job_detail_tile.dart';
 import 'package:island_app/widgets/job_info_container.dart';
@@ -42,6 +43,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
     );
     if (response != null && response.statusCode == 200) {
       showSuccessToast("Job applied successfully");
+      navigationService.pop();
     } else {
       showErrorToast("Server Error");
     }
@@ -224,7 +226,7 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
             const SizedBox(height: 10),
             JobDetailTile(
               name: "Medical Condition",
-              title: item.seniorCare!.medicalCondition.toString(),
+              title: item.seniorCare!.medicalCondition ?? '',
             ),
             const SizedBox(height: 10),
             JobDetailTile(
@@ -237,46 +239,46 @@ class _JobDetailGiverState extends State<JobDetailGiver> {
               AssistanceContainer(
                 dd: [
                   if (item.seniorCare!.bathing.toString() == "1") ...[
-                    item.seniorCare!.bathing.toString() == "1" ? "bathing" : item.seniorCare!.bathing.toString(),
+                    "Bathing",
                   ],
                   if (item.seniorCare!.dressing.toString() == "1") ...[
-                    item.seniorCare!.dressing.toString() == "1" ? "dressing" : item.seniorCare!.dressing.toString(),
+                    "Dressing",
                   ],
                   if (item.seniorCare!.feeding.toString() == "1") ...[
-                    item.seniorCare!.feeding.toString() == "1" ? "feeding" : item.seniorCare!.feeding.toString(),
+                    "Feeding",
                   ],
                   if (item.seniorCare!.mealPreparation.toString() == "1") ...[
-                    item.seniorCare!.mealPreparation.toString() == "1" ? "mealPreparation" : item.seniorCare!.mealPreparation.toString(),
+                    "Meal Preparation",
                   ],
                   if (item.seniorCare!.groceryShopping.toString() == "1") ...[
-                    item.seniorCare!.groceryShopping.toString() == "1" ? "groceryShopping" : item.seniorCare!.groceryShopping.toString(),
+                    "Grocery Shopping",
                   ],
                   if (item.seniorCare!.walking.toString() == "1") ...[
-                    item.seniorCare!.walking.toString() == "1" ? "walking" : item.seniorCare!.walking.toString(),
+                    "Walking",
                   ],
                   if (item.seniorCare!.bedTransfer.toString() == "1") ...[
-                    item.seniorCare!.bedTransfer.toString() == "1" ? "bedTransfer" : item.seniorCare!.bedTransfer.toString(),
+                    "Bed Transfer",
                   ],
                   if (item.seniorCare!.lightCleaning.toString() == "1") ...[
-                    item.seniorCare!.lightCleaning.toString() == "1" ? "lightCleaning" : item.seniorCare!.lightCleaning.toString(),
+                    "Light Cleaning",
                   ],
                   if (item.seniorCare!.companionship.toString() == "1") ...[
-                    item.seniorCare!.companionship.toString() == "1" ? "companionship" : item.seniorCare!.companionship.toString(),
+                    "Companionship",
                   ],
                   if (item.seniorCare!.medicationAdministration.toString() == "1") ...[
-                    item.seniorCare!.medicationAdministration.toString() == "1" ? "medicationAdministration" : item.seniorCare!.medicationAdministration.toString(),
+                    "Medication Administration",
                   ],
                   if (item.seniorCare!.dressingWoundCare.toString() == "1") ...[
-                    item.seniorCare!.dressingWoundCare.toString() == "1" ? "dressingWoundCare" : item.seniorCare!.dressingWoundCare.toString(),
+                    "Dressing Wound Care",
                   ],
                   if (item.seniorCare!.bloodPressureMonetoring.toString() == "1") ...[
-                    item.seniorCare!.bloodPressureMonetoring.toString() == "1" ? "bloodPressureMonetoring" : item.seniorCare!.bloodPressureMonetoring.toString(),
+                    "Blood Pressure Monetoring",
                   ],
                   if (item.seniorCare!.bloodSugarMonetoring.toString() == "1") ...[
-                    item.seniorCare!.bloodSugarMonetoring.toString() == "1" ? "bloodSugarMonetoring" : item.seniorCare!.bloodSugarMonetoring.toString(),
+                    "Blood Sugar Monetoring",
                   ],
                   if (item.seniorCare!.groomingHairAndNailTrimming.toString() == "1") ...[
-                    item.seniorCare!.groomingHairAndNailTrimming.toString() == "1" ? "groomingHairAndNailTrimming" : item.seniorCare!.groomingHairAndNailTrimming.toString(),
+                    "Grooming Hair And Nail Trimming",
                   ],
                 ],
               ),

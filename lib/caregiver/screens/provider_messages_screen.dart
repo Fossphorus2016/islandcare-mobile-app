@@ -110,16 +110,16 @@ class ServiceProviderChat extends ChangeNotifier {
   }
 
   onEvent(event) {
-    log("onEventxsxsxsXS: ${event.toString()}");
+    log("Chat onEventxsxsxsXS: ${event.toString()}");
     getChats();
   }
 
   onSubscriptionSucceeded(dynamic data) {
-    log("onSubscriptionSucceeded: channelName, data: ${data.toString()}");
+    log("Chat onSubscriptionSucceeded: channelName, data: ${data.toString()}");
   }
 
   onSubscriptionError(dynamic data) {
-    log("onSubscriptionError: ${data.toString()} Exception: ${data.toString()}");
+    log("Chat onSubscriptionError: ${data.toString()} Exception: ${data.toString()}");
   }
 
   //   Pusher Connection End

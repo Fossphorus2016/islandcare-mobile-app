@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously, unused_local_variable, unnecessary_null_comparison, prefer_typing_uninitialized_variables, unrelated_type_equality_checks
 
-import 'dart:convert';
+// import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
@@ -15,6 +16,7 @@ import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/document_download_list.dart';
 import 'package:island_app/widgets/loading_button.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/custom_text_field.dart';
@@ -30,7 +32,7 @@ class ProfileGiverPendingEdit extends StatefulWidget {
   final int? yoe;
   final String? hourlyRate;
   final String? userAddress;
-  final String? area;
+  final List<String>? area;
 
   final String? zipCode;
   final List? additionalService;
@@ -46,7 +48,7 @@ class ProfileGiverPendingEdit extends StatefulWidget {
   final bool? cprFirstAidCertificationVerify;
   final bool? governmentRegisteredCareProviderVerify;
   final bool? animalCareProviderCertificationVerify;
-  final bool? animailFirstAidVerify;
+  final bool? animalFirstAidVerify;
   final bool? redCrossBabysittingCertificationVerify;
   final bool? chaildAndFamilyServicesAndAbuseVerify;
 
@@ -76,7 +78,7 @@ class ProfileGiverPendingEdit extends StatefulWidget {
     this.cprFirstAidCertificationVerify,
     this.governmentRegisteredCareProviderVerify,
     this.animalCareProviderCertificationVerify,
-    this.animailFirstAidVerify,
+    this.animalFirstAidVerify,
     this.redCrossBabysittingCertificationVerify,
     this.chaildAndFamilyServicesAndAbuseVerify,
   });
@@ -131,7 +133,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
       isSelectedGender = widget.gender.toString();
     }
     if (widget.area != "null" && widget.area != null) {
-      selectedArea = widget.area.toString();
+      selectedArea = widget.area!;
     }
     if (widget.additionalService != null && widget.additionalService!.isNotEmpty) {
       selectedAdditionalService.addAll(widget.additionalService!);
@@ -161,8 +163,8 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
       "red_cross_babysitting_certification": {"status": false, "verify": widget.redCrossBabysittingCertificationVerify == true, "error": "Red Cross Babysitting Certification is Required."},
       "cpr_first_aid_certification": {"status": false, "verify": widget.cprFirstAidCertificationVerify == true, "error": "CPR First Aid Certification is Required."},
       "animal_care_provider_certification": {"status": false, "verify": widget.animalCareProviderCertificationVerify == true, "error": "Animal Care Provider Certification is Required."},
-      "chaild_and_family_services_and_abuse": {"status": false, "verify": widget.chaildAndFamilyServicesAndAbuseVerify == true, "error": "Child And Family Services and Abuse is Required."},
-      "animail_first_aid": {"status": false, "verify": widget.animailFirstAidVerify == true, "error": "Animail First Aid is Required."},
+      "child_and_family_services_and_abuse": {"status": false, "verify": widget.chaildAndFamilyServicesAndAbuseVerify == true, "error": "Child And Family Services and Abuse is Required."},
+      "animail_first_aid": {"status": false, "verify": widget.animalFirstAidVerify == true, "error": "Animail First Aid is Required."},
       "government_registered_care_provider": {"status": false, "verify": widget.governmentRegisteredCareProviderVerify == true, "error": "Government Registered Care Provider is Required."},
       "police_background_check": {"status": false, "verify": widget.policeBackgroundCheckVerify == true, "error": "Police Background Check is Required."},
     };
@@ -429,7 +431,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     "red_cross_babysitting_certification": "",
     "cpr_first_aid_certification": "",
     "animal_care_provider_certification": "",
-    "chaild_and_family_services_and_abuse": "",
+    "child_and_family_services_and_abuse": "",
     "animail_first_aid": "",
     "government_registered_care_provider": "",
     "police_background_check": "",
@@ -441,12 +443,14 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         type: FileType.custom,
         allowedExtensions: ['pdf', 'docx', 'doc'],
       );
-      if (file != null && file.files[0].extension == "pdf" || file!.files[0].extension == "doc" || file.files[0].extension == "docx") {
-        setState(() {
-          lists[documentType] = file.files.single.path.toString();
-        });
-      } else {
-        showErrorToast("Only DOC and PDF file allowed");
+      if (file != null) {
+        if (file.files[0].extension == "pdf" || file.files[0].extension == "doc" || file.files[0].extension == "docx") {
+          setState(() {
+            lists[documentType] = file.files.single.path.toString();
+          });
+        } else {
+          showErrorToast("Only DOC and PDF file allowed");
+        }
       }
     } catch (error) {
       showErrorToast(error.toString());
@@ -460,18 +464,18 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
     var formData = FormData.fromMap({
       '_method': 'PUT',
       'id': usersId,
-      'user_info': userInfoController.text.toString(),
-      'phone': phoneController.text.toString(),
-      'address': addressController.text.toString(),
+      'user_info': userInfoController.text.trim().toString(),
+      'phone': phoneController.text.trim().toString(),
+      'address': addressController.text.trim().toString(),
       'gender': isSelectedGender,
-      'dob': dobController.text.toString(),
-      'area': selectedArea,
-      'zip': zipController.text.toString(),
-      'experience': experienceController.text.toString(),
-      'hourly_rate': hourlyController.text.toString(),
-      'availability': availabilityController.text.toString(),
-      'additional_service': selectedAdditionalService.toString(),
-      'service': jsonEncode(List<dynamic>.from(selectedAdditionalService.map((x) => {"value": x}))),
+      'dob': dobController.text.trim().toString(),
+      'area[]': selectedArea,
+      'zip': zipController.text.trim().toString(),
+      'experience': experienceController.text.trim().toString(),
+      'hourly_rate': hourlyController.text.trim().toString(),
+      'availability': availabilityController.text.trim().toString(),
+      'additional_service[]': selectedAdditionalService,
+      // 'service': jsonEncode(List<dynamic>.from(selectedAdditionalService.map((x) => {"value": x}))),
       "avatar": imageFileDio == null ? '' : await MultipartFile.fromFile(imageFileDio!.path),
       "institute_name[]": instituteMapList,
       "start_date[]": startDateMapList,
@@ -485,7 +489,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
       "red_cross_babysitting_certification": lists['red_cross_babysitting_certification'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['red_cross_babysitting_certification'].toString()),
       "cpr_first_aid_certification": lists['cpr_first_aid_certification'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['cpr_first_aid_certification'].toString()),
       "animal_care_provider_certification": lists['animal_care_provider_certification'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['animal_care_provider_certification'].toString()),
-      "chaild_and_family_services_and_abuse": lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['chaild_and_family_services_and_abuse'].toString()),
+      "child_and_family_services_and_abuse": lists['child_and_family_services_and_abuse'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['child_and_family_services_and_abuse'].toString()),
       "animail_first_aid": lists['animail_first_aid'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['animail_first_aid'].toString()),
       "government_registered_care_provider": lists['government_registered_care_provider'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['government_registered_care_provider'].toString()),
       "police_background_check": lists['police_background_check'].toString().isEmpty ? '' : await MultipartFile.fromFile(lists['police_background_check'].toString()),
@@ -504,6 +508,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
       });
       if (response != null && response.statusCode == 200) {
         Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
+        Navigator.pop(context);
         showSuccessToast("Profile Updated Successfully.");
       } else {
         if (response != null && response.data != null) {
@@ -519,18 +524,24 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   }
 
   final List areaList = [
-    {"name": "Select Area", "value": "select"},
     {"name": "East", "value": "0"},
     {"name": "Central", "value": "1"},
     {"name": "West", "value": "2"},
   ];
 
-  var selectedArea = "select";
-  setSelectedArea(value) {
+  List<String> selectedArea = [];
+
+  removeSelectedArea(item) {
     setState(() {
-      selectedArea = value;
+      selectedArea.remove(item);
     });
   }
+
+  // setSelectedArea(value) {
+  //   setState(() {
+  //     selectedArea = value;
+  //   });
+  // }
 
   List requireDocument = [];
 
@@ -560,7 +571,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         'police_background_check',
         'red_cross_babysitting_certification',
         'cpr_first_aid_certification',
-        'chaild_and_family_services_and_abuse',
+        'child_and_family_services_and_abuse',
         'government_registered_care_provider',
       ];
     } else if (serviceName.contains('Child Care')) {
@@ -570,7 +581,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         'police_background_check',
         'red_cross_babysitting_certification',
         'cpr_first_aid_certification',
-        'chaild_and_family_services_and_abuse',
+        'child_and_family_services_and_abuse',
         'government_registered_care_provider',
       ];
     } else {
@@ -634,8 +645,8 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         "red_cross_babysitting_certification": {"status": false, "verify": widget.redCrossBabysittingCertificationVerify == true, "error": "Red Cross Babysitting Certification is Required."},
         "cpr_first_aid_certification": {"status": false, "verify": widget.cprFirstAidCertificationVerify == true, "error": "CPR First Aid Certification is Required."},
         "animal_care_provider_certification": {"status": false, "verify": widget.animalCareProviderCertificationVerify == true, "error": "Animal Care Provider Certification is Required."},
-        "chaild_and_family_services_and_abuse": {"status": false, "verify": widget.chaildAndFamilyServicesAndAbuseVerify == true, "error": "Child And Family Services and Abuse is Required."},
-        "animail_first_aid": {"status": false, "verify": widget.animailFirstAidVerify == true, "error": "Animail First Aid is Required."},
+        "child_and_family_services_and_abuse": {"status": false, "verify": widget.chaildAndFamilyServicesAndAbuseVerify == true, "error": "Child And Family Services and Abuse is Required."},
+        "animail_first_aid": {"status": false, "verify": widget.animalFirstAidVerify == true, "error": "Animail First Aid is Required."},
         "government_registered_care_provider": {"status": false, "verify": widget.governmentRegisteredCareProviderVerify == true, "error": "Government Registered Care Provider is Required."},
         "police_background_check": {"status": false, "verify": widget.policeBackgroundCheckVerify == true, "error": "Police Background Check is Required."},
       };
@@ -922,7 +933,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Phone Number",
+                          "Contact Number",
                           style: TextStyle(
                             color: ServiceGiverColor.black,
                             fontSize: 12,
@@ -957,7 +968,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   border: InputBorder.none,
                                 ),
                                 validator: (value) {
-                                  if (value == null || value.toString().length < 10) {
+                                  if (value == null || value.trim().toString().length < 10) {
                                     setPhoneError(true);
 
                                     return "Please enter a valid phone number";
@@ -1036,6 +1047,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        const SizedBox(height: 05),
                         Container(
                           padding: const EdgeInsets.only(left: 12),
                           decoration: yearOfExpError
@@ -1062,7 +1074,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   border: InputBorder.none,
                                 ),
                                 validator: (value) {
-                                  if (value == null || value.isEmpty) {
+                                  if (value == null || value.trim().isEmpty) {
                                     setYearOfExpError(true);
 
                                     return "Please enter your experience";
@@ -1099,34 +1111,47 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        const SizedBox(height: 05),
                         Container(
-                          padding: const EdgeInsets.only(left: 12),
+                          padding: const EdgeInsets.only(left: 0),
                           decoration: hourlyRateError
                               ? BoxDecoration(
                                   border: Border.all(color: Colors.red),
                                   borderRadius: BorderRadius.circular(12),
                                 )
                               : null,
-                          child: TextFormField(
-                            controller: hourlyController,
-                            keyboardType: TextInputType.number,
-                            textInputAction: TextInputAction.next,
-                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.zero,
-                              constraints: BoxConstraints(maxHeight: 50, minHeight: 50),
-                              hintText: "Hourly Rate",
-                              prefix: Text("\$ "),
-                              border: InputBorder.none,
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                setHourlyRateError(true);
-                                return "Please enter your hourly rate";
-                              }
-                              setHourlyRateError(false);
-                              return null;
-                            },
+                          alignment: Alignment.centerLeft,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFormField(
+                                controller: hourlyController,
+                                keyboardType: TextInputType.number,
+                                textInputAction: TextInputAction.next,
+                                inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
+                                decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(maxHeight: 50, minHeight: 50),
+                                  hintText: "Hourly Rate",
+                                  prefixIconConstraints: BoxConstraints(
+                                    maxWidth: 60,
+                                    minWidth: 30,
+                                  ),
+                                  prefixIcon: SvgPicture(
+                                    SvgAssetLoader("assets/images/icons/currency-dollar.svg"),
+                                  ),
+                                  border: InputBorder.none,
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.trim().isEmpty) {
+                                    setHourlyRateError(true);
+                                    return "Please enter your hourly rate";
+                                  }
+                                  setHourlyRateError(false);
+                                  return null;
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -1180,7 +1205,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   border: InputBorder.none,
                                 ),
                                 validator: (value) {
-                                  if (value == null || value.isEmpty) {
+                                  if (value == null || value.trim().isEmpty) {
                                     setUserAddressError(true);
 
                                     return "Please enter your permanent address";
@@ -1221,21 +1246,33 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              DropdownButton(
-                                value: selectedArea,
-                                underline: Container(),
-                                isExpanded: true,
+                              MultiSelectDialogField(
                                 items: areaList
                                     .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e["value"],
-                                        child: Text(e["name"].toString()),
+                                      (item) => MultiSelectItem(
+                                        item["value"].toString(),
+                                        item["name"],
                                       ),
                                     )
                                     .toList(),
-                                onChanged: (value) {
-                                  // print(value.runtimeType);
-                                  setSelectedArea(value.toString());
+                                listType: MultiSelectListType.CHIP,
+                                buttonIcon: const Icon(Icons.arrow_drop_down),
+                                initialValue: selectedArea,
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(08)),
+                                title: const Text(
+                                  "Select Area",
+                                  style: TextStyle(fontSize: 18, color: Colors.black),
+                                ),
+                                buttonText: const Text(
+                                  "Select Area",
+                                  style: TextStyle(fontSize: 14),
+                                ),
+                                confirmText: const Text("ok"),
+                                cancelText: const Text("cancel"),
+                                onConfirm: (values) {
+                                  setState(() {
+                                    selectedArea = values;
+                                  });
                                 },
                               ),
                             ],
@@ -1264,6 +1301,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        const SizedBox(height: 05),
                         Container(
                           padding: const EdgeInsets.only(left: 12),
                           decoration: zipcodeError
@@ -1283,7 +1321,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                               border: InputBorder.none,
                             ),
                             validator: (value) {
-                              if (value == null || value.isEmpty) {
+                              if (value == null || value.trim().isEmpty) {
                                 setZipcodeError(true);
                                 return "Please enter postal code";
                               }
@@ -1319,6 +1357,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
+                            const SizedBox(height: 05),
                             InkWell(
                               onTap: () {
                                 showModalBottomSheet(
@@ -1553,13 +1592,16 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                       hintText: "Institute Name",
                                                       focusColor: CustomColors.white,
                                                       hoverColor: CustomColors.white,
-                                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                                      focusedBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                        borderRadius: BorderRadius.circular(10.0),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        borderSide: const BorderSide(color: Colors.grey),
                                                       ),
+                                                      // focusedBorder: OutlineInputBorder(
+                                                      //   borderSide: const BorderSide(color: Colors.grey, width: 0.0),
+                                                      //   borderRadius: BorderRadius.circular(10.0),
+                                                      // ),
                                                       enabledBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                        borderSide: const BorderSide(color: Colors.grey, width: 0.0),
                                                         borderRadius: BorderRadius.circular(10.0),
                                                       ),
                                                     ),
@@ -1604,13 +1646,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                       hintText: "Major",
                                                       focusColor: CustomColors.white,
                                                       hoverColor: CustomColors.white,
-                                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                                      focusedBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                                        borderRadius: BorderRadius.circular(10.0),
+                                                      border: OutlineInputBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        borderSide: const BorderSide(color: Colors.grey),
                                                       ),
                                                       enabledBorder: OutlineInputBorder(
-                                                        borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                                        borderSide: const BorderSide(color: Colors.grey, width: 0.0),
                                                         borderRadius: BorderRadius.circular(10.0),
                                                       ),
                                                     ),
@@ -1644,7 +1685,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                         setState(() {});
                                                       },
                                                     ),
-                                                    const Text("Currently Studying")
+                                                    InkWell(
+                                                        onTap: () {
+                                                          setState(() {
+                                                            if (isPeriodSeleted == "1") {
+                                                              isPeriodSeleted = "0";
+                                                            } else {
+                                                              isPeriodSeleted = "1";
+                                                            }
+                                                          });
+                                                        },
+                                                        child: const Text("Currently Studying"))
                                                   ],
                                                 ),
                                               ],
@@ -1721,11 +1772,14 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                               ),
                                             ],
                                             // AddBtn
+                                            const SizedBox(height: 20),
                                             LoadingButton(
                                               title: "Save",
+                                              backgroundColor: ServiceGiverColor.black,
+                                              height: 54,
                                               textStyle: TextStyle(
                                                 color: CustomColors.white,
-                                                fontSize: 16,
+                                                fontSize: 20,
                                                 fontWeight: FontWeight.w600,
                                                 fontFamily: "Rubik",
                                               ),
@@ -1960,6 +2014,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        const SizedBox(height: 05),
                         Container(
                           padding: const EdgeInsets.only(left: 12),
                           decoration: aboutMeError
@@ -1971,25 +2026,31 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextFormField(
-                                controller: userInfoController,
-                                keyboardType: TextInputType.multiline,
-                                textInputAction: TextInputAction.next,
-                                maxLines: 2,
-                                decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.zero,
-                                  hintText: "About Me",
-                                  border: InputBorder.none,
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    setAboutMeError(true);
+                              SizedBox(
+                                height: 70,
+                                child: TextFormField(
+                                  controller: userInfoController,
+                                  keyboardType: TextInputType.multiline,
+                                  textInputAction: TextInputAction.next,
+                                  // maxLines: 2,
+                                  expands: true,
+                                  maxLines: null,
+                                  minLines: null,
+                                  decoration: const InputDecoration(
+                                    contentPadding: EdgeInsets.zero,
+                                    hintText: "About Me",
+                                    border: InputBorder.none,
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      setAboutMeError(true);
 
-                                    return "Please provide information about yourself";
-                                  }
-                                  setAboutMeError(false);
-                                  return null;
-                                },
+                                      return "Please provide information about yourself";
+                                    }
+                                    setAboutMeError(false);
+                                    return null;
+                                  },
+                                ),
                               ),
                             ],
                           ),
@@ -2017,6 +2078,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
+                        const SizedBox(height: 05),
                         Container(
                           padding: const EdgeInsets.only(left: 12),
                           decoration: avaibilityError
@@ -2025,24 +2087,30 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   borderRadius: BorderRadius.circular(12),
                                 )
                               : null,
-                          child: TextFormField(
-                            controller: availabilityController,
-                            keyboardType: TextInputType.multiline,
-                            textInputAction: TextInputAction.next,
-                            maxLines: 2,
-                            decoration: const InputDecoration(
-                              contentPadding: EdgeInsets.zero,
-                              hintText: "Availability",
-                              border: InputBorder.none,
+                          child: SizedBox(
+                            height: 70,
+                            child: TextFormField(
+                              controller: availabilityController,
+                              keyboardType: TextInputType.multiline,
+                              textInputAction: TextInputAction.next,
+                              // maxLines: 2,
+                              expands: true,
+                              maxLines: null,
+                              minLines: null,
+                              decoration: const InputDecoration(
+                                contentPadding: EdgeInsets.zero,
+                                hintText: "Availability",
+                                border: InputBorder.none,
+                              ),
+                              validator: (value) {
+                                if (value == null || value.trim().isEmpty) {
+                                  setAvaibilityError(true);
+                                  return "Please provide availability information";
+                                }
+                                setAvaibilityError(false);
+                                return null;
+                              },
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                setAvaibilityError(true);
-                                return "Please provide availability information";
-                              }
-                              setAvaibilityError(false);
-                              return null;
-                            },
                           ),
                         ),
                       ],
@@ -2274,17 +2342,17 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                   const SizedBox(height: 10),
                   UploadBasicDocumentList(
                     onTap: () {
-                      uploadDocument(context, "chaild_and_family_services_and_abuse");
+                      uploadDocument(context, "child_and_family_services_and_abuse");
                     },
                     title: "Dept Child and Family Services Child Abuse Check",
-                    fileSelectText: lists['chaild_and_family_services_and_abuse'].toString().isEmpty ? "Select File" : "Change File",
+                    fileSelectText: lists['child_and_family_services_and_abuse'].toString().isEmpty ? "Select File" : "Change File",
                   ),
-                  if (validationErrors['chaild_and_family_services_and_abuse']!['status'] == true) ...[
+                  if (validationErrors['child_and_family_services_and_abuse']!['status'] == true) ...[
                     const SizedBox(height: 05),
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(
-                        validationErrors['chaild_and_family_services_and_abuse']!['error'].toString(),
+                        validationErrors['child_and_family_services_and_abuse']!['error'].toString(),
                         style: const TextStyle(
                           color: Colors.red,
                           fontSize: 09,
@@ -2334,8 +2402,18 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                           showErrorToast("Please Enter User Availability");
                         } else if (widget.workReference == null && lists['work_reference']!.isEmpty) {
                           showErrorToast("Work Refrence is Required");
+                          setState(() {
+                            error = {
+                              'errors': {'work_reference': "Work Reference (1 Area) is Required"},
+                            };
+                          });
                         } else if (widget.resume == null && lists['resume']!.isEmpty) {
                           showErrorToast("Resume is Required");
+                          setState(() {
+                            error = {
+                              'errors': {'resume': "Resume is Required"},
+                            };
+                          });
                         } else {
                           List<String> missingDocuments = [];
                           setValidateErrorToDefault();

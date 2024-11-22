@@ -166,6 +166,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                           if (snapshot.hasData) {
                             return InkWell(
                               onTap: () {
+                                // int prePage = bottomProvider.page;
                                 bottomProvider.updatePage(3);
                               },
                               child: Padding(
@@ -314,6 +315,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             if (widget.type == "home") {
                               Navigator.pop(context);
                             } else {
+                              // int prePage = bottomProvider.page;
                               bottomProvider.updatePage(0);
                             }
                           },

@@ -38,13 +38,13 @@ class JobInfoContainer extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         JobDetailTile(
-          name: "Job Address",
-          title: address,
+          name: "Job Area",
+          title: location,
         ),
         const SizedBox(height: 10),
         JobDetailTile(
-          name: "Job Area",
-          title: location,
+          name: "Job Location",
+          title: address,
         ),
         const SizedBox(height: 10),
         JobDetailTile(

@@ -38,33 +38,41 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
   String serviceName = '';
   bool? noDataFound;
   fetchJobDetail() async {
-    var token = await getToken();
-    final response = await getRequesthandler(
-      url: '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
-      token: token,
-    );
-    if (response != null && response.statusCode == 200) {
-      if (response.data['job_detail'] != null) {
-        serviceName = response.data['job_detail'][0]['service']['name'];
-        if (serviceName.toLowerCase() == "senior care") {
-          futureSeniorCareDetailDashboard = SeniorCareDetailModel.fromJson(response.data);
-        } else if (serviceName.toLowerCase() == "pet care") {
-          futurePetCareDetailDashboard = PetCareDetailModel.fromJson(response.data);
-        } else if (serviceName.toLowerCase() == "house keeping") {
-          futureHouseKeepingDetailDashboard = HouseKeepingDetailModel.fromJson(response.data);
-        } else if (serviceName.toLowerCase() == "school support") {
-          futureSchoolSupportDetailDashboard = SchoolSupportDetailModel.fromJson(response.data);
-        } else if (serviceName.toLowerCase() == "child care") {
-          futureChildCareDetailDashboard = ChildCareDetailModel.fromJson(response.data);
-        } else {
-          noDataFound = true;
-        }
-        setState(() {});
-      }
-    } else {
-      throw Exception(
-        'Failed to load Service Provider Dashboard',
+    try {
+      var token = await getToken();
+      final response = await getRequesthandler(
+        url: '${CareGiverUrl.serviceProviderJobDetail}/${widget.id}',
+        token: token,
       );
+      if (response != null && response.statusCode == 200) {
+        if (response.data['job_detail'] != null) {
+          serviceName = response.data['job_detail'][0]['service']['name'];
+          if (serviceName.toLowerCase() == "senior care") {
+            futureSeniorCareDetailDashboard = SeniorCareDetailModel.fromJson(response.data);
+          } else if (serviceName.toLowerCase() == "pet care") {
+            futurePetCareDetailDashboard = PetCareDetailModel.fromJson(response.data);
+          } else if (serviceName.toLowerCase() == "house keeping") {
+            futureHouseKeepingDetailDashboard = HouseKeepingDetailModel.fromJson(response.data);
+          } else if (serviceName.toLowerCase() == "school support") {
+            futureSchoolSupportDetailDashboard = SchoolSupportDetailModel.fromJson(response.data);
+          } else if (serviceName.toLowerCase() == "child care") {
+            futureChildCareDetailDashboard = ChildCareDetailModel.fromJson(response.data);
+          } else {
+            noDataFound = true;
+          }
+          setState(() {});
+        }
+      } else {
+        setState(() {
+          noDataFound = true;
+        });
+        showErrorToast("Failed to load Job Detail");
+      }
+    } catch (e) {
+      setState(() {
+        noDataFound = true;
+      });
+      showErrorToast("Failed to load Job Detail");
     }
   }
 
@@ -129,7 +137,16 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
           child: Column(
             children: [
               if (noDataFound == true) ...[
-                const Text("NO Data Found"),
+                const SizedBox(height: 250),
+                const Center(
+                  child: Text(
+                    "No Data Found",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ] else if (serviceName.toLowerCase() == "senior care") ...[
                 // service id 1
                 seniorCare(context),

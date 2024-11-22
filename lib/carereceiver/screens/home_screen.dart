@@ -241,7 +241,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return InkWell(
-                        onTap: () => bottomNavigationProvider.updatePage(3),
+                        onTap: () {
+                          // int prePage = bottomNavigationProvider.page;
+                          bottomNavigationProvider.updatePage(3);
+                        },
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(

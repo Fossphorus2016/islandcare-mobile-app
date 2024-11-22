@@ -9,7 +9,6 @@ import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
-import 'package:island_app/carereceiver/widgets/job_cart_widget.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/routes_name.dart';
@@ -24,74 +23,74 @@ class ServiceProviderJobs extends StatefulWidget {
 }
 
 class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
-  String? dropdownValue = 'All Relevance';
-  Future<void> _showDeleteDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  'Deleted',
-                  style: TextStyle(
-                    color: CustomColors.primaryText,
-                    fontSize: 26,
-                    fontFamily: "Rubik",
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  'Are you sure you want to Delete?',
-                  style: TextStyle(
-                    color: CustomColors.hintText,
-                    fontSize: 16,
-                    fontFamily: "Rubik",
-                    fontWeight: FontWeight.w300,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Cancel',
-                style: TextStyle(
-                  color: CustomColors.primaryColor,
-                  fontSize: 16,
-                  fontFamily: "Rubik",
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                'Ok',
-                style: TextStyle(
-                  color: CustomColors.primaryColor,
-                  fontSize: 16,
-                  fontFamily: "Rubik",
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // String? dropdownValue = 'All Relevance';
+  // Future<void> _showDeleteDialog() async {
+  //   return showDialog<void>(
+  //     context: context,
+  //     barrierDismissible: false, // user must tap button!
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         content: SingleChildScrollView(
+  //           child: ListBody(
+  //             children: <Widget>[
+  //               Text(
+  //                 'Deleted',
+  //                 style: TextStyle(
+  //                   color: CustomColors.primaryText,
+  //                   fontSize: 26,
+  //                   fontFamily: "Rubik",
+  //                   fontWeight: FontWeight.w600,
+  //                 ),
+  //               ),
+  //               const SizedBox(
+  //                 height: 10,
+  //               ),
+  //               Text(
+  //                 'Are you sure you want to Delete?',
+  //                 style: TextStyle(
+  //                   color: CustomColors.hintText,
+  //                   fontSize: 16,
+  //                   fontFamily: "Rubik",
+  //                   fontWeight: FontWeight.w300,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             child: Text(
+  //               'Cancel',
+  //               style: TextStyle(
+  //                 color: CustomColors.primaryColor,
+  //                 fontSize: 16,
+  //                 fontFamily: "Rubik",
+  //                 fontWeight: FontWeight.w600,
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //           TextButton(
+  //             child: Text(
+  //               'Ok',
+  //               style: TextStyle(
+  //                 color: CustomColors.primaryColor,
+  //                 fontSize: 16,
+  //                 fontFamily: "Rubik",
+  //                 fontWeight: FontWeight.w600,
+  //               ),
+  //             ),
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   @override
   void initState() {
@@ -585,15 +584,122 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                           var job = provider.filterDataList[index];
                                           return Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: JobBoardCartWidget(
-                                              jobTitle: job.jobTitle.toString(),
-                                              jobType: job.service!.name.toString(),
-                                              delete: () {
-                                                _showDeleteDialog();
+                                            child: InkWell(
+                                              onTap: () {
+                                                navigationService.push(
+                                                  RoutesName.myJobDetailGiver,
+                                                  arguments: {
+                                                    "id": job.id.toString(),
+                                                    "service": job.service!.name.toString(),
+                                                  },
+                                                );
                                               },
-                                              detail: () {
-                                                navigationService.push(RoutesName.myJobDetailGiver, arguments: {"id": job.id.toString(), "service": job.service!.name.toString()});
-                                              },
+                                              child: Container(
+                                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                                width: MediaQuery.of(context).size.width,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  border: Border.all(
+                                                    color: CustomColors.borderLight,
+                                                    width: 0.1,
+                                                  ),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+                                                    Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: MediaQuery.of(context).size.width - 150,
+                                                          child: Text(
+                                                            job.jobTitle.toString(),
+                                                            overflow: TextOverflow.ellipsis,
+                                                            maxLines: 2,
+                                                            style: TextStyle(
+                                                              color: CustomColors.primaryText,
+                                                              fontFamily: "Poppins",
+                                                              fontWeight: FontWeight.w600,
+                                                              fontSize: 18,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              "Type: ",
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: CustomColors.black,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              job.service!.name.toString(),
+                                                              maxLines: 1,
+                                                              overflow: TextOverflow.fade,
+                                                              style: TextStyle(
+                                                                color: CustomColors.hintText,
+                                                                fontFamily: "Poppins",
+                                                                fontWeight: FontWeight.w500,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              "Rate: ",
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: CustomColors.black,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              "\$${job.hourlyRate.toString()}/Hour",
+                                                              maxLines: 1,
+                                                              overflow: TextOverflow.fade,
+                                                              style: TextStyle(
+                                                                color: CustomColors.hintText,
+                                                                fontFamily: "Poppins",
+                                                                fontWeight: FontWeight.w500,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              "Status: ",
+                                                              style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: CustomColors.black,
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              job.status.toString(),
+                                                              maxLines: 1,
+                                                              overflow: TextOverflow.fade,
+                                                              style: TextStyle(
+                                                                color: CustomColors.hintText,
+                                                                fontFamily: "Poppins",
+                                                                fontWeight: FontWeight.w500,
+                                                                fontSize: 12,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Icon(
+                                                      Icons.arrow_circle_right_outlined,
+                                                      color: ServiceGiverColor.black,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
                                           );
                                         },
@@ -709,7 +815,7 @@ class GiverMyJobsProvider extends ChangeNotifier {
   setFilterByTime(DateTime startTime, DateTime endTime) {
     var filterData = allJobs!
         .map((element) {
-          // print(element.updatedAt);
+          // print(startTime.isBefore(DateTime.parse(element.updatedAt!)));
           var docTime = element.updatedAt;
           if (startTime.isBefore(DateTime.parse(docTime!)) && endTime.isAfter(DateTime.parse(docTime))) {
             return element;
