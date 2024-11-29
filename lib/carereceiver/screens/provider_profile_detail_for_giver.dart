@@ -165,12 +165,13 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                               child: ListTile(
                                 leading: SvgPicture.asset(
                                   "assets/images/icons/account-verified.svg",
+                                  height: ResponsiveBreakpoints.of(context).isTablet ? 100 : 40,
                                 ),
                                 title: Text(
                                   "Verified Service Provider",
                                   style: TextStyle(
                                     color: CustomColors.primaryText,
-                                    fontSize: 12,
+                                    fontSize: ResponsiveBreakpoints.of(context).isTablet ? 18 : 12,
                                     fontFamily: "Poppins",
                                     fontWeight: FontWeight.w600,
                                   ),
@@ -179,7 +180,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                   "This service provider is verified, ensuring an added layer of safety and trust within our community. Thank you for choosing a secure and trustworthy caregiving experience.",
                                   style: TextStyle(
                                     color: CustomColors.primaryText,
-                                    fontSize: 10,
+                                    fontSize: ResponsiveBreakpoints.of(context).isTablet ? 16 : 10,
                                     fontFamily: "Poppins",
                                     fontWeight: FontWeight.w300,
                                   ),
@@ -1016,10 +1017,10 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                             // Background Verified
                             if (futureReceiverDashboardDetail!.data!.ratings != null && futureReceiverDashboardDetail!.data!.ratings!.isNotEmpty) ...[
                               const SizedBox(height: 30),
-                              const Text(
+                              Text(
                                 "Reviews",
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: ResponsiveBreakpoints.of(context).isTablet ? 24 : 18,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -1043,7 +1044,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                       "Name",
                                       style: TextStyle(
                                         color: CustomColors.white,
-                                        fontSize: 12,
+                                        fontSize: ResponsiveBreakpoints.of(context).isTablet ? 18 : 12,
                                         fontFamily: "Poppins",
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -1053,7 +1054,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         "Rating",
                                         style: TextStyle(
                                           color: CustomColors.white,
-                                          fontSize: 12,
+                                          fontSize: ResponsiveBreakpoints.of(context).isTablet ? 18 : 12,
                                           fontFamily: "Poppins",
                                           fontWeight: FontWeight.w600,
                                         ),
@@ -1063,7 +1064,7 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                       "Comment",
                                       style: TextStyle(
                                         color: CustomColors.white,
-                                        fontSize: 12,
+                                        fontSize: ResponsiveBreakpoints.of(context).isTablet ? 18 : 12,
                                         fontFamily: "Poppins",
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -1071,16 +1072,20 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                   ],
                                 ),
                               ),
-                              ListView.builder(
+                              ListView.separated(
                                 itemCount: futureReceiverDashboardDetail!.data!.ratings!.length,
                                 shrinkWrap: true,
                                 padding: const EdgeInsets.only(top: 16),
                                 physics: const NeverScrollableScrollPhysics(),
+                                separatorBuilder: (context, index) {
+                                  return const SizedBox(
+                                    height: 10,
+                                  );
+                                },
                                 itemBuilder: (context, index) {
                                   return Container(
                                     height: 60,
                                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 08),
-                                    margin: const EdgeInsets.only(bottom: 10),
                                     decoration: BoxDecoration(
                                       border: Border.all(color: ServiceGiverColor.black),
                                       borderRadius: BorderRadius.circular(12),
@@ -1098,73 +1103,140 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                             ),
                                           ),
                                         ] else ...[
-                                          Text(
-                                            '${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}',
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
+                                          Expanded(
+                                            child: Text(
+                                              '${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}',
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
                                           ),
                                         ],
                                         if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
-                                          RatingBar.builder(
-                                            initialRating: futureReceiverDashboardDetail!.data!.ratings![index].rating!.toDouble(),
-                                            minRating: 1,
-                                            direction: Axis.horizontal,
-                                            allowHalfRating: true,
-                                            ignoreGestures: false,
-                                            itemSize: 15,
-                                            itemCount: 5,
-                                            itemBuilder: (context, _) => const Icon(
-                                              Icons.star,
-                                              color: Colors.amber,
+                                          Expanded(
+                                            child: DecoratedBox(
+                                              decoration: const BoxDecoration(),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  RatingBar.builder(
+                                                    initialRating: futureReceiverDashboardDetail!.data!.ratings![index].rating!.toDouble(),
+                                                    minRating: 1,
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: true,
+                                                    ignoreGestures: false,
+                                                    itemSize: ResponsiveBreakpoints.of(context).isTablet ? 26 : 15,
+                                                    itemCount: 5,
+                                                    itemBuilder: (context, _) => const Icon(
+                                                      Icons.star,
+                                                      color: Colors.amber,
+                                                    ),
+                                                    onRatingUpdate: (rating) {},
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                            onRatingUpdate: (rating) {},
+                                          ),
+                                          Expanded(
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) => AlertDialog(
+                                                        title: Center(child: Text('${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}')),
+                                                        alignment: Alignment.center,
+                                                        content: Column(
+                                                          mainAxisSize: MainAxisSize.min,
+                                                          children: [
+                                                            RatingBar.builder(
+                                                              initialRating: futureReceiverDashboardDetail!.data!.ratings![index].rating!.toDouble(),
+                                                              minRating: 1,
+                                                              direction: Axis.horizontal,
+                                                              allowHalfRating: true,
+                                                              ignoreGestures: false,
+                                                              itemSize: 24,
+                                                              itemCount: 5,
+                                                              itemBuilder: (context, _) => const Icon(
+                                                                Icons.star,
+                                                                color: Colors.amber,
+                                                              ),
+                                                              onRatingUpdate: (rating) {},
+                                                            ),
+                                                            Text(
+                                                              futureReceiverDashboardDetail!.data!.ratings![index].comment.toString() == "null" ? "Not Available" : futureReceiverDashboardDetail!.data!.ratings![index].comment.toString(),
+                                                              maxLines: 20,
+                                                              softWrap: true,
+                                                              style: TextStyle(
+                                                                fontSize: 16,
+                                                                fontFamily: "Poppins",
+                                                                fontWeight: FontWeight.w400,
+                                                                color: CustomColors.primaryText,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Icon(
+                                                    Icons.arrow_circle_right_outlined,
+                                                    color: ServiceGiverColor.black,
+                                                    size: ResponsiveBreakpoints.of(context).isTablet ? 36 : null,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ] else ...[
+                                          InkWell(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) => AlertDialog(
+                                                  title: Center(child: Text('${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}')),
+                                                  alignment: Alignment.center,
+                                                  content: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: [
+                                                      RatingBar.builder(
+                                                        initialRating: futureReceiverDashboardDetail!.data!.ratings![index].rating!.toDouble(),
+                                                        minRating: 1,
+                                                        direction: Axis.horizontal,
+                                                        allowHalfRating: true,
+                                                        ignoreGestures: false,
+                                                        itemSize: 24,
+                                                        itemCount: 5,
+                                                        itemBuilder: (context, _) => const Icon(
+                                                          Icons.star,
+                                                          color: Colors.amber,
+                                                        ),
+                                                        onRatingUpdate: (rating) {},
+                                                      ),
+                                                      Text(
+                                                        futureReceiverDashboardDetail!.data!.ratings![index].comment.toString() == "null" ? "Not Available" : futureReceiverDashboardDetail!.data!.ratings![index].comment.toString(),
+                                                        maxLines: 20,
+                                                        softWrap: true,
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontFamily: "Poppins",
+                                                          fontWeight: FontWeight.w400,
+                                                          color: CustomColors.primaryText,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Icon(
+                                              Icons.arrow_circle_right_outlined,
+                                              color: ServiceGiverColor.black,
+                                              size: ResponsiveBreakpoints.of(context).isTablet ? 36 : null,
+                                            ),
                                           ),
                                         ],
-                                        InkWell(
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) => AlertDialog(
-                                                title: Center(child: Text('${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}')),
-                                                alignment: Alignment.center,
-                                                content: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    RatingBar.builder(
-                                                      initialRating: futureReceiverDashboardDetail!.data!.ratings![index].rating!.toDouble(),
-                                                      minRating: 1,
-                                                      direction: Axis.horizontal,
-                                                      allowHalfRating: true,
-                                                      ignoreGestures: false,
-                                                      itemSize: 24,
-                                                      itemCount: 5,
-                                                      itemBuilder: (context, _) => const Icon(
-                                                        Icons.star,
-                                                        color: Colors.amber,
-                                                      ),
-                                                      onRatingUpdate: (rating) {},
-                                                    ),
-                                                    Text(
-                                                      futureReceiverDashboardDetail!.data!.ratings![index].comment.toString() == "null" ? "Not Available" : futureReceiverDashboardDetail!.data!.ratings![index].comment.toString(),
-                                                      maxLines: 20,
-                                                      softWrap: true,
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontFamily: "Poppins",
-                                                        fontWeight: FontWeight.w400,
-                                                        color: CustomColors.primaryText,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          child: Icon(
-                                            Icons.arrow_circle_right_outlined,
-                                            color: ServiceGiverColor.black,
-                                          ),
-                                        ),
                                       ],
                                     ),
                                   );

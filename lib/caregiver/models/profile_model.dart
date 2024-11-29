@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:island_app/models/service_model.dart';
+import 'package:island_app/caregiver/models/giver_service.dart';
 
 ProfileGiverModel profileGiverModelFromJson(String str) => ProfileGiverModel.fromJson(json.decode(str));
 
@@ -298,28 +298,28 @@ class Userdetail {
   int? userId;
   int? gender;
   String? dob;
-  String? servicesRequired;
+  List<String>? servicesRequired;
   String? zip;
   String? address;
   List<String>? area;
   String? userInfo;
   String? createdAt;
   String? updatedAt;
-  Service? service;
+  GiverService? service;
 
   factory Userdetail.fromJson(Map<String, dynamic> json) => Userdetail(
         id: json["id"],
         userId: json["user_id"],
         gender: json["gender"],
         dob: json["dob"],
-        servicesRequired: json["services_required"],
+        servicesRequired: json["services_required"].toString().split(','),
         zip: json["zip"],
         address: json["address"],
-        area: ["2", "1", "0"],
+        area: json["area"].toString().split(','),
         userInfo: json["user_info"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-        service: json["service"] == null ? null : Service.fromJson(json["service"]),
+        service: json["service"] == null ? null : GiverService.fromJson(json["service"]),
       );
 
   Map<String, dynamic> toJson() => {

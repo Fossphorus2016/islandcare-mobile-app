@@ -125,118 +125,79 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
         return giverProvider.profileStatus
             ? Drawer(
                 backgroundColor: ServiceGiverColor.black,
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              // int prePage = bottomNavigationProvider.page;
-                              bottomNavigationProvider.updatePage(2);
-                            },
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 140,
-                              padding: const EdgeInsets.only(top: 25, left: 20, right: 20),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  CircleAvatar(
-                                    radius: 40,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(40),
+                child: SafeArea(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                // int prePage = bottomNavigationProvider.page;
+                                bottomNavigationProvider.updatePage(2);
+                              },
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 140,
+                                padding: const EdgeInsets.only(top: 25, left: 20, right: 20),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    CircleAvatar(
+                                      radius: 40,
                                       child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(100),
-                                        child: CachedNetworkImage(
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
-                                          imageUrl: "${giverProvider.fetchProfile!.folderPath}/${giverProvider.fetchProfile!.data!.avatar}",
-                                          placeholder: (context, url) => const CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        borderRadius: BorderRadius.circular(40),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(100),
+                                          child: CachedNetworkImage(
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                            imageUrl: "${giverProvider.fetchProfile!.folderPath}/${giverProvider.fetchProfile!.data!.avatar}",
+                                            placeholder: (context, url) => const CircularProgressIndicator(),
+                                            errorWidget: (context, url, error) => const Icon(Icons.error),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          "${giverProvider.fetchProfile!.data!.firstName} ${giverProvider.fetchProfile!.data!.lastName}",
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            fontFamily: "Rubik",
-                                            color: CustomColors.white,
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Text(
+                                            "${giverProvider.fetchProfile!.data!.firstName} ${giverProvider.fetchProfile!.data!.lastName}",
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 2,
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: "Rubik",
+                                              color: CustomColors.white,
+                                            ),
                                           ),
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          giverProvider.fetchProfile!.data!.phone.toString(),
-                                          overflow: TextOverflow.visible,
-                                          style: TextStyle(
-                                            color: CustomColors.white,
-                                            fontFamily: "Rubik",
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            giverProvider.fetchProfile!.data!.phone.toString(),
+                                            overflow: TextOverflow.visible,
+                                            style: TextStyle(
+                                              color: CustomColors.white,
+                                              fontFamily: "Rubik",
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 6),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: ListTile(
-                              hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                              selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                              focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                              leading: SizedBox(
-                                child: Image.asset("assets/images/icons/homeIcon.png"),
-                              ),
-                              title: Text(
-                                'Dashboard',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: CustomColors.white,
-                                  fontFamily: "Rubik",
+                                  ],
                                 ),
                               ),
-                              trailing: Icon(
-                                Icons.arrow_forward_ios,
-                                color: CustomColors.white,
-                                size: 16,
-                              ),
-                              onTap: () {
-                                if (bottomNavigationProvider.page == 0) {
-                                  Navigator.pop(context);
-                                } else {
-                                  // int prePage = bottomNavigationProvider.page;
-                                  bottomNavigationProvider.updatePage(0);
-                                }
-                              },
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              navigationService.push(RoutesName.myJobsGiver);
-                            },
-                            child: Container(
+                            Container(
                               padding: const EdgeInsets.symmetric(vertical: 6),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(6),
@@ -246,10 +207,10 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                 selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                                 focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
                                 leading: SizedBox(
-                                  child: Image.asset("assets/images/icons/payments.png"),
+                                  child: Image.asset("assets/images/icons/homeIcon.png"),
                                 ),
                                 title: Text(
-                                  'Jobs',
+                                  'Dashboard',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -262,28 +223,135 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                   color: CustomColors.white,
                                   size: 16,
                                 ),
+                                onTap: () {
+                                  if (bottomNavigationProvider.page == 0) {
+                                    Navigator.pop(context);
+                                  } else {
+                                    // int prePage = bottomNavigationProvider.page;
+                                    bottomNavigationProvider.updatePage(0);
+                                  }
+                                },
                               ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              navigationService.push(RoutesName.providerReviews);
-                            },
-                            child: Container(
+                            GestureDetector(
+                              onTap: () {
+                                navigationService.push(RoutesName.myJobsGiver);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: ListTile(
+                                  hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                  selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                  focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                  leading: SizedBox(
+                                    child: Image.asset("assets/images/icons/payments.png"),
+                                  ),
+                                  title: Text(
+                                    'Jobs',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: CustomColors.white,
+                                      fontFamily: "Rubik",
+                                    ),
+                                  ),
+                                  trailing: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: CustomColors.white,
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                navigationService.push(RoutesName.providerReviews);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
+                                child: ListTile(
+                                  hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                  selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                  focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                  leading: SizedBox(
+                                    child: Icon(
+                                      Icons.star_border_outlined,
+                                      color: CustomColors.white,
+                                    ),
+                                  ),
+                                  title: Text(
+                                    'Reviews Given',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: CustomColors.white,
+                                      fontFamily: "Rubik",
+                                    ),
+                                  ),
+                                  trailing: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: CustomColors.white,
+                                    size: 16,
+                                  ),
+                                  onTap: () {
+                                    navigationService.push(RoutesName.providerReviews);
+                                  },
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                navigationService.push(RoutesName.giverBankDetails);
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(vertical: 6),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: ListTile(
+                                  hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                  selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                  focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
+                                  leading: SizedBox(
+                                    child: Icon(
+                                      Icons.card_membership,
+                                      color: CustomColors.white,
+                                    ),
+                                  ),
+                                  title: Text(
+                                    'Bank Details',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: CustomColors.white,
+                                      fontFamily: "Rubik",
+                                    ),
+                                  ),
+                                  trailing: Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: CustomColors.white,
+                                    size: 16,
+                                  ),
+                                  onTap: () {
+                                    navigationService.push(RoutesName.giverBankDetails);
+                                  },
+                                ),
+                              ),
+                            ),
+                            Container(
                               padding: const EdgeInsets.symmetric(vertical: 6),
                               decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
                               child: ListTile(
                                 hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
                                 selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
                                 focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                                leading: SizedBox(
-                                  child: Icon(
-                                    Icons.star_border_outlined,
-                                    color: CustomColors.white,
-                                  ),
-                                ),
+                                leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
                                 title: Text(
-                                  'Reviews Given',
+                                  'Change Password',
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -297,92 +365,121 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                                   size: 16,
                                 ),
                                 onTap: () {
-                                  navigationService.push(RoutesName.providerReviews);
+                                  showModalBottomSheet(
+                                    isScrollControlled: true,
+                                    context: context,
+                                    backgroundColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(30.0),
+                                        topRight: Radius.circular(30.0),
+                                      ),
+                                    ),
+                                    builder: (context) {
+                                      return const ChangePasswordWidget();
+                                    },
+                                  );
                                 },
                               ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              navigationService.push(RoutesName.giverBankDetails);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 6),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              child: ListTile(
-                                hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                                selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                                focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                                leading: SizedBox(
-                                  child: Icon(
-                                    Icons.card_membership,
-                                    color: CustomColors.white,
-                                  ),
-                                ),
-                                title: Text(
-                                  'Bank Details',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: CustomColors.white,
-                                    fontFamily: "Rubik",
-                                  ),
-                                ),
-                                trailing: Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: CustomColors.white,
-                                  size: 16,
-                                ),
-                                onTap: () {
-                                  navigationService.push(RoutesName.giverBankDetails);
-                                },
-                              ),
-                            ),
-                          ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 6),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
-                            child: ListTile(
-                              hoverColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                              selectedColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                              focusColor: const Color.fromRGBO(255, 255, 255, 0.1),
-                              leading: SizedBox(child: Image.asset("assets/images/icons/lock.png")),
-                              title: Text(
-                                'Change Password',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                  color: CustomColors.white,
-                                  fontFamily: "Rubik",
-                                ),
-                              ),
-                              trailing: Icon(
-                                Icons.arrow_forward_ios,
+                          ],
+                        ),
+                        ListTile(
+                          onTap: () {
+                            _showLogoutDialog();
+                          },
+                          leading: Image.asset("assets/images/icons/logout.png"),
+                          title: Padding(
+                            padding: const EdgeInsets.only(bottom: 5),
+                            child: Text(
+                              'Logout',
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
                                 color: CustomColors.white,
-                                size: 16,
+                                fontFamily: "Rubik",
                               ),
-                              onTap: () {
-                                showModalBottomSheet(
-                                  isScrollControlled: true,
-                                  context: context,
-                                  backgroundColor: Colors.white,
-                                  shape: const RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(30.0),
-                                      topRight: Radius.circular(30.0),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            : Drawer(
+                backgroundColor: ServiceGiverColor.black,
+                child: SafeArea(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: InkWell(
+                          onTap: () {
+                            // int prePage = bottomNavigationProvider.page;
+                            if (bottomNavigationProvider.page != 2) {
+                              bottomNavigationProvider.updatePage(2);
+                            } else {
+                              Scaffold.of(context).closeDrawer();
+                            }
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 25, bottom: 60),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                CircleAvatar(
+                                  radius: 40,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(40),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: CachedNetworkImage(
+                                        width: 100,
+                                        height: 100,
+                                        fit: BoxFit.cover,
+                                        imageUrl: "${giverProvider.fetchProfile!.folderPath}/${giverProvider.fetchProfile!.data!.avatar}",
+                                        placeholder: (context, url) => const CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      ),
                                     ),
                                   ),
-                                  builder: (context) {
-                                    return const ChangePasswordWidget();
-                                  },
-                                );
-                              },
+                                ),
+                                const SizedBox(width: 10),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    SizedBox(
+                                      child: Text(
+                                        "${"${giverProvider.fetchProfile!.data!.firstName} ${giverProvider.fetchProfile!.data!.lastName}"} ",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w400,
+                                          fontFamily: "Rubik",
+                                          color: CustomColors.white,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    SizedBox(
+                                      child: Text(
+                                        giverProvider.fetchProfile!.data!.phone.toString(),
+                                        style: TextStyle(
+                                          color: CustomColors.white,
+                                          fontFamily: "Rubik",
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
+                      Expanded(child: Container()),
                       ListTile(
                         onTap: () {
                           _showLogoutDialog();
@@ -403,95 +500,6 @@ class _DrawerGiverWidgetState extends State<DrawerGiverWidget> {
                       ),
                     ],
                   ),
-                ),
-              )
-            : Drawer(
-                backgroundColor: ServiceGiverColor.black,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: InkWell(
-                        onTap: () {
-                          // int prePage = bottomNavigationProvider.page;
-                          bottomNavigationProvider.updatePage(2);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 25, bottom: 60),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              CircleAvatar(
-                                radius: 40,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(40),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(100),
-                                    child: CachedNetworkImage(
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.cover,
-                                      imageUrl: "${giverProvider.fetchProfile!.folderPath}/${giverProvider.fetchProfile!.data!.avatar}",
-                                      placeholder: (context, url) => const CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) => const Icon(Icons.error),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  SizedBox(
-                                    child: Text(
-                                      "${"${giverProvider.fetchProfile!.data!.firstName} ${giverProvider.fetchProfile!.data!.lastName}"} ",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: "Rubik",
-                                        color: CustomColors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  SizedBox(
-                                    child: Text(
-                                      giverProvider.fetchProfile!.data!.phone.toString(),
-                                      style: TextStyle(
-                                        color: CustomColors.white,
-                                        fontFamily: "Rubik",
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Expanded(child: Container()),
-                    ListTile(
-                      onTap: () {
-                        _showLogoutDialog();
-                      },
-                      leading: Image.asset("assets/images/icons/logout.png"),
-                      title: Padding(
-                        padding: const EdgeInsets.only(bottom: 5),
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: CustomColors.white,
-                            fontFamily: "Rubik",
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
                 ),
               );
       },

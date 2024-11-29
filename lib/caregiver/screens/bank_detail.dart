@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, unnecessary_null_comparison, prefer_typing_uninitialized_variables, unused_catch_clause, deprecated_member_use
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:island_app/caregiver/models/bank_details_models.dart';
@@ -95,7 +96,7 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
       );
       if (response != null && response.statusCode == 200) {
         showSuccessToast("Bank Account Removed Successfully");
-        focus.requestFocus();
+        // focus.requestFocus();
         fetchBankDetailsModel();
       } else {
         showErrorToast("unable to fetch data");
@@ -125,7 +126,7 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
         if (response.data['success']) {
           showSuccessToast(response.data['message']);
           fetchBankDetailsModel();
-          focus.requestFocus();
+          // focus.requestFocus();
           accountTitleController.clear();
           accountNumberController.clear();
         } else {
@@ -163,352 +164,356 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
 
   List<BankDetail>? filteredList = [];
   BankDetail? selectedBank;
-  FocusNode focus = FocusNode();
+  // FocusNode focus = FocusNode();
   TextEditingController textController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0xffffffff),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      offset: Offset(2, 2),
-                      spreadRadius: 1,
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: CustomColors.primaryColor,
-                    size: 18,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: ServiceGiverColor.black,
+        // automaticallyImplyLeading: false,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(13.0),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color(0xffffffff),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(30, 0, 0, 0),
+                    offset: Offset(2, 2),
+                    spreadRadius: 1,
+                    blurRadius: 7,
                   ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: CustomColors.primaryColor,
+                  size: 18,
                 ),
               ),
             ),
           ),
-          title: Text(
-            "Bank Details",
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Rubik",
-              color: CustomColors.primaryText,
-            ),
+        ),
+        title: Text(
+          "Bank Details",
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Rubik",
+            color: CustomColors.white,
           ),
         ),
-        body: RefreshIndicator(
+      ),
+      body: SafeArea(
+        child: RefreshIndicator(
           onRefresh: () async {
             await fetchBankDetailsModel();
           },
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        context: context,
-                        backgroundColor: Colors.white,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30.0),
-                            topRight: Radius.circular(30.0),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      width: 140,
+                      height: 50,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(ServiceGiverColor.black),
+                          shape: WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                         ),
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(
-                            builder: (BuildContext context, StateSetter setState) {
-                              return SingleChildScrollView(
-                                child: Padding(
-                                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 25),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        const SizedBox(height: 20),
-                                        Center(
-                                          child: Container(
-                                            width: 130,
-                                            height: 5,
-                                            decoration: BoxDecoration(
-                                              color: const Color(0xffC4C4C4),
-                                              borderRadius: BorderRadius.circular(6),
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 20),
-                                        Center(
-                                          child: Text(
-                                            "Enter Your Bank Details",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: CustomColors.black,
-                                              fontFamily: "Rubik",
-                                              fontStyle: FontStyle.normal,
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(height: 40),
-                                        Form(
-                                          key: bankKey,
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Container(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            backgroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0),
+                              ),
+                            ),
+                            builder: (BuildContext context) {
+                              return StatefulBuilder(
+                                builder: (BuildContext context, StateSetter setState) {
+                                  return SingleChildScrollView(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            const SizedBox(height: 20),
+                                            Center(
+                                              child: Container(
+                                                width: 130,
+                                                height: 5,
                                                 decoration: BoxDecoration(
-                                                  borderRadius: const BorderRadius.only(
-                                                    topLeft: Radius.circular(6),
-                                                    bottomLeft: Radius.circular(6),
-                                                    bottomRight: Radius.circular(6),
-                                                    topRight: Radius.circular(6),
-                                                  ),
-                                                  color: CustomColors.white,
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      color: Color.fromARGB(13, 0, 0, 0),
-                                                      blurRadius: 4.0,
-                                                      spreadRadius: 2.0,
-                                                      offset: Offset(2.0, 2.0),
-                                                    ),
-                                                  ],
+                                                  color: const Color(0xffC4C4C4),
+                                                  borderRadius: BorderRadius.circular(6),
                                                 ),
-                                                alignment: Alignment.center,
-                                                width: MediaQuery.of(context).size.width,
-                                                height: 50,
-                                                child: DecoratedBox(
-                                                  decoration: const BoxDecoration(
-                                                    color: Colors.transparent,
-                                                  ),
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.symmetric(
-                                                      horizontal: 10,
-                                                      vertical: 4,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 20),
+                                            Center(
+                                              child: Text(
+                                                "Enter Your Bank Details",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: CustomColors.black,
+                                                  fontFamily: "Rubik",
+                                                  fontStyle: FontStyle.normal,
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 40),
+                                            Form(
+                                              key: bankKey,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: const BorderRadius.only(
+                                                        topLeft: Radius.circular(6),
+                                                        bottomLeft: Radius.circular(6),
+                                                        bottomRight: Radius.circular(6),
+                                                        topRight: Radius.circular(6),
+                                                      ),
+                                                      color: CustomColors.white,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          color: Color.fromARGB(13, 0, 0, 0),
+                                                          blurRadius: 4.0,
+                                                          spreadRadius: 2.0,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    child: DropdownButtonHideUnderline(
-                                                      child: DropdownButton(
-                                                        isExpanded: true,
-                                                        hint: const Text("Select Banks"),
-                                                        value: selectedNames,
-                                                        onChanged: (value) {
-                                                          setState(() {
-                                                            selectedNames = value.toString();
-                                                          });
-                                                        },
-                                                        items: dataNames.map((itemone) {
-                                                          return DropdownMenuItem(value: itemone['value'], child: Text(itemone['name']));
-                                                        }).toList(),
+                                                    alignment: Alignment.center,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    height: 50,
+                                                    child: DecoratedBox(
+                                                      decoration: const BoxDecoration(
+                                                        color: Colors.transparent,
+                                                      ),
+                                                      child: Padding(
+                                                        padding: const EdgeInsets.symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 4,
+                                                        ),
+                                                        child: DropdownButtonHideUnderline(
+                                                          child: DropdownButton(
+                                                            isExpanded: true,
+                                                            hint: const Text("Select Banks"),
+                                                            value: selectedNames,
+                                                            onChanged: (value) {
+                                                              setState(() {
+                                                                selectedNames = value.toString();
+                                                              });
+                                                            },
+                                                            items: dataNames.map((itemone) {
+                                                              return DropdownMenuItem(value: itemone['value'], child: Text(itemone['name']));
+                                                            }).toList(),
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius: const BorderRadius.only(
-                                                    topLeft: Radius.circular(6),
-                                                    bottomLeft: Radius.circular(6),
-                                                    bottomRight: Radius.circular(6),
-                                                    topRight: Radius.circular(6),
+                                                  const SizedBox(
+                                                    height: 10,
                                                   ),
-                                                  color: CustomColors.white,
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      color: Color.fromARGB(13, 0, 0, 0),
-                                                      blurRadius: 4.0,
-                                                      spreadRadius: 2.0,
-                                                      offset: Offset(2.0, 2.0),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: const BorderRadius.only(
+                                                        topLeft: Radius.circular(6),
+                                                        bottomLeft: Radius.circular(6),
+                                                        bottomRight: Radius.circular(6),
+                                                        topRight: Radius.circular(6),
+                                                      ),
+                                                      color: CustomColors.white,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          color: Color.fromARGB(13, 0, 0, 0),
+                                                          blurRadius: 4.0,
+                                                          spreadRadius: 2.0,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                                alignment: Alignment.center,
-                                                width: MediaQuery.of(context).size.width,
-                                                height: 50,
-                                                child: TextFormField(
-                                                  keyboardType: TextInputType.text,
-                                                  controller: accountTitleController,
-                                                  textInputAction: TextInputAction.next,
-                                                  style: const TextStyle(
-                                                    fontSize: 16,
-                                                    fontFamily: "Rubik",
-                                                    fontWeight: FontWeight.w400,
-                                                  ),
-                                                  textAlignVertical: TextAlignVertical.bottom,
-                                                  maxLines: 1,
-                                                  decoration: InputDecoration(
-                                                    hintText: "Enter Account Title",
-                                                    fillColor: CustomColors.white,
-                                                    focusColor: CustomColors.white,
-                                                    hoverColor: CustomColors.white,
-                                                    filled: true,
-                                                    border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(4),
-                                                    ),
-                                                    focusedBorder: OutlineInputBorder(
-                                                      borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                      borderRadius: BorderRadius.circular(4.0),
-                                                    ),
-                                                    enabledBorder: OutlineInputBorder(
-                                                      borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                      borderRadius: BorderRadius.circular(4.0),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(
-                                                height: 10,
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  borderRadius: const BorderRadius.only(
-                                                    topLeft: Radius.circular(6),
-                                                    bottomLeft: Radius.circular(6),
-                                                    bottomRight: Radius.circular(6),
-                                                    topRight: Radius.circular(6),
-                                                  ),
-                                                  color: CustomColors.white,
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      color: Color.fromARGB(13, 0, 0, 0),
-                                                      blurRadius: 4.0,
-                                                      spreadRadius: 2.0,
-                                                      offset: Offset(2.0, 2.0),
-                                                    ),
-                                                  ],
-                                                ),
-                                                alignment: Alignment.center,
-                                                width: MediaQuery.of(context).size.width,
-                                                height: 50,
-                                                child: TextFormField(
-                                                  keyboardType: TextInputType.text,
-                                                  textInputAction: TextInputAction.done,
-                                                  controller: accountNumberController,
-                                                  style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
-                                                  textAlignVertical: TextAlignVertical.bottom,
-                                                  maxLines: 1,
-                                                  inputFormatters: [
-                                                    LengthLimitingTextInputFormatter(20),
-                                                  ],
-                                                  decoration: InputDecoration(
-                                                    hintText: "Enter Account Number",
-                                                    fillColor: CustomColors.white,
-                                                    focusColor: CustomColors.white,
-                                                    hoverColor: CustomColors.white,
-                                                    filled: true,
-                                                    border: OutlineInputBorder(
-                                                      borderRadius: BorderRadius.circular(4),
-                                                    ),
-                                                    focusedBorder: OutlineInputBorder(
-                                                      borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                      borderRadius: BorderRadius.circular(4.0),
-                                                    ),
-                                                    enabledBorder: OutlineInputBorder(
-                                                      borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                      borderRadius: BorderRadius.circular(4.0),
+                                                    alignment: Alignment.center,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    height: 50,
+                                                    child: TextFormField(
+                                                      keyboardType: TextInputType.text,
+                                                      controller: accountTitleController,
+                                                      textInputAction: TextInputAction.next,
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontFamily: "Rubik",
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
+                                                      textAlignVertical: TextAlignVertical.bottom,
+                                                      maxLines: 1,
+                                                      decoration: InputDecoration(
+                                                        hintText: "Enter Account Title",
+                                                        fillColor: CustomColors.white,
+                                                        focusColor: CustomColors.white,
+                                                        hoverColor: CustomColors.white,
+                                                        filled: true,
+                                                        border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(4),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                          borderRadius: BorderRadius.circular(4.0),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                          borderRadius: BorderRadius.circular(4.0),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: const BorderRadius.only(
+                                                        topLeft: Radius.circular(6),
+                                                        bottomLeft: Radius.circular(6),
+                                                        bottomRight: Radius.circular(6),
+                                                        topRight: Radius.circular(6),
+                                                      ),
+                                                      color: CustomColors.white,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          color: Color.fromARGB(13, 0, 0, 0),
+                                                          blurRadius: 4.0,
+                                                          spreadRadius: 2.0,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    height: 50,
+                                                    child: TextFormField(
+                                                      keyboardType: TextInputType.text,
+                                                      textInputAction: TextInputAction.done,
+                                                      controller: accountNumberController,
+                                                      style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
+                                                      textAlignVertical: TextAlignVertical.bottom,
+                                                      maxLines: 1,
+                                                      inputFormatters: [
+                                                        LengthLimitingTextInputFormatter(20),
+                                                      ],
+                                                      decoration: InputDecoration(
+                                                        hintText: "Enter Account Number",
+                                                        fillColor: CustomColors.white,
+                                                        focusColor: CustomColors.white,
+                                                        hoverColor: CustomColors.white,
+                                                        filled: true,
+                                                        border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(4),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                          borderRadius: BorderRadius.circular(4.0),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                          borderRadius: BorderRadius.circular(4.0),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
 
-                                              const SizedBox(
-                                                height: 20,
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  // OTP
+                                                  LoadingButton(
+                                                    title: "Add Bank Detail",
+                                                    height: 54,
+                                                    backgroundColor: ServiceGiverColor.redButton,
+                                                    textStyle: TextStyle(
+                                                      color: CustomColors.white,
+                                                      fontFamily: "Rubik",
+                                                      fontStyle: FontStyle.normal,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontSize: 18,
+                                                    ),
+                                                    onPressed: () async {
+                                                      if (selectedNames == null) {
+                                                        showErrorToast("Please Select Bank Names");
+                                                        return false;
+                                                      } else if (accountTitleController.text.isEmpty) {
+                                                        showErrorToast("Please Enter Account Title");
+                                                        return false;
+                                                      } else if (accountNumberController.text.isEmpty) {
+                                                        showErrorToast("Please Enter Account Number");
+                                                        return false;
+                                                      } else {
+                                                        if (bankKey.currentState!.validate()) {
+                                                          await postAddBank();
+                                                          Navigator.pop(context);
+                                                          return true;
+                                                        }
+                                                        return false;
+                                                      }
+                                                    },
+                                                  ),
+                                                  const SizedBox(height: 30),
+                                                ],
                                               ),
-                                              // OTP
-                                              LoadingButton(
-                                                title: "Add Bank Detail",
-                                                height: 54,
-                                                backgroundColor: ServiceGiverColor.redButton,
-                                                textStyle: TextStyle(
-                                                  color: CustomColors.white,
-                                                  fontFamily: "Rubik",
-                                                  fontStyle: FontStyle.normal,
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 18,
-                                                ),
-                                                onPressed: () async {
-                                                  if (selectedNames == null) {
-                                                    showErrorToast("Please Select Bank Names");
-                                                    return false;
-                                                  } else if (accountTitleController.text.isEmpty) {
-                                                    showErrorToast("Please Enter Account Title");
-                                                    return false;
-                                                  } else if (accountNumberController.text.isEmpty) {
-                                                    showErrorToast("Please Enter Account Number");
-                                                    return false;
-                                                  } else {
-                                                    if (bankKey.currentState!.validate()) {
-                                                      await postAddBank();
-                                                      Navigator.pop(context);
-                                                      return true;
-                                                    }
-                                                    return false;
-                                                  }
-                                                },
-                                              ),
-                                              const SizedBox(height: 30),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                               );
                             },
                           );
                         },
-                      );
-                    },
-                    child: Container(
-                      width: 140,
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: ServiceGiverColor.black,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Center(
-                        child: Text(
+                        child: const Text(
                           "Add New Bank",
-                          style: TextStyle(color: CustomColors.white),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  if (filteredList != null) ...[
-                    TextField(
-                      focusNode: focus,
-                      // autofocus: true,
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 60,
+                    child: TextField(
                       decoration: InputDecoration(
                         isDense: true,
                         prefixIcon: const Icon(Icons.search),
@@ -544,274 +549,395 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
                         });
                       },
                     ),
-                    const SizedBox(height: 15),
-                    // if (FocusScope.of(context).hasFocus) ...[
-                    Container(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      decoration: const BoxDecoration(
-                        border: Border(
-                          bottom: BorderSide(color: Colors.grey),
-                        ),
-                      ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Bank Name",
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                          Text(
-                            "Account Title",
-                            style: TextStyle(fontWeight: FontWeight.w600),
-                          ),
-                        ],
-                      ),
-                    ),
-                    ListView.separated(
-                      itemCount: filteredList!.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      separatorBuilder: (context, index) {
-                        return Container(
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: Colors.grey),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      BankDetail bank = filteredList![index];
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: bank.selected == 1 ? 220 : 200,
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        margin: const EdgeInsets.symmetric(vertical: 05),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(08),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 05,
+                              spreadRadius: 01,
+                              color: Colors.grey.shade200,
                             ),
-                          ),
-                        );
-                      },
-                      itemBuilder: (context, index) {
-                        BankDetail bank = filteredList![index];
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: bank.selected == 1 ? 220 : 200,
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                          // decoration: const BoxDecoration(
-                          //   border: Border(
-                          //     bottom: BorderSide(color: Colors.grey),
-                          //   ),
-                          // ),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Name Of Bank: ",
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  "Name Of Bank: ",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(bank.nameOfBank.toString()),
+                              ],
+                            ),
+                            const SizedBox(height: 05),
+                            Row(
+                              children: [
+                                const Text(
+                                  "Account Title: ",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(bank.nameOnAccount.toString()),
+                              ],
+                            ),
+                            const SizedBox(height: 05),
+                            Row(
+                              children: [
+                                const Text(
+                                  "Account Number: ",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(bank.accountNumber.toString()),
+                              ],
+                            ),
+                            const SizedBox(height: 05),
+                            Row(
+                              children: [
+                                const Text(
+                                  "Status: ",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(width: 10),
+                                Text(
+                                  bank.status == 0 ? "Pending Approval" : "Approved",
+                                  style: TextStyle(
+                                    color: bank.status == 1 ? Colors.green : null,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const SizedBox(width: 10),
-                                  Text(bank.nameOfBank.toString()),
-                                ],
-                              ),
-                              const SizedBox(height: 05),
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Account Title: ",
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Text(bank.nameOnAccount.toString()),
-                                ],
-                              ),
-                              const SizedBox(height: 05),
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Account Number: ",
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Text(bank.accountNumber.toString()),
-                                ],
-                              ),
-                              const SizedBox(height: 05),
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Status: ",
-                                    style: TextStyle(fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    bank.status == 0 ? "Pending Approval" : "Approved",
-                                    style: TextStyle(
-                                      color: bank.status == 1 ? Colors.green : null,
-                                      fontWeight: FontWeight.bold,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 05),
+                            Row(
+                              children: [
+                                const Text(
+                                  "Selected Default Bank: ",
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(width: 10),
+                                if (bank.selected == 1) ...[
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: ServiceGiverColor.green,
+                                      borderRadius: BorderRadius.circular(08),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                    child: const Text(
+                                      "Default Bank",
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ),
                                 ],
-                              ),
-                              const SizedBox(height: 05),
-                              Row(
-                                children: [
-                                  const Text(
-                                    "Selected Default Bank: ",
-                                    style: TextStyle(fontWeight: FontWeight.bold),
+                              ],
+                            ),
+                            const SizedBox(height: 05),
+                            Row(
+                              children: [
+                                if (bank.selected == 0 && bank.status == 1) ...[
+                                  LoadingButton(
+                                    title: "Set as Default",
+                                    backgroundColor: Colors.green,
+                                    width: 150,
+                                    height: 50,
+                                    onPressed: () async {
+                                      await selectBank(bank.id);
+                                      return true;
+                                    },
                                   ),
-                                  const SizedBox(width: 10),
-                                  if (bank.selected == 1) ...[
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: ServiceGiverColor.green,
-                                        borderRadius: BorderRadius.circular(08),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                      child: const Text(
-                                        "Default Bank",
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                    ),
-                                  ],
+                                  const SizedBox(width: 20),
                                 ],
-                              ),
-                              const SizedBox(height: 05),
-                              Row(
-                                children: [
-                                  if (bank.selected == 0 && bank.status == 1) ...[
-                                    LoadingButton(
-                                      title: "Set as Default",
-                                      backgroundColor: Colors.green,
-                                      width: 150,
-                                      height: 50,
-                                      onPressed: () async {
-                                        await selectBank(bank.id);
-                                        return true;
-                                      },
-                                    ),
-                                    const SizedBox(width: 20),
-                                  ],
-                                  if (filteredList!.length > 1) ...[
-                                    LoadingButton(
-                                      title: "Delete",
-                                      width: 120,
-                                      height: 50,
-                                      backgroundColor: Colors.red,
-                                      onPressed: () async {
-                                        await deleteBank(bank.id);
-                                        return true;
-                                      },
-                                    ),
-                                  ],
+                                if (filteredList!.length > 1) ...[
+                                  LoadingButton(
+                                    title: "Delete",
+                                    width: 120,
+                                    height: 50,
+                                    backgroundColor: Colors.red,
+                                    onPressed: () async {
+                                      await deleteBank(bank.id);
+                                      return true;
+                                    },
+                                  ),
                                 ],
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-
-                    // if (selectedBank != null && !FocusScope.of(context).hasFocus) ...[
-                    //   Row(
-                    //     children: [
-                    //       const Text(
-                    //         "Name Of Bank: ",
-                    //         style: TextStyle(fontWeight: FontWeight.bold),
-                    //       ),
-                    //       const SizedBox(width: 10),
-                    //       Text(selectedBank!.nameOfBank.toString()),
-                    //     ],
-                    //   ),
-                    //   const SizedBox(height: 10),
-                    //   Row(
-                    //     children: [
-                    //       const Text(
-                    //         "Account Title: ",
-                    //         style: TextStyle(fontWeight: FontWeight.bold),
-                    //       ),
-                    //       const SizedBox(width: 10),
-                    //       Text(selectedBank!.nameOnAccount.toString()),
-                    //     ],
-                    //   ),
-                    //   const SizedBox(height: 10),
-                    //   Row(
-                    //     children: [
-                    //       const Text(
-                    //         "Account Number: ",
-                    //         style: TextStyle(fontWeight: FontWeight.bold),
-                    //       ),
-                    //       const SizedBox(width: 10),
-                    //       Text(selectedBank!.accountNumber.toString()),
-                    //     ],
-                    //   ),
-                    //   const SizedBox(height: 10),
-                    //   Row(
-                    //     children: [
-                    //       const Text(
-                    //         "Status: ",
-                    //         style: TextStyle(fontWeight: FontWeight.bold),
-                    //       ),
-                    //       const SizedBox(width: 10),
-                    //       Text(
-                    //         selectedBank!.status == 0 ? "Pending Approval" : "Approved",
-                    //         style: TextStyle(
-                    //           color: selectedBank!.status == 1 ? Colors.green : null,
-                    //           fontWeight: FontWeight.bold,
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    //   const SizedBox(height: 10),
-                    //   Row(
-                    //     children: [
-                    //       const Text(
-                    //         "Selected Default Bank: ",
-                    //         style: TextStyle(fontWeight: FontWeight.bold),
-                    //       ),
-                    //       const SizedBox(width: 10),
-                    //       if (selectedBank!.selected == 1) ...[
-                    //         Container(
-                    //           decoration: BoxDecoration(
-                    //             color: ServiceGiverColor.green,
-                    //             borderRadius: BorderRadius.circular(08),
-                    //           ),
-                    //           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    //           child: const Text(
-                    //             "Default Bank",
-                    //             style: TextStyle(color: Colors.white),
-                    //           ),
-                    //         ),
-                    //       ],
-                    //     ],
-                    //   ),
-                    //   const SizedBox(height: 10),
-                    //   Row(
-                    //     children: [
-                    //       if (selectedBank!.selected == 0 && selectedBank!.status == 1) ...[
-                    //         LoadingButton(
-                    //           title: "Set Default Bank",
-                    //           backgroundColor: Colors.green,
-                    //           width: 150,
-                    //           height: 50,
-                    //           onPressed: () async {
-                    //             await selectBank(selectedBank!.id);
-                    //             return true;
-                    //           },
-                    //         ),
-                    //         const SizedBox(width: 20),
-                    //       ],
-                    //       if (filteredList!.length > 1) ...[
-                    //         LoadingButton(
-                    //           title: "Delete",
-                    //           width: 120,
-                    //           height: 50,
-                    //           backgroundColor: Colors.red,
-                    //           onPressed: () async {
-                    //             await deleteBank(selectedBank!.id);
-                    //             return true;
-                    //           },
-                    //         ),
-                    //       ],
-                    //     ],
-                    //   ),
-                    // ],
-                  ],
-                ],
-              ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    childCount: filteredList!.length,
+                  ),
+                ),
+              ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget addNewBankDailog() {
+    return StatefulBuilder(
+      builder: (BuildContext context, StateSetter setState) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Container(
+                      width: 130,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: const Color(0xffC4C4C4),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Text(
+                      "Enter Your Bank Details",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: CustomColors.black,
+                        fontFamily: "Rubik",
+                        fontStyle: FontStyle.normal,
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 40),
+                  Form(
+                    key: bankKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(6),
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6),
+                              topRight: Radius.circular(6),
+                            ),
+                            color: CustomColors.white,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromARGB(13, 0, 0, 0),
+                                blurRadius: 4.0,
+                                spreadRadius: 2.0,
+                                offset: Offset(2.0, 2.0),
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          child: DecoratedBox(
+                            decoration: const BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  isExpanded: true,
+                                  hint: const Text("Select Banks"),
+                                  value: selectedNames,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedNames = value.toString();
+                                    });
+                                  },
+                                  items: dataNames.map((itemone) {
+                                    return DropdownMenuItem(value: itemone['value'], child: Text(itemone['name']));
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(6),
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6),
+                              topRight: Radius.circular(6),
+                            ),
+                            color: CustomColors.white,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromARGB(13, 0, 0, 0),
+                                blurRadius: 4.0,
+                                spreadRadius: 2.0,
+                                offset: Offset(2.0, 2.0),
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            controller: accountTitleController,
+                            textInputAction: TextInputAction.next,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontFamily: "Rubik",
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlignVertical: TextAlignVertical.bottom,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                              hintText: "Enter Account Title",
+                              fillColor: CustomColors.white,
+                              focusColor: CustomColors.white,
+                              hoverColor: CustomColors.white,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(6),
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6),
+                              topRight: Radius.circular(6),
+                            ),
+                            color: CustomColors.white,
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromARGB(13, 0, 0, 0),
+                                blurRadius: 4.0,
+                                spreadRadius: 2.0,
+                                offset: Offset(2.0, 2.0),
+                              ),
+                            ],
+                          ),
+                          alignment: Alignment.center,
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.done,
+                            controller: accountNumberController,
+                            style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
+                            textAlignVertical: TextAlignVertical.bottom,
+                            maxLines: 1,
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(20),
+                            ],
+                            decoration: InputDecoration(
+                              hintText: "Enter Account Number",
+                              fillColor: CustomColors.white,
+                              focusColor: CustomColors.white,
+                              hoverColor: CustomColors.white,
+                              filled: true,
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        // OTP
+                        LoadingButton(
+                          title: "Add Bank Detail",
+                          height: 54,
+                          backgroundColor: ServiceGiverColor.redButton,
+                          textStyle: TextStyle(
+                            color: CustomColors.white,
+                            fontFamily: "Rubik",
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                          ),
+                          onPressed: () async {
+                            if (selectedNames == null) {
+                              showErrorToast("Please Select Bank Names");
+                              return false;
+                            } else if (accountTitleController.text.isEmpty) {
+                              showErrorToast("Please Enter Account Title");
+                              return false;
+                            } else if (accountNumberController.text.isEmpty) {
+                              showErrorToast("Please Enter Account Number");
+                              return false;
+                            } else {
+                              if (bankKey.currentState!.validate()) {
+                                await postAddBank();
+                                Navigator.pop(context);
+                                return true;
+                              }
+                              return false;
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 30),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

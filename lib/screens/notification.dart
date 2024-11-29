@@ -1,6 +1,6 @@
 // ignore_for_file: unused_element, unused_local_variable, use_build_context_synchronously
 
-import 'dart:developer';
+// import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
@@ -431,16 +431,16 @@ class NotificationProvider extends ChangeNotifier {
   }
 
   onEvent(event) {
-    log("onEventxsxsxsXS: ${event.toString()}");
+    // log("onEventxsxsxsXS: ${event.toString()}");
     getNotifications();
   }
 
   onSubscriptionSucceeded(dynamic data) {
-    log("onSubscriptionSucceeded: ${data.toString()} data: ${data.toString()}");
+    // log("onSubscriptionSucceeded: ${data.toString()} data: ${data.toString()}");
   }
 
   onSubscriptionError(dynamic data) {
-    log("onSubscriptionError: ${data.toString()} Exception: ${data.toString()}");
+    // log("onSubscriptionError: ${data.toString()} Exception: ${data.toString()}");
   }
 
   getNotifications() async {
@@ -482,7 +482,7 @@ class IslandPusher {
       await pusher.init(apiKey: apiKey, cluster: cluster);
       await pusher.connect();
     } catch (e) {
-      log("ERROR: $e");
+      // log("ERROR: $e");
     }
   }
 

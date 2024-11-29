@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
@@ -415,9 +416,10 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
             imageFileDio = File(pickedFileDio.files.single.path ?? "");
           });
         }
-      } else {
-        showErrorToast("No file select");
       }
+      // else {
+      //   showErrorToast("No file select");
+      // }
     } catch (e) {
       //
     }
@@ -461,6 +463,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   Future<void> sendPrfileUpdateRequest() async {
     var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
     var token = await getToken();
+    print(selectedArea.join(','));
     var formData = FormData.fromMap({
       '_method': 'PUT',
       'id': usersId,
@@ -469,7 +472,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
       'address': addressController.text.trim().toString(),
       'gender': isSelectedGender,
       'dob': dobController.text.trim().toString(),
-      'area[]': selectedArea,
+      'area': selectedArea.join(','),
       'zip': zipController.text.trim().toString(),
       'experience': experienceController.text.trim().toString(),
       'hourly_rate': hourlyController.text.trim().toString(),
@@ -705,13 +708,19 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                   ),
                   const SizedBox(height: 15),
                   // Upload Image
-                  GestureDetector(
-                    onTap: () {
-                      getImageDio(context);
-                    },
-                    child: imageFileDio == null
-                        ? Center(
-                            child: Container(
+                  Align(
+                    alignment: Alignment.center,
+                    child: InkWell(
+                      onTap: () async {
+                        await getImageDio(context);
+                      },
+                      child: SizedBox(
+                        height: 100.45,
+                        width: 120.45,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
                               alignment: Alignment.center,
                               height: 100.45,
                               width: 100.45,
@@ -727,33 +736,102 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                   ),
                                 ],
                               ),
-                              child: Center(
-                                child: widget.avatar != null
-                                    ? ClipRRect(
+                              child: imageFileDio == null
+                                  ? Center(
+                                      child: widget.avatar != null
+                                          ? ClipRRect(
+                                              borderRadius: BorderRadius.circular(100),
+                                              child: Image(
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.fitWidth,
+                                                image: NetworkImage("${AppUrl.webStorageUrl}/${widget.avatar}"),
+                                              ),
+                                            )
+                                          : const Text("Upload"),
+                                    )
+                                  : Center(
+                                      child: ClipRRect(
                                         borderRadius: BorderRadius.circular(100),
-                                        child: Image(
+                                        child: Image.file(
+                                          imageFileDio!,
                                           width: 100,
                                           height: 100,
                                           fit: BoxFit.fitWidth,
-                                          image: NetworkImage("${AppUrl.webStorageUrl}/${widget.avatar}"),
                                         ),
-                                      )
-                                    : const Text("Upload"),
+                                      ),
+                                    ),
+                            ),
+                            Positioned(
+                              right: 05,
+                              bottom: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(5.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(80),
+                                ),
+                                child: const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
-                          )
-                        : Center(
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(100),
-                              child: Image.file(
-                                imageFileDio!,
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.fitWidth,
-                              ),
-                            ),
-                          ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
+
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     getImageDio(context);
+                  //   },
+                  //   child: imageFileDio == null
+                  //       ? Center(
+                  //           child: Container(
+                  //             alignment: Alignment.center,
+                  //             height: 100.45,
+                  //             width: 100.45,
+                  //             decoration: BoxDecoration(
+                  //               color: ServiceGiverColor.black,
+                  //               borderRadius: BorderRadius.circular(100),
+                  //               boxShadow: const [
+                  //                 BoxShadow(
+                  //                   color: Color.fromARGB(15, 0, 0, 0),
+                  //                   blurRadius: 4,
+                  //                   spreadRadius: 4,
+                  //                   offset: Offset(2, 2), // Shadow position
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //             child: Center(
+                  //               child: widget.avatar != null
+                  //                   ? ClipRRect(
+                  //                       borderRadius: BorderRadius.circular(100),
+                  //                       child: Image(
+                  //                         width: 100,
+                  //                         height: 100,
+                  //                         fit: BoxFit.fitWidth,
+                  //                         image: NetworkImage("${AppUrl.webStorageUrl}/${widget.avatar}"),
+                  //                       ),
+                  //                     )
+                  //                   : const Text("Upload"),
+                  //             ),
+                  //           ),
+                  //         )
+                  //       : Center(
+                  //           child: ClipRRect(
+                  //             borderRadius: BorderRadius.circular(100),
+                  //             child: Image.file(
+                  //               imageFileDio!,
+                  //               width: 100,
+                  //               height: 100,
+                  //               fit: BoxFit.fitWidth,
+                  //             ),
+                  //           ),
+                  //         ),
+                  // ),
                   const SizedBox(height: 15),
                   // Name and Email
                   Center(

@@ -54,7 +54,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           title: Text(
-            "Messages",
+            "Messages for caheck",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
@@ -236,8 +236,6 @@ class RecieverChatProvider extends ChangeNotifier {
     // } else {
     // var getChatRoom = allChatRooms.firstWhere((element) => element["id"] == id);
     activeChat = chat;
-    // print("get chat $getChatRoom");
-    // print("set active chat $activeChat");
     notifyListeners();
     // }
   }

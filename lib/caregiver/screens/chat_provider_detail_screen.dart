@@ -272,7 +272,7 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    DateFormat.jm().format(DateTime.parse(message['updated_at']).toLocal()),
+                    message['created_at'] != null ? DateFormat("dd-MM-yyyy hh:mm a").format(DateTime.parse(message['created_at']).toLocal()) : DateTime.now().toString(),
                     style: TextStyle(
                       fontSize: 13,
                       fontFamily: "Rubik",
@@ -346,7 +346,7 @@ class ServiceProviderChatRoomState extends State<ServiceProviderChatRoom> {
               ),
               const SizedBox(height: 05),
               Text(
-                DateFormat.jm().format(DateTime.parse(message['updated_at']).toLocal()),
+                message['created_at'] != null ? DateFormat("dd-MM-yyyy hh:mm a").format(DateTime.parse(message['created_at']).toLocal()) : DateTime.now().toString(),
                 style: const TextStyle(
                   fontSize: 13,
                   fontFamily: "Rubik",

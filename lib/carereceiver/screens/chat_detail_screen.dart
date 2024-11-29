@@ -241,6 +241,7 @@ class RecieverChatScreenState extends State<RecieverChatScreen> {
   }
 
   senderMassage(message) {
+    // print(message);
     return Align(
       alignment: Alignment.centerRight,
       child: Padding(
@@ -275,7 +276,7 @@ class RecieverChatScreenState extends State<RecieverChatScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    message['created_at'] != null ? DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()) : DateTime.now().toString(),
+                    message['created_at'] != null ? DateFormat("dd-MM-yyyy hh:mm a").format(DateTime.parse(message['created_at']).toLocal()) : DateTime.now().toString(),
                     style: TextStyle(
                       fontSize: 13,
                       fontFamily: "Rubik",
@@ -349,7 +350,7 @@ class RecieverChatScreenState extends State<RecieverChatScreen> {
               ),
               const SizedBox(height: 05),
               Text(
-                message['created_at'] != null ? DateFormat.jm().format(DateTime.parse(message['created_at']).toLocal()) : DateTime.now().toString(),
+                message['created_at'] != null ? DateFormat("dd-MM-yyyy hh:mm a").format(DateTime.parse(message['created_at']).toLocal()) : DateTime.now().toString(),
                 style: TextStyle(
                   fontSize: 13,
                   fontFamily: "Rubik",

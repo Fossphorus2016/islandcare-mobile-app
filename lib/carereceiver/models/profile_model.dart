@@ -128,6 +128,8 @@ class Userdetail {
   DateTime? updatedAt;
   Service? service;
 
+  // List<Service>? service;
+
   factory Userdetail.fromJson(Map<String, dynamic> json) => Userdetail(
         id: json["id"],
         userId: json["user_id"],
@@ -153,7 +155,7 @@ class Userdetail {
         "user_info": userInfo,
         "created_at": createdAt?.toIso8601String(),
         "updated_at": updatedAt?.toIso8601String(),
-        "service": service?.toJson(),
+        // "service": service?.toJson(),
       };
 }
 

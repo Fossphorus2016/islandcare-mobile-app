@@ -26,9 +26,6 @@ class _ConversationListState extends State<ConversationList> {
       onTap: () {
         Provider.of<RecieverChatProvider>(context, listen: false).setActiveChat(widget.chat);
         navigationService.push(RoutesName.recieverChatScreen);
-        // Navigator.push(context, MaterialPageRoute(builder: (context) {
-        //   return const ChatDetailPage();
-        // }));
       },
       child: Container(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 10, bottom: 10),

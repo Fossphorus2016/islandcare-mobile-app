@@ -1,9 +1,9 @@
 import 'dart:convert';
 
+import 'package:island_app/caregiver/models/giver_service.dart';
 import 'package:island_app/models/learning_model.dart';
 import 'package:island_app/models/schedule_model.dart';
 import 'package:island_app/models/school_camp_model.dart';
-import 'package:island_app/models/service_model.dart';
 
 ServiceProviderJobBoardModel serviceProviderJobBoardModelFromJson(String str) => ServiceProviderJobBoardModel.fromJson(json.decode(str));
 
@@ -71,7 +71,7 @@ class Job {
   int? fundsTransferedToProvider;
   String? totalDuration;
   List<Childinfo>? childinfo;
-  Service? service;
+  GiverService? service;
   List<Schedule>? schedule;
   SeniorCare? seniorCare;
   PetCare? petCare;
@@ -96,7 +96,7 @@ class Job {
         fundsTransferedToProvider: json["funds_transfered_to_provider"],
         totalDuration: json["total_duration"],
         childinfo: json["childinfo"] == null ? [] : List<Childinfo>.from(json["childinfo"]!.map((x) => Childinfo.fromJson(x))),
-        service: json["service"] == null ? null : Service.fromJson(json["service"]),
+        service: json["service"] == null ? null : GiverService.fromJson(json["service"]),
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
         seniorCare: json["senior_care"] == null ? null : SeniorCare.fromJson(json["senior_care"]),
         petCare: json["pet_care"] == null ? null : PetCare.fromJson(json["pet_care"]),

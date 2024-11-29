@@ -7,6 +7,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:island_app/models/service_model.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
@@ -15,22 +16,27 @@ import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/loading_button.dart';
 
 class ProfileReceiverEdit extends StatefulWidget {
-  String? name;
+  String name;
+  String email;
+
   String? dob;
   int? male;
   String? phoneNumber;
-  String? service;
+  Service? service;
+
+  // List<Service>? service;
   String? zipCode;
   String? userInfo;
   String? userAddress;
   String? profileImage;
   ProfileReceiverEdit({
     super.key,
-    this.name,
+    required this.name,
+    required this.email,
     this.male,
     this.dob,
     this.phoneNumber,
-    this.service,
+    required this.service,
     this.zipCode,
     this.userInfo,
     this.userAddress,
@@ -96,29 +102,29 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
 
   List? data = []; //edited line
 
-  Future<String> getSWData() async {
-    var token = await getToken();
-    var res = await getRequesthandler(url: serviceurl, token: token);
-    if (res != null && res.statusCode == 200) {
-      Map<String, dynamic> resBody = res.data;
-      List<dynamic> serviceData = resBody["services"];
-      if (widget.service != null) {
-        var getServiceByProfile = serviceData
-            .where(
-              (element) => element['name'] == widget.service,
-            )
-            .first;
+  // Future<String> getSWData() async {
+  //   var token = await getToken();
+  //   var res = await getRequesthandler(url: serviceurl, token: token);
+  //   if (res != null && res.statusCode == 200) {
+  //     Map<String, dynamic> resBody = res.data;
+  //     List<dynamic> serviceData = resBody["services"];
+  //     if (widget.service != null) {
+  //       var getServiceByProfile = serviceData
+  //           .where(
+  //             (element) => element['name'] == widget.service,
+  //           )
+  //           .first;
 
-        setState(() {
-          selectedService = getServiceByProfile['id'].toString();
-        });
-      }
-      setState(() {
-        data = serviceData;
-      });
-    }
-    return "Sucess";
-  }
+  //       setState(() {
+  //         selectedService = getServiceByProfile['id'].toString();
+  //       });
+  //     }
+  //     setState(() {
+  //       data = serviceData;
+  //     });
+  //   }
+  //   return "Sucess";
+  // }
 
   File? image;
   bool showSpinner = false;
@@ -196,7 +202,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
   void initState() {
     getUserId();
     super.initState();
-    getSWData();
+    // getSWData();
     if (widget.dob != null) {
       dobController.text = widget.dob!;
     }
@@ -301,6 +307,69 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 ),
                               ),
                       ),
+                      const SizedBox(height: 15),
+                      // Name and Email
+                      Center(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            if (widget.name != null) ...[
+                              Text(
+                                widget.name,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ],
+                            if (widget.email != null) ...[
+                              Text(
+                                widget.email,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      // Service Provided
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: CustomColors.white,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "Service Provided",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 12,
+                                fontFamily: "Rubik",
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(widget.service!.name.toString())
+                            // if (widget.service != null) ...[
+                            //   for (var i = 0; i < widget.service!.length; i++) ...[
+                            //     Container(
+                            //       padding: const EdgeInsets.symmetric(vertical: 10),
+                            //       decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(12),
+                            //       ),
+                            //       child: Text(widget.service![i].name.toString()),
+                            //     )
+                            //   ],
+                            // ],
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 15),
                       const SizedBox(height: 15),
                       //  Gender
                       Container(
@@ -763,9 +832,11 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 showErrorToast("Please Select Gender");
                               } else if (dobController.text.isEmpty) {
                                 showErrorToast("Please Select Date Of Birth");
-                              } else if (selectedService == null) {
-                                showErrorToast("Please Select Services");
-                              } else if (phoneController.text.isEmpty) {
+                              }
+                              // else if (selectedService == null) {
+                              //   showErrorToast("Please Select Services");
+                              // }
+                              else if (phoneController.text.isEmpty) {
                                 showErrorToast("Please Enter Phone Number");
                               } else if (addressController.text.isEmpty) {
                                 showErrorToast("Please Enter User Address");

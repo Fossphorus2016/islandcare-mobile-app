@@ -135,15 +135,17 @@ class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Text(
-                            "\$ ${allpackages[i]['price']}",
-                            style: TextStyle(
-                              fontSize: 26,
-                              fontWeight: FontWeight.w500,
-                              fontFamily: "Poppins",
-                              color: CustomColors.white,
+                          if (allpackages[i]['price'] != null) ...[
+                            Text(
+                              "\$ ${allpackages[i]['price']}",
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: "Poppins",
+                                color: CustomColors.white,
+                              ),
                             ),
-                          ),
+                          ],
                           const SizedBox(height: 05),
                           TextButton(
                             onPressed: () async {
@@ -182,6 +184,7 @@ class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
                                       LoadingButton(
                                         title: "Yes, unsubscribe please!",
                                         backgroundColor: Colors.blue,
+                                        height: 54,
                                         onPressed: () async {
                                           try {
                                             var resp = await Provider.of<SubscriptionProvider>(context, listen: false).unSubscribe(userSubsDetail.id);
@@ -206,9 +209,7 @@ class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
                                         onPressed: () {
                                           Navigator.pop(context);
                                         },
-                                        style: ButtonStyle(
-                                          backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.red.shade400),
-                                        ),
+                                        style: ButtonStyle(backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.red.shade400), shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)))),
                                         child: const Text(
                                           "No, cancel please!",
                                           style: TextStyle(color: Colors.white),
@@ -485,7 +486,6 @@ class _RecieverPaymentScreenState extends State<RecieverPaymentScreen> {
 
   bool sendReq = false;
   dynamic cardFormWidget(BuildContext context) {
-    // CreditCard? selectedCard = context.watch<SubscriptionProvider>().cardValue;
     Map selectedSubscribe = Provider.of<SubscriptionProvider>(context).selectedPackage;
     return selectedCard != null
         ? Column(
@@ -656,7 +656,6 @@ class _RecieverPaymentScreenState extends State<RecieverPaymentScreen> {
                       ),
                     ),
                     const SizedBox(height: 15),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -670,7 +669,7 @@ class _RecieverPaymentScreenState extends State<RecieverPaymentScreen> {
                           ),
                         ),
                         Text(
-                          "${selectedSubscribe['price']}\$",
+                          "\$ ${selectedSubscribe['price']}",
                           style: TextStyle(
                             color: CustomColors.primaryText,
                             fontSize: 18,
@@ -1082,7 +1081,7 @@ class _RecieverPaymentScreenState extends State<RecieverPaymentScreen> {
                   ),
                 ),
                 Text(
-                  "${selectedSubscribe['price']}\$",
+                  "\$ ${selectedSubscribe['price']}",
                   style: TextStyle(
                     color: CustomColors.primaryText,
                     fontSize: 18,

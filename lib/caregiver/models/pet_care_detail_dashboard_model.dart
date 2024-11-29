@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:island_app/caregiver/models/giver_service.dart';
 import 'package:island_app/models/schedule_model.dart';
-import 'package:island_app/models/service_model.dart';
 
 PetCareDetailDashboardModel petCareDetailDashboardModelFromJson(String str) => PetCareDetailDashboardModel.fromJson(json.decode(str));
 
@@ -71,7 +71,7 @@ class JobDetail {
   dynamic providerId;
   int? fundsTransferedToProvider;
   String? totalDuration;
-  Service? service;
+  GiverService? service;
   List<Schedule>? schedule;
   PetCare? petCare;
   String? additionalInfo;
@@ -94,7 +94,7 @@ class JobDetail {
         providerId: json["provider_id"],
         fundsTransferedToProvider: json["funds_transfered_to_provider"],
         totalDuration: json["total_duration"],
-        service: json["service"] == null ? null : Service.fromJson(json["service"]),
+        service: json["service"] == null ? null : GiverService.fromJson(json["service"]),
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
         petCare: json["pet_care"] == null ? null : PetCare.fromJson(json["pet_care"]),
         additionalInfo: json["additional_info"],

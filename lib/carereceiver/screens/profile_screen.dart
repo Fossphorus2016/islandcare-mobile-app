@@ -69,485 +69,235 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
           ),
           body: SafeArea(
             child: RefreshIndicator(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      if (Provider.of<RecieverUserProvider>(context).profileIsLoading) ...[
-                        const CircularProgressIndicator(
-                          color: Colors.amber,
-                        ),
-                      ] else ...[
-                        Container(
-                          height: 260,
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                          color: CustomColors.primaryColor,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                height: 110,
-                                child: Row(
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.circular(08),
-                                      child: CachedNetworkImage(
-                                        width: 130,
-                                        height: 110,
-                                        alignment: Alignment.center,
-                                        imageUrl: "${AppUrl.webStorageUrl}/${userProvider.gWAUserProfile!.data!.avatar.toString()}",
-                                        errorWidget: (context, url, error) => const Icon(Icons.error),
+              onRefresh: () async {
+                await userProvider.fetchProfileReceiverModel();
+              },
+              child: CustomScrollView(
+                slivers: [
+                  SliverFillRemaining(
+                    child: Column(
+                      children: [
+                        if (Provider.of<RecieverUserProvider>(context).profileIsLoading) ...[
+                          const CircularProgressIndicator(
+                            color: Colors.amber,
+                          ),
+                        ] else ...[
+                          Container(
+                            height: 260,
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                            color: CustomColors.primaryColor,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 110,
+                                  child: Row(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(08),
+                                        child: CachedNetworkImage(
+                                          width: 130,
+                                          height: 110,
+                                          alignment: Alignment.center,
+                                          imageUrl: "${AppUrl.webStorageUrl}/${userProvider.gWAUserProfile!.data!.avatar.toString()}",
+                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                        ),
                                       ),
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.topRight,
-                                            child: InkWell(
-                                              onTap: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => ProfileReceiverEdit(
-                                                      name: userProvider.gWAUserProfile!.data!.userdetail!.service!.name,
-                                                      dob: userProvider.gWAUserProfile!.data!.userdetail!.dob,
-                                                      male: userProvider.gWAUserProfile!.data!.userdetail!.gender,
-                                                      phoneNumber: userProvider.gWAUserProfile!.data!.phone,
-                                                      service: userProvider.gWAUserProfile!.data!.userdetail!.service!.name,
-                                                      zipCode: userProvider.gWAUserProfile!.data!.userdetail!.zip,
-                                                      userInfo: userProvider.gWAUserProfile!.data!.userdetail!.userInfo,
-                                                      userAddress: userProvider.gWAUserProfile!.data!.userdetail!.address,
-                                                      profileImage: userProvider.gWAUserProfile!.data!.avatar,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              child: const Icon(Icons.edit, color: Colors.white),
-                                            ),
-                                          ),
-                                          Text(
-                                            "${userProvider.gWAUserProfile!.data!.firstName.toString()} ${userProvider.gWAUserProfile!.data!.lastName.toString()}",
-                                            style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
-                                          ),
-                                          const SizedBox(width: 10),
-                                          Text(
-                                            userProvider.gWAUserProfile!.data!.email.toString(),
-                                            style: TextStyle(fontSize: 12, fontFamily: "Rubik", fontWeight: FontWeight.w400, color: CustomColors.white),
-                                          ),
-                                          const SizedBox(width: 10),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              SizedBox(
-                                height: 50,
-                                width: MediaQuery.of(context).size.width,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                                      width: 130,
-                                      child: Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.phone_outlined,
-                                            size: 14,
-                                            color: Colors.white,
-                                          ),
-                                          Expanded(
-                                            child: Text(
-                                              userProvider.gWAUserProfile!.data!.phone.toString(),
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(width: 05),
-                                    Expanded(
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
-                                        child: Flex(
-                                          direction: Axis.horizontal,
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
+                                            Align(
+                                              alignment: Alignment.topRight,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) => ProfileReceiverEdit(
+                                                        name: "${userProvider.gWAUserProfile!.data!.firstName} ${userProvider.gWAUserProfile!.data!.lastName}",
+                                                        email: userProvider.gWAUserProfile!.data!.email.toString(),
+                                                        // name: userProvider.gWAUserProfile!.data!.userdetail!.service!.name,
+                                                        dob: userProvider.gWAUserProfile!.data!.userdetail!.dob,
+                                                        male: userProvider.gWAUserProfile!.data!.userdetail!.gender,
+                                                        phoneNumber: userProvider.gWAUserProfile!.data!.phone,
+                                                        service: userProvider.gWAUserProfile!.data!.userdetail!.service,
+                                                        // userProvider.gWAUserProfile!.data!.userdetail!.service != null
+                                                        // // && userProvider.gWAUserProfile!.data!.userdetail!.service!.isNotEmpty
+                                                        //   userProvider.gWAUserProfile!.data!.userdetail!.service! : null,
+                                                        zipCode: userProvider.gWAUserProfile!.data!.userdetail!.zip,
+                                                        userInfo: userProvider.gWAUserProfile!.data!.userdetail!.userInfo,
+                                                        userAddress: userProvider.gWAUserProfile!.data!.userdetail!.address,
+                                                        profileImage: userProvider.gWAUserProfile!.data!.avatar,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: const Icon(Icons.edit, color: Colors.white),
+                                              ),
+                                            ),
+                                            Text(
+                                              "${userProvider.gWAUserProfile!.data!.firstName.toString()} ${userProvider.gWAUserProfile!.data!.lastName.toString()}",
+                                              style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Text(
+                                              userProvider.gWAUserProfile!.data!.email.toString(),
+                                              style: TextStyle(fontSize: 12, fontFamily: "Rubik", fontWeight: FontWeight.w400, color: CustomColors.white),
+                                            ),
+                                            const SizedBox(width: 10),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
+                                SizedBox(
+                                  height: 50,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                                        width: 130,
+                                        child: Row(
+                                          children: [
                                             const Icon(
-                                              Icons.location_on_outlined,
-                                              size: 18,
+                                              Icons.phone_outlined,
+                                              size: 14,
                                               color: Colors.white,
                                             ),
-                                            if (userProvider.gWAUserProfile!.data!.userdetail!.address != null) ...[
-                                              Flexible(
-                                                child: Text(
-                                                  userProvider.gWAUserProfile!.data!.userdetail!.address.toString(),
-                                                  maxLines: 6,
-                                                  overflow: TextOverflow.visible,
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
-                                              ),
-                                            ] else ...[
-                                              const Text(
-                                                "Not Available",
-                                                maxLines: 6,
-                                                overflow: TextOverflow.visible,
-                                                style: TextStyle(
+                                            Expanded(
+                                              child: Text(
+                                                userProvider.gWAUserProfile!.data!.phone.toString(),
+                                                style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w600,
                                                 ),
                                               ),
-                                            ],
+                                            ),
                                           ],
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 5),
-                              SizedBox(
-                                height: 40,
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      const SizedBox(width: 05),
+                                      Expanded(
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 4),
+                                          child: Flex(
+                                            direction: Axis.horizontal,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                "Profile Completion",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: "Rubik",
-                                                  fontWeight: FontWeight.w400,
-                                                  color: CustomColors.white,
-                                                ),
+                                              const Icon(
+                                                Icons.location_on_outlined,
+                                                size: 18,
+                                                color: Colors.white,
                                               ),
-                                              Text(
-                                                "${Provider.of<RecieverUserProvider>(context).profilePerentage}%",
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontFamily: "Rubik",
-                                                  fontWeight: FontWeight.w400,
-                                                  color: CustomColors.white,
+                                              if (userProvider.gWAUserProfile!.data!.userdetail!.address != null) ...[
+                                                Flexible(
+                                                  child: Text(
+                                                    userProvider.gWAUserProfile!.data!.userdetail!.address.toString(),
+                                                    maxLines: 6,
+                                                    overflow: TextOverflow.visible,
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w600,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
+                                              ] else ...[
+                                                const Text(
+                                                  "Not Available",
+                                                  maxLines: 6,
+                                                  overflow: TextOverflow.visible,
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ],
                                             ],
                                           ),
-                                          const SizedBox(height: 05),
-                                          LinearProgressIndicator(
-                                            minHeight: 08,
-                                            borderRadius: BorderRadius.circular(08),
-                                            value: Provider.of<RecieverUserProvider>(context).profilePerentage != null ? (Provider.of<RecieverUserProvider>(context).profilePerentage! / 100) : 00,
-                                            valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 5),
+                                SizedBox(
+                                  height: 40,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Text(
+                                                  "Profile Completion",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: "Rubik",
+                                                    fontWeight: FontWeight.w400,
+                                                    color: CustomColors.white,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  "${Provider.of<RecieverUserProvider>(context).profilePerentage}%",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: "Rubik",
+                                                    fontWeight: FontWeight.w400,
+                                                    color: CustomColors.white,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 05),
+                                            LinearProgressIndicator(
+                                              minHeight: 08,
+                                              borderRadius: BorderRadius.circular(08),
+                                              value: Provider.of<RecieverUserProvider>(context).profilePerentage != null ? (Provider.of<RecieverUserProvider>(context).profilePerentage! / 100) : 00,
+                                              valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 18),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Personal Information",
-                                style: TextStyle(
-                                  color: CustomColors.primaryText,
-                                  fontFamily: "Rubik",
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                margin: const EdgeInsets.only(bottom: 15),
-                                decoration: BoxDecoration(
-                                  color: CustomColors.white,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Full Name",
-                                          style: TextStyle(
-                                            color: CustomColors.primaryColor,
-                                            fontSize: 14,
-                                            fontFamily: "Rubik",
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          "${userProvider.gWAUserProfile!.data!.firstName} ${userProvider.gWAUserProfile!.data!.lastName}",
-                                          style: TextStyle(
-                                            color: CustomColors.hintText,
-                                            fontSize: 16,
-                                            fontFamily: "Rubik",
-                                            fontWeight: FontWeight.w200,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              if (userProvider.gWAUserProfile!.data!.email != null) ...[
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                  margin: const EdgeInsets.only(bottom: 15),
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Email ID",
-                                        style: TextStyle(
-                                          color: CustomColors.primaryColor,
-                                          fontSize: 14,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        userProvider.gWAUserProfile!.data!.email.toString(),
-                                        style: TextStyle(
-                                          color: CustomColors.hintText,
-                                          fontSize: 16,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w200,
-                                        ),
-                                      )
-                                    ],
+                          const SizedBox(height: 20),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 18),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Personal Information",
+                                  style: TextStyle(
+                                    color: CustomColors.primaryText,
+                                    fontFamily: "Rubik",
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
                                   ),
                                 ),
-                              ],
-                              if (userProvider.gWAUserProfile!.data!.phone != null) ...[
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                  margin: const EdgeInsets.only(bottom: 15),
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Contact Number",
-                                        style: TextStyle(
-                                          color: CustomColors.primaryColor,
-                                          fontSize: 14,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        userProvider.gWAUserProfile!.data!.phone.toString(),
-                                        style: TextStyle(
-                                          color: CustomColors.hintText,
-                                          fontSize: 16,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w200,
-                                        ),
-                                      )
-                                    ],
-                                  ),
+                                const SizedBox(
+                                  height: 10,
                                 ),
-                              ],
-                              if (userProvider.gWAUserProfile!.data!.userdetail!.zip != null) ...[
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                  margin: const EdgeInsets.only(bottom: 15),
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Postal Code",
-                                        style: TextStyle(
-                                          color: CustomColors.primaryColor,
-                                          fontSize: 14,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        userProvider.gWAUserProfile!.data!.userdetail!.zip.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.zip.toString(),
-                                        style: TextStyle(
-                                          color: CustomColors.hintText,
-                                          fontSize: 16,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w200,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                              if (userProvider.gWAUserProfile!.data!.userdetail!.gender != null) ...[
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                  margin: const EdgeInsets.only(bottom: 15),
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Gender",
-                                        style: TextStyle(
-                                          color: CustomColors.primaryColor,
-                                          fontSize: 14,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        (userProvider.gWAUserProfile!.data!.userdetail!.gender.toString() == "1")
-                                            ? "Male"
-                                            : (userProvider.gWAUserProfile!.data!.userdetail!.gender.toString() == "2")
-                                                ? "Female"
-                                                : "Not Available",
-                                        style: TextStyle(
-                                          color: CustomColors.hintText,
-                                          fontSize: 16,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w200,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                              if (userProvider.gWAUserProfile!.data!.userdetail!.dob != null) ...[
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                  margin: const EdgeInsets.only(bottom: 15),
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Date Of Birth",
-                                        style: TextStyle(
-                                          color: CustomColors.primaryColor,
-                                          fontSize: 14,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        userProvider.gWAUserProfile!.data!.userdetail!.dob.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.dob.toString(),
-                                        style: TextStyle(
-                                          color: CustomColors.hintText,
-                                          fontSize: 16,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w200,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                              if (userProvider.gWAUserProfile!.data!.userdetail!.dob != null) ...[
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                                  margin: const EdgeInsets.only(bottom: 15),
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: CustomColors.white,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Looking For",
-                                        style: TextStyle(
-                                          color: CustomColors.primaryColor,
-                                          fontSize: 14,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        userProvider.gWAUserProfile!.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.service!.name.toString(),
-                                        style: TextStyle(
-                                          color: CustomColors.hintText,
-                                          fontSize: 16,
-                                          fontFamily: "Rubik",
-                                          fontWeight: FontWeight.w200,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                              if (userProvider.gWAUserProfile!.data!.userdetail!.userInfo != null) ...[
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
                                   margin: const EdgeInsets.only(bottom: 15),
@@ -559,48 +309,312 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "Bio",
-                                              style: TextStyle(
-                                                color: CustomColors.primaryColor,
-                                                fontSize: 14,
-                                                fontFamily: "Rubik",
-                                                fontWeight: FontWeight.w600,
-                                              ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Full Name",
+                                            style: TextStyle(
+                                              color: CustomColors.primaryColor,
+                                              fontSize: 14,
+                                              fontFamily: "Rubik",
+                                              fontWeight: FontWeight.w600,
                                             ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              userProvider.gWAUserProfile!.data!.userdetail!.userInfo.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.userInfo.toString(),
-                                              softWrap: true,
-                                              style: TextStyle(
-                                                color: CustomColors.hintText,
-                                                fontSize: 16,
-                                                fontFamily: "Rubik",
-                                                fontWeight: FontWeight.w200,
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(
+                                            "${userProvider.gWAUserProfile!.data!.firstName} ${userProvider.gWAUserProfile!.data!.lastName}",
+                                            style: TextStyle(
+                                              color: CustomColors.hintText,
+                                              fontSize: 16,
+                                              fontFamily: "Rubik",
+                                              fontWeight: FontWeight.w200,
+                                            ),
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
                                 ),
+                                if (userProvider.gWAUserProfile!.data!.email != null) ...[
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                    margin: const EdgeInsets.only(bottom: 15),
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Email ID",
+                                          style: TextStyle(
+                                            color: CustomColors.primaryColor,
+                                            fontSize: 14,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          userProvider.gWAUserProfile!.data!.email.toString(),
+                                          style: TextStyle(
+                                            color: CustomColors.hintText,
+                                            fontSize: 16,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w200,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                if (userProvider.gWAUserProfile!.data!.phone != null) ...[
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                    margin: const EdgeInsets.only(bottom: 15),
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Contact Number",
+                                          style: TextStyle(
+                                            color: CustomColors.primaryColor,
+                                            fontSize: 14,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          userProvider.gWAUserProfile!.data!.phone.toString(),
+                                          style: TextStyle(
+                                            color: CustomColors.hintText,
+                                            fontSize: 16,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w200,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                if (userProvider.gWAUserProfile!.data!.userdetail!.zip != null) ...[
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                    margin: const EdgeInsets.only(bottom: 15),
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Postal Code",
+                                          style: TextStyle(
+                                            color: CustomColors.primaryColor,
+                                            fontSize: 14,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          userProvider.gWAUserProfile!.data!.userdetail!.zip.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.zip.toString(),
+                                          style: TextStyle(
+                                            color: CustomColors.hintText,
+                                            fontSize: 16,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w200,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                if (userProvider.gWAUserProfile!.data!.userdetail!.gender != null) ...[
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                    margin: const EdgeInsets.only(bottom: 15),
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Gender",
+                                          style: TextStyle(
+                                            color: CustomColors.primaryColor,
+                                            fontSize: 14,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          (userProvider.gWAUserProfile!.data!.userdetail!.gender.toString() == "1")
+                                              ? "Male"
+                                              : (userProvider.gWAUserProfile!.data!.userdetail!.gender.toString() == "2")
+                                                  ? "Female"
+                                                  : "Not Available",
+                                          style: TextStyle(
+                                            color: CustomColors.hintText,
+                                            fontSize: 16,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w200,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                if (userProvider.gWAUserProfile!.data!.userdetail!.dob != null) ...[
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                    margin: const EdgeInsets.only(bottom: 15),
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Date Of Birth",
+                                          style: TextStyle(
+                                            color: CustomColors.primaryColor,
+                                            fontSize: 14,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          userProvider.gWAUserProfile!.data!.userdetail!.dob.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.dob.toString(),
+                                          style: TextStyle(
+                                            color: CustomColors.hintText,
+                                            fontSize: 16,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w200,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                if (userProvider.gWAUserProfile!.data!.userdetail!.dob != null) ...[
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                    margin: const EdgeInsets.only(bottom: 15),
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Looking For",
+                                          style: TextStyle(
+                                            color: CustomColors.primaryColor,
+                                            fontSize: 14,
+                                            fontFamily: "Rubik",
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        if (userProvider.gWAUserProfile!.data!.userdetail!.service != null
+                                            // && userProvider.gWAUserProfile!.data!.userdetail!.service!.isNotEmpty
+                                            ) ...[
+                                          Text(
+                                            userProvider.gWAUserProfile!.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.service!.name.toString(),
+                                            style: TextStyle(
+                                              color: CustomColors.hintText,
+                                              fontSize: 16,
+                                              fontFamily: "Rubik",
+                                              fontWeight: FontWeight.w200,
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                                if (userProvider.gWAUserProfile!.data!.userdetail!.userInfo != null) ...[
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
+                                    margin: const EdgeInsets.only(bottom: 15),
+                                    decoration: BoxDecoration(
+                                      color: CustomColors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                "Bio",
+                                                style: TextStyle(
+                                                  color: CustomColors.primaryColor,
+                                                  fontSize: 14,
+                                                  fontFamily: "Rubik",
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                userProvider.gWAUserProfile!.data!.userdetail!.userInfo.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.userInfo.toString(),
+                                                softWrap: true,
+                                                style: TextStyle(
+                                                  color: CustomColors.hintText,
+                                                  fontSize: 16,
+                                                  fontFamily: "Rubik",
+                                                  fontWeight: FontWeight.w200,
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ],
-                            ],
+                            ),
                           ),
-                        ),
+                        ],
                       ],
-                    ],
-                  ),
-                ),
-                onRefresh: () async {
-                  await userProvider.fetchProfileReceiverModel();
-                }),
+                    ),
+                  )
+                ],
+              ),
+            ),
           ),
         );
       },
@@ -904,7 +918,11 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ProfileReceiverEdit(),
+                                      builder: (context) => ProfileReceiverEdit(
+                                        name: "${snapshot.data!.data!.firstName} ${snapshot.data!.data!.lastName}",
+                                        email: snapshot.data!.data!.email.toString(),
+                                        service: snapshot.data!.data!.userdetail!.service,
+                                      ),
                                     ),
                                   );
                                 },
@@ -1102,15 +1120,32 @@ class _ProfileReceiverPendingScreenState extends State<ProfileReceiverPendingScr
                                     const SizedBox(
                                       height: 8,
                                     ),
-                                    Text(
-                                      snapshot.data!.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.service!.name.toString(),
-                                      style: TextStyle(
-                                        color: CustomColors.hintText,
-                                        fontSize: 16,
-                                        fontFamily: "Rubik",
-                                        fontWeight: FontWeight.w200,
-                                      ),
-                                    ),
+                                    if (snapshot.data!.data!.userdetail!.service != null) ...[
+                                      Text(
+                                        snapshot.data!.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : snapshot.data!.data!.userdetail!.service!.name.toString(),
+                                        style: TextStyle(
+                                          color: CustomColors.hintText,
+                                          fontSize: 16,
+                                          fontFamily: "Rubik",
+                                          fontWeight: FontWeight.w200,
+                                        ),
+                                      )
+                                      // Wrap(
+                                      //   children: snapshot.data!.data!.userdetail!.service!.map(
+                                      //     (e) {
+                                      //       return Text(
+                                      //         e.name.toString() == "null" ? "Not Available" : e.name.toString(),
+                                      //         style: TextStyle(
+                                      //           color: CustomColors.hintText,
+                                      //           fontSize: 16,
+                                      //           fontFamily: "Rubik",
+                                      //           fontWeight: FontWeight.w200,
+                                      //         ),
+                                      //       );
+                                      //     },
+                                      //   ).toList(),
+                                      // ),
+                                    ],
                                   ],
                                 ),
                               ],

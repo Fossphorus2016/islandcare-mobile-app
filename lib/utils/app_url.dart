@@ -1,6 +1,6 @@
 class AppUrl {
-  static String localBaseURL = "http://192.168.10.238:8000"; //"https://islandcare.bm";
-  static String webBaseURL = "http://192.168.10.238:8000"; // "https://islandcare.bm";
+  static String localBaseURL = "http://192.168.10.238:8001"; //"https://islandcare.bm";
+  static String webBaseURL = "http://192.168.10.238:8001"; // "http://192.168.10.238:8000";
   static String webStorageUrl = "$webBaseURL/storage";
   static String localStorageUrl = "$localBaseURL/storage";
   static String localImageUser = "assets/images/user.png";

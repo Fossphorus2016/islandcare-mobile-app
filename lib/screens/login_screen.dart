@@ -85,6 +85,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.width > 650 ? 200 : 00,
+                        ),
                         // logo
                         SizedBox(
                           height: ResponsiveBreakpoints.of(context).isMobile ? 150 : 200,

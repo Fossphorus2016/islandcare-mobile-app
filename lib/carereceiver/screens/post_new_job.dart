@@ -11,6 +11,7 @@ import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/utils/routes_name.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class PostNewJob extends StatefulWidget {
   const PostNewJob({super.key});
@@ -167,7 +168,7 @@ class _PostNewJobState extends State<PostNewJob> {
                                     Text(
                                       snapshot.data!.services![index].name.toString(),
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: ResponsiveBreakpoints.of(context).isTablet ? 18 : 14,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: "Poppins",
                                         color: selectedJob == index ? CustomColors.white : ServiceRecieverColor.primaryColor,

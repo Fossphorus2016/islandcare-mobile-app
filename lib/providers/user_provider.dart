@@ -6,6 +6,8 @@ import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
+// import 'package:island_app/utils/navigation_service.dart';
+// import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/utils/storage_service.dart';
 
 class RecieverUserProvider extends ChangeNotifier {
@@ -34,12 +36,17 @@ class RecieverUserProvider extends ChangeNotifier {
         notifyListeners();
         return true;
       } else {
+        // if (response != null && response.statusCode == 400 && response.data["message"] == "No Internet Connected") {
+        //   navigationService.pushNamedAndRemoveUntil(RoutesName.login);
+        // }
         showErrorToast("Failed to load Profile");
+
         // throw Exception('Failed to load Profile Model');
         return false;
       }
     } on DioError {
       showErrorToast("Failed to load Profile");
+
       return true;
     }
   }

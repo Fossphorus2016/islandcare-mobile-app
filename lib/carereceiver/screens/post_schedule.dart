@@ -300,11 +300,12 @@ class _PostScheduleState extends State<PostSchedule> {
       },
     );
     if (picked != null) {
-      dobController.text = DateFormat('yyyy-MM-dd').format(picked);
-
       setState(() {
-        getfromPickedDate = dobController.text;
+        dobController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
+      // setState(() {
+      //   getfromPickedDate = dobController.text;
+      // });
     }
   }
 

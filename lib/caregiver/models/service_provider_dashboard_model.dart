@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:island_app/models/service_model.dart';
+import 'package:island_app/caregiver/models/giver_service.dart';
 
 ServiceProviderDashboardModel serviceProviderDashboardModelFromJson(String str) => ServiceProviderDashboardModel.fromJson(json.decode(str));
 
@@ -74,7 +74,7 @@ class Job {
   dynamic providerId;
   int? fundsTransferedToProvider;
   String? totalDuration;
-  Service? service;
+  GiverService? service;
   String? userImage;
   String? userFirstName;
   String? userLastName;
@@ -97,7 +97,7 @@ class Job {
         providerId: json["provider_id"],
         fundsTransferedToProvider: json["funds_transfered_to_provider"],
         totalDuration: json["total_duration"],
-        service: json["service"] == null ? null : Service.fromJson(json["service"]),
+        service: json["service"] == null ? null : GiverService.fromJson(json["service"]),
         userImage: json['user']['avatar'],
         userFirstName: json['user']['first_name'],
         userLastName: json['user']['last_name'],

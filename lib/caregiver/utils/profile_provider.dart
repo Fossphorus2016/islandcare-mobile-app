@@ -47,10 +47,12 @@ class ServiceGiverProvider extends ChangeNotifier {
       token: token,
     );
     if (response != null && response.statusCode == 200) {
+      // await getProfilePercentage();
       fetchProfile = ProfileGiverModel.fromJson(response.data);
       profileStatus = fetchProfile!.data!.status == 1;
       providerIsVerified = response.data['isVerified'] == 1;
       profileIsLoading = false;
+      profilePerentage = response.data['percentage'].toString();
       badges = fetchProfile!.data!.userdetailprovider!.badge != null ? fetchProfile!.data!.userdetailprovider!.badge.toString().split(',') : null;
       notifyListeners();
     }
@@ -69,17 +71,17 @@ class ServiceGiverProvider extends ChangeNotifier {
   }
 
   String profilePerentage = '';
-  getProfilePercentage() async {
-    var token = await getToken();
+  // getProfilePercentage() async {
+  //   var token = await getToken();
 
-    final response = await postRequesthandler(
-      url: CareGiverUrl.serviceProviderProfilePercentage,
-      token: token,
-    );
-    if (response != null && response.statusCode == 200) {
-      profilePerentage = response.data['percentage'].toString();
-    }
-  }
+  //   final response = await postRequesthandler(
+  //     url: CareGiverUrl.serviceProviderProfilePercentage,
+  //     token: token,
+  //   );
+  //   if (response != null && response.statusCode == 200) {
+  //     profilePerentage = response.data['percentage'].toString();
+  //   }
+  // }
 
 // Dashborad work
   ServiceProviderDashboardModel? serviceJobs;
@@ -93,6 +95,7 @@ class ServiceGiverProvider extends ChangeNotifier {
       dashboardIsLoading = false;
       notifyListeners();
       if (response != null && response.statusCode == 200) {
+        // await getProfilePercentage();
         serviceJobs = ServiceProviderDashboardModel.fromJson(response.data);
         currentPageIndex = 0;
         setPaginationList(serviceJobs!.jobs);
@@ -111,15 +114,7 @@ class ServiceGiverProvider extends ChangeNotifier {
     searchIsLoading = true;
     notifyListeners();
     var token = await getToken();
-
-    // var minRate = "";
-    // var maxRate = "";
-    // if (rate != null && rate!['id'] != 0) {
-    //   maxRate = rate!['maxValue'];
-    //   minRate = rate!['minValue'];
-    // }
     var serviceId = '';
-
     if (service != null) {
       serviceId = service;
     }

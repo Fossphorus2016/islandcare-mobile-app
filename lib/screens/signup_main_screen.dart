@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/screens/terms_condition_screen.dart';
-import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
@@ -491,27 +490,38 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                   const SizedBox(height: 05),
                   if (_isSelectedService == "4") ...[
-                    InkWell(
-                      onTap: () async {
-                        await showDialog(
-                          context: context,
-                          builder: (context) {
-                            return servicesDailog();
-                          },
-                        );
-                      },
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        alignment: Alignment.centerLeft,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          border: Border.all(color: const Color(0xff677294), width: 0.5),
-                          borderRadius: BorderRadius.circular(08),
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                        child: selectedService.isNotEmpty ? Text(getServiceNameById()) : const Text("Select Services You Require"),
+                    MultiSelectDialogField(
+                      items: allServices!
+                          .map(
+                            (item) => MultiSelectItem(
+                              item["id"].toString(),
+                              item["name"],
+                            ),
+                          )
+                          .toList(),
+                      listType: MultiSelectListType.CHIP,
+                      buttonIcon: const Icon(Icons.arrow_drop_down),
+                      initialValue: selectedService,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(08),
+                        border: Border.all(color: Colors.black, width: 0.5),
                       ),
+                      searchHint: "Select Services You Require",
+                      title: const Text(
+                        "Select Services You Require",
+                        style: TextStyle(fontSize: 18, color: Colors.black),
+                      ),
+                      buttonText: const Text(
+                        "Select Services You Require",
+                        style: TextStyle(fontSize: 14),
+                      ),
+                      confirmText: const Text("ok"),
+                      cancelText: const Text("cancel"),
+                      onConfirm: (values) {
+                        setState(() {
+                          selectedService = values;
+                        });
+                      },
                     ),
                   ] else ...[
                     Container(
@@ -836,83 +846,83 @@ class _SignupScreenState extends State<SignupScreen> {
     return getSer["name"];
   }
 
-  AlertDialog servicesDailog() {
-    return AlertDialog(
-      // backgroundColor: AppColors.ligthBlueGrey,
-      title: _isSelectedService == "4"
-          ? const Text(
-              "Service You Require",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            )
-          : const Text(
-              "Services You Provide",
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-      content: SizedBox(
-        height: 200,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 10),
-              if (allServices != null) ...[
-                MultiSelectDialogField(
-                  items: allServices!
-                      .map(
-                        (item) => MultiSelectItem(
-                          item["id"].toString(),
-                          item["name"],
-                        ),
-                      )
-                      .toList(),
-                  listType: MultiSelectListType.CHIP,
-                  buttonIcon: const Icon(Icons.arrow_drop_down),
-                  initialValue: selectedService,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(08)),
-                  title: const Text(
-                    "SELECT",
-                    style: TextStyle(fontSize: 18, color: Colors.black),
-                  ),
-                  buttonText: const Text(
-                    "select",
-                    style: TextStyle(fontSize: 14),
-                  ),
-                  confirmText: const Text("ok"),
-                  cancelText: const Text("cancel"),
-                  onConfirm: (values) {
-                    setState(() {
-                      selectedService = values;
-                    });
-                  },
-                ),
-              ],
-            ],
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(ServiceRecieverColor.primaryColor),
-            shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(08))),
-          ),
-          child: const Text(
-            "OK",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ],
-    );
-  }
+  // AlertDialog servicesDailog() {
+  //   return AlertDialog(
+  //     // backgroundColor: AppColors.ligthBlueGrey,
+  //     title: _isSelectedService == "4"
+  //         ? const Text(
+  //             "Service You Require",
+  //             style: TextStyle(
+  //               fontSize: 16,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           )
+  //         : const Text(
+  //             "Services You Provide",
+  //             style: TextStyle(
+  //               fontSize: 16,
+  //               fontWeight: FontWeight.w600,
+  //             ),
+  //           ),
+  //     content: SizedBox(
+  //       height: 200,
+  //       child: SingleChildScrollView(
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             const SizedBox(height: 10),
+  //             if (allServices != null) ...[
+  //               MultiSelectDialogField(
+  //                 items: allServices!
+  //                     .map(
+  //                       (item) => MultiSelectItem(
+  //                         item["id"].toString(),
+  //                         item["name"],
+  //                       ),
+  //                     )
+  //                     .toList(),
+  //                 listType: MultiSelectListType.CHIP,
+  //                 buttonIcon: const Icon(Icons.arrow_drop_down),
+  //                 initialValue: selectedService,
+  //                 decoration: BoxDecoration(borderRadius: BorderRadius.circular(08)),
+  //                 title: const Text(
+  //                   "SELECT",
+  //                   style: TextStyle(fontSize: 18, color: Colors.black),
+  //                 ),
+  //                 buttonText: const Text(
+  //                   "select",
+  //                   style: TextStyle(fontSize: 14),
+  //                 ),
+  //                 confirmText: const Text("ok"),
+  //                 cancelText: const Text("cancel"),
+  //                 onConfirm: (values) {
+  //                   setState(() {
+  //                     selectedService = values;
+  //                   });
+  //                 },
+  //               ),
+  //             ],
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //     actions: [
+  //       TextButton(
+  //         onPressed: () {
+  //           Navigator.pop(context);
+  //         },
+  //         style: ButtonStyle(
+  //           backgroundColor: WidgetStatePropertyAll(ServiceRecieverColor.primaryColor),
+  //           shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(08))),
+  //         ),
+  //         child: const Text(
+  //           "OK",
+  //           style: TextStyle(color: Colors.white),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }
 
 class CustomTextInputFormatter extends TextInputFormatter {

@@ -183,669 +183,633 @@ class _ManageCardsState extends State<ManageCards> {
 
   @override
   Widget build(BuildContext context) {
-    CreditCard? selectCard = Provider.of<CardProvider>(context).selectedCard;
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0xffffffff),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      offset: Offset(2, 2),
-                      spreadRadius: 1,
-                      blurRadius: 7,
+    return Consumer<CardProvider>(builder: (context, provider, _) {
+      return SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            automaticallyImplyLeading: false,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(13.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffffffff),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromARGB(30, 0, 0, 0),
+                        offset: Offset(2, 2),
+                        spreadRadius: 1,
+                        blurRadius: 7,
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: CustomColors.primaryColor,
+                      size: 18,
                     ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: CustomColors.primaryColor,
-                    size: 18,
                   ),
                 ),
               ),
             ),
-          ),
-          title: Text(
-            "Manage Cards",
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Rubik",
-              color: CustomColors.primaryText,
+            title: Text(
+              "Manage Cards",
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.w600,
+                fontFamily: "Rubik",
+                color: CustomColors.primaryText,
+              ),
             ),
           ),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
+          body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                      isScrollControlled: true,
-                      context: context,
-                      backgroundColor: Colors.white,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30.0),
-                          topRight: Radius.circular(30.0),
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: SizedBox(
+                      width: 140,
+                      height: 50,
+                      child: TextButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(ServiceGiverColor.black),
+                          shape: WidgetStatePropertyAll(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
                         ),
-                      ),
-                      builder: (BuildContext context) {
-                        return StatefulBuilder(
-                          builder: (BuildContext context, StateSetter setState) {
-                            return SingleChildScrollView(
-                              child: Padding(
-                                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Center(
-                                        child: Container(
-                                          width: 130,
-                                          height: 5,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xffC4C4C4),
-                                            borderRadius: BorderRadius.circular(6),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      Center(
-                                        child: Text(
-                                          "Enter Your Card Detail",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: CustomColors.black,
-                                            fontFamily: "Rubik",
-                                            fontStyle: FontStyle.normal,
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 40,
-                                      ),
-                                      Form(
-                                        key: cardKey,
+                        onPressed: () {
+                          showModalBottomSheet(
+                            isScrollControlled: true,
+                            context: context,
+                            backgroundColor: Colors.white,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30.0),
+                                topRight: Radius.circular(30.0),
+                              ),
+                            ),
+                            builder: (BuildContext context) {
+                              return StatefulBuilder(
+                                builder: (BuildContext context, StateSetter setState) {
+                                  return SingleChildScrollView(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 25),
                                         child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius: const BorderRadius.only(
-                                                  topLeft: Radius.circular(6),
-                                                  bottomLeft: Radius.circular(6),
-                                                  bottomRight: Radius.circular(6),
-                                                  topRight: Radius.circular(6),
-                                                ),
-                                                color: CustomColors.white,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Color.fromARGB(13, 0, 0, 0),
-                                                    blurRadius: 4.0,
-                                                    spreadRadius: 2.0,
-                                                    offset: Offset(2.0, 2.0),
-                                                  ),
-                                                ],
-                                              ),
-                                              alignment: Alignment.center,
-                                              width: MediaQuery.of(context).size.width,
-                                              height: 50,
-                                              child: TextFormField(
-                                                controller: nameOncardController,
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontFamily: "Rubik",
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                                textAlignVertical: TextAlignVertical.bottom,
-                                                maxLines: 1,
-                                                decoration: InputDecoration(
-                                                  suffixIcon: Icon(
-                                                    Icons.person,
-                                                    size: 17,
-                                                    color: CustomColors.primaryColor,
-                                                  ),
-                                                  hintText: "Enter Name On Card",
-                                                  fillColor: CustomColors.white,
-                                                  focusColor: CustomColors.white,
-                                                  hoverColor: CustomColors.white,
-                                                  filled: true,
-                                                  border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(4),
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
-                                                  ),
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
                                             const SizedBox(
-                                              height: 10,
+                                              height: 20,
                                             ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius: const BorderRadius.only(
-                                                  topLeft: Radius.circular(6),
-                                                  bottomLeft: Radius.circular(6),
-                                                  bottomRight: Radius.circular(6),
-                                                  topRight: Radius.circular(6),
-                                                ),
-                                                color: CustomColors.white,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Color.fromARGB(13, 0, 0, 0),
-                                                    blurRadius: 4.0,
-                                                    spreadRadius: 2.0,
-                                                    offset: Offset(2.0, 2.0),
-                                                  ),
-                                                ],
-                                              ),
-                                              alignment: Alignment.center,
-                                              width: MediaQuery.of(context).size.width,
-                                              height: 50,
-                                              child: TextFormField(
-                                                keyboardType: TextInputType.number,
-                                                controller: cardNumberController,
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontFamily: "Rubik",
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                                textAlignVertical: TextAlignVertical.bottom,
-                                                maxLines: 1,
-                                                decoration: InputDecoration(
-                                                  suffixIcon: Icon(
-                                                    Icons.credit_card,
-                                                    size: 17,
-                                                    color: CustomColors.primaryColor,
-                                                  ),
-                                                  hintText: "16 Digit Card Number",
-                                                  fillColor: CustomColors.white,
-                                                  focusColor: CustomColors.white,
-                                                  hoverColor: CustomColors.white,
-                                                  filled: true,
-                                                  border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(4),
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
-                                                  ),
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            SizedBox(
-                                              width: MediaQuery.of(context).size.width,
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  SizedBox(
-                                                    height: 50,
-                                                    width: MediaQuery.of(context).size.width * .4,
-                                                    child: Center(
-                                                      child: DecoratedBox(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: const BorderRadius.only(
-                                                            topLeft: Radius.circular(6),
-                                                            bottomLeft: Radius.circular(6),
-                                                            bottomRight: Radius.circular(6),
-                                                            topRight: Radius.circular(6),
-                                                          ),
-                                                          color: CustomColors.white,
-                                                          boxShadow: const [
-                                                            BoxShadow(
-                                                              color: Color.fromARGB(13, 0, 0, 0),
-                                                              blurRadius: 4.0,
-                                                              spreadRadius: 2.0,
-                                                              offset: Offset(2.0, 2.0),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.symmetric(
-                                                            horizontal: 10,
-                                                            vertical: 4,
-                                                          ),
-                                                          child: DropdownButtonHideUnderline(
-                                                            child: DropdownButton(
-                                                              hint: const Text(
-                                                                "Expiration Month",
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontFamily: "Rubik",
-                                                                  fontWeight: FontWeight.w400,
-                                                                ),
-                                                              ),
-                                                              isExpanded: true,
-                                                              items: month!.map((item) {
-                                                                return DropdownMenuItem(
-                                                                  value: item['id'].toString(),
-                                                                  child: Text(item['name']),
-                                                                );
-                                                              }).toList(),
-                                                              onChanged: (newVal) {
-                                                                setState(() {
-                                                                  selectedMonth = newVal;
-                                                                });
-                                                              },
-                                                              value: selectedMonth,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 10,
-                                                  ),
-                                                  SizedBox(
-                                                    width: MediaQuery.of(context).size.width * .4,
-                                                    height: 50,
-                                                    child: Center(
-                                                      child: DecoratedBox(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius: const BorderRadius.only(
-                                                            topLeft: Radius.circular(6),
-                                                            bottomLeft: Radius.circular(6),
-                                                            bottomRight: Radius.circular(6),
-                                                            topRight: Radius.circular(6),
-                                                          ),
-                                                          color: CustomColors.white,
-                                                          boxShadow: const [
-                                                            BoxShadow(
-                                                              color: Color.fromARGB(13, 0, 0, 0),
-                                                              blurRadius: 4.0,
-                                                              spreadRadius: 2.0,
-                                                              offset: Offset(2.0, 2.0),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.symmetric(
-                                                            horizontal: 10,
-                                                            vertical: 4,
-                                                          ),
-                                                          child: DropdownButtonHideUnderline(
-                                                            child: DropdownButton(
-                                                              hint: const Text(
-                                                                "Expiration Year",
-                                                                style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  fontFamily: "Rubik",
-                                                                  fontWeight: FontWeight.w400,
-                                                                ),
-                                                              ),
-                                                              isExpanded: true,
-                                                              items: year!.map((item) {
-                                                                return DropdownMenuItem(
-                                                                  value: item['id'].toString(),
-                                                                  child: Text(item['name']),
-                                                                );
-                                                              }).toList(),
-                                                              onChanged: (newVal) {
-                                                                setState(() {
-                                                                  selectedYear = newVal;
-                                                                });
-                                                              },
-                                                              value: selectedYear,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 10,
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius: const BorderRadius.only(
-                                                  topLeft: Radius.circular(6),
-                                                  bottomLeft: Radius.circular(6),
-                                                  bottomRight: Radius.circular(6),
-                                                  topRight: Radius.circular(6),
-                                                ),
-                                                color: CustomColors.white,
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Color.fromARGB(13, 0, 0, 0),
-                                                    blurRadius: 4.0,
-                                                    spreadRadius: 2.0,
-                                                    offset: Offset(2.0, 2.0),
-                                                  ),
-                                                ],
-                                              ),
-                                              alignment: Alignment.center,
-                                              width: MediaQuery.of(context).size.width,
-                                              height: 50,
-                                              child: TextFormField(
-                                                keyboardType: TextInputType.number,
-                                                controller: cvvController,
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontFamily: "Rubik",
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                                textAlignVertical: TextAlignVertical.bottom,
-                                                maxLines: 1,
-                                                decoration: InputDecoration(
-                                                  hintText: "CVV/CVC",
-                                                  fillColor: CustomColors.white,
-                                                  focusColor: CustomColors.white,
-                                                  hoverColor: CustomColors.white,
-                                                  filled: true,
-                                                  border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius.circular(4),
-                                                  ),
-                                                  focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
-                                                  ),
-                                                  enabledBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
-                                                    borderRadius: BorderRadius.circular(4.0),
-                                                  ),
+                                            Center(
+                                              child: Container(
+                                                width: 130,
+                                                height: 5,
+                                                decoration: BoxDecoration(
+                                                  color: const Color(0xffC4C4C4),
+                                                  borderRadius: BorderRadius.circular(6),
                                                 ),
                                               ),
                                             ),
                                             const SizedBox(
                                               height: 20,
                                             ),
-                                            LoadingButton(
-                                              title: "Add Card",
-                                              height: 54,
-                                              backgroundColor: CustomColors.primaryColor,
-                                              textStyle: TextStyle(
-                                                color: CustomColors.white,
-                                                fontFamily: "Rubik",
-                                                fontStyle: FontStyle.normal,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 18,
+                                            Center(
+                                              child: Text(
+                                                "Enter Your Card Detail",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: CustomColors.black,
+                                                  fontFamily: "Rubik",
+                                                  fontStyle: FontStyle.normal,
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
                                               ),
-                                              onPressed: () async {
-                                                if (nameOncardController.text.isEmpty) {
-                                                  showErrorToast("Please Enter Name");
-                                                } else if (cardNumberController.text.isEmpty) {
-                                                  showErrorToast("Please Enter Card Number");
-                                                } else if (selectedMonth == null) {
-                                                  showErrorToast("Please Select Month");
-                                                } else if (selectedYear == null) {
-                                                  showErrorToast("Please Select Year");
-                                                } else if (cvvController.text.isEmpty) {
-                                                  showErrorToast("Please Enter CVV");
-                                                } else {
-                                                  if (cardKey.currentState!.validate()) {
-                                                    await postAddCard();
-                                                  }
-                                                }
-                                                return false;
-                                              },
                                             ),
-                                            const SizedBox(height: 10),
-                                            LoadingButton(
-                                              title: "Cancel",
-                                              height: 54,
-                                              backgroundColor: CustomColors.red,
-                                              textStyle: TextStyle(
-                                                color: CustomColors.white,
-                                                fontFamily: "Rubik",
-                                                fontStyle: FontStyle.normal,
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 18,
+                                            const SizedBox(
+                                              height: 40,
+                                            ),
+                                            Form(
+                                              key: cardKey,
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: const BorderRadius.only(
+                                                        topLeft: Radius.circular(6),
+                                                        bottomLeft: Radius.circular(6),
+                                                        bottomRight: Radius.circular(6),
+                                                        topRight: Radius.circular(6),
+                                                      ),
+                                                      color: CustomColors.white,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          color: Color.fromARGB(13, 0, 0, 0),
+                                                          blurRadius: 4.0,
+                                                          spreadRadius: 2.0,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    height: 50,
+                                                    child: TextFormField(
+                                                      controller: nameOncardController,
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontFamily: "Rubik",
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
+                                                      textAlignVertical: TextAlignVertical.bottom,
+                                                      maxLines: 1,
+                                                      decoration: InputDecoration(
+                                                        suffixIcon: Icon(
+                                                          Icons.person,
+                                                          size: 17,
+                                                          color: CustomColors.primaryColor,
+                                                        ),
+                                                        hintText: "Enter Name On Card",
+                                                        fillColor: CustomColors.white,
+                                                        focusColor: CustomColors.white,
+                                                        hoverColor: CustomColors.white,
+                                                        filled: true,
+                                                        border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(4),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                          borderRadius: BorderRadius.circular(4.0),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                          borderRadius: BorderRadius.circular(4.0),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: const BorderRadius.only(
+                                                        topLeft: Radius.circular(6),
+                                                        bottomLeft: Radius.circular(6),
+                                                        bottomRight: Radius.circular(6),
+                                                        topRight: Radius.circular(6),
+                                                      ),
+                                                      color: CustomColors.white,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          color: Color.fromARGB(13, 0, 0, 0),
+                                                          blurRadius: 4.0,
+                                                          spreadRadius: 2.0,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    height: 50,
+                                                    child: TextFormField(
+                                                      keyboardType: TextInputType.number,
+                                                      controller: cardNumberController,
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontFamily: "Rubik",
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
+                                                      textAlignVertical: TextAlignVertical.bottom,
+                                                      maxLines: 1,
+                                                      decoration: InputDecoration(
+                                                        suffixIcon: Icon(
+                                                          Icons.credit_card,
+                                                          size: 17,
+                                                          color: CustomColors.primaryColor,
+                                                        ),
+                                                        hintText: "16 Digit Card Number",
+                                                        fillColor: CustomColors.white,
+                                                        focusColor: CustomColors.white,
+                                                        hoverColor: CustomColors.white,
+                                                        filled: true,
+                                                        border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(4),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                          borderRadius: BorderRadius.circular(4.0),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                          borderRadius: BorderRadius.circular(4.0),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  SizedBox(
+                                                    width: MediaQuery.of(context).size.width,
+                                                    child: Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 50,
+                                                          width: MediaQuery.of(context).size.width * .4,
+                                                          child: Center(
+                                                            child: DecoratedBox(
+                                                              decoration: BoxDecoration(
+                                                                borderRadius: const BorderRadius.only(
+                                                                  topLeft: Radius.circular(6),
+                                                                  bottomLeft: Radius.circular(6),
+                                                                  bottomRight: Radius.circular(6),
+                                                                  topRight: Radius.circular(6),
+                                                                ),
+                                                                color: CustomColors.white,
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                                    blurRadius: 4.0,
+                                                                    spreadRadius: 2.0,
+                                                                    offset: Offset(2.0, 2.0),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.symmetric(
+                                                                  horizontal: 10,
+                                                                  vertical: 4,
+                                                                ),
+                                                                child: DropdownButtonHideUnderline(
+                                                                  child: DropdownButton(
+                                                                    hint: const Text(
+                                                                      "Expiration Month",
+                                                                      style: TextStyle(
+                                                                        fontSize: 16,
+                                                                        fontFamily: "Rubik",
+                                                                        fontWeight: FontWeight.w400,
+                                                                      ),
+                                                                    ),
+                                                                    isExpanded: true,
+                                                                    items: month!.map((item) {
+                                                                      return DropdownMenuItem(
+                                                                        value: item['id'].toString(),
+                                                                        child: Text(item['name']),
+                                                                      );
+                                                                    }).toList(),
+                                                                    onChanged: (newVal) {
+                                                                      setState(() {
+                                                                        selectedMonth = newVal;
+                                                                      });
+                                                                    },
+                                                                    value: selectedMonth,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(context).size.width * .4,
+                                                          height: 50,
+                                                          child: Center(
+                                                            child: DecoratedBox(
+                                                              decoration: BoxDecoration(
+                                                                borderRadius: const BorderRadius.only(
+                                                                  topLeft: Radius.circular(6),
+                                                                  bottomLeft: Radius.circular(6),
+                                                                  bottomRight: Radius.circular(6),
+                                                                  topRight: Radius.circular(6),
+                                                                ),
+                                                                color: CustomColors.white,
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                    color: Color.fromARGB(13, 0, 0, 0),
+                                                                    blurRadius: 4.0,
+                                                                    spreadRadius: 2.0,
+                                                                    offset: Offset(2.0, 2.0),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.symmetric(
+                                                                  horizontal: 10,
+                                                                  vertical: 4,
+                                                                ),
+                                                                child: DropdownButtonHideUnderline(
+                                                                  child: DropdownButton(
+                                                                    hint: const Text(
+                                                                      "Expiration Year",
+                                                                      style: TextStyle(
+                                                                        fontSize: 16,
+                                                                        fontFamily: "Rubik",
+                                                                        fontWeight: FontWeight.w400,
+                                                                      ),
+                                                                    ),
+                                                                    isExpanded: true,
+                                                                    items: year!.map((item) {
+                                                                      return DropdownMenuItem(
+                                                                        value: item['id'].toString(),
+                                                                        child: Text(item['name']),
+                                                                      );
+                                                                    }).toList(),
+                                                                    onChanged: (newVal) {
+                                                                      setState(() {
+                                                                        selectedYear = newVal;
+                                                                      });
+                                                                    },
+                                                                    value: selectedYear,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 10,
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: const BorderRadius.only(
+                                                        topLeft: Radius.circular(6),
+                                                        bottomLeft: Radius.circular(6),
+                                                        bottomRight: Radius.circular(6),
+                                                        topRight: Radius.circular(6),
+                                                      ),
+                                                      color: CustomColors.white,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          color: Color.fromARGB(13, 0, 0, 0),
+                                                          blurRadius: 4.0,
+                                                          spreadRadius: 2.0,
+                                                          offset: Offset(2.0, 2.0),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    alignment: Alignment.center,
+                                                    width: MediaQuery.of(context).size.width,
+                                                    height: 50,
+                                                    child: TextFormField(
+                                                      keyboardType: TextInputType.number,
+                                                      controller: cvvController,
+                                                      style: const TextStyle(
+                                                        fontSize: 16,
+                                                        fontFamily: "Rubik",
+                                                        fontWeight: FontWeight.w400,
+                                                      ),
+                                                      textAlignVertical: TextAlignVertical.bottom,
+                                                      maxLines: 1,
+                                                      decoration: InputDecoration(
+                                                        hintText: "CVV/CVC",
+                                                        fillColor: CustomColors.white,
+                                                        focusColor: CustomColors.white,
+                                                        hoverColor: CustomColors.white,
+                                                        filled: true,
+                                                        border: OutlineInputBorder(
+                                                          borderRadius: BorderRadius.circular(4),
+                                                        ),
+                                                        focusedBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                          borderRadius: BorderRadius.circular(4.0),
+                                                        ),
+                                                        enabledBorder: OutlineInputBorder(
+                                                          borderSide: BorderSide(color: CustomColors.white, width: 2.0),
+                                                          borderRadius: BorderRadius.circular(4.0),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 20,
+                                                  ),
+                                                  LoadingButton(
+                                                    title: "Add Card",
+                                                    height: 54,
+                                                    backgroundColor: CustomColors.primaryColor,
+                                                    textStyle: TextStyle(
+                                                      color: CustomColors.white,
+                                                      fontFamily: "Rubik",
+                                                      fontStyle: FontStyle.normal,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontSize: 18,
+                                                    ),
+                                                    onPressed: () async {
+                                                      if (nameOncardController.text.isEmpty) {
+                                                        showErrorToast("Please Enter Name");
+                                                      } else if (cardNumberController.text.isEmpty) {
+                                                        showErrorToast("Please Enter Card Number");
+                                                      } else if (selectedMonth == null) {
+                                                        showErrorToast("Please Select Month");
+                                                      } else if (selectedYear == null) {
+                                                        showErrorToast("Please Select Year");
+                                                      } else if (cvvController.text.isEmpty) {
+                                                        showErrorToast("Please Enter CVV");
+                                                      } else {
+                                                        if (cardKey.currentState!.validate()) {
+                                                          await postAddCard();
+                                                        }
+                                                      }
+                                                      return false;
+                                                    },
+                                                  ),
+                                                  const SizedBox(height: 10),
+                                                  LoadingButton(
+                                                    title: "Cancel",
+                                                    height: 54,
+                                                    backgroundColor: CustomColors.red,
+                                                    textStyle: TextStyle(
+                                                      color: CustomColors.white,
+                                                      fontFamily: "Rubik",
+                                                      fontStyle: FontStyle.normal,
+                                                      fontWeight: FontWeight.w500,
+                                                      fontSize: 18,
+                                                    ),
+                                                    onPressed: () async {
+                                                      Navigator.pop(context);
+                                                      return false;
+                                                    },
+                                                  ),
+                                                  const SizedBox(height: 30),
+                                                ],
                                               ),
-                                              onPressed: () async {
-                                                // if (nameOncardController.text.isEmpty) {
-                                                //   showErrorToast("Please Enter Name");
-                                                // } else if (cardNumberController.text.isEmpty) {
-                                                //   showErrorToast("Please Enter Card Number");
-                                                // } else if (selectedMonth == null) {
-                                                //   showErrorToast("Please Select Month");
-                                                // } else if (selectedYear == null) {
-                                                //   showErrorToast("Please Select Year");
-                                                // } else if (cvvController.text.isEmpty) {
-                                                //   showErrorToast("Please Enter CVV");
-                                                // } else {
-                                                //   if (cardKey.currentState!.validate()) {
-                                                //     await postAddCard();
-                                                //   }
-                                                // }
-                                                Navigator.pop(context);
-                                                return false;
-                                              },
                                             ),
-                                            const SizedBox(height: 30),
                                           ],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    width: 140,
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: ServiceRecieverColor.redButton,
-                      borderRadius: BorderRadius.circular(6),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Add New Card",
-                        style: TextStyle(color: CustomColors.white),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          );
+                        },
+                        child: const Text(
+                          "Add New Card",
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: FocusScope.of(context).hasFocus ? MediaQuery.of(context).size.height : 80,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      TextField(
-                        focusNode: focus,
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          isDense: true,
-                          prefixIcon: const Icon(Icons.search),
-                          hintText: "Search Bank...",
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.black26),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.black12),
-                          ),
+                const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 60,
+                    child: TextField(
+                      focusNode: focus,
+                      // autofocus: true,
+                      decoration: InputDecoration(
+                        isDense: true,
+                        prefixIcon: const Icon(Icons.search),
+                        hintText: "Search Card...",
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.black26),
                         ),
-                        style: const TextStyle(fontSize: 14),
-                        controller: textController,
-                        onChanged: (value) {
-                          Provider.of<CardProvider>(context, listen: false).setfilterList(value);
-                        },
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: Colors.black12),
+                        ),
                       ),
-                      const SizedBox(height: 15),
-                      if (FocusScope.of(context).hasFocus) ...[
-                        Container(
-                          padding: const EdgeInsets.only(bottom: 10),
-                          decoration: const BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: Colors.grey),
-                            ),
+                      style: const TextStyle(fontSize: 14),
+                      controller: textController,
+                      onChanged: (value) {
+                        provider.setfilterList(value);
+                      },
+                    ),
+                  ),
+                ),
+                const SliverToBoxAdapter(child: SizedBox(height: 20)),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      CreditCard cardDetail = provider.filteredList![index];
+                      return InkWell(
+                        onTap: () {
+                          FocusScope.of(context).unfocus();
+                          provider.setSelectedCard(cardDetail);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(08),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 05,
+                                spreadRadius: 01,
+                                color: Colors.grey.shade200,
+                              ),
+                            ],
                           ),
-                          child: const Row(
+                          child: Column(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                "Card Name",
-                                style: TextStyle(fontWeight: FontWeight.w600),
+                              Row(
+                                children: [
+                                  const Text(
+                                    "Name Of Card: ",
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(cardDetail.nameOnCard.toString()),
+                                ],
                               ),
-                              Text(
-                                "Account Title",
-                                style: TextStyle(fontWeight: FontWeight.w600),
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  const Text(
+                                    "Card: ",
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(cardDetail.cardNumber.toString()),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "CVV Number: ${cardDetail.cvv.toString()}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: Text(
+                                      "Expiry Month: ${cardDetail.cardExpirationMonth.toString()}",
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end,
+                                      style: const TextStyle(fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              // const SizedBox(height: 10),
+                              // Row(
+                              //   children: [
+                              //     const SizedBox(width: 10),
+                              //     Text(),
+                              //   ],
+                              // ),
+                              const SizedBox(height: 10),
+                              Row(
+                                children: [
+                                  const Text(
+                                    "Expiry Year: ",
+                                    style: TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    cardDetail.cardExpirationYear.toString(),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
                         ),
-                        Expanded(
-                          child: Consumer<CardProvider>(builder: (context, provider, _) {
-                            return ListView.builder(
-                              itemCount: provider.filteredList!.length,
-                              cacheExtent: 50,
-                              itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    FocusScope.of(context).unfocus();
-                                    provider.setSelectedCard(provider.filteredList![index]);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 10),
-                                    decoration: const BoxDecoration(
-                                      border: Border(
-                                        bottom: BorderSide(color: Colors.grey),
-                                      ),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          provider.filteredList![index].nameOnCard.toString(),
-                                          style: const TextStyle(fontSize: 14),
-                                        ),
-                                        Text(
-                                          provider.filteredList![index].cardNumber.toString(),
-                                          style: const TextStyle(fontSize: 14),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
-                          }),
-                        ),
-                      ],
-                    ],
+                      );
+                    },
+                    childCount: provider.filteredList!.length,
                   ),
                 ),
-                if (selectCard != null && !FocusScope.of(context).hasFocus) ...[
-                  Row(
-                    children: [
-                      const Text(
-                        "Name Of Card: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(selectCard.nameOnCard.toString()),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      const Text(
-                        "Card: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(selectCard.cardNumber.toString()),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      const Text(
-                        "CVV Number: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(selectCard.cvv.toString()),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      const Text(
-                        "Expiry Month: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(selectCard.cardExpirationMonth.toString()),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      const Text(
-                        "Expiry Year: ",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        selectCard.cardExpirationYear.toString(),
-                      ),
-                    ],
-                  ),
-                ]
               ],
             ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 

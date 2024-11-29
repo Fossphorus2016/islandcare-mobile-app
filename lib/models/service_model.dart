@@ -20,7 +20,8 @@ class ServicesModel {
 
   Map<String, dynamic> toJson() => {
         "folder_path": folderPath,
-        "services": services == null ? [] : List<dynamic>.from(services!.map((x) => x.toJson())),
+        "services": services != null ? Service.toJsonList(services!) : [],
+        // List<dynamic>.from(services!.map((x) => x.toJson())),
       };
 }
 
@@ -55,6 +56,32 @@ class Service {
         createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
         updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
       );
+  static List<Service> fromJsonList(List json) {
+    return json
+        .map(
+          (e) => Service.fromJson(e),
+        )
+        .toList();
+  }
+
+  static List toJsonList(List<Service> json) {
+    return json
+        .map(
+          (e) => Service.toJsonFromList(e),
+        )
+        .toList();
+  }
+
+  static Map<String, dynamic> toJsonFromList(Service data) => {
+        "id": data.id,
+        "name": data.name,
+        "image": data.image,
+        "description": data.description,
+        "is_active": data.isActive,
+        "deleted_at": data.deletedAt,
+        "created_at": data.createdAt?.toIso8601String(),
+        "updated_at": data.updatedAt?.toIso8601String(),
+      };
 
   Map<String, dynamic> toJson() => {
         "id": id,

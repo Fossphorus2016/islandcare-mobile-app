@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 
+import 'package:island_app/caregiver/models/giver_service.dart';
 import 'package:island_app/models/schedule_model.dart';
 import 'package:island_app/models/school_camp_model.dart';
-import 'package:island_app/models/service_model.dart';
 
 ChildCareDetailDashboardModel childCareDetailDashboardModelFromJson(String str) => ChildCareDetailDashboardModel.fromJson(json.decode(str));
 
@@ -74,7 +74,7 @@ class JobDetail {
   dynamic providerId;
   int? fundsTransferedToProvider;
   String? totalDuration;
-  Service? service;
+  GiverService? service;
   List<Schedule>? schedule;
   List<Childinfo>? childinfo;
   SchoolCamp? schoolCamp;
@@ -98,7 +98,7 @@ class JobDetail {
         providerId: json["provider_id"],
         fundsTransferedToProvider: json["funds_transfered_to_provider"],
         totalDuration: json["total_duration"],
-        service: json["service"] == null ? null : Service.fromJson(json["service"]),
+        service: json["service"] == null ? null : GiverService.fromJson(json["service"]),
         schedule: json["schedule"] == null ? [] : List<Schedule>.from(json["schedule"]!.map((x) => Schedule.fromJson(x))),
         childinfo: json["childinfo"] == null ? [] : List<Childinfo>.from(json["childinfo"]!.map((x) => Childinfo.fromJson(x))),
         schoolCamp: json["school_camp"] == null ? null : SchoolCamp.fromJson(json["school_camp"]),

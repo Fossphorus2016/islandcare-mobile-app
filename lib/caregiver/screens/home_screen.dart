@@ -8,7 +8,7 @@ import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/navigation_service.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:island_app/widgets/loading_button.dart';
-import 'package:island_app/widgets/profile_complete_widget.dart';
+// import 'package:island_app/widgets/profile_complete_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:island_app/caregiver/widgets/drawer_widget.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
@@ -641,7 +641,31 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                         ],
                       ),
                     )
-                  : const ProfileCompletContainer(),
+                  : RefreshIndicator(
+                      onRefresh: () => provider.fetchProviderDashboardModel(),
+                      child: CustomScrollView(
+                        slivers: [
+                          SliverToBoxAdapter(
+                            child: SizedBox(
+                              height: 300,
+                              child: Center(
+                                child: Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Text(
+                                    "Please Complete your \n Profile for Approval",
+                                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
         );
       },
     );
