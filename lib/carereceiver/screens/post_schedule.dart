@@ -149,6 +149,7 @@ class _PostScheduleState extends State<PostSchedule> {
   var laundry;
   var ironing;
   var other;
+  String otherValue = '';
   var dressing;
   var feeding;
   var socialization;
@@ -432,7 +433,7 @@ class _PostScheduleState extends State<PostSchedule> {
         'number_of_bathrooms': bathroomValue.toString(),
         'laundry': laundry.toString(),
         'ironing': ironing.toString(),
-        'other': otherFieldController.text.toString(),
+        'other': otherValue,
         "date[]": dateMapList,
         "start_time[]": startTimeMapList,
         "duration[]": durationMapList,
@@ -512,7 +513,7 @@ class _PostScheduleState extends State<PostSchedule> {
         'assistance_in_english': english == "0" ? 0 : 1,
         'assistance_in_reading': reading == "0" ? 0 : 1,
         'assistance_in_science': science == "0" ? 0 : 1,
-        'assistance_in_other': otherFieldController.text.isNotEmpty ? otherFieldController.text.toString() : 0,
+        'assistance_in_other': otherValue.isNotEmpty ? otherValue : 0,
         "date[]": dateMapList,
         "start_time[]": startTimeMapList,
         "duration[]": durationMapList,
@@ -1577,7 +1578,7 @@ class _PostScheduleState extends State<PostSchedule> {
               //   showErrorToast("Cost Range of Camp is Required");
               // }
               else {
-                postChildCare();
+                await postChildCare();
               }
               return false;
             },
@@ -2003,7 +2004,7 @@ class _PostScheduleState extends State<PostSchedule> {
             child: TextFormField(
               controller: otherFieldController,
               onChanged: (value) {
-                other = value;
+                otherValue = value;
               },
               style: const TextStyle(
                 fontSize: 12,
@@ -2126,7 +2127,7 @@ class _PostScheduleState extends State<PostSchedule> {
                 showErrorToast("Please Enter Add Days");
               } else if (children.isEmpty) {
                 showErrorToast("Child Initials is Required");
-              } else if (other == "1" && otherFieldController.text.isEmpty) {
+              } else if (other == "1" && otherValue.isEmpty) {
                 showErrorToast("Other is Required");
               } else if (learningStyleController.text.isEmpty) {
                 showErrorToast("Learning Style is Required");
@@ -2582,7 +2583,9 @@ class _PostScheduleState extends State<PostSchedule> {
             height: 45,
             child: TextFormField(
               onChanged: (value) {
-                other = value;
+                setState(() {
+                  otherValue = value;
+                });
               },
               controller: otherFieldController,
               style: const TextStyle(
@@ -2659,7 +2662,7 @@ class _PostScheduleState extends State<PostSchedule> {
               } else if (seniorCareDays.isEmpty) {
                 showErrorToast("Please Enter Add Days");
               } else {
-                postHouseKeeping();
+                await postHouseKeeping();
               }
               return false;
             },

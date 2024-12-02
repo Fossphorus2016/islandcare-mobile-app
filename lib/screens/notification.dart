@@ -1,7 +1,5 @@
 // ignore_for_file: unused_element, unused_local_variable, use_build_context_synchronously
 
-// import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -431,7 +429,7 @@ class NotificationProvider extends ChangeNotifier {
   }
 
   onEvent(event) {
-    // log("onEventxsxsxsXS: ${event.toString()}");
+    // log("onEvent in notification channel: ${event.toString()}");
     getNotifications();
   }
 

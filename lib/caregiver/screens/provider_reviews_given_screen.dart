@@ -132,6 +132,9 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                                                   child: const Text("0 Jobs Found"));
                                             }
                                             var review = provider.filterDataList[index];
+                                            if (review.receiverRating == null) {
+                                              return null;
+                                            }
                                             return InkWell(
                                               onTap: () {
                                                 showDialog(
@@ -271,7 +274,7 @@ class GiverReviewsProvider extends ChangeNotifier {
   setDefault() {
     isLoading = true;
     allReviews = [];
-    futurereviews = null;
+    // futurereviews = null;
     filterDataList = [];
     currentPageIndex = 0;
     rowsPerPage = 10;
@@ -281,9 +284,9 @@ class GiverReviewsProvider extends ChangeNotifier {
   }
 
   bool isLoading = true;
-  List? allReviews = [];
+  List<ReviewsModel>? allReviews = [];
 
-  ProviderReviewsModel? futurereviews;
+  //  ReviewsModel? futurereviews;
   fetchReviewsModel(BuildContext context) async {
     var token = await getToken();
     final response = await getRequesthandler(
@@ -293,22 +296,22 @@ class GiverReviewsProvider extends ChangeNotifier {
     isLoading = false;
     notifyListeners();
     if (response != null && response.statusCode == 200 && response.data['data'] != null) {
-      futurereviews = ProviderReviewsModel.fromJson(response.data);
-      allReviews = futurereviews!.data;
+      // futurereviews = ProviderReviewsModel.fromJson(response.data);
+      allReviews = ReviewsModel.fromTislJson(response.data["data"]);
       currentPageIndex = 0;
       setPaginationList(allReviews);
       notifyListeners();
     }
   }
 
-  List filterDataList = [];
+  List<ReviewsModel> filterDataList = [];
   int currentPageIndex = 0;
   int rowsPerPage = 10;
   int startIndex = 0;
   int endIndex = 0;
   int totalRowsCount = 0;
 
-  setPaginationList(List? data) async {
+  setPaginationList(List<ReviewsModel>? data) async {
     try {
       startIndex = currentPageIndex * rowsPerPage;
       endIndex = min(startIndex + rowsPerPage, data!.length);
@@ -321,19 +324,19 @@ class GiverReviewsProvider extends ChangeNotifier {
     }
   }
 
-  setFilter(String searchText) {
-    var filterData = allReviews!.where((element) {
-      if (element.jobTitle.toString().toLowerCase().contains(searchText.toLowerCase()) || element.address.toString().toLowerCase().contains(searchText.toLowerCase())) {
-        return true;
-      } else {
-        return false;
-      }
-    }).toList();
-    currentPageIndex = 0;
-    setPaginationList(filterData);
+  // setFilter(String searchText) {
+  //   var filterData = allReviews!.where((element) {
+  //     if (element.jobTitle.toString().toLowerCase().contains(searchText.toLowerCase()) || element.address.toString().toLowerCase().contains(searchText.toLowerCase())) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   }).toList();
+  //   currentPageIndex = 0;
+  //   setPaginationList(filterData);
 
-    notifyListeners();
-  }
+  //   notifyListeners();
+  // }
 
   clearFilter() {
     setPaginationList(allReviews!);

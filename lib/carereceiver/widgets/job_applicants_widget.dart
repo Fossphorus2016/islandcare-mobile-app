@@ -18,62 +18,62 @@ class JobApplicantsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: CustomColors.borderLight,
-            width: 0.1,
-          ),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 6,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name.toString(),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: CustomColors.primaryText,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                  ),
-                ),
-                Text(
-                  jobType.toString(),
-                  style: TextStyle(
-                    color: CustomColors.hintText,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w500,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        width: MediaQuery.of(context).size.width,
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: CustomColors.borderLight,
+              width: 0.1,
             ),
           ),
-          Expanded(
-            flex: 4,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Text(count.toString()),
-                ),
-                GestureDetector(
-                  onTap: onTap,
-                  child: Container(
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 6,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    name.toString(),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: CustomColors.primaryText,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    jobType.toString(),
+                    style: TextStyle(
+                      color: CustomColors.hintText,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w500,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15),
+                    child: Text(count.toString()),
+                  ),
+                  Container(
                     height: 24,
                     width: 24,
                     decoration: BoxDecoration(
@@ -88,11 +88,11 @@ class JobApplicantsWidget extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -106,6 +106,11 @@ Future<Response?> postRequesthandler({required String url, String? token, FormDa
           );
         } else {
           showErrorToast("something went wrong");
+          return Response(
+            statusCode: 422,
+            statusMessage: "Validation Error",
+            requestOptions: RequestOptions(data: {"error": "Validation Error"},),
+          );
         }
       } else if (err.response?.statusCode == 400) {
         showErrorToast(err.response?.data['message']);

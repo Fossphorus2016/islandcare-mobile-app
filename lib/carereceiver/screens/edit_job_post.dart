@@ -363,6 +363,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       );
       if (response != null && response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
+        Navigator.pop(context);
       }
       setState(() {
         buttonLoading = false;
@@ -413,6 +414,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       });
       if (response != null && response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
+        Navigator.pop(context);
       }
     } catch (e) {
       showErrorToast(e.toString());
@@ -455,6 +457,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       });
       if (response != null && response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
+        Navigator.pop(context);
       }
     } catch (e) {
       setState(() {
@@ -464,7 +467,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     }
   }
 
-  Future<void> PostChildCare() async {
+  Future<void> postChildCare() async {
     var formData = FormData.fromMap(
       {
         'job_id': widget.jobData['id'],
@@ -494,6 +497,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       });
       if (response != null && response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
+        Navigator.pop(context);
       }
     } catch (e) {
       setState(() {
@@ -503,7 +507,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     }
   }
 
-  Future<void> PostSchoolSupport() async {
+  Future<void> postSchoolSupport() async {
     var formData = FormData.fromMap(
       {
         'job_id': widget.jobData['id'],
@@ -543,6 +547,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       });
       if (response != null && response.statusCode == 200) {
         showSuccessToast("Job Updated Successfully");
+        Navigator.pop(context);
       }
     } catch (e) {
       setState(() {
@@ -699,27 +704,32 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       }
 
       petBreedController.text = futurePetCareDetailDashboard!.job![0].petCare!.petBreed.toString();
-      if (futurePetCareDetailDashboard!.job![0].petCare!.sizeOfPet == "small") {
+      if (futurePetCareDetailDashboard!.job![0].petCare!.sizeOfPet.toString().toLowerCase() == "small") {
         selectedSize = 0;
         sizeOfPetValue = "Small";
-      } else if (futurePetCareDetailDashboard!.job![0].petCare!.sizeOfPet == "medium") {
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.sizeOfPet.toString().toLowerCase() == "medium") {
         selectedSize = 1;
         sizeOfPetValue = "Medium";
-      } else if (futurePetCareDetailDashboard!.job![0].petCare!.sizeOfPet == "large") {
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.sizeOfPet.toString().toLowerCase() == "large") {
         selectedSize = 2;
         sizeOfPetValue = "Large";
       }
 
-      if (futurePetCareDetailDashboard!.job![0].petCare!.temperament == "friendly") {
+      if (futurePetCareDetailDashboard!.job![0].petCare!.temperament.toString().toLowerCase() == "friendly/socialized") {
         selectedTemperament = 0;
         otherGuarded = 0;
         temperamentValue = "Friendly/Socialized";
-      } else if (futurePetCareDetailDashboard!.job![0].petCare!.temperament == "guarded with people") {
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.temperament.toString().toLowerCase() == "guarded") {
+        otherGuarded = 1;
+        selectedTemperament = 1;
+        selectedGuarded = 0;
+        temperamentValue = "Guarded";
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.temperament.toString().toLowerCase() == "with people") {
         otherGuarded = 1;
         selectedTemperament = 1;
         selectedGuarded = 0;
         temperamentValue = "With People";
-      } else if (futurePetCareDetailDashboard!.job![0].petCare!.temperament == "guarded with other animals") {
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.temperament.toString().toLowerCase() == "with other animals") {
         otherGuarded = 1;
         selectedTemperament = 1;
         selectedGuarded = 1;
@@ -954,6 +964,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
 
   @override
   Widget build(BuildContext context) {
+    // print(futurePetCareDetailDashboard!.job![0].petCare!.temperament);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -1190,19 +1201,19 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                 // Switch View,
                 if (widget.serviceId == "1") ...[
                   // service id 1
-                  ServiceSeniorCare(context),
+                  serviceSeniorCare(context),
                 ] else if (widget.serviceId == "2") ...[
                   // service id 2
-                  ServicePetCare(context),
+                  servicePetCare(context),
                 ] else if (widget.serviceId == "3") ...[
                   // service id 3
-                  ServiceHouseKeeping(context),
+                  serviceHouseKeeping(context),
                 ] else if (widget.serviceId == "4") ...[
                   // Service Id 4
-                  ServiceSchoolSupport(context),
+                  serviceSchoolSupport(context),
                 ] else if (widget.serviceId == "5") ...[
                   // Service Id 5
-                  ServiceChildCare(context),
+                  serviceChildCare(context),
                 ],
               ],
             ),
@@ -1436,7 +1447,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
     );
   }
 
-  Widget ServiceChildCare(BuildContext context) {
+  Widget serviceChildCare(BuildContext context) {
     return Column(
       children: [
         const SizedBox(height: 20),
@@ -1777,17 +1788,18 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                 setState(() {
                   buttonLoading = true;
                 });
-                await PostChildCare();
+                await postChildCare();
               }
               return false;
             },
           ),
         ),
+        const SizedBox(height: 20),
       ],
     );
   }
 
-  Widget ServiceSchoolSupport(BuildContext context) {
+  Widget serviceSchoolSupport(BuildContext context) {
     return Column(
       children: [
         const SizedBox(height: 20),
@@ -2319,18 +2331,19 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   setState(() {
                     buttonLoading = true;
                   });
-                  await PostSchoolSupport();
+                  await postSchoolSupport();
                 }
                 return false;
               },
             ),
           ),
         ),
+        const SizedBox(height: 20),
       ],
     );
   }
 
-  Column ServiceHouseKeeping(BuildContext context) {
+  Widget serviceHouseKeeping(BuildContext context) {
     return Column(
       children: [
         // Cleaning type
@@ -2851,11 +2864,12 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
             },
           ),
         ),
+        const SizedBox(height: 20),
       ],
     );
   }
 
-  Widget ServicePetCare(BuildContext context) {
+  Widget servicePetCare(BuildContext context) {
     return Column(
       children: [
         // Add Days
@@ -3062,6 +3076,7 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
           ),
         ),
         const SizedBox(height: 10),
+        Text(selectedSize.toString()),
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -3479,17 +3494,18 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                 setState(() {
                   buttonLoading = true;
                 });
-                postPetCare();
+                await postPetCare();
               }
               return false;
             },
           ),
         ),
+        const SizedBox(height: 20),
       ],
     );
   }
 
-  Widget ServiceSeniorCare(BuildContext context) {
+  Widget serviceSeniorCare(BuildContext context) {
     return Column(
       children: [
         //Senior Name
@@ -3943,12 +3959,13 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                 setState(() {
                   buttonLoading = true;
                 });
-                postSeniorCare();
+                await postSeniorCare();
               }
               return false;
             },
           ),
         ),
+        const SizedBox(height: 20),
       ],
     );
   }

@@ -34,10 +34,12 @@ class _BottomBarGiverState extends State<BottomBarGiver> {
   ];
 
   callUserData() async {
-    await Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
+    var resp = await Provider.of<ServiceGiverProvider>(context, listen: false).fetchProfileGiverModel();
     // await Provider.of<ServiceGiverProvider>(context, listen: false).getProfilePercentage();
-    await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(3);
-    await Provider.of<ServiceProviderChat>(context, listen: false).connectChatChannel(3);
+    if (resp) {
+      await Provider.of<NotificationProvider>(context, listen: false).connectNotificationChannel(3);
+      await Provider.of<ServiceProviderChat>(context, listen: false).connectChatChannel(3);
+    }
   }
 
   @override

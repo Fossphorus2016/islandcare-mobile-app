@@ -526,56 +526,56 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                         itemBuilder: (context, index) {
                                           var item = provider.filterDataList[index];
 
-                                          return Container(
-                                            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-                                            width: MediaQuery.of(context).size.width,
-                                            decoration: BoxDecoration(
-                                              border: Border(
-                                                bottom: BorderSide(
-                                                  color: CustomColors.borderLight,
-                                                  width: 0.1,
-                                                ),
-                                              ),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Expanded(
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      Text(
-                                                        item.jobTitle.toString(),
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(
-                                                          color: CustomColors.primaryText,
-                                                          fontFamily: "Poppins",
-                                                          fontWeight: FontWeight.w600,
-                                                          fontSize: 14,
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        item!.service!.name.toString(),
-                                                        style: TextStyle(
-                                                          color: CustomColors.hintText,
-                                                          fontFamily: "Poppins",
-                                                          fontWeight: FontWeight.w500,
-                                                          fontSize: 12,
-                                                        ),
-                                                      ),
-                                                    ],
+                                          return GestureDetector(
+                                            onTap: () {
+                                              navigationService.push(RoutesName.serviceRecieverJobDetail, arguments: {
+                                                "serviceId": item!.serviceId.toString(),
+                                                "jobData": item.data,
+                                              });
+                                            },
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+                                              width: MediaQuery.of(context).size.width,
+                                              decoration: BoxDecoration(
+                                                border: Border(
+                                                  bottom: BorderSide(
+                                                    color: CustomColors.borderLight,
+                                                    width: 0.1,
                                                   ),
                                                 ),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    navigationService.push(RoutesName.serviceRecieverJobDetail, arguments: {
-                                                      "serviceId": item!.serviceId.toString(),
-                                                      "jobData": item.data,
-                                                    });
-                                                  },
-                                                  child: Container(
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                    child: Column(
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Text(
+                                                          item.jobTitle.toString(),
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: TextStyle(
+                                                            color: CustomColors.primaryText,
+                                                            fontFamily: "Poppins",
+                                                            fontWeight: FontWeight.w600,
+                                                            fontSize: 14,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          item!.service!.name.toString(),
+                                                          style: TextStyle(
+                                                            color: CustomColors.hintText,
+                                                            fontFamily: "Poppins",
+                                                            fontWeight: FontWeight.w500,
+                                                            fontSize: 12,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Container(
                                                     height: 24,
                                                     width: 24,
                                                     decoration: BoxDecoration(
@@ -590,8 +590,8 @@ class _PostJobScreenState extends State<PostJobScreen> {
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           );
                                         },

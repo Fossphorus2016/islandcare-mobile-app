@@ -54,7 +54,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
           elevation: 0,
           backgroundColor: Colors.transparent,
           title: Text(
-            "Messages for caheck",
+            "Chat Room",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
@@ -84,6 +84,7 @@ class _MessagesScreenState extends State<MessagesScreen> {
                           padding: const EdgeInsets.only(top: 16),
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
+                            // print(provider.chatList[index]['userDate']);
                             if (provider.chatList[index]['userDate'] == null || provider.chatList[index]['userDate'].firstName == null) {
                               return null;
                             }
@@ -125,7 +126,7 @@ class RecieverChatProvider extends ChangeNotifier {
   }
 
   onEvent(event) {
-    // log("onEventxsxsxsXS: ${event.toString()}");
+    // log("onEvent in receiver messages: ${event.toString()}");
     if (activeChat.isNotEmpty) {
       getSingleChatAndSetActive(activeChat['id']);
     } else {

@@ -39,22 +39,28 @@ class ServiceGiverProvider extends ChangeNotifier {
   bool dashboardIsLoading = true;
   bool searchIsLoading = false;
   bool providerIsVerified = false;
-  fetchProfileGiverModel() async {
-    getUserName();
-    var token = await getToken();
-    final response = await getRequesthandler(
-      url: CareGiverUrl.serviceProviderProfile,
-      token: token,
-    );
-    if (response != null && response.statusCode == 200) {
-      // await getProfilePercentage();
-      fetchProfile = ProfileGiverModel.fromJson(response.data);
-      profileStatus = fetchProfile!.data!.status == 1;
-      providerIsVerified = response.data['isVerified'] == 1;
-      profileIsLoading = false;
-      profilePerentage = response.data['percentage'].toString();
-      badges = fetchProfile!.data!.userdetailprovider!.badge != null ? fetchProfile!.data!.userdetailprovider!.badge.toString().split(',') : null;
-      notifyListeners();
+  Future<bool> fetchProfileGiverModel() async {
+    try {
+      getUserName();
+      var token = await getToken();
+      final response = await getRequesthandler(
+        url: CareGiverUrl.serviceProviderProfile,
+        token: token,
+      );
+      if (response != null && response.statusCode == 200) {
+        // await getProfilePercentage();
+        fetchProfile = ProfileGiverModel.fromJson(response.data);
+        profileStatus = fetchProfile!.data!.status == 1;
+        providerIsVerified = response.data['isVerified'] == 1;
+        profileIsLoading = false;
+        profilePerentage = response.data['percentage'].toString();
+        badges = fetchProfile!.data!.userdetailprovider!.badge != null ? fetchProfile!.data!.userdetailprovider!.badge.toString().split(',') : null;
+        notifyListeners();
+      }
+      return true;
+    } catch (e) {
+      showErrorToast("Failed to fetch profile");
+      return false;
     }
   }
 

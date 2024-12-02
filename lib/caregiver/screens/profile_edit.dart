@@ -6,7 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:island_app/caregiver/models/profile_model.dart';
@@ -463,7 +462,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
   Future<void> sendPrfileUpdateRequest() async {
     var usersId = await Provider.of<ServiceGiverProvider>(context, listen: false).getUserId();
     var token = await getToken();
-    print(selectedArea.join(','));
     var formData = FormData.fromMap({
       '_method': 'PUT',
       'id': usersId,
