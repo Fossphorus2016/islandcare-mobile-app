@@ -273,16 +273,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                           arguments: {"token": data["token"]},
                                         );
                                       } else if (data["user"]["role"] == 3) {
-                                        await storageService.writeSecureData(
-                                            'userRole', data["user"]["role"].toString());
+                                        await storageService.writeSecureData('userRole', data["user"]["role"].toString());
                                         await storageService.writeSecureData('userToken', data["token"].toString());
                                         await storageService.writeSecureData('userStatus', status.toString());
                                         await storageService.writeSecureData('userId', userId.toString());
                                         await storageService.writeSecureData('userAvatar', avatar.toString());
                                         await storageService.writeSecureData('userName', "$name $last");
 
-                                        Navigator.push(
-                                            context, MaterialPageRoute(builder: (context) => const SplashScreen()));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => const SplashScreen()));
                                       } else if (data["user"]["role"] == 4) {
                                         if (data["user"]["status"] == 0) {
                                           await storageService.writeSecureData('userStatus', status.toString());
@@ -291,14 +289,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                           await storageService.writeSecureData('userId', userId.toString());
                                           await storageService.writeSecureData('userName', "$name $last");
 
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => BottomBar(data: data['token'].toString())),
-                                              (route) => false);
+                                          Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => BottomBar(data: data['token'].toString())), (route) => false);
                                         } else {
-                                          await storageService.writeSecureData(
-                                              'userRole', data["user"]["role"].toString());
+                                          await storageService.writeSecureData('userRole', data["user"]["role"].toString());
                                           await storageService.writeSecureData('userToken', data["token"].toString());
                                           await storageService.writeSecureData('userStatus', status.toString());
                                           await storageService.writeSecureData('userId', userId.toString());
@@ -309,7 +302,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       }
                                     }
                                   } else {
-                                    showErrorToast("Bad Credentials");
+                                    // showErrorToast("Bad Credentials");
                                   }
                                 } catch (e) {
                                   showErrorToast("something went wrong");
@@ -326,17 +319,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       children: [
                         // Need help logging in
-                        Text(
-                          'Need help logging in?',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontStyle: FontStyle.italic,
-                            fontSize: MediaQuery.of(context).size.width > 460 ? 24 : 16,
-                            fontWeight: FontWeight.w500,
-                            height: 3.2575,
-                            color: const Color(0xff131313),
-                          ),
-                        ),
+                        const SizedBox(height: 20),
+                        // Text(
+                        //   'Need help logging in?',
+                        //   style: TextStyle(
+                        //     fontFamily: 'Poppins',
+                        //     fontStyle: FontStyle.italic,
+                        //     fontSize: MediaQuery.of(context).size.width > 460 ? 24 : 16,
+                        //     fontWeight: FontWeight.w500,
+                        //     height: 3.2575,
+                        //     color: const Color(0xff131313),
+                        //   ),
+                        // ),
                         // Don’t have an account
                         RichText(
                           text: TextSpan(

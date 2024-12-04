@@ -1,7 +1,6 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously, unnecessary_null_comparison, prefer_typing_uninitialized_variables, unused_element, must_be_immutable
 
 import 'dart:io';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -265,19 +264,24 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                       ),
                       const SizedBox(height: 15),
                       // Upload Image
-                      GestureDetector(
-                        onTap: () {
-                          getImage();
-                        },
-                        child: image == null
-                            ? Center(
-                                child: Container(
+                      Align(
+                        alignment: Alignment.center,
+                        child: InkWell(
+                          onTap: () {
+                            getImage();
+                          },
+                          child: SizedBox(
+                            height: 100.45,
+                            width: 120.45,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                Container(
                                   alignment: Alignment.center,
                                   height: 100.45,
                                   width: 100.45,
-                                  padding: const EdgeInsets.all(4),
-                                  clipBehavior: Clip.antiAlias,
                                   decoration: BoxDecoration(
+                                    color: CustomColors.primaryColor,
                                     borderRadius: BorderRadius.circular(100),
                                     boxShadow: const [
                                       BoxShadow(
@@ -288,27 +292,97 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                       ),
                                     ],
                                   ),
-                                  child: widget.profileImage != null
-                                      ? CachedNetworkImage(
-                                          imageUrl: "${AppUrl.webStorageUrl}/${widget.profileImage}",
-                                          fit: BoxFit.cover,
-                                          alignment: Alignment.center,
-                                          errorWidget: (context, url, error) => const Icon(Icons.error),
+                                  child: image == null
+                                      ? Center(
+                                          child: widget.profileImage != null
+                                              ? ClipRRect(
+                                                  borderRadius: BorderRadius.circular(100),
+                                                  child: Image(
+                                                    width: 100,
+                                                    height: 100,
+                                                    fit: BoxFit.fitWidth,
+                                                    image: NetworkImage("${AppUrl.webStorageUrl}/${widget.profileImage}"),
+                                                    errorBuilder: (context, error, stackTrace) {
+                                                      return const Icon(
+                                                        Icons.info_rounded,
+                                                        color: Colors.white,
+                                                      );
+                                                    },
+                                                  ),
+                                                )
+                                              : const Text("Upload"),
                                         )
-                                      : const Center(child: Text("Upload")),
+                                      : Center(
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(100),
+                                            child: Image.file(
+                                              File(image!.path).absolute,
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                          ),
+                                        ),
                                 ),
-                              )
-                            : Center(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(50),
-                                  child: Image.file(
-                                    File(image!.path).absolute,
-                                    width: 100,
-                                    height: 100,
-                                    fit: BoxFit.cover,
+                                Positioned(
+                                  right: 05,
+                                  bottom: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(5.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade200,
+                                      borderRadius: BorderRadius.circular(80),
+                                    ),
+                                    child: const Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.grey,
+                                    ),
                                   ),
                                 ),
-                              ),
+                              ],
+                            ),
+                          ),
+                          // image == null
+                          //     ? Center(
+                          //         child: Container(
+                          //           alignment: Alignment.center,
+                          //           height: 100.45,
+                          //           width: 100.45,
+                          //           padding: const EdgeInsets.all(4),
+                          //           clipBehavior: Clip.antiAlias,
+                          //           decoration: BoxDecoration(
+                          //             borderRadius: BorderRadius.circular(100),
+                          //             boxShadow: const [
+                          //               BoxShadow(
+                          //                 color: Color.fromARGB(15, 0, 0, 0),
+                          //                 blurRadius: 4,
+                          //                 spreadRadius: 4,
+                          //                 offset: Offset(2, 2), // Shadow position
+                          //               ),
+                          //             ],
+                          //           ),
+                          //           child: widget.profileImage != null
+                          //               ? CachedNetworkImage(
+                          //                   imageUrl: "${AppUrl.webStorageUrl}/${widget.profileImage}",
+                          //                   fit: BoxFit.cover,
+                          //                   alignment: Alignment.center,
+                          //                   errorWidget: (context, url, error) => const Icon(Icons.error),
+                          //                 )
+                          //               : const Center(child: Text("Upload")),
+                          //         ),
+                          //       )
+                          //     : Center(
+                          //         child: ClipRRect(
+                          //           borderRadius: BorderRadius.circular(50),
+                          //           child: Image.file(
+                          //             File(image!.path).absolute,
+                          //             width: 100,
+                          //             height: 100,
+                          //             fit: BoxFit.cover,
+                          //           ),
+                          //         ),
+                          //       ),
+                        ),
                       ),
                       const SizedBox(height: 15),
                       // Name and Email
@@ -348,15 +422,16 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               "Service Provided",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: CustomColors.primaryColor,
                                 fontSize: 12,
                                 fontFamily: "Rubik",
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
+                            const SizedBox(height: 05),
                             Wrap(
                               spacing: 05,
                               runSpacing: 10,
@@ -445,11 +520,9 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                         ),
                       ),
                       const SizedBox(height: 15),
-                      const SizedBox(height: 15),
                       //  Gender
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -484,8 +557,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                       height: 50.45,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
-                                        color:
-                                            _isSelectedGender == "1" ? CustomColors.primaryColor : CustomColors.white,
+                                        color: _isSelectedGender == "1" ? CustomColors.primaryColor : CustomColors.white,
                                         borderRadius: BorderRadius.circular(8),
                                         boxShadow: const [
                                           BoxShadow(
@@ -507,9 +579,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                           "Male",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            color: _isSelectedGender == "1"
-                                                ? CustomColors.white
-                                                : CustomColors.primaryText,
+                                            color: _isSelectedGender == "1" ? CustomColors.white : CustomColors.primaryText,
                                             fontFamily: "Rubik",
                                             fontSize: 12,
                                             fontWeight: FontWeight.w300,
@@ -533,8 +603,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                       height: 50.45,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
-                                        color:
-                                            _isSelectedGender == "2" ? CustomColors.primaryColor : CustomColors.white,
+                                        color: _isSelectedGender == "2" ? CustomColors.primaryColor : CustomColors.white,
                                         borderRadius: BorderRadius.circular(8),
                                         boxShadow: const [
                                           BoxShadow(
@@ -556,9 +625,7 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                           "Female",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            color: _isSelectedGender == "2"
-                                                ? CustomColors.white
-                                                : CustomColors.primaryText,
+                                            color: _isSelectedGender == "2" ? CustomColors.white : CustomColors.primaryText,
                                             fontFamily: "Rubik",
                                             fontSize: 12,
                                             fontWeight: FontWeight.w300,
@@ -573,11 +640,10 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           ],
                         ),
                       ),
-
                       // User Address
+                      const SizedBox(height: 10),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
+                        padding: const EdgeInsets.fromLTRB(17, 10, 17, 05),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -603,7 +669,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 fontFamily: "Rubik",
                                 fontWeight: FontWeight.w400,
                               ),
-                              textAlignVertical: TextAlignVertical.bottom,
                               maxLines: 1,
                               validator: (value) {
                                 if (value != null || value!.isEmpty) {
@@ -617,34 +682,36 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 focusColor: CustomColors.white,
                                 hoverColor: CustomColors.white,
                                 filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
+                                contentPadding: EdgeInsets.zero,
+                                border: InputBorder.none,
+                                // border: OutlineInputBorder(
+                                //   borderRadius: BorderRadius.circular(0),
+                                // ),
+                                // focusedBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                //   borderRadius: BorderRadius.circular(0.0),
+                                // ),
+                                // enabledBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                //   borderRadius: BorderRadius.circular(0.0),
+                                // ),
+                                // errorBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                //   borderRadius: BorderRadius.circular(12),
+                                // ),
+                                // focusedErrorBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                //   borderRadius: BorderRadius.circular(12),
+                                // ),
                               ),
                             ),
                           ],
                         ),
                       ),
                       //  Phone Number
+                      const SizedBox(height: 10),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
+                        padding: const EdgeInsets.fromLTRB(17, 10, 17, 05),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -662,7 +729,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const SizedBox(height: 05),
                             TextFormField(
                               controller: phoneController,
                               keyboardType: TextInputType.number,
@@ -671,7 +737,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 fontFamily: "Rubik",
                                 fontWeight: FontWeight.w400,
                               ),
-                              textAlignVertical: TextAlignVertical.bottom,
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                                 LengthLimitingTextInputFormatter(10),
@@ -688,34 +753,36 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 focusColor: CustomColors.white,
                                 hoverColor: CustomColors.white,
                                 filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
+                                contentPadding: EdgeInsets.zero,
+                                border: InputBorder.none,
+                                // border: OutlineInputBorder(
+                                //   borderRadius: BorderRadius.circular(0),
+                                // ),
+                                // focusedBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                //   borderRadius: BorderRadius.circular(0.0),
+                                // ),
+                                // enabledBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                //   borderRadius: BorderRadius.circular(0.0),
+                                // ),
+                                // errorBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                //   borderRadius: BorderRadius.circular(12),
+                                // ),
+                                // focusedErrorBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                //   borderRadius: BorderRadius.circular(12),
+                                // ),
                               ),
                             ),
                           ],
                         ),
                       ),
                       // Zip Code
+                      const SizedBox(height: 10),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
+                        padding: const EdgeInsets.fromLTRB(17, 10, 17, 05),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -733,11 +800,9 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const SizedBox(height: 05),
                             TextFormField(
                               controller: zipController,
                               keyboardType: TextInputType.number,
-                              textAlignVertical: TextAlignVertical.bottom,
                               maxLines: 1,
                               inputFormatters: [
                                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
@@ -756,36 +821,38 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 focusColor: CustomColors.white,
                                 hoverColor: CustomColors.white,
                                 filled: true,
-                                border: OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(0.0),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
+                                contentPadding: EdgeInsets.zero,
+                                border: InputBorder.none,
+                                // OutlineInputBorder(borderRadius: BorderRadius.circular(0)),
+                                // focusedBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                //   borderRadius: BorderRadius.circular(0.0),
+                                // ),
+                                // enabledBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.white, width: 0.0),
+                                //   borderRadius: BorderRadius.circular(0.0),
+                                // ),
+                                // errorBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                //   borderRadius: BorderRadius.circular(12),
+                                // ),
+                                // focusedErrorBorder: OutlineInputBorder(
+                                //   borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                //   borderRadius: BorderRadius.circular(12),
+                                // ),
                               ),
                             ),
                           ],
                         ),
                       ),
                       // Date Of Birth
+                      const SizedBox(height: 10),
                       InkWell(
                         onTap: () {
                           _selectDate(context);
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                          margin: const EdgeInsets.only(bottom: 15),
                           width: MediaQuery.of(context).size.width,
                           alignment: Alignment.centerLeft,
                           decoration: BoxDecoration(
@@ -817,7 +884,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 10),
                       const Text(
                         "Bio",
@@ -831,7 +897,6 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                       // User Information
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 10),
-                        margin: const EdgeInsets.only(bottom: 15),
                         decoration: BoxDecoration(
                           color: CustomColors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -849,46 +914,50 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            TextFormField(
-                              controller: userInfoController,
-                              keyboardType: TextInputType.name,
-                              textAlignVertical: TextAlignVertical.bottom,
-                              maxLines: 1,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontFamily: "Rubik",
-                                fontWeight: FontWeight.w400,
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "Please add User Info";
-                                }
-                                return null;
-                              },
-                              decoration: InputDecoration(
-                                hintText: "User Info",
-                                fillColor: CustomColors.white,
-                                focusColor: CustomColors.white,
-                                hoverColor: CustomColors.white,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                            SizedBox(
+                              height: 80,
+                              child: TextFormField(
+                                controller: userInfoController,
+                                keyboardType: TextInputType.text,
+                                expands: true,
+                                minLines: null,
+                                maxLines: null,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: "Rubik",
+                                  fontWeight: FontWeight.w400,
                                 ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.red, width: 0.5),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(color: CustomColors.white, width: 0.0),
-                                  borderRadius: BorderRadius.circular(12),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Please add User Info";
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.zero,
+                                  hintText: "User Info",
+                                  fillColor: CustomColors.white,
+                                  focusColor: CustomColors.white,
+                                  hoverColor: CustomColors.white,
+                                  filled: true,
+                                  border: InputBorder.none,
+                                  //  OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  // focusedBorder: OutlineInputBorder(
+                                  //   borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.0),
+                                  //   borderRadius: BorderRadius.circular(12),
+                                  // ),
+                                  // enabledBorder: OutlineInputBorder(
+                                  //   borderSide: BorderSide(color: CustomColors.primaryColor, width: 0.0),
+                                  //   borderRadius: BorderRadius.circular(12),
+                                  // ),
+                                  // errorBorder: OutlineInputBorder(
+                                  //   borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  //   borderRadius: BorderRadius.circular(12),
+                                  // ),
+                                  // focusedErrorBorder: OutlineInputBorder(
+                                  //   borderSide: BorderSide(color: CustomColors.red, width: 0.5),
+                                  //   borderRadius: BorderRadius.circular(12),
+                                  // ),
                                 ),
                               ),
                             ),
@@ -913,14 +982,10 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 showErrorToast("Please Select Gender");
                               } else if (dobController.text.isEmpty) {
                                 showErrorToast("Please Select Date Of Birth");
-                              }
-                              // else if (selectedService == null) {
-                              //   showErrorToast("Please Select Services");
-                              // }
-                              else if (phoneController.text.isEmpty) {
+                              } else if (phoneController.text.isEmpty) {
                                 showErrorToast("Please Enter Phone Number");
                               } else if (addressController.text.isEmpty) {
-                                showErrorToast("Please Enter User Address");
+                                showErrorToast("Please Enter Home Address");
                               } else if (zipController.text.isEmpty) {
                                 showErrorToast("Please Enter Zip Code");
                               } else if (userInfoController.text.isEmpty) {

@@ -642,7 +642,7 @@ class _HomeGiverScreenState extends State<HomeGiverScreen> {
                       ),
                     )
                   : RefreshIndicator(
-                      onRefresh: () => provider.fetchProviderDashboardModel(),
+                      onRefresh: () => provider.fetchProfileGiverModel(),
                       child: CustomScrollView(
                         slivers: [
                           SliverToBoxAdapter(
@@ -764,7 +764,7 @@ class JobCardContainer extends StatelessWidget {
             children: [
               const Text("Hourly Rate: "),
               Text(
-                hourlyRate,
+                "\$ $hourlyRate",
                 style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               ),
             ],
@@ -777,7 +777,7 @@ class JobCardContainer extends StatelessWidget {
                 children: [
                   const Text("Job Total Pay: "),
                   Text(
-                    jobAmount,
+                    "\$ $jobAmount",
                     style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
                   ),
                 ],

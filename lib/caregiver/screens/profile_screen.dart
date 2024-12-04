@@ -171,6 +171,12 @@ class _ProfileGiverState extends State<ProfileGiver> {
                                               height: 110,
                                               alignment: Alignment.center,
                                               imageUrl: "${AppUrl.webStorageUrl}/${giverProvider.fetchProfile!.data!.avatar.toString()}",
+                                              errorWidget: (context, url, error) {
+                                                return const Icon(
+                                                  Icons.info_rounded,
+                                                  color: Colors.white,
+                                                );
+                                              },
                                             ),
                                           ),
                                           const SizedBox(width: 10),

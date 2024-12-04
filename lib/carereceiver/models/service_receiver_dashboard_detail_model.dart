@@ -471,7 +471,11 @@ class Userdetailprovider {
       availability: json["availability"],
       experience: json["experience"],
       educations: json["educations"],
-      keywords: json["keywords"] != null ? jsonDecode(json["keywords"]) : null,
+      keywords: json["keywords"] != null
+          ? json["keywords"].runtimeType == String
+              ? json["keywords"].toString().split(",")
+              : jsonDecode(json["keywords"])
+          : null,
       badge: json["badge"] == null ? null : json["badge"].toString().split(','),
       hourlyRate: json["hourly_rate"],
       createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),

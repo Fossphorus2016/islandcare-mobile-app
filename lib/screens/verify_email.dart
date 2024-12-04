@@ -1,10 +1,12 @@
 // ignore_for_file: prefer_typing_uninitialized_variables, must_be_immutable
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/utils/functions.dart';
-import 'package:island_app/utils/http_handlers.dart';
+import 'package:island_app/utils/navigation_service.dart';
+import 'package:island_app/utils/routes_name.dart';
 import 'package:island_app/widgets/loading_button.dart';
 
 class VerifyEmail extends StatefulWidget {
@@ -37,7 +39,6 @@ class _VerifyEmailState extends State<VerifyEmail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
@@ -51,6 +52,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                   width: 363,
                   height: 616,
                   child: Stack(
+                    alignment: Alignment.center,
                     children: [
                       Positioned(
                         left: 0,
@@ -69,14 +71,14 @@ class _VerifyEmailState extends State<VerifyEmail> {
                         ),
                       ),
                       Positioned(
-                        left: 130,
-                        top: 554,
+                        // left: 130,
+                        top: 500,
                         child: GestureDetector(
                           onTap: () {
-                            Navigator.pushReplacementNamed(context, '/');
+                            navigationService.pushNamedAndRemoveUntil(RoutesName.login);
                           },
                           child: Container(
-                            width: 100,
+                            width: 150,
                             height: 60,
                             decoration: BoxDecoration(
                               color: const Color(0xffffffff),
@@ -118,16 +120,26 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                   width: 320,
                                   height: 54.86,
                                   child: LoadingButton(
+                                    backgroundColor: Colors.white,
+                                    loadingColor: CustomColors.primaryColor,
                                     onPressed: () async {
-                                      final response = await postRequesthandler(
-                                        url: SessionUrl.emailVerification,
-                                        token: widget.token,
+                                      var resp = await Dio().post(
+                                        SessionUrl.emailVerification,
+                                        options: Options(
+                                          headers: {
+                                            'Authorization': "Bearer ${widget.token}",
+                                            "Accept": "application/json",
+                                          },
+                                        ),
                                       );
-                                      if (response != null && response.statusCode == 200) {
+                                      if (resp.statusCode == 202) {
                                         showSuccessToast("Verification link has been sent to your email address.");
                                         setState(() {
                                           updatedData = "Verification link has been sent to your email address.";
                                         });
+                                      } else if (resp.statusCode == 204) {
+                                        showSuccessToast("email already verified.");
+                                        navigationService.pushNamedAndRemoveUntil(RoutesName.login);
                                       }
                                       return false;
                                     },
@@ -144,7 +156,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                               ),
                               Positioned(
                                 left: 0,
-                                top: 107.9428710938,
+                                top: 80.9428710938,
                                 child: SizedBox(
                                   width: 320,
                                   height: 120.86,
@@ -155,7 +167,7 @@ class _VerifyEmailState extends State<VerifyEmail> {
                                       color: CustomColors.white,
                                       fontFamily: "Rubik",
                                       fontStyle: FontStyle.normal,
-                                      fontSize: 24,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),

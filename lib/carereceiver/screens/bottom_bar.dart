@@ -68,128 +68,127 @@ class BottomBarState extends State<BottomBar> {
         if (isLoading) {
           return const LoadingScreen();
         }
-        return Scaffold(
-          key: homaPageKey,
-          backgroundColor: CustomColors.loginBg,
-          body: pages[bottomNavigationProvider.page],
-          bottomNavigationBar: Theme(
-            data: Theme.of(context).copyWith(
-              // splashColor: CustomColors.primaryColor,
-              highlightColor: ServiceRecieverColor.primaryColor,
-              hoverColor: ServiceRecieverColor.primaryColor,
-            ),
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
+        return PopScope(
+          canPop: bottomNavigationProvider.page == 0,
+          onPopInvoked: (didPop) {
+            if (bottomNavigationProvider.page == 1) {
+              // int prePage = bottomNavigationProvider.page;
+              bottomNavigationProvider.updatePage(0);
+            } else if (bottomNavigationProvider.page == 2) {
+              // int prePage = bottomNavigationProvider.page;
+              bottomNavigationProvider.updatePage(1);
+            } else if (bottomNavigationProvider.page == 3) {
+              // int prePage = bottomNavigationProvider.page;
+              bottomNavigationProvider.updatePage(2);
+            }
+          },
+          child: Scaffold(
+            key: homaPageKey,
+            backgroundColor: CustomColors.loginBg,
+            body: pages[bottomNavigationProvider.page],
+            bottomNavigationBar: Theme(
+              data: Theme.of(context).copyWith(
+                // splashColor: CustomColors.primaryColor,
+                highlightColor: ServiceRecieverColor.primaryColor,
+                hoverColor: ServiceRecieverColor.primaryColor,
               ),
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.transparent,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromARGB(59, 0, 0, 0),
-                      blurRadius: 8.0,
-                      spreadRadius: 8.0,
-                      offset: Offset(4.0, 4.0),
-                    ),
-                  ],
+              child: ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
                 ),
-                child: BottomNavigationBar(
-                  currentIndex: bottomNavigationProvider.page,
-                  selectedItemColor: CustomColors.primaryColor,
-                  unselectedItemColor: CustomColors.white,
-                  backgroundColor: CustomColors.white,
-                  iconSize: 28,
-                  onTap: (value) {
-                    // int prePage = bottomNavigationProvider.page;
-                    bottomNavigationProvider.updatePage(value);
-                  },
-                  type: BottomNavigationBarType.fixed,
-                  showSelectedLabels: false,
-                  showUnselectedLabels: false,
-                  items: [
-                    // HOME
-                    BottomNavigationBarItem(
-                      icon: Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: bottomNavigationProvider.page == 0
-                              ? ServiceRecieverColor.primaryColor
-                              : Colors.transparent,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Icon(
-                          Icons.home,
-                          color: bottomNavigationProvider.page == 0
-                              ? CustomColors.white
-                              : ServiceRecieverColor.primaryColor,
-                        ),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.transparent,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color.fromARGB(59, 0, 0, 0),
+                        blurRadius: 8.0,
+                        spreadRadius: 8.0,
+                        offset: Offset(4.0, 4.0),
                       ),
-                      label: '',
-                    ),
-                    // Favorite
-                    BottomNavigationBarItem(
-                      icon: Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: bottomNavigationProvider.page == 1
-                              ? ServiceRecieverColor.primaryColor
-                              : Colors.transparent,
-                          shape: BoxShape.circle,
+                    ],
+                  ),
+                  child: BottomNavigationBar(
+                    currentIndex: bottomNavigationProvider.page,
+                    selectedItemColor: CustomColors.primaryColor,
+                    unselectedItemColor: CustomColors.white,
+                    backgroundColor: CustomColors.white,
+                    iconSize: 28,
+                    onTap: (value) {
+                      // int prePage = bottomNavigationProvider.page;
+                      bottomNavigationProvider.updatePage(value);
+                    },
+                    type: BottomNavigationBarType.fixed,
+                    showSelectedLabels: false,
+                    showUnselectedLabels: false,
+                    items: [
+                      // HOME
+                      BottomNavigationBarItem(
+                        icon: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            color: bottomNavigationProvider.page == 0 ? ServiceRecieverColor.primaryColor : Colors.transparent,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.home,
+                            color: bottomNavigationProvider.page == 0 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                          ),
                         ),
-                        child: Icon(
-                          Icons.favorite,
-                          color: bottomNavigationProvider.page == 1
-                              ? CustomColors.white
-                              : ServiceRecieverColor.primaryColor,
-                        ),
+                        label: '',
                       ),
-                      label: '',
-                    ),
-                    // chat
-                    BottomNavigationBarItem(
-                      icon: Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: bottomNavigationProvider.page == 2
-                              ? ServiceRecieverColor.primaryColor
-                              : CustomColors.white,
-                          shape: BoxShape.circle,
+                      // Favorite
+                      BottomNavigationBarItem(
+                        icon: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            color: bottomNavigationProvider.page == 1 ? ServiceRecieverColor.primaryColor : Colors.transparent,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.favorite,
+                            color: bottomNavigationProvider.page == 1 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                          ),
                         ),
-                        child: Icon(
-                          Icons.textsms_rounded,
-                          color: bottomNavigationProvider.page == 2
-                              ? CustomColors.white
-                              : ServiceRecieverColor.primaryColor,
-                        ),
+                        label: '',
                       ),
-                      label: '',
-                    ),
-                    // profile
-                    BottomNavigationBarItem(
-                      icon: Container(
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          color: bottomNavigationProvider.page == 3
-                              ? ServiceRecieverColor.primaryColor
-                              : CustomColors.white,
-                          shape: BoxShape.circle,
+                      // chat
+                      BottomNavigationBarItem(
+                        icon: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            color: bottomNavigationProvider.page == 2 ? ServiceRecieverColor.primaryColor : CustomColors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.textsms_rounded,
+                            color: bottomNavigationProvider.page == 2 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                          ),
                         ),
-                        child: Icon(
-                          Icons.person,
-                          color: bottomNavigationProvider.page == 3
-                              ? CustomColors.white
-                              : ServiceRecieverColor.primaryColor,
-                        ),
+                        label: '',
                       ),
-                      label: '',
-                    ),
-                  ],
+                      // profile
+                      BottomNavigationBarItem(
+                        icon: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            color: bottomNavigationProvider.page == 3 ? ServiceRecieverColor.primaryColor : CustomColors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.person,
+                            color: bottomNavigationProvider.page == 3 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                          ),
+                        ),
+                        label: '',
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -108,22 +108,16 @@ class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
                     // Package Card Basic
 
                     for (int i = 0; i < subscriptionProvider.allPackages.length; i++) ...[
-                      if (recieverUserProvider.gWAUserProfile != null &&
-                          recieverUserProvider.gWAUserProfile!.data != null &&
-                          recieverUserProvider.gWAUserProfile!.data!.userSubscriptionDetail != null &&
-                          recieverUserProvider.gWAUserProfile!.data!.userSubscriptionDetail!.subscriptionId
-                                  .toString() ==
-                              subscriptionProvider.allPackages[i]['id'].toString() &&
-                          recieverUserProvider.gWAUserProfile!.data!.userSubscriptionDetail!.isActive == 1) ...[
+                      if (recieverUserProvider.gWAUserProfile != null && recieverUserProvider.gWAUserProfile!.data != null && recieverUserProvider.gWAUserProfile!.data!.userSubscriptionDetail != null && recieverUserProvider.gWAUserProfile!.data!.userSubscriptionDetail!.subscriptionId.toString() == subscriptionProvider.allPackages[i]['id'].toString() && recieverUserProvider.gWAUserProfile!.data!.userSubscriptionDetail!.isActive == 1) ...[
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
-                              begin: Alignment.center,
-                              end: Alignment.center,
+                              begin: Alignment.topRight,
+                              end: Alignment.bottomLeft,
                               colors: [
-                                const Color(0xff90EAB4).withOpacity(0.1),
-                                const Color(0xff6BD294).withOpacity(0.8)
+                                CustomColors.primaryColor,
+                                const Color(0xff6BD294).withOpacity(0.8),
                               ],
                             ),
                             boxShadow: const [
@@ -171,9 +165,7 @@ class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
                               const SizedBox(height: 05),
                               TextButton(
                                 onPressed: () async {
-                                  if (recieverUserProvider
-                                          .gWAUserProfile?.data?.userSubscriptionDetail?.subscriptionId !=
-                                      null) {
+                                  if (recieverUserProvider.gWAUserProfile?.data?.userSubscriptionDetail?.subscriptionId != null) {
                                     showDialog(
                                       context: context,
                                       builder: (context) => AlertDialog(
@@ -211,16 +203,11 @@ class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
                                             height: 54,
                                             onPressed: () async {
                                               try {
-                                                var resp =
-                                                    await Provider.of<SubscriptionProvider>(context, listen: false)
-                                                        .unSubscribe(recieverUserProvider
-                                                            .gWAUserProfile?.data?.userSubscriptionDetail?.id);
+                                                var resp = await Provider.of<SubscriptionProvider>(context, listen: false).unSubscribe(recieverUserProvider.gWAUserProfile?.data?.userSubscriptionDetail?.id);
                                                 if (resp.statusCode == 200 && resp.data['success']) {
-                                                  Provider.of<RecieverUserProvider>(context, listen: false)
-                                                      .fetchProfileReceiverModel();
+                                                  Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
 
-                                                  Provider.of<SubscriptionProvider>(context, listen: false)
-                                                      .getPackages();
+                                                  Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
                                                   Navigator.pop(context);
                                                   showSuccessToast(resp.data['message'].toString());
                                                 } else {
@@ -238,11 +225,7 @@ class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
                                             onPressed: () {
                                               Navigator.pop(context);
                                             },
-                                            style: ButtonStyle(
-                                                backgroundColor:
-                                                    WidgetStateProperty.resolveWith((states) => Colors.red.shade400),
-                                                shape: WidgetStatePropertyAll(
-                                                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)))),
+                                            style: ButtonStyle(backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.red.shade400), shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)))),
                                             child: const Text(
                                               "No, cancel please!",
                                               style: TextStyle(color: Colors.white),
@@ -278,8 +261,7 @@ class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
                       ] else ...[
                         InkWell(
                           onTap: () {
-                            Provider.of<SubscriptionProvider>(context, listen: false)
-                                .setSelectedPackage(subscriptionProvider.allPackages[i]);
+                            Provider.of<SubscriptionProvider>(context, listen: false).setSelectedPackage(subscriptionProvider.allPackages[i]);
                             navigationService.push(
                               RoutesName.recieverPaymentScreen,
                               arguments: {"subsId": subscriptionProvider.allPackages[i]['id'].toString()},
@@ -288,26 +270,17 @@ class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  begin: Alignment.center,
-                                  end: Alignment.center,
-                                  colors: [
-                                    const Color(0xff90EAB4).withOpacity(0.1),
-                                    const Color(0xff6BD294).withOpacity(0.8)
-                                  ],
-                                ),
-                                boxShadow: const [
-                                  BoxShadow(
-                                      color: Color.fromARGB(25, 0, 0, 0),
-                                      blurRadius: 4.0,
-                                      spreadRadius: 2.0,
-                                      offset: Offset(2.0, 2.0))
-                                ],
-                                borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    bottomRight: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10))),
+                                color: CustomColors.primaryColor,
+                                // gradient: LinearGradient(
+                                //   begin: Alignment.topLeft,
+                                //   end: Alignment.bottomRight,
+                                //   colors: [
+                                //     const Color(0xff55CE86),
+                                //     const Color(0xff6BD294).withOpacity(0.5),
+                                //   ],
+                                // ),
+                                boxShadow: const [BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))],
+                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), topLeft: Radius.circular(10), topRight: Radius.circular(10))),
                             width: MediaQuery.of(context).size.width * .90,
                             height: 165,
                             child: Column(
@@ -453,9 +426,7 @@ class _RecieverPaymentScreenState extends State<RecieverPaymentScreen> {
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: selectedCard != null && selectedCard!.id == cardProvider.allCards![j].id
-                                        ? ServiceRecieverColor.primaryColor
-                                        : ServiceRecieverColor.redButton,
+                                    color: selectedCard != null && selectedCard!.id == cardProvider.allCards![j].id ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
                                     width: 0.5,
                                   ),
                                 ),

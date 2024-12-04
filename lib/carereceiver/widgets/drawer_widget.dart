@@ -640,7 +640,41 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             );
                           },
                         ),
-                      )
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(vertical: 6),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(6)),
+                        child: ListTile(
+                          onTap: () {
+                            showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0))),
+                              builder: (BuildContext context) {
+                                return StatefulBuilder(
+                                  builder: (BuildContext context, StateSetter setState) {
+                                    return const DeactivateAccountWidget();
+                                  },
+                                );
+                              },
+                            );
+                          },
+                          leading: const SvgPicture(
+                            SvgAssetLoader("assets/images/icons/deactivate_account.svg"),
+                            height: 20,
+                          ),
+                          trailing: Icon(
+                            Icons.arrow_forward_ios,
+                            color: CustomColors.white,
+                            size: 16,
+                          ),
+                          title: Text(
+                            'Close Account',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: CustomColors.white, fontFamily: "Rubik"),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                   GestureDetector(
@@ -656,7 +690,10 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                             onTap: () {
                               _showLogoutDialog();
                             },
-                            leading: Image.asset("assets/images/icons/logout.png"),
+                            leading: const Icon(
+                              Icons.logout_outlined,
+                              color: Colors.white,
+                            ),
                             title: Padding(
                               padding: const EdgeInsets.only(bottom: 5),
                               child: Text(
@@ -681,6 +718,211 @@ class _DrawerWidgetState extends State<DrawerWidget> {
         ),
       );
     });
+  }
+}
+
+class DeactivateAccountWidget extends StatefulWidget {
+  const DeactivateAccountWidget({super.key});
+
+  @override
+  State<DeactivateAccountWidget> createState() => _DeactivateAccountWidgetState();
+}
+
+class _DeactivateAccountWidgetState extends State<DeactivateAccountWidget> {
+  TextEditingController passwordController = TextEditingController();
+  bool showPassword = false;
+  void togglevisibility1() {
+    setState(() {
+      showPassword = !showPassword;
+    });
+  }
+
+  Future<void> sendRequest() async {
+    var token = await getToken();
+    var userId = await Provider.of<RecieverUserProvider>(context, listen: false).getUserId();
+
+    var formData = FormData.fromMap({"password": passwordController.text.toString()});
+
+    try {
+      var response = await postRequesthandler(
+        url: '${SessionUrl.accountDeactivate}/$userId',
+        formData: formData,
+        token: token,
+      );
+
+      // Navigator.pop(context);
+      if (response != null && response.statusCode == 200 && response.data != null && response.data["message"] != null && response.data["message"] == "Account Deactivated Successfully") {
+        showSuccessToast("Account Deactivated Successfully");
+        Provider.of<NotificationProvider>(context, listen: false).unSubscribeChannels(4);
+        await storageService.deleteSecureStorage('userRole');
+        await storageService.deleteSecureStorage('userToken');
+        await storageService.deleteSecureStorage("userStatus");
+        Provider.of<BottomNavigationProvider>(context, listen: false).page = 0;
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/',
+          (route) => false,
+        );
+        Provider.of<NotificationProvider>(context, listen: false).setDefault();
+        Provider.of<SubscriptionProvider>(context, listen: false).setDefault();
+        Provider.of<RecieverChatProvider>(context, listen: false).setDefault();
+        Provider.of<CardProvider>(context, listen: false).setDefault();
+        Provider.of<ReceiverReviewsProvider>(context, listen: false).setDefault();
+        Provider.of<JobApplicantsProvider>(context, listen: false).setDefault();
+        Provider.of<HomePaginationProvider>(context, listen: false).setDefault();
+        Provider.of<HiredCandidatesProvider>(context, listen: false).setDefault();
+        Provider.of<PostedJobsProvider>(context, listen: false).setDefault();
+      } else if (response != null && response.data != null && response.data["message"] != null && response.data["message"] == "Password doesn't match") {
+        setState(() {
+          showIncorrectPasswordError = true;
+          showEmptyPasswordError = false;
+        });
+        showErrorToast(response.data['message'].toString());
+      } else {
+        showErrorToast("something went wrong");
+      }
+    } catch (e) {
+      // Navigator.pop(context);
+      showErrorToast(e.toString());
+    }
+  }
+
+  final formKey = GlobalKey<FormState>();
+  bool showIncorrectPasswordError = false;
+  bool showEmptyPasswordError = false;
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 20),
+              Center(
+                child: Container(
+                  width: 130,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffC4C4C4),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  "Deactivated Account",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: CustomColors.black,
+                    fontFamily: "Rubik",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Center(
+                child: Text(
+                  "Do You want to deactivated your account?",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: CustomColors.black,
+                    fontFamily: "Rubik",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Center(
+                child: Text(
+                  "Are you sure you want to delete your account? This action cannot be undone and your user name cannot be registered again! After your account is deleted, you will be logged out and all other active sessions will be terminated.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: CustomColors.primaryText,
+                    fontFamily: "Rubik",
+                    fontStyle: FontStyle.normal,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              CustomTextFieldWidget(
+                borderColor: CustomColors.loginBorder,
+                textStyle: TextStyle(
+                  fontSize: 15,
+                  color: CustomColors.hintText,
+                  fontFamily: "Calibri",
+                  fontWeight: FontWeight.w400,
+                ),
+                hintText: "Password",
+                controller: passwordController,
+                obsecure: !showPassword,
+                sufIcon: GestureDetector(
+                  onTap: () {
+                    togglevisibility1();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Icon(
+                      showPassword ? Icons.visibility : Icons.visibility_off,
+                      size: 20,
+                      color: CustomColors.hintText,
+                    ),
+                  ),
+                ),
+              ),
+              if (showEmptyPasswordError) ...[
+                const Text(
+                  "Password is Required",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ] else if (showIncorrectPasswordError) ...[
+                const Text(
+                  "Password is Incorrect",
+                  style: TextStyle(color: Colors.red),
+                ),
+              ],
+              const SizedBox(height: 20),
+              LoadingButton(
+                title: "Continue",
+                height: 54,
+                backgroundColor: CustomColors.primaryColor,
+                textStyle: TextStyle(
+                  color: CustomColors.white,
+                  fontFamily: "Rubik",
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
+                ),
+                onPressed: () async {
+                  if (passwordController.text.trim().isEmpty) {
+                    setState(() {
+                      showIncorrectPasswordError = false;
+                      showEmptyPasswordError = true;
+                    });
+                    return false;
+                  }
+                  await sendRequest();
+
+                  return false;
+                },
+              ),
+              const SizedBox(height: 30),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 

@@ -152,7 +152,7 @@ class RecommendationReceiverWidget extends StatelessWidget {
                             height: 5,
                           ),
                           Text(
-                            "Hourly Rate \$${hourly!}/hour",
+                            "Hourly Rate \$ ${hourly!}/hour",
                             style: TextStyle(
                               color: CustomColors.darkGreyRecommended,
                               fontSize: ResponsiveBreakpoints.of(context).isTablet ? 18 : 12,
@@ -183,8 +183,8 @@ class RecommendationReceiverWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // receiverUserProvider.profilePerentage == 100
-                  if (true) ...[
+                  //
+                  if (receiverUserProvider.profilePerentage == 100) ...[
                     GestureDetector(
                       onTap: onTap,
                       child: Container(

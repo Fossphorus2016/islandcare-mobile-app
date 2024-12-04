@@ -49,7 +49,7 @@ class JobInfoContainer extends StatelessWidget {
         const SizedBox(height: 10),
         JobDetailTile(
           name: "Hourly Rate",
-          title: hourlyRate,
+          title: "\$ $hourlyRate",
         ),
       ],
     );

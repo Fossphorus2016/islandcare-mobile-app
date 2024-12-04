@@ -87,7 +87,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                           children: [
                             SizedBox(
                               width: MediaQuery.of(context).size.width,
-                              height: 110,
+                              height: 115,
                               child: Row(
                                 children: [
                                   ClipRRect(
@@ -96,9 +96,13 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                       width: 130,
                                       height: 110,
                                       alignment: Alignment.center,
-                                      imageUrl:
-                                          "${AppUrl.webStorageUrl}/${userProvider.gWAUserProfile!.data!.avatar.toString()}",
-                                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      imageUrl: "${AppUrl.webStorageUrl}/${userProvider.gWAUserProfile!.data!.avatar.toString()}",
+                                      errorWidget: (context, url, error) {
+                                        return const Icon(
+                                          Icons.info_rounded,
+                                          color: Colors.white,
+                                        );
+                                      },
                                     ),
                                   ),
                                   const SizedBox(width: 10),
@@ -115,20 +119,13 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) => ProfileReceiverEdit(
-                                                    name:
-                                                        "${userProvider.gWAUserProfile!.data!.firstName} ${userProvider.gWAUserProfile!.data!.lastName}",
+                                                    name: "${userProvider.gWAUserProfile!.data!.firstName} ${userProvider.gWAUserProfile!.data!.lastName}",
                                                     email: userProvider.gWAUserProfile!.data!.email.toString(),
                                                     // name: userProvider.gWAUserProfile!.data!.userdetail!.service!.name,
                                                     dob: userProvider.gWAUserProfile!.data!.userdetail!.dob,
                                                     male: userProvider.gWAUserProfile!.data!.userdetail!.gender,
                                                     phoneNumber: userProvider.gWAUserProfile!.data!.phone,
-                                                    service: userProvider
-                                                                .gWAUserProfile!.data!.userdetail!.servicesRequired !=
-                                                            null
-                                                        ? userProvider
-                                                            .gWAUserProfile!.data!.userdetail!.servicesRequired!
-                                                            .split(',')
-                                                        : [],
+                                                    service: userProvider.gWAUserProfile!.data!.userdetail!.servicesRequired != null ? userProvider.gWAUserProfile!.data!.userdetail!.servicesRequired!.split(',') : [],
                                                     zipCode: userProvider.gWAUserProfile!.data!.userdetail!.zip,
                                                     userInfo: userProvider.gWAUserProfile!.data!.userdetail!.userInfo,
                                                     userAddress: userProvider.gWAUserProfile!.data!.userdetail!.address,
@@ -137,25 +134,40 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                                 ),
                                               );
                                             },
-                                            child: const Icon(Icons.edit, color: Colors.white),
+                                            child: const Padding(
+                                              padding: EdgeInsets.symmetric(horizontal: 10),
+                                              child: Icon(Icons.edit, color: Colors.white),
+                                            ),
                                           ),
                                         ),
-                                        Text(
-                                          "${userProvider.gWAUserProfile!.data!.firstName.toString()} ${userProvider.gWAUserProfile!.data!.lastName.toString()}",
-                                          style: TextStyle(
+                                        SizedBox(
+                                          height: 55,
+                                          child: Text(
+                                            "${userProvider.gWAUserProfile!.data!.firstName.toString()} ${userProvider.gWAUserProfile!.data!.lastName.toString()}",
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
                                               fontSize: 20,
                                               fontFamily: "Rubik",
                                               fontWeight: FontWeight.w700,
-                                              color: CustomColors.white),
+                                              color: CustomColors.white,
+                                            ),
+                                          ),
                                         ),
                                         const SizedBox(width: 10),
-                                        Text(
-                                          userProvider.gWAUserProfile!.data!.email.toString(),
-                                          style: TextStyle(
+                                        SizedBox(
+                                          height: 33,
+                                          child: Text(
+                                            userProvider.gWAUserProfile!.data!.email.toString(),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
                                               fontSize: 12,
                                               fontFamily: "Rubik",
                                               fontWeight: FontWeight.w400,
-                                              color: CustomColors.white),
+                                              color: CustomColors.white,
+                                            ),
+                                          ),
                                         ),
                                         const SizedBox(width: 10),
                                       ],
@@ -276,9 +288,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                         LinearProgressIndicator(
                                           minHeight: 08,
                                           borderRadius: BorderRadius.circular(08),
-                                          value: Provider.of<RecieverUserProvider>(context).profilePerentage != null
-                                              ? (Provider.of<RecieverUserProvider>(context).profilePerentage! / 100)
-                                              : 00,
+                                          value: Provider.of<RecieverUserProvider>(context).profilePerentage != null ? (Provider.of<RecieverUserProvider>(context).profilePerentage! / 100) : 00,
                                           valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
                                         ),
                                       ],
@@ -444,9 +454,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
-                                      userProvider.gWAUserProfile!.data!.userdetail!.zip.toString() == "null"
-                                          ? "Not Available"
-                                          : userProvider.gWAUserProfile!.data!.userdetail!.zip.toString(),
+                                      userProvider.gWAUserProfile!.data!.userdetail!.zip.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.zip.toString(),
                                       style: TextStyle(
                                         color: CustomColors.hintText,
                                         fontSize: 16,
@@ -522,9 +530,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                     ),
                                     const SizedBox(height: 8),
                                     Text(
-                                      userProvider.gWAUserProfile!.data!.userdetail!.dob.toString() == "null"
-                                          ? "Not Available"
-                                          : userProvider.gWAUserProfile!.data!.userdetail!.dob.toString(),
+                                      userProvider.gWAUserProfile!.data!.userdetail!.dob.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.dob.toString(),
                                       style: TextStyle(
                                         color: CustomColors.hintText,
                                         fontSize: 16,
@@ -563,10 +569,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                         // && userProvider.gWAUserProfile!.data!.userdetail!.service!.isNotEmpty
                                         ) ...[
                                       Text(
-                                        userProvider.gWAUserProfile!.data!.userdetail!.service!.name.toString() ==
-                                                "null"
-                                            ? "Not Available"
-                                            : userProvider.gWAUserProfile!.data!.userdetail!.service!.name.toString(),
+                                        userProvider.gWAUserProfile!.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.service!.name.toString(),
                                         style: TextStyle(
                                           color: CustomColors.hintText,
                                           fontSize: 16,
@@ -607,9 +610,7 @@ class _ProfileReceiverScreenState extends State<ProfileReceiverScreen> {
                                           ),
                                           const SizedBox(height: 8),
                                           Text(
-                                            userProvider.gWAUserProfile!.data!.userdetail!.userInfo.toString() == "null"
-                                                ? "Not Available"
-                                                : userProvider.gWAUserProfile!.data!.userdetail!.userInfo.toString(),
+                                            userProvider.gWAUserProfile!.data!.userdetail!.userInfo.toString() == "null" ? "Not Available" : userProvider.gWAUserProfile!.data!.userdetail!.userInfo.toString(),
                                             softWrap: true,
                                             style: TextStyle(
                                               color: CustomColors.hintText,

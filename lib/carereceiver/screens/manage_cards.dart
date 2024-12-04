@@ -324,8 +324,7 @@ class _ManageCardsState extends State<ManageCards> {
                                           builder: (BuildContext context, StateSetter setState) {
                                             return SingleChildScrollView(
                                               child: Padding(
-                                                padding:
-                                                    EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                                                 child: Container(
                                                   padding: const EdgeInsets.symmetric(horizontal: 25),
                                                   child: Column(
@@ -400,6 +399,9 @@ class _ManageCardsState extends State<ManageCards> {
                                                                 ),
                                                                 textAlignVertical: TextAlignVertical.bottom,
                                                                 maxLines: 1,
+                                                                inputFormatters: [
+                                                                  FilteringTextInputFormatter.allow(RegExp("[A-Za-z]")),
+                                                                ],
                                                                 decoration: InputDecoration(
                                                                   suffixIcon: Icon(
                                                                     Icons.person,
@@ -415,13 +417,11 @@ class _ManageCardsState extends State<ManageCards> {
                                                                     borderRadius: BorderRadius.circular(4),
                                                                   ),
                                                                   focusedBorder: OutlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: CustomColors.white, width: 2.0),
+                                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
                                                                     borderRadius: BorderRadius.circular(4.0),
                                                                   ),
                                                                   enabledBorder: OutlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: CustomColors.white, width: 2.0),
+                                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
                                                                     borderRadius: BorderRadius.circular(4.0),
                                                                   ),
                                                                 ),
@@ -478,13 +478,11 @@ class _ManageCardsState extends State<ManageCards> {
                                                                     borderRadius: BorderRadius.circular(4),
                                                                   ),
                                                                   focusedBorder: OutlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: CustomColors.white, width: 2.0),
+                                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
                                                                     borderRadius: BorderRadius.circular(4.0),
                                                                   ),
                                                                   enabledBorder: OutlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: CustomColors.white, width: 2.0),
+                                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
                                                                     borderRadius: BorderRadius.circular(4.0),
                                                                   ),
                                                                 ),
@@ -644,7 +642,7 @@ class _ManageCardsState extends State<ManageCards> {
                                                                 controller: cvvController,
                                                                 inputFormatters: [
                                                                   FilteringTextInputFormatter.digitsOnly,
-                                                                  LengthLimitingTextInputFormatter(4),
+                                                                  LengthLimitingTextInputFormatter(3),
                                                                 ],
                                                                 keyboardType: TextInputType.number,
                                                                 style: const TextStyle(
@@ -664,13 +662,11 @@ class _ManageCardsState extends State<ManageCards> {
                                                                     borderRadius: BorderRadius.circular(4),
                                                                   ),
                                                                   focusedBorder: OutlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: CustomColors.white, width: 2.0),
+                                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
                                                                     borderRadius: BorderRadius.circular(4.0),
                                                                   ),
                                                                   enabledBorder: OutlineInputBorder(
-                                                                    borderSide: BorderSide(
-                                                                        color: CustomColors.white, width: 2.0),
+                                                                    borderSide: BorderSide(color: CustomColors.white, width: 2.0),
                                                                     borderRadius: BorderRadius.circular(4.0),
                                                                   ),
                                                                 ),
@@ -777,103 +773,103 @@ class _ManageCardsState extends State<ManageCards> {
                             ),
                           ),
                           const SliverToBoxAdapter(child: SizedBox(height: 20)),
-                          SliverList(
-                            delegate: SliverChildBuilderDelegate(
-                              (BuildContext context, int index) {
-                                CreditCard cardDetail = provider.filteredList![index];
-                                return InkWell(
-                                  onTap: () {
-                                    FocusScope.of(context).unfocus();
-                                    provider.setSelectedCard(cardDetail);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(08),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 05,
-                                          spreadRadius: 01,
-                                          color: Colors.grey.shade200,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              "Name Of Card: ",
-                                              style: TextStyle(fontWeight: FontWeight.bold),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(cardDetail.nameOnCard.toString()),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              "Card: ",
-                                              style: TextStyle(fontWeight: FontWeight.bold),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(cardDetail.cardNumber.toString()),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                "CVV Number: ${cardDetail.cvv.toString()}",
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(fontWeight: FontWeight.bold),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Expanded(
-                                              child: Text(
-                                                "Expiry Month: ${cardDetail.cardExpirationMonth.toString()}",
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.end,
-                                                style: const TextStyle(fontWeight: FontWeight.bold),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        // const SizedBox(height: 10),
-                                        // Row(
-                                        //   children: [
-                                        //     const SizedBox(width: 10),
-                                        //     Text(),
-                                        //   ],
-                                        // ),
-                                        const SizedBox(height: 10),
-                                        Row(
-                                          children: [
-                                            const Text(
-                                              "Expiry Year: ",
-                                              style: TextStyle(fontWeight: FontWeight.bold),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            Text(
-                                              cardDetail.cardExpirationYear.toString(),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                          SliverList.separated(
+                            itemCount: provider.filteredList!.length,
+                            separatorBuilder: (context, index) => const SizedBox(height: 10),
+                            itemBuilder: (BuildContext context, int index) {
+                              CreditCard cardDetail = provider.filteredList![index];
+                              return InkWell(
+                                onTap: () {
+                                  FocusScope.of(context).unfocus();
+                                  provider.setSelectedCard(cardDetail);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(08),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 05,
+                                        spreadRadius: 01,
+                                        color: Colors.grey.shade200,
+                                      ),
+                                    ],
                                   ),
-                                );
-                              },
-                              childCount: provider.filteredList!.length,
-                            ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          const Text(
+                                            "Name Of Card: ",
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(cardDetail.nameOnCard.toString()),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          const Text(
+                                            "Card: ",
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(cardDetail.cardNumber.toString()),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              "CVV Number: ${cardDetail.cvv.toString()}",
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Text(
+                                              "Expiry Month: ${cardDetail.cardExpirationMonth.toString()}",
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.end,
+                                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      // const SizedBox(height: 10),
+                                      // Row(
+                                      //   children: [
+                                      //     const SizedBox(width: 10),
+                                      //     Text(),
+                                      //   ],
+                                      // ),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        children: [
+                                          const Text(
+                                            "Expiry Year: ",
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Text(
+                                            cardDetail.cardExpirationYear.toString(),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
+                          const SliverToBoxAdapter(child: SizedBox(height: 40)),
                         ],
                       )
                     : const ProfileNotApprovedText(),

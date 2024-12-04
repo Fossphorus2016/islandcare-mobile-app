@@ -29,6 +29,7 @@ class SessionUrl {
   static String signup = "${AppUrl.webBaseURL}/api/signup";
   static String emailVerification = "${AppUrl.webBaseURL}/api/email-verification";
   static String updatePassword = "${AppUrl.webBaseURL}/api/password-update";
+  static String accountDeactivate = "${AppUrl.webBaseURL}/api/account-deactivate";
 }
 
 class CareGiverUrl {

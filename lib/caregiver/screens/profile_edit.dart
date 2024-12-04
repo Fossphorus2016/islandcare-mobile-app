@@ -150,12 +150,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
         currentMapList.add(widget.educations![i]['current']);
         educationApiList.add(widget.educations![i]);
       }
-      instituteMapList = instituteMapList.toSet().toList();
-      majorMapList = majorMapList.toSet().toList();
-      startDateMapList = startDateMapList.toSet().toList();
-      endDateMapList = endDateMapList.toSet().toList();
-      currentMapList = currentMapList.toSet().toList();
-      educationApiList = educationApiList.toSet().toList();
+      // instituteMapList = instituteMapList.toList();
+      // majorMapList = majorMapList.toList();
+      // startDateMapList = startDateMapList.toList();
+      // endDateMapList = endDateMapList.toList();
+      // currentMapList = currentMapList.toList();
+      // educationApiList = educationApiList.toList();
     }
     validationErrors = {
       "valid_driver_license": {"status": false, "verify": widget.validDriverLicenseVerify == true, "error": "Valid Driver License is Required."},
@@ -476,7 +476,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
       'hourly_rate': hourlyController.text.trim().toString(),
       'availability': availabilityController.text.trim().toString(),
       'additional_service[]': selectedAdditionalService,
-      // 'service': jsonEncode(List<dynamic>.from(selectedAdditionalService.map((x) => {"value": x}))),
       "avatar": imageFileDio == null ? '' : await MultipartFile.fromFile(imageFileDio!.path),
       "institute_name[]": instituteMapList,
       "start_date[]": startDateMapList,
@@ -537,12 +536,6 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
       selectedArea.remove(item);
     });
   }
-
-  // setSelectedArea(value) {
-  //   setState(() {
-  //     selectedArea = value;
-  //   });
-  // }
 
   List requireDocument = [];
 
@@ -668,6 +661,7 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
 
   @override
   Widget build(BuildContext context) {
+    // print(startDateMapList);
     return Scaffold(
       backgroundColor: CustomColors.loginBg,
       appBar: AppBar(
@@ -744,6 +738,12 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                 height: 100,
                                                 fit: BoxFit.fitWidth,
                                                 image: NetworkImage("${AppUrl.webStorageUrl}/${widget.avatar}"),
+                                                errorBuilder: (context, error, stackTrace) {
+                                                  return const Icon(
+                                                    Icons.info_rounded,
+                                                    color: Colors.white,
+                                                  );
+                                                },
                                               ),
                                             )
                                           : const Text("Upload"),
@@ -1875,7 +1875,11 @@ class _ProfileGiverPendingEditState extends State<ProfileGiverPendingEdit> {
                                                   toController.text = '';
                                                   instituteMapList.add(institute);
                                                   majorMapList.add(major);
-                                                  startDateMapList.add(from);
+                                                  if (from.isEmpty) {
+                                                    startDateMapList.add("");
+                                                  } else {
+                                                    startDateMapList.add(from);
+                                                  }
                                                   endDateMapList.add(to);
                                                   currentMapList.add(isPeriodSeleted);
                                                   educationApiList.add(

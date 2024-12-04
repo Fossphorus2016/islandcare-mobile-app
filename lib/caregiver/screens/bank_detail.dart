@@ -396,9 +396,7 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
                                                       ),
                                                     ),
                                                   ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
+                                                  const SizedBox(height: 10),
                                                   Container(
                                                     decoration: BoxDecoration(
                                                       borderRadius: const BorderRadius.only(
@@ -428,6 +426,7 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
                                                       textAlignVertical: TextAlignVertical.bottom,
                                                       maxLines: 1,
                                                       inputFormatters: [
+                                                        FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
                                                         LengthLimitingTextInputFormatter(20),
                                                       ],
                                                       decoration: InputDecoration(
@@ -557,7 +556,7 @@ class _GiverBankDetailsState extends State<GiverBankDetails> {
                       BankDetail bank = filteredList![index];
                       return Container(
                         width: MediaQuery.of(context).size.width,
-                        height: bank.selected == 1 ? 220 : 200,
+                        // height: bank.selected == 1 ? 220 : 200,
                         padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                         margin: const EdgeInsets.symmetric(vertical: 05),
                         decoration: BoxDecoration(
