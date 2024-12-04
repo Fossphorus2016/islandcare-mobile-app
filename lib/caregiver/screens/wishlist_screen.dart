@@ -12,39 +12,39 @@ class WishlistGiverScreen extends StatefulWidget {
 class _WishlistGiverScreenState extends State<WishlistGiverScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: CustomColors.primaryColor,
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xffFFFFFF),
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(15, 0, 0, 0),
-                      blurRadius: 4,
-                      spreadRadius: 4,
-                      offset: Offset(2, 2), // Shadow position
-                    ),
-                  ],
-                ),
-                child: const CircleAvatar(
-                  radius: 20,
-                  backgroundImage: AssetImage(
-                    "assets/images/category.png",
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: CustomColors.primaryColor,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xffFFFFFF),
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(15, 0, 0, 0),
+                    blurRadius: 4,
+                    spreadRadius: 4,
+                    offset: Offset(2, 2), // Shadow position
                   ),
+                ],
+              ),
+              child: const CircleAvatar(
+                radius: 20,
+                backgroundImage: AssetImage(
+                  "assets/images/category.png",
                 ),
               ),
-            )
-          ],
-        ),
-        drawer: const DrawerGiverWidget(),
-        body: SingleChildScrollView(
+            ),
+          )
+        ],
+      ),
+      drawer: const DrawerGiverWidget(),
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

@@ -13,38 +13,38 @@ class OnBoardScreen extends StatefulWidget {
 class _OnBoardScreenState extends State<OnBoardScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 8),
-          child: GestureDetector(
-            onTap: () {
-              navigationService.push(RoutesName.login);
-            },
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 54,
-              decoration: BoxDecoration(
-                color: CustomColors.primaryColor,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Center(
-                child: Text(
-                  "Login",
-                  style: TextStyle(
-                    color: CustomColors.white,
-                    fontFamily: "Rubik",
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 18,
-                  ),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 17, vertical: 8),
+        child: GestureDetector(
+          onTap: () {
+            navigationService.push(RoutesName.login);
+          },
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: 54,
+            decoration: BoxDecoration(
+              color: CustomColors.primaryColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Text(
+                "Login",
+                style: TextStyle(
+                  color: CustomColors.white,
+                  fontFamily: "Rubik",
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18,
                 ),
               ),
             ),
           ),
         ),
-        body: SizedBox(
+      ),
+      body: SafeArea(
+        child: SizedBox(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: Column(

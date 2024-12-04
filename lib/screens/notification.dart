@@ -130,201 +130,204 @@ class _NotificationScreenState extends State<NotificationScreen> {
       }
     }
 
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0xffffffff),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      offset: Offset(2, 2),
-                      spreadRadius: 1,
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: CustomColors.primaryColor,
-                    size: 18,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          title: Text(
-            "Notifications",
-            style: TextStyle(
-              color: CustomColors.primaryText,
-              fontSize: 22,
-              fontFamily: "Rubik",
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 05),
-              child: PopupMenuButton(
-                position: PopupMenuPosition.under,
-                icon: const Icon(
-                  Icons.more_vert_rounded,
-                  color: Colors.black,
-                ),
-                onSelected: (value) async {
-                  if (value == 1) {
-                    try {
-                      var userToken = await storageService.readSecureStorage('userToken');
-
-                      var resp = await getRequesthandler(
-                        url: NotificationUrl.notificationMarkRead,
-                        token: userToken,
-                      );
-                      if (resp != null && resp.statusCode == 200) {
-                        Provider.of<NotificationProvider>(context, listen: false).getNotifications();
-                      }
-                    } catch (error) {
-                      showErrorToast("something went wrong please try again later");
-                    }
-                  } else if (value == 2) {
-                    var allNotification = Provider.of<NotificationProvider>(context, listen: false).allNotifications;
-
-                    List allRead = allNotification.where((item) => item['is_read'] == 1).toList();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => AllReadNotificationScreen(
-                          readNotification: allRead,
-                        ),
+    return Consumer<NotificationProvider>(
+      builder: (context, provider, child) {
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            automaticallyImplyLeading: false,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(13.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffffffff),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromARGB(30, 0, 0, 0),
+                        offset: Offset(2, 2),
+                        spreadRadius: 1,
+                        blurRadius: 7,
                       ),
-                    );
-                  }
-                },
-                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                  PopupMenuItem(
-                    value: 1,
-                    onTap: () async {},
-                    child: const Text('Mark All Read'),
+                    ],
                   ),
-                  PopupMenuItem(
-                    value: 2,
-                    onTap: () {},
-                    child: const Text('See All Read'),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: CustomColors.primaryColor,
+                      size: 18,
+                    ),
                   ),
-                ],
+                ),
               ),
             ),
-          ],
-        ),
-        body: SafeArea(
-          child: isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : RefreshIndicator(
-                  onRefresh: () async {
-                    Provider.of<NotificationProvider>(context, listen: false).getNotifications();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: Consumer<NotificationProvider>(
-                            builder: (context, provider, child) {
-                              return ListView.builder(
-                                itemCount: provider.allNotifications.length,
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: InkWell(
-                                      onTap: () {
-                                        gotoScreen(provider.allNotifications[index]['type'], provider.allNotifications[index]['action_id']);
-                                      },
-                                      child: Container(
-                                        height: 70,
-                                        padding: const EdgeInsets.all(5.0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          border: Border.all(
-                                            width: 1,
-                                            color: Colors.grey.shade200,
+            title: Text(
+              "Notifications",
+              style: TextStyle(
+                color: CustomColors.primaryText,
+                fontSize: 22,
+                fontFamily: "Rubik",
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            actions: provider.allNotifications.isNotEmpty
+                ? [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 05),
+                      child: PopupMenuButton(
+                        position: PopupMenuPosition.under,
+                        icon: const Icon(
+                          Icons.more_vert_rounded,
+                          color: Colors.black,
+                        ),
+                        onSelected: (value) async {
+                          if (value == 1) {
+                            try {
+                              var userToken = await storageService.readSecureStorage('userToken');
+
+                              var resp = await getRequesthandler(
+                                url: NotificationUrl.notificationMarkRead,
+                                token: userToken,
+                              );
+                              if (resp != null && resp.statusCode == 200) {
+                                Provider.of<NotificationProvider>(context, listen: false).getNotifications();
+                              }
+                            } catch (error) {
+                              showErrorToast("something went wrong please try again later");
+                            }
+                          } else if (value == 2) {
+                            var allNotification =
+                                Provider.of<NotificationProvider>(context, listen: false).allNotifications;
+
+                            List allRead = allNotification.where((item) => item['is_read'] == 1).toList();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AllReadNotificationScreen(
+                                  readNotification: allRead,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                          PopupMenuItem(
+                            value: 1,
+                            onTap: () async {},
+                            child: const Text('Mark all as Read'),
+                          ),
+                          PopupMenuItem(
+                            value: 2,
+                            onTap: () {},
+                            child: const Text('See All Read'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]
+                : null,
+          ),
+          body: SafeArea(
+            child: isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () async {
+                      Provider.of<NotificationProvider>(context, listen: false).getNotifications();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          Expanded(
+                            child: ListView.builder(
+                              itemCount: provider.allNotifications.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      gotoScreen(provider.allNotifications[index]['type'],
+                                          provider.allNotifications[index]['action_id']);
+                                    },
+                                    child: Container(
+                                      height: 70,
+                                      padding: const EdgeInsets.all(5.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                          width: 1,
+                                          color: Colors.grey.shade200,
+                                        ),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.circular(50),
+                                              child: provider.allNotifications[index]['users']['avatar'] == null
+                                                  ? Container(
+                                                      width: 50,
+                                                      // height: 50,
+                                                      // color: CustomColors.primaryColor,
+                                                      // child: Center(
+                                                      //   child: Text(
+                                                      //     "${provider.allNotifications[index]['users']['first_name'][0].toString().toUpperCase()} ${provider.allNotifications[index]['users']['last_name'][0].toString().toUpperCase()}",
+                                                      //     style: const TextStyle(
+                                                      //       fontSize: 20,
+                                                      //       color: Colors.white,
+                                                      //     ),
+                                                      //   ),
+                                                      // ),
+                                                    )
+                                                  : CachedNetworkImage(
+                                                      height: 50,
+                                                      width: 50,
+                                                      fit: BoxFit.cover,
+                                                      alignment: Alignment.topCenter,
+                                                      imageUrl:
+                                                          "${AppUrl.webStorageUrl}/${provider.allNotifications[index]['users']['avatar']}",
+                                                      placeholder: (context, url) => const CircularProgressIndicator(),
+                                                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                                                    ),
+                                            ),
                                           ),
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            SizedBox(
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(50),
-                                                child: provider.allNotifications[index]['users']['avatar'] == null
-                                                    ? Container(
-                                                        width: 50,
-                                                        // height: 50,
-                                                        // color: CustomColors.primaryColor,
-                                                        // child: Center(
-                                                        //   child: Text(
-                                                        //     "${provider.allNotifications[index]['users']['first_name'][0].toString().toUpperCase()} ${provider.allNotifications[index]['users']['last_name'][0].toString().toUpperCase()}",
-                                                        //     style: const TextStyle(
-                                                        //       fontSize: 20,
-                                                        //       color: Colors.white,
-                                                        //     ),
-                                                        //   ),
-                                                        // ),
-                                                      )
-                                                    : CachedNetworkImage(
-                                                        height: 50,
-                                                        width: 50,
-                                                        fit: BoxFit.cover,
-                                                        alignment: Alignment.topCenter,
-                                                        imageUrl: "${AppUrl.webStorageUrl}/${provider.allNotifications[index]['users']['avatar']}",
-                                                        placeholder: (context, url) => const CircularProgressIndicator(),
-                                                        errorWidget: (context, url, error) => const Icon(Icons.error),
-                                                      ),
-                                              ),
+                                          const SizedBox(width: 05),
+                                          Expanded(
+                                            child: Text(
+                                              provider.allNotifications[index]['message'].toString(),
+                                              maxLines: 3,
+                                              overflow: TextOverflow.clip,
                                             ),
-                                            const SizedBox(width: 05),
-                                            Expanded(
-                                              child: Text(
-                                                provider.allNotifications[index]['message'].toString(),
-                                                maxLines: 3,
-                                                overflow: TextOverflow.clip,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  );
-                                },
-                              );
-                            },
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
-                ),
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -19,79 +19,79 @@ class _RecieverAvailabilityScreenState extends State<RecieverAvailabilityScreen>
     double baseWidth = 360;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: CustomColors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      offset: Offset(2, 2),
-                      spreadRadius: 1,
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: CustomColors.primaryColor,
-                    size: 18,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(13.0),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: CustomColors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(30, 0, 0, 0),
+                    offset: Offset(2, 2),
+                    spreadRadius: 1,
+                    blurRadius: 7,
                   ),
-                ),
+                ],
               ),
-            ),
-          ),
-          title: Text(
-            "Availability",
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Rubik",
-              color: CustomColors.primaryText,
-            ),
-          ),
-        ),
-        bottomNavigationBar: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
-          child: Container(
-            height: 54,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-                border: Border.all(
-                  width: 1.5,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
                   color: CustomColors.primaryColor,
-                ),
-                borderRadius: BorderRadius.circular(6)),
-            child: Center(
-              child: Text(
-                "Contact",
-                style: TextStyle(
-                  fontFamily: "Rubik",
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: CustomColors.primaryColor,
+                  size: 18,
                 ),
               ),
             ),
           ),
         ),
-        body: SingleChildScrollView(
+        title: Text(
+          "Availability",
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Rubik",
+            color: CustomColors.primaryText,
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6),
+        child: Container(
+          height: 54,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              border: Border.all(
+                width: 1.5,
+                color: CustomColors.primaryColor,
+              ),
+              borderRadius: BorderRadius.circular(6)),
+          child: Center(
+            child: Text(
+              "Contact",
+              style: TextStyle(
+                fontFamily: "Rubik",
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: CustomColors.primaryColor,
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Container(
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -295,7 +295,9 @@ class _RecieverAvailabilityScreenState extends State<RecieverAvailabilityScreen>
                       child: Container(
                         margin: const EdgeInsets.only(right: 10),
                         decoration: BoxDecoration(
-                          color: selectedTimeIndex == index ? CustomColors.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                          color: selectedTimeIndex == index
+                              ? CustomColors.primaryColor
+                              : const Color.fromRGBO(14, 190, 127, 0.08),
                           border: Border.all(
                             width: .5,
                             color: const Color.fromRGBO(103, 114, 148, 0.1),
@@ -358,7 +360,9 @@ class _RecieverAvailabilityScreenState extends State<RecieverAvailabilityScreen>
                       child: Container(
                         margin: const EdgeInsets.only(right: 10),
                         decoration: BoxDecoration(
-                          color: selectedEveningTimeIndex == index ? CustomColors.primaryColor : const Color.fromRGBO(14, 190, 127, 0.08),
+                          color: selectedEveningTimeIndex == index
+                              ? CustomColors.primaryColor
+                              : const Color.fromRGBO(14, 190, 127, 0.08),
                           border: Border.all(
                             width: .5,
                             color: const Color.fromRGBO(103, 114, 148, 0.1),

@@ -58,7 +58,7 @@ Future<Response?> getRequesthandler({required String url, String? token, FormDat
     }
   } else {
     showNetworkErrorToast("No internet connected");
-    navigationService.pushNamedAndRemoveUntil(RoutesName.login);
+    // navigationService.pushNamedAndRemoveUntil(RoutesName.login);
     return Response(
       statusCode: 400,
       data: {"message": "No Internet Connected"},
@@ -109,7 +109,9 @@ Future<Response?> postRequesthandler({required String url, String? token, FormDa
           return Response(
             statusCode: 422,
             statusMessage: "Validation Error",
-            requestOptions: RequestOptions(data: {"error": "Validation Error"},),
+            requestOptions: RequestOptions(
+              data: {"error": "Validation Error"},
+            ),
           );
         }
       } else if (err.response?.statusCode == 400) {
@@ -135,7 +137,7 @@ Future<Response?> postRequesthandler({required String url, String? token, FormDa
     }
   } else {
     showNetworkErrorToast("No Internet Connected");
-    navigationService.pushNamedAndRemoveUntil(RoutesName.login);
+    // navigationService.pushNamedAndRemoveUntil(RoutesName.login);
     return Response(
       statusCode: 400,
       data: {"message": "No Internet Connected"},

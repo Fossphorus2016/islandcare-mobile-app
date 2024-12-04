@@ -101,55 +101,55 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
   @override
   Widget build(BuildContext context) {
     return Consumer<GiverMyJobsProvider>(builder: (context, provider, __) {
-      return SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: false,
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            automaticallyImplyLeading: false,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(13.0),
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffffffff),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(30, 0, 0, 0),
-                        offset: Offset(2, 2),
-                        spreadRadius: 1,
-                        blurRadius: 7,
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: CustomColors.primaryColor,
-                      size: 18,
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: const Color(0xffffffff),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(30, 0, 0, 0),
+                      offset: Offset(2, 2),
+                      spreadRadius: 1,
+                      blurRadius: 7,
                     ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: CustomColors.primaryColor,
+                    size: 18,
                   ),
                 ),
               ),
             ),
-            title: Text(
-              "My Jobs",
-              style: TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w600,
-                fontFamily: "Rubik",
-                color: CustomColors.primaryText,
-              ),
+          ),
+          title: Text(
+            "My Jobs",
+            style: TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Rubik",
+              color: CustomColors.primaryText,
             ),
           ),
-          body: provider.isLoading
+        ),
+        body: SafeArea(
+          child: provider.isLoading
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
@@ -245,14 +245,16 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                                     },
                                                     maxLines: 1,
                                                     textAlignVertical: TextAlignVertical.bottom,
-                                                    style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
+                                                    style: const TextStyle(
+                                                        fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
                                                     decoration: InputDecoration(
                                                       hintText: "Search...",
                                                       fillColor: CustomColors.white,
                                                       focusColor: CustomColors.white,
                                                       hoverColor: CustomColors.white,
                                                       filled: true,
-                                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
+                                                      border:
+                                                          OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
                                                       focusedBorder: OutlineInputBorder(
                                                         borderSide: BorderSide(color: CustomColors.white, width: 2.0),
                                                         borderRadius: BorderRadius.circular(4.0),
@@ -271,7 +273,9 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                                   showModalBottomSheet(
                                                     isScrollControlled: true,
                                                     shape: const RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
+                                                      borderRadius: BorderRadius.only(
+                                                          topLeft: Radius.circular(30.0),
+                                                          topRight: Radius.circular(30.0)),
                                                     ),
                                                     context: context,
                                                     backgroundColor: Colors.white,
@@ -282,7 +286,8 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                                         builder: (BuildContext context, StateSetter setState) {
                                                           return SingleChildScrollView(
                                                             child: Padding(
-                                                              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                              padding: EdgeInsets.only(
+                                                                  bottom: MediaQuery.of(context).viewInsets.bottom),
                                                               child: Container(
                                                                 padding: const EdgeInsets.symmetric(horizontal: 25),
                                                                 child: Column(
@@ -357,14 +362,18 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                                                                   onTap: () async {
                                                                                     var tt = await showDatePicker(
                                                                                       context: context,
-                                                                                      initialEntryMode: DatePickerEntryMode.calendarOnly,
+                                                                                      initialEntryMode:
+                                                                                          DatePickerEntryMode
+                                                                                              .calendarOnly,
                                                                                       firstDate: DateTime(2020, 1, 1),
                                                                                       lastDate: DateTime.now(),
                                                                                     );
 
                                                                                     if (tt != null) {
                                                                                       setState(() {
-                                                                                        startTime = DateFormat('yyyy-MM-dd').format(tt);
+                                                                                        startTime =
+                                                                                            DateFormat('yyyy-MM-dd')
+                                                                                                .format(tt);
                                                                                       });
                                                                                     }
                                                                                   },
@@ -373,7 +382,9 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                                                                     width: double.infinity,
                                                                                     alignment: Alignment.centerLeft,
                                                                                     child: Text(
-                                                                                      startTime != null ? startTime.toString() : "Start Date",
+                                                                                      startTime != null
+                                                                                          ? startTime.toString()
+                                                                                          : "Start Date",
                                                                                     ),
                                                                                   ),
                                                                                 ),
@@ -421,23 +432,30 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                                                                   onTap: () async {
                                                                                     var tt = await showDatePicker(
                                                                                       context: context,
-                                                                                      initialEntryMode: DatePickerEntryMode.calendarOnly,
+                                                                                      initialEntryMode:
+                                                                                          DatePickerEntryMode
+                                                                                              .calendarOnly,
                                                                                       firstDate: DateTime(2020, 1, 1),
                                                                                       lastDate: DateTime.now(),
                                                                                     );
                                                                                     if (tt != null) {
                                                                                       setState(() {
-                                                                                        endTime = DateFormat('yyyy-MM-dd').format(tt);
+                                                                                        endTime =
+                                                                                            DateFormat('yyyy-MM-dd')
+                                                                                                .format(tt);
                                                                                       });
                                                                                     }
                                                                                   },
                                                                                   child: Container(
                                                                                     height: 50,
                                                                                     width: double.infinity,
-                                                                                    decoration: const BoxDecoration(color: Colors.white),
+                                                                                    decoration: const BoxDecoration(
+                                                                                        color: Colors.white),
                                                                                     alignment: Alignment.centerLeft,
                                                                                     child: Text(
-                                                                                      endTime != null ? endTime.toString() : "End Date",
+                                                                                      endTime != null
+                                                                                          ? endTime.toString()
+                                                                                          : "End Date",
                                                                                     ),
                                                                                   ),
                                                                                 ),
@@ -449,10 +467,13 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                                                         GestureDetector(
                                                                           onTap: () {
                                                                             if (startTime != null && endTime != null) {
-                                                                              provider.setFilterByTime(DateTime.parse(startTime!), DateTime.parse(endTime!));
+                                                                              provider.setFilterByTime(
+                                                                                  DateTime.parse(startTime!),
+                                                                                  DateTime.parse(endTime!));
                                                                               Navigator.pop(context);
                                                                             } else {
-                                                                              showErrorToast("Please select start and end date.");
+                                                                              showErrorToast(
+                                                                                  "Please select start and end date.");
                                                                             }
                                                                           },
                                                                           child: Container(
@@ -518,7 +539,8 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                                 },
                                                 style: ButtonStyle(
                                                   shape: WidgetStateProperty.resolveWith(
-                                                    (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)),
+                                                    (states) =>
+                                                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)),
                                                   ),
                                                   backgroundColor: WidgetStateProperty.resolveWith(
                                                     (states) => ServiceRecieverColor.redButton,
@@ -720,10 +742,14 @@ class _ServiceProviderJobsState extends State<ServiceProviderJobs> {
                                   provider.handlePageChange(provider.currentPageIndex + 1);
                                 }
                               : null,
-                          previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
+                          previousPage: provider.currentPageIndex > 0
+                              ? () => provider.handlePageChange(provider.currentPageIndex - 1)
+                              : null,
                           gotoPage: provider.handlePageChange,
                           gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
-                          gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1 ? () => provider.handlePageChange(provider.totalRowsCount - 1) : null,
+                          gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
+                              ? () => provider.handlePageChange(provider.totalRowsCount - 1)
+                              : null,
                           currentPageIndex: provider.currentPageIndex,
                           totalRowsCount: provider.totalRowsCount,
                         ),
@@ -795,7 +821,8 @@ class GiverMyJobsProvider extends ChangeNotifier {
 
   setFilter(String searchText) {
     var filterData = allJobs!.where((element) {
-      if (element.jobTitle.toString().toLowerCase().contains(searchText.toLowerCase()) || element.address.toString().toLowerCase().contains(searchText.toLowerCase())) {
+      if (element.jobTitle.toString().toLowerCase().contains(searchText.toLowerCase()) ||
+          element.address.toString().toLowerCase().contains(searchText.toLowerCase())) {
         return true;
       } else {
         return false;

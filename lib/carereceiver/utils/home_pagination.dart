@@ -1,8 +1,157 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:island_app/carereceiver/models/service_receiver_dashboard_model.dart';
+import 'package:island_app/utils/app_url.dart';
+import 'package:island_app/utils/functions.dart';
+import 'package:island_app/utils/http_handlers.dart';
 
 class HomePaginationProvider extends ChangeNotifier {
+  // List favouriteListTwo = [];
+  var favouriteList = [];
+  var ratingList = [];
+  List<Map>? data = [
+    {
+      "id": "1",
+      "name": "Senior Care",
+    },
+    {
+      "id": "2",
+      "name": "Pet Care",
+    },
+    {
+      "id": "3",
+      "name": "House Keeping",
+    },
+    {
+      "id": "5",
+      "name": "Child Care",
+    },
+    {
+      "id": "4",
+      "name": "School Support",
+    },
+  ];
+  List<Map>? area = [
+    {
+      "id": 0,
+      "name": "East",
+    },
+    {
+      "id": 1,
+      "name": "Central",
+    },
+    {
+      "id": 2,
+      "name": "West",
+    },
+    {
+      "id": 3,
+      "name": "No Preference",
+    },
+  ];
+  List<Map>? rate = [
+    {
+      "id": 0,
+      "name": "\$17-\$25",
+    },
+    {
+      "id": 1,
+      "name": "\$25-\$50",
+    },
+    {
+      "id": 2,
+      "name": "\$50-\$100",
+    },
+    {
+      "id": 3,
+      "name": "\$100+",
+    },
+    {
+      "id": 4,
+      "name": "No Prefrences",
+    },
+  ];
+  bool showFoundText = false;
+  String searchServiceName = "";
+  Future<void> fetchReceiverDashboardModel(
+      {required String? name, required String? serviceType, required String? location, required String? rate}) async {
+    var token = await getToken();
+    final response = await getRequesthandler(
+      url:
+          '${CareReceiverURl.serviceReceiverDashboard}?name=${name ?? ""}&serviceType=${serviceType ?? ""}&location=${location ?? ""}&rate=${rate ?? ""}',
+      token: token,
+    );
+
+    if (response != null && response.statusCode == 200 && response.data["status"] == true) {
+      if (response.data["data"] != null) {
+        var data = response.data["data"];
+        var listOfFavourites = data['favourites'] as List;
+        favouriteList = listOfFavourites;
+        searchServiceName = data["serviceName"];
+        showFoundText = true;
+        var modelData = ServiceReceiverDashboardModel.fromJson(response.data["data"]);
+        setPaginationList(modelData.data);
+        notifyListeners();
+      }
+    } else {
+      showErrorToast("Failed to load Dashboard");
+    }
+  }
+
+  fetchReceiverDashboardModelInInitCall() async {
+    var token = await getToken();
+
+    final response = await getRequesthandler(
+      url: '${CareReceiverURl.serviceReceiverDashboard}?service=&search=&area=&rate=',
+      token: token,
+    );
+    if (response != null && response.statusCode == 200 && response.data["status"] == true) {
+      if (response.data["data"] != null) {
+        var data = response.data["data"];
+        // var listOfProviders = data['providers'] as List;
+        var listOfFavourites = data['favourites'] as List;
+
+        // providerList = listOfProviders;
+        favouriteList = listOfFavourites;
+        // foundProviders = listOfProviders;
+        showFoundText = false;
+        var modelData = ServiceReceiverDashboardModel.fromJson(response.data["data"]);
+
+        // Double-check if widget is still mounted before using context
+        setPaginationList(modelData.data);
+        notifyListeners();
+      }
+    } else {
+      showErrorToast("Failed to load Dashboard");
+    }
+  }
+
+  // Favourite API
+  Future<void> favourited(providerId) async {
+    var url = '${CareReceiverURl.serviceReceiverAddFavourite}?favourite_id=$providerId';
+    var token = await getToken();
+    var response = await postRequesthandler(
+      url: url,
+      token: token,
+    );
+    if (response != null && response.statusCode == 200) {
+      if (response.data["data"].toString() == "1") {
+        favouriteList.add(providerId);
+        showSuccessToast("Added To Favourite");
+      } else {
+        favouriteList.remove(providerId);
+        showErrorToast("Remove from favourite");
+      }
+    } else {
+      showSuccessToast("Favourite Is Not Added");
+    }
+    notifyListeners();
+  }
+
+  // Search bar
+  // List foundProviders = [];
+  List findProviders = [];
   setDefault() {
     isLoading = true;
     dataList = [];

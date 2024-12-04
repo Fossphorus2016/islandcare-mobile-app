@@ -68,7 +68,8 @@ class Datum {
         lastName: json["user"]["last_name"],
         email: json["user"]["email"],
         phone: json["user"]["phone"],
-        emailVerifiedAt: json["user"]["email_verified_at"] == null ? null : DateTime.parse(json["user"]["email_verified_at"]),
+        emailVerifiedAt:
+            json["user"]["email_verified_at"] == null ? null : DateTime.parse(json["user"]["email_verified_at"]),
         providerId: json["user"]["provider_id"],
         avatar: json["user"]["avatar"],
         role: json["user"]["role"],
@@ -78,7 +79,8 @@ class Datum {
         deletedAt: json["user"]["deleted_at"],
         userdetailprovider: json["user"]["userdetailprovider"],
         userdetail: json["user"]["userdetail"] == null ? null : Userdetail.fromJson(json['user']["userdetail"]),
-        userSubscriptionDetail: json['subscription'] == null ? null : UserSubscriptionDetail.fromJson(json['subscription']),
+        userSubscriptionDetail:
+            json['subscription'] == null ? null : UserSubscriptionDetail.fromJson(json['subscription']),
       );
 
   Map<String, dynamic> toJson() => {

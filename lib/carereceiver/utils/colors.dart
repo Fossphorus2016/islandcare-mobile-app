@@ -2,6 +2,7 @@ import 'package:flutter/animation.dart';
 
 class CustomColors {
   static Color primaryColor = const Color(0xff55CE86);
+  static Color statusBarColor = const Color.fromARGB(196, 168, 255, 203);
   static Color primaryLight = const Color.fromARGB(111, 127, 190, 144);
   static Color myJobDetail = const Color(0xffBFDBD1);
   static Color primaryText = const Color(0xff333333);

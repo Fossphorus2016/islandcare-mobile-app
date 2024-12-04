@@ -34,55 +34,55 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer<GiverReviewsProvider>(builder: (context, provider, __) {
-      return SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: false,
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            automaticallyImplyLeading: false,
-            leading: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(13.0),
-                child: Container(
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffffffff),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color.fromARGB(30, 0, 0, 0),
-                        offset: Offset(2, 2),
-                        spreadRadius: 1,
-                        blurRadius: 7,
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: Icon(
-                      Icons.arrow_back_ios,
-                      color: CustomColors.primaryColor,
-                      size: 18,
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: const Color(0xffffffff),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(30, 0, 0, 0),
+                      offset: Offset(2, 2),
+                      spreadRadius: 1,
+                      blurRadius: 7,
                     ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: CustomColors.primaryColor,
+                    size: 18,
                   ),
                 ),
               ),
             ),
-            title: Text(
-              "My Reviews",
-              style: TextStyle(
-                fontSize: 19,
-                fontWeight: FontWeight.w600,
-                fontFamily: "Rubik",
-                color: CustomColors.primaryText,
-              ),
+          ),
+          title: Text(
+            "My Reviews",
+            style: TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Rubik",
+              color: CustomColors.primaryText,
             ),
           ),
-          body: provider.isLoading
+        ),
+        body: SafeArea(
+          child: provider.isLoading
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
@@ -140,7 +140,9 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                                                 showDialog(
                                                   context: context,
                                                   builder: (context) => AlertDialog(
-                                                    title: Center(child: Text('${review.receiverRating!.firstName} ${review.receiverRating!.lastName}')),
+                                                    title: Center(
+                                                        child: Text(
+                                                            '${review.receiverRating!.firstName} ${review.receiverRating!.lastName}')),
                                                     alignment: Alignment.center,
                                                     content: Column(
                                                       mainAxisSize: MainAxisSize.min,
@@ -160,7 +162,9 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                                                           onRatingUpdate: (rating) {},
                                                         ),
                                                         Text(
-                                                          review.comment.toString() == "null" ? "Not Available" : review.comment.toString(),
+                                                          review.comment.toString() == "null"
+                                                              ? "Not Available"
+                                                              : review.comment.toString(),
                                                           maxLines: 20,
                                                           softWrap: true,
                                                           style: TextStyle(
@@ -202,7 +206,8 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                                                         overflow: TextOverflow.ellipsis,
                                                       ),
                                                     ],
-                                                    if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                                    if (ResponsiveBreakpoints.of(context).isTablet ||
+                                                        ResponsiveBreakpoints.of(context).isDesktop) ...[
                                                       RatingBar.builder(
                                                         initialRating: review.rating!.toDouble(),
                                                         minRating: 1,
@@ -253,10 +258,14 @@ class _ProviderReviewsScreenState extends State<ProviderReviewsScreen> {
                                   provider.handlePageChange(provider.currentPageIndex + 1);
                                 }
                               : null,
-                          previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
+                          previousPage: provider.currentPageIndex > 0
+                              ? () => provider.handlePageChange(provider.currentPageIndex - 1)
+                              : null,
                           gotoPage: provider.handlePageChange,
                           gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
-                          gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1 ? () => provider.handlePageChange(provider.totalRowsCount - 1) : null,
+                          gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
+                              ? () => provider.handlePageChange(provider.totalRowsCount - 1)
+                              : null,
                           currentPageIndex: provider.currentPageIndex,
                           totalRowsCount: provider.totalRowsCount,
                         ),

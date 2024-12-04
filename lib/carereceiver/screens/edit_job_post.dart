@@ -590,7 +590,10 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
       }
       seniorNameController.text = futureSeniorCareDetail!.job![0].seniorCare!.seniorName.toString();
       dobController.text = futureSeniorCareDetail!.job![0].seniorCare!.dob.toString();
-      medicalConditionController.text = futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition != null && futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition != "null" ? futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition : "";
+      medicalConditionController.text = futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition != null &&
+              futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition != "null"
+          ? futureSeniorCareDetail!.job![0].seniorCare!.medicalCondition
+          : "";
 
       if (futureSeniorCareDetail!.job![0].seniorCare!.bathing == 1) {
         isChecked = true;
@@ -648,7 +651,10 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         isChecked14 = true;
         grooming_hair_and_nail_trimming = "1";
       }
-      additionalInfoController.text = futureSeniorCareDetail!.job![0].additionalInfo != null && futureSeniorCareDetail!.job![0].additionalInfo != "null" ? futureSeniorCareDetail!.job![0].additionalInfo.toString() : "";
+      additionalInfoController.text = futureSeniorCareDetail!.job![0].additionalInfo != null &&
+              futureSeniorCareDetail!.job![0].additionalInfo != "null"
+          ? futureSeniorCareDetail!.job![0].additionalInfo.toString()
+          : "";
     } else if (widget.serviceId == "2") {
       // service id 2;
       // servicePetCare(context);
@@ -715,7 +721,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         sizeOfPetValue = "Large";
       }
 
-      if (futurePetCareDetailDashboard!.job![0].petCare!.temperament.toString().toLowerCase() == "friendly/socialized") {
+      if (futurePetCareDetailDashboard!.job![0].petCare!.temperament.toString().toLowerCase() ==
+          "friendly/socialized") {
         selectedTemperament = 0;
         otherGuarded = 0;
         temperamentValue = "Friendly/Socialized";
@@ -729,7 +736,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         selectedTemperament = 1;
         selectedGuarded = 0;
         temperamentValue = "With People";
-      } else if (futurePetCareDetailDashboard!.job![0].petCare!.temperament.toString().toLowerCase() == "with other animals") {
+      } else if (futurePetCareDetailDashboard!.job![0].petCare!.temperament.toString().toLowerCase() ==
+          "with other animals") {
         otherGuarded = 1;
         selectedTemperament = 1;
         selectedGuarded = 1;
@@ -759,7 +767,10 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         isChecked6 = true;
         boarding = "1";
       }
-      additionalInfoController.text = futurePetCareDetailDashboard!.job![0].additionalInfo != null && futurePetCareDetailDashboard!.job![0].additionalInfo != "null" ? futurePetCareDetailDashboard!.job![0].additionalInfo.toString() : "";
+      additionalInfoController.text = futurePetCareDetailDashboard!.job![0].additionalInfo != null &&
+              futurePetCareDetailDashboard!.job![0].additionalInfo != "null"
+          ? futurePetCareDetailDashboard!.job![0].additionalInfo.toString()
+          : "";
     } else if (widget.serviceId == "3") {
       // service id 3
 
@@ -833,7 +844,10 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         other = "1";
         otherFieldController.text = futureHouseKeepingDetailDashboard!.job![0].houseKeeping!.other.toString();
       }
-      additionalInfoController.text = futureHouseKeepingDetailDashboard!.job![0].additionalInfo != null && futureHouseKeepingDetailDashboard!.job![0].additionalInfo != "null" ? futureHouseKeepingDetailDashboard!.job![0].additionalInfo.toString() : "";
+      additionalInfoController.text = futureHouseKeepingDetailDashboard!.job![0].additionalInfo != null &&
+              futureHouseKeepingDetailDashboard!.job![0].additionalInfo != "null"
+          ? futureHouseKeepingDetailDashboard!.job![0].additionalInfo.toString()
+          : "";
     } else if (widget.serviceId == "4") {
       // Service Id 4
 
@@ -893,8 +907,12 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
         otherFieldController.text = futureSchoolSupportDetailDashboard!.job![0].learning!.assistanceInOther;
       }
       learningStyleController.text = futureSchoolSupportDetailDashboard!.job![0].learning!.learningStyle.toString();
-      learningChallengeController.text = futureSchoolSupportDetailDashboard!.job![0].learning!.learningChallenge.toString();
-      additionalInfoController.text = futureSchoolSupportDetailDashboard!.job![0].additionalInfo != null && futureSchoolSupportDetailDashboard!.job![0].additionalInfo != "null" ? futureSchoolSupportDetailDashboard!.job![0].additionalInfo.toString() : "";
+      learningChallengeController.text =
+          futureSchoolSupportDetailDashboard!.job![0].learning!.learningChallenge.toString();
+      additionalInfoController.text = futureSchoolSupportDetailDashboard!.job![0].additionalInfo != null &&
+              futureSchoolSupportDetailDashboard!.job![0].additionalInfo != "null"
+          ? futureSchoolSupportDetailDashboard!.job![0].additionalInfo.toString()
+          : "";
     } else if (widget.serviceId == "5") {
       // Service Id 5
 
@@ -965,66 +983,66 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
   @override
   Widget build(BuildContext context) {
     // print(futurePetCareDetailDashboard!.job![0].petCare!.temperament);
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0xffffffff),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      offset: Offset(2, 2),
-                      spreadRadius: 1,
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: ServiceRecieverColor.primaryColor,
-                    size: 18,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        automaticallyImplyLeading: false,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(13.0),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color(0xffffffff),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(30, 0, 0, 0),
+                    offset: Offset(2, 2),
+                    spreadRadius: 1,
+                    blurRadius: 7,
                   ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: ServiceRecieverColor.primaryColor,
+                  size: 18,
                 ),
               ),
             ),
           ),
-          title: Text(
-            (widget.serviceId == "1")
-                ? "Senior Care Job Post"
-                : (widget.serviceId == "2")
-                    ? "Pet Care Job Post"
-                    : (widget.serviceId == "3")
-                        ? "House Keeping Job Post"
-                        : (widget.serviceId == "4")
-                            ? "School Support Job Post"
-                            : (widget.serviceId == "5")
-                                ? "Child Care Job Post"
-                                : "Screen Not Found",
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Rubik",
-              color: CustomColors.primaryText,
-            ),
+        ),
+        title: Text(
+          (widget.serviceId == "1")
+              ? "Senior Care Job Post"
+              : (widget.serviceId == "2")
+                  ? "Pet Care Job Post"
+                  : (widget.serviceId == "3")
+                      ? "House Keeping Job Post"
+                      : (widget.serviceId == "4")
+                          ? "School Support Job Post"
+                          : (widget.serviceId == "5")
+                              ? "Child Care Job Post"
+                              : "Screen Not Found",
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Rubik",
+            color: CustomColors.primaryText,
           ),
         ),
-        body: SingleChildScrollView(
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
@@ -1293,7 +1311,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                 ),
                 buttonStyle: ButtonStyle(
                   alignment: Alignment.centerLeft,
-                  padding: MaterialStateProperty.resolveWith((states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
+                  padding: MaterialStateProperty.resolveWith(
+                      (states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10)),
                   shape: MaterialStateProperty.resolveWith(
                     (states) => RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -2372,7 +2391,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedCleaning == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2401,7 +2421,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedCleaning == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2451,7 +2472,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBedroom == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2480,7 +2502,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBedroom == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2512,7 +2535,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBedroom == 2 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2541,7 +2565,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBedroom == 3 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2575,7 +2600,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBathroom == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2604,7 +2630,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBathroom == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2636,7 +2663,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBathroom == 2 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2665,7 +2693,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBathroom == 3 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -3154,7 +3183,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedTemperament == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -3184,7 +3214,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedTemperament == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -3219,7 +3250,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                     });
                   },
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                    shape: MaterialStateProperty.resolveWith(
+                        (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => selectedGuarded == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                     ),
@@ -3248,7 +3280,8 @@ class _EditPostScheduleState extends State<EditPostSchedule> {
                     });
                   },
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                    shape: MaterialStateProperty.resolveWith(
+                        (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => selectedGuarded == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                     ),

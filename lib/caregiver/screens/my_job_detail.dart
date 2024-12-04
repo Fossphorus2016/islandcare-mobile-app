@@ -84,56 +84,56 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: CustomColors.loginBg,
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.white,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0xffffffff),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      offset: Offset(2, 2),
-                      spreadRadius: 1,
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: CustomColors.primaryColor,
-                    size: 18,
+    return Scaffold(
+      backgroundColor: CustomColors.loginBg,
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(13.0),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color(0xffffffff),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(30, 0, 0, 0),
+                    offset: Offset(2, 2),
+                    spreadRadius: 1,
+                    blurRadius: 7,
                   ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: CustomColors.primaryColor,
+                  size: 18,
                 ),
               ),
             ),
           ),
-          title: Text(
-            "Details",
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Rubik",
-              color: CustomColors.primaryText,
-            ),
+        ),
+        title: Text(
+          "Details",
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Rubik",
+            color: CustomColors.primaryText,
           ),
         ),
-        body: SingleChildScrollView(
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Column(
             children: [
               if (noDataFound == true) ...[
@@ -225,7 +225,9 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
             const SizedBox(height: 10),
             JobDetailTile(
               name: "Medical Condition",
-              title: job.seniorCare!.medicalCondition != null ? "Not Available" : job.seniorCare!.medicalCondition.toString(),
+              title: job.seniorCare!.medicalCondition != null
+                  ? "Not Available"
+                  : job.seniorCare!.medicalCondition.toString(),
             ),
             const SizedBox(height: 10),
             AssistanceContainer(
@@ -240,37 +242,57 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                   job.seniorCare!.feeding.toString() == "1" ? "feeding" : job.seniorCare!.feeding.toString(),
                 ],
                 if (job.seniorCare!.mealPreparation.toString() == "1") ...[
-                  job.seniorCare!.mealPreparation.toString() == "1" ? "mealPreparation" : job.seniorCare!.mealPreparation.toString(),
+                  job.seniorCare!.mealPreparation.toString() == "1"
+                      ? "mealPreparation"
+                      : job.seniorCare!.mealPreparation.toString(),
                 ],
                 if (job.seniorCare!.groceryShopping.toString() == "1") ...[
-                  job.seniorCare!.groceryShopping.toString() == "1" ? "groceryShopping" : job.seniorCare!.groceryShopping.toString(),
+                  job.seniorCare!.groceryShopping.toString() == "1"
+                      ? "groceryShopping"
+                      : job.seniorCare!.groceryShopping.toString(),
                 ],
                 if (job.seniorCare!.walking.toString() == "1") ...[
                   job.seniorCare!.walking.toString() == "1" ? "walking" : job.seniorCare!.walking.toString(),
                 ],
                 if (job.seniorCare!.bedTransfer.toString() == "1") ...[
-                  job.seniorCare!.bedTransfer.toString() == "1" ? "bedTransfer" : job.seniorCare!.bedTransfer.toString(),
+                  job.seniorCare!.bedTransfer.toString() == "1"
+                      ? "bedTransfer"
+                      : job.seniorCare!.bedTransfer.toString(),
                 ],
                 if (job.seniorCare!.lightCleaning.toString() == "1") ...[
-                  job.seniorCare!.lightCleaning.toString() == "1" ? "lightCleaning" : job.seniorCare!.lightCleaning.toString(),
+                  job.seniorCare!.lightCleaning.toString() == "1"
+                      ? "lightCleaning"
+                      : job.seniorCare!.lightCleaning.toString(),
                 ],
                 if (job.seniorCare!.companionship.toString() == "1") ...[
-                  job.seniorCare!.companionship.toString() == "1" ? "companionship" : job.seniorCare!.companionship.toString(),
+                  job.seniorCare!.companionship.toString() == "1"
+                      ? "companionship"
+                      : job.seniorCare!.companionship.toString(),
                 ],
                 if (job.seniorCare!.medicationAdministration.toString() == "1") ...[
-                  job.seniorCare!.medicationAdministration.toString() == "1" ? "medicationAdministration" : job.seniorCare!.medicationAdministration.toString(),
+                  job.seniorCare!.medicationAdministration.toString() == "1"
+                      ? "medicationAdministration"
+                      : job.seniorCare!.medicationAdministration.toString(),
                 ],
                 if (job.seniorCare!.dressingWoundCare.toString() == "1") ...[
-                  job.seniorCare!.dressingWoundCare.toString() == "1" ? "dressingWoundCare" : job.seniorCare!.dressingWoundCare.toString(),
+                  job.seniorCare!.dressingWoundCare.toString() == "1"
+                      ? "dressingWoundCare"
+                      : job.seniorCare!.dressingWoundCare.toString(),
                 ],
                 if (job.seniorCare!.bloodPressureMonetoring.toString() == "1") ...[
-                  job.seniorCare!.bloodPressureMonetoring.toString() == "1" ? "bloodPressureMonetoring" : job.seniorCare!.bloodPressureMonetoring.toString(),
+                  job.seniorCare!.bloodPressureMonetoring.toString() == "1"
+                      ? "bloodPressureMonetoring"
+                      : job.seniorCare!.bloodPressureMonetoring.toString(),
                 ],
                 if (job.seniorCare!.bloodSugarMonetoring.toString() == "1") ...[
-                  job.seniorCare!.bloodSugarMonetoring.toString() == "1" ? "bloodSugarMonetoring" : job.seniorCare!.bloodSugarMonetoring.toString(),
+                  job.seniorCare!.bloodSugarMonetoring.toString() == "1"
+                      ? "bloodSugarMonetoring"
+                      : job.seniorCare!.bloodSugarMonetoring.toString(),
                 ],
                 if (job.seniorCare!.groomingHairAndNailTrimming.toString() == "1") ...[
-                  job.seniorCare!.groomingHairAndNailTrimming.toString() == "1" ? "groomingHairAndNailTrimming" : job.seniorCare!.groomingHairAndNailTrimming.toString(),
+                  job.seniorCare!.groomingHairAndNailTrimming.toString() == "1"
+                      ? "groomingHairAndNailTrimming"
+                      : job.seniorCare!.groomingHairAndNailTrimming.toString(),
                 ],
               ],
             ),
@@ -362,7 +384,8 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                               Container(
                                 margin: const EdgeInsets.symmetric(horizontal: 3),
                                 padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                decoration: BoxDecoration(
+                                    color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
                                 child: Text(
                                   job.petCare!.walking.toString() == "1" ? "Walking" : job.petCare!.walking.toString(),
                                   style: TextStyle(
@@ -378,7 +401,8 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                               Container(
                                 margin: const EdgeInsets.symmetric(horizontal: 3),
                                 padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                decoration: BoxDecoration(
+                                    color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
                                 child: Text(
                                   job.petCare!.daycare.toString() == "1" ? "Day Care" : job.petCare!.daycare.toString(),
                                   style: TextStyle(
@@ -394,7 +418,8 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                               Container(
                                 margin: const EdgeInsets.symmetric(horizontal: 3),
                                 padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                decoration: BoxDecoration(
+                                    color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
                                 child: Text(
                                   job.petCare!.feeding.toString() == "1" ? "Feeding" : job.petCare!.feeding.toString(),
                                   style: TextStyle(
@@ -410,9 +435,12 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                               Container(
                                 margin: const EdgeInsets.symmetric(horizontal: 3),
                                 padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                decoration: BoxDecoration(
+                                    color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
                                 child: Text(
-                                  job.petCare!.socialization.toString() == "1" ? "Socialization" : job.petCare!.socialization.toString(),
+                                  job.petCare!.socialization.toString() == "1"
+                                      ? "Socialization"
+                                      : job.petCare!.socialization.toString(),
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontFamily: "Poppins",
@@ -426,9 +454,12 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                               Container(
                                 margin: const EdgeInsets.symmetric(horizontal: 3),
                                 padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                decoration: BoxDecoration(
+                                    color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
                                 child: Text(
-                                  job.petCare!.grooming.toString() == "1" ? "Grooming" : job.petCare!.grooming.toString(),
+                                  job.petCare!.grooming.toString() == "1"
+                                      ? "Grooming"
+                                      : job.petCare!.grooming.toString(),
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontFamily: "Poppins",
@@ -442,9 +473,12 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
                               Container(
                                 margin: const EdgeInsets.symmetric(horizontal: 3),
                                 padding: const EdgeInsets.all(4),
-                                decoration: BoxDecoration(color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
+                                decoration: BoxDecoration(
+                                    color: CustomColors.primaryLight, borderRadius: BorderRadius.circular(6)),
                                 child: Text(
-                                  job.petCare!.boarding.toString() == "1" ? "Boarding" : job.petCare!.boarding.toString(),
+                                  job.petCare!.boarding.toString() == "1"
+                                      ? "Boarding"
+                                      : job.petCare!.boarding.toString(),
                                   style: TextStyle(
                                     fontSize: 13,
                                     fontFamily: "Poppins",
@@ -502,7 +536,9 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
             const SizedBox(height: 10),
             JobDetailTile(
               name: "Cleaning Type",
-              title: job.houseKeeping!.cleaningType.toString() == "null" ? "Not Available" : job.houseKeeping!.cleaningType.toString(),
+              title: job.houseKeeping!.cleaningType.toString() == "null"
+                  ? "Not Available"
+                  : job.houseKeeping!.cleaningType.toString(),
             ),
             const SizedBox(height: 10),
             JobDetailTile(
@@ -527,7 +563,8 @@ class _ServiceProviderJobsDetailState extends State<ServiceProviderJobsDetail> {
             const SizedBox(height: 10),
             JobDetailTile(
               name: "Other",
-              title: job.houseKeeping!.other.toString() == "null" ? "Not Available" : job.houseKeeping!.other.toString(),
+              title:
+                  job.houseKeeping!.other.toString() == "null" ? "Not Available" : job.houseKeeping!.other.toString(),
             ),
             const SizedBox(height: 10),
             JobDetailTile(

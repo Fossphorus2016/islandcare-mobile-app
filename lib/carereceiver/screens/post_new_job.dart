@@ -45,64 +45,75 @@ class _PostNewJobState extends State<PostNewJob> {
 
   @override
   Widget build(BuildContext context) {
-    UserSubscriptionDetail? subscriptionDetail = Provider.of<RecieverUserProvider>(context).gWAUserProfile!.data!.userSubscriptionDetail;
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0xffffffff),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      offset: Offset(2, 2),
-                      spreadRadius: 1,
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: ServiceRecieverColor.primaryColor,
-                    size: 18,
+    UserSubscriptionDetail? subscriptionDetail =
+        Provider.of<RecieverUserProvider>(context).gWAUserProfile!.data!.userSubscriptionDetail;
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: CustomColors.primaryColor,
+        automaticallyImplyLeading: false,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(13.0),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color(0xffffffff),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(30, 0, 0, 0),
+                    offset: Offset(2, 2),
+                    spreadRadius: 1,
+                    blurRadius: 7,
                   ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: ServiceRecieverColor.primaryColor,
+                  size: 18,
                 ),
               ),
             ),
           ),
         ),
-        body: SingleChildScrollView(
+        title: Text(
+          "Post New Job",
+          textAlign: TextAlign.left,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Rubik",
+            color: CustomColors.white,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               children: [
-                Container(
-                  alignment: Alignment.topLeft,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    "Post Job",
-                    style: TextStyle(
-                      color: CustomColors.primaryTextLight,
-                      fontSize: 22,
-                      fontFamily: "Poppins",
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 40),
+                // Container(
+                //   alignment: Alignment.topLeft,
+                //   padding: const EdgeInsets.symmetric(vertical: 10),
+                //   child: Text(
+                //     "Post Job",
+                //     style: TextStyle(
+                //       color: CustomColors.primaryTextLight,
+                //       fontSize: 22,
+                //       fontFamily: "Poppins",
+                //       fontWeight: FontWeight.w600,
+                //     ),
+                //   ),
+                // ),
                 FutureBuilder<ServicesModel>(
                   future: futureJobPost,
                   builder: (context, snapshot) {
@@ -157,7 +168,8 @@ class _PostNewJobState extends State<PostNewJob> {
                                         width: 60,
                                         height: 60,
                                         fit: BoxFit.contain,
-                                        imageUrl: "${snapshot.data!.folderPath}/${snapshot.data!.services![index].image}",
+                                        imageUrl:
+                                            "${snapshot.data!.folderPath}/${snapshot.data!.services![index].image}",
                                         placeholder: (context, url) => const CircularProgressIndicator(),
                                         errorWidget: (context, url, error) => const Icon(Icons.error),
                                       ),
@@ -171,7 +183,9 @@ class _PostNewJobState extends State<PostNewJob> {
                                         fontSize: ResponsiveBreakpoints.of(context).isTablet ? 18 : 14,
                                         fontWeight: FontWeight.w600,
                                         fontFamily: "Poppins",
-                                        color: selectedJob == index ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                                        color: selectedJob == index
+                                            ? CustomColors.white
+                                            : ServiceRecieverColor.primaryColor,
                                       ),
                                     ),
                                   ],

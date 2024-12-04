@@ -12,7 +12,9 @@ import 'package:island_app/carereceiver/models/hired_candidate_model.dart';
 import 'package:island_app/carereceiver/models/manage_cards_model.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/screens/payment_package_screen.dart';
+import 'package:island_app/widgets/profile_not_approved_text.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
@@ -35,7 +37,8 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
   var rating = 1;
   var jobId;
   jobCompleted() async {
-    var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
+    var url =
+        '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
     var token = await getToken();
     var response = await postRequesthandler(
       url: url,
@@ -66,13 +69,13 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HiredCandidatesProvider>(builder: (context, provider, __) {
-      return SafeArea(
-        child: Scaffold(
+    return Consumer2<HiredCandidatesProvider, RecieverUserProvider>(
+        builder: (context, provider, recieverUserProvider, __) {
+      if (!recieverUserProvider.profileIsApprove()) {
+        return Scaffold(
           appBar: AppBar(
-            centerTitle: false,
             elevation: 0,
-            backgroundColor: Colors.transparent,
+            backgroundColor: ServiceRecieverColor.primaryColor,
             automaticallyImplyLeading: false,
             leading: GestureDetector(
               onTap: () {
@@ -105,17 +108,121 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                 ),
               ),
             ),
-            title: Text(
+            title: const Text(
               "Hired Candidates",
               style: TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w600,
                 fontFamily: "Rubik",
-                color: CustomColors.primaryText,
+                color: Colors.white,
               ),
             ),
           ),
-          body: SizedBox(
+          body: const Center(
+            child: ProfileNotApprovedText(),
+          ),
+        );
+      } else if (recieverUserProvider.profilePerentage != 100) {
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: ServiceRecieverColor.primaryColor,
+            automaticallyImplyLeading: false,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Padding(
+                padding: const EdgeInsets.all(13.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffffffff),
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromARGB(30, 0, 0, 0),
+                        offset: Offset(2, 2),
+                        spreadRadius: 1,
+                        blurRadius: 7,
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: CustomColors.primaryColor,
+                      size: 18,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            title: const Text(
+              "Hired Candidates",
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.w600,
+                fontFamily: "Rubik",
+                color: Colors.white,
+              ),
+            ),
+          ),
+          body: const Center(
+            child: ProfileNotCompletedText(),
+          ),
+        );
+      }
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          elevation: 0,
+          backgroundColor: CustomColors.primaryColor,
+          automaticallyImplyLeading: false,
+          leading: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(13.0),
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: const Color(0xffffffff),
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color.fromARGB(30, 0, 0, 0),
+                      offset: Offset(2, 2),
+                      spreadRadius: 1,
+                      blurRadius: 7,
+                    ),
+                  ],
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 4.0),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: CustomColors.primaryColor,
+                    size: 18,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          title: const Text(
+            "Hired Candidates",
+            style: TextStyle(
+              fontSize: 19,
+              fontWeight: FontWeight.w600,
+              fontFamily: "Rubik",
+              color: Colors.white,
+            ),
+          ),
+        ),
+        body: SafeArea(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Column(
@@ -207,7 +314,8 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                               },
                                               maxLines: 1,
                                               textAlignVertical: TextAlignVertical.bottom,
-                                              style: const TextStyle(fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
+                                              style: const TextStyle(
+                                                  fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w400),
                                               decoration: InputDecoration(
                                                 hintText: "Search...",
                                                 fillColor: CustomColors.white,
@@ -233,7 +341,8 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                             showModalBottomSheet(
                                               isScrollControlled: true,
                                               shape: const RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.only(topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(30.0), topRight: Radius.circular(30.0)),
                                               ),
                                               context: context,
                                               backgroundColor: Colors.white,
@@ -244,7 +353,8 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                   builder: (BuildContext context, StateSetter setState) {
                                                     return SingleChildScrollView(
                                                       child: Padding(
-                                                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                        padding: EdgeInsets.only(
+                                                            bottom: MediaQuery.of(context).viewInsets.bottom),
                                                         child: Container(
                                                           padding: const EdgeInsets.symmetric(horizontal: 25),
                                                           child: Column(
@@ -319,14 +429,16 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                             onTap: () async {
                                                                               var tt = await showDatePicker(
                                                                                 context: context,
-                                                                                initialEntryMode: DatePickerEntryMode.calendarOnly,
+                                                                                initialEntryMode:
+                                                                                    DatePickerEntryMode.calendarOnly,
                                                                                 firstDate: DateTime(2020, 1, 1),
                                                                                 lastDate: DateTime.now(),
                                                                               );
 
                                                                               if (tt != null) {
                                                                                 setState(() {
-                                                                                  startTime = DateFormat('yyyy-MM-dd').format(tt);
+                                                                                  startTime = DateFormat('yyyy-MM-dd')
+                                                                                      .format(tt);
                                                                                 });
                                                                               }
                                                                             },
@@ -335,7 +447,9 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                               width: double.infinity,
                                                                               alignment: Alignment.centerLeft,
                                                                               child: Text(
-                                                                                startTime != null ? startTime.toString() : "Start Date",
+                                                                                startTime != null
+                                                                                    ? startTime.toString()
+                                                                                    : "Start Date",
                                                                               ),
                                                                             ),
                                                                           ),
@@ -383,23 +497,28 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                             onTap: () async {
                                                                               var tt = await showDatePicker(
                                                                                 context: context,
-                                                                                initialEntryMode: DatePickerEntryMode.calendarOnly,
+                                                                                initialEntryMode:
+                                                                                    DatePickerEntryMode.calendarOnly,
                                                                                 firstDate: DateTime(2020, 1, 1),
                                                                                 lastDate: DateTime.now(),
                                                                               );
                                                                               if (tt != null) {
                                                                                 setState(() {
-                                                                                  endTime = DateFormat('yyyy-MM-dd').format(tt);
+                                                                                  endTime = DateFormat('yyyy-MM-dd')
+                                                                                      .format(tt);
                                                                                 });
                                                                               }
                                                                             },
                                                                             child: Container(
                                                                               height: 50,
                                                                               width: double.infinity,
-                                                                              decoration: const BoxDecoration(color: Colors.white),
+                                                                              decoration: const BoxDecoration(
+                                                                                  color: Colors.white),
                                                                               alignment: Alignment.centerLeft,
                                                                               child: Text(
-                                                                                endTime != null ? endTime.toString() : "End Date",
+                                                                                endTime != null
+                                                                                    ? endTime.toString()
+                                                                                    : "End Date",
                                                                               ),
                                                                             ),
                                                                           ),
@@ -411,7 +530,9 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                   GestureDetector(
                                                                     onTap: () {
                                                                       if (startTime != null && endTime != null) {
-                                                                        provider.setFilterByTime(DateTime.parse(startTime), DateTime.parse(endTime));
+                                                                        provider.setFilterByTime(
+                                                                            DateTime.parse(startTime),
+                                                                            DateTime.parse(endTime));
                                                                         Navigator.pop(context);
                                                                       }
                                                                     },
@@ -478,7 +599,8 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                           },
                                           style: ButtonStyle(
                                             shape: WidgetStateProperty.resolveWith(
-                                              (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)),
+                                              (states) =>
+                                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)),
                                             ),
                                             backgroundColor: WidgetStateProperty.resolveWith(
                                               (states) => ServiceRecieverColor.redButton,
@@ -585,7 +707,8 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                   return StatefulBuilder(
                                                     builder: (context, setState) => SingleChildScrollView(
                                                       child: Padding(
-                                                        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+                                                        padding: EdgeInsets.only(
+                                                            bottom: MediaQuery.of(context).viewInsets.bottom),
                                                         child: Container(
                                                           height: 480,
                                                           // width: MediaQuery.of(context).size.width,
@@ -666,7 +789,8 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                           fontFamily: "Calibri",
                                                                           fontWeight: FontWeight.w400,
                                                                         ),
-                                                                        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                                                                        contentPadding: const EdgeInsets.symmetric(
+                                                                            horizontal: 10, vertical: 10),
                                                                         border: OutlineInputBorder(
                                                                           borderRadius: BorderRadius.circular(12),
                                                                           borderSide: const BorderSide(width: 0.5),
@@ -713,15 +837,18 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                         showErrorToast("Comment field is required");
                                                                         return true;
                                                                       }
-                                                                      var url = '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
+                                                                      var url =
+                                                                          '${CareReceiverURl.serviceReceiverJobCompleted}?provider_id=$providerId&rating=$rating&comment=${commentController.text}&job_id=$jobId';
                                                                       var token = await getToken();
                                                                       var response = await postRequesthandler(
                                                                         url: url,
                                                                         token: token,
                                                                       );
 
-                                                                      if (response != null && response.statusCode == 200) {
-                                                                        showSuccessToast(response.data['message'].toString());
+                                                                      if (response != null &&
+                                                                          response.statusCode == 200) {
+                                                                        showSuccessToast(
+                                                                            response.data['message'].toString());
                                                                         commentController.clear();
                                                                         setState(
                                                                           () {
@@ -748,14 +875,17 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                                                         showModalBottomSheet(
                                                                           context: scaffoldContext,
                                                                           builder: (context) {
-                                                                            return showPaymentDailog(context: scaffoldContext);
+                                                                            return showPaymentDailog(
+                                                                                context: scaffoldContext);
                                                                           },
                                                                         );
                                                                       },
                                                                       style: ButtonStyle(
-                                                                        backgroundColor: WidgetStatePropertyAll(CustomColors.primaryColor),
+                                                                        backgroundColor: WidgetStatePropertyAll(
+                                                                            CustomColors.primaryColor),
                                                                         shape: WidgetStatePropertyAll(
-                                                                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)),
+                                                                          RoundedRectangleBorder(
+                                                                              borderRadius: BorderRadius.circular(08)),
                                                                         ),
                                                                       ),
                                                                       child: Text(
@@ -788,7 +918,9 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                                               height: 50,
                                               decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.circular(2),
-                                                color: item.status == 3 ? CustomColors.primaryLight : CustomColors.primaryColor,
+                                                color: item.status == 3
+                                                    ? CustomColors.primaryLight
+                                                    : CustomColors.primaryColor,
                                               ),
                                               child: Center(
                                                 child: Text(
@@ -824,10 +956,14 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                             provider.handlePageChange(provider.currentPageIndex + 1);
                           }
                         : null,
-                    previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
+                    previousPage: provider.currentPageIndex > 0
+                        ? () => provider.handlePageChange(provider.currentPageIndex - 1)
+                        : null,
                     gotoPage: provider.handlePageChange,
                     gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
-                    gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1 ? () => provider.handlePageChange(provider.totalRowsCount - 1) : null,
+                    gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
+                        ? () => provider.handlePageChange(provider.totalRowsCount - 1)
+                        : null,
                     currentPageIndex: provider.currentPageIndex,
                     totalRowsCount: provider.totalRowsCount,
                   ),
@@ -901,7 +1037,9 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: selectedCard != null && selectedCard!.id == provider.allCards![j].id ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
+                            color: selectedCard != null && selectedCard!.id == provider.allCards![j].id
+                                ? ServiceRecieverColor.primaryColor
+                                : ServiceRecieverColor.redButton,
                             width: selectedCard != null && selectedCard!.id == provider.allCards![j].id ? 2 : 0.5,
                           ),
                         ),
@@ -1436,7 +1574,8 @@ class _HiredCandidatesScreenState extends State<HiredCandidatesScreen> {
 
                                 if (response != null && response.statusCode == 200 && response.data['status'] == true) {
                                   showSuccessToast(response.data['message']);
-                                  Provider.of<HiredCandidatesProvider>(context, listen: false).fetchHiredCandidateModel();
+                                  Provider.of<HiredCandidatesProvider>(context, listen: false)
+                                      .fetchHiredCandidateModel();
                                   Navigator.pop(context);
                                   // navigationService.push(RoutesName.serviceRecieverHireCandidates);
                                 } else {
@@ -1489,24 +1628,29 @@ class HiredCandidatesProvider extends ChangeNotifier {
 
   bool isLoading = true;
   Future<void> fetchHiredCandidateModel() async {
-    var token = await getToken();
+    try {
+      var token = await getToken();
 
-    final response = await getRequesthandler(
-      url: '${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=${DateTime.now()}',
-      token: token,
-    );
-    if (response != null && response.statusCode == 200) {
-      var json = response.data as Map;
+      final response = await getRequesthandler(
+        url: '${CareReceiverURl.serviceReceiverHireCandicate}?start_date=2022-01-01&end_date=${DateTime.now()}',
+        token: token,
+      );
+      if (response != null && response.statusCode == 200) {
+        var json = response.data as Map;
 
-      if (json['data'].isNotEmpty) {
-        var data = HiredCandidateModel.fromJson(response.data);
-        hiredCandidates = data.data!;
-        isLoading = false;
-        notifyListeners();
-        setPaginationList(data.data);
+        if (json['data'].isNotEmpty) {
+          var data = HiredCandidateModel.fromJson(response.data);
+          hiredCandidates = data.data!;
+          isLoading = false;
+          notifyListeners();
+          setPaginationList(data.data);
+        }
+      } else {
+        showErrorToast("Failed to load Hired Candidates");
+        // throw Exception('Failed to load Hired Candidates');
       }
-    } else {
-      throw Exception('Failed to load Hired Candidates');
+    } catch (e) {
+      showErrorToast("Failed to load Hired Candidates");
     }
   }
 
@@ -1534,7 +1678,10 @@ class HiredCandidatesProvider extends ChangeNotifier {
 
   setFilter(String searchText) {
     var filterData = hiredCandidates.where((element) {
-      if (element.jobs!.jobTitle.toString().toLowerCase().contains(searchText.toLowerCase()) || element.users!.firstName.toString().toLowerCase().contains(searchText.toLowerCase()) || element.users!.lastName.toString().toLowerCase().contains(searchText.toLowerCase()) || element.jobs!.address.toString().toLowerCase().contains(searchText.toLowerCase())) {
+      if (element.jobs!.jobTitle.toString().toLowerCase().contains(searchText.toLowerCase()) ||
+          element.users!.firstName.toString().toLowerCase().contains(searchText.toLowerCase()) ||
+          element.users!.lastName.toString().toLowerCase().contains(searchText.toLowerCase()) ||
+          element.jobs!.address.toString().toLowerCase().contains(searchText.toLowerCase())) {
         // print(element);
         return true;
       } else {

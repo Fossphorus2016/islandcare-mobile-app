@@ -46,7 +46,7 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: CustomColors.primaryColor,
         automaticallyImplyLeading: false,
         leading: GestureDetector(
           onTap: () {
@@ -107,7 +107,9 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: selectedCard != null && selectedCard!.id == allCards[j].id ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
+                              color: selectedCard != null && selectedCard!.id == allCards[j].id
+                                  ? ServiceRecieverColor.primaryColor
+                                  : ServiceRecieverColor.redButton,
                               width: selectedCard != null && selectedCard!.id == allCards[j].id ? 2 : 0.5,
                             ),
                           ),
@@ -367,7 +369,7 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
                           ),
                         ),
                         Text(
-                          "${widget.amount}\$",
+                          "\$ ${widget.amount}",
                           style: TextStyle(
                             color: CustomColors.primaryText,
                             fontSize: 18,
@@ -787,7 +789,7 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
                   ),
                 ),
                 Text(
-                  "${widget.amount}\$",
+                  "\$ ${widget.amount}",
                   style: TextStyle(
                     color: CustomColors.primaryText,
                     fontSize: 18,
@@ -842,7 +844,10 @@ class _RecieverJobPaymentsScreenState extends State<RecieverJobPaymentsScreen> {
                         },
                       );
                     } else {
-                      if (response != null && response.data != null && response.data["error"] != null && response.data['error'].toString().contains("Job Already Funded")) {
+                      if (response != null &&
+                          response.data != null &&
+                          response.data["error"] != null &&
+                          response.data['error'].toString().contains("Job Already Funded")) {
                         showSuccessToast("Job Already Funded");
                       } else if (response != null && response.data != null && response.data['error'] != null) {
                         throw response.data['error']['original'][0];

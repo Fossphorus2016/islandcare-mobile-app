@@ -7,13 +7,14 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:island_app/models/service_model.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/utils/storage_service.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/widgets/loading_button.dart';
+import 'package:provider/provider.dart';
 
 class ProfileReceiverEdit extends StatefulWidget {
   String name;
@@ -22,7 +23,7 @@ class ProfileReceiverEdit extends StatefulWidget {
   String? dob;
   int? male;
   String? phoneNumber;
-  Service? service;
+  List? service;
 
   // List<Service>? service;
   String? zipCode;
@@ -175,6 +176,8 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
       );
       if (response != null && response.statusCode == 200) {
         showSuccessToast("Profile Updated Successfully.");
+        Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
+        Navigator.of(context).pop();
       } else {
         if (response != null && response.data != null && response.data["message"] != null) {
           showErrorToast(response.data['message']);
@@ -222,24 +225,24 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: CustomColors.loginBg,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: CustomColors.primaryColor,
-          centerTitle: true,
-          title: Text(
-            "Profile Edit",
-            style: TextStyle(
-              fontSize: 20,
-              color: CustomColors.white,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Rubik",
-            ),
+    return Scaffold(
+      backgroundColor: CustomColors.loginBg,
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: CustomColors.primaryColor,
+        centerTitle: true,
+        title: Text(
+          "Profile Edit",
+          style: TextStyle(
+            fontSize: 20,
+            color: CustomColors.white,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Rubik",
           ),
         ),
-        body: SizedBox(
+      ),
+      body: SafeArea(
+        child: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
             child: Column(
@@ -354,18 +357,90 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Text(widget.service!.name.toString())
-                            // if (widget.service != null) ...[
-                            //   for (var i = 0; i < widget.service!.length; i++) ...[
-                            //     Container(
-                            //       padding: const EdgeInsets.symmetric(vertical: 10),
-                            //       decoration: BoxDecoration(
-                            //         borderRadius: BorderRadius.circular(12),
-                            //       ),
-                            //       child: Text(widget.service![i].name.toString()),
-                            //     )
-                            //   ],
-                            // ],
+                            Wrap(
+                              spacing: 05,
+                              runSpacing: 10,
+                              children: [
+                                for (var i = 0; i < widget.service!.length; i++) ...[
+                                  if (widget.service![i] == "1") ...[
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.grey.shade200,
+                                      ),
+                                      child: const Text(
+                                        "Senior Care",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ] else if (widget.service![i] == "2") ...[
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.grey.shade200,
+                                      ),
+                                      child: const Text(
+                                        "Pet Care",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ] else if (widget.service![i] == "3") ...[
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.grey.shade200,
+                                      ),
+                                      child: const Text(
+                                        "House Keeping",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ] else if (widget.service![i] == "4") ...[
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.grey.shade200,
+                                      ),
+                                      child: const Text(
+                                        "School Support",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ] else if (widget.service![i] == "5") ...[
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Colors.grey.shade200,
+                                      ),
+                                      child: const Text(
+                                        "Child Care",
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ]
+                                ],
+                              ],
+                            ),
                           ],
                         ),
                       ),
@@ -409,7 +484,8 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                       height: 50.45,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
-                                        color: _isSelectedGender == "1" ? CustomColors.primaryColor : CustomColors.white,
+                                        color:
+                                            _isSelectedGender == "1" ? CustomColors.primaryColor : CustomColors.white,
                                         borderRadius: BorderRadius.circular(8),
                                         boxShadow: const [
                                           BoxShadow(
@@ -431,7 +507,9 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                           "Male",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            color: _isSelectedGender == "1" ? CustomColors.white : CustomColors.primaryText,
+                                            color: _isSelectedGender == "1"
+                                                ? CustomColors.white
+                                                : CustomColors.primaryText,
                                             fontFamily: "Rubik",
                                             fontSize: 12,
                                             fontWeight: FontWeight.w300,
@@ -455,7 +533,8 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                       height: 50.45,
                                       padding: const EdgeInsets.all(4),
                                       decoration: BoxDecoration(
-                                        color: _isSelectedGender == "2" ? CustomColors.primaryColor : CustomColors.white,
+                                        color:
+                                            _isSelectedGender == "2" ? CustomColors.primaryColor : CustomColors.white,
                                         borderRadius: BorderRadius.circular(8),
                                         boxShadow: const [
                                           BoxShadow(
@@ -477,7 +556,9 @@ class _ProfileReceiverEditState extends State<ProfileReceiverEdit> {
                                           "Female",
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
-                                            color: _isSelectedGender == "2" ? CustomColors.white : CustomColors.primaryText,
+                                            color: _isSelectedGender == "2"
+                                                ? CustomColors.white
+                                                : CustomColors.primaryText,
                                             fontFamily: "Rubik",
                                             fontSize: 12,
                                             fontWeight: FontWeight.w300,

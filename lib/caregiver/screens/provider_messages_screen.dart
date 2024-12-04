@@ -34,23 +34,23 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
   @override
   Widget build(BuildContext context) {
     return Consumer2<ServiceProviderChat, ServiceGiverProvider>(builder: (context, providerChat, giverProvider, child) {
-      return SafeArea(
-        child: Scaffold(
-          appBar: AppBar(
-            centerTitle: false,
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            title: Text(
-              "Messages",
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.w700,
-                fontFamily: "Rubik",
-                color: CustomColors.primaryText,
-              ),
+      return Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          title: Text(
+            "Messages",
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              fontFamily: "Rubik",
+              color: CustomColors.primaryText,
             ),
           ),
-          body: giverProvider.profileStatus
+        ),
+        body: SafeArea(
+          child: giverProvider.profileStatus
               ? RefreshIndicator(
                   onRefresh: () async {
                     providerChat.getChats();
@@ -71,9 +71,11 @@ class _ProviderMessagesScreenState extends State<ProviderMessagesScreen> {
                               itemBuilder: (context, index) {
                                 return ProviderConversationList(
                                   roomId: providerChat.chatList[index]["roomId"],
-                                  name: "${providerChat.chatList[index]['userDate'].firstName} ${providerChat.chatList[index]['userDate'].lastName}",
+                                  name:
+                                      "${providerChat.chatList[index]['userDate'].firstName} ${providerChat.chatList[index]['userDate'].lastName}",
                                   messageText: providerChat.chatList[index]['lastMessage'],
-                                  imageUrl: "${AppUrl.webStorageUrl}/${providerChat.chatList[index]['userDate'].avatar}",
+                                  imageUrl:
+                                      "${AppUrl.webStorageUrl}/${providerChat.chatList[index]['userDate'].avatar}",
                                   time: providerChat.chatList[index]['lastMessageTime'].toString(),
                                   isMessageRead: providerChat.chatList[index]['lastMessagesCount'] == 0 ? false : true,
                                 );

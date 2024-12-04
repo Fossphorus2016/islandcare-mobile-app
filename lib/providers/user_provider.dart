@@ -51,6 +51,14 @@ class RecieverUserProvider extends ChangeNotifier {
     }
   }
 
+  bool profileIsApprove() {
+    if (gWAUserProfile != null && gWAUserProfile!.data != null && gWAUserProfile!.data!.status == 1) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<ProfileReceiverModel?> get userProfile async => _userProfile;
   ProfileReceiverModel? get gWAUserProfile => _userProfile;
 }

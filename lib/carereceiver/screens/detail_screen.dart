@@ -17,9 +17,9 @@ class _DetailScreenState extends State<DetailScreen> {
     double baseWidth = 360;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: SizedBox(
             width: double.infinity,
             child: Column(

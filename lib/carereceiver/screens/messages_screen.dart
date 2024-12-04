@@ -3,9 +3,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:island_app/widgets/profile_not_approved_text.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/widgets/conversational_widget.dart';
 import 'package:island_app/models/chatroom_model.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/screens/notification.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
@@ -47,68 +49,80 @@ class _MessagesScreenState extends State<MessagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Consumer2<RecieverChatProvider, RecieverUserProvider>(
+        builder: (context, provider, recieverUserProvider, child) {
+      return Scaffold(
         appBar: AppBar(
-          centerTitle: false,
+          centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.transparent,
+          backgroundColor: CustomColors.primaryColor,
           title: Text(
-            "Chat Room",
+            "Chats",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w700,
               fontFamily: "Rubik",
-              color: CustomColors.primaryText,
+              color: CustomColors.white,
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: RefreshIndicator(
-            onRefresh: () async {
-              Provider.of<RecieverChatProvider>(context, listen: false).getChats();
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                children: [
-                  const SizedBox(height: 20),
-
-                  // Messsages
-                  Consumer<RecieverChatProvider>(
-                    builder: (context, provider, child) {
-                      if (provider.chatList.isNotEmpty) {
-                        return ListView.builder(
-                          itemCount: provider.chatList.length,
-                          shrinkWrap: true,
-                          padding: const EdgeInsets.only(top: 16),
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            // print(provider.chatList[index]['userDate']);
-                            if (provider.chatList[index]['userDate'] == null || provider.chatList[index]['userDate'].firstName == null) {
-                              return null;
-                            }
-                            return ConversationList(
-                              chat: provider.chatList[index]['chat'],
-                              name: "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].lastName}",
-                              messageText: provider.chatList[index]['lastMessage'],
-                              imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
-                              time: provider.chatList[index]['lastMessageTime'].toString(),
-                              isMessageRead: provider.chatList[index]['lastMessagesCount'] == 0 ? false : true,
-                            );
-                          },
-                        );
-                      }
-                      return const Center(child: Text("No chat found"));
+        body: SafeArea(
+          child: recieverUserProvider.profileIsApprove()
+              ? SingleChildScrollView(
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      Provider.of<RecieverChatProvider>(context, listen: false).getChats();
                     },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 20),
+
+                          // Messsages
+
+                          if (provider.chatList.isNotEmpty) ...[
+                            ListView.builder(
+                              itemCount: provider.chatList.length,
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.only(top: 16),
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                // print(provider.chatList[index]['userDate']);
+                                if (provider.chatList[index]['userDate'] == null ||
+                                    provider.chatList[index]['userDate'].firstName == null) {
+                                  return null;
+                                }
+                                return ConversationList(
+                                  chat: provider.chatList[index]['chat'],
+                                  name:
+                                      "${provider.chatList[index]['userDate'].firstName} ${provider.chatList[index]['userDate'].lastName}",
+                                  messageText: provider.chatList[index]['lastMessage'],
+                                  imageUrl: "${AppUrl.webStorageUrl}/${provider.chatList[index]['userDate'].avatar}",
+                                  time: provider.chatList[index]['lastMessageTime'].toString(),
+                                  isMessageRead: provider.chatList[index]['lastMessagesCount'] == 0 ? false : true,
+                                );
+                              },
+                            ),
+                          ] else ...[
+                            const Center(
+                              child: Text(
+                                "No chat found",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
+                )
+              : const ProfileNotApprovedText(),
         ),
-      ),
-    );
+      );
+    });
   }
 }
 
@@ -166,14 +180,19 @@ class RecieverChatProvider extends ChangeNotifier {
         (index) {
           var getlastmessage;
           var lastmessagetime;
-          if (resp.data['chats'][index]['chat_messages'] != null && resp.data['chats'][index]['chat_messages'].length > 0) {
+          if (resp.data['chats'][index]['chat_messages'] != null &&
+              resp.data['chats'][index]['chat_messages'].length > 0) {
             getlastmessage = resp.data['chats'][index]['chat_messages'].last;
-            lastmessagetime = getlastmessage['created_at'] != null ? DateFormat.jm().format(DateTime.parse(getlastmessage['created_at']).toLocal()) : DateTime.now();
+            lastmessagetime = getlastmessage['created_at'] != null
+                ? DateFormat.jm().format(DateTime.parse(getlastmessage['created_at']).toLocal())
+                : DateTime.now();
           }
           return {
             "roomId": resp.data['chats'][index]['id'],
             "chat": resp.data['chats'][index],
-            "userDate": resp.data['chats'][index] != null && resp.data['chats'][index]['receiver'] != null ? ChatroomUser.fromJson(resp.data['chats'][index]['receiver']) : null,
+            "userDate": resp.data['chats'][index] != null && resp.data['chats'][index]['receiver'] != null
+                ? ChatroomUser.fromJson(resp.data['chats'][index]['receiver'])
+                : null,
             "lastMessage": getlastmessage != null ? getlastmessage['message'] : null,
             "lastMessagesCount": resp.data['chats'][index]["status"],
             "lastMessageTime": lastmessagetime,

@@ -1,6 +1,7 @@
 // ignore_for_file: await_only_futures, prefer_typing_uninitialized_variables
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:island_app/caregiver/screens/my_jobs_screen.dart';
 import 'package:island_app/caregiver/screens/provider_reviews_given_screen.dart';
 import 'package:island_app/caregiver/utils/profile_provider.dart';
@@ -12,7 +13,9 @@ import 'package:island_app/carereceiver/screens/messages_screen.dart';
 import 'package:island_app/carereceiver/screens/post_job.dart';
 import 'package:island_app/carereceiver/screens/receiver_reviews_given_screen.dart';
 import 'package:island_app/carereceiver/screens/refund_screen.dart';
+import 'package:island_app/carereceiver/screens/wishlist_screen.dart';
 import 'package:island_app/carereceiver/utils/bottom_navigation_provider.dart';
+import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/carereceiver/utils/home_pagination.dart';
 import 'package:island_app/providers/subscription_provider.dart';
 import 'package:island_app/screens/notification.dart';
@@ -49,7 +52,8 @@ void main() {
         ChangeNotifierProvider(create: (context) => HomePaginationProvider()),
         ChangeNotifierProvider(create: (context) => HiredCandidatesProvider()),
         ChangeNotifierProvider(create: (context) => RefundsProvider()),
-        ChangeNotifierProvider(create: (context) => PostedJobsProvider())
+        ChangeNotifierProvider(create: (context) => PostedJobsProvider()),
+        ChangeNotifierProvider(create: (context) => WishListProvider()),
       ],
       child: const MyApp(),
     ),
@@ -68,6 +72,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     IslandPusher().initPusher();
     super.initState();
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: CustomColors.statusBarColor,
+      ),
+    );
   }
 
   @override
@@ -75,7 +84,11 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Island Care',
-      theme: ThemeData(appBarTheme: const AppBarTheme(iconTheme: IconThemeData(color: Colors.white))),
+      theme: ThemeData(
+        appBarTheme: const AppBarTheme(
+          iconTheme: IconThemeData(color: Colors.white),
+        ),
+      ),
       onGenerateRoute: RouteGenerator.generateRoutes,
       initialRoute: '/',
       navigatorKey: NavigationService().navigatorKey,

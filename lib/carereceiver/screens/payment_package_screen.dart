@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:island_app/carereceiver/models/manage_cards_model.dart';
-import 'package:island_app/carereceiver/models/profile_model.dart';
 import 'package:island_app/carereceiver/screens/manage_cards.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
 import 'package:island_app/providers/subscription_provider.dart';
@@ -28,286 +27,336 @@ class PackagePaymentScreen extends StatefulWidget {
 class _PackagePaymentScreenState extends State<PackagePaymentScreen> {
   @override
   void initState() {
-    callInInit();
     super.initState();
-  }
-
-  callInInit() {
-    // var firstcard = Provider.of<CardProvider>(context, listen: false).gWAallCards.first;
-    // Provider.of<SubscriptionProvider>(context, listen: false).setSelectCardOnInit(firstcard);
   }
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
-    List allpackages = context.watch<SubscriptionProvider>().allPackages;
-    ProfileReceiverModel? user = context.watch<RecieverUserProvider>().gWAUserProfile;
-    UserSubscriptionDetail? userSubsDetail = user!.data!.userSubscriptionDetail;
-
-    return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        automaticallyImplyLeading: false,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Padding(
-            padding: const EdgeInsets.all(13.0),
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: CustomColors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color.fromARGB(30, 0, 0, 0),
-                    offset: Offset(2, 2),
-                    spreadRadius: 1,
-                    blurRadius: 7,
-                  ),
-                ],
-              ),
+    return Consumer2<SubscriptionProvider, RecieverUserProvider>(
+      builder: (context, subscriptionProvider, recieverUserProvider, __) {
+        return Scaffold(
+          key: scaffoldKey,
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: CustomColors.primaryColor,
+            automaticallyImplyLeading: false,
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
               child: Padding(
-                padding: const EdgeInsets.only(left: 4.0),
-                child: Icon(
-                  Icons.arrow_back_ios,
-                  color: CustomColors.primaryColor,
-                  size: 18,
+                padding: const EdgeInsets.all(13.0),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: CustomColors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Color.fromARGB(30, 0, 0, 0),
+                        offset: Offset(2, 2),
+                        spreadRadius: 1,
+                        blurRadius: 7,
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      color: CustomColors.primaryColor,
+                      size: 18,
+                    ),
+                  ),
                 ),
               ),
             ),
+            title: const Text(
+              "Subscribtion Center",
+              style: TextStyle(
+                fontSize: 19,
+                fontWeight: FontWeight.w600,
+                fontFamily: "Rubik",
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20),
 
-                Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Get recruitment pro perks - Subscribe monthly for flexibility or annually to maximize savings.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: CustomColors.primaryText,
-                      fontSize: 16,
-                      fontFamily: "Rubik",
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                // Package Card Basic
-
-                for (int i = 0; i < allpackages.length; i++) ...[
-                  if (userSubsDetail != null && userSubsDetail.subscriptionId.toString() == allpackages[i]['id'].toString() && userSubsDetail.isActive == 1) ...[
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                      decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.center,
-                            end: Alignment.center,
-                            colors: [const Color(0xff90EAB4).withOpacity(0.1), const Color(0xff6BD294).withOpacity(0.8)],
-                          ),
-                          boxShadow: const [BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))],
-                          borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-                      width: MediaQuery.of(context).size.width > 320 ? 320 : MediaQuery.of(context).size.width,
-                      height: 170,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            allpackages[i]['subscription_name'],
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Poppins",
-                              color: CustomColors.white,
-                            ),
-                          ),
-                          const SizedBox(height: 10),
-                          if (allpackages[i]['price'] != null) ...[
-                            Text(
-                              "\$ ${allpackages[i]['price']}",
-                              style: TextStyle(
-                                fontSize: 26,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: "Poppins",
-                                color: CustomColors.white,
-                              ),
-                            ),
-                          ],
-                          const SizedBox(height: 05),
-                          TextButton(
-                            onPressed: () async {
-                              if (userSubsDetail.subscriptionId != null) {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) => AlertDialog(
-                                    content: const SizedBox(
-                                      width: 300,
-                                      height: 120,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.info_outline_rounded,
-                                            size: 56,
-                                            color: Color(0xFFffc700),
-                                          ),
-                                          Text(
-                                            "Confirm Unsubscribe",
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                          Text(
-                                            "Please make sure this action is irreversible",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    actionsAlignment: MainAxisAlignment.center,
-                                    actionsOverflowAlignment: OverflowBarAlignment.center,
-                                    alignment: Alignment.center,
-                                    actions: [
-                                      LoadingButton(
-                                        title: "Yes, unsubscribe please!",
-                                        backgroundColor: Colors.blue,
-                                        height: 54,
-                                        onPressed: () async {
-                                          try {
-                                            var resp = await Provider.of<SubscriptionProvider>(context, listen: false).unSubscribe(userSubsDetail.id);
-                                            if (resp.statusCode == 200 && resp.data['success']) {
-                                              Provider.of<RecieverUserProvider>(context, listen: false).fetchProfileReceiverModel();
-
-                                              Provider.of<SubscriptionProvider>(context, listen: false).getPackages();
-                                              Navigator.pop(context);
-                                              showSuccessToast(resp.data['message'].toString());
-                                            } else {
-                                              throw "something went wrong please try again later";
-                                            }
-                                            return true;
-                                          } catch (e) {
-                                            Navigator.pop(context);
-                                            showErrorToast(e.toString());
-                                            return false;
-                                          }
-                                        },
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        style: ButtonStyle(backgroundColor: WidgetStateProperty.resolveWith((states) => Colors.red.shade400), shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)))),
-                                        child: const Text(
-                                          "No, cancel please!",
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-                            },
-                            style: ButtonStyle(
-                              maximumSize: WidgetStateProperty.resolveWith((states) => const Size(250, 80)),
-                              padding: WidgetStateProperty.resolveWith(
-                                (states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                              ),
-                              backgroundColor: WidgetStateProperty.resolveWith(
-                                (states) => Colors.red,
-                              ),
-                            ),
-                            child: const Text(
-                              "UnSubscribe",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ] else ...[
-                    InkWell(
-                      onTap: () {
-                        Provider.of<SubscriptionProvider>(context, listen: false).setSelectedPackage(allpackages[i]);
-                        navigationService.push(
-                          RoutesName.recieverPaymentScreen,
-                          arguments: {"subsId": allpackages[i]['id'].toString()},
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.center,
-                              end: Alignment.center,
-                              colors: [const Color(0xff90EAB4).withOpacity(0.1), const Color(0xff6BD294).withOpacity(0.8)],
-                            ),
-                            boxShadow: const [BoxShadow(color: Color.fromARGB(25, 0, 0, 0), blurRadius: 4.0, spreadRadius: 2.0, offset: Offset(2.0, 2.0))],
-                            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10), topLeft: Radius.circular(10), topRight: Radius.circular(10))),
-                        width: MediaQuery.of(context).size.width * .90,
-                        height: 165,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              allpackages[i]['subscription_name'],
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Poppins",
-                                color: CustomColors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              "\$ ${allpackages[i]['price']}",
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.w500,
-                                fontFamily: "Poppins",
-                                color: CustomColors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              "BUY ${allpackages[i]['period_type']} SUBSCRIPTION",
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Poppins",
-                                color: CustomColors.white,
-                              ),
-                            ),
-                          ],
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Get recruitment pro perks - Subscribe monthly for flexibility or annually to maximize savings.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: CustomColors.primaryText,
+                          fontSize: 16,
+                          fontFamily: "Rubik",
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
+                    const SizedBox(height: 30),
+                    // Package Card Basic
+
+                    for (int i = 0; i < subscriptionProvider.allPackages.length; i++) ...[
+                      if (recieverUserProvider.gWAUserProfile != null &&
+                          recieverUserProvider.gWAUserProfile!.data != null &&
+                          recieverUserProvider.gWAUserProfile!.data!.userSubscriptionDetail != null &&
+                          recieverUserProvider.gWAUserProfile!.data!.userSubscriptionDetail!.subscriptionId
+                                  .toString() ==
+                              subscriptionProvider.allPackages[i]['id'].toString() &&
+                          recieverUserProvider.gWAUserProfile!.data!.userSubscriptionDetail!.isActive == 1) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.center,
+                              end: Alignment.center,
+                              colors: [
+                                const Color(0xff90EAB4).withOpacity(0.1),
+                                const Color(0xff6BD294).withOpacity(0.8)
+                              ],
+                            ),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color.fromARGB(25, 0, 0, 0),
+                                blurRadius: 4.0,
+                                spreadRadius: 2.0,
+                                offset: Offset(2.0, 2.0),
+                              )
+                            ],
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                            ),
+                          ),
+                          width: MediaQuery.of(context).size.width > 320 ? 320 : MediaQuery.of(context).size.width,
+                          height: 170,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                subscriptionProvider.allPackages[i]['subscription_name'],
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Poppins",
+                                  color: CustomColors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              if (subscriptionProvider.allPackages[i]['price'] != null) ...[
+                                Text(
+                                  "\$ ${subscriptionProvider.allPackages[i]['price']}",
+                                  style: TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Poppins",
+                                    color: CustomColors.white,
+                                  ),
+                                ),
+                              ],
+                              const SizedBox(height: 05),
+                              TextButton(
+                                onPressed: () async {
+                                  if (recieverUserProvider
+                                          .gWAUserProfile?.data?.userSubscriptionDetail?.subscriptionId !=
+                                      null) {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        content: const SizedBox(
+                                          width: 300,
+                                          height: 120,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.info_outline_rounded,
+                                                size: 56,
+                                                color: Color(0xFFffc700),
+                                              ),
+                                              Text(
+                                                "Confirm Unsubscribe",
+                                                style: TextStyle(color: Colors.red),
+                                              ),
+                                              Text(
+                                                "Please make sure this action is irreversible",
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(color: Colors.red),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        actionsAlignment: MainAxisAlignment.center,
+                                        actionsOverflowAlignment: OverflowBarAlignment.center,
+                                        alignment: Alignment.center,
+                                        actions: [
+                                          LoadingButton(
+                                            title: "Yes, unsubscribe please!",
+                                            backgroundColor: Colors.blue,
+                                            height: 54,
+                                            onPressed: () async {
+                                              try {
+                                                var resp =
+                                                    await Provider.of<SubscriptionProvider>(context, listen: false)
+                                                        .unSubscribe(recieverUserProvider
+                                                            .gWAUserProfile?.data?.userSubscriptionDetail?.id);
+                                                if (resp.statusCode == 200 && resp.data['success']) {
+                                                  Provider.of<RecieverUserProvider>(context, listen: false)
+                                                      .fetchProfileReceiverModel();
+
+                                                  Provider.of<SubscriptionProvider>(context, listen: false)
+                                                      .getPackages();
+                                                  Navigator.pop(context);
+                                                  showSuccessToast(resp.data['message'].toString());
+                                                } else {
+                                                  throw "something went wrong please try again later";
+                                                }
+                                                return true;
+                                              } catch (e) {
+                                                Navigator.pop(context);
+                                                showErrorToast(e.toString());
+                                                return false;
+                                              }
+                                            },
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    WidgetStateProperty.resolveWith((states) => Colors.red.shade400),
+                                                shape: WidgetStatePropertyAll(
+                                                    RoundedRectangleBorder(borderRadius: BorderRadius.circular(08)))),
+                                            child: const Text(
+                                              "No, cancel please!",
+                                              style: TextStyle(color: Colors.white),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                },
+                                style: ButtonStyle(
+                                  maximumSize: WidgetStateProperty.resolveWith((states) => const Size(250, 80)),
+                                  padding: WidgetStateProperty.resolveWith(
+                                    (states) => const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                                  ),
+                                  backgroundColor: WidgetStateProperty.resolveWith(
+                                    (states) => Colors.red,
+                                  ),
+                                ),
+                                child: const Text(
+                                  "UnSubscribe",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ] else ...[
+                        InkWell(
+                          onTap: () {
+                            Provider.of<SubscriptionProvider>(context, listen: false)
+                                .setSelectedPackage(subscriptionProvider.allPackages[i]);
+                            navigationService.push(
+                              RoutesName.recieverPaymentScreen,
+                              arguments: {"subsId": subscriptionProvider.allPackages[i]['id'].toString()},
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.center,
+                                  end: Alignment.center,
+                                  colors: [
+                                    const Color(0xff90EAB4).withOpacity(0.1),
+                                    const Color(0xff6BD294).withOpacity(0.8)
+                                  ],
+                                ),
+                                boxShadow: const [
+                                  BoxShadow(
+                                      color: Color.fromARGB(25, 0, 0, 0),
+                                      blurRadius: 4.0,
+                                      spreadRadius: 2.0,
+                                      offset: Offset(2.0, 2.0))
+                                ],
+                                borderRadius: const BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10))),
+                            width: MediaQuery.of(context).size.width * .90,
+                            height: 165,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  subscriptionProvider.allPackages[i]['subscription_name'],
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Poppins",
+                                    color: CustomColors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  "\$ ${subscriptionProvider.allPackages[i]['price']}",
+                                  style: TextStyle(
+                                    fontSize: 40,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: "Poppins",
+                                    color: CustomColors.white,
+                                  ),
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  "BUY ${subscriptionProvider.allPackages[i]['period_type']} SUBSCRIPTION",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Poppins",
+                                    color: CustomColors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                      const SizedBox(height: 30),
+                    ],
                   ],
-                  const SizedBox(height: 30),
-                ],
-              ],
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -404,7 +453,9 @@ class _RecieverPaymentScreenState extends State<RecieverPaymentScreen> {
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(
-                                    color: selectedCard != null && selectedCard!.id == cardProvider.allCards![j].id ? ServiceRecieverColor.primaryColor : ServiceRecieverColor.redButton,
+                                    color: selectedCard != null && selectedCard!.id == cardProvider.allCards![j].id
+                                        ? ServiceRecieverColor.primaryColor
+                                        : ServiceRecieverColor.redButton,
                                     width: 0.5,
                                   ),
                                 ),

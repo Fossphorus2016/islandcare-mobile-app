@@ -112,15 +112,19 @@ class BottomBarState extends State<BottomBar> {
                     // HOME
                     BottomNavigationBarItem(
                       icon: Container(
-                        height: 50,
-                        width: 50,
+                        height: 80,
+                        width: 80,
                         decoration: BoxDecoration(
-                          color: bottomNavigationProvider.page == 0 ? ServiceRecieverColor.primaryColor : Colors.transparent,
+                          color: bottomNavigationProvider.page == 0
+                              ? ServiceRecieverColor.primaryColor
+                              : Colors.transparent,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           Icons.home,
-                          color: bottomNavigationProvider.page == 0 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                          color: bottomNavigationProvider.page == 0
+                              ? CustomColors.white
+                              : ServiceRecieverColor.primaryColor,
                         ),
                       ),
                       label: '',
@@ -128,15 +132,19 @@ class BottomBarState extends State<BottomBar> {
                     // Favorite
                     BottomNavigationBarItem(
                       icon: Container(
-                        height: 50,
-                        width: 50,
+                        height: 80,
+                        width: 80,
                         decoration: BoxDecoration(
-                          color: bottomNavigationProvider.page == 1 ? ServiceRecieverColor.primaryColor : Colors.transparent,
+                          color: bottomNavigationProvider.page == 1
+                              ? ServiceRecieverColor.primaryColor
+                              : Colors.transparent,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           Icons.favorite,
-                          color: bottomNavigationProvider.page == 1 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                          color: bottomNavigationProvider.page == 1
+                              ? CustomColors.white
+                              : ServiceRecieverColor.primaryColor,
                         ),
                       ),
                       label: '',
@@ -144,15 +152,19 @@ class BottomBarState extends State<BottomBar> {
                     // chat
                     BottomNavigationBarItem(
                       icon: Container(
-                        height: 50,
-                        width: 50,
+                        height: 80,
+                        width: 80,
                         decoration: BoxDecoration(
-                          color: bottomNavigationProvider.page == 2 ? ServiceRecieverColor.primaryColor : CustomColors.white,
+                          color: bottomNavigationProvider.page == 2
+                              ? ServiceRecieverColor.primaryColor
+                              : CustomColors.white,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           Icons.textsms_rounded,
-                          color: bottomNavigationProvider.page == 2 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                          color: bottomNavigationProvider.page == 2
+                              ? CustomColors.white
+                              : ServiceRecieverColor.primaryColor,
                         ),
                       ),
                       label: '',
@@ -160,15 +172,19 @@ class BottomBarState extends State<BottomBar> {
                     // profile
                     BottomNavigationBarItem(
                       icon: Container(
-                        height: 50,
-                        width: 50,
+                        height: 80,
+                        width: 80,
                         decoration: BoxDecoration(
-                          color: bottomNavigationProvider.page == 3 ? ServiceRecieverColor.primaryColor : CustomColors.white,
+                          color: bottomNavigationProvider.page == 3
+                              ? ServiceRecieverColor.primaryColor
+                              : CustomColors.white,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
                           Icons.person,
-                          color: bottomNavigationProvider.page == 3 ? CustomColors.white : ServiceRecieverColor.primaryColor,
+                          color: bottomNavigationProvider.page == 3
+                              ? CustomColors.white
+                              : ServiceRecieverColor.primaryColor,
                         ),
                       ),
                       label: '',
@@ -224,8 +240,8 @@ class BottomBarState extends State<BottomBar> {
     //                   // HOME
     //                   BottomNavigationBarItem(
     //                     icon: Container(
-    //                       height: 50,
-    //                       width: 50,
+    //                       height: 80,
+    //                       width: 80,
     //                       decoration: BoxDecoration(
     //                         color: page == 0 ? ServiceRecieverColor.primaryColor : Colors.transparent,
     //                         shape: BoxShape.circle,
@@ -240,8 +256,8 @@ class BottomBarState extends State<BottomBar> {
     //                   // Favorite
     //                   BottomNavigationBarItem(
     //                     icon: Container(
-    //                       height: 50,
-    //                       width: 50,
+    //                       height: 80,
+    //                       width: 80,
     //                       decoration: BoxDecoration(
     //                         color: page == 1 ? ServiceRecieverColor.primaryColor : Colors.transparent,
     //                         shape: BoxShape.circle,
@@ -256,8 +272,8 @@ class BottomBarState extends State<BottomBar> {
     //                   // chat
     //                   BottomNavigationBarItem(
     //                     icon: Container(
-    //                       height: 50,
-    //                       width: 50,
+    //                       height: 80,
+    //                       width: 80,
     //                       decoration: BoxDecoration(
     //                         color: page == 2 ? ServiceRecieverColor.primaryColor : CustomColors.white,
     //                         shape: BoxShape.circle,
@@ -272,8 +288,8 @@ class BottomBarState extends State<BottomBar> {
     //                   // profile
     //                   BottomNavigationBarItem(
     //                     icon: Container(
-    //                       height: 50,
-    //                       width: 50,
+    //                       height: 80,
+    //                       width: 80,
     //                       decoration: BoxDecoration(
     //                         color: page == 3 ? ServiceRecieverColor.primaryColor : CustomColors.white,
     //                         shape: BoxShape.circle,

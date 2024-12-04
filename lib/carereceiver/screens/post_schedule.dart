@@ -584,66 +584,66 @@ class _PostScheduleState extends State<PostSchedule> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          automaticallyImplyLeading: false,
-          leading: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(13.0),
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: const Color(0xffffffff),
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromARGB(30, 0, 0, 0),
-                      offset: Offset(2, 2),
-                      spreadRadius: 1,
-                      blurRadius: 7,
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: ServiceRecieverColor.primaryColor,
-                    size: 18,
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: CustomColors.primaryColor,
+        automaticallyImplyLeading: false,
+        leading: GestureDetector(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(13.0),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: const Color(0xffffffff),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color.fromARGB(30, 0, 0, 0),
+                    offset: Offset(2, 2),
+                    spreadRadius: 1,
+                    blurRadius: 7,
                   ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 4.0),
+                child: Icon(
+                  Icons.arrow_back_ios,
+                  color: ServiceRecieverColor.primaryColor,
+                  size: 18,
                 ),
               ),
             ),
           ),
-          title: Text(
-            (widget.serviceId == "1")
-                ? "Senior Care Job Post"
-                : (widget.serviceId == "2")
-                    ? "Pet Care Job Post"
-                    : (widget.serviceId == "3")
-                        ? "House Keeping Job Post"
-                        : (widget.serviceId == "4")
-                            ? "School Support Job Post"
-                            : (widget.serviceId == "5")
-                                ? "Child Care Job Post"
-                                : "Screen Not Found",
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: FontWeight.w600,
-              fontFamily: "Rubik",
-              color: CustomColors.primaryText,
-            ),
+        ),
+        title: Text(
+          (widget.serviceId == "1")
+              ? "Senior Care Job Post"
+              : (widget.serviceId == "2")
+                  ? "Pet Care Job Post"
+                  : (widget.serviceId == "3")
+                      ? "House Keeping Job Post"
+                      : (widget.serviceId == "4")
+                          ? "School Support Job Post"
+                          : (widget.serviceId == "5")
+                              ? "Child Care Job Post"
+                              : "Screen Not Found",
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.w600,
+            fontFamily: "Rubik",
+            color: CustomColors.white,
           ),
         ),
-        body: SingleChildScrollView(
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
@@ -2175,7 +2175,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedCleaning == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2204,7 +2205,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedCleaning == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2254,7 +2256,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBedroom == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2283,7 +2286,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBedroom == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2315,7 +2319,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBedroom == 2 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2344,7 +2349,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBedroom == 3 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2378,7 +2384,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBathroom == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2407,7 +2414,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBathroom == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2439,7 +2447,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBathroom == 2 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2468,7 +2477,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedBathroom == 3 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2957,7 +2967,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedTemperament == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -2987,7 +2998,8 @@ class _PostScheduleState extends State<PostSchedule> {
                   });
                 },
                 style: ButtonStyle(
-                  shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                  shape: MaterialStateProperty.resolveWith(
+                      (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                   backgroundColor: MaterialStateProperty.resolveWith(
                     (states) => selectedTemperament == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                   ),
@@ -3022,7 +3034,8 @@ class _PostScheduleState extends State<PostSchedule> {
                     });
                   },
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                    shape: MaterialStateProperty.resolveWith(
+                        (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => selectedGuarded == 0 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                     ),
@@ -3051,7 +3064,8 @@ class _PostScheduleState extends State<PostSchedule> {
                     });
                   },
                   style: ButtonStyle(
-                    shape: MaterialStateProperty.resolveWith((states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                    shape: MaterialStateProperty.resolveWith(
+                        (states) => RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     backgroundColor: MaterialStateProperty.resolveWith(
                       (states) => selectedGuarded == 1 ? ServiceRecieverColor.primaryColor : Colors.grey.shade200,
                     ),

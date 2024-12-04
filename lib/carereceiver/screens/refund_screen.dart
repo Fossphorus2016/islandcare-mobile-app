@@ -3,12 +3,14 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:island_app/carereceiver/utils/colors.dart';
+import 'package:island_app/providers/user_provider.dart';
 import 'package:island_app/utils/app_colors.dart';
 import 'package:island_app/utils/app_url.dart';
 import 'package:island_app/utils/functions.dart';
 import 'package:island_app/utils/http_handlers.dart';
 import 'package:island_app/widgets/custom_pagination.dart';
 import 'package:island_app/widgets/loading_button.dart';
+import 'package:island_app/widgets/profile_not_approved_text.dart';
 import 'package:provider/provider.dart';
 
 class RefundScreen extends StatefulWidget {
@@ -27,20 +29,20 @@ class _RefundScreenState extends State<RefundScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<RefundsProvider>(
-      builder: (context, provider, __) {
+    return Consumer2<RefundsProvider, RecieverUserProvider>(
+      builder: (context, provider, recieverUserProvider, __) {
         // print(provider.totalRowsCount);
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.transparent,
+            backgroundColor: CustomColors.primaryColor,
             automaticallyImplyLeading: false,
-            title: Text(
+            title: const Text(
               "Refunds",
               style: TextStyle(
                 fontSize: 19,
                 fontWeight: FontWeight.w600,
                 fontFamily: "Rubik",
-                color: CustomColors.primaryText,
+                color: Colors.white,
               ),
             ),
             leading: GestureDetector(
@@ -79,196 +81,211 @@ class _RefundScreenState extends State<RefundScreen> {
             child: SizedBox(
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: () => provider.fetchRefundData(),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+              child: recieverUserProvider.profilePerentage != 100
+                  ? const ProfileNotCompletedText()
+                  : recieverUserProvider.profileIsApprove()
+                      ? Column(
                           children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: SizedBox(
-                                width: 143,
-                                child: TextButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) => addRefundRequest(context),
-                                    );
-                                  },
-                                  style: ButtonStyle(
-                                    backgroundColor: WidgetStatePropertyAll(ServiceRecieverColor.redButton),
-                                    shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(05))),
-                                  ),
-                                  child: const Row(
+                            const SizedBox(height: 10),
+                            Expanded(
+                              child: RefreshIndicator(
+                                onRefresh: () => provider.fetchRefundData(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        "+",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 22,
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: SizedBox(
+                                          width: 143,
+                                          child: TextButton(
+                                            onPressed: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) => addRefundRequest(context),
+                                              );
+                                            },
+                                            style: ButtonStyle(
+                                              backgroundColor: WidgetStatePropertyAll(ServiceRecieverColor.redButton),
+                                              shape: WidgetStatePropertyAll(
+                                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(05))),
+                                            ),
+                                            child: const Row(
+                                              children: [
+                                                Text(
+                                                  "+",
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 22,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  " Request Refund",
+                                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      Text(
-                                        " Request Refund",
-                                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+                                      const SizedBox(height: 20),
+                                      Expanded(
+                                        child: SingleChildScrollView(
+                                          child: Column(
+                                            children: [
+                                              ListView.builder(
+                                                itemCount: provider.filterDataList.length,
+                                                shrinkWrap: true,
+                                                physics: const NeverScrollableScrollPhysics(),
+                                                itemBuilder: (context, index) {
+                                                  RefundDataModel item = provider.filterDataList[index];
+                                                  return Padding(
+                                                    padding: const EdgeInsets.only(bottom: 10),
+                                                    child: Container(
+                                                      width: MediaQuery.of(context).size.width,
+                                                      height: 175,
+                                                      padding: const EdgeInsets.all(15),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius: BorderRadius.circular(08),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            blurRadius: 05,
+                                                            spreadRadius: 01,
+                                                            color: Colors.grey.shade300,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      child: Column(
+                                                        children: [
+                                                          Row(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              const SizedBox(
+                                                                width: 70,
+                                                                child: Text(
+                                                                  "Job: ",
+                                                                  style: TextStyle(
+                                                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  item.job!["job_title"],
+                                                                  maxLines: 2,
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                  style: const TextStyle(fontSize: 16),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const SizedBox(height: 10),
+                                                          Row(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              const SizedBox(
+                                                                width: 70,
+                                                                child: Text(
+                                                                  "Amount: ",
+                                                                  style: TextStyle(
+                                                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  item.amount,
+                                                                  maxLines: 1,
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                  style: const TextStyle(fontSize: 16),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const SizedBox(height: 10),
+                                                          Row(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              const SizedBox(
+                                                                width: 70,
+                                                                child: Text(
+                                                                  "Type: ",
+                                                                  style: TextStyle(
+                                                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  toCamelCase(item.type),
+                                                                  maxLines: 1,
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                  style: const TextStyle(fontSize: 16),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const SizedBox(height: 10),
+                                                          Row(
+                                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                                            children: [
+                                                              const SizedBox(
+                                                                width: 70,
+                                                                child: Text(
+                                                                  "Status: ",
+                                                                  style: TextStyle(
+                                                                      fontSize: 16, fontWeight: FontWeight.bold),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: Text(
+                                                                  toCamelCase(item.status),
+                                                                  maxLines: 1,
+                                                                  overflow: TextOverflow.ellipsis,
+                                                                  style: const TextStyle(fontSize: 16),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(height: 20),
-                            Expanded(
-                              child: SingleChildScrollView(
-                                child: Column(
-                                  children: [
-                                    ListView.builder(
-                                      itemCount: provider.filterDataList.length,
-                                      shrinkWrap: true,
-                                      physics: const NeverScrollableScrollPhysics(),
-                                      itemBuilder: (context, index) {
-                                        RefundDataModel item = provider.filterDataList[index];
-                                        return Padding(
-                                          padding: const EdgeInsets.only(bottom: 10),
-                                          child: Container(
-                                            width: MediaQuery.of(context).size.width,
-                                            height: 175,
-                                            padding: const EdgeInsets.all(15),
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.circular(08),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  blurRadius: 05,
-                                                  spreadRadius: 01,
-                                                  color: Colors.grey.shade300,
-                                                ),
-                                              ],
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 70,
-                                                      child: Text(
-                                                        "Job: ",
-                                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        item.job!["job_title"],
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: const TextStyle(fontSize: 16),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 70,
-                                                      child: Text(
-                                                        "Amount: ",
-                                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        item.amount,
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: const TextStyle(fontSize: 16),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 70,
-                                                      child: Text(
-                                                        "Type: ",
-                                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        toCamelCase(item.type),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: const TextStyle(fontSize: 16),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 10),
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    const SizedBox(
-                                                      width: 70,
-                                                      child: Text(
-                                                        "Status: ",
-                                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                                      ),
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        toCamelCase(item.status),
-                                                        maxLines: 1,
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: const TextStyle(fontSize: 16),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: CustomPagination(
+                                nextPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
+                                    ? () {
+                                        provider.handlePageChange(provider.currentPageIndex + 1);
+                                      }
+                                    : null,
+                                previousPage: provider.currentPageIndex > 0
+                                    ? () => provider.handlePageChange(provider.currentPageIndex - 1)
+                                    : null,
+                                gotoPage: provider.handlePageChange,
+                                gotoFirstPage:
+                                    provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
+                                gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
+                                    ? () => provider.handlePageChange(provider.totalRowsCount - 1)
+                                    : null,
+                                currentPageIndex: provider.currentPageIndex,
+                                totalRowsCount: provider.totalRowsCount,
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width,
-                    child: CustomPagination(
-                      nextPage: (provider.currentPageIndex) < provider.totalRowsCount - 1
-                          ? () {
-                              provider.handlePageChange(provider.currentPageIndex + 1);
-                            }
-                          : null,
-                      previousPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(provider.currentPageIndex - 1) : null,
-                      gotoPage: provider.handlePageChange,
-                      gotoFirstPage: provider.currentPageIndex > 0 ? () => provider.handlePageChange(0) : null,
-                      gotoLastPage: (provider.currentPageIndex) < provider.totalRowsCount - 1 ? () => provider.handlePageChange(provider.totalRowsCount - 1) : null,
-                      currentPageIndex: provider.currentPageIndex,
-                      totalRowsCount: provider.totalRowsCount,
-                    ),
-                  ),
-                ],
-              ),
+                        )
+                      : const ProfileNotApprovedText(),
             ),
           ),
         );

@@ -120,22 +120,26 @@ class _SignupScreenState extends State<SignupScreen> {
   List? allServices = []; //edited line
 
   Future<String> getSWData() async {
-    var res = await Dio().get(
-      AppUrl.services,
-      options: Options(
-        headers: {
-          'Accept': 'application/json',
-        },
-      ),
-    );
-    Map<String, dynamic> resBody = res.data;
-    List<dynamic> serviceData = resBody["services"];
+    try {
+      var res = await Dio().get(
+        AppUrl.services,
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      Map<String, dynamic> resBody = res.data;
+      List<dynamic> serviceData = resBody["services"];
 
-    setState(() {
-      allServices = serviceData;
-    });
+      setState(() {
+        allServices = serviceData;
+      });
 
-    return "Sucess";
+      return "Sucess";
+    } catch (e) {
+      return "Sucess";
+    }
   }
 
   @override
@@ -165,25 +169,25 @@ class _SignupScreenState extends State<SignupScreen> {
   bool showServiceProvideSelectError = false;
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: Text(
-            "Join us to start searching",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: CustomColors.primaryTextLight,
-              fontFamily: "Poppins",
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Text(
+          "Join us to start searching",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: CustomColors.primaryTextLight,
+            fontFamily: "Poppins",
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
           ),
-          centerTitle: true,
         ),
-        body: SingleChildScrollView(
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Form(
             key: _signUpFormKey,
             child: Padding(
@@ -397,7 +401,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                 });
                               },
                               icon: Image.asset(
-                                _isSelectedService == "3" ? "assets/images/icons/caregiverwhite.png" : "assets/images/icons/caregiver1.png",
+                                _isSelectedService == "3"
+                                    ? "assets/images/icons/caregiverwhite.png"
+                                    : "assets/images/icons/caregiver1.png",
                                 scale: 1.0,
                                 height: 24,
                                 width: 24,
@@ -450,7 +456,9 @@ class _SignupScreenState extends State<SignupScreen> {
                                 });
                               },
                               icon: Image.asset(
-                                _isSelectedService == "4" ? "assets/images/icons/carereceiverwhite.png" : "assets/images/icons/caregiver-Rpng2.png",
+                                _isSelectedService == "4"
+                                    ? "assets/images/icons/carereceiverwhite.png"
+                                    : "assets/images/icons/caregiver-Rpng2.png",
                                 scale: 1.0,
                                 height: 24,
                                 width: 24,
@@ -562,7 +570,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 8.0),
                         child: Text(
-                          _isSelectedService == "4" ? "Please select services you Require" : "Please select service you Provide",
+                          _isSelectedService == "4"
+                              ? "Please select services you Require"
+                              : "Please select service you Provide",
                           style: TextStyle(
                             color: CustomColors.red,
                           ),
@@ -657,7 +667,9 @@ class _SignupScreenState extends State<SignupScreen> {
                           radius: 8,
                           child: CircleAvatar(
                             radius: 4,
-                            backgroundColor: _isRadioSelected == "1" ? CustomColors.primaryText : const Color.fromARGB(181, 171, 171, 171),
+                            backgroundColor: _isRadioSelected == "1"
+                                ? CustomColors.primaryText
+                                : const Color.fromARGB(181, 171, 171, 171),
                           ),
                         ),
                         label: Text(
@@ -763,12 +775,12 @@ class _SignupScreenState extends State<SignupScreen> {
                           var userId = data["user"]['id'];
                           var name = data["user"]['first_name'];
                           var last = data["user"]['last_name'];
-
                           if (status == 3) {
-                            showErrorToast("User Blocked");
+                            showErrorToast("Your Account is blocked.");
                           } else {
                             if (data["user"]["email_verified_at"] == null) {
-                              navigationService.pushReplacement(RoutesName.verifyEmail, arguments: {"token": data["token"]});
+                              navigationService
+                                  .pushReplacement(RoutesName.verifyEmail, arguments: {"token": data["token"]});
                             } else if (data["user"]["role"] == 3) {
                               await storageService.writeSecureData('userRole', data["user"]["role"].toString());
                               await storageService.writeSecureData('userToken', data["token"].toString());

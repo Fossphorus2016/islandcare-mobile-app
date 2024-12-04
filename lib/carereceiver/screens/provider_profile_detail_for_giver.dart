@@ -211,7 +211,8 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                       width: 130,
                                       height: 110,
                                       alignment: Alignment.center,
-                                      imageUrl: "${AppUrl.webStorageUrl}/${futureReceiverDashboardDetail!.data!.avatar.toString()}",
+                                      imageUrl:
+                                          "${AppUrl.webStorageUrl}/${futureReceiverDashboardDetail!.data!.avatar.toString()}",
                                       errorWidget: (context, url, error) => const Icon(
                                         Icons.error,
                                         color: Colors.white,
@@ -241,7 +242,11 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         ],
                                         Text(
                                           "${futureReceiverDashboardDetail!.data!.firstName.toString()} ${futureReceiverDashboardDetail!.data!.lastName.toString()}",
-                                          style: TextStyle(fontSize: 20, fontFamily: "Rubik", fontWeight: FontWeight.w700, color: CustomColors.white),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontFamily: "Rubik",
+                                              fontWeight: FontWeight.w700,
+                                              color: CustomColors.white),
                                         ),
                                         const SizedBox(width: 10),
                                         if (futureReceiverDashboardDetail!.data!.avgRating != null) ...[
@@ -249,7 +254,11 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                             ignoreGestures: true,
                                             itemCount: 5,
                                             itemSize: 20,
-                                            initialRating: futureReceiverDashboardDetail!.data!.avgRating!['rating'] == null ? 0.0 : double.parse(futureReceiverDashboardDetail!.data!.avgRating!['rating'].toString()),
+                                            initialRating: futureReceiverDashboardDetail!.data!.avgRating!['rating'] ==
+                                                    null
+                                                ? 0.0
+                                                : double.parse(futureReceiverDashboardDetail!.data!.avgRating!['rating']
+                                                    .toString()),
                                             minRating: 0,
                                             ratingWidget: RatingWidget(
                                               full: const Icon(
@@ -363,7 +372,9 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         LinearProgressIndicator(
                                           minHeight: 08,
                                           borderRadius: BorderRadius.circular(08),
-                                          value: futureReceiverDashboardDetail!.percentage != null ? (futureReceiverDashboardDetail!.percentage! / 100) : 00,
+                                          value: futureReceiverDashboardDetail!.percentage != null
+                                              ? (futureReceiverDashboardDetail!.percentage! / 100)
+                                              : 00,
                                           valueColor: AlwaysStoppedAnimation<Color>(Colors.pink.shade400),
                                         ),
                                       ],
@@ -389,12 +400,14 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                               runSpacing: 05,
                               crossAxisAlignment: WrapCrossAlignment.center,
                               alignment: WrapAlignment.center,
-                              children: List.generate(futureReceiverDashboardDetail!.data!.userdetailprovider!.badge!.length, (index) {
+                              children: List.generate(
+                                  futureReceiverDashboardDetail!.data!.userdetailprovider!.badge!.length, (index) {
                                 return ClipRRect(
                                   borderRadius: BorderRadius.circular(500),
                                   child: CachedNetworkImage(
                                     height: 50,
-                                    imageUrl: "${AppUrl.webStorageUrl}/${futureReceiverDashboardDetail!.data!.userdetailprovider!.badge![index]}",
+                                    imageUrl:
+                                        "${AppUrl.webStorageUrl}/${futureReceiverDashboardDetail!.data!.userdetailprovider!.badge![index]}",
                                   ),
                                 );
                               }),
@@ -489,9 +502,12 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                       ),
                                       futureReceiverDashboardDetail!.data!.userdetail!.gender.toString() != "null"
                                           ? Text(
-                                              (futureReceiverDashboardDetail!.data!.userdetail!.gender.toString() == "1")
+                                              (futureReceiverDashboardDetail!.data!.userdetail!.gender.toString() ==
+                                                      "1")
                                                   ? "Male"
-                                                  : (futureReceiverDashboardDetail!.data!.userdetail!.gender.toString() == "2")
+                                                  : (futureReceiverDashboardDetail!.data!.userdetail!.gender
+                                                              .toString() ==
+                                                          "2")
                                                       ? "Female"
                                                       : "Not Available",
                                               style: TextStyle(
@@ -549,7 +565,8 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                             ? "East"
                                             : futureReceiverDashboardDetail!.data!.userdetail!.area.toString() == "1"
                                                 ? "Central"
-                                                : futureReceiverDashboardDetail!.data!.userdetail!.area.toString() == "2"
+                                                : futureReceiverDashboardDetail!.data!.userdetail!.area.toString() ==
+                                                        "2"
                                                     ? "West"
                                                     : "Not Available",
                                         style: TextStyle(
@@ -593,7 +610,10 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         height: 8,
                                       ),
                                       Text(
-                                        futureReceiverDashboardDetail!.data!.userdetail!.service!.name.toString() == "null" ? "Not Available" : futureReceiverDashboardDetail!.data!.userdetail!.service!.name.toString(),
+                                        futureReceiverDashboardDetail!.data!.userdetail!.service!.name.toString() ==
+                                                "null"
+                                            ? "Not Available"
+                                            : futureReceiverDashboardDetail!.data!.userdetail!.service!.name.toString(),
                                         style: TextStyle(
                                           color: CustomColors.hintText,
                                           fontSize: 16,
@@ -634,9 +654,14 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         ),
                                         const SizedBox(height: 8),
                                         Text(
-                                          futureReceiverDashboardDetail!.data!.userdetailprovider!.experience.toString(),
+                                          futureReceiverDashboardDetail!.data!.userdetailprovider!.experience
+                                              .toString(),
                                           softWrap: true,
-                                          style: TextStyle(color: CustomColors.hintText, fontSize: 16, fontFamily: "Rubik", fontWeight: FontWeight.w200),
+                                          style: TextStyle(
+                                              color: CustomColors.hintText,
+                                              fontSize: 16,
+                                              fontFamily: "Rubik",
+                                              fontWeight: FontWeight.w200),
                                         ),
                                       ],
                                     ),
@@ -671,7 +696,9 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                           ),
                                         ),
                                         const SizedBox(height: 8),
-                                        futureReceiverDashboardDetail!.data!.userdetailprovider!.hourlyRate.toString() != "null"
+                                        futureReceiverDashboardDetail!.data!.userdetailprovider!.hourlyRate
+                                                    .toString() !=
+                                                "null"
                                             ? Text(
                                                 "\$ ${futureReceiverDashboardDetail!.data!.userdetailprovider!.hourlyRate.toString()}",
                                                 softWrap: true,
@@ -725,25 +752,28 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                     Wrap(
                                       spacing: 10,
                                       children: [
-                                        for (var item in futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords!) ...[
-                                          Container(
-                                            padding: const EdgeInsets.all(05),
-                                            margin: const EdgeInsets.only(bottom: 05),
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey.shade100,
-                                              borderRadius: BorderRadius.circular(16),
-                                            ),
-                                            child: Text(
-                                              item['value'],
-                                              softWrap: true,
-                                              style: TextStyle(
-                                                color: CustomColors.hintText,
-                                                fontSize: 12,
-                                                fontFamily: "Rubik",
-                                                fontWeight: FontWeight.w200,
+                                        for (var item
+                                            in futureReceiverDashboardDetail!.data!.userdetailprovider!.keywords!) ...[
+                                          if (item.runtimeType == Map<String, dynamic>) ...[
+                                            Container(
+                                              padding: const EdgeInsets.all(05),
+                                              margin: const EdgeInsets.only(bottom: 05),
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey.shade100,
+                                                borderRadius: BorderRadius.circular(16),
+                                              ),
+                                              child: Text(
+                                                item['value'],
+                                                softWrap: true,
+                                                style: TextStyle(
+                                                  color: CustomColors.hintText,
+                                                  fontSize: 12,
+                                                  fontFamily: "Rubik",
+                                                  fontWeight: FontWeight.w200,
+                                                ),
                                               ),
                                             ),
-                                          ),
+                                          ],
                                         ],
                                       ],
                                     ),
@@ -845,7 +875,8 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                     ),
                                                   ),
                                                   const SizedBox(height: 5),
-                                                  if (futureReceiverDashboardDetail!.data!.educations![index].to == "") ...[
+                                                  if (futureReceiverDashboardDetail!.data!.educations![index].to ==
+                                                      "") ...[
                                                     Text(
                                                       "Time Period: Currently Studying",
                                                       softWrap: true,
@@ -943,7 +974,11 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                 ),
                                               )
                                             : Text(
-                                                futureReceiverDashboardDetail!.data!.userdetail!.userInfo.toString() == "null" ? "Required" : futureReceiverDashboardDetail!.data!.userdetail!.userInfo.toString(),
+                                                futureReceiverDashboardDetail!.data!.userdetail!.userInfo.toString() ==
+                                                        "null"
+                                                    ? "Required"
+                                                    : futureReceiverDashboardDetail!.data!.userdetail!.userInfo
+                                                        .toString(),
                                                 softWrap: true,
                                                 style: TextStyle(
                                                   color: CustomColors.hintText,
@@ -987,7 +1022,9 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         const SizedBox(
                                           height: 8,
                                         ),
-                                        futureReceiverDashboardDetail!.data!.userdetailprovider!.availability.toString() == "null"
+                                        futureReceiverDashboardDetail!.data!.userdetailprovider!.availability
+                                                    .toString() ==
+                                                "null"
                                             ? Text(
                                                 "Not Available",
                                                 softWrap: true,
@@ -999,7 +1036,13 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                 ),
                                               )
                                             : Text(
-                                                futureReceiverDashboardDetail!.data!.userdetailprovider!.availability.toString() == "null" ? "Required" : futureReceiverDashboardDetail!.data!.userdetailprovider!.availability.toString(),
+                                                futureReceiverDashboardDetail!.data!.userdetailprovider!.availability
+                                                            .toString() ==
+                                                        "null"
+                                                    ? "Required"
+                                                    : futureReceiverDashboardDetail!
+                                                        .data!.userdetailprovider!.availability
+                                                        .toString(),
                                                 softWrap: true,
                                                 style: TextStyle(
                                                   color: CustomColors.hintText,
@@ -1015,7 +1058,8 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                               ),
                             ),
                             // Background Verified
-                            if (futureReceiverDashboardDetail!.data!.ratings != null && futureReceiverDashboardDetail!.data!.ratings!.isNotEmpty) ...[
+                            if (futureReceiverDashboardDetail!.data!.ratings != null &&
+                                futureReceiverDashboardDetail!.data!.ratings!.isNotEmpty) ...[
                               const SizedBox(height: 30),
                               Text(
                                 "Reviews",
@@ -1049,7 +1093,8 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                    if (ResponsiveBreakpoints.of(context).isTablet ||
+                                        ResponsiveBreakpoints.of(context).isDesktop) ...[
                                       Text(
                                         "Rating",
                                         style: TextStyle(
@@ -1111,7 +1156,8 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                             ),
                                           ),
                                         ],
-                                        if (ResponsiveBreakpoints.of(context).isTablet || ResponsiveBreakpoints.of(context).isDesktop) ...[
+                                        if (ResponsiveBreakpoints.of(context).isTablet ||
+                                            ResponsiveBreakpoints.of(context).isDesktop) ...[
                                           Expanded(
                                             child: DecoratedBox(
                                               decoration: const BoxDecoration(),
@@ -1119,7 +1165,9 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                 mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
                                                   RatingBar.builder(
-                                                    initialRating: futureReceiverDashboardDetail!.data!.ratings![index].rating!.toDouble(),
+                                                    initialRating: futureReceiverDashboardDetail!
+                                                        .data!.ratings![index].rating!
+                                                        .toDouble(),
                                                     minRating: 1,
                                                     direction: Axis.horizontal,
                                                     allowHalfRating: true,
@@ -1145,13 +1193,17 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                     showDialog(
                                                       context: context,
                                                       builder: (context) => AlertDialog(
-                                                        title: Center(child: Text('${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}')),
+                                                        title: Center(
+                                                            child: Text(
+                                                                '${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}')),
                                                         alignment: Alignment.center,
                                                         content: Column(
                                                           mainAxisSize: MainAxisSize.min,
                                                           children: [
                                                             RatingBar.builder(
-                                                              initialRating: futureReceiverDashboardDetail!.data!.ratings![index].rating!.toDouble(),
+                                                              initialRating: futureReceiverDashboardDetail!
+                                                                  .data!.ratings![index].rating!
+                                                                  .toDouble(),
                                                               minRating: 1,
                                                               direction: Axis.horizontal,
                                                               allowHalfRating: true,
@@ -1165,7 +1217,14 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                               onRatingUpdate: (rating) {},
                                                             ),
                                                             Text(
-                                                              futureReceiverDashboardDetail!.data!.ratings![index].comment.toString() == "null" ? "Not Available" : futureReceiverDashboardDetail!.data!.ratings![index].comment.toString(),
+                                                              futureReceiverDashboardDetail!
+                                                                          .data!.ratings![index].comment
+                                                                          .toString() ==
+                                                                      "null"
+                                                                  ? "Not Available"
+                                                                  : futureReceiverDashboardDetail!
+                                                                      .data!.ratings![index].comment
+                                                                      .toString(),
                                                               maxLines: 20,
                                                               softWrap: true,
                                                               style: TextStyle(
@@ -1195,13 +1254,17 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                               showDialog(
                                                 context: context,
                                                 builder: (context) => AlertDialog(
-                                                  title: Center(child: Text('${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}')),
+                                                  title: Center(
+                                                      child: Text(
+                                                          '${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.firstName} ${futureReceiverDashboardDetail!.data!.ratings![index].receiverRating!.lastName}')),
                                                   alignment: Alignment.center,
                                                   content: Column(
                                                     mainAxisSize: MainAxisSize.min,
                                                     children: [
                                                       RatingBar.builder(
-                                                        initialRating: futureReceiverDashboardDetail!.data!.ratings![index].rating!.toDouble(),
+                                                        initialRating: futureReceiverDashboardDetail!
+                                                            .data!.ratings![index].rating!
+                                                            .toDouble(),
                                                         minRating: 1,
                                                         direction: Axis.horizontal,
                                                         allowHalfRating: true,
@@ -1215,7 +1278,13 @@ class _ProviderProfileDetailForReceiverState extends State<ProviderProfileDetail
                                                         onRatingUpdate: (rating) {},
                                                       ),
                                                       Text(
-                                                        futureReceiverDashboardDetail!.data!.ratings![index].comment.toString() == "null" ? "Not Available" : futureReceiverDashboardDetail!.data!.ratings![index].comment.toString(),
+                                                        futureReceiverDashboardDetail!.data!.ratings![index].comment
+                                                                    .toString() ==
+                                                                "null"
+                                                            ? "Not Available"
+                                                            : futureReceiverDashboardDetail!
+                                                                .data!.ratings![index].comment
+                                                                .toString(),
                                                         maxLines: 20,
                                                         softWrap: true,
                                                         style: TextStyle(

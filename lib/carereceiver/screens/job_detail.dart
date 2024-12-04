@@ -83,6 +83,7 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
     return Scaffold(
       backgroundColor: CustomColors.loginBg,
       appBar: AppBar(
+        backgroundColor: CustomColors.primaryColor,
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
@@ -114,12 +115,11 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
             ),
           ),
         ),
-        centerTitle: true,
         title: Text(
           "Job Detail",
           style: TextStyle(
             fontSize: 20,
-            color: CustomColors.primaryText,
+            color: CustomColors.white,
             fontFamily: "Poppins",
             fontWeight: FontWeight.w600,
           ),
@@ -280,46 +280,99 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
                 AssistanceContainer(
                   dd: [
                     if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bathing.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bathing.toString() == "1" ? "bathing" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bathing.toString(),
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bathing.toString() == "1"
+                          ? "bathing"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bathing.toString(),
                     ],
                     if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressing.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressing.toString() == "1" ? "dressing" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressing.toString(),
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressing.toString() == "1"
+                          ? "dressing"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressing.toString(),
                     ],
                     if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.feeding.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.feeding.toString() == "1" ? "feeding" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.feeding.toString(),
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.feeding.toString() == "1"
+                          ? "feeding"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.feeding.toString(),
                     ],
-                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.mealPreparation.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.mealPreparation.toString() == "1" ? "mealPreparation" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.mealPreparation.toString(),
+                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.mealPreparation.toString() ==
+                        "1") ...[
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.mealPreparation.toString() == "1"
+                          ? "mealPreparation"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.mealPreparation.toString(),
                     ],
-                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groceryShopping.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groceryShopping.toString() == "1" ? "groceryShopping" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groceryShopping.toString(),
+                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groceryShopping.toString() ==
+                        "1") ...[
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groceryShopping.toString() == "1"
+                          ? "groceryShopping"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groceryShopping.toString(),
                     ],
                     if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.walking.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.walking.toString() == "1" ? "walking" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.walking.toString(),
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.walking.toString() == "1"
+                          ? "walking"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.walking.toString(),
                     ],
-                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bedTransfer.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bedTransfer.toString() == "1" ? "bedTransfer" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bedTransfer.toString(),
+                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bedTransfer.toString() ==
+                        "1") ...[
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bedTransfer.toString() == "1"
+                          ? "bedTransfer"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bedTransfer.toString(),
                     ],
-                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.lightCleaning.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.lightCleaning.toString() == "1" ? "lightCleaning" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.lightCleaning.toString(),
+                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.lightCleaning.toString() ==
+                        "1") ...[
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.lightCleaning.toString() == "1"
+                          ? "lightCleaning"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.lightCleaning.toString(),
                     ],
-                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.companionship.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.companionship.toString() == "1" ? "companionship" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.companionship.toString(),
+                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.companionship.toString() ==
+                        "1") ...[
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.companionship.toString() == "1"
+                          ? "companionship"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.companionship.toString(),
                     ],
-                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.medicationAdministration.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.medicationAdministration.toString() == "1" ? "medicationAdministration" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.medicationAdministration.toString(),
+                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.medicationAdministration
+                            .toString() ==
+                        "1") ...[
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.medicationAdministration
+                                  .toString() ==
+                              "1"
+                          ? "medicationAdministration"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.medicationAdministration
+                              .toString(),
                     ],
-                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressingWoundCare.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressingWoundCare.toString() == "1" ? "dressingWoundCare" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressingWoundCare.toString(),
+                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressingWoundCare.toString() ==
+                        "1") ...[
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressingWoundCare.toString() == "1"
+                          ? "dressingWoundCare"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.dressingWoundCare.toString(),
                     ],
-                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodPressureMonetoring.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodPressureMonetoring.toString() == "1" ? "bloodPressureMonetoring" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodPressureMonetoring.toString(),
+                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodPressureMonetoring
+                            .toString() ==
+                        "1") ...[
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodPressureMonetoring
+                                  .toString() ==
+                              "1"
+                          ? "bloodPressureMonetoring"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodPressureMonetoring
+                              .toString(),
                     ],
-                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodSugarMonetoring.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodSugarMonetoring.toString() == "1" ? "bloodSugarMonetoring" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodSugarMonetoring.toString(),
+                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodSugarMonetoring
+                            .toString() ==
+                        "1") ...[
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodSugarMonetoring.toString() ==
+                              "1"
+                          ? "bloodSugarMonetoring"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.bloodSugarMonetoring
+                              .toString(),
                     ],
-                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming.toString() == "1") ...[
-                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming.toString() == "1" ? "groomingHairAndNailTrimming" : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming.toString(),
+                    if (futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming
+                            .toString() ==
+                        "1") ...[
+                      futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming
+                                  .toString() ==
+                              "1"
+                          ? "groomingHairAndNailTrimming"
+                          : futureSeniorCareDetailDashboard!.jobDetail![index].seniorCare!.groomingHairAndNailTrimming
+                              .toString(),
                     ],
                   ],
                 ),
@@ -406,23 +459,35 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
                 const SizedBox(height: 10),
                 AssistanceContainer(
                   dd: [
-                    if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInReading == 1) ...["Reading"],
-                    if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInEnglish == 1) ...["English"],
-                    if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInMath == 1) ...["Math"],
-                    if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInScience == 1) ...["Science"],
-                    if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInOther != null) ...[futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInOther.toString()],
+                    if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInReading == 1) ...[
+                      "Reading"
+                    ],
+                    if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInEnglish == 1) ...[
+                      "English"
+                    ],
+                    if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInMath == 1) ...[
+                      "Math"
+                    ],
+                    if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInScience == 1) ...[
+                      "Science"
+                    ],
+                    if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInOther != null) ...[
+                      futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.assistanceInOther.toString()
+                    ],
                   ],
                 ),
               ],
               const SizedBox(height: 10),
-              if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning != null && futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.learningStyle != null) ...[
+              if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning != null &&
+                  futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.learningStyle != null) ...[
                 JobDetailTile(
                   name: "Learning Style",
                   title: futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.learningStyle.toString(),
                 ),
                 const SizedBox(height: 10),
               ],
-              if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning != null && futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.learningChallenge != null) ...[
+              if (futureSchoolSupportDetailDashboard!.jobDetail![index].learning != null &&
+                  futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.learningChallenge != null) ...[
                 JobDetailTile(
                   name: "Learning Challenge",
                   title: futureSchoolSupportDetailDashboard!.jobDetail![index].learning!.learningChallenge.toString(),
@@ -572,27 +637,38 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
                     const SizedBox(height: 10),
                     JobDetailTile(
                       name: "Number of Bedrooms",
-                      title: futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.numberOfBedrooms.toString(),
+                      title: futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.numberOfBedrooms
+                          .toString(),
                     ),
                     const SizedBox(height: 10),
                     JobDetailTile(
                       name: "Number of Bathrooms",
-                      title: futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.numberOfBathrooms.toString(),
+                      title: futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.numberOfBathrooms
+                          .toString(),
                     ),
                     const SizedBox(height: 10),
                     JobDetailTile(
                       name: "Laundary",
-                      title: futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.laundry.toString() == "1" ? "Yes" : "No",
+                      title:
+                          futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.laundry.toString() == "1"
+                              ? "Yes"
+                              : "No",
                     ),
                     const SizedBox(height: 10),
                     JobDetailTile(
                       name: "Ironing",
-                      title: futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.ironing.toString() == "1" ? "Yes" : "No",
+                      title:
+                          futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.ironing.toString() == "1"
+                              ? "Yes"
+                              : "No",
                     ),
                     const SizedBox(height: 10),
                     JobDetailTile(
                       name: "Other",
-                      title: futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.other.toString() == "null" ? "" : futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.other.toString(),
+                      title:
+                          futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.other.toString() == "null"
+                              ? ""
+                              : futureHouseKeepingDetailDashboard!.jobDetail![index].houseKeeping!.other.toString(),
                     ),
                     const SizedBox(height: 10),
                     JobDetailTile(
@@ -681,22 +757,34 @@ class _ReceiverJobDetailState extends State<ReceiverJobDetail> {
               AssistanceContainer(
                 dd: [
                   if (futurePetCareDetailDashboard!.jobDetail![index].petCare!.walking.toString() == "1") ...[
-                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.walking.toString() == "1" ? "Walking" : futurePetCareDetailDashboard!.jobDetail![index].petCare!.walking.toString(),
+                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.walking.toString() == "1"
+                        ? "Walking"
+                        : futurePetCareDetailDashboard!.jobDetail![index].petCare!.walking.toString(),
                   ],
                   if (futurePetCareDetailDashboard!.jobDetail![index].petCare!.daycare.toString() == "1") ...[
-                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.daycare.toString() == "1" ? "Day Care" : futurePetCareDetailDashboard!.jobDetail![index].petCare!.daycare.toString(),
+                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.daycare.toString() == "1"
+                        ? "Day Care"
+                        : futurePetCareDetailDashboard!.jobDetail![index].petCare!.daycare.toString(),
                   ],
                   if (futurePetCareDetailDashboard!.jobDetail![index].petCare!.feeding.toString() == "1") ...[
-                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.feeding.toString() == "1" ? "Feeding" : futurePetCareDetailDashboard!.jobDetail![index].petCare!.feeding.toString(),
+                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.feeding.toString() == "1"
+                        ? "Feeding"
+                        : futurePetCareDetailDashboard!.jobDetail![index].petCare!.feeding.toString(),
                   ],
                   if (futurePetCareDetailDashboard!.jobDetail![index].petCare!.socialization.toString() == "1") ...[
-                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.socialization.toString() == "1" ? "Socialization" : futurePetCareDetailDashboard!.jobDetail![index].petCare!.socialization.toString(),
+                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.socialization.toString() == "1"
+                        ? "Socialization"
+                        : futurePetCareDetailDashboard!.jobDetail![index].petCare!.socialization.toString(),
                   ],
                   if (futurePetCareDetailDashboard!.jobDetail![index].petCare!.grooming.toString() == "1") ...[
-                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.grooming.toString() == "1" ? "Grooming" : futurePetCareDetailDashboard!.jobDetail![index].petCare!.grooming.toString(),
+                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.grooming.toString() == "1"
+                        ? "Grooming"
+                        : futurePetCareDetailDashboard!.jobDetail![index].petCare!.grooming.toString(),
                   ],
                   if (futurePetCareDetailDashboard!.jobDetail![index].petCare!.boarding.toString() == "1") ...[
-                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.boarding.toString() == "1" ? "Boarding" : futurePetCareDetailDashboard!.jobDetail![index].petCare!.boarding.toString(),
+                    futurePetCareDetailDashboard!.jobDetail![index].petCare!.boarding.toString() == "1"
+                        ? "Boarding"
+                        : futurePetCareDetailDashboard!.jobDetail![index].petCare!.boarding.toString(),
                   ],
                 ],
               ),
