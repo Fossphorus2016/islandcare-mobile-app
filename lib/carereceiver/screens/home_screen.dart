@@ -612,6 +612,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               return RecommendationReceiverWidget(
                                                 imgPath: "${AppUrl.webStorageUrl}" '/' + item.avatar.toString(),
                                                 title: "${item.firstName} ${item.lastName}",
+                                                // service: ,
                                                 experience: item.userdetailprovider.experience == null
                                                     ? "0"
                                                     : item.userdetailprovider.experience.toString(),

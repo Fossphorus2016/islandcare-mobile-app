@@ -99,12 +99,24 @@ class _RefundScreenState extends State<RefundScreen> {
                                       Align(
                                         alignment: Alignment.centerLeft,
                                         child: SizedBox(
-                                          width: 143,
+                                          width: 155,
                                           child: TextButton(
                                             onPressed: () {
-                                              showDialog(
+                                              // showDialog(
+                                              //   context: context,
+                                              //   builder: (context) => addRefundRequest(context),
+                                              // );
+                                              showModalBottomSheet(
                                                 context: context,
-                                                builder: (context) => addRefundRequest(context),
+                                                useSafeArea: true,
+                                                isScrollControlled: true,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(12),
+                                                    topRight: Radius.circular(12),
+                                                  ),
+                                                ),
+                                                builder: (context) => addRefundBottomSheet(context),
                                               );
                                             },
                                             style: ButtonStyle(
@@ -145,7 +157,7 @@ class _RefundScreenState extends State<RefundScreen> {
                                                     padding: const EdgeInsets.only(bottom: 10),
                                                     child: Container(
                                                       width: MediaQuery.of(context).size.width,
-                                                      height: 175,
+                                                      // height: 175,
                                                       padding: const EdgeInsets.all(15),
                                                       decoration: BoxDecoration(
                                                         color: Colors.white,
@@ -496,6 +508,288 @@ class _RefundScreenState extends State<RefundScreen> {
                   },
                 ),
               ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget addRefundBottomSheet(BuildContext context) {
+    return Consumer<RefundsProvider>(
+      builder: (context, refundsProvider, __) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return
+                //  AlertDialog(
+                //   titlePadding: EdgeInsets.zero,
+                //   title: Container(
+                //     padding: const EdgeInsets.symmetric(vertical: 15),
+                //     decoration: BoxDecoration(
+                //       color: CustomColors.primaryColor,
+                //       borderRadius: const BorderRadius.only(
+                //         topLeft: Radius.circular(20),
+                //         topRight: Radius.circular(20),
+                //       ),
+                //     ),
+                //     alignment: Alignment.center,
+                //     child: const Text(
+                //       "Request Refund",
+                //       style: TextStyle(color: Colors.white, fontSize: 24),
+                //     ),
+                //   ),
+                //   // contentPadding: EdgeInsets.zero,
+                //   content:
+                Container(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              // height: 380,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      decoration: BoxDecoration(
+                        color: CustomColors.primaryColor,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(12),
+                          topRight: Radius.circular(12),
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Text(
+                        "Request Refund",
+                        style: TextStyle(color: Colors.white, fontSize: 24),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text("Job"),
+                          const SizedBox(height: 05),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 05),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(08),
+                              border: Border.all(color: Colors.grey),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                value: selectedJob ?? "select",
+                                isExpanded: true,
+                                items: [
+                                  const DropdownMenuItem(
+                                    value: "select",
+                                    enabled: false,
+                                    child: Text("Select"),
+                                  ),
+                                  for (var i = 0; i < refundsProvider.jobsList.length; i++) ...[
+                                    // if(refundsProvider.jobsList[i].isFunded)...[
+
+                                    // ],
+                                    DropdownMenuItem(
+                                      value: refundsProvider.jobsList[i],
+                                      child: Text(refundsProvider.jobsList[i].jobTitle),
+                                    ),
+                                  ]
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedJob = value as RefundJobModel;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text("Amount"),
+                          const SizedBox(height: 05),
+                          Container(
+                            width: double.infinity,
+                            height: 50,
+                            padding: const EdgeInsets.all(08),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(08),
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: selectedJob != null ? Text(selectedJob!.amount) : const Text("Enter Amount"),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text("Refund Type"),
+                          const SizedBox(height: 05),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 05),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(08),
+                              border: Border.all(color: Colors.grey),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                isExpanded: true,
+                                value: selectType,
+                                items: const [
+                                  DropdownMenuItem(
+                                    value: "select",
+                                    enabled: false,
+                                    child: Text("Select"),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "full",
+                                    child: Text("Full"),
+                                  ),
+                                  DropdownMenuItem(
+                                    value: "partial",
+                                    child: Text("Partial"),
+                                  ),
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectType = value!;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          const Text("Reason"),
+                          const SizedBox(height: 05),
+                          Container(
+                            // width: double.infinity,
+                            height: 100,
+                            padding: const EdgeInsets.all(08),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(08),
+                            ),
+                            alignment: Alignment.centerLeft,
+                            child: TextFormField(
+                              controller: refundReasonController,
+                              textInputAction: TextInputAction.done,
+                              expands: true,
+                              maxLines: null,
+                              minLines: null,
+                              decoration: const InputDecoration(
+                                hintText: "Reason",
+                                border: InputBorder.none,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Align(
+                            alignment: Alignment.center,
+                            child: LoadingButton(
+                              title: "Request Refund",
+                              backgroundColor: ServiceGiverColor.green,
+                              width: 150,
+                              height: 50,
+                              onPressed: () async {
+                                if (selectedJob == null) {
+                                  showErrorToast("Job is required");
+                                  return false;
+                                }
+                                if (selectType == "select") {
+                                  showErrorToast("Refund Type is required");
+                                  return false;
+                                }
+                                var token = await getToken();
+                                var data = FormData.fromMap({
+                                  "refund_job_id": selectedJob!.id,
+                                  "refund_type": selectType,
+                                  "refund_amount": double.parse(selectedJob!.amount),
+                                  "refund_reason": refundReasonController.text.trim(),
+                                });
+                                var resp = await postRequesthandler(
+                                  url: CareReceiverURl.serviceReceiverRefundStore,
+                                  token: token,
+                                  formData: data,
+                                );
+                                if (resp != null &&
+                                    resp.statusCode == 201 &&
+                                    resp.data != null &&
+                                    resp.data["status"] == true) {
+                                  showSuccessToast("Refund Request is successfully Added");
+                                  // ignore: use_build_context_synchronously
+                                  refundsProvider.fetchRefundData();
+                                  setState(() {
+                                    selectedJob = null;
+                                    selectType = "select";
+                                    refundReasonController.clear();
+                                  });
+                                  // ignore: use_build_context_synchronously
+                                  Navigator.pop(context);
+                                }
+                                return true;
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 50),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // ),
+              // actions: [
+              //   LoadingButton(
+              //     title: "Request Refund",
+              //     backgroundColor: ServiceGiverColor.green,
+              //     width: 150,
+              //     height: 50,
+              //     onPressed: () async {
+              //       if (selectedJob == null) {
+              //         showErrorToast("Job is required");
+              //         return false;
+              //       }
+              //       if (selectType == "select") {
+              //         showErrorToast("Refund Type is required");
+              //         return false;
+              //       }
+              //       var token = await getToken();
+              //       var data = FormData.fromMap({
+              //         "refund_job_id": selectedJob!.id,
+              //         "refund_type": selectType,
+              //         "refund_amount": double.parse(selectedJob!.amount),
+              //         "refund_reason": refundReasonController.text.trim(),
+              //       });
+              //       var resp = await postRequesthandler(
+              //         url: CareReceiverURl.serviceReceiverRefundStore,
+              //         token: token,
+              //         formData: data,
+              //       );
+              //       if (resp != null && resp.statusCode == 201 && resp.data != null && resp.data["status"] == true) {
+              //         showSuccessToast("Refund Request is successfully Added");
+              //         // ignore: use_build_context_synchronously
+              //         refundsProvider.fetchRefundData();
+              //         setState(() {
+              //           selectedJob = null;
+              //           selectType = "select";
+              //           refundReasonController.clear();
+              //         });
+              //         // ignore: use_build_context_synchronously
+              //         Navigator.pop(context);
+              //       }
+              //       return true;
+              //     },
+              //   ),
+              //   LoadingButton(
+              //     title: "Close",
+              //     backgroundColor: ServiceGiverColor.redButtonLigth,
+              //     width: 60,
+              //     height: 50,
+              //     onPressed: () async {
+              //       Navigator.pop(context);
+              //       setState(() {
+              //         selectedJob = null;
+              //         selectType = "select";
+              //         refundReasonController.clear();
+              //       });
+              //       return true;
+              //     },
+              //   ),
+              // ],
             );
           },
         );

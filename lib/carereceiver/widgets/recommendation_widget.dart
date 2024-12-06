@@ -14,6 +14,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 class RecommendationReceiverWidget extends StatelessWidget {
   final String? imgPath;
   final String? title;
+  final String? service;
   final String? experience;
   final String? hourly;
   final dynamic dob;
@@ -29,6 +30,7 @@ class RecommendationReceiverWidget extends StatelessWidget {
     super.key,
     this.imgPath,
     this.title,
+    this.service,
     this.experience,
     this.hourly,
     this.dob,
